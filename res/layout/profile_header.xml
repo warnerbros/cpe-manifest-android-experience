@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/profileLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#fff"
+    android:clickable="true"
+    android:focusable="true"
+    android:padding="10dp" >
+
+    <ImageView
+        android:id="@+id/profilePhoto"
+        android:layout_width="@dimen/user_profile_width"
+        android:layout_height="@dimen/user_profile_height"
+        android:scaleType="centerCrop"
+        android:src="@drawable/user" />
+
+    <ImageView
+        android:id="@+id/profileFrame"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignBottom="@id/profilePhoto"
+        android:layout_alignLeft="@id/profilePhoto"
+        android:layout_alignRight="@id/profilePhoto"
+        android:layout_alignTop="@id/profilePhoto"
+        android:background="@drawable/mymovies_image_frame" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/profilePhoto"
+        android:orientation="vertical"
+        android:paddingLeft="10dp" >
+
+        <TextView
+            android:id="@+id/profileTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:singleLine="true"
+            android:text="Full Name"
+            android:textAppearance="@style/TextMediumBold" />
+
+        <TextView
+            android:id="@+id/profileWantToSee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:drawableLeft="@drawable/icon_wts_social"
+            android:drawablePadding="5dp"
+            android:includeFontPadding="false"
+            android:singleLine="true"
+            android:text="@string/profile_wts"
+            android:textAppearance="@style/TextSmall" />
+
+        <TextView
+            android:id="@+id/profileRatings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:drawableLeft="@drawable/icon_review"
+            android:drawablePadding="5dp"
+            android:includeFontPadding="false"
+            android:singleLine="true"
+            android:text="@string/profile_ratings"
+            android:textAppearance="@style/TextSmall" />
+
+        <TextView
+            android:id="@+id/profileFriends"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:drawableLeft="@drawable/icon_friends"
+            android:drawablePadding="5dp"
+            android:includeFontPadding="false"
+            android:singleLine="true"
+            android:text="@string/profile_friends"
+            android:textAppearance="@style/TextSmall" />
+
+        <TextView
+            android:id="@+id/profileCollections"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:drawableLeft="@drawable/icon_collections"
+            android:drawablePadding="5dp"
+            android:includeFontPadding="false"
+            android:singleLine="true"
+            android:text="@string/profile_collected"
+            android:textAppearance="@style/TextSmall"
+            android:visibility="gone" />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:clickable="true"
+	android:focusable="true"
+	android:background="@drawable/bg_uv_promo_white"
+	android:layout_marginLeft="@dimen/spacing_small"
+	android:layout_marginRight="@dimen/spacing_small"
+	android:layout_marginTop="@dimen/spacing_normal"
+	android:layout_marginBottom="@dimen/spacing_small"
+	android:gravity="center_vertical"
+	android:orientation="horizontal" >
+
+	
+
+
+
+		<ImageView
+		    android:id="@+id/imageView_collection_uv_tout"
+		    android:layout_width="0dp"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="1"
+		    android:adjustViewBounds="true"
+		    android:scaleType="fitCenter"
+			android:paddingLeft="@dimen/spacing_normal"
+			android:paddingRight="@dimen/spacing_normal"
+		    android:src="@drawable/digital_uv_logo" />
+
+		<LinearLayout
+		    android:layout_width="0dp"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="1"
+			android:paddingLeft="@dimen/spacing_normal"
+			android:paddingRight="@dimen/spacing_normal"
+			android:orientation="vertical">
+			<TextView
+				android:id="@+id/textView_collection_uv_tout_text2"
+				android:layout_width="fill_parent"
+				android:layout_height="0dp"
+				android:layout_weight="1"
+				android:gravity="center"
+				android:textSize="@dimen/textSmall"
+				android:paddingLeft="@dimen/spacing_normal"
+				android:textColor="@color/uv_purple_text"
+				android:text="@string/uv_tout_text2" />
+			<Button
+				android:id="@+id/uvtout_uv_link_button"
+				android:layout_width="fill_parent"
+				android:layout_weight="1"
+				android:layout_height="0dp"
+				android:gravity="center"
+				android:background="@drawable/uv_purple_button"
+				android:textColor="@color/white"
+				android:textAppearance="@style/TextSmall"
+				android:text="@string/redeem_redeemBtn" />
+		</LinearLayout>
+
+
+
+</LinearLayout>

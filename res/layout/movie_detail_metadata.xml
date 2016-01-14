@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:layout_below="@id/movieDetails"
+	android:orientation="vertical" >
+   	<include 
+	    android:id="@+id/rating_panel"
+	    layout="@layout/rating_layout"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_margin="@dimen/spacing_normal"/>
+	<TextView
+		android:layout_margin="@dimen/spacing_normal"
+		android:id="@+id/num_of_downloads"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:padding="5dp"
+		android:textColor="@color/grey05"
+		android:textAppearance="@style/TextSmall"
+		android:visibility="gone"/>
+
+	<LinearLayout
+		android:id="@+id/md_ll_moviedetails"
+		android:layout_margin="@dimen/spacing_normal"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical">
+
+		<include
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_marginBottom="10dp"
+		    android:layout_marginRight="10dp"
+		    layout="@layout/movie_details_descriptions" />
+
+		<RelativeLayout
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+			<TextView
+				android:id="@+id/moviedetails_synopsis"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:autoLink="all"
+				android:text="Synopsis"
+				android:textAppearance="@style/TextSmall" />
+			<TextView
+				android:id="@+id/moviedetails_synopsis_more"
+				android:layout_below="@id/moviedetails_synopsis"
+				android:layout_alignParentRight="true"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:singleLine="true" 
+				android:textColor="@android:color/holo_blue_dark"
+				android:textAppearance="@style/TextSmall" 
+				android:visibility="gone"/>
+
+		</RelativeLayout>
+
+		<LinearLayout
+			android:id="@+id/moviePhotos"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:orientation="horizontal"
+			android:paddingRight="5dp" >
+		</LinearLayout>
+	</LinearLayout>
+	<Button
+			android:layout_width="0dp"
+			android:layout_height="0dp"></Button>
+</LinearLayout>

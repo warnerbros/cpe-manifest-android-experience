@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<net.flixster.android.view.widget.DownloadPanel xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:orientation="vertical" >
+    
+	<Button
+		android:id="@+id/download_text"
+		android:layout_width="@dimen/tds_watch_width"
+		android:layout_height="fill_parent"
+		android:drawableLeft="@drawable/icon_download"
+		android:gravity="center"
+		android:maxLines="1"
+		android:background="@drawable/download_button_bg"
+		android:paddingBottom="@dimen/iconpanel_padding"
+		android:paddingLeft="@dimen/iconpanel_padding"
+		android:paddingTop="@dimen/iconpanel_padding"
+		android:drawablePadding="@dimen/iconpanel_padding"
+		android:text="Download"
+		android:textAppearance="@style/TextSmallBold"
+		android:textColor="@color/tds_download_btn_text_color" />
+
+	<RelativeLayout
+	    android:id="@+id/downloading_layout"
+	    android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:padding="@dimen/spacing_xsmall"
+		android:background="@drawable/bg_divider_hollow_box"
+		android:orientation="horizontal"
+		android:visibility="visible" >
+	    
+	    <ImageButton
+	        android:id="@+id/cancel_download_button"
+	        android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:src="@drawable/ic_clear_holo_light"
+		    android:background="@android:color/transparent"
+		    android:layout_centerVertical="true"
+		    android:layout_alignParentRight="true"
+		    android:paddingRight="3dp" />
+	    
+	    <RelativeLayout
+	        android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+			android:layout_toLeftOf="@id/cancel_download_button"
+			android:layout_centerVertical="true"
+			android:layout_marginTop="8dp"
+			android:layout_marginBottom="8dp"
+			android:layout_marginLeft="10dp"
+			android:layout_marginRight="5dp"
+			android:orientation="horizontal" >
+			
+	        <TextView
+	            android:id="@+id/downloading_size_text"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:textAppearance="@style/TextSmall"
+	            android:text="10MB / 2.2 GB" />
+
+	        <TextView
+	            android:id="@+id/downloading_percentage_text"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_alignParentRight="true"
+	            android:textAppearance="@style/TextSmall"
+	            android:text="10%" />
+	        	        
+		    <ProgressBar
+				android:id="@+id/download_progress_bar_horizontal"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_below="@id/downloading_size_text"
+		        android:layout_marginTop="0dp"
+		        style="@style/HoloLightProgressBarHorizontal" />
+	    
+	    </RelativeLayout>
+	    
+	</RelativeLayout>
+	
+	<RelativeLayout
+	    android:id="@+id/downloaded_layout"
+	    android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:padding="@dimen/spacing_small"
+		android:background="@drawable/bg_divider_hollow_box"
+		android:orientation="horizontal"
+		android:visibility="visible" >
+	    
+	    <LinearLayout
+	        android:id="@+id/downloaded_icon"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:paddingLeft="@dimen/spacing_small"
+	        android:paddingRight="@dimen/spacing_small"
+	        android:layout_centerVertical="true" >
+		    <ImageView
+		        android:layout_width="16dp"
+				android:layout_height="16dp"
+				android:adjustViewBounds="true"
+				android:scaleType="fitXY"
+				android:src="@drawable/icon_downloaded" />
+	    </LinearLayout>
+	    
+	    <TextView
+	        android:id="@+id/downloaded_text"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerVertical="true"
+	        android:layout_toRightOf="@id/downloaded_icon"
+	        android:gravity="center_vertical"
+	        android:maxLines="1"
+	        android:text="Downloaded (2.2 GB)"
+			android:textAppearance="@style/TextSmaller" />
+	    
+	    <View
+            android:id="@+id/spacing"
+            android:layout_width="10dp"
+            android:layout_height="1dp"
+            android:layout_toRightOf="@id/downloaded_text" />
+	    
+	    <ImageButton
+		    android:id="@+id/delete_button"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentRight="true"
+		    android:background="@android:color/transparent"
+		    android:layout_centerVertical="true"
+		    android:src="@drawable/icon_delete_selector" />
+	    
+	</RelativeLayout>
+
+</net.flixster.android.view.widget.DownloadPanel>

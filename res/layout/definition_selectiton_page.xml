@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <LinearLayout 
+        android:id="@+id/definition_selection_text_frame"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+	    <TextView 
+       		android:id="@+id/definition_title_text"
+	        android:paddingTop="5pt"
+	        android:paddingBottom="5pt"
+	        android:layout_height="@dimen/alert_dialog_title_height"
+	        android:layout_width="fill_parent"
+			android:gravity="center"
+			android:textAppearance="@style/AlertDialog.TitleText"
+	        android:text="Select Quality" />
+	    
+	    <View
+		    android:layout_width="fill_parent"
+		    android:layout_height="2dip"
+		    android:background="@color/holo_blue_light"/>
+	    
+	    <TextView 
+       		android:id="@+id/definition_detail_txt"
+	        android:padding="5pt"
+	        android:layout_height="wrap_content"
+	        android:layout_width="fill_parent"
+	        android:gravity="center_horizontal"
+			android:textAppearance="@style/AlertDialog.BodyText"
+	        android:text="Der große Gatsick Carrawayim Frühjahr 1922 aus dem Mittelwesten nach New York City, das von lockeren Moralvorstellungen, Jazz-Glamour, mächtigen Alkoholschmugglern und ins Astronomische steigenden Aktien geprägt wird. Auf seiner Suche nach dem amerikanischen Traum wird Nick der Nachbar des geheimnisvollen, rauschende Fe"/>
+    </LinearLayout>
+    
+      <LinearLayout 
+        android:id="@+id/definition_selction_button_frame"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="3"
+        android:orientation="vertical">
+        <Button 
+       		android:id="@+id/definition_hd_btn"
+            android:layout_weight="1"
+	        android:layout_height="0pt"
+	        android:layout_width="fill_parent"
+            android:text="HD"
+            style="@style/AlertDialogButton"
+			android:gravity="center"/>
+        <Button 
+       		android:id="@+id/definition_sd_btn"
+            android:layout_weight="1"
+	        android:layout_height="0pt"
+	        android:layout_width="fill_parent"
+            android:text="SD"
+            style="@style/AlertDialogButton"
+			android:gravity="center"/>
+        <Button 
+       		android:id="@+id/definition_cancel_btn"
+            android:layout_weight="1"
+	        android:layout_height="0pt"
+	        android:layout_width="fill_parent"
+            android:text="Cancel"
+            style="@style/AlertDialogButton"
+			android:gravity="center"/>
+    </LinearLayout>
+    
+</LinearLayout>

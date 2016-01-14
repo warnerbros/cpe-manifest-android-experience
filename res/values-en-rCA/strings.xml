@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="Favorites">Favourites</string>
+    <string name="label_theater_releasedate"><b>Theatre Release:</b></string>
+    <string name="settings_distance">Theatre Search Distance</string>
+    <string name="current_location_message">* Turn \'Use Current Location\' On, to always show the theatres closest to your current location</string>
+    <string name="map_theaters">Map Theatres</string>
+    <string name="tag_ticketconfirm_instructions">Tickets can be picked up at the Theatre Box Office or Theatre ATM. Tickets will be available for
+		pickup
+		immediately following the online purchase up to the date of the performance. You must bring the same credit card
+		used
+		to purchase the tickets. Tickets are for general admission seating; there is no reserved seating. Please come
+		early to
+		ensure best seating. There are no refunds on tickets or service charges.</string>
+    <string name="Theater:">Theatre:</string>
+    <string name="format_theaterlist_distance_subheader">Within %.0f km</string>
+    <string name="format_theaterlist_distance_subheader_final">More than %.0f km</string>
+    <string name="format_dialog_distances">%d km</string>
+    <string name="format_theaterlist_radiustext_place">Theatres within %1$d km of %2$s</string>
+    <string name="tabtext_theaters">Theatres</string>
+
+</resources>

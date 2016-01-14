@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true"><!-- pressed -->
+	    <layer-list>
+           <item android:left="5dp" android:top="5dp"><shape>
+                   <corners android:radius="8dp" />
+
+                   <solid android:color="@color/divider" />
+               </shape></item>
+    	    <item 
+    	        android:right="10dp"
+    	        android:bottom="2dp"
+		        android:gravity="left" >
+		        <shape android:shape="rectangle">
+					<solid
+				        android:color="@color/flixster_lightblue_button_color" />
+					<size
+        				android:width="6dp"/>
+				    <corners android:radius="8dp"/>
+				</shape> 
+		        
+		   	</item>
+    	    <item android:left="42dp" 
+    	        android:bottom="2dp"
+    	        android:right="2dp"
+		        android:gravity="left" >
+		        <shape android:shape="rectangle">
+		            <solid android:color="@color/divider" />
+					<size android:width="1dp" />
+				    <corners android:topRightRadius="8dp"
+				        android:bottomRightRadius="8dp"  />
+					
+				</shape> 
+		        
+		   	</item>
+		   
+    	     <item android:left="44dp" 
+    	        android:bottom="2dp"
+    	        android:right="2dp"
+		        android:gravity="right" >
+		        <shape android:shape="rectangle">
+					<solid
+				        android:color="@color/flixster_lightblue_button_color" />
+				
+				    <corners android:topRightRadius="8dp"
+				        android:bottomRightRadius="8dp"  />
+				    
+					  <size android:width="4dp" />
+				</shape> 
+		        
+		   </item>
+		   
+		    
+		</layer-list>
+    </item>
+    
+    <item > <!-- default -->
+        
+        <layer-list>
+           <item android:left="5dp" android:top="5dp"><shape>
+                   <corners android:radius="8dp" />
+
+                   <solid android:color="@color/divider" />
+               </shape></item>
+    	    <item android:left="1dp" 
+    	        android:bottom="2dp"
+    	        android:right="10dp"
+		        android:gravity="left" >
+		        <shape android:shape="rectangle">
+					<solid
+				        android:color="@color/flixster_blue_button_color" />
+					<size
+        				android:width="6dp"/>
+				    <corners android:radius="8dp"/>
+				</shape> 
+		        
+		   	</item>
+    	    <item android:left="42dp" 
+    	        android:bottom="2dp"
+    	        android:right="2dp"
+		        android:gravity="left" >
+		        <shape android:shape="rectangle">
+		            
+		            <solid android:color="@color/divider" />
+					<size android:width="1dp" />
+				    <corners android:topRightRadius="8dp"
+				        android:bottomRightRadius="8dp"  />
+					
+				</shape> 
+		        
+		   	</item>
+		   
+    	     <item android:left="44dp" 
+    	        android:bottom="2dp"
+    	        android:right="2dp"
+		        android:gravity="right" >
+		        <shape android:shape="rectangle">
+					<solid
+				        android:color="@color/flixster_blue_button_color" />
+				
+				    <corners android:topRightRadius="8dp"
+				        android:bottomRightRadius="8dp"  />
+				    
+					  <size android:width="4dp" />
+				</shape> 
+		        
+		   </item>
+		   
+		    
+		</layer-list>
+    </item>
+    
+</selector>

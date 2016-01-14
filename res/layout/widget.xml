@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearLayout1"
+    android:layout_width="320dp"
+    android:layout_height="100dp"
+    android:background="@drawable/widget_portrait"
+    android:orientation="horizontal" >
+
+    <RelativeLayout
+        android:id="@+id/widgetLogoLayout"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content" >
+
+        <ImageButton
+            android:id="@+id/widgetFlixsterLogoButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/flixster_sm_padded" >
+        </ImageButton>
+
+        <ImageButton
+            android:id="@+id/widgetSearchButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="48dp"
+            android:background="@drawable/search_padded" >
+        </ImageButton>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/widgetPosterLayout"
+        android:layout_width="52dp"
+        android:layout_height="66dp"
+        android:layout_marginTop="15dp"
+        android:clickable="true" >
+
+        <ImageView
+            android:id="@+id/widgetPosterButton"
+            android:layout_width="45dp"
+            android:layout_height="65dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/poster_frame"
+            android:scaleType="fitXY"
+            android:src="@drawable/poster_loading_small"
+            android:visibility="gone" >
+        </ImageView>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/widgetMovieLayout"
+        android:layout_width="117dp"
+        android:layout_height="66dp"
+        android:layout_marginTop="14dp"
+        android:clickable="true" > <!-- android:background="@color/transparent_black" -->
+
+        <TextView
+            android:id="@+id/widgetLoading"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:text="loading"
+            android:textAppearance="@style/widgetMovieTitle"
+            android:visibility="visible" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/widgetMovieTitle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="Kung Fu Panda Movie wraps all the way to second line."
+            android:textAppearance="@style/widgetMovieTitle"
+            android:visibility="gone" >
+        </TextView>
+
+        <ImageView
+            android:id="@+id/widgetTomatometerIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/widgetMovieTitle"
+            android:layout_below="@id/widgetMovieTitle"
+            android:layout_marginRight="1dp"
+            android:src="@drawable/icon_fresh_sm"
+            android:visibility="gone" >
+        </ImageView>
+
+        <TextView
+            android:id="@+id/widgetTomatometer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/widgetMovieTitle"
+            android:layout_marginRight="5dp"
+            android:layout_toRightOf="@id/widgetTomatometerIcon"
+            android:text="100%"
+            android:textAppearance="@style/widgetMovieSubtitle"
+            android:visibility="gone" >
+        </TextView>
+
+        <ImageView
+            android:id="@+id/widgetAudienceScoreIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/widgetMovieTitle"
+            android:layout_marginRight="1dp"
+            android:layout_toRightOf="@id/widgetTomatometer"
+            android:src="@drawable/icon_popcorn_sm"
+            android:visibility="gone" >
+        </ImageView>
+
+        <TextView
+            android:id="@+id/widgetAudienceScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/widgetMovieTitle"
+            android:layout_toRightOf="@id/widgetAudienceScoreIcon"
+            android:text="1%"
+            android:textAppearance="@style/widgetMovieSubtitle"
+            android:visibility="gone" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/widgetSecondaryText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/widgetMovieTitle"
+            android:layout_below="@id/widgetAudienceScore"
+            android:maxLines="1"
+            android:text="2 friends want tg see"
+            android:textAppearance="@style/widgetMovieSubtitle"
+            android:visibility="gone" >
+        </TextView>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/widgetArrowsLayout"
+        android:layout_width="51dp"
+        android:layout_height="fill_parent" >
+
+        <ImageButton
+            android:id="@+id/widgetUpButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/arrow_up"
+            android:visibility="gone" >
+        </ImageButton>
+
+        <ImageButton
+            android:id="@+id/widgetDownButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/arrow_down"
+            android:visibility="gone" >
+        </ImageButton>
+    </RelativeLayout>
+
+</LinearLayout>

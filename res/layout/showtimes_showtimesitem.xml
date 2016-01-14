@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/showtimes_showtimespanel"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bgpanel_inactive_topdiv"
+    android:focusable="true"
+    android:padding="@dimen/spacing_normal" >
+
+    <TextView
+        android:id="@+id/showtimes_movietitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_toLeftOf="@+id/showtimes_buybutton"
+        android:text="(movie title)"
+        android:textAppearance="@style/TextNormal"
+        android:textColor="@color/subtitle_grey" />
+
+    <TextView
+        android:id="@+id/showtimes_timelist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_below="@id/showtimes_movietitle"
+        android:layout_toLeftOf="@+id/showtimes_buybutton"
+        android:text="(time list)"
+        android:textAppearance="@style/TextSmall" />
+
+    <ImageView
+        android:id="@+id/showtimes_buybutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/spacing_small"
+        android:src="@drawable/button_buy" />
+
+</RelativeLayout>

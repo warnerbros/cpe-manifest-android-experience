@@ -1,0 +1,20 @@
+{
+    "version" : "1.0",
+    "analytics" : {
+        "rsids" : "wbrosadsuvdcinternational",
+        "server" : "warnerbros.112.2o7.net",
+        "charset" : "UTF-8",
+        "ssl" : false,
+		"offlineEnabled" : true,
+        "lifecycleTimeout" : 300,
+        "privacyDefault" : "optedin",
+		"poi" : []
+    },
+	"target" : {
+		"clientCode" : "dc2_android",
+		"timeout" : 5
+	},
+	"audienceManager" : {
+		"server" : "warnerbros.112.2o7.net"
+	}
+}

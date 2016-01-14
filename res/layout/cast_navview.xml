@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <LinearLayout
+        android:id="@+id/cast_info_nocontent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:minHeight="@dimen/movie_list_height"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            android:text="@string/cast_ready"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/cast_info_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/cast_actionbar_bg"
+        android:orientation="horizontal"
+        android:visibility="gone" >
+
+        <ImageView
+            android:id="@+id/cast_poster"
+            android:layout_width="@dimen/movie_list_width"
+            android:layout_height="@dimen/movie_list_height"
+            android:src="@drawable/poster_loading_small" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical|left"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/cast_title"
+                style="@style/TextNormal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Star Trek: Into Darkness (HD)"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/cast_playingon"
+                style="@style/TextSmaller"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Casting to Andrew&apos;s Chromecast"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/cast_playpause"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="8dp"
+            android:src="@drawable/ic_media_playpause_flat" />
+    </LinearLayout>
+
+</merge>

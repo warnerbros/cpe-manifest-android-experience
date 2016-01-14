@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:drawable="@android:drawable/ic_dialog_alert" android:duration="5" />
+    <item android:drawable="@android:drawable/btn_plus" android:duration="5" />
+    <item android:drawable="@android:drawable/arrow_down_float" android:duration="5" />
+    <item android:drawable="@android:drawable/arrow_up_float" android:duration="5" />
+    <item android:drawable="@android:drawable/ic_menu_call" android:duration="5" />
+    <item android:drawable="@android:drawable/ic_dialog_dialer" android:duration="5" />
+    
+
+</animation-list>

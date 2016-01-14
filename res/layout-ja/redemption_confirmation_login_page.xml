@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_inactive" >
+  
+    <LinearLayout
+        android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:baselineAligned="false"
+		android:gravity="center"
+		android:orientation="vertical">
+		
+		<ScrollView
+            android:id="@+id/redemption_confirmation_login_scrollview_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+			<LinearLayout
+		        android:id="@+id/redemption_main_layout"
+		        android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:baselineAligned="false"
+				android:gravity="center"
+				android:orientation="vertical">
+		    
+				<LinearLayout
+			        android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:baselineAligned="false"
+				    android:orientation="vertical"
+				    android:paddingBottom="4pt"
+				    android:paddingLeft="4pt"
+				    android:paddingRight="4pt"
+				    android:paddingTop="4pt" >
+
+					<TextView
+					    android:id="@+id/textView_redeem_text1"
+					    android:layout_width="match_parent"
+					    android:layout_height="wrap_content"
+					    android:textSize="@dimen/textMedium"
+						android:textStyle="bold"
+					    android:textColor="@color/grey05"
+					    android:text="Sign Up / Log In"/>
+						
+					<ProgressBar
+						android:id="@+id/pb"
+						style="@style/HoloLightProgressBarHorizontal"
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:progress="60"
+						android:visibility="gone" >
+					</ProgressBar>
+
+					<LinearLayout
+				        android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:paddingTop="10dp"
+						android:paddingBottom="10dp"
+						android:orientation="horizontal" >
+								
+						<ImageView
+						    android:id="@+id/imageView_redeem_confirm_poster"
+						    android:layout_width="103dp"
+						    android:layout_height="154dp"
+						    android:scaleType="fitXY"
+						    android:paddingRight="4dp"
+						    android:paddingBottom="4dp"
+						    android:background="@drawable/drop_shadow"
+						    android:src="@drawable/poster_loading_small" />
+						
+						<LinearLayout
+					        android:layout_width="0dp"
+						    android:layout_weight="2"
+						    android:paddingLeft="8dp"
+						    android:paddingBottom="40dp"
+							android:layout_height="wrap_content"
+							android:orientation="vertical"
+							android:baselineAligned="false">
+		
+						    <TextView
+							    android:id="@+id/textView_title_name"
+							    android:layout_width="match_parent"
+							    android:layout_height="wrap_content"
+								android:paddingBottom="@dimen/spacing_small"
+							    android:text="The Jerk"
+							    android:textStyle="bold"
+							    android:textSize="@dimen/textMedium"/>
+						    
+						    <TextView
+							    android:id="@+id/textView_redeem_text3"
+							    android:layout_width="match_parent"
+							    android:layout_height="wrap_content"
+							    android:paddingBottom="@dimen/spacing_small"
+							    android:textColor="@color/flixster_login_button_color"
+							    android:textSize="@dimen/textSmall"
+							    android:layout_gravity="left"
+							    android:text="@string/redeem_confirmSubHeader" />
+							
+							<TextView
+							    android:id="@+id/textView_redeem_text2"
+							    android:layout_width="match_parent"
+							    android:layout_height="wrap_content"
+							    android:paddingBottom="20dp"
+							    android:textColor="@color/flixster_login_button_color"
+							    android:textSize="@dimen/textSmall"
+							    android:layout_gravity="left"
+							    android:text="@string/redeem_info" />
+						</LinearLayout>
+					</LinearLayout>
+
+				</LinearLayout>
+		
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:paddingLeft="20dp"
+					android:paddingRight="20dp"
+					android:paddingTop="4pt"
+					android:paddingBottom="4pt"
+					android:orientation="vertical" >
+					
+				    <LinearLayout
+						android:layout_width="match_parent"
+						android:layout_height="0dp"
+						android:layout_weight="3"
+						android:paddingLeft="4dp"
+						android:paddingRight="4dp"
+						android:paddingTop="10dp"
+						android:paddingBottom="10dp"
+						android:layout_gravity="center_horizontal"
+						android:orientation="horizontal" >
+			    		
+			    		<Button
+							android:id="@+id/button_register"
+							android:layout_width="0dp"
+							android:layout_height="wrap_content"
+							android:layout_weight="6"
+							android:background="@drawable/flixster_drawer_button_blue"
+							android:textColor="@color/white"
+							android:clickable="true"
+							android:focusable="true"
+							android:scaleType="fitCenter"
+							android:text="@string/label_reg"
+							android:textStyle="bold"
+							android:textSize="@dimen/textMedium" />
+			
+			    		<LinearLayout
+			    		    android:layout_width="wrap_content"
+			    		    android:layout_height="wrap_content"
+			    		    android:layout_weight="0.6" />
+			
+				        <Button
+							android:id="@+id/button_sign_in"
+							android:layout_width="0dp"
+							android:layout_height="wrap_content"
+							android:layout_weight="6"
+							android:background="@drawable/flixster_drawer_button_white"
+							android:textColor="@color/flixster_video_blue"
+							android:clickable="true"
+							android:focusable="true"
+							android:scaleType="fitCenter"
+							android:text="Login"
+							android:textStyle="bold"
+							android:textSize="@dimen/textMedium" />
+				        
+			    	</LinearLayout>
+			    	
+			  		<LinearLayout
+			   		    android:layout_width="match_parent"
+			   		    android:layout_height="wrap_content"
+						android:paddingLeft="4dp"
+						android:paddingRight="4dp"
+						android:paddingTop="3dp"
+						android:paddingBottom="3dp"
+			   		    android:gravity="center|center_vertical"
+			   		    android:orientation="horizontal" >
+			
+			   		    <ImageView 
+							android:layout_width="0dp"
+							android:layout_weight="5"
+							android:layout_height="2px"
+							android:background="@drawable/table_header_divider" />
+			   		    
+						<TextView
+						    android:id="@+id/redeem_login_or"
+							android:layout_width="0dp"
+							android:layout_weight="2"
+							android:layout_height="wrap_content"
+							android:gravity="center"
+							android:text="or"
+							android:textColor="@color/flixster_text_grey"
+						    android:textSize="@dimen/textSmall"
+						    android:background="@android:color/transparent" />
+			
+			   		    <ImageView 
+							android:layout_width="0dp"
+							android:layout_weight="5"
+							android:layout_height="2px"
+							android:background="@drawable/table_header_divider" />
+					
+					</LinearLayout>
+			    		
+					<LinearLayout
+						android:layout_width="match_parent"
+						android:layout_height="0dp"
+						android:layout_weight="3"
+						android:paddingLeft="4dp"
+						android:paddingRight="4dp"
+						android:paddingTop="10dp"
+						android:paddingBottom="10dp"
+						android:gravity="center"
+						android:orientation="horizontal" >
+						
+			    		<Button
+							android:id="@+id/button_fb_login"
+							android:layout_width="0dp"
+							android:layout_weight="6"
+							android:layout_height="wrap_content"
+							android:background="@drawable/flixster_login_page_button"
+							android:clickable="true"
+							android:focusable="true"
+							android:scaleType="fitCenter"
+							android:text="@string/label_facebook"
+							android:textColor="@color/flixster_login_page_button_text_color"
+				    		android:drawableLeft="@drawable/fblogo"
+							android:textStyle="bold"
+							android:textSize="@dimen/textMedium" />
+			    		
+			    		<LinearLayout
+			    		    android:layout_width="wrap_content"
+			    		    android:layout_height="wrap_content"
+			    		    android:layout_weight="0.6" />
+			    		
+			    		<Button
+							android:id="@+id/google_sign_in_button"
+							android:layout_width="0dp"
+							android:layout_weight="6"
+							android:layout_height="wrap_content"
+							android:background="@drawable/flixster_login_page_button"
+							android:clickable="true"
+							android:focusable="true"
+							android:scaleType="fitCenter"
+							android:text="@string/label_google"
+							android:textColor="@color/flixster_login_page_button_text_color"
+				    		android:drawableLeft="@drawable/icon_gplus_red"
+							android:textStyle="bold"
+							android:textSize="@dimen/textMedium" />
+			    		
+			   		</LinearLayout>
+					
+		    	</LinearLayout>
+		    	
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:paddingLeft="4pt"
+					android:paddingRight="4pt"
+					android:paddingTop="2pt"
+					android:paddingBottom="4pt"
+					android:orientation="vertical" >
+		
+					<Button
+					    android:id="@+id/textView_redeem_not_want_text"
+					    android:layout_width="wrap_content"
+					    android:layout_height="33dp"
+					    android:background="@android:color/transparent"
+					    android:clickable="true"
+					    android:layout_gravity="center_horizontal"
+					    android:text="Not what you want to redeem"
+					    android:textColor="@color/flixster_text_blue"
+					    android:textSize="@dimen/textSmall" />
+					
+		    	</LinearLayout>
+    		
+    		</LinearLayout>
+		</ScrollView>
+        
+    </LinearLayout>
+   
+
+
+</RelativeLayout>

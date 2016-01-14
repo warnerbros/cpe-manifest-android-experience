@@ -1,0 +1,16 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+
+	<item>
+		<shape>
+			<solid android:color="@color/divider" />
+		</shape>
+	</item>
+	<item
+		android:bottom="@dimen/divider_height"
+		android:top="@dimen/divider_height">
+		<shape>
+			<solid android:color="@color/bg_active" />
+		</shape>
+	</item>
+
+</layer-list>

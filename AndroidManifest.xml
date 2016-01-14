@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	package="com.wb.nextgen"
+	android:installLocation="auto"
+	android:versionCode="1"
+	android:versionName="v1.0.0" >
+
+	<!-- Minimum Ice-cream Sandwich 4.0; target Ice-cream Sandwich 4.0 -->
+	<uses-sdk
+		android:minSdkVersion="14"
+		android:targetSdkVersion="14" />
+
+	<!-- Support all screens -->
+	<supports-screens
+		android:anyDensity="true"
+		android:largeScreens="true"
+		android:normalScreens="true"
+		android:smallScreens="true"
+		android:xlargeScreens="true" />
+
+	<!-- Permissions -->
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+	<uses-permission android:name="android.permission.GET_ACCOUNTS" />
+	<uses-permission android:name="android.permission.GET_TASKS" />
+	<uses-permission android:name="android.permission.USE_CREDENTIALS" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.VIBRATE" />
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
+	<uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="net.flixster.android.ACCESS_COMM" />
+	<uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
+	
+	<!-- Widevine DRM -->
+    <uses-feature
+        android:name="com.google.widevine.software.drm"
+        android:required="false" />
+    
+	<!-- GTV Market inclusion -->
+	<uses-feature
+		android:name="android.hardware.touchscreen"
+		android:required="false" />
+
+	<!-- GTV unsupported feature -->
+	<uses-feature
+		android:name="android.hardware.location.gps"
+		android:required="false" />
+
+	<!-- Tablets unsupported feature -->
+	<uses-feature
+		android:name="android.hardware.telephony"
+		android:required="false" />
+
+	<!-- Flixster -->
+	<application
+		android:name="com.wb.nextgen.NextGenApplication"
+		android:allowClearUserData="true"
+		android:icon="@drawable/icon_launcher"
+		android:label="@string/app_name"
+		android:theme="@style/FlixsterActionBar" >
+
+		<!-- Might have to remove this for one-off Android builds -->
+		<uses-library
+			android:name="com.google.android.maps"
+			android:required="false" />
+
+		<meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+		<meta-data android:name="com.crashlytics.ApiKey" android:value="672734f5363b289563cbb85b6da95e747cc7eabd"/>
+
+		<!-- Activities -->
+		<activity
+			android:name="com.wb.nextgen.NextGenActivity"
+			android:launchMode="singleTop"
+			android:configChanges="orientation|screenSize"
+			android:theme="@style/Theme.Flx.NoTitle" >
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+
+
+			
+			<intent-filter> <!-- app link -->
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:scheme="flxvid" />
+			</intent-filter>
+		</activity>
+
+		
+		<!-- The main/home activity (it has no parent activity) -->
+
+
+		<!-- Landing Page
+		<activity android:name="net.flixster.android.view.LandingPageActivity"
+		    android:theme="@style/Theme.Flx.NoTitle"></activity>-->
+
+
+
+		<!--
+             GA SDK install referrer tracking
+			<receiver android:name="com.google.android.apps.analytics.AnalyticsReceiver" android:exported="true">
+			<intent-filter>
+			<action android:name="com.android.vending.INSTALL_REFERRER" />
+			</intent-filter>
+			</receiver>
+		-->
+
+
+		<!-- Custom install referrer tracking -->
+
+
+		<!-- App widget -->
+		<!-- <receiver android:name="com.flixster.android.widget.WidgetProvider" >
+			<intent-filter>
+				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+			</intent-filter>
+
+			<meta-data
+				android:name="android.appwidget.provider"
+				android:resource="@xml/widget_provider" />
+		</receiver>-->
+
+	
+		<!-- Set up lower level activities and up navigation (by specifying parent activity) -->
+		
+
+				
+		<!-- Video Player -->
+
+		<!-- Next Gen -->
+
+		<activity android:name="com.wb.nextgen.NextGenPlayer"
+			android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+			android:exported="false"
+			android:theme="@style/Theme.Flx.FullscreenVideo" >
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+			</intent-filter>
+		</activity>
+
+		<!--<activity android:name="com.wb.nextgen.NextGenActivity"
+			android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+			android:exported="false"
+			android:theme="@style/Theme.Flx.FullscreenVideo" >
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+			</intent-filter>
+		</activity>
+		-->
+		<activity android:name="com.wb.nextgen.NextGenExtraActivity"
+			android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+			android:exported="false"
+			android:theme="@style/Theme.Flx.FullscreenVideo" >
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+			</intent-filter>
+		</activity>
+		<!-- ChromeCast -->
+		<activity android:name="net.flixster.android.view.CastPlayerActivity"
+			 android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+            android:exported="false"
+			android:launchMode="singleTop"
+            android:theme="@style/Theme.AppCompat" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+		
+		<receiver
+            android:name="net.flixster.android.cast.CastBroadcastReceiver" android:exported="false" android:enabled="true" android:priority="1000" >
+            <intent-filter>
+                <action android:name="flixster.cast.ACTION_PLAY" />
+                <action android:name="flixster.cast.ACTION_PAUSE" />
+                <action android:name="flixster.cast.ACTION_STOP" />
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+                <action android:name="android.media.VOLUME_CHANGED_ACTION" />
+            </intent-filter>
+        </receiver>
+		
+
+				
+
+						
+	</application>
+
+</manifest>

@@ -1,0 +1,35 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <NumberPicker
+        android:id="@+id/numberPicker1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
+
+    <LinearLayout 
+	    android:id="@+id/language_button_group"
+		android:layout_below="@id/numberPicker1"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:weightSum="2"
+		android:orientation="horizontal" >
+	    <Button 
+	        android:id="@+id/number_pick_cancel"
+	        android:layout_height="wrap_content"
+	        android:layout_width="0pt"
+	        android:text="Cancel"
+	        style="@style/AlertDialogButton"
+	        android:layout_weight="1"/>
+	    <Button 
+	        android:id="@+id/number_pick_set"
+	        android:layout_height="wrap_content"
+	        android:layout_width="0pt"
+	        android:text="OK"
+	        style="@style/AlertDialogButtonBottomRight"
+	        android:layout_weight="1"/>
+	</LinearLayout>
+    
+</RelativeLayout>

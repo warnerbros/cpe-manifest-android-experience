@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <!-- Non focused states -->
+    <item android:state_focused="false" android:state_pressed="false" android:state_selected="false">
+ 
+    	<shape android:shape="rectangle">
+    	    <solid android:color="@android:color/white"/>
+		    <corners 
+		        android:topLeftRadius="8dp" 
+		        android:bottomLeftRadius="8dp"/>
+		    <stroke
+		        android:width="1dp"
+		        android:color="@color/flixster_textbox_deselected_stroke"/>
+		</shape> 
+    </item>
+        
+    <!-- <item android:drawable="@drawable/button_nav_selected" android:state_focused="false" android:state_pressed="false" android:state_selected="true"/>-->
+    
+    <item android:state_focused="false" android:state_pressed="false" android:state_selected="true">
+ 
+    	<shape android:shape="rectangle">
+    	    <solid android:color="@color/flixster_button_bottom"/>
+		    <corners 
+		        android:topLeftRadius="8dp" 
+		        android:bottomLeftRadius="8dp"/>
+		    <stroke
+		        android:width="1dp"
+		        android:color="@color/flixster_textbox_deselected_stroke"/>
+		</shape> 
+    </item>
+
+    <!-- Focused states -->
+    <item android:state_focused="true" android:state_pressed="false" android:state_selected="false">
+ 
+    	<shape android:shape="rectangle">
+    	    <solid android:color="@color/flixster_button_bottom"/>
+		    <corners 
+		        android:topLeftRadius="8dp" 
+		        android:bottomLeftRadius="8dp"/>
+		    <stroke
+		        android:width="1dp"
+		        android:color="@color/flixster_textbox_deselected_stroke"/>
+		</shape> 
+    </item>
+    <item android:state_focused="true" android:state_pressed="false" android:state_selected="true">
+ 
+    	<shape android:shape="rectangle">
+    	    <solid android:color="@color/flixster_button_bottom"/>
+		    <corners 
+		        android:topLeftRadius="8dp" 
+		        android:bottomLeftRadius="8dp"/>
+		    <stroke
+		        android:width="1dp"
+		        android:color="@color/flixster_textbox_deselected_stroke"/>
+		</shape> 
+    </item>
+
+    <!-- Pressed -->
+    <item android:state_pressed="true">
+ 
+    	<shape android:shape="rectangle" >
+    	    <solid android:color="@color/flixster_button_top"/>
+		    <corners 
+		        android:topLeftRadius="8dp" 
+		        android:bottomLeftRadius="8dp"/>
+		    <stroke
+		        android:width="1dp"
+		        android:color="@color/flixster_textbox_deselected_stroke"/>
+		</shape> 
+    </item>
+    
+
+</selector>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menuMovie"
+        android:icon="@drawable/ic_menu_movie"
+        android:title="@string/menu_movie"
+        android:titleCondensed="@string/menu_movie"/>
+    <item
+        android:id="@+id/menuSettings"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:title="@string/menu_settings"
+        android:titleCondensed="@string/menu_settings"/>
+    <item
+        android:id="@+id/menuSearch"
+        android:icon="@android:drawable/ic_menu_search"
+        android:title="@string/menu_search"
+        android:titleCondensed="@string/menu_search"/>
+
+</menu>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    
+	<!-- Theme for fullscreen video activities -->
+    <style name="Theme.Flx.BaseSelector.Dark" parent="@android:style/Theme.Holo" />
+    <style name="Theme.Flx.NoTitle.Dark" parent="@style/Theme.Flx.BaseSelector.Dark">
+        <item name="android:windowNoTitle">true</item>
+    </style>
+    <style name="Theme.Flx.FullscreenVideo" parent="@style/Theme.Flx.NoTitle.Dark">
+        <item name="android:windowFullscreen">true</item>
+    </style>
+    
+    
+	<style name="AlertDialog" parent="@style/Theme.AppCompat.Light">
+		<item name="android:windowNoTitle">true</item>
+		<item name="android:windowIsFloating">true</item>
+	</style>
+	
+	<style name="AlertDialog.TitleText" parent="@style/TextLarge">
+	    <item name="android:textColor">@color/holo_blue_light</item>
+	</style>
+	
+	<style name="AlertDialog.BodyText" parent="@style/TextMedium">
+	    <item name="android:textColor">@color/black</item>
+	</style>
+	
+	<style name="AlertDialogButton" parent="@android:style/Widget.ListView">
+	    <item name="android:background">@drawable/btn_alert_dialog_selector</item>
+	    <item name="android:textColor">@color/black</item>
+	    <item name="android:textAppearance">@style/TextNormal</item>
+	    <item name="android:minHeight">@dimen/alert_dialog_button_bar_height</item>
+    </style>
+	
+	<style name="AlertDialogButtonBottomRight" parent="@style/AlertDialogButton">
+	    <item name="android:background">@drawable/btn_alert_dialog_bottomright_selector</item>
+    </style>
+		
+</resources>

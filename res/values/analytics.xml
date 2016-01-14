@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources xmlns:tools="https://schemas.android.com/tools" tools:ignore="TypographyDashes">
+  <!-- UA-35611714-5 for production build, UA-35611714-6 for QA build -->
+  <string name="ga_trackingId">UA-54929130-2</string>
+
+  <!-- Enable automatic exception tracking -->
+  <bool name="ga_reportUncaughtExceptions">true</bool>
+  
+  <!-- Flag to enable or writing of debug information to the log -->
+  <bool name="ga_debug">false</bool>
+  
+  <!-- Tells Google Analytics to anonymize the information sent by the tracker objects by removing the last octet of the IP address prior to its storage. -->
+  <bool name="ga_anonymizeIp">true</bool>
+  
+  <!-- The amount of time (in seconds) your application can stay in the background before the session is ended -->
+  <integer name="ga_sessionTimeout">600</integer>
+  
+  <!-- Enable Activity tracking -->
+  <bool name="ga_autoActivityTracking">true</bool>
+  
+  <!-- The screen names that will appear in  reporting -->
+  <string name="net.flixster.android.view.LoginActivity">Login View</string>
+  <string name="net.flixster.android.view.CollectionActivity">Collection View</string>
+  <string name="net.flixster.android.view.MovieDetailsActivity">Title Details View</string>
+  <string name="net.flixster.android.view.tablet.MovieDetailsActivityTablet">Title Details View</string>
+  <string name="net.flixster.android.drm.WidevinePlayer">Video Player View</string>
+</resources>

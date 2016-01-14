@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="@dimen/spacing_large"
+    android:orientation="vertical" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+		android:layout_height="match_parent" >
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical" >
+			
+			<ImageView
+				android:id="@+id/flixster_logo"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:scaleType="fitCenter"
+				android:layout_gravity="center"
+				android:src="@drawable/flixsterlogo" />
+		
+		    <LinearLayout
+		        android:layout_width="fill_parent"
+		        android:layout_height="fill_parent"
+		        android:baselineAligned="false"
+		        android:orientation="vertical" >
+		
+		        <TextView 
+					android:id="@+id/login_text"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:padding="@dimen/spacing_normal"
+					android:gravity="center"
+					android:textSize="@dimen/textLarge"
+					android:textStyle="bold"
+					android:textColor="@color/black"
+					android:text="Log In" />
+		        
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:padding="@dimen/spacing_normal"
+					android:gravity="center"
+					android:orientation="horizontal" >
+					
+		    		<Button
+						android:id="@+id/button_fb_login"
+						android:layout_width="0dp"
+						android:layout_weight="6"
+						android:layout_height="wrap_content"
+						android:background="@drawable/flixster_login_page_button"
+						android:clickable="true"
+						android:focusable="true"
+						android:scaleType="fitCenter"
+						android:text="@string/label_facebook"
+						android:textColor="@color/flixster_login_page_button_text_color"
+			    		android:drawableLeft="@drawable/fblogo"
+						android:textStyle="bold"
+						android:textSize="@dimen/textMedium" />
+		    		
+		    		<LinearLayout
+		    		    android:layout_width="wrap_content"
+		    		    android:layout_height="wrap_content"
+		    		    android:layout_weight="0.6" />
+		    		
+		    		<Button
+						android:id="@+id/google_sign_in_button"
+						android:layout_width="0dp"
+						android:layout_weight="6"
+						android:layout_height="wrap_content"
+						android:background="@drawable/flixster_login_page_button"
+						android:clickable="true"
+						android:focusable="true"
+						android:scaleType="fitCenter"
+						android:text="@string/label_google"
+						android:textColor="@color/flixster_login_page_button_text_color"
+			    		android:drawableLeft="@drawable/icon_gplus_red"
+						android:textStyle="bold"
+						android:textSize="@dimen/textMedium" />
+		    		
+		   		</LinearLayout>
+		
+				<TextView 
+					android:id="@+id/login_to_flixster_text"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:padding="@dimen/spacing_normal"
+					android:gravity="center"
+					android:textSize="@dimen/textMedium"
+					android:textStyle="bold"
+					android:textColor="@color/black"
+					android:text="Log in with your Flixster Account" />
+		        
+				<LinearLayout
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:padding="@dimen/spacing_normal"
+					android:orientation="vertical" >
+					<EditText
+						android:id="@+id/editText_user"
+						android:layout_width="fill_parent"
+						android:layout_height="36dp"
+						android:background="@drawable/flixster_text_box"
+						android:focusable="true"
+						android:imeOptions="actionNext"
+						android:inputType="textEmailAddress"
+						android:maxLength="100"
+						android:singleLine="true"
+						android:textAppearance="@style/TextNormal"
+						android:hint="Email Address" />
+				</LinearLayout>
+				
+				<LinearLayout
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:padding="@dimen/spacing_normal"
+					android:orientation="vertical" >
+					<EditText
+						android:id="@+id/editText_password"
+						android:layout_width="fill_parent"
+						android:layout_height="36dp"
+						android:background="@drawable/flixster_text_box"
+						android:focusable="true"
+						android:imeOptions="actionDone"
+						android:inputType="textPassword"
+						android:maxLength="100"
+						android:singleLine="true"
+						android:textAppearance="@style/TextNormal"
+						android:hint="Password" />
+				</LinearLayout>
+		
+				<LinearLayout
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:padding="@dimen/spacing_normal"
+					android:orientation="vertical" >
+					<Button
+		                android:id="@+id/button_sign_in"
+		                android:layout_width="fill_parent"
+		                android:layout_height="wrap_content"
+		                android:background="@drawable/flixster_blue_button"
+		                android:clickable="true"
+		                android:focusable="true"
+		                android:scaleType="fitCenter"
+		                android:text="@string/label_log_in"
+		                android:textColor="@color/white"
+		                android:textStyle="bold"
+		                android:textSize="@dimen/textMedium" />
+				</LinearLayout>
+				
+				<LinearLayout
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:padding="@dimen/spacing_normal"
+					android:gravity="center"
+					android:orientation="horizontal" >
+					
+					<TextView
+					    android:id="@+id/new_to_flixster_text"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="New to Flixster?"
+						android:textColor="@color/flixster_text_grey"
+					    android:textSize="@dimen/textMSmall" />
+					
+		            <Button
+		                android:id="@+id/button_sign_up"
+		                android:layout_width="wrap_content"
+		                android:layout_height="30dp"
+		                android:paddingLeft="@dimen/spacing_small"
+		                android:background="@android:color/transparent"
+		                android:clickable="true"
+		                android:focusable="true"
+		                android:scaleType="fitCenter"
+		                android:text="Sign Up"
+		                android:textColor="@drawable/blue_anchor_text_selector"
+		                android:textSize="@dimen/textMSmall" />
+										
+				</LinearLayout>
+				
+	            <Button
+	                android:id="@+id/button_forgot_password"
+	                android:layout_width="fill_parent"
+	                android:layout_height="30dp"
+	                android:background="@android:color/transparent"
+	                android:clickable="true"
+	                android:focusable="true"
+	                android:scaleType="fitCenter"
+	                android:text="@string/label_forgot"
+	                android:textColor="@drawable/blue_anchor_text_selector"
+	                android:textSize="@dimen/textMSmall" />
+		
+		    </LinearLayout>
+    
+    	</LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+	<LinearLayout 
+	    android:id="@+id/empty_collection_layout1"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentTop="true"
+	    android:layout_centerHorizontal="true"
+	    android:padding="10sp"
+	    android:weightSum="12">
+	    
+		    
+	    <TextView
+	   		android:layout_weight="8"
+	   		android:gravity="center_vertical"
+	        android:id="@+id/empty_collection_title"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:textSize="20sp"
+	        android:text="Build your digital collection on Flixster!" />
+	    
+	</LinearLayout>
+	
+	<LinearLayout 
+	   	android:layout_below="@id/empty_collection_layout1"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical">
+	    
+	    <TextView
+	        android:id="@+id/empty_collection_body_text"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:padding="10sp"
+	        android:textSize="10sp"
+	        android:text="Flixster, the #1 movie discovery application, now lets you stream movies and TV shows from the cloud with UltraViolet — the new industry-backed format that will allow you to access movies and TV shows you own from any compatible service.
+
+With Flixster, you can enjoy your UltraViolet Digital Copy in more ways, on more devices, and in more places than ever before!
+
+To build your collection, look for the specially marked Blu-ray and DVD packages that have the Digital Copy logo. The redemption code is printed on an insert accompanying your feature." />
+	
+	    <TextView
+	        android:id="@+id/empty_collection_code_text"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center_horizontal"
+	        android:textSize="20sp"
+	        android:padding="10sp"
+	        android:text="Already have your code?" />
+	
+	    <Button
+	        android:id="@+id/collection_to_redemptionview_button"
+	        android:layout_width="240dp"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center_horizontal"
+	        android:background="@drawable/flixster_blue_button"
+	        android:padding="10sp"
+	        android:text="Get Started"
+	        android:textColor="@android:color/white"
+	        android:textSize="20sp" />
+        
+    </LinearLayout>
+    
+
+</RelativeLayout>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical" >
+	<ProgressBar
+		android:id="@+id/pb"
+		style="@style/HoloLightProgressBarHorizontalNoPadding"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:visibility="gone" >
+	</ProgressBar>
+
+    <RelativeLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+			android:background="@color/flixster_tab_normal_color"
+		android:visibility="visible" >
+
+		<ImageButton
+			android:id="@+id/back"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_toLeftOf="@+id/forward"
+			android:scaleX="0.5"
+			android:scaleY="0.5"
+			android:background="@android:color/transparent"
+			android:src="@drawable/icon_arrow_left"
+			
+			 />
+
+		<ImageButton
+			android:id="@+id/forward"
+			android:layout_alignParentRight="true"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:background="@android:color/transparent"
+			android:scaleX="0.5"
+			android:scaleY="0.5"
+			android:src="@drawable/icon_arrow_right"
+			 />
+
+		<ImageButton
+			android:id="@+id/reload"
+			android:layout_alignParentLeft="true"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:scaleX="0.5"
+			android:scaleY="0.5"
+			android:background="@android:color/transparent"
+			android:src="@drawable/icon_refresh"
+			/>
+	</RelativeLayout>
+
+	
+
+	<FrameLayout 
+	    android:id="@+id/webViewholder_tab"
+    	android:layout_width="fill_parent"
+    	android:layout_height="fill_parent"/>
+	
+
+</LinearLayout>

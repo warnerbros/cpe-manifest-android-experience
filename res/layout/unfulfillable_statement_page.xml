@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        style="@style/header_text"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/topbar"
+        android:padding="@dimen/topbar_pad"
+        android:text="@string/unfulfillable_title" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/iconpanel_padding"
+        android:text="@string/unfulfillable_statement_title"
+        android:textAppearance="@style/TextSmallBold" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/iconpanel_padding_left"
+        android:text="@string/unfulfillable_statement_text"
+        android:textAppearance="@style/TextSmall" />
+
+</LinearLayout>

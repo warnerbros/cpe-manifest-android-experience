@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
+	<item
+        android:id="@+id/menuChromecast"
+        android:title="cast"
+        app:actionProviderClass="android.support.v7.app.MediaRouteActionProvider"
+        android:showAsAction="always"/>
+    
+    <item
+        android:id="@+id/menuRefresh"
+        android:icon="@drawable/ic_action_refresh"
+        android:title="Refresh"
+        android:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/menuFilter"
+        android:icon="@drawable/ic_action_filter"
+        android:title="Filter"
+        android:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/menuSort"
+        android:icon="@drawable/ic_ab_sort"
+        android:title="@string/menu_sort"
+        android:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/menuSearch"
+        android:icon="@drawable/ic_action_search"
+        android:title="@string/menu_search"
+        android:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/menuBack"
+        android:icon="@drawable/ic_action_back"
+        android:title="back"
+        android:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/menuForward"
+        android:icon="@drawable/ic_action_forward"
+        android:title="forward"
+        android:showAsAction="ifRoom"/>
+
+</menu>

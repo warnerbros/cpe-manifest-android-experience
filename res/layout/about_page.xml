@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ScrollView01"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/listitem_bg"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/LinearLayout01"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:id="@+id/about_version_row"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:background="@drawable/bgpanel_active_topdiv" >
+
+            <TextView
+                android:id="@+id/about_version_maintext"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="Version 1.2.3"
+                android:textAppearance="@style/TextMedium" />
+
+        </RelativeLayout>
+
+		<RelativeLayout
+            android:id="@+id/about_terms_row"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:background="@drawable/bgpanel_active_topdiv" >
+
+            <TextView
+                android:id="@+id/about_terms_maintext"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="Terms and Conditions"
+                android:textAppearance="@style/TextMedium" />
+
+        </RelativeLayout>
+
+		<RelativeLayout
+            android:id="@+id/about_privacy_row"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:background="@drawable/bgpanel_active_topdiv" >
+
+            <TextView
+                android:id="@+id/about_privacy_maintext"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="Privacy Policy"
+                android:textAppearance="@style/TextMedium" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</ScrollView>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/load_more"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="12dp"
+    android:paddingLeft="50dp"
+    android:paddingTop="10dp" >
+
+    <TextView
+        android:id="@+id/load_more_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/label_load_more_reviews"
+        android:textAppearance="@style/hyperlink" />
+
+    <TextView
+        android:id="@+id/load_more_count"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/load_more_title"
+        android:textAppearance="@style/subtitle" />
+
+</RelativeLayout>

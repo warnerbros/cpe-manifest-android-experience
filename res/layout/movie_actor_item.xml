@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/actorLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:drawable/list_selector_background"
+    android:focusable="true"
+    android:padding="10dp" >
+
+    <ImageView
+        android:id="@+id/actorPhoto"
+        android:layout_width="@dimen/critic_photo_size"
+        android:layout_height="@dimen/critic_photo_size"
+        android:layout_marginRight="10dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/user" />
+
+    <TextView
+        android:id="@+id/actorName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/actorPhoto"
+        android:ellipsize="end"
+        android:includeFontPadding="false"
+        android:maxLines="1"
+        android:text="Name"
+        android:textAppearance="@style/TextNormalBold" />
+
+    <TextView
+        android:id="@+id/actorChars"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/actorName"
+        android:layout_below="@id/actorName"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:text="chars"
+        android:textAppearance="@style/TextNormal"
+        android:visibility="invisible" >
+    </TextView>
+
+</RelativeLayout>

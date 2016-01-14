@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+   	android:layout_height="wrap_content"
+   	
+   	android:orientation="horizontal">
+
+   	<TextView
+   	    android:id="@+id/drawer_row_text"
+   		android:paddingTop="@dimen/spacing_normal"
+   		android:paddingBottom="@dimen/spacing_normal"
+   		android:paddingLeft="@dimen/spacing_large"
+   		android:paddingRight="@dimen/spacing_large"
+   	    android:layout_gravity="center_vertical"
+   	    android:layout_width="fill_parent"
+   	    android:layout_height="wrap_content"
+   	    android:background="@drawable/drawer_row_bg_selector"
+		android:textColor="@color/drawer_row_text_color"
+		android:textSize="@dimen/textNormal"
+   	    android:text="Drawer Item"/>
+
+	
+</LinearLayout>

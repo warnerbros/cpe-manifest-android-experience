@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bgpanel_active_topdiv"
+    android:focusable="true"
+    android:focusableInTouchMode="false"
+    android:paddingBottom="@dimen/spacing_normal"
+    android:paddingLeft="@dimen/spacing_normal"
+    android:paddingTop="@dimen/spacing_normal" >
+
+    <!-- TODO: Replace /layout-large-v11/showtimes_item.xml with this -->
+
+    <ImageView
+        android:id="@+id/showtimes_ticketicon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/icon_ticket" />
+
+    <TextView
+        android:id="@+id/showtimes_theatername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="@dimen/ticket_icon_size"
+        android:layout_marginRight="@dimen/spacing_small"
+        android:layout_toLeftOf="@+id/showtimes_star"
+        android:text="(theater name)"
+        android:textAppearance="@style/TextMediumBold" />
+
+    <TextView
+        android:id="@+id/showtimes_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/showtimes_theatername"
+        android:layout_alignRight="@id/showtimes_theatername"
+        android:layout_below="@id/showtimes_theatername"
+        android:text="(address)"
+        android:textAppearance="@style/TextSmaller" />
+
+    <CheckBox
+        android:id="@+id/showtimes_star"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:button="@drawable/list_starbox" />
+
+</RelativeLayout>

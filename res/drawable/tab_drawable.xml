@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Non focused states -->
+    <item android:state_enabled="true" android:state_focused="false" android:state_pressed="false" android:state_selected="false">
+ 
+    	<layer-list>
+    	    <item android:drawable="@color/flixster_tab_normal_color" />
+    	    <item android:top="10dp" android:bottom="10dp"
+    	        android:drawable="@color/flixster_tab_divider_color"
+		        android:gravity="left" >
+		        
+		   </item>
+    	    <item android:left="2dp" 
+    	        android:drawable="@color/flixster_tab_normal_color"
+		        android:gravity="left" >
+		        
+		   </item>
+		    
+		</layer-list>
+    </item>
+    
+    <item android:state_enabled="true" android:state_focused="false" android:state_pressed="false" android:state_selected="true">
+ 
+    	<layer-list>
+    	    <item 
+    	        android:drawable="@color/flixster_tab_selected_color"
+		        android:gravity="left" >
+		    </item>
+		   
+    	    <item android:drawable="@color/flixster_tab_normal_color" android:bottom="3dp"/>
+    	    <item android:top="10dp" android:bottom="10dp"
+    	        android:drawable="@color/flixster_tab_divider_color"
+		        android:gravity="left" >
+		        
+		   </item>
+    	    <item android:left="2dp" android:bottom="3dp"
+    	        android:drawable="@color/flixster_tab_normal_color"
+		        android:gravity="left" >
+		        
+		   </item>
+		    
+		</layer-list>
+    </item>
+
+    <!-- Focused states -->
+    <item android:drawable="@drawable/tab_focused" android:state_enabled="true" android:state_focused="true" android:state_pressed="false" android:state_selected="false"/>
+    <item android:drawable="@drawable/tab_focused" android:state_enabled="true" android:state_focused="true" android:state_pressed="false" android:state_selected="true"/>
+
+    <!-- Pressed -->
+    <item android:drawable="@color/flixster_button_top" android:state_enabled="true" android:state_pressed="true" />
+    
+    <!-- Disabled -->
+    <item android:drawable="@color/flixster_tab_normal_color" android:state_enabled="false"/>
+
+</selector>

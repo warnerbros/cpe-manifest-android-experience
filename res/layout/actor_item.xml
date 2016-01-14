@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/top_list_divider"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/divider_height"
+        android:background="@color/divider" >
+    </ImageView>
+
+    <RelativeLayout
+        android:id="@+id/actorLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/list_selector_background"
+        android:focusable="true"
+        android:paddingRight="10dp" >
+
+        <ImageView
+            android:id="@+id/actorPhoto"
+            android:layout_width="@dimen/search_photo_size"
+            android:layout_height="@dimen/search_photo_size"
+            android:layout_marginRight="20dp"
+            android:maxHeight="@dimen/search_photo_size"
+            android:maxWidth="@dimen/search_photo_size"
+            android:scaleType="fitXY"
+            android:src="@drawable/photo_loading" />
+
+        <TextView
+            android:id="@+id/actorName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/actorPhoto"
+            android:ellipsize="end"
+            android:includeFontPadding="false"
+            android:paddingTop="30dp"
+            android:singleLine="true"
+            android:text="title"
+            android:textAppearance="@style/TextNormalBold" />
+    </RelativeLayout>
+
+</LinearLayout>

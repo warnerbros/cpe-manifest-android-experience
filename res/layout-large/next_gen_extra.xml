@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@android:color/black"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <Button
+            android:layout_width="wrap_content"
+            android:id="@+id/next_gen_extra_header_left_button"
+            android:text="Back"
+            android:textColor="@color/white"
+            android:textSize="@dimen/textLarge"
+            android:background="@android:color/transparent"
+            android:layout_alignParentLeft="true"
+            android:layout_height="match_parent" />
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:id="@+id/next_gen_extra_header_center_logo"
+            android:background="@android:color/transparent"
+            android:layout_centerInParent="true"
+            android:layout_height="match_parent" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:id="@+id/next_gen_extra_header_right_title"
+            android:text="EXTRA"
+            android:textColor="@color/white"
+            android:textSize="@dimen/textLarge"
+            android:background="@android:color/transparent"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent">
+        <LinearLayout
+            android:id="@+id/next_gen_extra_left_view"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+            <!--<fragment
+                android:name="net.flixster.android.nextgen.fragment.NextGenActorListFragment"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"/>-->
+        </LinearLayout>
+        <!--<com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView
+            android:id="@+id/next_gen_extra_left_panel_list"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:stretchMode="columnWidth" >
+        </com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView>-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:id="@+id/next_gen_extra_right_view"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+            <!--<com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView
+                android:id="@+id/next_gen_extra_right_list"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:stretchMode="columnWidth" >
+            </com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView>-->
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

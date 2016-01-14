@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal"
+    android:orientation="vertical" >
+	<ImageView 
+        android:id="@+id/country_logo_img_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/movie_pro_height"
+        android:src="@drawable/splash_popcorn"/>
+	<TextView 
+        android:id="@+id/country_where_txt"
+        android:layout_below="@id/country_logo_img_view"
+        android:padding="@dimen/spacing_normal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textSize="@dimen/textMedium"
+        android:text="Where are You?"/>
+	<TextView 
+        android:id="@+id/country_gate_sub_txt"
+        android:layout_below="@id/country_where_txt"
+        android:padding="@dimen/spacing_normal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textSize="@dimen/textSmall"
+        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing\nelit, sed do eiusmod tempor."/>
+	<TextView 
+        android:id="@+id/country_choose_country_txt"
+        android:layout_below="@id/country_gate_sub_txt"
+        android:padding="@dimen/spacing_normal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textSize="@dimen/textMedium"
+        android:text="Choose a Country"/>
+    <ListView
+        android:layout_below="@id/country_choose_country_txt"
+        android:layout_above="@+id/country_confirm_button"
+        android:id="@+id/country_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center_vertical"
+        android:paddingLeft="8dip"
+        android:paddingRight="8dip"
+        android:textAppearance="@style/TextMediumBold" />
+
+    <Button
+        android:layout_alignParentBottom="true"
+        android:id="@+id/country_confirm_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+		android:background="@drawable/flixster_blue_button"
+		android:layout_margin="@dimen/spacing_normal"
+		android:text="Continue"
+		android:textColor="@color/white"
+		android:textStyle="bold"
+        android:textAppearance="@style/TextNormal" />
+
+</RelativeLayout>

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="movieratings">
+        <item>Flixster</item>
+        <item>Rotten Tomatoes</item>
+        <item>No Ratings</item>
+    </string-array>
+    <string-array name="location_choices">
+        <item>Off</item>
+        <item>On (Network Only)</item>
+        <item>On (Network &amp; GPS)</item>
+    </string-array>
+    <string-array name="cachepolicy_choices">
+        <item>Off (Clear Cache)</item>
+        <item>Small (2 MB)</item>
+        <item>Medium (4 MB)</item>
+        <item>Large (8 MB)</item>
+    </string-array>
+    <string-array name="boxoffice_sort_select">
+        <item>Popular</item>
+        <item>Rating</item>
+        <item>A-Z</item>
+    </string-array>
+    <string-array name="theaters_sort_select">
+        <item>Distance</item>
+        <item>A-Z</item>
+    </string-array>
+    <string-array name="date_choices">
+        <item>Today</item>
+    </string-array>
+    <string-array name="dvd_browse_catagories_english">
+        <item>Flixster Top 100</item>
+        <item>Action &amp; Adventure</item>
+        <item>Animation</item>
+        <item>Anime &amp; Manga</item>
+        <item>Art House &amp; International</item>
+        <item>Classics</item>
+        <item>Comedy</item>
+        <item>Cult Movies</item>
+        <item>Documentary</item>
+        <item>Drama</item>
+        <item>Faith &amp; Spirituality</item>
+        <item>Gay &amp; Lesbian</item>
+        <item>Horror</item>
+        <item>Kids &amp; Family</item>
+        <item>Musical &amp; Performing Arts</item>
+        <item>Mystery &amp; Suspense</item>
+        <item>Romance</item>
+        <item>Science Fiction &amp; Fantasy</item>
+        <item>Special Interest</item>
+        <item>Sports &amp; Fitness</item>
+        <item>Television</item>
+        <item>Western</item>
+    </string-array>
+    <string-array name="dvd_browse_catagories">
+        <item>Flixster Top 100</item>
+        <item>Action &amp; Adventure</item>
+        <item>Animation</item>
+        <item>Anime &amp; Manga</item>
+        <item>Art House &amp; International</item>
+        <item>Classics</item>
+        <item>Comedy</item>
+        <item>Cult Movies</item>
+        <item>Documentary</item>
+        <item>Drama</item>
+        <item>Faith &amp; Spirituality</item>
+        <item>Gay &amp; Lesbian</item>
+        <item>Horror</item>
+        <item>Kids &amp; Family</item>
+        <item>Musical &amp; Performing Arts</item>
+        <item>Mystery &amp; Suspense</item>
+        <item>Romance</item>
+        <item>Science Fiction &amp; Fantasy</item>
+        <item>Special Interest</item>
+        <item>Sports &amp; Fitness</item>
+        <item>Television</item>
+        <item>Western</item>
+    </string-array>
+    <string-array name="dvd_browse_tags">
+        <item>&amp;filter=flixster-top-100</item>
+        <item>&amp;genre=action-adventure</item>
+        <item>&amp;genre=animation</item>
+        <item>&amp;genre=anime-manga</item>
+        <item>&amp;genre=art-house-international</item>
+        <item>&amp;genre=classics</item>
+        <item>&amp;genre=comedy</item>
+        <item>&amp;genre=cult</item>
+        <item>&amp;genre=documentary</item>
+        <item>&amp;genre=drama</item>
+        <item>&amp;genre=faith-spirituality</item>
+        <item>&amp;genre=gay-lesbian</item>
+        <item>&amp;genre=horror</item>
+        <item>&amp;genre=kids-family</item>
+        <item>&amp;genre=musicals-performing-arts</item>
+        <item>&amp;genre=mystery-suspense</item>
+        <item>&amp;genre=romance</item>
+        <item>&amp;genre=science-fiction-fantasy</item>
+        <item>&amp;genre=special-interest</item>
+        <item>&amp;genre=sports-fitness</item>
+        <item>&amp;genre=television</item>
+        <item>&amp;genre=western</item>
+    </string-array>
+    <string-array name="months">
+        <item>01 - January</item>
+        <item>02 - Febuary</item>
+        <item>03 - March</item>
+        <item>04 - April</item>
+        <item>05 - May</item>
+        <item>06 - June</item>
+        <item>07 - July</item>
+        <item>08 - August</item>
+        <item>09 - September</item>
+        <item>10 - October</item>
+        <item>11 - November</item>
+        <item>12 - December</item>
+    </string-array>
+    <string-array name="dialog_netflix_action">
+        <item>Cancel</item>
+        <item>View Queue</item>
+        <item>Remove from DVDs</item>
+        <item>Add to Top of DVDs</item>
+        <item>Add to End of DVDs</item>
+        <item>Save DVD</item>
+        <item>Remove from Instant</item>
+        <item>Add to Top of Instant</item>
+        <item>Add to End of Instant</item>
+        <item>Move to Top of DVDs</item>
+        <item>Move to End of DVDs</item>
+        <item>Move to Top of Instant</item>
+        <item>Move to End of Instant</item>
+    </string-array>
+    <string-array name="dialog_netflix_label">
+        <item>Remove from Queue</item>
+        <item>View Queue</item>
+        <item>Cancel</item>
+    </string-array>
+    <string-array name="feedbackOptionsLine1">
+        <item>Missing Theater</item>
+        <item>Incorrect Showtimes</item>
+        <item>Account/Login Trouble</item>
+        <item>Suggestions or Feedback</item>
+        <item>Other Problem</item>
+    </string-array>
+    <string-array name="feedbackOptionsLine2">
+        <item>Tell us about a missing theater</item>
+        <item>Report missing or incorrect showtimes</item>
+        <item>Tell us if you have trouble logging in</item>
+        <item>Give us any suggestions or feedback</item>
+        <item>Tell us about any other problems</item>
+    </string-array>
+    <string-array name="feedbackOptionsLineBody">
+        <item>Please give us the name and postal code of the theater</item>
+        <item>Please give us the name and zip code of the theater, the name of the movie (also include 3D or IMAX when
+			applicable), and the correct and incorrect showtime:</item>
+        <item>Please indicate whether you are having trouble logging into Flixster, Facebook, or Netflix, and any other useful
+			information</item>
+        <item></item>
+        <item></item>
+    </string-array>
+    <string-array name="login_choices">
+        <item>Connect with Facebook</item>
+        <item>Login with Flixster</item>
+        <!-- <item>Register with Flixster</item> -->
+    </string-array>
+
+    <string-array name="captions_fonts">
+        <item>Monospace</item>
+        <item>Sans-Serif</item>
+        <item>Serif</item>
+    </string-array>
+    
+</resources>

@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipe_container"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/LinearLayout01"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+        
+        <RelativeLayout
+            android:id="@+id/profile_flixster_row"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bgpanel_active_topdiv" >
+
+            <ImageView
+                android:id="@+id/profile_flixster_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/spacing_normal"
+                android:src="@drawable/iconbox_flixster" />
+
+            <TextView
+                android:id="@+id/profile_flixster_maintext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="@dimen/spacing_normal"
+                android:layout_marginRight="@dimen/spacing_normal"
+                android:layout_toRightOf="@id/profile_flixster_icon"
+                android:paddingTop="@dimen/spacing_normal"
+                android:text="@string/settings_flixster"
+                android:textAppearance="@style/TextMedium" />
+
+            <TextView
+                android:id="@+id/profile_flixster_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/profile_flixster_maintext"
+                android:layout_below="@id/profile_flixster_maintext"
+                android:paddingBottom="@dimen/spacing_normal"
+                android:text="user@wb.com"
+                android:textAppearance="@style/TextSmallGrey" />
+
+        </RelativeLayout>
+        
+        <RelativeLayout
+            android:id="@+id/profile_name_row"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:background="@drawable/bgpanel_active_topdiv" >
+
+            <TextView
+                android:id="@+id/profile_name_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_toLeftOf="@+id/profile_name_edit_text"
+                android:layout_centerVertical="true"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="John Doe"
+                android:textAppearance="@style/TextMedium" />
+
+            <TextView
+       		    android:id="@+id/profile_name_edit_text"
+       		    android:layout_width="wrap_content"
+       		    android:layout_height="wrap_content"
+       		    android:paddingRight="@dimen/spacing_small"
+       		    android:layout_toLeftOf="@+id/profile_name_arrow"
+       		    android:layout_centerVertical="true"
+       		    android:textAppearance="@style/TextSmall"
+       		    android:textColor="@color/grey05"
+       		    android:text="@string/label_edit"/>
+            
+            <ImageView
+                android:id="@+id/profile_name_arrow"
+		        android:layout_width="12dp"
+		        android:layout_height="12dp"
+		        android:layout_alignParentRight="true"
+            	android:layout_centerVertical="true"
+		        android:scaleType="fitCenter"
+		        android:src="@drawable/icon_arrow_right"
+		        android:adjustViewBounds="true" />
+	            
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/profile_change_password_row"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:visibility="gone"
+            android:background="@drawable/bgpanel_active_topdiv" >
+
+            <TextView
+                android:id="@+id/profile_change_password_maintext"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="Change Password"
+                android:textAppearance="@style/TextMedium" />
+
+            <ImageView
+                android:id="@+id/profile_change_password_arrow"
+		        android:layout_width="12dp"
+		        android:layout_height="12dp"
+		        android:layout_alignParentRight="true"
+            	android:layout_centerVertical="true"
+		        android:scaleType="fitCenter"
+		        android:src="@drawable/icon_arrow_right"
+		        android:adjustViewBounds="true" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/profile_manage_uv_row"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingRight="10dp"
+            android:background="@drawable/bgpanel_active_topdiv" >
+
+            <ImageView
+                android:id="@+id/profile_manage_uv_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/spacing_normal"
+                android:src="@drawable/icon_uvvu_tm" />
+
+            <TextView
+                android:id="@+id/profile_manage_uv_maintext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="@dimen/spacing_normal"
+                android:layout_marginRight="@dimen/spacing_normal"
+                android:layout_toRightOf="@id/profile_manage_uv_icon"
+                android:paddingTop="@dimen/spacing_normal"
+                android:text="@string/uv_label"
+                android:textAppearance="@style/TextMedium" />
+
+            <TextView
+                android:id="@+id/profile_manage_uv_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/profile_manage_uv_maintext"
+                android:layout_below="@id/profile_manage_uv_maintext"
+                android:paddingBottom="@dimen/spacing_normal"
+                android:text="user@wb.com"
+                android:textAppearance="@style/TextSmallGrey" />
+
+            <ImageView
+                android:id="@+id/profile_manage_uv_arrow"
+		        android:layout_width="12dp"
+		        android:layout_height="12dp"
+		        android:layout_alignParentRight="true"
+            	android:layout_centerVertical="true"
+		        android:scaleType="fitCenter"
+		        android:src="@drawable/icon_arrow_right"
+		        android:adjustViewBounds="true" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/profile_link_uv_row"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:background="@drawable/bgpanel_active_topdiv" >
+
+            <ImageView
+                android:id="@+id/profile_link_uv_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/icon_uvvu_tm" />
+
+            <TextView
+                android:id="@+id/profile_link_uv_maintext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/spacing_normal"
+                android:layout_marginRight="@dimen/spacing_normal"
+                android:layout_toRightOf="@id/profile_link_uv_icon"
+                android:text="@string/uv_label"
+                android:textAppearance="@style/TextMedium" />
+
+				<Button
+				    android:id="@+id/profile_link_uv_button"
+				    android:layout_width="wrap_content"
+				    android:layout_height="@dimen/profile_button_height"
+			        android:layout_alignParentRight="true"
+	            	android:layout_centerVertical="true"
+				    android:paddingLeft="@dimen/spacing_normal"
+				    android:paddingRight="@dimen/spacing_normal"
+				    android:background="@drawable/uv_purple_button"
+				    android:textColor="@color/white"
+				    android:textAppearance="@style/TextSmall"
+				    android:text="@string/uv_label_link_account" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/profile_logout_row"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:weightSum="9"
+            android:gravity="center" >
+	        
+            <Button
+			    android:id="@+id/profile_logout_button"
+			    android:layout_width="0dp"
+			    android:layout_weight="4"
+			    android:layout_height="35dp"
+			    android:gravity="center"
+			    android:background="@drawable/flixster_drawer_button_red"
+			    android:textColor="@color/dark_red"
+			    android:textAppearance="@style/TextSmallBold"
+			    android:text="@string/logout" />
+            
+        </LinearLayout>
+    </LinearLayout>
+
+</android.support.v4.widget.SwipeRefreshLayout>

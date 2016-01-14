@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="500dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@color/bg_inactive" >
+  
+    <LinearLayout
+        android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:padding="20sp"
+		android:baselineAligned="false"
+		android:orientation="vertical">
+		
+        <TextView
+		    android:id="@+id/textView_redeem_optin_header"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:textSize="@dimen/textMedium"
+		    android:textStyle="bold"
+		    android:textColor="@color/grey05"
+		    android:text="@string/redeem_enterCode" />
+		
+		<ProgressBar
+			android:id="@+id/pb"
+			style="@style/HoloLightProgressBarHorizontal"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:progress="60"
+			android:visibility="gone" >
+		</ProgressBar>
+		
+            <LinearLayout
+		        android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:gravity="center_horizontal"
+				android:orientation="vertical"
+				android:paddingBottom="4pt"
+			    android:paddingLeft="4pt"
+			    android:paddingRight="4pt"
+			    android:paddingTop="8pt"
+				android:baselineAligned="false">
+				
+				<TextView
+				    android:id="@+id/textView_redeem_text3"
+				    android:layout_width="match_parent"
+				    android:layout_height="wrap_content"
+				    android:paddingBottom="@dimen/spacing_small"
+				    android:gravity="center_horizontal"
+				    android:textSize="@dimen/textMedium"
+				    android:textColor="@color/flixster_text_grey"
+				    android:text="You are redeeming"/>
+
+				<TextView
+				    android:id="@+id/textView_title_name"
+				    android:layout_width="match_parent"
+				    android:layout_height="wrap_content"
+				    android:paddingBottom="@dimen/spacing_small"
+				    android:gravity="center_horizontal"
+				    android:text="The Jerk"
+				    android:textStyle="bold"
+				    android:textColor="@color/black"
+				    android:textSize="@dimen/textLarge"/>
+
+				<LinearLayout
+				    android:id="@+id/studio_specific_optin_linearlayout"
+				    android:paddingLeft="@dimen/spacing_normal"
+		    		android:paddingRight="@dimen/spacing_normal"
+				    android:paddingTop="@dimen/spacing_normal"
+				    android:paddingBottom="@dimen/spacing_normal"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:orientation="horizontal" >
+				    
+					<CheckBox
+					    android:id="@+id/checkBox_studio_specific_optin"
+					    android:background="@drawable/circle_checkbox_selector"
+					    android:button="@null"
+					    android:layout_width="26dp"
+					    android:layout_height="26dp"
+					    android:checked="false" />
+					
+					<LinearLayout
+						android:layout_width="4pt"
+						android:layout_height="wrap_content"
+						android:orientation="horizontal" />
+				
+					<WebView 
+					    android:id="@+id/webView_studio_specific_optin"
+					    android:layout_width="match_parent"
+					    android:layout_height="wrap_content"
+					    android:paddingBottom="3pt" >
+					</WebView>
+				</LinearLayout>
+
+				<LinearLayout
+					android:layout_width="400dp"
+					android:layout_height="wrap_content"
+					android:paddingLeft="40dp"
+					android:paddingRight="40dp"
+					android:paddingTop="40dp"
+					android:paddingBottom="8pt"
+					android:orientation="vertical" >
+					
+				    <Button
+						android:id="@+id/button_redeem_continue"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:background="@drawable/flixster_blue_button"
+						android:clickable="true"
+						android:focusable="true"
+						android:text="@string/Continue"
+						android:textColor="@color/white"
+						android:textStyle="bold"
+						android:textSize="@dimen/textMedium" />
+				    
+				</LinearLayout>		    	
+			</LinearLayout>
+        
+	</LinearLayout>
+        
+
+</RelativeLayout>

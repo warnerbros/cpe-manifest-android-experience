@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<!-- MSK prompt top margin -->
+	<dimen name="msk_prompt_margin_top">53dp</dimen>
+<!-- 	<dimen name="textSmall">18sp</dimen>
+	<dimen name="textMedium">24sp</dimen>
+	<dimen name="textLarge">30sp</dimen>
+	<dimen name="textXLarge">36sp</dimen>
+ -->
+</resources>

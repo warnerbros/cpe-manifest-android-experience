@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/profileLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/userProfileTitle"
+            style="@style/header_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/topbar"
+            android:padding="@dimen/topbar_pad"
+            android:text="@string/user_profile_title" />
+
+        <LinearLayout
+            android:id="@+id/profileHeader"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" />
+
+        <TextView
+            android:id="@+id/wantToSeeTitle"
+            style="@style/header_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/macbar"
+            android:gravity="center_vertical"
+            android:paddingLeft="5dp"
+            android:text="@string/my_wts_title"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/wantToSeeMovies"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" />
+
+        <RelativeLayout
+            android:id="@+id/moreWantToSee"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bgpanel_active_topdiv"
+            android:paddingBottom="14dp"
+            android:paddingLeft="68dp"
+            android:paddingTop="14dp"
+            android:visibility="gone" >
+
+            <TextView
+                android:id="@+id/moreWantToSeeTitle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/label_load_movies"
+                android:textAppearance="@style/TextNormalBold"
+                android:textColor="@color/hyperlink" />
+
+            <TextView
+                android:id="@+id/moreWantToSeeLabel"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/moreWantToSeeTitle"
+                android:text="10 movies total"
+                android:textAppearance="@style/subtitle" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/ratedTitle"
+            style="@style/header_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/macbar"
+            android:gravity="center_vertical"
+            android:paddingLeft="5dp"
+            android:text="@string/my_rated_title"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/ratedMovies"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" />
+
+        <RelativeLayout
+            android:id="@+id/moreRated"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bgpanel_active_topdiv"
+            android:paddingBottom="14dp"
+            android:paddingLeft="68dp"
+            android:paddingTop="14dp"
+            android:visibility="gone" >
+
+            <TextView
+                android:id="@+id/moreRatedTitle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/label_load_movies"
+                android:textAppearance="@style/TextNormalBold"
+                android:textColor="@color/hyperlink" />
+
+            <TextView
+                android:id="@+id/moreRatedLabel"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/moreRatedTitle"
+                android:text="10 movies total"
+                android:textAppearance="@style/subtitle" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</ScrollView>
