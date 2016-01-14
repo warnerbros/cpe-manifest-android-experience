@@ -2,6 +2,7 @@ package com.wb.nextgen;
 
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -51,6 +52,8 @@ public class NextGenStartupUpperFragment extends Fragment implements View.OnClic
         switch(v.getId()){
             case R.id.next_gen_startup_play_button:
                 Intent intent = new Intent(getActivity(), NextGenPlayer.class);
+                intent.setAction(android.content.Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.parse("https://ia802304.us.archive.org/17/items/BigBuckBunny1280x720Stereo/big_buck_bunny_720_stereo.mp4"), "video/*");
                 startActivity(intent);
                 //Drm.manager().playMovie(getActivity(), FlixsterApplication.getCurrentPlayableContent(), PhysicalAsset.Definition.HD, "en_US", "en_US");
                 //        lockOrientation();
