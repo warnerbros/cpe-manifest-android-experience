@@ -8,10 +8,7 @@
 
     <style name="CustomTabBG" parent="@android:style/Widget.TabWidget"></style>
 
-    <style name="FlixsterListView" parent="@android:style/Widget.ListView">
-        <item name="android:background">@drawable/listitem_bg</item>
-        <item name="android:divider">@drawable/listdivider</item>
-    </style>
+
 
     <style name="FlixsterListItem">
         <!-- <item name="android:background">@drawable/listpanel</item> -->
@@ -29,13 +26,6 @@
 
 		<style name="FlixsterTopTheme" parent="@android:style/Theme.Light">
     -->
-    <style name="FlixsterTopTheme" parent="@android:style/Theme.Holo.Light">
-        <!--<item name="android:windowContentOverlay">@drawable/listdivider</item>-->
-        <item name="android:tabWidgetStyle">@style/CustomTabStyle</item>
-        <item name="android:windowBackground">@color/white</item>
-        <item name="android:textAppearance">@style/TextNormal</item>
-        <item name="android:listViewStyle">@style/FlixsterListView</item>
-    </style>
     
     <style name="NextGenActionBar" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <item name="android:tabWidgetStyle">@style/CustomTabStyle</item>

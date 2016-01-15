@@ -1,5 +1,6 @@
 package com.wb.nextgen.fragment;
 
+import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,6 +17,12 @@ import java.util.List;
  * Created by gzcheng on 1/13/16.
  */
 public class NextGenActorListFragment extends NextGenExtraLeftListFragment {
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        //listView.setselect
+    }
 
     public static class Actor {
         public final String realName;
@@ -53,6 +60,7 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment {
     }
 
     protected void onListItmeClick(View v, final int position, long id){
+        listView.setSelection(position);
         if (getActivity() instanceof NextGenExtraActivity){
             NextGenActorDetailFragment target = new NextGenActorDetailFragment();
             NextGenActorDetailFragment.NextGenExtraDetialInterface obj = new NextGenActorDetailFragment.NextGenExtraDetialInterface() {

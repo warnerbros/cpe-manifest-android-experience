@@ -1,8 +1,0 @@
-<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:initialLayout="@layout/widget"
-    android:minHeight="72dp"
-    android:minWidth="294dp"
-    android:previewImage="@drawable/preview"
-    android:updatePeriodMillis="43200000" > <!-- 12-hr update --> <!-- optional: android:configure="com.example.android.ExampleAppWidgetConfigure" -->
-
-</appwidget-provider>

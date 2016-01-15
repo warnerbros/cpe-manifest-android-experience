@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-   	android:layout_height="wrap_content"
-   	
-   	android:orientation="horizontal">
+   	android:layout_height="80dp"
+	android:background="@android:color/transparent">
 
    	<TextView
    	    android:id="@+id/drawer_row_text"
@@ -12,13 +11,29 @@
    		android:paddingBottom="@dimen/spacing_normal"
    		android:paddingLeft="@dimen/spacing_large"
    		android:paddingRight="@dimen/spacing_large"
-   	    android:layout_gravity="center_vertical"
-   	    android:layout_width="fill_parent"
+		android:layout_centerInParent="true"
+   	    android:layout_alignParentLeft="true"
+		android:layout_gravity="right"
+   	    android:layout_width="wrap_content"
    	    android:layout_height="wrap_content"
-   	    android:background="@drawable/drawer_row_bg_selector"
-		android:textColor="@color/drawer_row_text_color"
+		android:background="@android:color/transparent"
+		android:textColor="@color/white"
 		android:textSize="@dimen/textNormal"
    	    android:text="Drawer Item"/>
 
-	
-</LinearLayout>
+	<Switch
+		android:id="@+id/drawer_row_switch"
+		android:layout_width="wrap_content"
+		android:layout_centerInParent="true"
+		android:layout_alignParentRight="true"
+		android:layout_height="wrap_content"
+		android:visibility="gone"/>
+	<ImageView
+		android:id="@+id/drawer_row_image"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:background="@android:drawable/ic_menu_preferences"
+		android:layout_centerInParent="true"
+		android:layout_alignParentRight="true"
+		android:visibility="gone"/>
+</RelativeLayout>

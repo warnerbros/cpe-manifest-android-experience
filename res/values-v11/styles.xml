@@ -24,7 +24,7 @@
 	    <item name="android:textColor">@color/black</item>
 	</style>
 	
-	<style name="AlertDialogButton" parent="@android:style/Widget.ListView">
+	<!--<style name="AlertDialogButton" parent="@android:style/Widget.ListView">
 	    <item name="android:background">@drawable/btn_alert_dialog_selector</item>
 	    <item name="android:textColor">@color/black</item>
 	    <item name="android:textAppearance">@style/TextNormal</item>
@@ -33,6 +33,6 @@
 	
 	<style name="AlertDialogButtonBottomRight" parent="@style/AlertDialogButton">
 	    <item name="android:background">@drawable/btn_alert_dialog_bottomright_selector</item>
-    </style>
+    </style>-->
 		
 </resources>

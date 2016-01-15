@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <item android:color="@color/flixster_text_blue" android:state_pressed="true" />
-    <item android:color="@color/flixster_blue_button_color" android:state_pressed="false" />
-
-</selector>

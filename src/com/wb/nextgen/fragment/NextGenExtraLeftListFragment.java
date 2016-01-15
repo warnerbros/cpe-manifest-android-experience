@@ -20,7 +20,7 @@ import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
  */
 public abstract class NextGenExtraLeftListFragment extends Fragment implements AdapterView.OnItemClickListener{
 
-    private StickyGridHeadersGridView listView;
+    protected StickyGridHeadersGridView listView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

@@ -8,6 +8,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Build;
 
+import com.wb.nextgen.model.NextGenSettings;
+
 import net.flixster.android.FlixsterCacheManager;
 
 import java.io.ByteArrayInputStream;
@@ -52,6 +54,8 @@ public class NextGenApplication extends Application {
     private static String sClientLanguageCode = null;
     private static PackageInfo sNextGenInfo = null;
 
+    private static NextGenSettings sAppSettings;
+
     // ///////////////////////////////////////////////////////
     // Flixster Cache
 
@@ -71,6 +75,8 @@ public class NextGenApplication extends Application {
             sNextGenInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
 
             //setLocalization();
+
+            sAppSettings = new NextGenSettings();
 
             sVersionName = sNextGenInfo.versionName;
             sVersionCode = sNextGenInfo.versionCode;
@@ -178,5 +184,13 @@ public class NextGenApplication extends Application {
 
     public static Locale getLocale() {
         return Locale.US;
+    }
+
+    public static void setSubtitleOn(boolean bOnOf){
+        sAppSettings.setSubtitleOn(bOnOf);
+    }
+
+    public static boolean getSubtitleOn(){
+        return sAppSettings.getSubtitleOn();
     }
 }
