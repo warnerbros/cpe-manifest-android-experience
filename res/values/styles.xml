@@ -37,30 +37,31 @@
         <item name="android:listViewStyle">@style/FlixsterListView</item>
     </style>
     
-    <style name="FlixsterActionBar" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+    <style name="NextGenActionBar" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <item name="android:tabWidgetStyle">@style/CustomTabStyle</item>
-        <item name="android:windowBackground">@color/white</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:textAppearance">@style/TextNormalBold</item>
         
-        <item name="android:icon">@drawable/ab_popcorn</item>
+        <item name="android:icon">@android:color/transparent</item>
+        <item name="android:gravity">center_horizontal</item>
         
         <!-- flxabv44 generated action bar -->
-        <item name="android:actionBarItemBackground">@drawable/selectable_background_flxabv44</item>
-        <item name="android:actionBarTabStyle">@style/flxabv44_ActionBarTabStyle</item>
-        <item name="android:actionBarStyle">@style/flxabv44_solid_ActionBar</item>
-        <item name="android:selectableItemBackground">@drawable/selectable_background_flxabv44</item>
-        
-    </style>
-    
-    <style name="FlixsterWebViewStyle" parent="@style/Theme.AppCompat.Light">
-    </style>
+        <item name="android:actionBarItemBackground">@android:color/transparent</item>
+        <!--  <item name="android:actionBarTabStyle">@style/flxabv44_ActionBarTabStyle</item>
+         <item name="android:actionBarStyle">@style/flxabv44_solid_ActionBar</item>-->
+         <item name="android:selectableItemBackground">@android:color/transparent</item>
 
-    <style name="FlixsterModalActivity" parent="@style/Theme.AppCompat.Light.DialogWhenLarge">
-        <item name="android:windowCloseOnTouchOutside">true</item>
-		<item name="android:windowIsTranslucent">true</item>
-		<item name="android:windowNoTitle">true</item>
-		<item name="android:windowBackground">@color/transparent_black</item>
-		<!--<item name="android:windowBackground">@android:color/transparent</item>  -->
+     </style>
+
+     <style name="FlixsterWebViewStyle" parent="@style/Theme.AppCompat.Light">
+     </style>
+
+     <style name="FlixsterModalActivity" parent="@style/Theme.AppCompat.Light.DialogWhenLarge">
+         <item name="android:windowCloseOnTouchOutside">true</item>
+         <item name="android:windowIsTranslucent">true</item>
+         <item name="android:windowNoTitle">true</item>
+         <item name="android:windowBackground">@color/transparent_black</item>
+         <!--<item name="android:windowBackground">@android:color/transparent</item>  -->
     </style>
 
     <!--

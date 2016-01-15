@@ -104,7 +104,7 @@ public class PicassoTrustAll {
         public ImageLoadTask(String url, ImageView imageView) {
             this.url = url;
             this.imageView = imageView;
-            this.imageView.setTag(R.id.imageView_title_poster, url);
+            this.imageView.setTag(R.id.next_gen_detail_thumbnail_image, url);
         }
 
         @Override
@@ -127,7 +127,7 @@ public class PicassoTrustAll {
         @Override
         protected void onPostExecute(Bitmap result) {
             super.onPostExecute(result);
-            if (url.equals(imageView.getTag(R.id.imageView_title_poster))) {
+            if (url.equals(imageView.getTag(R.id.next_gen_detail_thumbnail_image))) {
                 imageView.setImageBitmap(result);
                 imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
             }

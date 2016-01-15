@@ -104,7 +104,7 @@ public class NextGenApplication extends Application {
     }
 
     public static boolean isDebugBuild() {
-        return debugCertExists;
+        return true;//debugCertExists;
     }
 
     public static boolean isRcBuild() {
