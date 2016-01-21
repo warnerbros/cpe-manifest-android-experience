@@ -63,9 +63,10 @@
         android:id="@+id/nextgenview"
         android:orientation="vertical"
         android:layout_weight="1">
-        <!--<fragment
-            android:name="net.flixster.android.fragment.WebViewFragment"
+        <fragment
+            android:id="@+id/next_gen_ime_frame"
+            android:name="com.wb.nextgen.fragment.NextGenPlayerBottomFragment"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"/>-->
+            android:layout_height="fill_parent"/>
     </LinearLayout>
 </LinearLayout>

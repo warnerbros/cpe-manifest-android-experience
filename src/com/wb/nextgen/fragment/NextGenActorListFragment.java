@@ -21,6 +21,7 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         //listView.setselect
     }
 
@@ -59,8 +60,12 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment {
         actors.add(new Actor("ANTJE TRAUE", "Faora-Ul", "http://ia.media-imdb.com/images/M/MV5BMTgzMjY4MjUyMF5BMl5BanBnXkFtZTgwMjc1ODU1MDE@._V1_UY317_CR12,0,214,317_AL_.jpg", "Antje Traue was born in Mittweida, Saxony, East Germany. Her mother was a musician and dancer. Traue was raised speaking Russian. She discovered her love for acting at an early age. As a teenager, Traue attended the \"International Munich Art Lab\", where she was cast in the lead role in the theatre play, \"West End Opera\". For four years, she toured with the ensemble cast throughout Europe and then to New York. In 2002, Traue moved to Berlin and landed roles in both feature films and television projects, including Kleinruppin forever (2004), Berlin am Meer (2008) and Phantom Pain (2009). In 2008, she was cast as the female lead in the international science fiction film, Pandorum (2009), opposite Dennis Quaid and Ben Foster. In 2010, she was filming on Renny Harlin's 5 Days of War (2011), alongside Val Kilmer and Rupert Friend."));
     }
 
+    private int selectedIndex = -1;
+
     protected void onListItmeClick(View v, final int position, long id){
         listView.setSelection(position);
+        v.setSelected(true);
+        selectedIndex = position;
         if (getActivity() instanceof NextGenExtraActivity){
             NextGenActorDetailFragment target = new NextGenActorDetailFragment();
             NextGenActorDetailFragment.NextGenExtraDetialInterface obj = new NextGenActorDetailFragment.NextGenExtraDetialInterface() {
@@ -77,6 +82,7 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment {
             target.setDetailObject(obj);
             ((NextGenExtraActivity)getActivity()).transitRightMainFragment(target);
         }
+        listAdaptor.notifyDataSetChanged();
     }
 
     protected int getNumberOfColumns(){
@@ -108,6 +114,11 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment {
             characterNameTxt.setText(thisActor.characterName);
             PicassoTrustAll.loadImageIntoView(getActivity(), thisActor.avatarURL, avatarImg);
         }
+        if (selectedIndex != -1 && selectedIndex < getListItemCount() && item.equals(getListItemAtPosition(selectedIndex)))
+            rowView.setSelected(true);
+        else
+            rowView.setSelected(false);
+
     }
 
     protected String getHeaderText(){

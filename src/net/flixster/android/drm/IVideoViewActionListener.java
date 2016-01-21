@@ -1,6 +1,6 @@
 package net.flixster.android.drm;
 
-interface IVideoViewActionListener {
+public interface IVideoViewActionListener {
 	void onPause();
 	
 	void onResume();

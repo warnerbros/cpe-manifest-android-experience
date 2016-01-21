@@ -53,7 +53,8 @@ public class NextGenStartupUpperFragment extends Fragment implements View.OnClic
             case R.id.next_gen_startup_play_button:
                 Intent intent = new Intent(getActivity(), NextGenPlayer.class);
                 intent.setAction(android.content.Intent.ACTION_VIEW);
-                intent.setDataAndType(Uri.parse("https://ia802304.us.archive.org/17/items/BigBuckBunny1280x720Stereo/big_buck_bunny_720_stereo.mp4"), "video/*");
+                intent.setDataAndType(Uri.parse("http://d1x310wzaeunai.cloudfront.net/video/man-of-steel-trailer3.mp4"), "video/*");
+                 //       intent.setDataAndType(Uri.parse("https://ia802304.us.archive.org/17/items/BigBuckBunny1280x720Stereo/big_buck_bunny_720_stereo.mp4"), "video/*");
                 startActivity(intent);
                 //Drm.manager().playMovie(getActivity(), FlixsterApplication.getCurrentPlayableContent(), PhysicalAsset.Definition.HD, "en_US", "en_US");
                 //        lockOrientation();

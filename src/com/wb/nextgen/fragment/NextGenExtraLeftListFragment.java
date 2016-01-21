@@ -21,7 +21,7 @@ import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
 public abstract class NextGenExtraLeftListFragment extends Fragment implements AdapterView.OnItemClickListener{
 
     protected StickyGridHeadersGridView listView;
-
+    protected NextGenExtraLeftPanelAdapter listAdaptor;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -40,7 +40,8 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
             listView.setVerticalSpacing(spacing);
             listView.setPadding(spacing, 0, spacing, spacing);
             listView.setHeadersIgnorePadding(true);
-            listView.setAdapter(new NextGenExtraLeftPanelAdapter());
+            listAdaptor = new NextGenExtraLeftPanelAdapter();
+            listView.setAdapter(listAdaptor);
             listView.setOnItemClickListener(this);
         }
 

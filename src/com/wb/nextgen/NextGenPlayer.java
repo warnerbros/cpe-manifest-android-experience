@@ -13,16 +13,30 @@ import android.widget.MediaController;
 import com.flixster.android.captioning.CaptionedPlayer;
 import com.wb.nextgen.R;
 
+import com.wb.nextgen.fragment.NextGenPlayerBottomFragment;
+import com.wb.nextgen.interfaces.NextGenPlaybackStatusListener;
 import com.wb.nextgen.util.TabletUtils;
 
+import net.flixster.android.drm.IVideoViewActionListener;
 import net.flixster.android.drm.ObservableVideoView;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 /**
  * Created by gzcheng on 1/5/16.
  */
 public class NextGenPlayer extends CaptionedPlayer {
+
+
     protected ObservableVideoView videoView;
 
+    protected NextGenPlayerBottomFragment imeFragment;
+
+    private TimerTask imeUpdateTask;
+
+    private Timer imeUpdateTimer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,6 +49,32 @@ public class NextGenPlayer extends CaptionedPlayer {
         videoView.setOnPreparedListener(getOnPreparedListener());
         videoView.setOnCompletionListener(getOnCompletionListener());
         videoView.requestFocus();
+        imeFragment = (NextGenPlayerBottomFragment)getSupportFragmentManager().findFragmentById(R.id.next_gen_ime_frame);
+        videoView.setVideoViewListener(new IVideoViewActionListener() {
+
+            @Override
+            public void onTimeBarSeekChanged(int currentTime) {
+                updateImeFragment(NextGenPlaybackStatusListener.NextGenPlaybackStatus.SEEK, currentTime);
+            }
+
+            @Override
+            public void onResume() {
+                updateImeFragment(NextGenPlaybackStatusListener.NextGenPlaybackStatus.PAUSE, videoView.getCurrentPosition());
+            }
+
+            @Override
+            public void onPause() {
+                updateImeFragment(NextGenPlaybackStatusListener.NextGenPlaybackStatus.RESUME, videoView.getCurrentPosition());
+            }
+        });
+
+
+    }
+
+    protected void updateImeFragment(NextGenPlaybackStatusListener.NextGenPlaybackStatus playbackStatus, long timecode){
+        if (imeFragment != null){
+            imeFragment.playbackStatusUpdate(playbackStatus, timecode);
+        }
     }
 
     @Override
@@ -81,6 +121,21 @@ public class NextGenPlayer extends CaptionedPlayer {
         public void onPrepared(MediaPlayer mp) {
 
             videoView.start();
+            if (imeUpdateTimer == null){
+                imeUpdateTimer = new Timer();
+            }
+            if (imeUpdateTask == null){
+                imeUpdateTask = new TimerTask() {
+                    @Override
+                    public void run() {
+                        updateImeFragment(NextGenPlaybackStatusListener.NextGenPlaybackStatus.TIMESTAMP_UPDATE, videoView.getCurrentPosition());
+                    }
+                };
+                imeUpdateTimer.scheduleAtFixedRate(imeUpdateTask, 0, 1000);
+            }
+
+
+            updateImeFragment(NextGenPlaybackStatusListener.NextGenPlaybackStatus.PREPARED, -1L);
 
         }
     }
@@ -93,6 +148,7 @@ public class NextGenPlayer extends CaptionedPlayer {
     private class CompletionListener implements MediaPlayer.OnCompletionListener {
         @Override
         public void onCompletion(MediaPlayer mp) {
+            updateImeFragment(NextGenPlaybackStatusListener.NextGenPlaybackStatus.STOP, -1L);
             /*trackPlaybackEvent("playback_complete", 0);
             FlixsterLogger.d(F.TAG_DRM, "WidevinePlayer.onCompletion: rightId=" + rightId + ", resetting seek time");
 
@@ -121,6 +177,14 @@ public class NextGenPlayer extends CaptionedPlayer {
     protected void onDestroy() {
         //ContentLocker content = FlixsterApplication.getCurrentPlayableContent();
         super.onDestroy();
+        if (imeUpdateTask != null) {
+            imeUpdateTask.cancel();
+            imeUpdateTask = null;
+        }
+        if (imeUpdateTimer != null){
+            imeUpdateTimer.cancel();
+            imeUpdateTimer = null;
+        }
         //FlixsterApplication.setCurrentPlayableContent(content);
 
     }
