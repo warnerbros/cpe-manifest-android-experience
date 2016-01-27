@@ -14,6 +14,7 @@ import com.wb.nextgen.interfaces.NextGenPlaybackStatusListener;
  */
 public class NextGenPlayerBottomFragment extends Fragment implements NextGenPlaybackStatusListener{
 
+    NextGenIMEActorFragment imeActorFragment;
     TextView imeText;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -26,15 +27,19 @@ public class NextGenPlayerBottomFragment extends Fragment implements NextGenPlay
         super.onViewCreated(view, savedInstanceState);
 
         imeText = (TextView)view.findViewById(R.id.next_gen_ime_text);
+        imeActorFragment = (NextGenIMEActorFragment)getActivity().getSupportFragmentManager().findFragmentById(R.id.ime_actor_fragment);
+
     }
 
     public void playbackStatusUpdate(final NextGenPlaybackStatus playbackStatus, final long timecode){
-
+        if (imeActorFragment != null){
+            imeActorFragment.playbackStatusUpdate(playbackStatus, timecode);
+        }
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (imeText != null)
-                    imeText.setText(playbackStatus.toString() + " " + timecode);
+                    imeText.setText(Long.toString(timecode));
             }
         });
 
