@@ -20,15 +20,18 @@ public class NextGenIMEActorFragment extends AbstractIMEFragment<List<Actor>> {
 
                 @Override
                 public void run() {
-                    if (actors.equals(imeElement) || (actors.size() == 0 && imeElement == null))
-                        return;
-                    if (imeElement != null)
-                        actors = imeElement;
-                    else
-                        actors = new ArrayList<Actor>();
+                    try {
+                        if (actors.equals(imeElement) || (actors.size() == 0 && imeElement == null))
+                            return;
+                        if (imeElement != null)
+                            actors = imeElement;
+                        else
+                            actors = new ArrayList<Actor>();
 
-                    listAdaptor.notifyDataSetChanged();
+                        listAdaptor.notifyDataSetChanged();
+                    }catch (Exception ex){
 
+                    }
                 }
             });
         }
@@ -42,7 +45,7 @@ public class NextGenIMEActorFragment extends AbstractIMEFragment<List<Actor>> {
         imeElements.add(new NextGenIMEElement(0, 9000, new ArrayList<Actor>(Arrays.asList(new Actor[]{Actor.RUSSELL_CROWE}))));
 
         imeElements.add(new NextGenIMEElement(10000,20000, new ArrayList<Actor>(Arrays.asList(new Actor[]{Actor.RUSSELL_CROWE, Actor.AYELET_ZURER}))));
-        imeElements.add(new NextGenIMEElement(50000,68000, new ArrayList<Actor>(Arrays.asList(new Actor[]{Actor.KEVIN_COSTER}))));
+        imeElements.add(new NextGenIMEElement(56000,68000, new ArrayList<Actor>(Arrays.asList(new Actor[]{Actor.KEVIN_COSTER}))));
         imeElements.add(new NextGenIMEElement(69000,79000, new ArrayList<Actor>(Arrays.asList(new Actor[]{Actor.HENRY_CAVILL}))));
         imeElements.add(new NextGenIMEElement(80000,82000, new ArrayList<Actor>(Arrays.asList(new Actor[]{Actor.AMY_ADAM}))));
         imeElements.add(new NextGenIMEElement(83000,125000, new ArrayList<Actor>(Arrays.asList(new Actor[]{Actor.HENRY_CAVILL}))));

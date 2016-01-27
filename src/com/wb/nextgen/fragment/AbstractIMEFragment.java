@@ -52,7 +52,7 @@ public abstract class AbstractIMEFragment<T> extends NextGenActorListFragment im
     }
 
     protected T getCurrentIMEElement(long timecode){
-        if (timecode < 0)
+        if (timecode < 0 || imeElements.size() == 0)
             return null;
         //Implementation #1: Binary Search o(log n)
         if (currentIndex == -1){
@@ -61,6 +61,9 @@ public abstract class AbstractIMEFragment<T> extends NextGenActorListFragment im
 
 
         int searchIndex = currentIndex;
+        int upperBoundIndex = imeElements.size()-1;
+        int lowerBoundIndex = 0;
+
         while(searchIndex >= 0 && searchIndex < imeElements.size()) {
             NextGenIMEElement currentElement = imeElements.get(searchIndex);
 
@@ -68,21 +71,34 @@ public abstract class AbstractIMEFragment<T> extends NextGenActorListFragment im
             if (compareTimeCodeValue == 0) {
                 currentIndex = searchIndex;
                 return imeElements.get(currentIndex).imeObject;
-            } else if (compareTimeCodeValue > 0  && searchIndex < imeElements.size() - 1) { //after
+            } else if (compareTimeCodeValue > 0  && searchIndex < upperBoundIndex) { //after
                 //check in next element is after this time code => gap in IME, no element for this time
+                lowerBoundIndex = searchIndex;
                 NextGenIMEElement nextElement = imeElements.get(searchIndex + 1);
                 int nextCompare = nextElement.compareTimeCode(timecode);
                 if (nextCompare < 0)
                     return null;
+                else if (nextCompare == 0)
+                    return nextElement.imeObject;
 
-                searchIndex = searchIndex + (imeElements.size() - searchIndex )/2;
-            } else if (compareTimeCodeValue < 0 && searchIndex > 0) { // before
+                int nextIndex = searchIndex + (upperBoundIndex - searchIndex )/2;
+                if (nextIndex == searchIndex)   //if there's only 1 item left to be search and it's not a match
+                    return null;
+                else
+                    searchIndex = nextIndex;
+            } else if (compareTimeCodeValue < 0 && searchIndex > lowerBoundIndex) { // before
+                upperBoundIndex = searchIndex;
                 NextGenIMEElement nextElement = imeElements.get(searchIndex - 1);
                 int nextCompare = nextElement.compareTimeCode(timecode);
                 if (nextCompare > 0)
                     return null;
-
-                searchIndex = searchIndex / 2;
+                else if (nextCompare == 0)
+                    return nextElement.imeObject;
+                int nextIndex = searchIndex / 2;
+                if (nextIndex == searchIndex)       //if there's only 1 item left to be search and it's not a match
+                    return null;
+                else
+                    searchIndex = nextIndex;
             } else {
                 return null;
             }
