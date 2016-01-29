@@ -1,4 +1,4 @@
-package com.wb.nextgen.fragment;
+package com.wb.nextgen.model;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by gzcheng on 1/25/16.
  */
-public abstract class AbstractIMEFragment<T> extends NextGenActorListFragment implements NextGenPlaybackStatusListener{
+public class NextGenIMEEngine<T> {
 
     public class NextGenIMEElement {
         public final long startTimecode;
@@ -40,18 +40,17 @@ public abstract class AbstractIMEFragment<T> extends NextGenActorListFragment im
                 return -1;
         }
     }
-    abstract void handleIMEUpdate(long timecode, T imeElement);
+    //abstract void handleIMEUpdate(long timecode, T imeElement);
 
     protected List<NextGenIMEElement> imeElements = new ArrayList<NextGenIMEElement>();
     protected int currentIndex = -1;
 
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void setImeElements(List<NextGenIMEElement> elements){
+        imeElements = elements;
     }
 
-    protected T getCurrentIMEElement(long timecode){
+    public T getCurrentIMEElement(long timecode){
         if (timecode < 0 || imeElements.size() == 0)
             return null;
         //Implementation #1: Binary Search o(log n)
@@ -106,7 +105,11 @@ public abstract class AbstractIMEFragment<T> extends NextGenActorListFragment im
         return null;
     }
 
+    public NextGenIMEElement createNextGenIMEElement(long startTimeCode, long endTimeCode, T object){
+        return new NextGenIMEElement(startTimeCode, endTimeCode, object);
+    }
+    /*
     public void playbackStatusUpdate(NextGenPlaybackStatus playbackStatus, long timecode){
         handleIMEUpdate(timecode, getCurrentIMEElement(timecode));
-    }
+    }*/
 }

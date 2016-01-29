@@ -9,12 +9,16 @@ import android.widget.TextView;
 
 import com.wb.nextgen.R;
 import com.wb.nextgen.interfaces.NextGenPlaybackStatusListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by gzcheng on 1/19/16.
  */
 public class NextGenPlayerBottomFragment extends Fragment implements NextGenPlaybackStatusListener{
 
-    NextGenIMEActorFragment imeActorFragment;
+    final List<NextGenPlaybackStatusListener> listeners = new ArrayList<NextGenPlaybackStatusListener>();
     TextView imeText;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -27,13 +31,25 @@ public class NextGenPlayerBottomFragment extends Fragment implements NextGenPlay
         super.onViewCreated(view, savedInstanceState);
 
         imeText = (TextView)view.findViewById(R.id.next_gen_ime_text);
-        imeActorFragment = (NextGenIMEActorFragment)getActivity().getSupportFragmentManager().findFragmentById(R.id.ime_actor_fragment);
+        NextGenIMEActorFragment imeActorFragment = (NextGenIMEActorFragment)getActivity().getSupportFragmentManager().findFragmentById(R.id.ime_actor_fragment);
+
+        NextGenPlaybackStatusListener imeFragmentFrame1 = (NextGenPlaybackStatusListener)getActivity().getSupportFragmentManager().findFragmentById(R.id.ime_fragment_frame_1);
+        NextGenPlaybackStatusListener imeFragmentFrame2 = (NextGenPlaybackStatusListener)getActivity().getSupportFragmentManager().findFragmentById(R.id.ime_fragment_frame_2);
+        NextGenPlaybackStatusListener imeFragmentFrame3 = (NextGenPlaybackStatusListener)getActivity().getSupportFragmentManager().findFragmentById(R.id.ime_fragment_frame_3);
+        NextGenPlaybackStatusListener imeFragmentFrame4 = (NextGenPlaybackStatusListener)getActivity().getSupportFragmentManager().findFragmentById(R.id.ime_fragment_frame_4);
+        listeners.add(imeActorFragment);
+        listeners.add(imeFragmentFrame1);
+        listeners.add(imeFragmentFrame2);
+        listeners.add(imeFragmentFrame3);
+        listeners.add(imeFragmentFrame4);
 
     }
 
     public void playbackStatusUpdate(final NextGenPlaybackStatus playbackStatus, final long timecode){
-        if (imeActorFragment != null){
-            imeActorFragment.playbackStatusUpdate(playbackStatus, timecode);
+        if (listeners.size()> 0 ){
+            for (NextGenPlaybackStatusListener listener :listeners) {
+                listener.playbackStatusUpdate(playbackStatus, timecode);
+            }
         }
         getActivity().runOnUiThread(new Runnable() {
             @Override
