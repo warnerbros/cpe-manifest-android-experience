@@ -2,6 +2,7 @@ package com.wb.nextgen.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import com.wb.nextgen.R;
 import com.wb.nextgen.interfaces.NextGenPlaybackStatusListener;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,5 +71,18 @@ public class NextGenPlayerBottomFragment extends Fragment implements NextGenPlay
             case TIMESTAMP_UPDATE:
                 break;
         }
+    }
+
+    public int getMainFrameId(){
+        return R.id.next_gen_ime_main_frame;
+    }
+
+    public int getLeftFrameId(){
+        return R.id.next_gen_ime_left_frame;
+    }
+
+    public int getRightFrameId(){
+        return R.id.next_gen_ime_right_frame;
+
     }
 }

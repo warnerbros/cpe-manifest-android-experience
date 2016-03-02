@@ -13,11 +13,20 @@ import android.widget.RelativeLayout;
 import com.wb.nextgen.R;
 
 import com.wb.nextgen.fragment.NextGenNavigationDrawerFragment;
+import com.wb.nextgen.manifest.schema.v1_4.MediaManifestType;
 import com.wb.nextgen.util.TabletUtils;
 
 import net.flixster.android.localization.Localizer;
 import net.flixster.android.localization.constants.KEYS;
 
+import java.io.File;
+/*
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.stream.StreamSource;
+*/
 /**
  * Created by gzcheng on 1/7/16.
  */
@@ -42,6 +51,18 @@ public class NextGenActivity extends NextGenActionBarFragmentActivity {
         leftdrawer = (RelativeLayout) findViewById(R.id.left_drawer);
         mDrawerToggle = new NextGenActionBarDrawerToggle(this,	mDrawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+        /*
+        try {
+            JAXBContext jc = JAXBContext.newInstance(MediaManifestType.class);
+
+            Unmarshaller unmarshaller = jc.createUnmarshaller();
+            JAXBElement<MediaManifestType> unmarshalledRoot = unmarshaller.unmarshal(new StreamSource(new File("/data/mos_hls_manifest_v3.xml")), MediaManifestType.class);
+            MediaManifestType mani jifest = unmarshalledRoot.getValue();
+
+            System.out.println(manifest.getInventory().getMetadata().get(0).getBasicMetadata().getLocalizedInfo().get(0).getOriginalTitle());
+        } catch (JAXBException ex){
+
+        }*/
     }
 
     private class NextGenActionBarDrawerToggle extends ActionBarDrawerToggle {
@@ -81,7 +102,7 @@ public class NextGenActivity extends NextGenActionBarFragmentActivity {
     }
 
     private void hideShowNextGenView(){
-        if (TabletUtils.isTablet()) {
+/*        if (TabletUtils.isTablet()) {
             View nextGenView = findViewById(R.id.nextgen_portrait_bottom);
             if (nextGenView == null)
                 return;
@@ -92,7 +113,7 @@ public class NextGenActivity extends NextGenActionBarFragmentActivity {
                 case Configuration.ORIENTATION_LANDSCAPE:
                     nextGenView.setVisibility(View.GONE);
             }
-        }
+        }*/
     }
 
     @Override

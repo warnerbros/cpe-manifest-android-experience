@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.wb.nextgen.R;
 
 import com.wb.nextgen.NextGenExtraActivity;
+import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgen.model.Actor;
 import com.wb.nextgen.util.PicassoTrustAll;
 
@@ -22,6 +23,13 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        actors.add(Actor.HENRY_CAVILL);
+        actors.add(Actor.AMY_ADAM);
+        actors.add(Actor.MICHAEL_SHANNON);
+        actors.add(Actor.RUSSELL_CROWE);
+        actors.add(Actor.DIANE_LANE);
+        actors.add(Actor.KEVIN_COSTER);
+        actors.add(Actor.ANTJE_TRAUE);
 
         //listView.setselect
     }
@@ -35,16 +43,9 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment {
 
     protected void onListItmeClick(View v, final int position, long id){
         listView.setSelection(position);
-        actors.add(Actor.HENRY_CAVILL);
-        actors.add(Actor.AMY_ADAM);
-        actors.add(Actor.MICHAEL_SHANNON);
-        actors.add(Actor.RUSSELL_CROWE);
-        actors.add(Actor.DIANE_LANE);
-        actors.add(Actor.KEVIN_COSTER);
-        actors.add(Actor.ANTJE_TRAUE);
         v.setSelected(true);
         selectedIndex = position;
-        if (getActivity() instanceof NextGenExtraActivity){
+        if (getActivity() instanceof NextGenFragmentTransactionInterface){
             NextGenActorDetailFragment target = new NextGenActorDetailFragment();
             NextGenActorDetailFragment.NextGenExtraDetialInterface obj = new NextGenActorDetailFragment.NextGenExtraDetialInterface() {
                 @Override
@@ -58,7 +59,7 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment {
                 }
             };
             target.setDetailObject(obj);
-            ((NextGenExtraActivity)getActivity()).transitRightMainFragment(target);
+            ((NextGenFragmentTransactionInterface)getActivity()).transitRightFragment(target);
         }
         listAdaptor.notifyDataSetChanged();
     }

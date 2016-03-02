@@ -77,6 +77,7 @@
 		<activity
 			android:name="com.wb.nextgen.NextGenActivity"
 			android:launchMode="singleTop"
+			android:screenOrientation="sensorLandscape"
 			android:configChanges="orientation|screenSize"
 			android:theme="@style/NextGenActionBar">
 			<!--android:theme="@style/Theme.Flx.NoTitle">-->
@@ -157,6 +158,15 @@
 		</activity>
 		-->
 		<activity android:name="com.wb.nextgen.NextGenExtraActivity"
+			android:screenOrientation="sensorLandscape"
+			android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+			android:exported="false"
+			android:theme="@style/Theme.Flx.FullscreenVideo" >
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+			</intent-filter>
+		</activity>
+		<activity android:name="com.wb.nextgen.NextGenECView"
 			android:screenOrientation="sensorLandscape"
 			android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
 			android:exported="false"

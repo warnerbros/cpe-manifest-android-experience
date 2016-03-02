@@ -1,11 +1,15 @@
 package com.wb.nextgen.fragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.NextGenECView;
+import com.wb.nextgen.NextGenPlayer;
 import com.wb.nextgen.R;
 
 import com.wb.nextgen.util.PicassoTrustAll;
@@ -45,7 +49,12 @@ public class NextGenExtraMainTableFragment extends NextGenExtraLeftListFragment 
     }
 
     protected void onListItmeClick(View v, int position, long id){
-
+        Intent intent = new Intent(getActivity(), NextGenECView.class);
+        intent.setAction(android.content.Intent.ACTION_VIEW);
+        intent.setDataAndType(Uri.parse("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/feature/ManOfSteel_Clean.mp4"), "video/*");
+        //intent.setDataAndType(Uri.parse("http://d1x310wzaeunai.cloudfront.net/video/man-of-steel-trailer3.mp4"), "video/*");
+        //       intent.setDataAndType(Uri.parse("https://ia802304.us.archive.org/17/items/BigBuckBunny1280x720Stereo/big_buck_bunny_720_stereo.mp4"), "video/*");
+        startActivity(intent);
     }
 
     protected int getNumberOfColumns(){

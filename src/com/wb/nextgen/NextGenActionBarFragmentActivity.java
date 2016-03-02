@@ -4,17 +4,24 @@ import android.app.ActionBar;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import java.lang.reflect.Constructor;
+import java.util.Stack;
+
 /**
  * Created by gzcheng on 1/14/16.
  */
 public class NextGenActionBarFragmentActivity  extends FragmentActivity{
+    //final Stack<Class<?>> fragmentClassStack = new Stack<Class<?>>();
+    Fragment currentFragment;
 
     private void setupActionBar() {
         ActionBar ab = getActionBar();
@@ -59,5 +66,60 @@ public class NextGenActionBarFragmentActivity  extends FragmentActivity{
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void transitToFragment(Class<?> fragmentClass, int viewId){
+
+        try{
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.setCustomAnimations(R.anim.push_left_in, R.anim.push_left_out, R.anim.push_right_in, R.anim.push_right_out);
+
+            Constructor<?> ctor = fragmentClass.getConstructor();
+            currentFragment = (Fragment)ctor.newInstance(new Object[] {});
+
+            //ft.add()
+
+            ft.add(viewId/*R.id.next_gen_main_frame*/, currentFragment);
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            ft.addToBackStack("tag");
+            ft.commit();
+        }catch(Exception ex){}
+    }
+
+    public void popTopFragment(int viewId){
+        //fragmentClassStack.pop();
+        //Class<?> previousFragmentClass = fragmentClassStack.peek();
+        try{
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.setCustomAnimations(R.anim.push_left_in, R.anim.push_left_out, R.anim.push_right_in, R.anim.push_right_out);
+
+            //Constructor<?> ctor = fragmentClass.getConstructor();
+            //Fragment fragment = (Fragment)ctor.newInstance(new Object[] {});
+
+            //ft.add()
+
+            ft.remove(currentFragment);
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            //ft.addToBackStack("tag");
+            ft.commit();
+        }catch(Exception ex){}
+    }
+
+    public void pushFragment(Class<?> fragmentClass, int viewId){
+        //fragmentClassStack.add(fragmentClass);
+        try{
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.setCustomAnimations(R.anim.push_left_in, R.anim.push_left_out, R.anim.push_right_in, R.anim.push_right_out);
+
+            Constructor<?> ctor = fragmentClass.getConstructor();
+            currentFragment = (Fragment)ctor.newInstance(new Object[] {});
+
+            //ft.add()
+
+            ft.add(viewId, currentFragment);
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            ft.addToBackStack("tag");
+            ft.commit();
+        }catch(Exception ex){}
     }
 }

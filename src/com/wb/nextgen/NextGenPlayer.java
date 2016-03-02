@@ -7,6 +7,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.MediaController;
 
@@ -14,8 +15,10 @@ import com.flixster.android.captioning.CaptionedPlayer;
 import com.wb.nextgen.R;
 
 import com.wb.nextgen.fragment.NextGenPlayerBottomFragment;
+import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgen.interfaces.NextGenPlaybackStatusListener;
 import com.wb.nextgen.util.TabletUtils;
+import com.wb.nextgen.util.utils.NextGenFragmentTransactionEngine;
 
 import net.flixster.android.drm.IVideoViewActionListener;
 import net.flixster.android.drm.ObservableVideoView;
@@ -27,7 +30,7 @@ import java.util.TimerTask;
 /**
  * Created by gzcheng on 1/5/16.
  */
-public class NextGenPlayer extends CaptionedPlayer {
+public class NextGenPlayer extends CaptionedPlayer implements NextGenFragmentTransactionInterface {
 
 
     protected ObservableVideoView videoView;
@@ -38,10 +41,12 @@ public class NextGenPlayer extends CaptionedPlayer {
 
     private Timer imeUpdateTimer;
 
+    NextGenFragmentTransactionEngine nextGenFragmentTransactionEngine;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        nextGenFragmentTransactionEngine = new NextGenFragmentTransactionEngine(this);
         setContentView(R.layout.next_gen_videoview);
         videoView = (ObservableVideoView) findViewById(R.id.surface_view);
         videoView.setMediaController(new MediaController(this));
@@ -187,5 +192,21 @@ public class NextGenPlayer extends CaptionedPlayer {
         }
         //FlixsterApplication.setCurrentPlayableContent(content);
 
+    }
+
+
+    @Override
+    public void transitLeftFragment(Fragment nextFragment){
+        nextGenFragmentTransactionEngine.transitFragment(imeFragment.getLeftFrameId(), nextFragment);
+    }
+
+    @Override
+    public void transitRightFragment(Fragment nextFragment){
+        nextGenFragmentTransactionEngine.transitFragment(imeFragment.getRightFrameId(), nextFragment);
+    }
+
+    @Override
+    public void transitMainFragment(Fragment nextFragment){
+        nextGenFragmentTransactionEngine.transitFragment(imeFragment.getMainFrameId(), nextFragment);
     }
 }

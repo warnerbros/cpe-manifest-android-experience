@@ -27,6 +27,11 @@ android {
 		minSdkVersion 14
 		targetSdkVersion 19
     }
+
+	compileOptions {
+		sourceCompatibility JavaVersion.VERSION_1_6
+		targetCompatibility JavaVersion.VERSION_1_6
+	}
         
 	sourceSets {
 		main {
@@ -148,8 +153,9 @@ repositories {
 dependencies {
 	// jars in libs folder
 	// android-support-v4.jar is included in flixster-android-closedcaptions
-	compile fileTree(dir: 'libs', excludes: ['android-support-v4.jar', 'WidevineDRM-Debug-*.jar'], include: '*.jar')
+	compile fileTree(dir: 'libs', excludes: ['android-support-v4.jar', 'WidevineDRM-Debug-*.jar'], include: ['*.jar', '**/**/*.jar'])
 	compile fileTree(dir: 'kit-libs', include: '**/*.jar')
+
 	compile project(':flixster-android-closedcaptions')
 	compile project(':StickyGridHeaders:Library')
 	compile project(':google-play-services_lib')
