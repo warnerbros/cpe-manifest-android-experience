@@ -1,15 +1,15 @@
 package com.wb.nextgen;
 
-import com.wb.nextgen.manifest.schema.v1_4.MediaManifestType;
+//import com.wb.nextgen.manifest.schema.v1_4.MediaManifestType;
 
 import java.io.File;
 
-import javax.xml.bind.*;
-import javax.xml.transform.stream.StreamSource;
+//import javax.xml.bind.*;
+//import javax.xml.transform.stream.StreamSource;
 
 public class NextGenDataExample {
 
-	public static void main (String[] args) throws JAXBException {
+	public static void main (String[] args)/* throws JAXBException*/ {
 		/*JAXBContext jc = JAXBContext.newInstance(MediaManifestType.class);
 
         Unmarshaller unmarshaller = jc.createUnmarshaller();
