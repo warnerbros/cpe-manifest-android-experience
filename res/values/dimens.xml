@@ -136,5 +136,6 @@
     <!-- Closed Caption Settings -->
     <dimen name="color_button_width">30dp</dimen>
 
+    <dimen name="list_title_font_size">40dp</dimen>
     
 </resources>

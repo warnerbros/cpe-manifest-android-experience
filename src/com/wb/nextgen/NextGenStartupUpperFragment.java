@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.flixster.android.captioning.CaptionedPlayer;
@@ -16,12 +17,14 @@ import com.wb.nextgen.R;
 
 import com.wb.nextgen.util.PicassoTrustAll;
 
+import java.io.File;
+
 /**
  * Created by gzcheng on 1/7/16.
  */
 public class NextGenStartupUpperFragment extends Fragment implements View.OnClickListener {
-    Button playMovieButton;
-    Button extraButton;
+    ImageButton playMovieButton;
+    ImageButton extraButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,13 +38,14 @@ public class NextGenStartupUpperFragment extends Fragment implements View.OnClic
         super.onViewCreated(view, savedInstanceState);
         ImageView bg = (ImageView)view.findViewById(R.id.next_gen_startup_layout);
         if (bg != null){
-            PicassoTrustAll.loadImageIntoView(NextGenApplication.getContext(), "http://www.manofsteel.com/img/about/full_bg.jpg", bg);
+            String bgImageUri = "android.resource://com.wb.nextgen/" + R.drawable.front_page_bg;
+            PicassoTrustAll.loadImageIntoView(NextGenApplication.getContext(), bgImageUri, bg);
         }
-        playMovieButton = (Button) view.findViewById(R.id.next_gen_startup_play_button);
+        playMovieButton = (ImageButton) view.findViewById(R.id.next_gen_startup_play_button);
         if (playMovieButton != null){
             playMovieButton.setOnClickListener(this);
         }
-        extraButton = (Button) view.findViewById(R.id.next_gen_startup_extra_button);
+        extraButton = (ImageButton) view.findViewById(R.id.next_gen_startup_extra_button);
         if (extraButton != null){
             extraButton.setOnClickListener(this);
         }

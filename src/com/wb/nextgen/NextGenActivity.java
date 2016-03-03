@@ -2,12 +2,15 @@ package com.wb.nextgen;
 
 import android.app.Activity;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.TranslateAnimation;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import com.wb.nextgen.R;
@@ -30,7 +33,7 @@ import javax.xml.transform.stream.StreamSource;
 /**
  * Created by gzcheng on 1/7/16.
  */
-public class NextGenActivity extends NextGenActionBarFragmentActivity {
+public class NextGenActivity extends FragmentActivity {
     // wrapper of ProfileViewFragment
 
 
@@ -72,6 +75,7 @@ public class NextGenActivity extends NextGenActionBarFragmentActivity {
             super(activity, drawerLayout, drawerImageRes, openDrawerContentDescRes, closeDrawerContentDescRes);
         }
 
+        private float lastTranslate = 0.0f;
         /**
          * Swap fragment on drawer closed for better performance
          */
@@ -88,9 +92,30 @@ public class NextGenActivity extends NextGenActionBarFragmentActivity {
         public void onDrawerOpened(View drawerView) {
             super.onDrawerOpened(drawerView);
             mDrawerFragment.resetDrawer();
-            setTitle(R.string.app_name);
+            //setTitle(R.string.app_name);
         }
 
+        //@SuppressLint("NewApi")
+        public void onDrawerSlide(View drawerView, float slideOffset)
+        {
+            float moveFactor = (leftdrawer.getWidth() * slideOffset);
+
+            FrameLayout frame = (FrameLayout) findViewById(R.id.content_frame);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+            {
+
+                frame.setTranslationX(moveFactor);
+            }
+            else
+            {
+                TranslateAnimation anim = new TranslateAnimation(lastTranslate, moveFactor, 0.0f, 0.0f);
+                anim.setDuration(0);
+                anim.setFillAfter(true);
+                frame.startAnimation(anim);
+
+                lastTranslate = moveFactor;
+            }
+        }
 
 
     }

@@ -44,6 +44,8 @@ public class NextGenApplication extends Application {
     public static int sDay;
     private static Context sApplicationContext;
     private static float deviceScreenDensity = 0.0f;
+    private static int deviceScreenWidth = -1;
+    private static int deviceScreenHeight = -1;
     public static int sCachePolicy;
     private static String sUserAgent = null;
     private static String sVersionName = null;
@@ -162,6 +164,13 @@ public class NextGenApplication extends Application {
         if (deviceScreenDensity == 0.0f && ctx != null)
             deviceScreenDensity = ctx.getResources().getDisplayMetrics().density;
         return deviceScreenDensity;
+    }
+
+    public static int getScreenWidth(Context ctx){
+        if (deviceScreenWidth == -1 && ctx != null){
+            deviceScreenWidth = (int)(ctx.getResources().getDisplayMetrics().widthPixels * ctx.getResources().getDisplayMetrics().density);
+        }
+        return deviceScreenWidth;
     }
 
 

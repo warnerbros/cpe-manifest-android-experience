@@ -1,5 +1,6 @@
 package com.wb.nextgen;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -16,11 +17,16 @@ import android.widget.TextView;
 import com.flixster.android.captioning.CaptionedPlayer;
 import com.tonicartos.widget.stickygridheaders.StickyGridHeadersBaseAdapter;
 import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
+import com.wb.nextgen.data.DemoData;
+import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.utils.NextGenFragmentTransactionEngine;
 
 import net.flixster.android.drm.ObservableVideoView;
 
 import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by gzcheng on 2/25/16.
@@ -29,6 +35,11 @@ public class NextGenECView extends CaptionedPlayer {
     protected ObservableVideoView videoView;
     protected StickyGridHeadersGridView ecListView;
     private NextGenECListAdapter ecListAdaptor;
+
+
+
+    private List<DemoData.ECContentData> ecDataList = DemoData.DEMODATA_LEGACY_EC_LIST ;
+
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +56,7 @@ public class NextGenECView extends CaptionedPlayer {
         int spacing = (int)(10 *density);
         ecListView = (StickyGridHeadersGridView) findViewById(R.id.next_gen_ec_list);
         ecListView.setNumColumns(1);
+        //ecListView.setSelection(0);
         //ecListView.setHorizontalSpacing(spacing);
         ecListView.setVerticalSpacing(spacing);
         ecListView.setPadding(spacing, 0, spacing, spacing);
@@ -53,6 +65,10 @@ public class NextGenECView extends CaptionedPlayer {
         ecListView.setAdapter(ecListAdaptor);
         ecListView.setOnItemClickListener(ecListAdaptor);
 
+    }
+
+    public String getHeaderText(){
+        return DemoData.DEMODATA_LEGACY_TITLE_TEXT;
     }
 
     private class PreparedListener implements MediaPlayer.OnPreparedListener {
@@ -65,11 +81,12 @@ public class NextGenECView extends CaptionedPlayer {
 
     public void onResume() {
         super.onResume();
-        Intent intent = getIntent();
-        Uri uri = intent.getData();
+        /*Intent intent = getIntent();
+        Uri uri = intent.getData();*/
         videoView.setVisibility(View.VISIBLE);
-        videoView.setVideoURI(uri);
-
+        if (ecListAdaptor != null){
+            ecListAdaptor.onItemClick(ecListView, null, 0, 0);
+        }
         //hideShowNextGenView();
     }
 
@@ -80,6 +97,8 @@ public class NextGenECView extends CaptionedPlayer {
         protected LayoutInflater mInflater;
 
         private TextView headerTextView;
+
+        private int selectedItemIndex = 0;
 
         NextGenECListAdapter() {
 
@@ -101,21 +120,37 @@ public class NextGenECView extends CaptionedPlayer {
 
             }
 
+            DemoData.ECContentData thisEC = ecDataList.get(position);
+
             ImageView imageView = (ImageView)convertView.findViewById(R.id.ec_list_image);
+            if (imageView != null){
+                //ViewGroup.LayoutParams imageLayoutParams = imageView.getLayoutParams();
+
+                PicassoTrustAll.loadImageIntoView(NextGenECView.this, thisEC.posterImgUrl, imageView);
+            }
+
             TextView ecNameText = (TextView)convertView.findViewById(R.id.ec_list_name_text);
+            if (ecNameText != null){
+                ecNameText.setText(thisEC.title);
+            }
 
-
-
+            ImageView mask = (ImageView)convertView.findViewById(R.id.ec_inactive_mask);
+            if (mask != null){
+                if (selectedItemIndex == position){
+                    mask.setVisibility(View.INVISIBLE);
+                }else
+                    mask.setVisibility(View.VISIBLE);
+            }
 
             return convertView;
         }
 
         public int getCount() {
-            return getListItemCount();
+            return ecDataList.size();
         }
 
         public Object getItem(int position) {
-            return getListItemAtPosition(position);
+            return ecDataList.get(position);
         }
 
         public long getItemId(int position) {
@@ -125,29 +160,32 @@ public class NextGenECView extends CaptionedPlayer {
         @Override
         public View getHeaderView(int position, View convertView, ViewGroup parent) {
             if (headerTextView == null){
-                headerTextView = new TextView(getActivity());
+                headerTextView = new TextView(NextGenECView.this);
             }
             headerTextView.setText(getHeaderText());
-            headerTextView.setTextSize(40);
+            headerTextView.setTextSize(20);
             return headerTextView;
         }
 
         @Override
         public int getCountForHeader(int header) {
             // TODO Auto-generated method stub
-            return getHeaderChildenCount(header);
+            return ecDataList.size();
         }
 
         @Override
         public int getNumHeaders() {
             // TODO Auto-generated method stub
-            return getHeaderCount();
+            return 1;
         }
 
         // AdapterView.OnItemClickListener
         @Override
         public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-            onListItmeClick(v, position, id);
+            selectedItemIndex = position;
+            videoView.setVideoURI(Uri.parse(ecDataList.get(position).ecVideoUrl) );
+            notifyDataSetChanged();
+            //onListItmeClick(v, position, id);
         }
 
     }
