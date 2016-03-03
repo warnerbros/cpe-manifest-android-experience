@@ -4,10 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:drawable="@drawable/next_gen_actor_row_bg">
-    <ImageView
-        android:layout_width="60dp"
-        android:id="@+id/next_gen_actor_avatar"
-        android:layout_height="60dp" />
+    <com.wb.nextgen.drawable.CircularOverlayView
+        android:layout_width="@dimen/next_gen_actor_thumbnail_dimen"
+        android:layout_height="@dimen/next_gen_actor_thumbnail_dimen">
+        <ImageView
+            android:layout_width="@dimen/next_gen_actor_thumbnail_dimen"
+            android:layout_height="@dimen/next_gen_actor_thumbnail_dimen"
+            android:id="@+id/next_gen_actor_avatar"
+            android:src="@drawable/adams"/>
+        <ImageView
+            android:id="@+id/actor_selected_mask"
+            android:background="@drawable/circle_mask"
+            android:visibility="invisible"
+            android:layout_width="@dimen/next_gen_actor_thumbnail_dimen"
+            android:layout_height="@dimen/next_gen_actor_thumbnail_dimen" />
+
+    </com.wb.nextgen.drawable.CircularOverlayView>
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

@@ -73,7 +73,11 @@ public class NextGenExtraMainTableFragment extends NextGenExtraLeftListFragment 
         return R.layout.next_gen_extra_right_item;
     }
 
-    protected void fillListRowWithObjectInfo(View rowView, Object item) {
+    protected int getStartupSelectedIndex(){
+        return -1;
+    }
+
+    protected void fillListRowWithObjectInfo(View rowView, Object item, boolean isSelected) {
 
 
         ImageView thumbnailImg = (ImageView) rowView.findViewById(R.id.next_gen_extra_thumbnail);

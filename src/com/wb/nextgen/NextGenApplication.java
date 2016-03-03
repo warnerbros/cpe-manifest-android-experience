@@ -8,6 +8,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Build;
 
+import com.wb.nextgen.data.DemoData;
+import com.wb.nextgen.data.DemoJSONData;
 import com.wb.nextgen.model.NextGenSettings;
 
 import net.flixster.android.FlixsterCacheManager;
@@ -19,6 +21,7 @@ import java.security.cert.X509Certificate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.logging.Logger;
 
 import javax.security.auth.x500.X500Principal;
 
@@ -58,6 +61,7 @@ public class NextGenApplication extends Application {
 
     private static NextGenSettings sAppSettings;
 
+
     // ///////////////////////////////////////////////////////
     // Flixster Cache
 
@@ -84,6 +88,9 @@ public class NextGenApplication extends Application {
             sVersionCode = sNextGenInfo.versionCode;
             sUserAgent = "Android/" + sVersionName + " (Linux; U; Android " + Build.VERSION.RELEASE + "; " + locale
                     + "; " + Build.MODEL + ")";
+            DemoData.parseDemoJSONData();
+
+
         }catch (Exception ex){}
     }
 

@@ -26,6 +26,18 @@ public class DemoData {
 
     final static public List<ECContentData> DEMODATA_LEGACY_EC_LIST = new ArrayList<ECContentData>();
     final static public String DEMODATA_LEGACY_TITLE_TEXT = "Legacy";
+
+    static private DemoJSONData dataFromJSON;
+
+    public static DemoJSONData getDemoJSONData(){
+        return dataFromJSON;
+    }
+
+    public static void parseDemoJSONData(){
+        dataFromJSON = DemoJSONData.createFromUri("abc");
+
+    }
+
     static {
         DEMODATA_MAN_OF_STEEL_EC_LIST.add(new ECContentData("Batman v Superman",
                 "http://resizing.flixster.com/Jj6wWGt6lyF3lvez2mPrgekAjpA=/320x474/dkpu1ddg7pbsk.cloudfront.net/movie/11/19/11/11191102_ori.jpg",

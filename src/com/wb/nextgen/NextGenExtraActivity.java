@@ -16,6 +16,7 @@ import com.wb.nextgen.fragment.NextGenActorListFragment;
 import com.wb.nextgen.fragment.NextGenExtraMainTableFragment;
 
 import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
+import com.wb.nextgen.interfaces.SensitiveFragmentInterface;
 import com.wb.nextgen.util.utils.NextGenFragmentTransactionEngine;
 import com.wb.nextgen.util.PicassoTrustAll;
 
@@ -137,7 +138,14 @@ public class NextGenExtraActivity extends FragmentActivity implements NextGenFra
     @Override
     public void onBackPressed(){
         super.onBackPressed();
-        if (getSupportFragmentManager().getBackStackEntryCount() == 0 )
+        Fragment leftFragment = getSupportFragmentManager().findFragmentById(R.id.next_gen_extra_left_view);
+        Fragment rightFragment = getSupportFragmentManager().findFragmentById(R.id.next_gen_extra_right_view);
+
+        if (leftFragment != null && leftFragment instanceof SensitiveFragmentInterface){
+            ((SensitiveFragmentInterface)leftFragment).notifyCurrentSensitiveFragment(rightFragment);
+        }
+
+        if (getSupportFragmentManager().getBackStackEntryCount() == 1 )
             finish();
 
     }

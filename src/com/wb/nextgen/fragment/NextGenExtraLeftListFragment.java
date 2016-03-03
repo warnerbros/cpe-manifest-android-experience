@@ -48,6 +48,7 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
     }
     @Override
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+        listAdaptor.selectedIndex = position;
         onListItmeClick(v, position, id);
     }
 
@@ -61,7 +62,7 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
 
     protected abstract int getListItemViewId();
 
-    protected abstract void fillListRowWithObjectInfo(View rowView, Object item);
+    protected abstract void fillListRowWithObjectInfo(View rowView, Object item, boolean isSelected);
 
     protected abstract String getHeaderText();
 
@@ -69,9 +70,17 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
 
     protected abstract int getHeaderCount();
 
+    protected abstract int getStartupSelectedIndex();
+
+    public void resetSelectedItem(){
+        listAdaptor.selectedIndex = getStartupSelectedIndex();
+    }
+
     public class NextGenExtraLeftPanelAdapter extends BaseAdapter implements StickyGridHeadersBaseAdapter {
 
         //protected NextGenExtraActivity activity;
+
+        protected int selectedIndex = getStartupSelectedIndex();
 
         protected LayoutInflater mInflater;
 
@@ -97,9 +106,7 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
 
             }
 
-
-
-            fillListRowWithObjectInfo(convertView, getItem(position));
+            fillListRowWithObjectInfo(convertView, getItem(position), selectedIndex == position);
 
             return convertView;
         }
@@ -122,7 +129,7 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
                 headerTextView = new TextView(getActivity());
             }
             headerTextView.setText(getHeaderText());
-            headerTextView.setTextSize(40);
+            headerTextView.setTextSize(20);
             return headerTextView;
         }
 

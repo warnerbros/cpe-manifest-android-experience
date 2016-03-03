@@ -1,0 +1,393 @@
+{
+  "video": {
+    "file_url": "https://d1x310wzaeunai.cloudfront.net/video/man-of-steel-trailer3.mp4",
+    "interstitial_file_url": "https://d1x310wzaeunai.cloudfront.net/video/mos-nextgen-interstitial.mp4",
+    "delivery_format": "HD"
+  },
+  "scenes": [
+    {
+      "startTime": 0,
+      "endTime": 25,
+      "people": [
+        "nge:actor-crowe",
+        "nge:actor-zurer"
+      ]
+    },
+    {
+      "startTime": 34,
+      "endTime": 46,
+      "people": [
+        "nge:actor-timberline"
+      ]
+    },
+    {
+      "startTime": 46,
+      "endTime": 55,
+      "people": [
+        "nge:actor-sprayberry"
+      ]
+    },
+    {
+      "startTime": 55,
+      "endTime": 69,
+      "people": [
+        "nge:actor-costner",
+        "nge:actor-sprayberry"
+      ]
+    },
+    {
+      "startTime": 69,
+      "endTime": 83,
+      "people": [
+        "nge:actor-cavill",
+        "nge:actor-adams"
+      ]
+    },
+    {
+      "startTime": 83,
+      "endTime": 125,
+      "people": [
+        "nge:actor-cavill"
+      ]
+    },
+    {
+      "startTime": 125,
+      "endTime": 153,
+      "people": [
+        "nge:actor-cavill",
+        "nge:actor-shannon"
+      ]
+    },
+    {
+      "startTime": 155,
+      "endTime": 182,
+      "people": [
+        "nge:actor-cavill",
+        "nge:actor-adams"
+      ]
+    }
+  ],
+  "metadata": {
+    "title": "Man of Steel",
+    "people": [
+      {
+        "id": "nge:actor-cavill",
+        "job_function": "Actor",
+        "billing_block_order": 1,
+        "character": "Clark Kent / Kal-El",
+        "name": "Henry Cavill",
+        "thumbnail_image": "cavill_thumb.jpg",
+        "full_image": "cavill_full.jpg",
+        "biography": "Actor Henry Cavill studied drama at Stowe School in England before trying his hand at a professional career in show business, beginning with a small role in The Count of Monte Cristo in 2001. Cavill was 18 and had already developed the square jaw and piercing stare that would soon make him a successful leading man, going up for roles like Bruce Wayne in Batman Begins and even James Bond in Casino Royale. He lost those roles to more well-known actors, but had no trouble building up his résumé with supporting roles in movies like Tristan & Isolde, before scoring the prominent role of Charles Brandon on the Showtime series The Tudors in 2007. He enjoyed a small part in the Woody Allen movie Whatever Works, and had a larger role in the action film Immortals in 2011. He was tapped to take over the iconic role of Superman in the planned 2013 project Man of Steel.",
+        "filmography": [
+          {
+            "title": "Batman v Superman",
+            "poster_image": "http://resizing.flixster.com/Jj6wWGt6lyF3lvez2mPrgekAjpA=/320x474/dkpu1ddg7pbsk.cloudfront.net/movie/11/19/11/11191102_ori.jpg",
+            "external_url": "http://www.flixster.com/movie/batman-v-superman-dawn-of-justice/"
+          },
+          {
+            "title": "The Man From U.N.C.L.E.",
+            "poster_image": "https://d19p213wjrwt85.cloudfront.net/uvvu-images/2083346825265035E05314345B0AD4F9",
+            "external_url": "https://video.flixster.com/movies/the-man-from-u-n-c-l-e/urn:dece:cid:eidr-s:AA29-CCC8-B64E-9647-6627-N"
+          },
+          {
+            "title": "Immortals",
+            "poster_image": "https://d19p213wjrwt85.cloudfront.net/uvvu-images/1007F33E67B6A988E05315345B0A63A6",
+            "external_url": "https://video.flixster.com/movies/immortals/urn:dece:cid:org:relativitymedia:Immortals_2012"
+          },
+          {
+            "title": "Whatever Works",
+            "poster_image": "https://d19p213wjrwt85.cloudfront.net/uvvu-images/02933A178B3F8076E0505A0A15346353",
+            "external_url": "https://video.flixster.com/movies/whatever-works/urn:dece:cid:eidr-s:2653-F7B7-1F65-BE16-306C-S"
+          },
+          {
+            "title": "Stardust",
+            "poster_image": "https://resizing.flixster.com/lhmSvFu-P5Gdkjeg15aAkHe2adE=/180x240/dkpu1ddg7pbsk.cloudfront.net/movie/11/37/75/11377594_ori.jpg",
+            "external_url": "https://video.flixster.com/movies/stardust/urn:dece:cid:org:ppc:000003475600100003753"
+          }
+        ]
+      },
+      {
+        "id": "nge:actor-adams",
+        "job_function": "Actor",
+        "billing_block_order": 2,
+        "character": "Lois Lane",
+        "name": "Amy Adams",
+        "thumbnail_image": "adams.jpg",
+        "full_image": "adams.jpg",
+        "biography": "An actress with a knack for light comedy, Amy Adams was born in Italy and raised in Castle Rock, Colorado. After high school, she studied dance and worked in regional dinner theater until age 20, when she moved to Minnesota with her family after being spotted by a visiting Minneapolis producer and recruited to work in his dinner theater there. She landed her first film role in the satiric 1999 comedy Drop Dead Gorgeous, which was, appropriately enough, set in Minnesota. After appearing in the independent comedy Psycho Beach Party, Adams made guest appearances on a number of television series, including That 70s Show, Buffy the Vampire Slayer, and The West Wing; she was also cast as a regular in Manchester Prep, a TV spin-off of the hit film Cruel Intentions. Manchester Prep, however, was never aired when its network decided that the show's sexual content was too strong for television, although several episodes were eventually re-edited into a direct-to-video feature entitled Cruel Intentions 2. 2002 proved to be a very busy year for Adams, who appeared in no fewer than four features, including the eagerly anticipated Catch Me if You Can, featuring Leonardo DiCaprio and Tom Hanks.",
+        "filmography": [
+          {
+            "title": "Big Eyes",
+            "poster_image": "https://d19p213wjrwt85.cloudfront.net/uvvu-images/0EEE085300B4500DE05316345B0AC788",
+            "external_url": "https://video.flixster.com/movies/big-eyes/urn:dece:cid:org:anchorbayent:BIGEYES_M"
+          },
+          {
+            "title": "Lullaby",
+            "poster_image": "http://resizing.flixster.com/ODlGkWWCpHly5admqQ5cH1eR5KM=/320x474/dkpu1ddg7pbsk.cloudfront.net/movie/11/17/82/11178252_ori.jpg",
+            "external_url": "http://www.flixster.com/movie/lullaby-2013/"
+          },
+          {
+            "title": "American Hustle",
+            "poster_image": "https://d19p213wjrwt85.cloudfront.net/uvvu-images/F8DA72E80E8023DEE0405B0A163458D2",
+            "external_url": "https://video.flixster.com/movies/american-hustle/urn:dece:cid:eidr-s:626A-A431-E3A8-EE6D-0668-3"
+          },
+          {
+            "title": "Her",
+            "poster_image": "https://content6.flixster.com/movie/11/17/76/11177656_det.jpg",
+            "external_url": "https://video.flixster.com/movies/her/urn:dece:cid:eidr-s:3F2E-E412-9650-B898-A52B-J"
+          },
+          {
+            "title": "Trouble with the Curve",
+            "poster_image": "https://d19p213wjrwt85.cloudfront.net/uvvu-images/EB7D421B9C5CDEE3E0405A0A153401E9",
+            "external_url": "https://video.flixster.com/movies/trouble-with-the-curve/urn:dece:cid:org:WB:2059722x6000075956"
+          },
+          {
+            "title": "The Master",
+            "poster_image": "https://resizing.flixster.com/e8EFfuzJ8k6ePyPYMaScRHfOcWM=/180x270/dkpu1ddg7pbsk.cloudfront.net/movie/11/17/64/11176490_ori.jpg",
+            "external_url": "https://video.flixster.com/movies/the-master/urn:dece:cid:org:anchorbayent:MASTER_M"
+          }
+        ]
+      },
+      {
+        "id": "nge:actor-shannon",
+        "job_function": "Actor",
+        "billing_block_order": 3,
+        "character": "General Zod",
+        "name": "Michael Shannon",
+        "thumbnail_image": "shannon_thumb.jpg",
+        "full_image": "shannon_full.jpg",
+        "biography": "Distinguished character actor Michael Shannon essayed a diverse series of characterizations onscreen, beginning just after the start of the new millennium. A veteran member of Chicago's experimental Red Orchid theatrical troupe, Shannon specialized in small, multidimensional portrayals that added to the overall effectiveness of each project -- per his contributions to Vanilla Sky (2001), 8 Mile (2002), and Bad Boys II (2003). Whenever necessary, Shannon imperceptibly blended into the material at hand. He played a therapist in Nicole Kassell's psychodrama The Woodsman (2004), yet by virtue of his emotional intensity and eccentric look, Shannon evinced an ability to dominate with his onscreen presence, as well.",
+        "filmography": [
+          {
+            "title": "99 Homes",
+            "poster_image": "http://resizing.flixster.com/_F1zapdRleMM6p__hLZCztRFZvI=/320x473/dkpu1ddg7pbsk.cloudfront.net/movie/11/20/22/11202259_ori.jpg",
+            "external_url": "http://www.flixster.com/movie/99-homes/"
+          },
+          {
+            "title": "The Harvest",
+            "poster_image": "http://resizing.flixster.com/szj7pQh9ou9_OxcVV0Yr5ivqGQo=/284x405/dkpu1ddg7pbsk.cloudfront.net/movie/11/19/10/11191024_ori.jpg",
+            "external_url": "http://www.flixster.com/movie/the-harvest-2015/"
+          },
+          {
+            "title": "The Iceman",
+            "poster_image": "http://resizing.flixster.com/ehhRBRBQyi-CZCsz4eL-ZXJftdU=/320x474/dkpu1ddg7pbsk.cloudfront.net/movie/11/16/41/11164167_ori.jpg",
+            "external_url": "http://www.flixster.com/movie/the-iceman-2013/"
+          },
+          {
+            "title": "Premium Rush",
+            "poster_image": "http://resizing.flixster.com/UOuJr48sD4Xo92EICRy3axFF9Jw=/320x480/dkpu1ddg7pbsk.cloudfront.net/movie/11/16/80/11168079_ori.jpg",
+            "external_url": "http://www.flixster.com/movie/premium-rush/"
+          },
+          {
+            "title": "Mud",
+            "poster_image": "https://resizing.flixster.com/3M9mwbxhlX3nTCBEUDmvo_tx_ZQ=/180x270/dkpu1ddg7pbsk.cloudfront.net/movie/11/17/24/11172428_ori.jpg",
+            "external_url": "https://video.flixster.com/movies/mud/urn:dece:cid:org:lionsgate:9382598"
+          },
+          {
+            "title": "Take Shelter",
+            "poster_image": "https://d19p213wjrwt85.cloudfront.net/uvvu-images/0090D4C00DC4F2CDE0505A0A1634200C",
+            "external_url": "https://video.flixster.com/movies/take-shelter/urn:dece:cid:eidr-s:434A-A49F-7A23-DE2D-537B-Z"
+          }
+        ]
+      },
+      {
+        "id": "nge:actor-lane",
+        "job_function": "Actor",
+        "billing_block_order": 4,
+        "character": "Martha Kent",
+        "name": "Diane Lane",
+        "thumbnail_image": "lane_thumb.jpg",
+        "full_image": "lane_full.jpg",
+        "biography": "Diane Lane was born in New York City in 1965, the daughter of drama coach Burt Lane and Playboy centrespread Colleen Farrington; her eyes seemed to sparkle with stars from the tender age of six. Cast in a La Mama Experimental Theatre production of Medea, Lane would subsequently appear on stage in numerous productions, both in her native New York and abroad. It wasn't long before the late-'70s found Lane reaching the apex of her early career, and in 1978 she made her film debut in director George Roy Hill's A Little Romance. Cast alongside no less than Sir Laurence Olivier, Lane held her own in the role of an American student who finds love while studying abroad, and as a result gained remarkable exposure on the cover of Time Magazine in August of the following year.",
+        "filmography": [
+          {
+            "title": "Batman v Superman",
+            "poster_image": "http://resizing.flixster.com/Jj6wWGt6lyF3lvez2mPrgekAjpA=/320x474/dkpu1ddg7pbsk.cloudfront.net/movie/11/19/11/11191102_ori.jpg",
+            "external_url": "http://www.flixster.com/movie/batman-v-superman-dawn-of-justice/"
+          },
+          {
+            "title": "Trumbo",
+            "poster_image": "http://resizing.flixster.com/vtmBSFsuGIPFkKvifoFbABkNmv8=/320x474/dkpu1ddg7pbsk.cloudfront.net/movie/11/19/18/11191857_ori.jpg",
+            "external_url": "http://www.flixster.com/movie/trumbo-2015/"
+          },
+          {
+            "title": "Inside Out",
+            "poster_image": "http://resizing.flixster.com/owz2LziRqiILGAN4M3bH6UP9_4I=/320x473/dkpu1ddg7pbsk.cloudfront.net/movie/11/19/05/11190503_ori.jpg",
+            "external_url": "http://www.flixster.com/movie/inside-out-2015/"
+          },
+          {
+            "title": "Every Secret Thing",
+            "poster_image": "http://resizing.flixster.com/DGYrHism_S8iXPstS7aOd9S5bPE=/320x474/dkpu1ddg7pbsk.cloudfront.net/movie/11/19/12/11191288_ori.jpg",
+            "external_url": "http://www.flixster.com/movie/every-secret-thing/"
+          }
+        ]
+      },
+      {
+        "id": "nge:actor-crowe",
+        "job_function": "Actor",
+        "billing_block_order": 5,
+        "character": "Jor-El",
+        "name": "Russel Crowe",
+        "thumbnail_image": "crowe_thumb.jpg",
+        "full_image": "crowe_full.jpg",
+        "biography": "Though perhaps best-known internationally for playing tough-guy roles in Romper Stomper (1993), L.A. Confidential (1997), and Gladiator (2000), New Zealand-born actor Russell Crowe has proven himself equally capable of playing gentler roles in films such as Proof (1991) and The Sum of Us (1992). No matter what kind of characters he plays, Crowe's weather-beaten handsomeness and gruff charisma combine to make him constantly watchable: his one-time Hollywood mentor Sharon Stone has called him 'the sexiest guy working in movies today.'",
+        "filmography": [
+          {
+            "title": "Noah",
+            "poster_image": "http://resizing.flixster.com/pXq5tpdJ7DoMSMJtnZR1ZC0CMQc=/320x480/dkpu1ddg7pbsk.cloudfront.net/movie/11/17/95/11179582_ori.jpg",
+            "external_url": "https://video.flixster.com/movies/noah/urn:dece:cid:eidr-s:095A-4CCE-7B39-E715-9897-L"
+          },
+          {
+            "title": "Winter's Tale",
+            "poster_image": "https://d19p213wjrwt85.cloudfront.net/uvvu-images/FF80152B77727C32E0405B0A1534627A",
+            "external_url": "https://video.flixster.com/movies/winters-tale/urn:dece:cid:eidr-s:A321-9C2B-148F-AB87-B87E-L"
+          },
+          {
+            "title": "Les Misérables",
+            "poster_image": "http://resizing.flixster.com/VtPe6jYfspWB__dPTpJ-s-B71uM=/320x480/dkpu1ddg7pbsk.cloudfront.net/movie/11/17/01/11170178_ori.jpg",
+            "external_url": "http://www.flixster.com/movie/les-miserables-2012/"
+          },
+          {
+            "title": "L.A. Confidential",
+            "poster_image": "http://resizing.flixster.com/RDn1Pyi-pgwNhcHcEITSFUKj0lA=/320x480/dkpu1ddg7pbsk.cloudfront.net/movie/11/16/87/11168703_ori.jpg",
+            "external_url": "https://video.flixster.com/movies/la-confidential/urn:dece:cid:org:WB:2003555x6000001020"
+          }
+        ]
+      },
+      {
+        "id": "nge:actor-traue",
+        "job_function": "Actor",
+        "billing_block_order": 6,
+        "character": "Faora-Ul",
+        "name": "Antje Traue",
+        "thumbnail_image": "traue_thumb.jpg",
+        "full_image": "traue_full.jpg",
+        "biography": "Traue was born in Mittweida, Saxony, Germany. Her mother was a dancer and musician. Traue was raised speaking Russian. Her stage career began when she portrayed Jeanne d'Arc in a school play. At sixteen, she won the lead role in the International Munich Art Lab's first ever 'Hip Hopera' (the musical 'West End Opera'). Traue performed and toured with the production for four years, appearing on stages throughout Germany, Europe, and in New York City. Subsequently, Traue appeared in several films and television movies, such as Kleinruppin Forever, Berlin am Meer and Phantomschmerz.",
+        "filmography": [
+          {
+            "title": "Woman in Gold",
+            "poster_image": "http://resizing.flixster.com/oT-YX1aLYTUFTNvl0_PEBjr3xh4=/284x405/dkpu1ddg7pbsk.cloudfront.net/movie/11/19/06/11190645_ori.jpg",
+            "external_url": "http://www.flixster.com/movie/woman-in-gold/"
+          },
+          {
+            "title": "Seventh Son",
+            "poster_image": "http://resizing.flixster.com/KyRfX_Stt24pgXhBNJ-4sJpG1o8=/303x480/dkpu1ddg7pbsk.cloudfront.net/movie/11/18/03/11180365_ori.jpg",
+            "external_url": "https://video.flixster.com/movies/seventh-son/urn:dece:cid:eidr-s:6117-E6EC-0AB2-3C49-643A-H"
+          },
+          {
+            "title": "Nobel's Last Will",
+            "poster_image": "http://resizing.flixster.com/J8yGRoGr-tYQIt2wc_oMiZCwh9w=/320x474/dkpu1ddg7pbsk.cloudfront.net/movie/11/16/57/11165747_ori.jpg",
+            "external_url": "http://www.flixster.com/movie/nobels-last-will/"
+          }
+        ]
+      },
+      {
+        "id": "nge:actor-lennix",
+        "job_function": "Actor",
+        "billing_block_order": 7,
+        "character": "General Swanwick",
+        "name": "Harry Lennix",
+        "thumbnail_image": "lennix_thumb.jpg",
+        "full_image": "lennix_full.jpg",
+        "biography": "Attended Archbishop Quigley Preparatory Seminary, with plans to become a Dominican priest. Worked as a public school teacher in the Chicago area before his acting career took off. Co-founded Legacy Productions, a Chicago theatre that produces plays of historical significance to the black community, in 1989. Made his big-screen debut in the Gene Hackman thriller The Package (1989). Landed regular roles on the short-lived drama Commander in Chief and Joss Whedon's sci-fi series Dollhouse. Has an older sister and two older brothers.",
+        "filmography": [
+          {
+            "title": "Chi-Raq",
+            "poster_image": "https://d19p213wjrwt85.cloudfront.net/uvvu-images/267F893D61521283E05314345B0AAC90",
+            "external_url": "https://video.flixster.com/movies/chiraq/urn:dece:cid:org:lionsgate:9382722-221220"
+          },
+          {
+            "title": "Love and Basketball",
+            "poster_image": "http://resizing.flixster.com/9BpuzL7xY0XUjOIJNpLMN4n3FTA=/320x480/dkpu1ddg7pbsk.cloudfront.net/movie/11/17/00/11170084_ori.jpg",
+            "external_url": "http://www.flixster.com/movie/love-and-basketball/"
+          },
+          {
+            "title": "Get on the Bus",
+            "poster_image": "http://resizing.flixster.com/ji4ROtFCeOWyixmyMjEkqfz5MII=/319x426/dkpu1ddg7pbsk.cloudfront.net/movie/11/20/96/11209608_ori.jpg",
+            "external_url": "http://www.flixster.com/movie/get-on-the-bus/"
+          }
+        ]
+      },
+      {
+        "id": "nge:actor-schiff",
+        "job_function": "Actor",
+        "billing_block_order": 8,
+        "character": "Dr. Emil Hamilton",
+        "name": "Richard Schiff",
+        "thumbnail_image": "schiff_thumb.jpg",
+        "full_image": "schiff_full.jpg"
+      },
+      {
+        "id": "nge:actor-meloni",
+        "job_function": "Actor",
+        "billing_block_order": 9,
+        "character": "Colonel Nathan Hardy",
+        "name": "Christopher Meloni",
+        "thumbnail_image": "meloni_thumb.jpg",
+        "full_image": "meloni_full.jpg"
+      },
+      {
+        "id": "nge:actor-costner",
+        "job_function": "Actor",
+        "billing_block_order": 10,
+        "character": "Jonathan Kent",
+        "name": "Kevin Costner",
+        "thumbnail_image": "costner_thumb.jpg",
+        "full_image": "costner_full.jpg"
+      },
+      {
+        "id": "nge:actor-zurer",
+        "job_function": "Actor",
+        "billing_block_order": 11,
+        "character": "Lara Lor-Van",
+        "name": "Ayelet Zurer",
+        "thumbnail_image": "zurer_thumb.jpg",
+        "full_image": "zurer_full.jpg",
+        "biography": "After essaying a series of roles in her native Israel that carried her through her thirties, actress Ayelet Zurer relocated to Los Angeles and achieved a dual breakthrough in 2005: Steven Spielberg cast her as the wife of a Mossad agent in his period thriller Munich, and Israeli producers recruited her to play one of the leads on BeTipul ('In Treatment'), a blockbuster prime-time drama on local television in Israel. Zurer subsequently chalked up a covetable series of Hollywood roles, typically playing characters of variable Middle Eastern origin; projects included Paul Schrader's Holocaust-themed drama Adam Resurrected (2007) and Pete Travis' assassination-themed political thriller Vantage Point (2008, as a European paramedic with possible ties to clandestine groups).",
+        "filmography": [
+            {
+                "title": "Last Days In The Desert",
+                "poster_image": "http://resizing.flixster.com/jFXsnIOJN4s00zlUMn81XowC95U=/320x474/dkpu1ddg7pbsk.cloudfront.net/movie/11/18/97/11189748_ori.jpg",
+                "external_url": "http://www.flixster.com/movie/last-days-in-the-desert/"
+            },
+            {
+                "title": "Last Knights",
+                "poster_image": "http://resizing.flixster.com/KzNNuO7bUfUbq5Bw_wpw95vyC-8=/320x464/dkpu1ddg7pbsk.cloudfront.net/movie/11/19/06/11190614_ori.jpg",
+                "external_url": "https://video.flixster.com/movies/last-knights/urn:dece:cid:org:lionsgate:1620486-219669"
+            },
+            {
+                "title": "Fugitive Pieces",
+                "poster_image": "http://resizing.flixster.com/IEheHOtC3Cslq5VtOB82s-Ut9j4=/319x426/dkpu1ddg7pbsk.cloudfront.net/movie/11/22/40/11224023_ori.jpg",
+                "external_url": "http://www.flixster.com/movie/fugitive-pieces/"
+            },
+            {
+                "title": "Nina's Tragedies",
+                "poster_image": "http://resizing.flixster.com/rgsC-5KCNg_GQXx43rt0O__ZeTo=/320x453/dkpu1ddg7pbsk.cloudfront.net/movie/11/21/23/11212389_ori.jpg",
+                "external_url": "http://www.flixster.com/movie/ninas-tragedies/"
+            }
+        ]
+      },
+      {
+        "id": "nge:actor-sprayberry",
+        "job_function": "Actor",
+        "billing_block_order": 12,
+        "character": "Clark Kent (13 Years)",
+        "name": "Dylan Sprayberry",
+        "thumbnail_image": "sprayberry_thumb.jpg",
+        "full_image": "sprayberry_full.jpg",
+        "biography": "Dylan Sprayberry is an American actor and musician known for Man of Steel (2013), Teen Wolf (2011), Shuffle (2011) and Old Dogs (2009). Dylan attended West University Elementary until 2005 when his family moved to California. He has a younger sister, Ellery Sprayberry, who is also an actress. His most recent work (January 2015) has been starring in the fourth and fifth season of Teen Wolf."
+      },
+      {
+        "id": "nge:actor-timberline",
+        "job_function": "Actor",
+        "billing_block_order": 13,
+        "character": "Clark Kent (9 Years)",
+        "name": "Cooper Timberline",
+        "thumbnail_image": "timberline_thumb.jpg",
+        "full_image": "timberline_full.jpg",
+        "biography": "Cooper Timberline is an actor, known for Man of Steel (2013), Chasing Mavericks (2012) and Falsify (2013)."
+      }
+    ]
+  }
+}
