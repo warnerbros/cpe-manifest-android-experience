@@ -35,12 +35,7 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
         int spacing = (int)(10 *density);
         listView = (ListView)view.findViewById(R.id.next_gen_lists);
         if (listView != null){
-           // listView.setNumColumns(getNumberOfColumns());
-            //listView.setHorizontalSpacing(spacing);
-           // listView.setVerticalSpacing(spacing);
             listView.setPadding(spacing, 0, spacing, spacing);
-            //listView.setDivider(null);
-            // listView.setHeadersIgnorePadding(true);
             listAdaptor = new NextGenExtraLeftPanelAdapter();
             listView.setAdapter(listAdaptor);
             listView.setOnItemClickListener(this);
@@ -49,9 +44,8 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
     }
     @Override
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-        //listAdaptor.selectedIndex = position;
+        listAdaptor.selectedIndex = position;
         listView.setSelection(position);
-        listView.setItemChecked(position, true);
         onListItmeClick(v, position, id);
         listAdaptor.notifyDataSetChanged();
     }
@@ -66,7 +60,7 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
 
     protected abstract int getListItemViewId();
 
-    protected abstract void fillListRowWithObjectInfo(View rowView, Object item, boolean isSelected);
+    protected abstract void fillListRowWithObjectInfo(View rowView, Object item);
 
     protected abstract String getHeaderText();
 
@@ -77,18 +71,16 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
     protected abstract int getStartupSelectedIndex();
 
     public void resetSelectedItem(){
-        listView.setSelection(-1);
+        listAdaptor.selectedIndex = getStartupSelectedIndex();
+        listView.setSelection(getStartupSelectedIndex());
     }
 
     public class NextGenExtraLeftPanelAdapter extends BaseAdapter {
 
-        //protected NextGenExtraActivity activity;
-
-        //protected int selectedIndex = getStartupSelectedIndex();
+        protected int selectedIndex = getStartupSelectedIndex();
 
         protected LayoutInflater mInflater;
 
-        private TextView headerTextView;
 
         NextGenExtraLeftPanelAdapter() {
 
@@ -105,14 +97,18 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
                 LayoutInflater inflater = getActivity().getLayoutInflater();
                 convertView = inflater.inflate(getListItemViewId(), parent, false);
 
-
             } else {
 
             }
 
+            boolean bSelectedStateChanged = (selectedIndex == position) != convertView.isActivated();
 
-            //listView.setItemChecked(position, selectedIndex == position);
-            fillListRowWithObjectInfo(convertView, getItem(position), 0 == position);
+
+            if (bSelectedStateChanged ) {       //programmatically changes the activated state of the row.
+                convertView.setActivated(selectedIndex == position);
+                convertView.postInvalidate();
+            }
+            fillListRowWithObjectInfo(convertView, getItem(position));
 
             return convertView;
         }
@@ -128,28 +124,7 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
         public long getItemId(int position) {
             return position;
         }
-        /*
-        @Override
-        public View getHeaderView(int position, View convertView, ViewGroup parent) {
-            if (headerTextView == null){
-                headerTextView = new TextView(getActivity());
-            }
-            headerTextView.setText(getHeaderText());
-            headerTextView.setTextSize(20);
-            return headerTextView;
-        }
 
-        @Override
-        public int getCountForHeader(int header) {
-            // TODO Auto-generated method stub
-            return getHeaderChildenCount(header);
-        }
-
-        @Override
-        public int getNumHeaders() {
-            // TODO Auto-generated method stub
-            return getHeaderCount();
-        }*/
 
     }
 }

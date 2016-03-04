@@ -1,5 +1,6 @@
 package com.wb.nextgen.fragment;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
@@ -31,7 +32,7 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment imple
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //listView.setselect
+        listView.setSelection(getStartupSelectedIndex());
     }
 
     public List<ActorInfo> getActorInfos(){
@@ -74,39 +75,26 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment imple
         return -1;
     }
 
-    protected void fillListRowWithObjectInfo(View rowView, Object item, boolean isSelected) {
+    protected void fillListRowWithObjectInfo(View rowView, Object item) {
 
 
         ImageView avatarImg = (ImageView) rowView.findViewById(R.id.next_gen_actor_avatar);
         TextView realNameTxt = (TextView) rowView.findViewById(R.id.next_gen_actor_real_name);
         TextView characterNameTxt = (TextView) rowView.findViewById(R.id.next_gen_actor_character_name);
-        //ImageView selectedMaskImg = (ImageView) rowView.findViewById(R.id.actor_selected_mask);
 
-        rowView.setVisibility(View.INVISIBLE);
-        rowView.setSelected(isSelected);
-        rowView.setVisibility(View.VISIBLE);
-        //avatarImg.setSelected(isSelected);
 
         ActorInfo thisActor = (ActorInfo) item;
+
+
+
         if(!thisActor.realName.equals(realNameTxt.getText())) {
-            avatarImg.setTag(thisActor.realName);
             realNameTxt.setText(thisActor.realName);
             characterNameTxt.setText(thisActor.character);
-            PicassoTrustAll.loadImageIntoView(getActivity(), thisActor.getThumbnailUri(), avatarImg);
+
+            avatarImg.setTag(thisActor.realName);
         }
+        PicassoTrustAll.loadImageIntoView(getActivity(), thisActor.getThumbnailUri(), avatarImg);
 
-
-            //((ViewGroup)rowView).getChildCount()
-        /*
-        if (selectedIndex != -1 && selectedIndex < getListItemCount() && item.equals(getListItemAtPosition(selectedIndex)))
-            rowView.setSelected(true);
-        else
-            rowView.setSelected(false);
-        */
-        /*
-        if (selectedMaskImg != null){
-            selectedMaskImg.setVisibility(isSelected ? View.VISIBLE : View.INVISIBLE);
-        }*/
 
     }
 
