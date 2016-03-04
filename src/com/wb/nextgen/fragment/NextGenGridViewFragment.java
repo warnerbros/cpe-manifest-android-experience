@@ -1,5 +1,9 @@
 package com.wb.nextgen.fragment;
 
+/**
+ * Created by gzcheng on 3/3/16.
+ */
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -7,7 +11,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.ListView;
+import android.widget.TextView;
+
+import com.tonicartos.widget.stickygridheaders.StickyGridHeadersBaseAdapter;
+import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
+import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.R;
+
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.wb.nextgen.NextGenApplication;
@@ -18,14 +36,14 @@ import com.tonicartos.widget.stickygridheaders.StickyGridHeadersBaseAdapter;
 /**
  * Created by gzcheng on 1/12/16.
  */
-public abstract class NextGenExtraLeftListFragment extends Fragment implements AdapterView.OnItemClickListener{
+public abstract class NextGenGridViewFragment extends Fragment implements AdapterView.OnItemClickListener{
 
-    protected ListView listView;
+    protected StickyGridHeadersGridView gridView;
     protected NextGenExtraLeftPanelAdapter listAdaptor;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.next_gen_list_view, container, false);
+        return inflater.inflate(R.layout.next_gen_grid_view, container, false);
     }
 
     @Override
@@ -33,25 +51,23 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
         super.onViewCreated(view, savedInstanceState);
         float density = NextGenApplication.getScreenDensity(getActivity());
         int spacing = (int)(10 *density);
-        listView = (ListView)view.findViewById(R.id.next_gen_lists);
-        if (listView != null){
-           // listView.setNumColumns(getNumberOfColumns());
-            //listView.setHorizontalSpacing(spacing);
-           // listView.setVerticalSpacing(spacing);
-            listView.setPadding(spacing, 0, spacing, spacing);
-            listView.setDivider(null);
-            listView.setDividerHeight(0);
-            // listView.setHeadersIgnorePadding(true);
+        gridView = (StickyGridHeadersGridView)view.findViewById(R.id.next_gen_grid);
+        if (gridView != null){
+            gridView.setNumColumns(getNumberOfColumns());
+            gridView.setHorizontalSpacing(spacing);
+            gridView.setVerticalSpacing(spacing);
+            gridView.setPadding(spacing, 0, spacing, spacing);
+            gridView.setHeadersIgnorePadding(true);
             listAdaptor = new NextGenExtraLeftPanelAdapter();
-            listView.setAdapter(listAdaptor);
-            listView.setOnItemClickListener(this);
+            gridView.setAdapter(listAdaptor);
+            gridView.setOnItemClickListener(this);
         }
 
     }
     @Override
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
         listAdaptor.selectedIndex = position;
-        listView.setItemChecked(position, true);
+        gridView.setItemChecked(position, true);
         onListItmeClick(v, position, id);
     }
 
@@ -79,7 +95,7 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
         listAdaptor.selectedIndex = getStartupSelectedIndex();
     }
 
-    public class NextGenExtraLeftPanelAdapter extends BaseAdapter {
+    public class NextGenExtraLeftPanelAdapter extends BaseAdapter implements StickyGridHeadersBaseAdapter {
 
         //protected NextGenExtraActivity activity;
 
@@ -110,7 +126,7 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
             }
 
 
-            listView.setItemChecked(position, selectedIndex == position);
+            gridView.setItemChecked(position, selectedIndex == position);
             fillListRowWithObjectInfo(convertView, getItem(position), selectedIndex == position);
 
             return convertView;
@@ -127,7 +143,7 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
         public long getItemId(int position) {
             return position;
         }
-        /*
+
         @Override
         public View getHeaderView(int position, View convertView, ViewGroup parent) {
             if (headerTextView == null){
@@ -148,7 +164,7 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
         public int getNumHeaders() {
             // TODO Auto-generated method stub
             return getHeaderCount();
-        }*/
+        }
 
     }
 }

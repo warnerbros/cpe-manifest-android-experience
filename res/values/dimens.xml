@@ -136,8 +136,11 @@
     <!-- Closed Caption Settings -->
     <dimen name="color_button_width">30dp</dimen>
 
-    <dimen name="list_title_font_size">40dp</dimen>
+    <dimen name="list_title_font_size">20dp</dimen>
     <dimen name="next_gen_actor_thumbnail_cirle_mask_radius">30dp</dimen>
     <dimen name="next_gen_actor_thumbnail_dimen">60dp</dimen>
+    <dimen name="selected_thumbnail_border_size">2dp</dimen>
+    <dimen name="social_icon_dimen">20dp</dimen>
+    <dimen name="detail_title_font_size">30dp</dimen>
     
 </resources>

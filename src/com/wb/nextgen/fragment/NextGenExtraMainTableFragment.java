@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Created by gzcheng on 1/13/16.
  */
-public class NextGenExtraMainTableFragment extends NextGenExtraLeftListFragment {
+public class NextGenExtraMainTableFragment extends NextGenGridViewFragment {
 
 
     public final static int GRID_SPACING_DP = 10;

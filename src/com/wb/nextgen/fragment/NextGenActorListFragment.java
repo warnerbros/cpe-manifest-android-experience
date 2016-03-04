@@ -3,7 +3,9 @@ package com.wb.nextgen.fragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wb.nextgen.R;
@@ -45,18 +47,8 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment imple
         v.setSelected(true);
         if (getActivity() instanceof NextGenFragmentTransactionInterface){
             NextGenActorDetailFragment target = new NextGenActorDetailFragment();
-            NextGenActorDetailFragment.NextGenExtraDetialInterface obj = new NextGenActorDetailFragment.NextGenExtraDetialInterface() {
-                @Override
-                public String getThumbnailImageUrl() {
-                    return ((ActorInfo)getListItemAtPosition(position)).getThumbnailUri();
-                }
 
-                @Override
-                public String getDetailText() {
-                    return ((ActorInfo)getListItemAtPosition(position)).biography;
-                }
-            };
-            target.setDetailObject(obj);
+            target.setDetailObject((ActorInfo)getListItemAtPosition(position));
             ((NextGenFragmentTransactionInterface)getActivity()).transitRightFragment(target);
         }
         listAdaptor.notifyDataSetChanged();
@@ -88,7 +80,12 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment imple
         ImageView avatarImg = (ImageView) rowView.findViewById(R.id.next_gen_actor_avatar);
         TextView realNameTxt = (TextView) rowView.findViewById(R.id.next_gen_actor_real_name);
         TextView characterNameTxt = (TextView) rowView.findViewById(R.id.next_gen_actor_character_name);
-        ImageView selectedMaskImg = (ImageView) rowView.findViewById(R.id.actor_selected_mask);
+        //ImageView selectedMaskImg = (ImageView) rowView.findViewById(R.id.actor_selected_mask);
+
+        rowView.setVisibility(View.INVISIBLE);
+        rowView.setSelected(isSelected);
+        rowView.setVisibility(View.VISIBLE);
+        //avatarImg.setSelected(isSelected);
 
         ActorInfo thisActor = (ActorInfo) item;
         if(!thisActor.realName.equals(realNameTxt.getText())) {
@@ -96,15 +93,19 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment imple
             characterNameTxt.setText(thisActor.character);
             PicassoTrustAll.loadImageIntoView(getActivity(), thisActor.getThumbnailUri(), avatarImg);
         }
+
+
+            //((ViewGroup)rowView).getChildCount()
         /*
         if (selectedIndex != -1 && selectedIndex < getListItemCount() && item.equals(getListItemAtPosition(selectedIndex)))
             rowView.setSelected(true);
         else
             rowView.setSelected(false);
         */
+        /*
         if (selectedMaskImg != null){
             selectedMaskImg.setVisibility(isSelected ? View.VISIBLE : View.INVISIBLE);
-        }
+        }*/
 
     }
 

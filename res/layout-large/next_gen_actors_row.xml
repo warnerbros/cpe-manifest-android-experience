@@ -4,38 +4,38 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:drawable="@drawable/next_gen_actor_row_bg">
-    <com.wb.nextgen.drawable.CircularOverlayView
-        android:layout_width="@dimen/next_gen_actor_thumbnail_dimen"
-        android:layout_height="@dimen/next_gen_actor_thumbnail_dimen">
-        <ImageView
-            android:layout_width="@dimen/next_gen_actor_thumbnail_dimen"
-            android:layout_height="@dimen/next_gen_actor_thumbnail_dimen"
-            android:id="@+id/next_gen_actor_avatar"
-            android:src="@drawable/adams"/>
-        <ImageView
-            android:id="@+id/actor_selected_mask"
-            android:background="@drawable/circle_mask"
-            android:visibility="invisible"
-            android:layout_width="@dimen/next_gen_actor_thumbnail_dimen"
-            android:layout_height="@dimen/next_gen_actor_thumbnail_dimen" />
+    <!--<RelativeLayout
+       android:layout_width="@dimen/next_gen_actor_thumbnail_dimen"
+       android:layout_height="@dimen/next_gen_actor_thumbnail_dimen">-->
+       <com.wb.nextgen.widget.CircularClippedImageView
+           android:layout_width="@dimen/next_gen_actor_thumbnail_dimen"
+           android:layout_height="@dimen/next_gen_actor_thumbnail_dimen"
+           android:id="@+id/next_gen_actor_avatar"
+           android:src="@drawable/adams"/>
+       <!--<ImageView
+           android:id="@+id/actor_selected_mask"
+           android:background="@drawable/circle_mask"
+           android:visibility="invisible"
+           android:layout_width="@dimen/next_gen_actor_thumbnail_dimen"
+           android:layout_height="@dimen/next_gen_actor_thumbnail_dimen" />-->
 
-    </com.wb.nextgen.drawable.CircularOverlayView>
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/next_gen_actor_real_name"
-            android:layout_width="fill_parent"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/textMedium"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/next_gen_actor_character_name"
-            android:layout_width="fill_parent"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="@dimen/textMSmall"
-            android:textStyle="italic"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
-</LinearLayout>
+        <!--</RelativeLayout>-->
+       <LinearLayout
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:orientation="vertical">
+           <TextView
+               android:id="@+id/next_gen_actor_real_name"
+               android:layout_width="fill_parent"
+               android:textColor="@android:color/white"
+               android:textSize="@dimen/textMedium"
+               android:layout_height="wrap_content"/>
+           <TextView
+               android:id="@+id/next_gen_actor_character_name"
+               android:layout_width="fill_parent"
+               android:textColor="@android:color/darker_gray"
+               android:textSize="@dimen/textMSmall"
+               android:textStyle="italic"
+               android:layout_height="wrap_content"/>
+       </LinearLayout>
+   </LinearLayout>
