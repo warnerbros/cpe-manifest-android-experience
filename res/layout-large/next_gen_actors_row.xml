@@ -10,6 +10,7 @@
        <com.wb.nextgen.widget.CircularClippedImageView
            android:layout_width="@dimen/next_gen_actor_thumbnail_dimen"
            android:layout_height="@dimen/next_gen_actor_thumbnail_dimen"
+           android:duplicateParentState="true"
            android:id="@+id/next_gen_actor_avatar"
            android:src="@drawable/adams"/>
        <!--<ImageView

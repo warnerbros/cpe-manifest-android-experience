@@ -42,12 +42,7 @@ public class NextGenActorDetailFragment extends Fragment{
         characterTextView = (TextView)view.findViewById(R.id.actor_character_name_text);
         actorNameTextView = (TextView)view.findViewById(R.id.actor_real_name_text);
 
-        if (actorOjbect != null){
-            PicassoTrustAll.loadImageIntoView(getActivity(), actorOjbect.getFullImageUri(), fullImageView);
-            detailTextView.setText(actorOjbect.biography);
-            characterTextView.setText(actorOjbect.character);
-            actorNameTextView.setText(actorOjbect.realName);
-        }
+        reloadDetail(actorOjbect);
     }
 
     public void setDetailObject(ActorInfo object){
@@ -55,10 +50,12 @@ public class NextGenActorDetailFragment extends Fragment{
     }
 
     public void reloadDetail(ActorInfo object){
-        setDetailObject(actorOjbect);
-        if (object != null){
-            PicassoTrustAll.loadImageIntoView(getActivity(), object.getFullImageUri(), fullImageView);
-            detailTextView.setText(object.biography);
+        actorOjbect = object;
+        if (actorOjbect != null){
+            PicassoTrustAll.loadImageIntoView(getActivity(), actorOjbect.getFullImageUri(), fullImageView);
+            detailTextView.setText(actorOjbect.biography);
+            characterTextView.setText(actorOjbect.character);
+            actorNameTextView.setText(actorOjbect.realName);
         }
     }
 

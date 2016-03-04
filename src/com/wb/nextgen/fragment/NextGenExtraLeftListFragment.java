@@ -39,8 +39,7 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
             //listView.setHorizontalSpacing(spacing);
            // listView.setVerticalSpacing(spacing);
             listView.setPadding(spacing, 0, spacing, spacing);
-            listView.setDivider(null);
-            listView.setDividerHeight(0);
+            //listView.setDivider(null);
             // listView.setHeadersIgnorePadding(true);
             listAdaptor = new NextGenExtraLeftPanelAdapter();
             listView.setAdapter(listAdaptor);
@@ -50,9 +49,11 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
     }
     @Override
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-        listAdaptor.selectedIndex = position;
+        //listAdaptor.selectedIndex = position;
+        listView.setSelection(position);
         listView.setItemChecked(position, true);
         onListItmeClick(v, position, id);
+        listAdaptor.notifyDataSetChanged();
     }
 
     protected abstract void onListItmeClick(View v, int position, long id);
@@ -76,14 +77,14 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
     protected abstract int getStartupSelectedIndex();
 
     public void resetSelectedItem(){
-        listAdaptor.selectedIndex = getStartupSelectedIndex();
+        listView.setSelection(-1);
     }
 
     public class NextGenExtraLeftPanelAdapter extends BaseAdapter {
 
         //protected NextGenExtraActivity activity;
 
-        protected int selectedIndex = getStartupSelectedIndex();
+        //protected int selectedIndex = getStartupSelectedIndex();
 
         protected LayoutInflater mInflater;
 
@@ -110,8 +111,8 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
             }
 
 
-            listView.setItemChecked(position, selectedIndex == position);
-            fillListRowWithObjectInfo(convertView, getItem(position), selectedIndex == position);
+            //listView.setItemChecked(position, selectedIndex == position);
+            fillListRowWithObjectInfo(convertView, getItem(position), 0 == position);
 
             return convertView;
         }

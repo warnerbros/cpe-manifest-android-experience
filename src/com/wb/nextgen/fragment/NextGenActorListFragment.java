@@ -89,6 +89,7 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment imple
 
         ActorInfo thisActor = (ActorInfo) item;
         if(!thisActor.realName.equals(realNameTxt.getText())) {
+            avatarImg.setTag(thisActor.realName);
             realNameTxt.setText(thisActor.realName);
             characterNameTxt.setText(thisActor.character);
             PicassoTrustAll.loadImageIntoView(getActivity(), thisActor.getThumbnailUri(), avatarImg);
