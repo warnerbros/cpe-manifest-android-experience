@@ -156,6 +156,7 @@ dependencies {
 	compile fileTree(dir: 'libs', excludes: ['android-support-v4.jar', 'WidevineDRM-Debug-*.jar'], include: ['*.jar', '**/**/*.jar'])
 	compile fileTree(dir: 'kit-libs', include: '**/*.jar')
 	compile "com.android.support:recyclerview-v7:23.1.0"
+	compile "com.android.support:cardview-v7:23.1.0"
 
 
 	compile project(':flixster-android-closedcaptions')
