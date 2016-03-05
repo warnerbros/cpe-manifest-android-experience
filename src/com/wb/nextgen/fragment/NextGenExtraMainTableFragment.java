@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wb.nextgen.NextGenApplication;
@@ -12,8 +13,12 @@ import com.wb.nextgen.NextGenECView;
 import com.wb.nextgen.NextGenPlayer;
 import com.wb.nextgen.R;
 
+import com.wb.nextgen.data.DemoData;
+import com.wb.nextgen.data.DemoData.ECGroupData;
+import com.wb.nextgen.data.DemoData;
 import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.TabletUtils;
+import com.wb.nextgen.util.utils.F;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,33 +30,13 @@ public class NextGenExtraMainTableFragment extends NextGenGridViewFragment {
 
 
     public final static int GRID_SPACING_DP = 10;
-    private static List<Object> rightListItems = new ArrayList<Object>();
-    static {
-        rightListItems.add(new ExtraThumbnails("BEHIND THE SCENES", "http://vide.nextgen.com/nge/Extra/extras_bts.jpg"));
-        rightListItems.add(new ExtraThumbnails("DC MULTIVERSE", "http://vide.nextgen.com/nge/Extra/extras_universe.jpg"));
-        rightListItems.add(new ExtraThumbnails("DELETED SCENES", "http://vide.nextgen.com/nge/Extra/extras_scenes.jpg"));
-        // rightListItems.add(new ExtraThumbnails("SPECIAL FEATURES", "http://vide.nextgen.com/nge/Extra/extras_bts.jpg"));
-        // rightListItems.add(new ExtraThumbnails("CLIP SHARE", "http://vide.nextgen.com/nge/Extra/extras_bts.jpg"));
-        rightListItems.add(new ExtraThumbnails("SHOPPING", "http://vide.nextgen.com/nge/Extra/extras_shopping.jpg"));
-        rightListItems.add(new ExtraThumbnails("PLACES", "http://vide.nextgen.com/nge/Extra/extras_places.jpg"));
-        rightListItems.add(new ExtraThumbnails("GALLERIES", "http://vide.nextgen.com/nge/Extra/extras_galleries.jpg"));
-        rightListItems.add(new ExtraThumbnails("EXPLORE KRYPTON", "http://vide.nextgen.com/nge/Extra/extras_krypton.jpg"));
-        rightListItems.add(new ExtraThumbnails("LEGACY", "http://vide.nextgen.com/nge/Extra/extras_legacy.jpg"));
-    }
-
-    public static class ExtraThumbnails{
-        public final String title;
-        public final String thumbnailUrl;
-        public ExtraThumbnails(String title, String thumbnailUrl){
-            this.title = title;
-            this.thumbnailUrl = thumbnailUrl;
-        }
-    }
+    private static List<ECGroupData> ecGroups = DemoData.DEMO_MAN_OF_STEEL_EC_GROUPS;
 
     protected void onListItmeClick(View v, int position, long id){
         Intent intent = new Intent(getActivity(), NextGenECView.class);
         intent.setAction(android.content.Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.parse("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/feature/ManOfSteel_Clean.mp4"), "video/*");
+        intent.putExtra(F.ID, getListItemAtPosition(position).id);
+        //intent.setDataAndType(Uri.parse("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/feature/ManOfSteel_Clean.mp4"), "video/*");
         //intent.setDataAndType(Uri.parse("http://d1x310wzaeunai.cloudfront.net/video/man-of-steel-trailer3.mp4"), "video/*");
         //       intent.setDataAndType(Uri.parse("https://ia802304.us.archive.org/17/items/BigBuckBunny1280x720Stereo/big_buck_bunny_720_stereo.mp4"), "video/*");
         startActivity(intent);
@@ -62,11 +47,11 @@ public class NextGenExtraMainTableFragment extends NextGenGridViewFragment {
     }
 
     protected int getListItemCount() {
-        return rightListItems.size();
+        return ecGroups.size();
     }
 
-    protected Object getListItemAtPosition(int i) {
-        return rightListItems.get(i);
+    protected ECGroupData getListItemAtPosition(int i) {
+        return ecGroups.get(i);
     }
 
     protected int getListItemViewId() {
@@ -85,12 +70,17 @@ public class NextGenExtraMainTableFragment extends NextGenGridViewFragment {
 
         float density = NextGenApplication.getScreenDensity(getActivity());
         int spacing = (int) (GRID_SPACING_DP * density);
-        int w = getActivity().getResources().getDisplayMetrics().widthPixels - spacing;
+        int w = getActivity().getResources().getDisplayMetrics().widthPixels * 2 / 3 - spacing;
+
+        ViewGroup.LayoutParams viewParams = this.getView().getLayoutParams();
+        /*if (viewParams instanceof LinearLayout.LayoutParams){
+            w = (int)(((float)getActivity().getResources().getDisplayMetrics().widthPixels) *((LinearLayout.LayoutParams)viewParams).weight) - spacing;
+        }*/
 
         ViewGroup.LayoutParams layoutParams = (ViewGroup.LayoutParams) thumbnailImg.getLayoutParams();
         if (TabletUtils.isTablet()) {
             int width = (int) (w / 2) - spacing;
-            int height = width /16 *9;
+            int height = width /352 *198;
             layoutParams.width = width;
             layoutParams.height = height;
 
@@ -104,11 +94,13 @@ public class NextGenExtraMainTableFragment extends NextGenGridViewFragment {
 
 
 
-        ExtraThumbnails thisExtra = (ExtraThumbnails)item;
+        ECGroupData thisExtra = (ECGroupData)item;
         if(!thisExtra.title.equals(titleTxt.getText())){
             titleTxt.setText(thisExtra.title);
-            PicassoTrustAll.loadImageIntoView(getActivity(), thisExtra.thumbnailUrl, thumbnailImg);
+            PicassoTrustAll.loadImageIntoView(getActivity(), thisExtra.getPosterImgUrl(), thumbnailImg);
         }
+        /*layoutParams.height = thumbnailImg.getHeight() + titleTxt.getHeight();
+        rowView.setLayoutParams(layoutParams);*/
     }
 
     protected String getHeaderText(){

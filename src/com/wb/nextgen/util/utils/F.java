@@ -10,15 +10,10 @@ import android.os.Build;
  */
 
 public class F {
+
+
 	
-	/* Switch dev and live servers */
-	
-	public static final boolean BYPASS_DOWNLOAD_CREAT_ELEMENTS = false;
-	public static final boolean BYPASS_DOWNLOAD_DELETE_ELEMENTS = false;
-	
-	public static final boolean BYPASS_STREAM_ENTITLEMENTS = false;
-	
-	public static final String PACKAGE = "com.flixster.video";
+	public static final String PACKAGE = "com.wb.nextgen";
 	public static final String CRYPT_KEY = "SDAFsdfsdxsadf894ew5sdg;lj34;ln5/ldfsg;ldf9g0gvdfgbkld;fg";
 	
 	/* Device properties */
@@ -36,28 +31,14 @@ public class F {
 	public static final boolean IS_NOOK_BUILD = false;
 	public static final boolean IS_VODAFONE_BUILD = false;
 	public static final boolean IS_THIRD_PARTY_BUILD = IS_AMAZON_BUILD || IS_NOOK_BUILD || IS_VODAFONE_BUILD;
-	
-	/* Intents/Bundle extras */
-	public static final String EXTRA_ID = PACKAGE + ".EXTRA_ID";
-	public static final String EXTRA_TITLE = PACKAGE + ".EXTRA_TITLE";
-	public static final String EXTRA_RIGHT_ID = PACKAGE + ".EXTRA_RIGHT_ID";
+
 	
 	/* Log tags */
-	public static final String TAG = "FlxMain";
-	public static final String TAG_DEEPLINK = "FlxDeepLink";
-	public static final String TAG_AD = "FlxAd";
-	public static final String TAG_API = "FlxApi";
-	public static final String TAG_GA = "FlxGa";
-	public static final String TAG_NETFLIX = "FlxNf";
-	public static final String TAG_WIDGET = "FlxWdgt";
-	public static final String TAG_DRM = "FlxDrm";
-	public static final String TAG_DB = "FlxDB";
-	public static final String TAG_DOWNLOAD = "FlxDownload";
-	public static final String TAG_USER_ACTION = "FlxUserAction";
-	public static final String TAG_GPLUS = "FlxGPlus";
-	public static final String TAG_CAST = "FlxCast";
-	public static final String TAG_KRUX = "FlxKrux";
-	public static final String TAB_DOWNLOAD_MIGRATION = "FlxDownloadMigration";
+	public static final String TAG = "NextGenMain";
+	public static final String TAG_API = "NextGenApi";
+	public static final String TAG_GA = "NextGenGa";
+	public static final String TAG_DRM = "NextGenDrm";
+	public static final String TAG_USER_ACTION = "NextGenUserAction";
 
 	/* Misc */
 	public static final long SPLASH_DURATION = 1800;

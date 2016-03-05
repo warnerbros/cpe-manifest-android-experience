@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!--
     <dimen name="ti_indent">15dip</dimen>
     <dimen name="header_pad">2dip</dimen>
     <dimen name="topbar_pad">10dip</dimen>
@@ -25,9 +26,9 @@
     <dimen name="iconpanel_height">50dp</dimen>
     <dimen name="morepanel_padding_top">10dp</dimen>
     <dimen name="morepanel_padding_bottom">10dp</dimen>
-    <dimen name="morepanel_padding_left">63dp</dimen>
+    <dimen name="morepanel_padding_left">63dp</dimen>-->
 
-    <!-- height of a normal list item in edit playlist mode -->
+    <!-- height of a normal list item in edit playlist mode
     <dimen name="relative_pixel">1dp</dimen>
     <dimen name="ads_direct_height">70dp</dimen>
     <dimen name="ads_web_height">50dp</dimen>
@@ -35,9 +36,9 @@
     <dimen name="facebookbutton_textheight">14sp</dimen>
     <dimen name="facebookbutton_vpad">12dp</dimen>
     <dimen name="facebookbutton_lpad">30dp</dimen>
-    <dimen name="facebookbutton_rpad">10dp</dimen>
+    <dimen name="facebookbutton_rpad">10dp</dimen>-->
 
-    <!-- New unified dimensions -->
+    <!-- Unified dimensions -->
     <dimen name="spacing_xlarge">25dp</dimen>
     <dimen name="spacing_large">15dp</dimen>
     <dimen name="spacing_normal">10dp</dimen>
@@ -45,11 +46,11 @@
     <dimen name="spacing_xsmall">4dp</dimen>
     <dimen name="spacing_line">2dp</dimen>
 
-    <!-- Custom hard-coded dimensions -->
+    <!-- Custom hard-coded dimensions
     <dimen name="home_carousel_height">175dp</dimen>
-    <dimen name="theater_star_margin">0dp</dimen>
+    <dimen name="theater_star_margin">0dp</dimen> -->
 
-    <!-- Custom dynamic dimensions -->
+    <!-- Custom dynamic dimensions
     <dimen name="user_header_photo_size">60dp</dimen>
     <dimen name="extra_header_height">30dp</dimen>
     <dimen name="user_profile_width">100dp</dimen>
@@ -69,9 +70,9 @@
     <dimen name="ticket_icon_size">23dp</dimen>
     <dimen name="ticketprice_width">60sp</dimen>
     <dimen name="ticketconfirm_infomargin">100dp</dimen>
-    <dimen name="ticket_num_width">25dp</dimen>
+    <dimen name="ticket_num_width">25dp</dimen>-->
 
-    <!-- Custom control dimensions -->
+    <!-- Custom control dimensions
     <dimen name="carousel_gradient_height">40dp</dimen>
     <dimen name="carousel_caption_height">18dp</dimen>
     <dimen name="carousel_page_indicator_height">4.5dp</dimen>
@@ -82,13 +83,9 @@
     <dimen name="movie_tile_poster_width">93.3dp</dimen>
     <dimen name="movie_tile_poster_height">140dp</dimen>
     <dimen name="movie_tile_progress_bar_height">6dp</dimen>
-    <dimen name="season_detail_progress_bar_height">8dp</dimen>
+    <dimen name="season_detail_progress_bar_height">8dp</dimen> -->
 
     <!-- MSK prompt top margin -->
-    <dimen name="msk_prompt_margin_top">45dp</dimen>
-    
-    <dimen name="profile_button_height">30dp</dimen>
-    
     <dimen name="textXSmall">8sp</dimen>
     <dimen name="textSmall">12sp</dimen>
     <dimen name="textMSmall">15sp</dimen>
@@ -96,6 +93,14 @@
     <dimen name="textMedium">18sp</dimen>
     <dimen name="textLarge">22sp</dimen>
     <dimen name="textXLarge">26sp</dimen>
+    <dimen name="alert_dialog_title_height">64dip</dimen>
+    <dimen name="alert_dialog_button_bar_height">48dip</dimen>
+
+    <!-- MSK prompt top margin
+    <dimen name="msk_prompt_margin_top">45dp</dimen>
+    
+    <dimen name="profile_button_height">30dp</dimen>
+
     
     <dimen name="collection_item_progress_width">80dp</dimen>
     <dimen name="collection_item_icon_width">24dp</dimen>
@@ -108,9 +113,7 @@
     <dimen name="uv_promo_dialog_close_button_width">40dp</dimen>
 
     <integer name="nbc_optin_font_size">11</integer>
-    
-    <dimen name="alert_dialog_title_height">64dip</dimen>
-    <dimen name="alert_dialog_button_bar_height">48dip</dimen>
+
     
     <dimen name="tds_watch_width">190dp</dimen>
     <dimen name="tds_watch_height">50dp</dimen>
@@ -119,29 +122,32 @@
     <dimen name="episode_row_download_in_progress_width">200dp</dimen>
     
     <dimen name="tablet_modal_width">500dp</dimen>
-    <dimen name="header_bar_text_size">@dimen/textMedium</dimen>
+    <dimen name="header_bar_text_size">@dimen/textMedium</dimen>-->
     
-    <!-- Custom subnavbar -->
+    <!-- Custom subnavbar
     <dimen name="subnavbar_margin_h">5dp</dimen>
     <dimen name="subnavbar_margin_v">7dp</dimen>
     <dimen name="subnavbar_height">46dp</dimen>
-    <dimen name="subnavbar_divider_padding">8dp</dimen>
+    <dimen name="subnavbar_divider_padding">8dp</dimen>-->
     
-    <!-- Custom subheader -->
+    <!-- Custom subheader
     <dimen name="subheader_padding_l">10dp</dimen>
     <dimen name="subheader_padding_b">3dp</dimen>
     <dimen name="subheader_padding_r">10dp</dimen>
-    <dimen name="subheader_padding_t">10dp</dimen>
+    <dimen name="subheader_padding_t">10dp</dimen>-->
     
-    <!-- Closed Caption Settings -->
-    <dimen name="color_button_width">30dp</dimen>
+    <!-- Closed Caption Settings
+    <dimen name="color_button_width">30dp</dimen>-->
 
+    <!-- Left panel list -->
     <dimen name="list_title_font_size">20dp</dimen>
+    <dimen name="list_item_spacing">20dp</dimen>
+    <dimen name="list_title_height">30dp</dimen>
+
     <dimen name="next_gen_actor_thumbnail_cirle_mask_radius">30dp</dimen>
     <dimen name="next_gen_actor_thumbnail_dimen">60dp</dimen>
     <dimen name="selected_thumbnail_border_size">2dp</dimen>
     <dimen name="social_icon_dimen">20dp</dimen>
     <dimen name="detail_title_font_size">30dp</dimen>
-    <dimen name="list_item_spacing">20dp</dimen>
     
 </resources>

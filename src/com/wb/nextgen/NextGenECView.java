@@ -1,6 +1,7 @@
 package com.wb.nextgen;
 
 import android.app.ActionBar;
+import android.app.admin.DevicePolicyManager;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -19,6 +20,7 @@ import com.tonicartos.widget.stickygridheaders.StickyGridHeadersBaseAdapter;
 import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
 import com.wb.nextgen.data.DemoData;
 import com.wb.nextgen.util.PicassoTrustAll;
+import com.wb.nextgen.util.utils.F;
 import com.wb.nextgen.util.utils.NextGenFragmentTransactionEngine;
 
 import net.flixster.android.drm.ObservableVideoView;
@@ -38,13 +40,19 @@ public class NextGenECView extends CaptionedPlayer {
 
 
 
-    private List<DemoData.ECContentData> ecDataList = DemoData.DEMODATA_LEGACY_EC_LIST ;
+    private DemoData.ECGroupData ecGroupData ;
 
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.next_gen_ecs_view);
+
+        Intent intent = getIntent();
+        String groupId = intent.getStringExtra(F.ID);
+
+        ecGroupData = DemoData.findECGroupDataById(groupId);
+
         videoView = (ObservableVideoView) findViewById(R.id.surface_view);
         videoView.setMediaController(new MediaController(this));
         //videoView.setOnErrorListener(getOnErrorListener());
@@ -68,7 +76,7 @@ public class NextGenECView extends CaptionedPlayer {
     }
 
     public String getHeaderText(){
-        return DemoData.DEMODATA_LEGACY_TITLE_TEXT;
+        return ecGroupData.title;
     }
 
     private class PreparedListener implements MediaPlayer.OnPreparedListener {
@@ -120,7 +128,7 @@ public class NextGenECView extends CaptionedPlayer {
 
             }
 
-            DemoData.ECContentData thisEC = ecDataList.get(position);
+            DemoData.ECContentData thisEC = ecGroupData.ecContents.get(position);
 
             ImageView imageView = (ImageView)convertView.findViewById(R.id.ec_list_image);
             if (imageView != null){
@@ -146,11 +154,11 @@ public class NextGenECView extends CaptionedPlayer {
         }
 
         public int getCount() {
-            return ecDataList.size();
+            return ecGroupData.ecContents.size();
         }
 
         public Object getItem(int position) {
-            return ecDataList.get(position);
+            return ecGroupData.ecContents.get(position);
         }
 
         public long getItemId(int position) {
@@ -170,7 +178,7 @@ public class NextGenECView extends CaptionedPlayer {
         @Override
         public int getCountForHeader(int header) {
             // TODO Auto-generated method stub
-            return ecDataList.size();
+            return ecGroupData.ecContents.size();
         }
 
         @Override
@@ -183,7 +191,7 @@ public class NextGenECView extends CaptionedPlayer {
         @Override
         public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
             selectedItemIndex = position;
-            videoView.setVideoURI(Uri.parse(ecDataList.get(position).ecVideoUrl) );
+            videoView.setVideoURI(Uri.parse(ecGroupData.ecContents.get(position).ecVideoUrl) );
             notifyDataSetChanged();
             //onListItmeClick(v, position, id);
         }

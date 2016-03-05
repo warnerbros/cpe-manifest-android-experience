@@ -26,6 +26,7 @@
     </RelativeLayout>
     <ImageView
         android:id="@+id/next_gen_extra_thumbnail"
+        android:scaleType="centerInside"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
 </LinearLayout>
