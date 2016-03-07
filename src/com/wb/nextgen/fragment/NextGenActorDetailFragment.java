@@ -1,5 +1,10 @@
 package com.wb.nextgen.fragment;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
@@ -11,10 +16,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 
 import com.wb.nextgen.data.DemoJSONData.ActorInfo;
 import com.wb.nextgen.data.DemoJSONData.Filmography;
+import com.wb.nextgen.util.DialogUtils;
 import com.wb.nextgen.util.PicassoTrustAll;
 
 import org.w3c.dom.Text;
@@ -72,18 +79,43 @@ public class NextGenActorDetailFragment extends Fragment{
         }
     }
 
-    public static class FilmographyViewHolder extends RecyclerView.ViewHolder {
+    public class FilmographyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         CardView cv;
-        TextView personName;
-        TextView personAge;
+       // TextView personName;
+       // TextView personAge;
         ImageView personPhoto;
+        Filmography filmInfo;
 
-        FilmographyViewHolder(View itemView) {
+        FilmographyViewHolder(View itemView, Filmography filmInfo) {
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.cv);
-            personName = (TextView)itemView.findViewById(R.id.person_name);
-            personAge = (TextView)itemView.findViewById(R.id.person_age);
+           // personName = (TextView)itemView.findViewById(R.id.person_name);
+            //personAge = (TextView)itemView.findViewById(R.id.person_age);
             personPhoto = (ImageView)itemView.findViewById(R.id.person_photo);
+            this.filmInfo = filmInfo;
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            final String url = filmInfo.movieInfoUrl;
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+            alertDialogBuilder.setMessage("Do you want to launch chrome browser");
+            alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(browserIntent);
+                }
+            });
+            alertDialogBuilder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            alertDialogBuilder.show();
         }
     }
 
@@ -92,12 +124,12 @@ public class NextGenActorDetailFragment extends Fragment{
         @Override
         public FilmographyViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.actor_filmography_cardview, viewGroup, false);
-            FilmographyViewHolder pvh = new FilmographyViewHolder(v);
+            FilmographyViewHolder pvh = new FilmographyViewHolder(v, actorOjbect.actorFilmography[i]);
             return pvh;
         }
         public void onBindViewHolder(FilmographyViewHolder holder, int position){
-            holder.personName.setText(actorOjbect.actorFilmography[position].title);
-            holder.personAge.setText(actorOjbect.actorFilmography[position].title);
+            //holder.personName.setText(actorOjbect.actorFilmography[position].title);
+            //holder.personAge.setText(actorOjbect.actorFilmography[position].title);
             PicassoTrustAll.loadImageIntoView(getActivity(), actorOjbect.actorFilmography[position].posterImageUrl, holder.personPhoto);
             //holder.personPhoto.setImageResource(persons.get(i).photoId);
         }
