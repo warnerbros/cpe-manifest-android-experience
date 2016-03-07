@@ -100,8 +100,9 @@ public class NextGenActorDetailFragment extends Fragment{
         public void onClick(View v) {
             final String url = filmInfo.movieInfoUrl;
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-            alertDialogBuilder.setMessage("Do you want to launch chrome browser");
-            alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            alertDialogBuilder.setTitle(getResources().getString(R.string.dialog_leave_app));
+            alertDialogBuilder.setMessage(getResources().getString(R.string.dialog_follow_link));
+            alertDialogBuilder.setPositiveButton(getResources().getString(android.R.string.yes), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
@@ -109,7 +110,7 @@ public class NextGenActorDetailFragment extends Fragment{
                     startActivity(browserIntent);
                 }
             });
-            alertDialogBuilder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            alertDialogBuilder.setNegativeButton(getResources().getString(android.R.string.no), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();

@@ -16,6 +16,8 @@
 	<string name="label_ok">OK</string>
 	<string name="label_cancel">Cancel</string>
 	<string name="label_submit">Submit</string>
+	<string name="dialog_leave_app">Leaving App</string>
+	<string name="dialog_follow_link">Following this link will exit the app and launch your browser. Would you like to continue?</string>
 
 	<string name="settings_captions_header">Closed Captions</string>
 
