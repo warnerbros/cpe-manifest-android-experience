@@ -1,4 +1,4 @@
-package com.wb.nextgen;
+package com.wb.nextgen.fragment;
 
 
 import android.content.Intent;
@@ -8,16 +8,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import com.flixster.android.captioning.CaptionedPlayer;
+import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
-
+import com.wb.nextgen.activity.NextGenExtraActivity;
+import com.wb.nextgen.activity.NextGenPlayer;
 import com.wb.nextgen.util.PicassoTrustAll;
-
-import java.io.File;
 
 /**
  * Created by gzcheng on 1/7/16.

@@ -1,4 +1,6 @@
-package com.wb.nextgen;
+package com.wb.nextgen.interfaces;
+
+import com.wb.nextgen.fragment.NextGenStreamAssetInfo;
 
 /**
  * Created by gzcheng on 1/12/16.

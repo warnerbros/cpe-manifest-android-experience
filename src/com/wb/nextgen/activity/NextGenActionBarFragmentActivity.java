@@ -1,4 +1,4 @@
-package com.wb.nextgen;
+package com.wb.nextgen.activity;
 
 import android.app.ActionBar;
 import android.content.Context;
@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
+import com.wb.nextgen.R;
 
 import java.lang.reflect.Constructor;
 import java.util.Stack;

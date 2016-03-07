@@ -1,4 +1,4 @@
-package com.wb.nextgen;
+package com.wb.nextgen.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

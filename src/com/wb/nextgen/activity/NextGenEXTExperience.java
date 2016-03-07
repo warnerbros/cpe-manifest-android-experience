@@ -1,7 +1,9 @@
-package com.wb.nextgen;
+package com.wb.nextgen.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+
+import com.wb.nextgen.interfaces.NextGenCallBackInterface;
 
 /**
  * Created by gzcheng on 1/12/16.

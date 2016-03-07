@@ -1,6 +1,5 @@
 package com.wb.nextgen.data;
 
-import com.wb.nextgen.NextGenECView;
 import com.wb.nextgen.util.utils.StringHelper;
 
 import java.util.ArrayList;
@@ -11,7 +10,7 @@ import java.util.List;
  */
 public class DemoData {
 
-    static enum ECGroupType{
+    public static enum ECGroupType{
         FEATURETTES, VISUAL_EFFECT, GALLERY
     }
 

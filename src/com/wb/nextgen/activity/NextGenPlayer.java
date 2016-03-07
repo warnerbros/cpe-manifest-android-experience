@@ -1,4 +1,4 @@
-package com.wb.nextgen;
+package com.wb.nextgen.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;

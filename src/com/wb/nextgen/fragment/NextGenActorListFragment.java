@@ -1,19 +1,14 @@
 package com.wb.nextgen.fragment;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wb.nextgen.R;
 
-import com.wb.nextgen.NextGenExtraActivity;
 import com.wb.nextgen.data.DemoData;
-import com.wb.nextgen.data.DemoJSONData;
 import com.wb.nextgen.data.DemoJSONData.ActorInfo;
 import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgen.interfaces.SensitiveFragmentInterface;

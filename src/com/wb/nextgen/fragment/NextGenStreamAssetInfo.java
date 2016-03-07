@@ -1,4 +1,4 @@
-package com.wb.nextgen;
+package com.wb.nextgen.fragment;
 
 /**
  * Created by gzcheng on 1/12/16.

@@ -6,7 +6,7 @@
     android:id="@+id/next_gen_extra_main_frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NextGenExtraActivity">
+    tools:context=".activity.NextGenExtraActivity">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp">

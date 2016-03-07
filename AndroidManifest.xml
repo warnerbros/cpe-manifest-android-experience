@@ -75,7 +75,7 @@
 
 		<!-- Activities -->
 		<activity
-			android:name="com.wb.nextgen.NextGenActivity"
+			android:name=".activity.NextGenActivity"
 			android:launchMode="singleTop"
 			android:screenOrientation="sensorLandscape"
 			android:configChanges="orientation|screenSize"
@@ -139,7 +139,7 @@
 
 		<!-- Next Gen -->
 
-		<activity android:name="com.wb.nextgen.NextGenPlayer"
+		<activity android:name=".activity.NextGenPlayer"
 			android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
 			android:exported="false"
 			android:theme="@style/Theme.Flx.FullscreenVideo" >
@@ -157,7 +157,7 @@
 			</intent-filter>
 		</activity>
 		-->
-		<activity android:name="com.wb.nextgen.NextGenExtraActivity"
+		<activity android:name=".activity.NextGenExtraActivity"
 			android:screenOrientation="sensorLandscape"
 			android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
 			android:exported="false"
@@ -166,7 +166,16 @@
 				<action android:name="android.intent.action.VIEW" />
 			</intent-filter>
 		</activity>
-		<activity android:name="com.wb.nextgen.NextGenECView"
+		<activity android:name=".activity.ECGalleryActivity"
+			android:screenOrientation="sensorLandscape"
+			android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+			android:exported="false"
+			android:theme="@style/Theme.Flx.FullscreenVideo" >
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+			</intent-filter>
+		</activity>
+		<activity android:name=".activity.ECVideoActivity"
 			android:screenOrientation="sensorLandscape"
 			android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
 			android:exported="false"

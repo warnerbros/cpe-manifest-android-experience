@@ -1,26 +1,22 @@
 package com.wb.nextgen.fragment;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wb.nextgen.NextGenApplication;
-import com.wb.nextgen.NextGenECView;
-import com.wb.nextgen.NextGenPlayer;
+import com.wb.nextgen.activity.ECGalleryActivity;
+import com.wb.nextgen.activity.ECVideoActivity;
 import com.wb.nextgen.R;
 
 import com.wb.nextgen.data.DemoData;
 import com.wb.nextgen.data.DemoData.ECGroupData;
-import com.wb.nextgen.data.DemoData;
 import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.TabletUtils;
 import com.wb.nextgen.util.utils.F;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,7 +29,13 @@ public class NextGenExtraMainTableFragment extends NextGenGridViewFragment {
     private static List<ECGroupData> ecGroups = DemoData.DEMO_MAN_OF_STEEL_EC_GROUPS;
 
     protected void onListItmeClick(View v, int position, long id){
-        Intent intent = new Intent(getActivity(), NextGenECView.class);
+        ECGroupData selectedGroup = ecGroups.get(position);
+        Intent intent = new Intent(getActivity(), ECVideoActivity.class);
+        if (selectedGroup.type == DemoData.ECGroupType.GALLERY){
+            intent = new Intent(getActivity(), ECGalleryActivity.class);
+        }
+
+
         intent.setAction(android.content.Intent.ACTION_VIEW);
         intent.putExtra(F.ID, getListItemAtPosition(position).id);
         //intent.setDataAndType(Uri.parse("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/feature/ManOfSteel_Clean.mp4"), "video/*");

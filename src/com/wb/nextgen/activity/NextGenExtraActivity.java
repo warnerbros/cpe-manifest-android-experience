@@ -1,4 +1,4 @@
-package com.wb.nextgen;
+package com.wb.nextgen.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,9 +9,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
 
-
+import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.R;
 import com.wb.nextgen.fragment.NextGenActorListFragment;
 import com.wb.nextgen.fragment.NextGenExtraMainTableFragment;
 
@@ -24,10 +24,6 @@ import com.wb.nextgen.util.PicassoTrustAll;
  * Created by gzcheng on 1/7/16.
  */
 public class NextGenExtraActivity extends FragmentActivity implements NextGenFragmentTransactionInterface{
-    // wrapper of ProfileViewFragment
-
-    //protected StickyGridHeadersGridView nextGenExtraLeftMenu;
-    protected StickyGridHeadersGridView nextGenExtraRightList;
 
     protected TextView extraTitleTextView;
     protected ImageView extraLogoImageView;

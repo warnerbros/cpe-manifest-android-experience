@@ -1,64 +1,48 @@
-package com.wb.nextgen;
+package com.wb.nextgen.activity;
 
-import android.app.ActionBar;
-import android.app.admin.DevicePolicyManager;
 import android.content.Intent;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.MediaController;
 import android.widget.TextView;
 
-import com.flixster.android.captioning.CaptionedPlayer;
 import com.tonicartos.widget.stickygridheaders.StickyGridHeadersBaseAdapter;
 import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
+import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.R;
 import com.wb.nextgen.data.DemoData;
 import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.utils.F;
-import com.wb.nextgen.util.utils.NextGenFragmentTransactionEngine;
-
-import net.flixster.android.drm.ObservableVideoView;
-
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by gzcheng on 2/25/16.
  */
-public class NextGenECView extends CaptionedPlayer {
-    protected ObservableVideoView videoView;
+public abstract class AbstractECView extends FragmentActivity {
+
     protected StickyGridHeadersGridView ecListView;
     private NextGenECListAdapter ecListAdaptor;
+    protected DemoData.ECGroupData ecGroupData ;
 
 
+    public abstract void onLeftListItemSelected(DemoData.ECContentData ecContentData);
 
-    private DemoData.ECGroupData ecGroupData ;
-
+    public abstract int getContentViewId();
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.next_gen_ecs_view);
+        setContentView(getContentViewId());
 
         Intent intent = getIntent();
         String groupId = intent.getStringExtra(F.ID);
 
         ecGroupData = DemoData.findECGroupDataById(groupId);
 
-        videoView = (ObservableVideoView) findViewById(R.id.surface_view);
-        videoView.setMediaController(new MediaController(this));
-        //videoView.setOnErrorListener(getOnErrorListener());
-        videoView.setOnPreparedListener(new PreparedListener());
-        //videoView.setOnCompletionListener(getOnCompletionListener());
-        videoView.requestFocus();
 
         float density = NextGenApplication.getScreenDensity(this);
         int spacing = (int)(10 *density);
@@ -72,26 +56,18 @@ public class NextGenECView extends CaptionedPlayer {
         ecListAdaptor = new NextGenECListAdapter();
         ecListView.setAdapter(ecListAdaptor);
         ecListView.setOnItemClickListener(ecListAdaptor);
-
     }
+
 
     public String getHeaderText(){
         return ecGroupData.title;
     }
 
-    private class PreparedListener implements MediaPlayer.OnPreparedListener {
-        @Override
-        public void onPrepared(MediaPlayer mp) {
-
-            videoView.start();
-        }
-    }
 
     public void onResume() {
         super.onResume();
         /*Intent intent = getIntent();
         Uri uri = intent.getData();*/
-        videoView.setVisibility(View.VISIBLE);
         if (ecListAdaptor != null){
             ecListAdaptor.onItemClick(ecListView, null, 0, 0);
         }
@@ -110,7 +86,7 @@ public class NextGenECView extends CaptionedPlayer {
 
         NextGenECListAdapter() {
 
-            mInflater = LayoutInflater.from(NextGenECView.this);
+            mInflater = LayoutInflater.from(AbstractECView.this);
         }
 
         public View getView(int position, View convertView, ViewGroup parent) {
@@ -134,7 +110,7 @@ public class NextGenECView extends CaptionedPlayer {
             if (imageView != null){
                 //ViewGroup.LayoutParams imageLayoutParams = imageView.getLayoutParams();
 
-                PicassoTrustAll.loadImageIntoView(NextGenECView.this, thisEC.posterImgUrl, imageView);
+                PicassoTrustAll.loadImageIntoView(AbstractECView.this, thisEC.posterImgUrl, imageView);
             }
 
             TextView ecNameText = (TextView)convertView.findViewById(R.id.ec_list_name_text);
@@ -168,7 +144,7 @@ public class NextGenECView extends CaptionedPlayer {
         @Override
         public View getHeaderView(int position, View convertView, ViewGroup parent) {
             if (headerTextView == null){
-                headerTextView = new TextView(NextGenECView.this);
+                headerTextView = new TextView(AbstractECView.this);
             }
             headerTextView.setText(getHeaderText());
             headerTextView.setTextSize(20);
@@ -191,7 +167,7 @@ public class NextGenECView extends CaptionedPlayer {
         @Override
         public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
             selectedItemIndex = position;
-            videoView.setVideoURI(Uri.parse(ecGroupData.ecContents.get(position).ecVideoUrl) );
+            onLeftListItemSelected(ecGroupData.ecContents.get(position));
             notifyDataSetChanged();
             //onListItmeClick(v, position, id);
         }
