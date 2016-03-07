@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" android:exitFadeDuration="@android:integer/config_shortAnimTime">
+
+    <!-- https://github.com/astuetz/PagerSlidingTabStrip version 1.0.1 -->
+
+    <item android:drawable="@color/transparent_gray" android:state_pressed="true"/>
+    <!--<item android:drawable="@color/background_tab_pressed" android:state_focused="true"/>
+    <item android:drawable="@android:color/transparent"/>
+    -->
+</selector>

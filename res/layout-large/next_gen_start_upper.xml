@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
+    xmlns:selected_image_button="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <ImageView
@@ -28,25 +28,25 @@
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:scaleType="fitCenter"
-                    android:layout_above="@+id/next_gen_startup_play_button"
-                    android:src="@drawable/man_of_sett_top_logo"/>
-                <ImageButton
+                    android:id="@+id/next_gen_startup_movie_logo"
+                    android:layout_above="@+id/next_gen_startup_play_button"/>
+                <com.wb.nextgen.widget.SelectedMaskImageButton
                     android:id="@+id/next_gen_startup_play_button"
                     android:layout_width="wrap_content"
                     android:layout_height="80dp"
                     android:scaleType="fitCenter"
                     android:layout_centerInParent="true"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/front_page_paly_button"/>
-                <ImageButton
+                    selected_image_button:selectedOverlayColor="@color/transparent_black"
+                    android:background="@android:color/transparent" />
+                <com.wb.nextgen.widget.SelectedMaskImageButton
                     android:id="@+id/next_gen_startup_extra_button"
                     android:layout_width="wrap_content"
                     android:layout_height="80dp"
                     android:layout_below="@+id/next_gen_startup_play_button"
                     android:layout_centerInParent="true"
                     android:scaleType="fitCenter"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/front_page_extra_button"/>
+                    selected_image_button:selectedOverlayColor="@color/transparent_black"
+                    android:background="@android:color/transparent"/>
 
             </RelativeLayout>
 

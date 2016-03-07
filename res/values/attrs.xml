@@ -60,4 +60,9 @@
         <attr name="maxValue" format="integer" />
     </declare-styleable>
 
+
+    <declare-styleable name="SelectedMaskImageButton">
+        <attr name="selectedOverlayColor" format="integer" />
+    </declare-styleable>
+
 </resources>

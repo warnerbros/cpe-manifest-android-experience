@@ -52,7 +52,7 @@ public class NextGenActivity extends FragmentActivity {
         mDrawerFragment = (NextGenNavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.drawer_list);
         //mDrawerFragment.setListener(this);
         leftdrawer = (RelativeLayout) findViewById(R.id.left_drawer);
-        mDrawerToggle = new NextGenActionBarDrawerToggle(this,	mDrawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close);
+        mDrawerToggle = new NextGenActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         /*
         try {

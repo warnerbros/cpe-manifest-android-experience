@@ -25,6 +25,7 @@ import java.io.File;
 public class NextGenStartupUpperFragment extends Fragment implements View.OnClickListener {
     ImageButton playMovieButton;
     ImageButton extraButton;
+    ImageView movieLogo;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,12 +42,18 @@ public class NextGenStartupUpperFragment extends Fragment implements View.OnClic
             String bgImageUri = "android.resource://com.wb.nextgen/" + R.drawable.front_page_bg;
             PicassoTrustAll.loadImageIntoView(NextGenApplication.getContext(), bgImageUri, bg);
         }
+        movieLogo = (ImageView) view.findViewById(R.id.next_gen_startup_movie_logo);
+        if (movieLogo != null){
+            movieLogo.setImageResource(R.drawable.man_of_sett_top_logo);
+        }
         playMovieButton = (ImageButton) view.findViewById(R.id.next_gen_startup_play_button);
         if (playMovieButton != null){
+            playMovieButton.setImageResource(R.drawable.front_page_paly_button);
             playMovieButton.setOnClickListener(this);
         }
         extraButton = (ImageButton) view.findViewById(R.id.next_gen_startup_extra_button);
         if (extraButton != null){
+            extraButton.setImageResource(R.drawable.front_page_extra_button);
             extraButton.setOnClickListener(this);
         }
     }
