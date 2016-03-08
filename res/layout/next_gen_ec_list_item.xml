@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:nextgen="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ImageView
+    <com.wb.nextgen.widget.SelectedOverlayImageView
         android:id="@+id/ec_list_image"
         android:layout_width="fill_parent"
         android:layout_height="130dp"
         android:layout_centerHorizontal="true"
+        nextgen:inActiveOverlayDrawable="@drawable/play_button"
+        nextgen:inActiveOverlayColor="@color/transparent_black"
         android:scaleType="fitCenter"
+        android:duplicateParentState="true"
         android:src="@drawable/ec_sample_thumbnail"/>
     <TextView
         android:id="@+id/ec_list_name_text"
@@ -19,13 +24,13 @@
         android:ellipsize="end"
         android:text="goes here"/>
 
-        <ImageView
+        <!--<ImageView
             android:id="@+id/ec_inactive_mask"
             android:background="@color/transparent_gray"
             android:layout_centerInParent="true"
             android:layout_width="fill_parent"
             android:layout_height="150dp"
             android:scaleType="center"
-            android:src="@android:drawable/ic_media_play"/>
+            android:src="@android:drawable/ic_media_play"/>-->
 
 </RelativeLayout>

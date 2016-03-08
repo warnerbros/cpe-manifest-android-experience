@@ -131,7 +131,8 @@ public class NextGenActorDetailFragment extends Fragment{
         public void onBindViewHolder(FilmographyViewHolder holder, int position){
             //holder.personName.setText(actorOjbect.actorFilmography[position].title);
             //holder.personAge.setText(actorOjbect.actorFilmography[position].title);
-            PicassoTrustAll.loadImageIntoView(getActivity(), actorOjbect.actorFilmography[position].posterImageUrl, holder.personPhoto);
+            if (actorOjbect.actorFilmography != null)
+                PicassoTrustAll.loadImageIntoView(getActivity(), actorOjbect.actorFilmography[position].posterImageUrl, holder.personPhoto);
             //holder.personPhoto.setImageResource(persons.get(i).photoId);
         }
 
@@ -141,7 +142,10 @@ public class NextGenActorDetailFragment extends Fragment{
         }
 
         public int getItemCount(){
-            return actorOjbect.actorFilmography.length;
+            if (actorOjbect.actorFilmography != null )
+                return actorOjbect.actorFilmography.length;
+            else
+                return 0;
         }
 
     }

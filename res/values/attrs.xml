@@ -65,4 +65,8 @@
         <attr name="selectedOverlayColor" format="integer" />
     </declare-styleable>
 
+    <declare-styleable name="SelectedOverlayImageView">
+        <attr name="inActiveOverlayDrawable" format="integer" />
+        <attr name="inActiveOverlayColor" format="integer" />
+    </declare-styleable>
 </resources>

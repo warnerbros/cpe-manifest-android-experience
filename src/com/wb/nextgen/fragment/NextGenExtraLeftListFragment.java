@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -22,6 +23,7 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
 
     protected ListView listView;
     protected NextGenExtraLeftPanelAdapter listAdaptor;
+    protected TextView titleTextView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -39,20 +41,25 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
             listAdaptor = new NextGenExtraLeftPanelAdapter();
             listView.setAdapter(listAdaptor);
             listView.setOnItemClickListener(this);
+
+            titleTextView = new TextView(getActivity());
+            titleTextView.setText(getHeaderText());
+            titleTextView.setTextSize(getResources().getDimension(R.dimen.list_title_font_size));
+            listView.addHeaderView(titleTextView, null, false);
+
         }
 
     }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-        listAdaptor.selectedIndex = position;
+        listAdaptor.selectedIndex = position - listView.getHeaderViewsCount();;
         listView.setSelection(position);
-        onListItmeClick(v, position, id);
+        onListItemClick(listAdaptor.getItem(listAdaptor.selectedIndex));
         listAdaptor.notifyDataSetChanged();
     }
 
-    protected abstract void onListItmeClick(View v, int position, long id);
-
-    protected abstract int getNumberOfColumns();
+    protected abstract void onListItemClick(Object selectedObject);
 
     protected abstract int getListItemCount();
 
@@ -64,15 +71,14 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
 
     protected abstract String getHeaderText();
 
-    protected abstract int getHeaderChildenCount(int header);
-
-    protected abstract int getHeaderCount();
-
     protected abstract int getStartupSelectedIndex();
 
     public void resetSelectedItem(){
         listAdaptor.selectedIndex = getStartupSelectedIndex();
-        listView.setSelection(getStartupSelectedIndex());
+        listView.setSelection(getStartupSelectedIndex() + listView.getHeaderViewsCount());
+        if (listAdaptor.selectedIndex != -1)
+            onListItemClick(listAdaptor.getItem(listAdaptor.selectedIndex));
+        listAdaptor.notifyDataSetChanged();
     }
 
     public class NextGenExtraLeftPanelAdapter extends BaseAdapter {
@@ -94,8 +100,8 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
 
 
             if (convertView == null  ) {
-                LayoutInflater inflater = getActivity().getLayoutInflater();
-                convertView = inflater.inflate(getListItemViewId(), parent, false);
+
+                convertView = mInflater.inflate(getListItemViewId(), parent, false);
 
             } else {
 
@@ -124,6 +130,7 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
         public long getItemId(int position) {
             return position;
         }
+
 
 
     }

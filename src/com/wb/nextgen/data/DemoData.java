@@ -107,7 +107,7 @@ public class DemoData {
         //X-Ray Vision
         DEMO_MAN_OF_STEEL_EC_GROUPS.get(2).ecContents.add(new ECContentData("The Creation and Destruction of Krypton",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOS_NG_CreationDestruction_SML.jpg",
-                "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/video/ManOfSteel_EC_CreationAndDestructionOfKrypton_HD_2ch_en-US.m3u8<"));
+                "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/video/ManOfSteel_EC_CreationAndDestructionOfKrypton_HD_2ch_en-US.m3u8"));
         DEMO_MAN_OF_STEEL_EC_GROUPS.get(2).ecContents.add(new ECContentData("Clark Discovers the Scout Ship",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOS_NG_ScoutShip_SML.jpg",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/video/ManOfSteel_EC_ClarkDiscoversTheScoutShip_HD_2ch_en-US.m3u8"));

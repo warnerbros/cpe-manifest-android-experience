@@ -38,20 +38,16 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment imple
     }
 
 
-    protected void onListItmeClick(View v, final int position, long id){
-        listView.setSelection(position);
-        v.setSelected(true);
+    @Override
+    protected void onListItemClick(Object selectedObject){
+
         if (getActivity() instanceof NextGenFragmentTransactionInterface){
             NextGenActorDetailFragment target = new NextGenActorDetailFragment();
 
-            target.setDetailObject((ActorInfo)getListItemAtPosition(position));
+            target.setDetailObject((ActorInfo)selectedObject);
             ((NextGenFragmentTransactionInterface)getActivity()).transitRightFragment(target);
         }
         listAdaptor.notifyDataSetChanged();
-    }
-
-    protected int getNumberOfColumns(){
-        return 1;
     }
 
     protected int getListItemCount() {

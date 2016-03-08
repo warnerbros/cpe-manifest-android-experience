@@ -3,14 +3,23 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView
+    <!--<ListView
         android:id="@+id/next_gen_ec_list"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_gravity="center"
         android:stretchMode="columnWidth" >
-    </com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView>
+    </ListView>-->
+    <fragment
+        android:name="com.wb.nextgen.fragment.ECViewLeftListFragment"
+        android:id="@+id/ec_fragment_list"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_gravity="center"
+        android:stretchMode="columnWidth" />
+
     <LinearLayout
         android:id="@+id/next_gen_ec_content_view"
         android:layout_weight="3"

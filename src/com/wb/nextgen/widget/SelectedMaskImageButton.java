@@ -15,7 +15,7 @@ import com.wb.nextgen.R;
  */
 public class SelectedMaskImageButton extends ImageButton{
 
-    int selectedOverlayColor = R.color.transparent_black;
+    int selectedOverlayColor = getResources().getColor(R.color.transparent_black);
 
     public SelectedMaskImageButton(final Context context, final AttributeSet attrs, final int defStyle)
     {

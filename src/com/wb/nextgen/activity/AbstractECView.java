@@ -1,5 +1,6 @@
 package com.wb.nextgen.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -9,13 +10,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
-import com.tonicartos.widget.stickygridheaders.StickyGridHeadersBaseAdapter;
-import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.DemoData;
+import com.wb.nextgen.fragment.ECViewLeftListFragment;
+import com.wb.nextgen.fragment.NextGenExtraLeftListFragment;
 import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.utils.F;
 
@@ -24,69 +26,78 @@ import com.wb.nextgen.util.utils.F;
  */
 public abstract class AbstractECView extends FragmentActivity {
 
-    protected StickyGridHeadersGridView ecListView;
-    private NextGenECListAdapter ecListAdaptor;
+    //protected ListView ecListView;
+    //private NextGenECListAdapter ecListAdaptor;
     protected DemoData.ECGroupData ecGroupData ;
-
+    protected ECViewLeftListFragment listFragment;
 
     public abstract void onLeftListItemSelected(DemoData.ECContentData ecContentData);
 
     public abstract int getContentViewId();
 
+    public DemoData.ECGroupData getECGroupData(){
+        return ecGroupData;
+    }
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(getContentViewId());
-
         Intent intent = getIntent();
         String groupId = intent.getStringExtra(F.ID);
-
         ecGroupData = DemoData.findECGroupDataById(groupId);
 
+        setContentView(getContentViewId());
 
         float density = NextGenApplication.getScreenDensity(this);
         int spacing = (int)(10 *density);
-        ecListView = (StickyGridHeadersGridView) findViewById(R.id.next_gen_ec_list);
-        ecListView.setNumColumns(1);
-        //ecListView.setSelection(0);
-        //ecListView.setHorizontalSpacing(spacing);
-        ecListView.setVerticalSpacing(spacing);
+
+        listFragment = (ECViewLeftListFragment) getSupportFragmentManager().findFragmentById(R.id.ec_fragment_list);
+
+        /*
+        ecListView = (ListView) findViewById(R.id.next_gen_ec_list);
         ecListView.setPadding(spacing, 0, spacing, spacing);
-        ecListView.setHeadersIgnorePadding(true);
         ecListAdaptor = new NextGenECListAdapter();
         ecListView.setAdapter(ecListAdaptor);
         ecListView.setOnItemClickListener(ecListAdaptor);
+
+        TextView titleTextView = new TextView(this);
+        titleTextView.setText(getHeaderText());
+        titleTextView.setTextSize(getResources().getDimension(R.dimen.list_title_font_size));
+        ecListView.addHeaderView(titleTextView);*/
     }
 
-
+    public void onStart() {
+        super.onStart();
+        if (listFragment != null){
+            listFragment.onListItemClick(ecGroupData.ecContents.get(0));
+        }
+    }
+/*
     public String getHeaderText(){
         return ecGroupData.title;
     }
 
 
-    public void onResume() {
-        super.onResume();
-        /*Intent intent = getIntent();
-        Uri uri = intent.getData();*/
-        if (ecListAdaptor != null){
-            ecListAdaptor.onItemClick(ecListView, null, 0, 0);
+        public void onResume() {
+            super.onResume();
+            if (ecListAdaptor != null){
+                ecListAdaptor.onItemClick(ecListView, null, 0, 0);
+            }
         }
-        //hideShowNextGenView();
-    }
 
-    public class NextGenECListAdapter extends BaseAdapter implements StickyGridHeadersBaseAdapter, AdapterView.OnItemClickListener {
+        public class NextGenECListAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
 
-        //protected NextGenExtraActivity activity;
+            //protected NextGenExtraActivity activity;
 
-        protected LayoutInflater mInflater;
+            protected LayoutInflater mInflater;
 
-        private TextView headerTextView;
+            private TextView headerTextView;
 
-        private int selectedItemIndex = 0;
+            private int selectedItemIndex = 0;
 
-        NextGenECListAdapter() {
+            NextGenECListAdapter() {
 
-            mInflater = LayoutInflater.from(AbstractECView.this);
+                mInflater = LayoutInflater.from(AbstractECView.this);
         }
 
         public View getView(int position, View convertView, ViewGroup parent) {
@@ -141,36 +152,15 @@ public abstract class AbstractECView extends FragmentActivity {
             return position;
         }
 
-        @Override
-        public View getHeaderView(int position, View convertView, ViewGroup parent) {
-            if (headerTextView == null){
-                headerTextView = new TextView(AbstractECView.this);
-            }
-            headerTextView.setText(getHeaderText());
-            headerTextView.setTextSize(20);
-            return headerTextView;
-        }
-
-        @Override
-        public int getCountForHeader(int header) {
-            // TODO Auto-generated method stub
-            return ecGroupData.ecContents.size();
-        }
-
-        @Override
-        public int getNumHeaders() {
-            // TODO Auto-generated method stub
-            return 1;
-        }
 
         // AdapterView.OnItemClickListener
         @Override
         public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-            selectedItemIndex = position;
+            selectedItemIndex = position - ecListView.getHeaderViewsCount();
             onLeftListItemSelected(ecGroupData.ecContents.get(position));
             notifyDataSetChanged();
             //onListItmeClick(v, position, id);
         }
 
-    }
+    }*/
 }
