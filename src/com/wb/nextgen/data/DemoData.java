@@ -221,18 +221,208 @@ public class DemoData {
         ECContentData gallery3 = new ECContentData("Kryptonian Noble Wardrobe Gallery",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOSNG_704_KryptonianNoble_SML.jpg",
                 "");
+
+        gallery3.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_703_KryptonianArmor_010.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_703_KryptonianArmor_010.jpg", 352, 198)) );
+
+        gallery3.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_703_KryptonianArmor_020.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_703_KryptonianArmor_020.jpg", 352, 198)) );
+
+        gallery3.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_703_KryptonianArmor_030.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_703_KryptonianArmor_030.jpg", 352, 198)) );
+
+        gallery3.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_703_KryptonianArmor_040.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_703_KryptonianArmor_040.jpg", 352, 198)) );
+
+        gallery3.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_703_KryptonianArmor_050.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_703_KryptonianArmor_050.jpg", 352, 198)) );
+
+        gallery3.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_703_KryptonianArmor_060.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_703_KryptonianArmor_060.jpg", 352, 198)) );
+
+        gallery3.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_703_KryptonianArmor_070.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_703_KryptonianArmor_070.jpg", 352, 198)) );
+
+
+
         ECContentData gallery4 =new ECContentData("Superman Gallery",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOSNG_705_SupermanGallery_SML.jpg",
                 "");
+
+        gallery4.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_704_KryptonianNoble_010.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_704_KryptonianNoble_010.jpg", 352, 198)) );
+
+        gallery4.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_704_KryptonianNoble_020.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_704_KryptonianNoble_020.jpg", 352, 198)) );
+
+        gallery4.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_704_KryptonianNoble_030.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_704_KryptonianNoble_030.jpg", 352, 198)) );
+
+        gallery4.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_704_KryptonianNoble_040.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_704_KryptonianNoble_040.jpg", 352, 198)) );
+
+        gallery4.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_704_KryptonianNoble_050.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_704_KryptonianNoble_050.jpg", 352, 198)) );
+
+        gallery4.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_704_KryptonianNoble_060.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_704_KryptonianNoble_060.jpg", 352, 198)) );
+
+        gallery4.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_704_KryptonianNoble_070.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_704_KryptonianNoble_070.jpg", 352, 198)) );
+
         ECContentData gallery5 = new ECContentData("Earth Armor Gallery",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOSNG_706_EarthArmorGallery_SML.jpg",
                 "");
+
+        gallery5.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_705_SupermanGallery_010.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_705_SupermanGallery_010.jpg", 352, 198)) );
+
+        gallery5.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_705_SupermanGallery_020.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_705_SupermanGallery_020.jpg", 352, 198)) );
+
+        gallery5.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_705_SupermanGallery_030.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_705_SupermanGallery_030.jpg", 352, 198)) );
+
+        gallery5.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_705_SupermanGallery_040.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_705_SupermanGallery_040.jpg", 352, 198)) );
+
+        gallery5.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_705_SupermanGallery_050.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_705_SupermanGallery_050.jpg", 352, 198)) );
+
+        gallery5.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_705_SupermanGallery_060.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_705_SupermanGallery_060.jpg", 352, 198)) );
+
+        gallery5.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_705_SupermanGallery_070.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_705_SupermanGallery_070.jpg", 352, 198)) );
+
+
         ECContentData gallery6 = new ECContentData("Interior Black Zero Gallery",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOSNG_707_InteriorBlackZero_SML.jpg",
                 "");
+
+        gallery6.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_706_EarthArmorGallery_010.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_706_EarthArmorGallery_010.jpg", 352, 198)) );
+
+        gallery6.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_706_EarthArmorGallery_020.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_706_EarthArmorGallery_020.jpg", 352, 198)) );
+
+        gallery6.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_706_EarthArmorGallery_030.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_706_EarthArmorGallery_030.jpg", 352, 198)) );
+
+        gallery6.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_706_EarthArmorGallery_040.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_706_EarthArmorGallery_040.jpg", 352, 198)) );
+
+        gallery6.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_706_EarthArmorGallery_050.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_706_EarthArmorGallery_050.jpg", 352, 198)) );
+
+
         ECContentData gallery7 = new ECContentData("Black Zero Phantom Zone Gallery",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOSNG_708_BlackZeroPhantomZone_SML.jpg",
                 "");
+
+        gallery7.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_707_InteriorBlackZero_010.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_707_InteriorBlackZero_010.jpg", 352, 198)) );
+
+        gallery7.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_707_InteriorBlackZero_020.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_707_InteriorBlackZero_020.jpg", 352, 198)) );
+
+        gallery7.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_707_InteriorBlackZero_030.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_707_InteriorBlackZero_030.jpg", 352, 198)) );
+
+        gallery7.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_707_InteriorBlackZero_040.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_707_InteriorBlackZero_040.jpg", 352, 198)) );
+
+        gallery7.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_707_InteriorBlackZero_050.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_707_InteriorBlackZero_050.jpg", 352, 198)) );
+
+        gallery7.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_707_InteriorBlackZero_060.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_707_InteriorBlackZero_060.jpg", 352, 198)) );
+
+        ECContentData gallery8 = new ECContentData("Black Zero Phantom Zone Gallery",
+                "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOSNG_708_BlackZeroPhantomZone_SML.jpg",
+                "");
+
+        gallery8.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_708_BlackZeroPhantomZone_010.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_708_BlackZeroPhantomZone_010.jpg", 352, 198)) );
+
+        gallery8.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_708_BlackZeroPhantomZone_020.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_708_BlackZeroPhantomZone_020.jpg", 352, 198)) );
+
+        gallery8.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_708_BlackZeroPhantomZone_030.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_708_BlackZeroPhantomZone_030.jpg", 352, 198)) );
+
+        gallery8.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_708_BlackZeroPhantomZone_040.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_708_BlackZeroPhantomZone_040.jpg", 352, 198)) );
+
+        gallery8.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_708_BlackZeroPhantomZone_050.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_708_BlackZeroPhantomZone_050.jpg", 352, 198)) );
+
+        gallery8.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_708_BlackZeroPhantomZone_060.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_708_BlackZeroPhantomZone_060.jpg", 352, 198)) );
+
+        gallery8.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_708_BlackZeroPhantomZone_070.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_708_BlackZeroPhantomZone_070.jpg", 352, 198)) );
+
+        gallery8.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_708_BlackZeroPhantomZone_080.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_708_BlackZeroPhantomZone_080.jpg", 352, 198)) );
+
+        gallery8.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_708_BlackZeroPhantomZone_090.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_708_BlackZeroPhantomZone_090.jpg", 352, 198)) );
+
+        gallery8.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_708_BlackZeroPhantomZone_100.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_708_BlackZeroPhantomZone_100.jpg", 352, 198)) );
+
+        gallery8.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_708_BlackZeroPhantomZone_110.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_708_BlackZeroPhantomZone_110.jpg", 352, 198)) );
+
+        gallery8.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_708_BlackZeroPhantomZone_120.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_708_BlackZeroPhantomZone_0120.jpg", 352, 198)) );
+
+
         DEMO_MAN_OF_STEEL_EC_GROUPS.get(4).ecContents.add(gallery1);
         DEMO_MAN_OF_STEEL_EC_GROUPS.get(4).ecContents.add(gallery2);
         DEMO_MAN_OF_STEEL_EC_GROUPS.get(4).ecContents.add(gallery3);
@@ -240,6 +430,7 @@ public class DemoData {
         DEMO_MAN_OF_STEEL_EC_GROUPS.get(4).ecContents.add(gallery5);
         DEMO_MAN_OF_STEEL_EC_GROUPS.get(4).ecContents.add(gallery6);
         DEMO_MAN_OF_STEEL_EC_GROUPS.get(4).ecContents.add(gallery7);
+        DEMO_MAN_OF_STEEL_EC_GROUPS.get(4).ecContents.add(gallery8);
     }
 
 }

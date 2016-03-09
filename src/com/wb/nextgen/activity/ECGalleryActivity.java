@@ -8,16 +8,13 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
-import com.squareup.picasso.Picasso;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.DemoData;
 
@@ -75,12 +72,12 @@ public class ECGalleryActivity extends AbstractECView {
     }*/
     class GalleryPagerAdapter extends PagerAdapter {
 
-        Context _context;
-        LayoutInflater _inflater;
+        Context mContext;
+        LayoutInflater mInflater;
 
         public GalleryPagerAdapter(Context context) {
-            _context = context;
-            _inflater = (LayoutInflater) _context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            mContext = context;
+            mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
         @Override
@@ -95,8 +92,12 @@ public class ECGalleryActivity extends AbstractECView {
 
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
-            View itemView = _inflater.inflate(R.layout.pager_gallery_item, container, false);
+            View itemView = mInflater.inflate(R.layout.pager_gallery_item, container, false);
             container.addView(itemView);
+
+            DemoData.ECGalleryImageItem currentItem = currentGallery.galleryItems.get(position);
+
+            itemView.setTag(currentItem.name);
 
             // Get the border size to show around each image
             int borderSize = 0;//_thumbnails.getPaddingTop();
@@ -114,7 +115,7 @@ public class ECGalleryActivity extends AbstractECView {
             //        ViewGroup.LayoutParams.WRAP_CONTENT,
             //        ViewGroup.LayoutParams.WRAP_CONTENT);
             /*
-            final ImageView thumbView = new ImageView(_context);
+            final ImageView thumbView = new ImageView(mContext);
             thumbView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             thumbView.setLayoutParams(params);
             thumbView.setOnClickListener(new View.OnClickListener() {
@@ -132,8 +133,8 @@ public class ECGalleryActivity extends AbstractECView {
                     (SubsamplingScaleImageView) itemView.findViewById(R.id.image);
 
             // Asynchronously load the image and set the thumbnail and pager view
-            Glide.with(_context)
-                    .load(currentGallery.galleryItems.get(position).fullImage.url)
+            Glide.with(mContext)
+                    .load(currentItem.fullImage.url)
                     .asBitmap()
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
@@ -149,6 +150,15 @@ public class ECGalleryActivity extends AbstractECView {
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((LinearLayout) object);
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            int position = super.getItemPosition(object);
+            if (position >= 0)
+                return  position;
+            else
+                return POSITION_NONE;
         }
     }
 
