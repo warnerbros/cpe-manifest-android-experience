@@ -52,6 +52,9 @@ public class ECViewLeftListFragment extends NextGenExtraLeftListFragment{
     }
 
     protected int getListItemViewId(){
+        if (getActivity() != null && getActivity() instanceof AbstractECView){
+            return ((AbstractECView)getActivity()).getListItemViewLayoutId();
+        }
         return R.layout.next_gen_ec_list_item;
     }
 
@@ -82,6 +85,11 @@ public class ECViewLeftListFragment extends NextGenExtraLeftListFragment{
     protected String getHeaderText(){
         return listECGroupData.title;
 
+    }
+
+    public void scrollToTop(){
+        if (listView != null)
+            listView.smoothScrollToPosition(0);
     }
 
     protected int getStartupSelectedIndex(){

@@ -26,8 +26,6 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment imple
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        listView.setSelection(getStartupSelectedIndex());
     }
 
     public List<ActorInfo> getActorInfos(){

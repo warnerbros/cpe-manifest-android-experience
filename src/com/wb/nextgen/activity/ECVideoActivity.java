@@ -36,6 +36,12 @@ public class ECVideoActivity extends AbstractECView {
         }
     }
 
+
+    @Override
+    public int getListItemViewLayoutId(){
+        return R.layout.next_gen_ec_list_item;
+    }
+
     public void onResume() {
         super.onResume();
         /*Intent intent = getIntent();

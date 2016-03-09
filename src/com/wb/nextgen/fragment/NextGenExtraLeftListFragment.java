@@ -1,5 +1,6 @@
 package com.wb.nextgen.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -46,10 +47,27 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
             titleTextView.setText(getHeaderText());
             titleTextView.setTextSize(getResources().getDimension(R.dimen.list_title_font_size));
             listView.addHeaderView(titleTextView, null, false);
-
+            //listView.setSelection(getStartupSelectedIndex() + listView.getHeaderViewsCount());
+            listView.setItemChecked(getStartupSelectedIndex() + listView.getHeaderViewsCount(), true);
         }
 
     }
+/*
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (listView != null) {
+            listView.setSelection(getStartupSelectedIndex() + listView.getHeaderViewsCount());
+            listView.setItemChecked(getStartupSelectedIndex() + listView.getHeaderViewsCount(), true);
+        }
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        if (listView != null && listView.getSelectedView() != null)
+            listView.getSelectedView().setSelected(true);
+    }*/
 
     @Override
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
@@ -75,7 +93,7 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
 
     public void resetSelectedItem(){
         listAdaptor.selectedIndex = getStartupSelectedIndex();
-        listView.setSelection(getStartupSelectedIndex() + listView.getHeaderViewsCount());
+        listView.setItemChecked(getStartupSelectedIndex() + listView.getHeaderViewsCount(), true);
         if (listAdaptor.selectedIndex != -1)
             onListItemClick(listAdaptor.getItem(listAdaptor.selectedIndex));
         listAdaptor.notifyDataSetChanged();

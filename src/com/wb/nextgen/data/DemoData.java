@@ -39,10 +39,34 @@ public class DemoData {
         }
     }
 
+    static public class ECGalleryImageData{
+
+        final public String url;
+        final public int width;
+        final public int height;
+        public ECGalleryImageData(String url, int width, int height){
+            this.url = url;
+            this.width = width;
+            this.height = height;
+        }
+    }
+
+    static public class ECGalleryImageItem{
+        final public ECGalleryImageData fullImage;
+        final public ECGalleryImageData thumbnail;
+        final public String name;
+        public ECGalleryImageItem(String name, ECGalleryImageData fullImage, ECGalleryImageData thumbnail){
+            this.name = name;
+            this.fullImage = fullImage;
+            this.thumbnail = thumbnail;
+        }
+    }
+
     static public class ECContentData{
         final public String title;
         final public String posterImgUrl;
         final public String ecVideoUrl;
+        final public List<ECGalleryImageItem>  galleryItems = new ArrayList<ECGalleryImageItem>();
         public ECContentData(String title, String posterImgUrl, String videoUrl){
             this.title = title;
             this.posterImgUrl = posterImgUrl;
@@ -81,7 +105,7 @@ public class DemoData {
         DEMO_MAN_OF_STEEL_EC_GROUPS.add(new ECGroupData("experience.bonus.8", "Out of this World", ECGroupType.FEATURETTES));
         DEMO_MAN_OF_STEEL_EC_GROUPS.add(new ECGroupData("experience.bonus.11", "X-Ray Vision", ECGroupType.FEATURETTES));
         DEMO_MAN_OF_STEEL_EC_GROUPS.add(new ECGroupData("experience.bonus.17", "Additional Features", ECGroupType.VISUAL_EFFECT));
-        DEMO_MAN_OF_STEEL_EC_GROUPS.add(new ECGroupData("experience.bonus.20", "Galleries", ECGroupType.FEATURETTES));
+        DEMO_MAN_OF_STEEL_EC_GROUPS.add(new ECGroupData("experience.bonus.20", "Galleries", ECGroupType.GALLERY));
 
 
         // legacy
@@ -130,27 +154,92 @@ public class DemoData {
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/video/MOSNG_311_LiquidGeoDefense.m3u8"));
 
         //Galleries
-        DEMO_MAN_OF_STEEL_EC_GROUPS.get(4).ecContents.add(new ECContentData("Kryptonian Council Wardrobe Gallery",
+        ECContentData gallery1 = new ECContentData("Kryptonian Council Wardrobe Gallery",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOSNG_701_KryptonianCouncilWardrobe_SML.jpg",
-                ""));
-        DEMO_MAN_OF_STEEL_EC_GROUPS.get(4).ecContents.add(new ECContentData("Kryptonian Weapons Gallery",
+                "");
+        gallery1.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_701_KryptonianCouncilWardrobe_010.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_701_KryptonianCouncilWardrobe_010.jpg", 352, 198)) );
+
+        gallery1.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_701_KryptonianCouncilWardrobe_020.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_701_KryptonianCouncilWardrobe_020.jpg", 352, 198)) );
+
+        gallery1.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_701_KryptonianCouncilWardrobe_030.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_701_KryptonianCouncilWardrobe_030.jpg", 352, 198)) );
+
+        gallery1.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_701_KryptonianCouncilWardrobe_040.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_701_KryptonianCouncilWardrobe_040.jpg", 352, 198)) );
+
+        gallery1.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_701_KryptonianCouncilWardrobe_050.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_701_KryptonianCouncilWardrobe_050.jpg", 352, 198)) );
+
+        ECContentData gallery2 = new ECContentData("Kryptonian Weapons Gallery",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOSNG_702_KryptonianWeapons_SML.jpg",
-                ""));
-        DEMO_MAN_OF_STEEL_EC_GROUPS.get(4).ecContents.add(new ECContentData("Kryptonian Noble Wardrobe Gallery",
+                "");
+
+        gallery2.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_702_KryptonianWeapons_010.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_702_KryptonianWeapons_010.jpg<", 352, 198)) );
+
+        gallery2.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_702_KryptonianWeapons_020.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_702_KryptonianWeapons_020.jpg", 352, 198)) );
+
+        gallery2.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_702_KryptonianWeapons_030.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_702_KryptonianWeapons_030.jpg", 352, 198)) );
+
+        gallery2.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_702_KryptonianWeapons_040.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_702_KryptonianWeapons_040.jpg", 352, 198)) );
+
+        gallery2.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_702_KryptonianWeapons_050.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_702_KryptonianWeapons_050.jpg", 352, 198)) );
+
+        gallery2.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_702_KryptonianWeapons_060.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_702_KryptonianWeapons_060.jpg", 352, 198)) );
+
+        gallery2.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_702_KryptonianWeapons_070.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_702_KryptonianWeapons_070.jpg", 352, 198)) );
+
+        gallery2.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_702_KryptonianWeapons_080.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_702_KryptonianWeapons_080.jpg", 352, 198)) );
+
+        gallery2.galleryItems.add(new ECGalleryImageItem("",
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_702_KryptonianWeapons_090.jpg", 1920, 1080),
+                new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_702_KryptonianWeapons_090.jpg", 352, 198)) );
+
+
+        ECContentData gallery3 = new ECContentData("Kryptonian Noble Wardrobe Gallery",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOSNG_704_KryptonianNoble_SML.jpg",
-                ""));
-        DEMO_MAN_OF_STEEL_EC_GROUPS.get(4).ecContents.add(new ECContentData("Superman Gallery",
+                "");
+        ECContentData gallery4 =new ECContentData("Superman Gallery",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOSNG_705_SupermanGallery_SML.jpg",
-                ""));
-        DEMO_MAN_OF_STEEL_EC_GROUPS.get(4).ecContents.add(new ECContentData("Earth Armor Gallery",
+                "");
+        ECContentData gallery5 = new ECContentData("Earth Armor Gallery",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOSNG_706_EarthArmorGallery_SML.jpg",
-                ""));
-        DEMO_MAN_OF_STEEL_EC_GROUPS.get(4).ecContents.add(new ECContentData("Interior Black Zero Gallery",
+                "");
+        ECContentData gallery6 = new ECContentData("Interior Black Zero Gallery",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOSNG_707_InteriorBlackZero_SML.jpg",
-                ""));
-        DEMO_MAN_OF_STEEL_EC_GROUPS.get(4).ecContents.add(new ECContentData("Black Zero Phantom Zone Gallery",
+                "");
+        ECContentData gallery7 = new ECContentData("Black Zero Phantom Zone Gallery",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOSNG_708_BlackZeroPhantomZone_SML.jpg",
-                ""));
+                "");
+        DEMO_MAN_OF_STEEL_EC_GROUPS.get(4).ecContents.add(gallery1);
+        DEMO_MAN_OF_STEEL_EC_GROUPS.get(4).ecContents.add(gallery2);
+        DEMO_MAN_OF_STEEL_EC_GROUPS.get(4).ecContents.add(gallery3);
+        DEMO_MAN_OF_STEEL_EC_GROUPS.get(4).ecContents.add(gallery4);
+        DEMO_MAN_OF_STEEL_EC_GROUPS.get(4).ecContents.add(gallery5);
+        DEMO_MAN_OF_STEEL_EC_GROUPS.get(4).ecContents.add(gallery6);
+        DEMO_MAN_OF_STEEL_EC_GROUPS.get(4).ecContents.add(gallery7);
     }
 
 }

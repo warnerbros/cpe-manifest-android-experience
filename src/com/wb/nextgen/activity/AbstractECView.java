@@ -70,8 +70,11 @@ public abstract class AbstractECView extends FragmentActivity {
         super.onStart();
         if (listFragment != null){
             listFragment.onListItemClick(ecGroupData.ecContents.get(0));
+            listFragment.scrollToTop();
         }
     }
+
+    public abstract int getListItemViewLayoutId();
 /*
     public String getHeaderText(){
         return ecGroupData.title;

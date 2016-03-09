@@ -3,14 +3,6 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--<ListView
-        android:id="@+id/next_gen_ec_list"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:layout_width="0dp"
-        android:layout_gravity="center"
-        android:stretchMode="columnWidth" >
-    </ListView>-->
     <fragment
         android:name="com.wb.nextgen.fragment.ECViewLeftListFragment"
         android:id="@+id/ec_fragment_list"
