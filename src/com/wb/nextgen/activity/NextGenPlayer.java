@@ -194,6 +194,10 @@ public class NextGenPlayer extends CaptionedPlayer implements NextGenFragmentTra
 
     }
 
+    @Override
+    public void resetUI(boolean isRoot){
+
+    }
 
     @Override
     public void transitLeftFragment(Fragment nextFragment){

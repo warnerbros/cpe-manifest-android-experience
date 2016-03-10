@@ -42,8 +42,10 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment imple
         if (getActivity() instanceof NextGenFragmentTransactionInterface){
             NextGenActorDetailFragment target = new NextGenActorDetailFragment();
 
-            target.setDetailObject((ActorInfo)selectedObject);
+            target.setDetailObject((ActorInfo) selectedObject);
             ((NextGenFragmentTransactionInterface)getActivity()).transitRightFragment(target);
+            ((NextGenFragmentTransactionInterface)getActivity()).resetUI(false);
+
         }
         listAdaptor.notifyDataSetChanged();
     }
@@ -103,6 +105,7 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment imple
         if (!(fragment instanceof NextGenActorDetailFragment) ){
             resetSelectedItem();
             listAdaptor.notifyDataSetChanged();
+            ((NextGenFragmentTransactionInterface)getActivity()).resetUI(true);
         }
     }
 }

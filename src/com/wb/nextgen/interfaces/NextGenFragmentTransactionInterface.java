@@ -11,4 +11,6 @@ public interface NextGenFragmentTransactionInterface {
     void transitLeftFragment(Fragment nextFragment);
 
     void transitMainFragment(Fragment nextFragment);
+
+    void resetUI(boolean bIsRoot);
 }

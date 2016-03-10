@@ -71,13 +71,13 @@ public class NextGenExtraActivity extends AbstractNextGenActivity implements Nex
     @Override
     public void transitRightFragment(Fragment nextFragment){
         nextGenFragmentTransactionEngine.transitFragment(R.id.next_gen_extra_right_view, nextFragment);
-        resetLeftButton();
+
     }
 
     @Override
     public void transitLeftFragment(Fragment nextFragment){
         nextGenFragmentTransactionEngine.transitFragment(R.id.next_gen_extra_left_view, nextFragment);
-        resetLeftButton();
+
     }
 
     @Override
@@ -85,8 +85,9 @@ public class NextGenExtraActivity extends AbstractNextGenActivity implements Nex
         nextGenFragmentTransactionEngine.transitFragment(R.id.next_gen_extra_main_frame, nextFragment);
     }
 
-    private void resetLeftButton(){
-        if (getSupportFragmentManager().getBackStackEntryCount() <= startupStackCount){
+    @Override
+    public void resetUI(boolean bIsRoot){
+        if (bIsRoot){
             setBackButtonLogo(R.drawable.home_logo);
             setBackButtonText(getResources().getString(R.string.home_button_text) );
         }else{
@@ -108,7 +109,6 @@ public class NextGenExtraActivity extends AbstractNextGenActivity implements Nex
         if (getSupportFragmentManager().getBackStackEntryCount() == 1 )
             finish();
 
-        resetLeftButton();
 
     }
 
