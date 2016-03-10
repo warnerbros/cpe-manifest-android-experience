@@ -5,9 +5,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.MediaController;
+import android.widget.RelativeLayout;
 
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.DemoData;
+import com.wb.nextgen.widget.ECMediaController;
 
 import net.flixster.android.drm.ObservableVideoView;
 
@@ -20,7 +22,7 @@ public class ECVideoActivity extends AbstractECView {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         videoView = (ObservableVideoView) findViewById(R.id.surface_view);
-        videoView.setMediaController(new MediaController(this));
+        videoView.setMediaController(new ECMediaController(this, (RelativeLayout)findViewById(R.id.video_view_container)));
         //videoView.setOnErrorListener(getOnErrorListener());
         videoView.setOnPreparedListener(new PreparedListener());
         //videoView.setOnCompletionListener(getOnCompletionListener());

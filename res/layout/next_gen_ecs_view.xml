@@ -20,6 +20,7 @@
         android:orientation="vertical">
 
         <RelativeLayout
+            android:id="@+id/video_view_container"
             android:layout_weight="3"
             android:layout_width="fill_parent"
             android:layout_height="0dp"

@@ -26,4 +26,8 @@
 	<string name="drawer_close">Close Drawer</string>
 
 	<string name="today">Today</string>
+
+	<string name="back_button_text">Back</string>
+	<string name="home_button_text">Home</string>
+
 </resources>

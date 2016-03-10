@@ -9,10 +9,6 @@
     <style name="CustomTabBG" parent="@android:style/Widget.TabWidget"></style>
 
 
-
-    <style name="FlixsterListItem">
-        <!-- <item name="android:background">@drawable/listpanel</item> -->
-    </style>
     
     <style name="SearchListItem"  parent="@android:style/Widget.ListView">
         <item name="android:background">@color/whitegray</item>
@@ -389,6 +385,18 @@
 	    <item name="android:windowFullscreen">true</item>
 	    <item name="android:windowContentOverlay">@null</item>
 	</style>
-	
+    <style name="ExtraActionBar" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:tabWidgetStyle">@style/CustomTabStyle</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:textAppearance">@style/TextNormalBold</item>
+        <item name="logo">@android:color/transparent</item>
+
+        <!-- flxabv44 generated action bar
+        <item name="android:actionBarItemBackground">@drawable/selectable_background_flxabv44</item>
+        <item name="android:actionBarTabStyle">@style/flxabv44_ActionBarTabStyle</item>
+        <item name="android:actionBarStyle">@style/flxabv44_solid_ActionBar</item>
+        <item name="android:selectableItemBackground">@drawable/selectable_background_flxabv44</item>-->
+
+    </style>
 		
 </resources>

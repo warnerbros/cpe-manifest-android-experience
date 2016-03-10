@@ -1,5 +1,6 @@
 package com.wb.nextgen.data;
 
+import com.wb.nextgen.R;
 import com.wb.nextgen.util.utils.StringHelper;
 
 import java.util.ArrayList;
@@ -88,6 +89,18 @@ public class DemoData {
     public static void parseDemoJSONData(){
         dataFromJSON = DemoJSONData.createFromUri("abc");
 
+    }
+
+    public static String getMovieLogoUrl(){
+        return "android.resource://com.wb.nextgen/" + R.drawable.man_of_sett_top_logo;
+    }
+
+    public static String getExtraBackgroundUrl(){
+        return "android.resource://com.wb.nextgen/" + R.drawable.extras_bg;
+    }
+
+    public static String getExtraRightTitleImageUrl(){
+        return "android.resource://com.wb.nextgen/" + R.drawable.extras_header;
     }
 
     public static ECGroupData findECGroupDataById(String id){

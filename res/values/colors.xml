@@ -113,4 +113,6 @@
     
     <color name="sync_in_progress_yellow">#fcf8e3</color>
     <color name="cast_actionbar_bg">#35A648</color>
+
+    <color name="list_title_text_color">#FFFFFF</color>
 </resources>

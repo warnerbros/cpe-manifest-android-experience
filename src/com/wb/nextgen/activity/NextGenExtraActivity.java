@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
+import com.wb.nextgen.data.DemoData;
 import com.wb.nextgen.fragment.NextGenActorListFragment;
 import com.wb.nextgen.fragment.NextGenExtraMainTableFragment;
 
@@ -25,15 +26,17 @@ import com.wb.nextgen.util.PicassoTrustAll;
  */
 public class NextGenExtraActivity extends AbstractNextGenActivity implements NextGenFragmentTransactionInterface{
 
-    protected ImageView extraTitleView;
-    protected ImageView extraLogoImageView;
-    protected Button extraBackButton;
+    //protected ImageView extraTitleView;
+    //protected ImageView extraLogoImageView;
+    //protected Button extraBackButton;
 
     NextGenFragmentTransactionEngine nextGenFragmentTransactionEngine;
 
     protected LinearLayout leftPanelFrame;
     protected LinearLayout rightMainFrame;
     protected LinearLayout fullFrame;
+
+    private int startupStackCount = 2;
 
     @Override
     public void onCreate(Bundle savedState) {
@@ -50,47 +53,31 @@ public class NextGenExtraActivity extends AbstractNextGenActivity implements Nex
 
         transitLeftFragment(new NextGenActorListFragment());
         transitRightFragment(new NextGenExtraMainTableFragment());
-
-        extraBackButton = (Button) findViewById(R.id.next_gen_extra_header_left_button);
-        extraBackButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                NextGenExtraActivity.this.finish();
-            }
-        });
-
-        extraLogoImageView = (ImageView) findViewById(R.id.next_gen_extra_header_center_logo);
-
-        extraTitleView = (ImageView) findViewById(R.id.next_gen_extra_header_right_title);
-        if (extraTitleView != null){
-            PicassoTrustAll.loadImageIntoView(this, "android.resource://com.wb.nextgen/" + R.drawable.extras_header, extraTitleView);
-        }
-        /*ImageView bg = (ImageView)view.findViewById(R.id.next_gen_startup_layout);
-        if (bg != null){
-            PicassoTrustAll.loadImageIntoView(FlixsterApplication.getContext(), "http://www.manofsteel.com/img/about/full_bg.jpg", bg);
-        }*/
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        if (extraLogoImageView != null){
+        /*if (extraLogoImageView != null){
             //PicassoTrustAll.loadImageIntoView(NextGenApplication.getContext(), "http://img07.deviantart.net/b14a/i/2013/072/2/7/man_of_steel__2013____superman_symbol_logo_by_gbmpersonal-d5xz08y.jpg", extraLogoImageView);
             String logoUri = "android.resource://com.wb.nextgen/" + R.drawable.man_of_sett_top_logo;
             PicassoTrustAll.loadImageIntoView(NextGenApplication.getContext(), logoUri, extraLogoImageView);
 
 
-        }
+        }*/
     }
 
     //*************** NextGenFragmentTransactionInterface ***************
     @Override
     public void transitRightFragment(Fragment nextFragment){
         nextGenFragmentTransactionEngine.transitFragment(R.id.next_gen_extra_right_view, nextFragment);
+        resetLeftButton();
     }
 
     @Override
     public void transitLeftFragment(Fragment nextFragment){
         nextGenFragmentTransactionEngine.transitFragment(R.id.next_gen_extra_left_view, nextFragment);
+        resetLeftButton();
     }
 
     @Override
@@ -98,46 +85,15 @@ public class NextGenExtraActivity extends AbstractNextGenActivity implements Nex
         nextGenFragmentTransactionEngine.transitFragment(R.id.next_gen_extra_main_frame, nextFragment);
     }
 
-/*
-    public void transitLeftPanelFragment(Fragment nextFragment){
-        Fragment leftFragment = nextFragment;
-        FragmentTransaction ftLeft = getSupportFragmentManager().beginTransaction();
-        ftLeft.add(leftPanelFrame.getId(), leftFragment).commit();
-    }
-
-
-    public void transitRightMainFragment(Fragment nextFragment){
-        Fragment rightFragment = nextFragment;
-        FragmentTransaction ftRight = getSupportFragmentManager().beginTransaction();
-        //ftRight.setCustomAnimations(R.anim.push_left_in, R.anim.push_left_out, R.anim.push_right_in, R.anim.push_right_out);
-        ftRight.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out);
-        if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
-            ftRight.replace(rightMainFrame.getId(), rightFragment, rightFragment.getClass().toString());
-            ftRight.addToBackStack(rightFragment.getClass().toString());
-            ftRight.commit();
-            //rightFrameStack.add(rightFragment.getId());
-
+    private void resetLeftButton(){
+        if (getSupportFragmentManager().getBackStackEntryCount() <= startupStackCount){
+            setBackButtonLogo(R.drawable.home_logo);
+            setBackButtonText(getResources().getString(R.string.home_button_text) );
         }else{
-            //int currentFragmentId = rightFrameStack.peek();
-            //int currentFragmentId = getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getId();
-            Fragment currentFragment = getSupportFragmentManager().findFragmentByTag(rightFragment.getClass().toString());
-            if (currentFragment != null && currentFragment.getClass().equals(nextFragment.getClass())){
-                //Fragment fragment = getSupportFragmentManager().findFragmentById(currentFragmentId);
-                if (currentFragment instanceof NextGenActorDetailFragment && nextFragment instanceof NextGenActorDetailFragment){
-                    ((NextGenActorDetailFragment) currentFragment).reloadDetail(((NextGenActorDetailFragment)nextFragment).getDetailObject());
-                }
-            }else{
-                ftRight.replace(rightMainFrame.getId(), rightFragment, rightFragment.getClass().toString());
-                ftRight.addToBackStack(rightFragment.getClass().toString());
-                ftRight.commit();
-                //rightFrameStack.add(rightFragment.getId());
-
-            }
+            setBackButtonLogo(R.drawable.back_logo);
+            setBackButtonText(getResources().getString(R.string.back_button_text) );
         }
-
-    }*/
-
-    //final Stack<Integer> rightFrameStack = new Stack<Integer>();
+    }
 
     @Override
     public void onBackPressed(){
@@ -152,11 +108,28 @@ public class NextGenExtraActivity extends AbstractNextGenActivity implements Nex
         if (getSupportFragmentManager().getBackStackEntryCount() == 1 )
             finish();
 
+        resetLeftButton();
+
+    }
+
+    @Override
+    public int getLeftButtonLogoId(){
+        return R.drawable.home_logo;
     }
 
     @Override
     public String getBackgroundImgUri(){
-        return "android.resource://com.wb.nextgen/" + R.drawable.extras_bg;
+        return DemoData.getExtraBackgroundUrl();
+    }
+
+    @Override
+    public String getLeftButtonText(){
+        return getResources().getString(R.string.home_button_text);
+    }
+
+    @Override
+    public String getRightTitleImageUri(){
+        return DemoData.getExtraRightTitleImageUrl();
     }
 
 }

@@ -161,7 +161,7 @@
 			android:screenOrientation="sensorLandscape"
 			android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
 			android:exported="false"
-			android:theme="@style/Theme.Flx.FullscreenVideo" >
+			android:theme="@style/ExtraActionBar" >
 			<intent-filter>
 				<action android:name="android.intent.action.VIEW" />
 			</intent-filter>
@@ -170,7 +170,7 @@
 			android:screenOrientation="sensorLandscape"
 			android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
 			android:exported="false"
-			android:theme="@style/Theme.Flx.FullscreenVideo" >
+			android:theme="@style/ExtraActionBar" >
 			<intent-filter>
 				<action android:name="android.intent.action.VIEW" />
 			</intent-filter>
@@ -179,7 +179,7 @@
 			android:screenOrientation="sensorLandscape"
 			android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
 			android:exported="false"
-			android:theme="@style/Theme.Flx.FullscreenVideo" >
+			android:theme="@style/ExtraActionBar" >
 			<intent-filter>
 				<action android:name="android.intent.action.VIEW" />
 			</intent-filter>
