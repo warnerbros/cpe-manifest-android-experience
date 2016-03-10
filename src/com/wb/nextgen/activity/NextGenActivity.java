@@ -11,12 +11,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 
 import com.wb.nextgen.fragment.NextGenNavigationDrawerFragment;
 //import com.wb.nextgen.manifest.schema.v1_4.MediaManifestType;
+import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.TabletUtils;
 
 import net.flixster.android.localization.Localizer;
@@ -52,6 +55,14 @@ public class NextGenActivity extends FragmentActivity {
         mDrawerFragment = (NextGenNavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.drawer_list);
         //mDrawerFragment.setListener(this);
         leftdrawer = (RelativeLayout) findViewById(R.id.left_drawer);
+
+        ImageView menuBG = (ImageView)findViewById(R.id.menu_bg_image_view);
+        if (menuBG != null){
+            String bgImageUri = "android.resource://com.wb.nextgen/" + R.drawable.man_of_steel_menu;
+            PicassoTrustAll.getInstance(this).load(bgImageUri).fit().into(menuBG);
+            //PicassoTrustAll.loadImageIntoView(NextGenApplication.getContext(), bgImageUri, menuBG);
+        }
+
         mDrawerToggle = new NextGenActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         /*

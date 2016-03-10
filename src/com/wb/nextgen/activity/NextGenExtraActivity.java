@@ -23,9 +23,9 @@ import com.wb.nextgen.util.PicassoTrustAll;
 /**
  * Created by gzcheng on 1/7/16.
  */
-public class NextGenExtraActivity extends FragmentActivity implements NextGenFragmentTransactionInterface{
+public class NextGenExtraActivity extends AbstractNextGenActivity implements NextGenFragmentTransactionInterface{
 
-    protected TextView extraTitleTextView;
+    protected ImageView extraTitleView;
     protected ImageView extraLogoImageView;
     protected Button extraBackButton;
 
@@ -60,7 +60,10 @@ public class NextGenExtraActivity extends FragmentActivity implements NextGenFra
 
         extraLogoImageView = (ImageView) findViewById(R.id.next_gen_extra_header_center_logo);
 
-        extraTitleTextView = (TextView) findViewById(R.id.next_gen_extra_header_right_title);
+        extraTitleView = (ImageView) findViewById(R.id.next_gen_extra_header_right_title);
+        if (extraTitleView != null){
+            PicassoTrustAll.loadImageIntoView(this, "android.resource://com.wb.nextgen/" + R.drawable.extras_header, extraTitleView);
+        }
         /*ImageView bg = (ImageView)view.findViewById(R.id.next_gen_startup_layout);
         if (bg != null){
             PicassoTrustAll.loadImageIntoView(FlixsterApplication.getContext(), "http://www.manofsteel.com/img/about/full_bg.jpg", bg);
@@ -70,8 +73,13 @@ public class NextGenExtraActivity extends FragmentActivity implements NextGenFra
     @Override
     protected void onStart() {
         super.onStart();
-        if (extraLogoImageView != null)
-            PicassoTrustAll.loadImageIntoView(NextGenApplication.getContext(), "http://img07.deviantart.net/b14a/i/2013/072/2/7/man_of_steel__2013____superman_symbol_logo_by_gbmpersonal-d5xz08y.jpg", extraLogoImageView);
+        if (extraLogoImageView != null){
+            //PicassoTrustAll.loadImageIntoView(NextGenApplication.getContext(), "http://img07.deviantart.net/b14a/i/2013/072/2/7/man_of_steel__2013____superman_symbol_logo_by_gbmpersonal-d5xz08y.jpg", extraLogoImageView);
+            String logoUri = "android.resource://com.wb.nextgen/" + R.drawable.man_of_sett_top_logo;
+            PicassoTrustAll.loadImageIntoView(NextGenApplication.getContext(), logoUri, extraLogoImageView);
+
+
+        }
     }
 
     //*************** NextGenFragmentTransactionInterface ***************
@@ -144,6 +152,11 @@ public class NextGenExtraActivity extends FragmentActivity implements NextGenFra
         if (getSupportFragmentManager().getBackStackEntryCount() == 1 )
             finish();
 
+    }
+
+    @Override
+    public String getBackgroundImgUri(){
+        return "android.resource://com.wb.nextgen/" + R.drawable.extras_bg;
     }
 
 }

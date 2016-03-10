@@ -19,6 +19,11 @@
             android:layout_gravity="start"
             android:layout_width="240dp"
             android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/menu_bg_image_view"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@android:color/transparent"/>
             <fragment android:name="com.wb.nextgen.fragment.NextGenNavigationDrawerFragment"
                 android:id="@+id/drawer_list"
                 android:layout_width="fill_parent"

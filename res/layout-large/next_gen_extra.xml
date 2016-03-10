@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:background="@android:color/black"
+    android:background="@android:color/transparent"
     android:id="@+id/next_gen_extra_main_frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -26,12 +26,11 @@
             android:background="@android:color/transparent"
             android:layout_centerInParent="true"
             android:layout_height="match_parent" />
-        <TextView
-            android:layout_width="wrap_content"
+        <ImageView
+            android:layout_width="@dimen/top_right_title_icon_width"
             android:layout_height="match_parent"
             android:gravity="center"
             android:id="@+id/next_gen_extra_header_right_title"
-            android:text="EXTRA"
             android:textColor="@color/white"
             android:textSize="@dimen/textLarge"
             android:background="@android:color/transparent"
