@@ -98,13 +98,8 @@ public class SelectedOverlayImageView extends ImageView {
 
         if (!isActivated()) {
 
-            //create another bitmap for selected overlay
-
-
-
             // draw a circle on the overlay bitmap
             paint.setColor(inActiveOverlayColor);
-            //selectedPaint.setAlpha(99);
             paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
             canvas.drawRect(rect, paint);
 
@@ -120,8 +115,6 @@ public class SelectedOverlayImageView extends ImageView {
                 }
             }
             // draw on top of normal state image
-            //selectedPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.ADD));
-            //canvas.drawBitmap(overlay, rect, rect, selectedPaint);
         }else{
 
 

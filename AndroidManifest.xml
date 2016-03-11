@@ -20,7 +20,6 @@
 
 	<!-- Permissions -->
 	<uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -33,9 +32,20 @@
 	<uses-permission android:name="android.permission.VIBRATE" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
 	<uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="net.flixster.android.ACCESS_COMM" />
 	<uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
-	
+
+	<permission
+		android:name="com.wb.nextgen.permission.MAPS_RECEIVE"
+		android:protectionLevel="signature" />
+	<uses-permission android:name="com.wb.nextgen.permission.MAPS_RECEIVE"/>
+	<uses-feature
+		android:glEsVersion="0x00020000"
+		android:required="true"/>
+
+
 	<!-- Widevine DRM -->
     <uses-feature
         android:name="com.google.widevine.software.drm"
@@ -97,63 +107,23 @@
 		</activity>
 
 		<activity
-			android:name=".activity.InterStitualVideoPlayerActivity"
-			android:launchMode="singleTop"
+			android:name=".activity.InterStitialVideoPlayerActivity"
 			android:screenOrientation="sensorLandscape"
 			android:configChanges="orientation|screenSize"
 			android:theme="@style/Theme.Flx.NoTitle">
 			<!--android:theme="@style/NextGenActionBar">-->
 
 		</activity>
-		<!-- The main/home activity (it has no parent activity) -->
 
-
-		<!-- Landing Page
-		<activity android:name="net.flixster.android.view.LandingPageActivity"
-		    android:theme="@style/Theme.Flx.NoTitle"></activity>-->
-
-
-
-		<!--
-             GA SDK install referrer tracking
-			<receiver android:name="com.google.android.apps.analytics.AnalyticsReceiver" android:exported="true">
-			<intent-filter>
-			<action android:name="com.android.vending.INSTALL_REFERRER" />
-			</intent-filter>
-			</receiver>
-		-->
-
-
-		<!-- Custom install referrer tracking -->
-
-
-		<!-- App widget -->
-		<!-- <receiver android:name="com.flixster.android.widget.WidgetProvider" >
-			<intent-filter>
-				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-			</intent-filter>
-
-			<meta-data
-				android:name="android.appwidget.provider"
-				android:resource="@xml/widget_provider" />
-		</receiver>-->
-
-	
-		<!-- Set up lower level activities and up navigation (by specifying parent activity) -->
-		
-
-				
-		<!-- Video Player -->
 
 		<!-- Next Gen -->
 
 		<activity android:name=".activity.NextGenPlayer"
+			android:screenOrientation="fullSensor"
 			android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
 			android:exported="false"
 			android:theme="@style/Theme.Flx.FullscreenVideo" >
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW" />
-			</intent-filter>
+
 		</activity>
 
 		<!--<activity android:name="com.wb.nextgen.NextGenActivity"
@@ -170,27 +140,18 @@
 			android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
 			android:exported="false"
 			android:theme="@style/ExtraActionBar" >
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW" />
-			</intent-filter>
 		</activity>
 		<activity android:name=".activity.ECGalleryActivity"
 			android:screenOrientation="sensorLandscape"
 			android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
 			android:exported="false"
 			android:theme="@style/ExtraActionBar" >
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW" />
-			</intent-filter>
 		</activity>
 		<activity android:name=".activity.ECVideoActivity"
 			android:screenOrientation="sensorLandscape"
 			android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
 			android:exported="false"
 			android:theme="@style/ExtraActionBar" >
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW" />
-			</intent-filter>
 		</activity>
 		<!-- ChromeCast -->
 		<!--<activity android:name="net.flixster.android.view.CastPlayerActivity"
