@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.VideoView;
 
 import com.wb.nextgen.R;
+import com.wb.nextgen.data.DemoData;
 
 /**
  * Created by gzcheng on 3/11/16.
@@ -34,7 +35,7 @@ public class InterStitialVideoPlayerActivity extends Activity{
                     public void run() {
                         Intent intent = new Intent(InterStitialVideoPlayerActivity.this, NextGenPlayer.class);
                         //intent.setAction(android.content.Intent.ACTION_VIEW);
-                        intent.setDataAndType(Uri.parse("android.resource://com.wb.nextgen/" + R.raw.man_of_steel_trailer3), "video/*");
+                        intent.setDataAndType(Uri.parse(DemoData.getMovieStreamUrl()), "video/*");
                         //intent.setDataAndType(Uri.parse("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/feature/ManOfSteel_Clean.mp4"), "video/*");
                         startActivity(intent);
                        finish();

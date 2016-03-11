@@ -1,5 +1,6 @@
 package com.wb.nextgen.activity;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,6 +31,8 @@ public abstract class AbstractECView extends AbstractNextGenActivity {
     protected DemoData.ECGroupData ecGroupData ;
     protected ECViewLeftListFragment listFragment;
     protected TextView selectedECNameTextView;
+    protected FrameLayout leftListFrame;
+    protected boolean isContentFullScreen = false;
 
     public abstract void onLeftListItemSelected(DemoData.ECContentData ecContentData);
 
@@ -46,6 +50,8 @@ public abstract class AbstractECView extends AbstractNextGenActivity {
         ecGroupData = DemoData.findECGroupDataById(groupId);
 
         setContentView(getContentViewId());
+
+        leftListFrame = (FrameLayout)findViewById(R.id.ec_list_frame);
 
         float density = NextGenApplication.getScreenDensity(this);
         int spacing = (int)(10 *density);
@@ -82,5 +88,32 @@ public abstract class AbstractECView extends AbstractNextGenActivity {
     @Override
     public String getRightTitleImageUri(){
         return DemoData.getExtraRightTitleImageUrl();
+    }
+
+
+    @Override
+    public void onRequestToggleFullscreen(){
+        super.onRequestToggleFullscreen();
+        ActionBar bar = getActionBar();
+        if (!isContentFullScreen){    // make it full screen
+            leftListFrame.setVisibility(View.GONE);
+            selectedECNameTextView.setVisibility(View.GONE);
+            if (bar != null)
+                bar.hide();
+        } else {                     // shrink it
+            leftListFrame.setVisibility(View.VISIBLE);
+            selectedECNameTextView.setVisibility(View.VISIBLE);
+            if (bar != null)
+                bar.show();
+        }
+        isContentFullScreen = !isContentFullScreen;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isContentFullScreen)
+            onRequestToggleFullscreen();
+        else
+            super.onBackPressed();
     }
 }

@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.VideoView;
 
 import com.wb.nextgen.R;
+import com.wb.nextgen.interfaces.ContentViewFullscreenRequestInterface;
 
 /**
  * Created by gzcheng on 3/9/16.
@@ -67,10 +68,24 @@ public class ECMediaController extends MediaController {
                     // TODO Auto-generated method stub
                     //Log.e("media controller", "full screen onclick");
 
-                    Intent i = new Intent("xyxyxyxhx");
+                    //Intent i = new Intent("xyxyxyxhx");
+                    if (mContext instanceof ContentViewFullscreenRequestInterface){
+                        ((ContentViewFullscreenRequestInterface)mContext).onRequestToggleFullscreen();
+                    }
 
-                    mContext.sendBroadcast(i);
+                    /*mContext.sendBroadcast(i);
+                    DisplayMetrics displaymetrics = new DisplayMetrics();
+                    ((Activity)mContext).getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+                    int height = displaymetrics.heightPixels;
+                    int width = displaymetrics.widthPixels;
 
+                    ViewGroup.LayoutParams params = container.getLayoutParams();
+                    params.width = width;
+                    params.height=height-80;// -80 for android controls
+                    if (params instanceof LinearLayout.LayoutParams) {
+                        ((LinearLayout.LayoutParams)params).setMargins(0, 0, 0, 50);
+                    }
+                    container.setLayoutParams(params);*/
                 }
             });
         }

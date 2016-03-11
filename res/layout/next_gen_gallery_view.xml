@@ -3,14 +3,19 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <fragment
-        android:name="com.wb.nextgen.fragment.ECViewLeftListFragment"
-        android:id="@+id/ec_fragment_list"
-        android:layout_height="match_parent"
+    <FrameLayout
+        android:id="@+id/ec_list_frame"
         android:layout_weight="1"
         android:layout_width="0dp"
-        android:layout_gravity="center"
-        android:stretchMode="columnWidth" />
+        android:layout_height="match_parent">
+        <fragment
+            android:name="com.wb.nextgen.fragment.ECViewLeftListFragment"
+            android:id="@+id/ec_fragment_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:stretchMode="columnWidth" />
+    </FrameLayout>
     <LinearLayout
         android:id="@+id/next_gen_gallery_content_view"
         android:layout_weight="3"
@@ -30,6 +35,12 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent" >
             </android.support.v4.view.ViewPager>
+            <Button
+                android:id="@+id/gallery_fullscreen_toggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:text="TEST"/>
         </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
 
         <TextView

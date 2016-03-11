@@ -2,16 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <fragment
-        android:name="com.wb.nextgen.fragment.ECViewLeftListFragment"
-        android:id="@+id/ec_fragment_list"
-        android:layout_height="match_parent"
+    <FrameLayout
+        android:id="@+id/ec_list_frame"
         android:layout_weight="1"
         android:layout_width="0dp"
-        android:layout_gravity="center"
-        android:stretchMode="columnWidth" />
-
+        android:layout_height="match_parent">
+        <fragment
+            android:name="com.wb.nextgen.fragment.ECViewLeftListFragment"
+            android:id="@+id/ec_fragment_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:stretchMode="columnWidth" />
+    </FrameLayout>
     <LinearLayout
         android:id="@+id/next_gen_ec_content_view"
         android:layout_weight="3"
@@ -69,11 +72,11 @@
 
         </RelativeLayout>
 
-            <TextView
-                android:id="@+id/ec_content_name"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/textLarge"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/ec_content_name"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/textLarge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 </LinearLayout>

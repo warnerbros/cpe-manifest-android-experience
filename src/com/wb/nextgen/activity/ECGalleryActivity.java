@@ -1,6 +1,9 @@
 package com.wb.nextgen.activity;
 
+import android.app.ActionBar;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
@@ -8,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
@@ -27,12 +31,22 @@ public class ECGalleryActivity extends AbstractECView {
     private ViewPager galleryViewPager;
     private DemoData.ECContentData currentGallery;
     private GalleryPagerAdapter adapter;
+    private Button fullscreenToggleBtn;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         currentGallery = ecGroupData.ecContents.get(0);
         galleryViewPager = (ViewPager) findViewById(R.id.next_gen_gallery_view_pager);
         adapter = new GalleryPagerAdapter(this);
+        fullscreenToggleBtn = (Button)findViewById(R.id.gallery_fullscreen_toggle);
+        if (fullscreenToggleBtn != null){
+            fullscreenToggleBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onRequestToggleFullscreen();
+                }
+            });
+        }
         galleryViewPager.setAdapter(adapter);
     }
 
@@ -45,32 +59,29 @@ public class ECGalleryActivity extends AbstractECView {
         return R.layout.ec_gallery_list_item;
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT && isContentFullScreen){
+            newConfig.orientation = Configuration.ORIENTATION_LANDSCAPE;
+            super.onConfigurationChanged(newConfig);
+        }else{
+            super.onConfigurationChanged(newConfig);
+        }
+    }
+    @Override
+    public void onRequestToggleFullscreen(){
 /*
-    class GalleryPagerAdapter extends PagerAdapter {
-        public int getCount(){
-            return 0;
-        }
+        if (!isContentFullScreen){    // make it full screen
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+        } else {                     // shrink it
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+        }*/
+        super.onRequestToggleFullscreen();
+        adapter.notifyDataSetChanged();
 
-        public boolean isViewFromObject(View view, Object object){
-            return view == object;
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            ViewPager pager = (ViewPager) container;
-            View view = getView(position, pager);
-
-            pager.addView(view);
-
-            return view;
-        }
-
-        public View getView(int position, ViewPager pager){
+    }
 
 
-            return null;
-        }
-    }*/
     class GalleryPagerAdapter extends PagerAdapter {
 
         Context mContext;

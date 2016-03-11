@@ -91,6 +91,11 @@ public class DemoData {
 
     }
 
+    public static String getMovieStreamUrl(){
+        return "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/feature/ManOfSteel_Clean.mp4";
+        //return "android.resource://com.wb.nextgen/" + R.raw.man_of_steel_trailer3;
+    }
+
     public static String getMovieLogoUrl(){
         return "android.resource://com.wb.nextgen/" + R.drawable.man_of_sett_top_logo;
     }

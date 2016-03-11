@@ -25,13 +25,14 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.DemoData;
+import com.wb.nextgen.interfaces.ContentViewFullscreenRequestInterface;
 import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.utils.StringHelper;
 
 /**
  * Created by gzcheng on 3/9/16.
  */
-public abstract class AbstractNextGenActivity extends FragmentActivity {
+public abstract class AbstractNextGenActivity extends FragmentActivity implements ContentViewFullscreenRequestInterface {
 
     public abstract String getBackgroundImgUri();
     public abstract String getLeftButtonText();
@@ -167,5 +168,12 @@ public abstract class AbstractNextGenActivity extends FragmentActivity {
         }else
             actionBarLeftButton.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         currentBackButtonLogoId = logoId;
+    }
+
+    public void onRequestToggleFullscreen(){
+        if (topUnderlayActionbarSpacer.getVisibility() == View.GONE){
+            topUnderlayActionbarSpacer.setVisibility(View.VISIBLE);
+        }else
+            topUnderlayActionbarSpacer.setVisibility(View.GONE);
     }
 }

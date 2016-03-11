@@ -1,14 +1,20 @@
 package com.wb.nextgen.activity;
 
+import android.app.ActionBar;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
+import android.widget.FrameLayout;
 import android.widget.MediaController;
 import android.widget.RelativeLayout;
 
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.DemoData;
+import com.wb.nextgen.interfaces.ContentViewFullscreenRequestInterface;
 import com.wb.nextgen.widget.ECMediaController;
 
 import net.flixster.android.drm.ObservableVideoView;
@@ -17,10 +23,11 @@ import net.flixster.android.drm.ObservableVideoView;
  * Created by gzcheng on 3/7/16.
  */
 public class ECVideoActivity extends AbstractECView {
-    protected ObservableVideoView videoView;
+        protected ObservableVideoView videoView;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         videoView = (ObservableVideoView) findViewById(R.id.surface_view);
         videoView.setMediaController(new ECMediaController(this, (RelativeLayout)findViewById(R.id.video_view_container)));
         //videoView.setOnErrorListener(getOnErrorListener());
@@ -63,4 +70,5 @@ public class ECVideoActivity extends AbstractECView {
             videoView.setVideoURI(Uri.parse(ec.ecVideoUrl));
         }
     }
+
 }
