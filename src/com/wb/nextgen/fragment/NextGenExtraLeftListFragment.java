@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 import com.tonicartos.widget.stickygridheaders.StickyGridHeadersBaseAdapter;
+import com.wb.nextgen.widget.CustomFontTextView;
 
 
 /**
@@ -24,7 +25,7 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
 
     protected ListView listView;
     protected NextGenExtraLeftPanelAdapter listAdaptor;
-    protected TextView titleTextView;
+    protected CustomFontTextView titleTextView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -43,9 +44,9 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
             listView.setAdapter(listAdaptor);
             listView.setOnItemClickListener(this);
 
-            titleTextView = new TextView(getActivity());
+            titleTextView = new CustomFontTextView(getActivity());
             titleTextView.setText(getHeaderText());
-            titleTextView.setTextSize(getResources().getDimension(R.dimen.list_title_font_size));
+            titleTextView.setTextSize(getResources().getDimension(R.dimen.textMedium));
             titleTextView.setTextColor(getResources().getColor(R.color.list_title_text_color));
             listView.addHeaderView(titleTextView, null, false);
             listView.setItemChecked(getStartupSelectedIndex() + listView.getHeaderViewsCount(), true);

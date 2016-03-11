@@ -86,6 +86,8 @@ public class SelectedOverlayImageView extends ImageView {
     }
 
     public Bitmap overlayBitmap(Bitmap bm) {
+        if (bm == null)
+            return bm;
         Bitmap output = Bitmap.createBitmap(bm.getWidth(),
                 bm.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);

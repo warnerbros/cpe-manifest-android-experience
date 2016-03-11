@@ -25,8 +25,7 @@ public class CustomFontTextView extends TextView {
     }
 
     private void init() {
-        Typeface tf = Typeface.createFromAsset(getContext().getAssets(),
-                "your_font.ttf");
+        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "font/roboto-regular.ttf");
         setTypeface(tf);
     }
 }

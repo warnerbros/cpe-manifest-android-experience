@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
@@ -103,31 +104,12 @@ public class ECGalleryActivity extends AbstractECView {
             int borderSize = 0;//_thumbnails.getPaddingTop();
 
             // Get the size of the actual thumbnail image
-            int thumbnailSize = ((LinearLayout.LayoutParams)
+            int thumbnailSize = ((FrameLayout.LayoutParams)
                     galleryViewPager.getLayoutParams()).bottomMargin - (borderSize*2);
 
             // Set the thumbnail layout parameters. Adjust as required
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(thumbnailSize, thumbnailSize);
             params.setMargins(0, 0, borderSize, 0);
-
-            // You could also set like so to remove borders
-            //ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
-            //        ViewGroup.LayoutParams.WRAP_CONTENT,
-            //        ViewGroup.LayoutParams.WRAP_CONTENT);
-            /*
-            final ImageView thumbView = new ImageView(mContext);
-            thumbView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            thumbView.setLayoutParams(params);
-            thumbView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d(TAG, "Thumbnail clicked");
-
-                    // Set the pager position when thumbnail clicked
-                    galleryViewPager.setCurrentItem(position);
-                }
-            });
-            _thumbnails.addView(thumbView);*/
 
             final SubsamplingScaleImageView imageView =
                     (SubsamplingScaleImageView) itemView.findViewById(R.id.image);
@@ -167,6 +149,7 @@ public class ECGalleryActivity extends AbstractECView {
     public void onLeftListItemSelected(DemoData.ECContentData ec){
         if (ec != null){
             currentGallery = ec;
+            selectedECNameTextView.setText(ec.title);
             if (adapter != null)
                 adapter.notifyDataSetChanged();
         }

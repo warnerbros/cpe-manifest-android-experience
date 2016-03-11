@@ -90,7 +90,7 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment imple
     }
 
     protected String getHeaderText(){
-        return "Actors";
+        return getResources().getString(R.string.actors);
     }
 
     protected int getHeaderChildenCount(int header){

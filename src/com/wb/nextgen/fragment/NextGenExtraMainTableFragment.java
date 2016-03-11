@@ -79,7 +79,7 @@ public class NextGenExtraMainTableFragment extends NextGenGridViewFragment {
             w = (int)(((float)getActivity().getResources().getDisplayMetrics().widthPixels) *((LinearLayout.LayoutParams)viewParams).weight) - spacing;
         }*/
 
-        ViewGroup.LayoutParams layoutParams = (ViewGroup.LayoutParams) thumbnailImg.getLayoutParams();
+        /*ViewGroup.LayoutParams layoutParams = (ViewGroup.LayoutParams) thumbnailImg.getLayoutParams();
         if (TabletUtils.isTablet()) {
             int width = (int) (w / 2) - spacing;
             int height = width /352 *198;
@@ -92,7 +92,7 @@ public class NextGenExtraMainTableFragment extends NextGenGridViewFragment {
             layoutParams.width = width;
             layoutParams.height = (width - rowView.getPaddingRight()) / 2 * 3 + rowView.getPaddingBottom();
         }
-        thumbnailImg.setLayoutParams(layoutParams);
+        thumbnailImg.setLayoutParams(layoutParams);*/
 
 
 

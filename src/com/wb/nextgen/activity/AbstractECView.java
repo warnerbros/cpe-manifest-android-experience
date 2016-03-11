@@ -28,6 +28,7 @@ public abstract class AbstractECView extends AbstractNextGenActivity {
 
     protected DemoData.ECGroupData ecGroupData ;
     protected ECViewLeftListFragment listFragment;
+    protected TextView selectedECNameTextView;
 
     public abstract void onLeftListItemSelected(DemoData.ECContentData ecContentData);
 
@@ -50,7 +51,7 @@ public abstract class AbstractECView extends AbstractNextGenActivity {
         int spacing = (int)(10 *density);
 
         listFragment = (ECViewLeftListFragment) getSupportFragmentManager().findFragmentById(R.id.ec_fragment_list);
-
+        selectedECNameTextView = (TextView)findViewById(R.id.ec_content_name);
     }
 
     public void onStart() {

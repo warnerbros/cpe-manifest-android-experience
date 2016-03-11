@@ -37,6 +37,7 @@
                android:id="@+id/next_gen_actor_character_name"
                android:layout_width="fill_parent"
                android:textColor="@android:color/darker_gray"
+               android:fontFamily="sans-serif-condensed"
                android:textSize="@dimen/textMSmall"
                android:textStyle="italic"
                android:layout_height="wrap_content"/>

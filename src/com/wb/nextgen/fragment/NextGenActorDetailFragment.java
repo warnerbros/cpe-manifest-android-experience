@@ -13,9 +13,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 
@@ -72,6 +74,18 @@ public class NextGenActorDetailFragment extends Fragment{
         actorOjbect = object;
         if (actorOjbect != null){
             PicassoTrustAll.loadImageIntoView(getActivity(), actorOjbect.getFullImageUri(), fullImageView);
+
+            /*
+            ViewTreeObserver vto = fullImageView.getViewTreeObserver();
+            vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                public boolean onPreDraw() {
+                    fullImageView.getViewTreeObserver().removeOnPreDrawListener(this);
+                    Picasso.with(getActivity()).load(actorOjbect.getFullImageUri()).centerCrop().resize(fullImageView.getMeasuredWidth(), fullImageView.getMeasuredHeight()).into(fullImageView);
+
+                    return true;
+                }
+            });*/
+
             detailTextView.setText(actorOjbect.biography);
             characterTextView.setText(actorOjbect.character);
             actorNameTextView.setText(actorOjbect.realName);

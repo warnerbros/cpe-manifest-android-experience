@@ -5,31 +5,36 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3"
+        android:layout_weight="4"
         android:orientation="vertical">
         <TextView
             android:id="@+id/actor_title_text"
-            android:text="ACTOR"
+            android:text="@string/actor"
             android:gravity="left"
-            android:textSize="@dimen/detail_title_font_size"
+            android:textSize="@dimen/textLarge"
+            android:textColor="@android:color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:orientation="horizontal">
+            
             <ImageView
                 android:id="@+id/next_gen_detail_full_image"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"/>
+                android:layout_weight="2"/>
             <LinearLayout
                 android:layout_width="0dp"
+                android:paddingLeft="@dimen/spacing_xsmall"
                 android:layout_height="match_parent"
-                android:layout_weight="2"
+                android:layout_weight="5"
                 android:orientation="vertical">
                 <TextView
                     android:id="@+id/actor_real_name_text"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/textXLarge"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
                 <RelativeLayout
@@ -38,6 +43,9 @@
                     <TextView
                         android:layout_alignParentLeft="true"
                         android:id="@+id/actor_character_name_text"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="@dimen/textMedium"
+                        android:fontFamily="sans-serif-condensed"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                     <LinearLayout
@@ -59,7 +67,9 @@
                 </RelativeLayout>
                 <TextView
                     android:id="@+id/actor_biography_title"
+                    android:textColor="@android:color/darker_gray"
                     android:text="@string/biography"
+                    android:textSize="@dimen/textMedium"
                     android:paddingTop="@dimen/spacing_normal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -68,6 +78,9 @@
                     android:layout_height="fill_parent">
                     <TextView
                         android:id="@+id/actor_biography_text"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/textMedium"
+                        android:fontFamily="sans-serif-condensed"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content" />
                 </ScrollView>
@@ -76,12 +89,24 @@
         </LinearLayout>
 
     </LinearLayout>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/actor_detail_filmography"
+    <LinearLayout
+        android:layout_weight="3"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="horizontal"
-        android:layout_weight="2">
-    </android.support.v7.widget.RecyclerView>
+        android:layout_height="0dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/darker_gray"
+            android:fontFamily="sans-serif-condensed"
+            android:text="@string/filmography"
+            android:textSize="@dimen/textMedium" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/actor_detail_filmography"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:orientation="horizontal">
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
 
 </LinearLayout>

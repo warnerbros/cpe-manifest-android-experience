@@ -13,6 +13,7 @@
 		<string name="google_maps_key">0udlMGxJ4Z_jlHEzpd8k4Jd-NTuvTN_r7xP3duA</string>
 	-->
 	<string name="biography">BIOGRAPHY</string>
+	<string name="filmography">FILMOGRAPHY</string>
 	<string name="label_ok">OK</string>
 	<string name="label_cancel">Cancel</string>
 	<string name="label_submit">Submit</string>
@@ -29,5 +30,7 @@
 
 	<string name="back_button_text">Back</string>
 	<string name="home_button_text">Home</string>
+	<string name="actor">ACTOR</string>
+	<string name="actors">ACTORS</string>
 
 </resources>

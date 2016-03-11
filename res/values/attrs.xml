@@ -69,4 +69,13 @@
         <attr name="inActiveOverlayDrawable" format="integer" />
         <attr name="inActiveOverlayColor" format="integer" />
     </declare-styleable>
+
+    <declare-styleable name="FixedAspectRatioFrameLayout">
+        <attr name="aspectRatioWidth" format="integer" />
+        <attr name="aspectRatioHeight" format="integer" />
+        <attr name="priority" format="integer">
+            <enum name="WIDTH_PRIORITY" value="1" />
+            <enum name="HEIGHT_PRIORITY" value="2" />
+        </attr>
+    </declare-styleable>
 </resources>

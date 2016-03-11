@@ -58,7 +58,9 @@ public class ECVideoActivity extends AbstractECView {
 
     @Override
     public void onLeftListItemSelected(DemoData.ECContentData ec){
-        if (ec != null)
-            videoView.setVideoURI(Uri.parse(ec.ecVideoUrl) );
+        if (ec != null) {
+            selectedECNameTextView.setText(ec.title);
+            videoView.setVideoURI(Uri.parse(ec.ecVideoUrl));
+        }
     }
 }

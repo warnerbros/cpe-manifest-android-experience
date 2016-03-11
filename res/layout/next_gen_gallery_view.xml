@@ -17,27 +17,26 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-        <android.support.v4.view.ViewPager
-            android:layout_weight="3"
-            android:id="@+id/next_gen_gallery_view_pager"
-            android:background="@android:color/transparent"
-            android:layout_width="fill_parent"
-            android:layout_height="0dp" >
-        </android.support.v4.view.ViewPager>
-        <!--<Gallery
-            android:id="@+id/next_gen_gallery_view"
-            android:layout_weight="3"
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:background="@android:color/transparent">
-
-
-        </Gallery>-->
-
-        <LinearLayout
-            android:layout_weight="2"
+        <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
+            xmlns:nextgen="http://schemas.android.com/apk/res-auto"
+            android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:layout_height="0dp"></LinearLayout>
+            nextgen:aspectRatioHeight="9"
+            nextgen:aspectRatioWidth="16"
+            nextgen:priority="WIDTH_PRIORITY">
+            <android.support.v4.view.ViewPager
+                android:id="@+id/next_gen_gallery_view_pager"
+                android:background="@android:color/transparent"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" >
+            </android.support.v4.view.ViewPager>
+        </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
+
+        <TextView
+            android:id="@+id/ec_content_name"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/textLarge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 </LinearLayout>
