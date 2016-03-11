@@ -1,6 +1,5 @@
 package com.wb.nextgen.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,14 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
-import com.tonicartos.widget.stickygridheaders.StickyGridHeadersBaseAdapter;
-import com.wb.nextgen.widget.CustomFontTextView;
 
 
 /**
@@ -25,7 +21,7 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
 
     protected ListView listView;
     protected NextGenExtraLeftPanelAdapter listAdaptor;
-    protected CustomFontTextView titleTextView;
+    protected TextView titleTextView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -44,7 +40,7 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
             listView.setAdapter(listAdaptor);
             listView.setOnItemClickListener(this);
 
-            titleTextView = new CustomFontTextView(getActivity());
+            titleTextView = new TextView(getActivity());
             titleTextView.setText(getHeaderText());
             titleTextView.setTextSize(getResources().getDimension(R.dimen.textMedium));
             titleTextView.setTextColor(getResources().getColor(R.color.list_title_text_color));
