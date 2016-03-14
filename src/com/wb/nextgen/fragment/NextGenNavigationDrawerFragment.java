@@ -1,62 +1,95 @@
 package com.wb.nextgen.fragment;
 
-import android.app.Activity;
+import android.animation.ValueAnimator;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.animation.ScaleAnimation;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Switch;
+import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.tonicartos.widget.stickygridheaders.StickyGridHeadersBaseAdapter;
-import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
-import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
+import com.wb.nextgen.data.DemoData;
+import com.wb.nextgen.data.DemoData.AudSubLang;
 
-import net.flixster.android.localization.Localizer;
-import net.flixster.android.localization.constants.KEYS;
-
-import java.util.ArrayList;
 import java.util.List;
 
 
-public class NextGenNavigationDrawerFragment extends Fragment {
+public class NextGenNavigationDrawerFragment extends Fragment implements View.OnClickListener{
 
-	
+	RelativeLayout audioRow;
+	RelativeLayout subtitleRow;
+	TextView audioSelectionText;
+	TextView subtitleSelectionText;
+	ListView audioList;
+	ListView subtitleList;
+	int audioListHeight = 0, subtitleListHeight = 0;
 
-	
-	private StickyGridHeadersGridView mainList;
-	private final DrawerListAdapter adapter = new DrawerListAdapter();
-
-	
+	AudioSubtitleListAdaptor audioSelectionAdaptor, subtitleSelectionAdaptor;
 
 
-	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.navigation_drawer, container, false);
+		return inflater.inflate(R.layout.navigation_drawer, container, false);
     }
-	
-	@Override 
+
+	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState){
 		super.onViewCreated(view, savedInstanceState);
-		mainList = (StickyGridHeadersGridView)view.findViewById(R.id.drawer_main_list);
-		mainList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
+		audioRow = (RelativeLayout)view.findViewById(R.id.drawer_audio_row);
+
+		if (audioRow != null){
+			audioRow.setOnClickListener(this);
+		}
+
+		subtitleRow = (RelativeLayout)view.findViewById(R.id.drawer_subtitle_row);
+
+		if (subtitleRow != null){
+			subtitleRow.setOnClickListener(this);
+		}
+
+		audioSelectionText = (TextView)view.findViewById(R.id.drawer_audio_selection);
+		subtitleSelectionText = (TextView)view.findViewById(R.id.drawer_subtitle_selection);
+
+		audioList = (ListView)view.findViewById(R.id.drawer_audio_list);
+		audioSelectionAdaptor = new AudioSubtitleListAdaptor(getActivity(), R.layout.drawer_aud_sub_row, DemoData.audioList, -1);
+		audioList.setAdapter(audioSelectionAdaptor);
+		audioList.setOnItemClickListener(audioSelectionAdaptor);
+
+		subtitleList = (ListView)view.findViewById(R.id.drawer_subtitle_list);
+		subtitleSelectionAdaptor = new AudioSubtitleListAdaptor(getActivity(), R.layout.drawer_aud_sub_row, DemoData.subtitleList, 0);
+		subtitleList.setAdapter(subtitleSelectionAdaptor);
+		subtitleList.setOnItemClickListener(subtitleSelectionAdaptor);
+
+		final ViewTreeObserver vto = audioList.getViewTreeObserver();
+		vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+			@Override
+			public void onGlobalLayout() {
+
+				audioListHeight = audioList.getMeasuredHeight(); 			// Measure the expanded height of audio List
+				audioList.setVisibility(View.GONE);							// then set it to gone
+
+				subtitleListHeight = subtitleList.getMeasuredHeight();		// Measure the expanded Height of subtitle list
+				subtitleList.setVisibility(View.GONE);
+
+				audioList.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+			}
+		});
+
+
 		resetCurrentStateDrawerList();
-		mainList.setAdapter(adapter);
-		mainList.setOnItemClickListener(adapter);
-		mainList.setItemChecked(0, true);
 
 		getActivity().setTitle("<");
 		resetDrawer();
@@ -68,158 +101,146 @@ public class NextGenNavigationDrawerFragment extends Fragment {
 	public void onActivityResult(int requestCode, int resultCode, final Intent data) {
 
 	}
+
+	@Override
+	public void onClick(View v){
+		switch (v.getId()){
+			case R.id.drawer_audio_row:
+				final ScaleAnimation growAnim = new ScaleAnimation(1.0f, 1.15f, 1.0f, 1.15f);
+				final ScaleAnimation shrinkAnim = new ScaleAnimation(1.15f, 1.0f, 1.15f, 1.0f);
+
+				growAnim.setDuration(2000);
+				shrinkAnim.setDuration(2000);
+
+				if (audioList.getVisibility() == View.GONE || audioList.getHeight() == 0) {
+
+					audioList.setVisibility(View.VISIBLE);
+
+					new ExpandShrinkRunnable(audioList, true, 0, audioListHeight).run();
+				}else {
+					new ExpandShrinkRunnable(audioList, false, 0, audioListHeight).run();
+					AudSubLang lang = audioSelectionAdaptor.getSelectedLanguage();
+					if (lang != null)
+						audioSelectionText.setText(lang.displayName);
+				}
+				break;
+			case R.id.drawer_subtitle_row:
+				if (subtitleList.getVisibility() == View.GONE || subtitleList.getHeight() == 0) {
+					subtitleList.setVisibility(View.VISIBLE );
+					new ExpandShrinkRunnable(subtitleList, true, 0, subtitleListHeight).run();
+				}else {
+					new ExpandShrinkRunnable(subtitleList, false, 0, subtitleListHeight).run();
+					AudSubLang lang = subtitleSelectionAdaptor.getSelectedLanguage();
+					if (lang != null){
+						subtitleSelectionText.setText(lang.displayName);
+					}
+
+				}
+				break;
+		}
+	}
+
+
+
+	private class ExpandShrinkRunnable implements Runnable {
+
+		View targetView;
+		boolean isExpand;
+		int shrinkedHeight;
+		int expandedHeight;
+
+		ExpandShrinkRunnable(View v, boolean isExpand, int minHeight, int maxHeight){
+			targetView = v;
+			shrinkedHeight = minHeight;
+			expandedHeight = maxHeight;
+			this.isExpand = isExpand;
+		}
+
+		@Override
+		public void run() {
+
+			final View detail = targetView;
+			ValueAnimator va = isExpand ? ValueAnimator.ofInt(shrinkedHeight, expandedHeight) : ValueAnimator.ofInt(expandedHeight, shrinkedHeight);
+			va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+				public void onAnimationUpdate(ValueAnimator animation) {
+					Integer value = (Integer) animation.getAnimatedValue();
+					detail.getLayoutParams().height = value.intValue();
+					detail.requestLayout();
+				}
+			});
+			va.setDuration(1000);
+			va.start();
+		}
+	}
+
+
+	private class AudioSubtitleListAdaptor extends ArrayAdapter<AudSubLang> implements OnItemClickListener, View.OnClickListener{
+
+		int selectedIndex = -1;
+
+		public AudioSubtitleListAdaptor(Context context, int resource,List<AudSubLang> audSubList, int initialSelection) {
+			super(context, resource, audSubList);
+			selectedIndex = initialSelection;
+		}
+
+		public View getView(int position, View convertView, ViewGroup parent) {
+
+			if (convertView == null  ) {
+
+				convertView = LayoutInflater.from(getActivity()).inflate(R.layout.drawer_aud_sub_row, parent, false);
+
+			} else {
+
+			}
+
+			AudSubLang thisLang = (AudSubLang)getItem(position);
+
+			RadioButton audSubButton = (RadioButton) convertView.findViewById(R.id.aud_sub_radio_button);
+			audSubButton.setText(thisLang.displayName);
+			audSubButton.setTag(new Integer(position));
+			audSubButton.setOnClickListener(this);
+			if (position == selectedIndex)
+				audSubButton.setChecked(true);
+			else
+				audSubButton.setChecked(false);
+
+			return convertView;
+		}
+
+		@Override
+		public void onClick(View v){
+			int position = (Integer)v.getTag();
+			if (selectedIndex != position) {
+				selectedIndex = position;
+				notifyDataSetChanged();
+			}
+		}
+
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+			if (selectedIndex != position) {
+				selectedIndex = position;
+				notifyDataSetChanged();
+			}
+		}
+
+		public AudSubLang getSelectedLanguage(){
+			if(selectedIndex != -1){
+				return getItem(selectedIndex);
+			}else
+				return null;
+		}
+	}
 	
 
 	public void resetDrawer(){
 		resetCurrentStateDrawerList();
-		adapter.notifyDataSetChanged();
-		//basePanel.setVisibility(FlixsterApplication.isLoggedin() ? View.GONE : View.VISIBLE);
+
 	}
 	
 	private void resetCurrentStateDrawerList(){
-
 	}
 
-	private static class NextGenDrawerItem{
-		enum DrawerItemMode{
-			DRAWER_ITEM_LAUNCH_ACTIVITY, DRAWER_ITEM_LAUNCH_FRAGMENT, DRAER_ITEM_ON_OFF_SWITH;
-		}
-
-		public final String itemText;
-		public final DrawerItemMode mode;
-		public final NextGenDrawerInteractionInterface actionInterface;
-
-		public NextGenDrawerItem(String itemText, DrawerItemMode mode, NextGenDrawerInteractionInterface actionInterface){
-			this.itemText = itemText;
-			this.mode = mode;
-			this.actionInterface = actionInterface;
-		}
-
-	}
-
-	private static interface NextGenDrawerInteractionInterface {
-		public void handleAction(Object object);
-		//public Object getCurrentOnOff();
-	}
-
-
-	private static final List<NextGenDrawerItem> NextGenDrawerItemList = new ArrayList<NextGenDrawerItem>();
-
-	static{
-		NextGenDrawerItemList.add(new NextGenDrawerItem("Audio", NextGenDrawerItem.DrawerItemMode.DRAWER_ITEM_LAUNCH_ACTIVITY, new NextGenDrawerInteractionInterface(){
-			public void handleAction(Object object){
-
-			}
-		}));
-		NextGenDrawerItemList.add(new NextGenDrawerItem("Subtitle", NextGenDrawerItem.DrawerItemMode.DRAER_ITEM_ON_OFF_SWITH, new NextGenDrawerInteractionInterface(){
-			public void handleAction(Object object){
-				if (object instanceof  Boolean){
-					NextGenApplication.setSubtitleOn(((Boolean)object).booleanValue());
-				}
-			}
-		}));;
-		NextGenDrawerItemList.add(new NextGenDrawerItem("User Profile", NextGenDrawerItem.DrawerItemMode.DRAWER_ITEM_LAUNCH_ACTIVITY, new NextGenDrawerInteractionInterface(){
-			public void handleAction(Object object){
-
-			}
-		}));
-	}
-
-	private class DrawerListAdapter extends BaseAdapter implements StickyGridHeadersBaseAdapter, OnItemClickListener{
-
-		@Override
-		public int getCount() {
-			return NextGenDrawerItemList.size();
-		}
-
-		@Override
-		public long getItemId(int position) {
-			return position;
-		}
-
-
-		@Override
-		public View getView(final int index, View view, ViewGroup parent) {
-			View target = null;
-			final NextGenDrawerItem thisItem = NextGenDrawerItemList.get(index);
-			if (view != null)
-				target = view;
-			else
-				target = getActivity().getLayoutInflater().inflate(R.layout.navigation_drawer_row,  mainList, false);
-
-			TextView textView = (TextView)target.findViewById(R.id.drawer_row_text);
-
-			textView.setText(thisItem.itemText);
-
-			Switch onOffSwitch = (Switch) target.findViewById(R.id.drawer_row_switch);
-			ImageView rowIcon = (ImageView) target.findViewById(R.id.drawer_row_image);
-
-			switch(thisItem.mode){
-				case DRAWER_ITEM_LAUNCH_ACTIVITY:
-					onOffSwitch.setVisibility(View.GONE);
-					rowIcon.setVisibility(View.VISIBLE);
-					break;
-				case DRAER_ITEM_ON_OFF_SWITH:
-					onOffSwitch.setVisibility(View.VISIBLE);
-					rowIcon.setVisibility(View.GONE);
-					onOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-						@Override
-						public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-							thisItem.actionInterface.handleAction(new Boolean(isChecked));
-						}
-					});
-					break;
-				default:
-					break;
-			}
-			
-			//boolean isSelected = drawerListener.getCurrentSelectedDrawerKey() == itemKey;
-			//textView.setSelected(isSelected);
-			
-			
-			return target;
-		}
-
-		@Override
-		public void onItemClick(AdapterView<?> arg0, View arg1, int index, long arg3) {
-			NextGenDrawerItem thisItem = NextGenDrawerItemList.get(index);
-			switch(thisItem.mode){
-				case DRAWER_ITEM_LAUNCH_ACTIVITY:
-					break;
-				case DRAER_ITEM_ON_OFF_SWITH:
-					//Switch onOffSwitch = (Switch) arg1.findViewById(R.id.drawer_row_switch);
-					//thisItem.actionInterface.handleAction(onOffSwitch.on);
-					break;
-				default:
-					break;
-			}
-		}
-
-
-		@Override
-		public Object getItem(int position) {
-			// TODO Auto-generated method stub
-			return NextGenDrawerItemList.get(position);
-		}
-
-		@Override
-		public int getCountForHeader(int header) {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		@Override
-		public int getNumHeaders() {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		@Override
-		public View getHeaderView(int position, View convertView, ViewGroup parent) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-	}
 
 
 	public void onDestroyView(){

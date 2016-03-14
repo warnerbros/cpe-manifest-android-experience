@@ -80,6 +80,18 @@ public class DemoData {
     final static public List<ECContentData> DEMODATA_MAN_OF_STEEL_EC_LIST = new ArrayList<ECContentData>();
     final static public String DEMODATA_MAN_OF_STEEL_TITLE_TEXT = "Man of Steel";
 
+    public static class AudSubLang{
+        public final String displayName;
+        public final String locale;
+        public AudSubLang(String name, String locale){
+            displayName = name;
+            this.locale = locale;
+        }
+    }
+
+    static public List<AudSubLang> audioList = new ArrayList<AudSubLang>();
+    static public List<AudSubLang> subtitleList = new ArrayList<AudSubLang>();
+
     static private DemoJSONData dataFromJSON;
 
     public static DemoJSONData getDemoJSONData(){
@@ -449,6 +461,18 @@ public class DemoData {
         DEMO_MAN_OF_STEEL_EC_GROUPS.get(4).ecContents.add(gallery6);
         DEMO_MAN_OF_STEEL_EC_GROUPS.get(4).ecContents.add(gallery7);
         DEMO_MAN_OF_STEEL_EC_GROUPS.get(4).ecContents.add(gallery8);
+
+
+        audioList.add(new AudSubLang("English (US)", "en_US"));
+        audioList.add(new AudSubLang("English (US)(AC3)", "en_US"));
+        audioList.add(new AudSubLang("Spanish (Latin America)", "es_ES"));
+        audioList.add(new AudSubLang("French (Canada)", "fr_CA"));
+
+        subtitleList.add(new AudSubLang("off", "NONE"));
+        subtitleList.add(new AudSubLang("English (US)(AC3)", "en_US"));
+        subtitleList.add(new AudSubLang("Spanish (Latin America)", "es_ES"));
+        subtitleList.add(new AudSubLang("French (Canada)", "fr_CA"));
+        subtitleList.add(new AudSubLang("Portuguese (Brazil)", "po_Br"));
     }
 
 }

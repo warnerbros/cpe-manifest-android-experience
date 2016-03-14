@@ -33,4 +33,8 @@
 	<string name="actor">ACTOR</string>
 	<string name="actors">ACTORS</string>
 
+	<string name="audio_settings">Audio Settings</string>
+	<string name="subtitles">Subtitles</string>
+	<string name="menu">Menu</string>
+
 </resources>

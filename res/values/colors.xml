@@ -115,4 +115,5 @@
     <color name="cast_actionbar_bg">#35A648</color>
 
     <color name="list_title_text_color">#FFFFFF</color>
+    <color name="drawer_yellow">#fecd48</color>
 </resources>
