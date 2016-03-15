@@ -34,6 +34,8 @@ public class ECMediaController extends MediaController {
         container = videoViewContainer;
     }
 
+    boolean isFullScreen = false;
+
     @Override
     public void setAnchorView(View view) {
         super.setAnchorView(view);
@@ -41,21 +43,12 @@ public class ECMediaController extends MediaController {
         LinearLayout wrapperLayout2 = new LinearLayout(mContext);
 
         inflater2.inflate(R.layout.media_player_maxmin_button, wrapperLayout2, true);
-        maxminButton = (ImageButton)wrapperLayout2.findViewById(R.id.fmc_cc);
+        maxminButton = (ImageButton)wrapperLayout2.findViewById(R.id.mc_expand_shrink);
         if (mContext != null){
-            /*DisplayMetrics displaymetrics = new DisplayMetrics();
-            ((Activity)mContext).getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-            int height = displaymetrics.heightPixels;
-            int width = displaymetrics.widthPixels;
 
-            android.widget.FrameLayout.LayoutParams params = (android.widget.FrameLayout.LayoutParams) container.getLayoutParams();
-            params.width = width;
-            params.height=height-80;// -80 for android controls
-            params.setMargins(0, 0, 0, 50);*/
 
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
             params.setMargins(view.getWidth(), 0, 5, 20);
-            //params.gravity =  Gravity.RIGHT;
             LayoutParams wrapperParams2 = new FrameLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
                     LayoutParams.WRAP_CONTENT, Gravity.RIGHT);
 
@@ -73,19 +66,11 @@ public class ECMediaController extends MediaController {
                         ((ContentViewFullscreenRequestInterface)mContext).onRequestToggleFullscreen();
                     }
 
-                    /*mContext.sendBroadcast(i);
-                    DisplayMetrics displaymetrics = new DisplayMetrics();
-                    ((Activity)mContext).getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-                    int height = displaymetrics.heightPixels;
-                    int width = displaymetrics.widthPixels;
+                    isFullScreen = !isFullScreen;
 
-                    ViewGroup.LayoutParams params = container.getLayoutParams();
-                    params.width = width;
-                    params.height=height-80;// -80 for android controls
-                    if (params instanceof LinearLayout.LayoutParams) {
-                        ((LinearLayout.LayoutParams)params).setMargins(0, 0, 0, 50);
-                    }
-                    container.setLayoutParams(params);*/
+                    maxminButton.setImageDrawable(getResources().getDrawable(isFullScreen ? R.drawable.controller_shrink : R.drawable.controller_expand));
+
+
                 }
             });
         }

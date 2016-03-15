@@ -35,11 +35,13 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent" >
             </android.support.v4.view.ViewPager>
-            <Button
+            <ImageButton
                 android:id="@+id/gallery_fullscreen_toggle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|right"
+                android:src="@drawable/expand_shrink"
+                android:background="@android:color/transparent"
                 android:text="TEST"/>
         </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
 

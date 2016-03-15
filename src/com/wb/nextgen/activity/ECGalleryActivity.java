@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
@@ -31,14 +32,14 @@ public class ECGalleryActivity extends AbstractECView {
     private ViewPager galleryViewPager;
     private DemoData.ECContentData currentGallery;
     private GalleryPagerAdapter adapter;
-    private Button fullscreenToggleBtn;
+    private ImageButton fullscreenToggleBtn;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         currentGallery = ecGroupData.ecContents.get(0);
         galleryViewPager = (ViewPager) findViewById(R.id.next_gen_gallery_view_pager);
         adapter = new GalleryPagerAdapter(this);
-        fullscreenToggleBtn = (Button)findViewById(R.id.gallery_fullscreen_toggle);
+        fullscreenToggleBtn = (ImageButton)findViewById(R.id.gallery_fullscreen_toggle);
         if (fullscreenToggleBtn != null){
             fullscreenToggleBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
