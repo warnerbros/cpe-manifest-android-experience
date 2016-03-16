@@ -78,6 +78,7 @@ public class ECGalleryActivity extends AbstractECView {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
         }*/
         super.onRequestToggleFullscreen();
+        fullscreenToggleBtn.setImageDrawable(getResources().getDrawable(isContentFullScreen ? R.drawable.controller_shrink : R.drawable.controller_expand));
         adapter.notifyDataSetChanged();
 
     }

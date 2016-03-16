@@ -7,6 +7,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Build;
+import android.util.DisplayMetrics;
+import android.view.Display;
+import android.view.WindowManager;
 
 import com.wb.nextgen.data.DemoData;
 import com.wb.nextgen.data.DemoJSONData;
@@ -175,9 +178,24 @@ public class NextGenApplication extends Application {
 
     public static int getScreenWidth(Context ctx){
         if (deviceScreenWidth == -1 && ctx != null){
-            deviceScreenWidth = (int)(ctx.getResources().getDisplayMetrics().widthPixels * ctx.getResources().getDisplayMetrics().density);
+            WindowManager wm = (WindowManager) ctx.getSystemService(Context.WINDOW_SERVICE);
+            Display display = wm.getDefaultDisplay();
+            DisplayMetrics metrics = new DisplayMetrics();
+            display.getRealMetrics(metrics);
+            deviceScreenWidth = metrics.widthPixels;
         }
         return deviceScreenWidth;
+    }
+
+    public static int getScreenHeight(Context ctx){
+        if (deviceScreenHeight == -1 && ctx != null){
+            WindowManager wm = (WindowManager) ctx.getSystemService(Context.WINDOW_SERVICE);
+            Display display = wm.getDefaultDisplay();
+            DisplayMetrics metrics = new DisplayMetrics();
+            display.getRealMetrics(metrics);
+            deviceScreenHeight = metrics.heightPixels;
+        }
+        return deviceScreenHeight;
     }
 
 

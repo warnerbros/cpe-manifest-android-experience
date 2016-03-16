@@ -19,6 +19,7 @@ import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgen.interfaces.NextGenPlaybackStatusListener;
 import com.wb.nextgen.util.TabletUtils;
 import com.wb.nextgen.util.utils.NextGenFragmentTransactionEngine;
+import com.wb.nextgen.widget.NextGenMediaController;
 
 import net.flixster.android.drm.IVideoViewActionListener;
 import net.flixster.android.drm.ObservableVideoView;
@@ -49,7 +50,7 @@ public class NextGenPlayer extends CaptionedPlayer implements NextGenFragmentTra
         nextGenFragmentTransactionEngine = new NextGenFragmentTransactionEngine(this);
         setContentView(R.layout.next_gen_videoview);
         videoView = (ObservableVideoView) findViewById(R.id.surface_view);
-        videoView.setMediaController(new MediaController(this));
+        videoView.setMediaController(new NextGenMediaController(this));
         videoView.setOnErrorListener(getOnErrorListener());
         videoView.setOnPreparedListener(getOnPreparedListener());
         videoView.setOnCompletionListener(getOnCompletionListener());

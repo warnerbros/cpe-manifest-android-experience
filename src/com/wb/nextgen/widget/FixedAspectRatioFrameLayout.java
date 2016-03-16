@@ -3,9 +3,14 @@ package com.wb.nextgen.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
+import android.view.Display;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 
+import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 
 /**
@@ -16,6 +21,7 @@ public class FixedAspectRatioFrameLayout extends FrameLayout
     private int mAspectRatioWidth;
     private int mAspectRatioHeight;
     private Priority priority;
+    private boolean bKeepRatioWhenFullScreen = false;
 
     enum Priority{
         WIDTH_PRIORITY(1), HEIGHT_PRIORITY(2);
@@ -56,8 +62,8 @@ public class FixedAspectRatioFrameLayout extends FrameLayout
     {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.FixedAspectRatioFrameLayout);
 
-        mAspectRatioWidth = a.getInt(R.styleable.FixedAspectRatioFrameLayout_aspectRatioWidth, 4);
-        mAspectRatioHeight = a.getInt(R.styleable.FixedAspectRatioFrameLayout_aspectRatioHeight, 3);
+        mAspectRatioWidth = a.getInt(R.styleable.FixedAspectRatioFrameLayout_aspectRatioWidth, NextGenApplication.getScreenWidth(context));
+        mAspectRatioHeight = a.getInt(R.styleable.FixedAspectRatioFrameLayout_aspectRatioHeight, NextGenApplication.getScreenHeight(context));
         priority = Priority.valueFromInt(a.getInt(R.styleable.FixedAspectRatioFrameLayout_priority, Priority.WIDTH_PRIORITY.intValue));
         a.recycle();
     }
@@ -71,19 +77,46 @@ public class FixedAspectRatioFrameLayout extends FrameLayout
 
         int finalWidth, finalHeight;
 
-        ViewGroup.LayoutParams layoutParams = getLayoutParams();
+        if (!bKeepRatioWhenFullScreen &&
+                priority == Priority.WIDTH_PRIORITY && originalWidth == NextGenApplication.getScreenWidth(NextGenApplication.getContext()))  {       // this is full screen when width priority
 
-        if (priority == Priority.WIDTH_PRIORITY) {
-            finalHeight = originalWidth * mAspectRatioHeight / mAspectRatioWidth;
-            finalWidth = originalWidth;
+            /*WindowManager wm = (WindowManager) NextGenApplication.getContext().getSystemService(Context.WINDOW_SERVICE);
+            Display display = wm.getDefaultDisplay();
+            DisplayMetrics metrics = new DisplayMetrics();
+            display.getMetrics(metrics);*/
+            int visible = getSystemUiVisibility();
+            if ( (visible & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) != View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) { // this is full screen
+                WindowManager wm = (WindowManager) NextGenApplication.getContext().getSystemService(Context.WINDOW_SERVICE);
+                Display display = wm.getDefaultDisplay();
+                DisplayMetrics metrics = new DisplayMetrics();
+                display.getRealMetrics(metrics);
+                //if (originalHeight == metrics.heightPixels){
+                    super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(originalHeight, MeasureSpec.EXACTLY));
 
-        }else{
-            finalWidth = originalHeight * mAspectRatioWidth / mAspectRatioHeight ;
-            finalHeight = originalHeight;
-        }
+                //}else
+                  //  super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-        super.onMeasure(
-                MeasureSpec.makeMeasureSpec(finalWidth, MeasureSpec.EXACTLY),
-                MeasureSpec.makeMeasureSpec(finalHeight, MeasureSpec.EXACTLY));
+            }else{
+
+                super.onMeasure(
+                        widthMeasureSpec,
+                        MeasureSpec.makeMeasureSpec(originalHeight, MeasureSpec.EXACTLY));
+            }
+        }else {
+
+            if (priority == Priority.WIDTH_PRIORITY) {
+                finalHeight = originalWidth * mAspectRatioHeight / mAspectRatioWidth;
+                finalWidth = originalWidth;
+
+            } else {
+                finalWidth = originalHeight * mAspectRatioWidth / mAspectRatioHeight;
+                finalHeight = originalHeight;
+            }
+
+            super.onMeasure(
+                    MeasureSpec.makeMeasureSpec(finalWidth, MeasureSpec.EXACTLY),
+                    MeasureSpec.makeMeasureSpec(finalHeight, MeasureSpec.EXACTLY));
+       }
     }
+
 }
