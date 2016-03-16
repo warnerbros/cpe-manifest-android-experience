@@ -163,8 +163,11 @@ public class ECGalleryActivity extends AbstractECView {
         if (ec != null){
             currentGallery = ec;
             selectedECNameTextView.setText(ec.title);
-            if (adapter != null)
+            if (adapter != null) {
+
                 adapter.notifyDataSetChanged();
+                galleryViewPager.setCurrentItem(0);
+            }
         }
     }
 }
