@@ -176,4 +176,11 @@ public class StringHelper {
         }catch(Exception ex){}
         return retString;
     }
+
+    public static String capitalize(String string){
+        if (isEmpty(string))
+            return string;
+        String startC = string.substring(0,1);
+        return string.replaceFirst(startC, startC.toUpperCase());
+    }
 }

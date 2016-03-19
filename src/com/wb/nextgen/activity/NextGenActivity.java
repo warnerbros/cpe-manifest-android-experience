@@ -18,7 +18,7 @@ import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 
 import com.wb.nextgen.fragment.NextGenNavigationDrawerFragment;
-//import com.wb.nextgen.manifest.schema.v1_4.MediaManifestType;
+//import com.wb.nextgen.parser.manifest.schema.v1_4.MediaManifestType;
 import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.TabletUtils;
 

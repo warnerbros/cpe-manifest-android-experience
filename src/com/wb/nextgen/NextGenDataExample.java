@@ -1,6 +1,6 @@
 package com.wb.nextgen;
 
-//import com.wb.nextgen.manifest.schema.v1_4.MediaManifestType;
+//import com.wb.nextgen.parser.manifest.schema.v1_4.MediaManifestType;
 
 import java.io.File;
 
