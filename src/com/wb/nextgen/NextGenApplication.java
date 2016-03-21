@@ -107,6 +107,10 @@ public class NextGenApplication extends Application {
         }catch (Exception ex){}
     }
 
+    public static MediaManifestType getMovieManifest(){
+        return manifest;
+    }
+
     /** @return The application context */
     public static Context getContext() {
         return sApplicationContext;

@@ -129,8 +129,9 @@ public class ManifestXMLParser {
             retObj = classObj.getConstructor().newInstance();
 
             Class currentClass = classObj;
+            boolean bIsValue = false;
             while(!currentClass.equals(Object.class)){                  //handle XmlElement
-                Annotation classAnnotations[] = currentClass.getAnnotations();
+                /*Annotation classAnnotations[] = currentClass.getAnnotations();
                 if (classAnnotations != null && classAnnotations.length > 0){
                     for(Annotation thisAnnotation : classAnnotations){
                         if (thisAnnotation instanceof XmlType && ((XmlType)thisAnnotation).propOrder() != null && ((XmlType)thisAnnotation).propOrder().length > 0){
@@ -140,18 +141,46 @@ public class ManifestXMLParser {
                                     for (Annotation annotation : field.getAnnotations()) {
                                         if (annotation instanceof XmlElement) {
                                             classXmlNameToFieldMap.put(((XmlElement) annotation).name(), new FieldClassObject(field, currentClass));
-                                        } else if (annotation instanceof XmlValue) {
-
-                                        } else if (annotation instanceof XmlAttribute){
-
                                         }
                                     }
                                 }
                             }
                         }
                     }
+                }*/
+                Field declaredFields[] = currentClass.getDeclaredFields();
+                for (Field field: declaredFields) {
+
+                    Annotation annotations[] = field.getAnnotations();
+                    for (Annotation annotation : annotations) {
+                        if (annotation instanceof XmlElement) {
+                            classXmlNameToFieldMap.put(((XmlElement) annotation).name(), new FieldClassObject(field, currentClass));
+                        } else if (annotation instanceof XmlValue) {
+
+                        } else if (annotation instanceof XmlAttribute) {
+                            String attributValue = parser.getAttributeValue("", ((XmlAttribute) annotation).name());
+                            if (!StringHelper.isEmpty(attributValue)) {
+                                Object obj = toObject(field.getType(), attributValue);
+                                Method setter = currentClass.getDeclaredMethod("set" + StringHelper.capitalize(((XmlAttribute) annotation).name()), field.getType());
+                                setter.invoke(retObj, obj);
+                            }
+                        }
+                    }
                 }
                 currentClass = currentClass.getSuperclass();
+            }
+
+            if (bIsValue){
+                if (parser.getEventType() == XmlPullParser.TEXT) {
+                    try {
+                        Method setter = classObj.getDeclaredMethod("setValue", String.class);
+                        setter.invoke(retObj, readText(parser));
+
+                    } catch (Exception ex) {
+
+                    }
+
+                }
             }
 
 
@@ -161,7 +190,7 @@ public class ManifestXMLParser {
             //Parse the element
             parser.require(XmlPullParser.START_TAG, ns, tagName);
             while (parser.next() != XmlPullParser.END_TAG) {
-                if (parser.getEventType() == XmlPullParser.TEXT){
+                /*if (parser.getEventType() == XmlPullParser.TEXT){
                     try{
                         Method setter = classObj.getDeclaredMethod("setValue", String.class);
                         setter.invoke(retObj, readText(parser));
@@ -170,7 +199,7 @@ public class ManifestXMLParser {
 
                     }
                     continue;
-                }else if (parser.getEventType() != XmlPullParser.START_TAG) {
+                }else*/ if (parser.getEventType() != XmlPullParser.START_TAG) {
                     continue;
                 }
                 String xmlElementName = parser.getName();
@@ -201,7 +230,7 @@ public class ManifestXMLParser {
                                     listItmeObj = parseElement(parser, (Class) elementType, parser.getName());
 
                                 } else {
-                                    listItmeObj = toObject(thisFieldClass.field.getType(), parser);
+                                    listItmeObj = toObject(thisFieldClass.field.getType(), readText(parser));
                                 }
 
 
@@ -220,8 +249,8 @@ public class ManifestXMLParser {
                         }
                         setter.invoke(retObj, obj);
                     }*/ else {
-                            //String stringValue = readText(parser, parser.getName());\
-                            Object obj = toObject(thisFieldClass.field.getType(), parser);
+                            //String stringValue = readText(parser, parser.getName());
+                            Object obj = toObject(thisFieldClass.field.getType(), readText(parser));
                             Method setter = thisFieldClass.fieldClass.getDeclaredMethod("set" + xmlElementName, thisFieldClass.field.getType());
                             setter.invoke(retObj, obj);
                         }
@@ -244,9 +273,8 @@ public class ManifestXMLParser {
         return retObj;
     }
 
-    private Object toObject(Class targetClass, XmlPullParser parser) throws IOException, XmlPullParserException{
+    private Object toObject(Class targetClass, String stringValue) throws IOException, XmlPullParserException{
 
-        String stringValue = readText(parser);
         if (targetClass.equals(String.class)) {
             return stringValue;
         }else if (targetClass.equals(int.class)){
