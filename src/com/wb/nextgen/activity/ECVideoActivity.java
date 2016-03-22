@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.DemoData;
+import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.widget.ECMediaController;
 
 import net.flixster.android.drm.ObservableVideoView;
@@ -63,7 +64,7 @@ public class ECVideoActivity extends AbstractECView {
     }
 
     @Override
-    public void onLeftListItemSelected(DemoData.ECContentData ec){
+    public void onLeftListItemSelected(MovieMetaData.ECContentData ec){
         if (ec != null) {
             selectedECNameTextView.setText(ec.title);
             videoView.setVideoURI(Uri.parse(ec.ecVideoUrl));

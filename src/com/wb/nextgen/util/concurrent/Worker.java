@@ -6,7 +6,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import com.wb.nextgen.util.utils.F;
-import com.wb.nextgen.util.utils.FlixsterLogger;
+import com.wb.nextgen.util.utils.NextGenLogger;
 
 import android.os.Build;
 
@@ -42,7 +42,7 @@ public class Worker {
 						r.call();
 
 				} catch (Exception e) {
-					FlixsterLogger.e(F.TAG, "Worker.execute: Task throw exception "+ e.getMessage(),e);
+					NextGenLogger.e(F.TAG, "Worker.execute: Task throw exception " + e.getMessage(), e);
 					l.onException(e);
 				}
 				

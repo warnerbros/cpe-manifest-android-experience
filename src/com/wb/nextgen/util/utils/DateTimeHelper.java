@@ -58,7 +58,7 @@ public class DateTimeHelper extends LocalizedHelper {
 		try {
 			datetime = API_HOUR_PARSER.parse(time);
 		} catch (ParseException e) {
-			FlixsterLogger.w(F.TAG, "DateTimeHelper.shortTimeFormat", e);
+			NextGenLogger.w(F.TAG, "DateTimeHelper.shortTimeFormat", e);
 		}
 		return datetime != null ? INSTANCE.shortTimeFormatter.format(datetime) : time;
 	}

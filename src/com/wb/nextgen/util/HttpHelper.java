@@ -23,7 +23,7 @@ import net.flixster.android.net.ssl.SecureFlxHttpClient;
 
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.util.utils.F;
-import com.wb.nextgen.util.utils.FlixsterLogger;
+import com.wb.nextgen.util.utils.NextGenLogger;
 import com.wb.nextgen.util.utils.StringHelper;
 
 import org.apache.http.HttpEntity;
@@ -61,7 +61,7 @@ public class HttpHelper {
 	}
 	
 	public static String fetchFileLastModifiedDateFromUrl(URL url) throws IOException {
-		FlixsterLogger.d(F.TAG_API, "HttpHelper.fetchFileLastModifiedDateFromUrl " + url);
+		NextGenLogger.d(F.TAG_API, "HttpHelper.fetchFileLastModifiedDateFromUrl " + url);
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		connection.setConnectTimeout(TIMEOUT_HEADER);
 		connection.setReadTimeout(TIMEOUT_HEADER);
@@ -87,7 +87,7 @@ public class HttpHelper {
 	/* Protected for HttpImageHelper */
 	protected static byte[] fetchUrlBytes(URL url, boolean checkCache, boolean shouldCache, boolean useFlixsterUa,
 			boolean shouldAuth) throws IOException {
-		FlixsterLogger.d(F.TAG_API, "HttpHelper.fetchUrlBytes " + (checkCache ? "checkCache " : "")
+		NextGenLogger.d(F.TAG_API, "HttpHelper.fetchUrlBytes " + (checkCache ? "checkCache " : "")
 				+ (shouldCache ? "shouldCache " : "") + url);
 		byte[] result;
 		if (checkCache) {
@@ -203,7 +203,7 @@ public class HttpHelper {
 	}
 	
 	public static String postToUrl(String url, List<NameValuePair> parameters) throws IOException {
-		FlixsterLogger.d(F.TAG_API, "HttpHelper.postToUrl url:" + url + " postValues:" + parameters);
+		NextGenLogger.d(F.TAG_API, "HttpHelper.postToUrl url:" + url + " postValues:" + parameters);
 		InputStream content = null;
 		try {
 			HttpClient httpClient = isSecureFlxUrl(url) ? new SecureFlxHttpClient()
@@ -224,7 +224,7 @@ public class HttpHelper {
 					responseBuilder.append(line).append("\n");
 				}
 			}
-			FlixsterLogger.d(F.TAG_API, "HttpHelper.postToUrl response code:" + response.getStatusLine().getStatusCode());
+			NextGenLogger.d(F.TAG_API, "HttpHelper.postToUrl response code:" + response.getStatusLine().getStatusCode());
 			if (response.getStatusLine().getStatusCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
 				//FlixsterApplication.logout(true);
 //				throw new HttpUnauthorizedException(responseBuilder.toString().trim());
@@ -254,7 +254,7 @@ public class HttpHelper {
 	
 	public static String postJSONToUrl(String url, String requestString, boolean shouldAuth, int timeoutInMillis) throws IOException {
 
-		FlixsterLogger.d(F.TAG_API, "HttpHelper.postToUrl url:" + url + " postValues:" + requestString);
+		NextGenLogger.d(F.TAG_API, "HttpHelper.postToUrl url:" + url + " postValues:" + requestString);
 		InputStream content = null;
 		try {
 			HttpClient httpClient = isSecureFlxUrl(url) ? new SecureFlxHttpClient()
@@ -294,8 +294,8 @@ public class HttpHelper {
 					responseBuilder.append(line).append("\n");
 				}
 			}
-			FlixsterLogger.d(F.TAG_API, "HttpHelper.postToUrl response code:" + response.getStatusLine().getStatusCode());
-			FlixsterLogger.d(F.TAG_API, "HttpHelper.postToUrl response body:" + responseBuilder.toString().trim());
+			NextGenLogger.d(F.TAG_API, "HttpHelper.postToUrl response code:" + response.getStatusLine().getStatusCode());
+			NextGenLogger.d(F.TAG_API, "HttpHelper.postToUrl response body:" + responseBuilder.toString().trim());
 			
 			if (response.getStatusLine().getStatusCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
 				//NextGenApplication.logout(true);
@@ -316,7 +316,7 @@ public class HttpHelper {
 
 	
 	public static String getFromUrl(String url, JSONObject json, boolean shouldAuth) throws IOException {
-		FlixsterLogger.d(F.TAG_API, "HttpHelper.getFromUrl url:" + url);
+		NextGenLogger.d(F.TAG_API, "HttpHelper.getFromUrl url:" + url);
 		InputStream content = null;
 		try {
 			HttpClient httpClient = isSecureFlxUrl(url) ? new SecureFlxHttpClient()
@@ -347,8 +347,8 @@ public class HttpHelper {
 					responseBuilder.append(line).append("\n");
 				}
 			}
-			FlixsterLogger.d(F.TAG_API, "HttpHelper.getFromUrl response code:" + response.getStatusLine().getStatusCode());
-			FlixsterLogger.d(F.TAG_API, "HttpHelper.getFromUrl response body:" + responseBuilder.toString().trim());
+			NextGenLogger.d(F.TAG_API, "HttpHelper.getFromUrl response code:" + response.getStatusLine().getStatusCode());
+			NextGenLogger.d(F.TAG_API, "HttpHelper.getFromUrl response body:" + responseBuilder.toString().trim());
 			
 			if (response.getStatusLine().getStatusCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
 				//NextGenApplication.logout(true);
@@ -371,7 +371,7 @@ public class HttpHelper {
 	}
 	
 	public static String deleteFromUrl(String url, boolean shouldAuth) throws IOException {
-		FlixsterLogger.d(F.TAG_API, "HttpHelper.deleteFromUrl url:" + url);
+		NextGenLogger.d(F.TAG_API, "HttpHelper.deleteFromUrl url:" + url);
 		InputStream content = null;
 		try {
 			HttpClient httpClient = isSecureFlxUrl(url) ? new SecureFlxHttpClient()
@@ -396,7 +396,7 @@ public class HttpHelper {
 					responseBuilder.append(line).append("\n");
 				}
 			}
-			FlixsterLogger.d(F.TAG_API, "HttpHelper.deleteFromUrl response code:" + response.getStatusLine().getStatusCode());
+			NextGenLogger.d(F.TAG_API, "HttpHelper.deleteFromUrl response code:" + response.getStatusLine().getStatusCode());
 			
 			if (response.getStatusLine().getStatusCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
 				//NextGenApplication.logout(true);
@@ -416,7 +416,7 @@ public class HttpHelper {
 	}
 	
 	public static String putJSONToUrl(String url, JSONObject json, boolean shouldAuth) throws IOException {
-		FlixsterLogger.d(F.TAG_API, "HttpHelper.putToUrl url:" + url + " postValues:" + json);
+		NextGenLogger.d(F.TAG_API, "HttpHelper.putToUrl url:" + url + " postValues:" + json);
 		InputStream content = null;
 		try {
 			HttpClient httpClient = isSecureFlxUrl(url) ? new SecureFlxHttpClient()
@@ -447,8 +447,8 @@ public class HttpHelper {
 					responseBuilder.append(line).append("\n");
 				}
 			}
-			FlixsterLogger.d(F.TAG_API, "HttpHelper.putToUrl response code:" + response.getStatusLine().getStatusCode());
-			FlixsterLogger.d(F.TAG_API, "HttpHelper.putToUrl response body:" + responseBuilder.toString().trim());
+			NextGenLogger.d(F.TAG_API, "HttpHelper.putToUrl response code:" + response.getStatusLine().getStatusCode());
+			NextGenLogger.d(F.TAG_API, "HttpHelper.putToUrl response body:" + responseBuilder.toString().trim());
 			
 			if (response.getStatusLine().getStatusCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
 				//NextGenApplication.logout(true);

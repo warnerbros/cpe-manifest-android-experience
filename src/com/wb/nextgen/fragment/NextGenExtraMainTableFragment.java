@@ -11,10 +11,9 @@ import com.wb.nextgen.activity.ECGalleryActivity;
 import com.wb.nextgen.activity.ECVideoActivity;
 import com.wb.nextgen.R;
 
-import com.wb.nextgen.data.DemoData;
-import com.wb.nextgen.data.DemoData.ECGroupData;
+import com.wb.nextgen.data.MovieMetaData;
+import com.wb.nextgen.data.MovieMetaData.ECGroupData;
 import com.wb.nextgen.util.PicassoTrustAll;
-import com.wb.nextgen.util.TabletUtils;
 import com.wb.nextgen.util.utils.F;
 
 import java.util.List;
@@ -26,12 +25,12 @@ public class NextGenExtraMainTableFragment extends NextGenGridViewFragment {
 
 
     public final static int GRID_SPACING_DP = 10;
-    private static List<ECGroupData> ecGroups = DemoData.DEMO_MAN_OF_STEEL_EC_GROUPS;
+    private static List<ECGroupData> ecGroups = NextGenApplication.getMovieMetaData().getExtraECGroups();
 
     protected void onListItmeClick(View v, int position, long id){
         ECGroupData selectedGroup = ecGroups.get(position);
         Intent intent = new Intent(getActivity(), ECVideoActivity.class);
-        if (selectedGroup.type == DemoData.ECGroupType.GALLERY){
+        if (selectedGroup.getECGroupType() == MovieMetaData.ECGroupType.GALLERY){
             intent = new Intent(getActivity(), ECGalleryActivity.class);
         }
 

@@ -70,7 +70,7 @@ public class F {
 	public static final String TAB_LANDING = "landing";
 	public static final String TAB_SHOWTIME_TICKET = "showtime_ticket";
 
-	/**************************************** FlixsterLogger *************************************/
+	/**************************************** NextGenLogger *************************************/
 
 	public static final String WEBDEV_SUPPORT_EMAIL = "WebDev@warnerbros.com";
 	public static final String ENSEMBLE_SUPPORT_EMAIL = "wb-fv-qa@ensemble.com";

@@ -156,7 +156,7 @@ public class NextGenPlayer extends CaptionedPlayer implements NextGenFragmentTra
         public void onCompletion(MediaPlayer mp) {
             updateImeFragment(NextGenPlaybackStatusListener.NextGenPlaybackStatus.STOP, -1L);
             /*trackPlaybackEvent("playback_complete", 0);
-            FlixsterLogger.d(F.TAG_DRM, "WidevinePlayer.onCompletion: rightId=" + rightId + ", resetting seek time");
+            NextGenLogger.d(F.TAG_DRM, "WidevinePlayer.onCompletion: rightId=" + rightId + ", resetting seek time");
 
             mPlaybackCompleted = true;
             savePlayPosition(0);*/

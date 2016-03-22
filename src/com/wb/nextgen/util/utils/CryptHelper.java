@@ -35,15 +35,15 @@ public class CryptHelper {
             // Loggerflx.i(F.TAG, hexEncoded);
             return hexEncoded;
         } catch (NoSuchAlgorithmException nsae) {
-            FlixsterLogger.e(F.TAG, "AES algorithm not available", nsae);
+            NextGenLogger.e(F.TAG, "AES algorithm not available", nsae);
         } catch (NoSuchPaddingException nspe) {
-            FlixsterLogger.e(F.TAG, "AES padding not available", nspe);
+            NextGenLogger.e(F.TAG, "AES padding not available", nspe);
         } catch (InvalidKeyException ike) {
-            FlixsterLogger.e(F.TAG, "Invalid key '" + key + "'", ike);
+            NextGenLogger.e(F.TAG, "Invalid key '" + key + "'", ike);
         } catch (IllegalBlockSizeException ibse) {
-            FlixsterLogger.e(F.TAG, "Illegal block size", ibse);
+            NextGenLogger.e(F.TAG, "Illegal block size", ibse);
         } catch (BadPaddingException bpe) {
-            FlixsterLogger.e(F.TAG, "Bad padding", bpe);
+            NextGenLogger.e(F.TAG, "Bad padding", bpe);
         }
         return null;
     }
@@ -63,15 +63,15 @@ public class CryptHelper {
             byte[] decrypted = cipher.doFinal(unencoded);
             return new String(decrypted);
         } catch (NoSuchAlgorithmException nsae) {
-            FlixsterLogger.e(F.TAG, "AES algorithm not available", nsae);
+            NextGenLogger.e(F.TAG, "AES algorithm not available", nsae);
         } catch (NoSuchPaddingException nspe) {
-            FlixsterLogger.e(F.TAG, "AES padding not available", nspe);
+            NextGenLogger.e(F.TAG, "AES padding not available", nspe);
         } catch (InvalidKeyException ike) {
-            FlixsterLogger.e(F.TAG, "Invalid key '" + key + "'", ike);
+            NextGenLogger.e(F.TAG, "Invalid key '" + key + "'", ike);
         } catch (IllegalBlockSizeException ibse) {
-            FlixsterLogger.e(F.TAG, "Illegal block size", ibse);
+            NextGenLogger.e(F.TAG, "Illegal block size", ibse);
         } catch (BadPaddingException bpe) {
-            FlixsterLogger.e(F.TAG, "Bad padding", bpe);
+            NextGenLogger.e(F.TAG, "Bad padding", bpe);
         }
         return null;
     }
@@ -80,9 +80,9 @@ public class CryptHelper {
         String string = "abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(),./;'[]";
         String encrypted = encryptAES(SHARED_KEY.getBytes(), string);
         String decrypted = decryptAES(SHARED_KEY.getBytes(), encrypted);
-        FlixsterLogger.i(F.TAG, "Clear text = " + string);
-        FlixsterLogger.i(F.TAG, "Encrypted text (Hex encoded) = " + encrypted);
-        FlixsterLogger.i(F.TAG, "Decrypted text (Hex decoded) = " + decrypted);
-        FlixsterLogger.i(F.TAG, string.equals(decrypted) ? "success!" : "failure!");
+        NextGenLogger.i(F.TAG, "Clear text = " + string);
+        NextGenLogger.i(F.TAG, "Encrypted text (Hex encoded) = " + encrypted);
+        NextGenLogger.i(F.TAG, "Decrypted text (Hex decoded) = " + decrypted);
+        NextGenLogger.i(F.TAG, string.equals(decrypted) ? "success!" : "failure!");
     }
 }

@@ -1,7 +1,7 @@
 package net.flixster.android.net.ssl;
 
 import com.wb.nextgen.util.utils.F;
-import com.wb.nextgen.util.utils.FlixsterLogger;
+import com.wb.nextgen.util.utils.NextGenLogger;
 
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.PlainSocketFactory;
@@ -15,7 +15,7 @@ public class SecureFlxHttpClient extends DefaultHttpClient {
 
     @Override
     protected ClientConnectionManager createClientConnectionManager() {
-        FlixsterLogger.d(F.TAG, "SecureFlxHttpClient.createClientConnectionManager");
+        NextGenLogger.d(F.TAG, "SecureFlxHttpClient.createClientConnectionManager");
         SchemeRegistry schemeRegistry = new SchemeRegistry();
         schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
         schemeRegistry.register(new Scheme("https", new EasySSLSocketFactory(), 443));

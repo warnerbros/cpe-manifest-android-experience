@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.wb.nextgen.R;
 import com.wb.nextgen.activity.AbstractECView;
 import com.wb.nextgen.data.DemoData;
+import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.widget.SelectedOverlayImageView;
 
@@ -16,7 +17,7 @@ import com.wb.nextgen.widget.SelectedOverlayImageView;
  * Created by gzcheng on 3/7/16.
  */
 public class ECViewLeftListFragment extends NextGenExtraLeftListFragment{
-    DemoData.ECGroupData listECGroupData;
+    MovieMetaData.ECGroupData listECGroupData;
     AbstractECView ecViewActivity;
 
     @Override
@@ -40,7 +41,7 @@ public class ECViewLeftListFragment extends NextGenExtraLeftListFragment{
     }
 
     public void onListItemClick(Object selectedObject){
-        ecViewActivity.onLeftListItemSelected((DemoData.ECContentData) selectedObject);
+        ecViewActivity.onLeftListItemSelected((MovieMetaData.ECContentData) selectedObject);
     }
 
     protected int getListItemCount(){
@@ -59,7 +60,7 @@ public class ECViewLeftListFragment extends NextGenExtraLeftListFragment{
     }
 
     protected void fillListRowWithObjectInfo(View rowView, Object item){
-        DemoData.ECContentData thisEC = (DemoData.ECContentData) item;
+        MovieMetaData.ECContentData thisEC = (MovieMetaData.ECContentData) item;
 
         SelectedOverlayImageView imageView = (SelectedOverlayImageView)rowView.findViewById(R.id.ec_list_image);
         if (imageView != null){

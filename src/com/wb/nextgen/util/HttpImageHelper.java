@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.net.URL;
 
 import com.wb.nextgen.util.utils.F;
-import com.wb.nextgen.util.utils.FlixsterLogger;
+import com.wb.nextgen.util.utils.NextGenLogger;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
@@ -21,7 +22,7 @@ public class HttpImageHelper {
         	bitmap = BitmapFactory.decodeByteArray(bitmapByteArray, 0, bitmapByteArray.length, options);
             //bitmap = BitmapFactory.decodeByteArray(bitmapByteArray, 0, bitmapByteArray.length);
         } catch (OutOfMemoryError err) {
-        	FlixsterLogger.e(F.TAG, "HttpImageHelper.fetchImage: OutOfMemoryError, url: " + url);
+        	NextGenLogger.e(F.TAG, "HttpImageHelper.fetchImage: OutOfMemoryError, url: " + url);
         }
         
         if (bitmap == null) {
@@ -30,7 +31,7 @@ public class HttpImageHelper {
             try {
             	bitmap = BitmapFactory.decodeByteArray(bitmapByteArray, 0, bitmapByteArray.length, options);
             } catch (OutOfMemoryError err) {
-            	FlixsterLogger.e(F.TAG, "HttpImageHelper.fetchImage: OutOfMemoryError, inSampleSize=4, url: " + url);
+            	NextGenLogger.e(F.TAG, "HttpImageHelper.fetchImage: OutOfMemoryError, inSampleSize=4, url: " + url);
             }
         }
         return bitmap;

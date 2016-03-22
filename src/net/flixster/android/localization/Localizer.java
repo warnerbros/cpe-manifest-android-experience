@@ -18,7 +18,7 @@ import com.wb.nextgen.util.ResourceUtils;
 import com.wb.nextgen.util.concurrent.ResultListener;
 import com.wb.nextgen.util.concurrent.Worker;
 import com.wb.nextgen.util.utils.F;
-import com.wb.nextgen.util.utils.FlixsterLogger;
+import com.wb.nextgen.util.utils.NextGenLogger;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -59,10 +59,10 @@ final public class Localizer {
 				Map<KEYS, String> templocale = null;
 				try {
 					templocale = initOfflineLocalization(locale);
-					FlixsterLogger.d(F.TAG, "localization used from cache");
+					NextGenLogger.d(F.TAG, "localization used from cache");
 				} catch (Exception e) {
 					templocale = new EnumMap<KEYS, String>(backupLocalizedKeys);
-					FlixsterLogger.d(F.TAG, "localization used from assets");
+					NextGenLogger.d(F.TAG, "localization used from assets");
 				}
 				
 				//if (NextGenApplication.isConnected()) {
@@ -81,7 +81,7 @@ final public class Localizer {
 						}
 						if (newlocale != null)
 							templocale = newlocale;
-						FlixsterLogger.d(F.TAG, "localization used from server");
+						NextGenLogger.d(F.TAG, "localization used from server");
 					}
 				//}
 				
@@ -115,7 +115,7 @@ final public class Localizer {
 		String s = localizedKeys.get(key);
 		if (s == null || s.length() == 0) {
 			s = backupLocalizedKeys.get(key);	//should look for default error message if there is none.
-			FlixsterLogger.d(F.TAG, "Localizer.get " + key + " from backup: " + s);
+			NextGenLogger.d(F.TAG, "Localizer.get " + key + " from backup: " + s);
 		} else {
 			//Log.d("Localizer","good - " + s);
 		}
@@ -142,7 +142,7 @@ final public class Localizer {
 		String s = allLocalizedStrings.get(keyCode);
 		if (s == null || s.length() == 0) {
 			s = backupAllLocalizedStrings.get(keyCode);	//should look for default error message if there is none.
-			FlixsterLogger.d(F.TAG, "Localizer.getMessageForErrorCode " + keyCode + " from backup: " + s);
+			NextGenLogger.d(F.TAG, "Localizer.getMessageForErrorCode " + keyCode + " from backup: " + s);
 		}else {
 			//Log.d("Localizer","good - " + s);
 		}
@@ -156,7 +156,7 @@ final public class Localizer {
 		String s = allLocalizedStrings.get(keyCode);
 		if (s == null || s.length() == 0) {
 			s = backupAllLocalizedStrings.get(keyCode);	//should look for default error message if there is none.
-			FlixsterLogger.d(F.TAG, "Localizer.getStudioOptInString " + keyCode + " from backup: " + s);
+			NextGenLogger.d(F.TAG, "Localizer.getStudioOptInString " + keyCode + " from backup: " + s);
 		}else {
 			//Log.d("Localizer","good - " + s);
 		}
@@ -214,7 +214,7 @@ final public class Localizer {
 		try {
 			jo = new JSONObject(ResourceUtils.getStringFromAssets(locale.toString() + ".json"));
 		} catch (JSONException je) {
-			FlixsterLogger.e(F.TAG, "Localizer.initDefaultLocalization: Critical Error, cant parse locale from assets", je);
+			NextGenLogger.e(F.TAG, "Localizer.initDefaultLocalization: Critical Error, cant parse locale from assets", je);
 			return false;
 		}
 

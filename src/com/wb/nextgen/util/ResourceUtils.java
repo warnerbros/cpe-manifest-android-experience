@@ -8,7 +8,8 @@ import java.io.InputStreamReader;
 
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.util.utils.F;
-import com.wb.nextgen.util.utils.FlixsterLogger;
+import com.wb.nextgen.util.utils.NextGenLogger;
+
 import android.content.res.AssetManager;
 
 
@@ -32,13 +33,13 @@ final public class ResourceUtils {
 				read = br.readLine();
 			}
 		} catch (IOException e) {
-			FlixsterLogger.e(F.TAG, "ResourceUtils.getStringFromAssets: " + e.getMessage(), e);
+			NextGenLogger.e(F.TAG, "ResourceUtils.getStringFromAssets: " + e.getMessage(), e);
 		} finally {
 			try {
 				if (in != null)
 					in.close();
 			} catch (IOException e) {
-				FlixsterLogger.e(F.TAG, "ResourceUtils.getStringFromAssets: " + e.getMessage(), e);
+				NextGenLogger.e(F.TAG, "ResourceUtils.getStringFromAssets: " + e.getMessage(), e);
 			}
 		}
 		return sb.toString();

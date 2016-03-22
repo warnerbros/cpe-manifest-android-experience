@@ -8,7 +8,8 @@ import java.io.InputStreamReader;
 import java.lang.Thread.UncaughtExceptionHandler;
 
 import com.wb.nextgen.util.utils.F;
-import com.wb.nextgen.util.utils.FlixsterLogger;
+import com.wb.nextgen.util.utils.NextGenLogger;
+
 import android.content.Context;
 import android.content.Intent;
 
@@ -36,7 +37,7 @@ public class ErrorHandler {
             @Override
             public void uncaughtException(Thread thread, Throwable ex) {
                 String diagnostics = buildDiagnosticMessage(thread, ex);
-                FlixsterLogger.e(F.TAG, diagnostics);
+                NextGenLogger.e(F.TAG, diagnostics);
 
                 /* Save to internal storage */
                 FileOutputStream fos = null;
@@ -44,17 +45,17 @@ public class ErrorHandler {
                     String filename = DIAGNOSTICS_FILE;
                     fos = appContext.openFileOutput(filename, Context.MODE_PRIVATE);
                     fos.write(diagnostics.getBytes());
-                    FlixsterLogger.i(F.TAG, "Diagnostics saved to " + filename);
+                    NextGenLogger.i(F.TAG, "Diagnostics saved to " + filename);
                 } catch (FileNotFoundException e) {
-                    FlixsterLogger.e(F.TAG, "FileNotFoundException", e);
+                    NextGenLogger.e(F.TAG, "FileNotFoundException", e);
                 } catch (IOException e) {
-                    FlixsterLogger.e(F.TAG, "IOException", e);
+                    NextGenLogger.e(F.TAG, "IOException", e);
                 } finally {
                     if (fos != null)
                         try {
                             fos.close();
                         } catch (IOException e) {
-                            FlixsterLogger.e(F.TAG, "IOException", e);
+                            NextGenLogger.e(F.TAG, "IOException", e);
                         }
                 }
 
@@ -99,22 +100,22 @@ public class ErrorHandler {
         StringBuilder sb = new StringBuilder();
         try {
             br = new BufferedReader(new InputStreamReader(appContext.openFileInput(DIAGNOSTICS_FILE)));
-            FlixsterLogger.i(F.TAG, "Diagnostics found");
+            NextGenLogger.i(F.TAG, "Diagnostics found");
             String line;
             while ((line = br.readLine()) != null) {
                 sb.append(line).append("\n");
             }
             return sb.toString();
         } catch (FileNotFoundException e) {
-            FlixsterLogger.i(F.TAG, "No diagnostics found");
+            NextGenLogger.i(F.TAG, "No diagnostics found");
         } catch (IOException e) {
-            FlixsterLogger.e(F.TAG, "IOException", e);
+            NextGenLogger.e(F.TAG, "IOException", e);
         } finally {
             if (br != null)
                 try {
                     br.close();
                 } catch (IOException e) {
-                    FlixsterLogger.e(F.TAG, "IOException", e);
+                    NextGenLogger.e(F.TAG, "IOException", e);
                 }
         }
         return null;

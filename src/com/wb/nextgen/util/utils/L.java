@@ -9,14 +9,14 @@ import android.view.ViewGroup;
  */
 public class L {
     public static void view(View v) {
-        FlixsterLogger.i(F.TAG, v + " isClickable: " + v.isClickable());
-        FlixsterLogger.i(F.TAG, v + " isFocusable: " + v.isFocusable());
-        FlixsterLogger.i(F.TAG, v + " isFocused: " + v.isFocused());
+        NextGenLogger.i(F.TAG, v + " isClickable: " + v.isClickable());
+        NextGenLogger.i(F.TAG, v + " isFocusable: " + v.isFocusable());
+        NextGenLogger.i(F.TAG, v + " isFocused: " + v.isFocused());
     }
 
     public static void viewGroup(ViewGroup vg) {
         view(vg);
-        FlixsterLogger.i(F.TAG, vg + " hasFocusable: " + vg.hasFocusable());
-        FlixsterLogger.i(F.TAG, vg + " hasFocus: " + vg.hasFocus());
+        NextGenLogger.i(F.TAG, vg + " hasFocusable: " + vg.hasFocusable());
+        NextGenLogger.i(F.TAG, vg + " hasFocus: " + vg.hasFocus());
     }
 }

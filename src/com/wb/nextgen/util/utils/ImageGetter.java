@@ -72,7 +72,7 @@ public class ImageGetter {
                  //   Logger.d("ImageGetter", "RequestConsumer consuming");
 
                 } catch (InterruptedException e) {
-                    FlixsterLogger.e(F.TAG, "ImageGetter.RequestConsumer.run", e);
+                    NextGenLogger.e(F.TAG, "ImageGetter.RequestConsumer.run", e);
                 }
             }
         }
@@ -91,7 +91,7 @@ public class ImageGetter {
             try {
                 url = new URL(request.url);
             } catch (MalformedURLException e) {
-                FlixsterLogger.e(F.TAG, "ImageRequestConsumer.consume url=" + url, e);
+                NextGenLogger.e(F.TAG, "ImageRequestConsumer.consume url=" + url, e);
                 return;
             }
             try {
@@ -103,7 +103,7 @@ public class ImageGetter {
                     request.handler.sendMessage(Message.obtain(null, 0, image));
                 }
             } catch (IOException e) {
-                FlixsterLogger.e(F.TAG, "ImageRequestConsumer.consume", e);
+                NextGenLogger.e(F.TAG, "ImageRequestConsumer.consume", e);
             }
         }
     }

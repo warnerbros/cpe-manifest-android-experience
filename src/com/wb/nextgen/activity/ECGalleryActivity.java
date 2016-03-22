@@ -23,6 +23,7 @@ import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.DemoData;
+import com.wb.nextgen.data.MovieMetaData;
 
 /**
  * Created by gzcheng on 3/7/16.
@@ -30,7 +31,7 @@ import com.wb.nextgen.data.DemoData;
 public class ECGalleryActivity extends AbstractECView {
 
     private ViewPager galleryViewPager;
-    private DemoData.ECContentData currentGallery;
+    private MovieMetaData.ECContentData currentGallery;
     private GalleryPagerAdapter adapter;
     private ImageButton fullscreenToggleBtn;
 
@@ -109,7 +110,7 @@ public class ECGalleryActivity extends AbstractECView {
             View itemView = mInflater.inflate(R.layout.pager_gallery_item, container, false);
             container.addView(itemView);
 
-            DemoData.ECGalleryImageItem currentItem = currentGallery.galleryItems.get(position);
+            MovieMetaData.ECGalleryImageItem currentItem = currentGallery.galleryItems.get(position);
 
             itemView.setTag(currentItem.name);
 
@@ -159,7 +160,7 @@ public class ECGalleryActivity extends AbstractECView {
 
 
     @Override
-    public void onLeftListItemSelected(DemoData.ECContentData ec){
+    public void onLeftListItemSelected(MovieMetaData.ECContentData ec){
         if (ec != null){
             currentGallery = ec;
             selectedECNameTextView.setText(ec.title);

@@ -40,42 +40,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
  */
 public class ManifestXMLParser {
     private static final String ns = null;
-    /*public static void kParser() {
-
-        try {
-            // Parser
-            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-            factory.setNamespaceAware(true);
-            XmlPullParser xpp = factory.newPullParser();
-            AssetManager am = NextGenApplication.getContext().getAssets();
-
-            xpp.setInput(new InputStreamReader(am.open("mos_hls_manifest_v3.xml")));
-            int eventType = xpp.getEventType();
-            while (eventType != XmlPullParser.END_DOCUMENT)
-
-            {
-                if (eventType == XmlPullParser.START_DOCUMENT) {
-                    System.out.println("Start document");
-                } else if (eventType == XmlPullParser.END_DOCUMENT) {
-                    System.out.println("End document");
-                } else if (eventType == XmlPullParser.START_TAG) {
-                    System.out.println("Start tag " + xpp.getName());
-                } else if (eventType == XmlPullParser.END_TAG) {
-                    System.out.println("End tag " + xpp.getName());
-                } else if (eventType == XmlPullParser.TEXT) {
-                    System.out.println("Text " + xpp.getText());
-                }
-                eventType = xpp.next();
-            }
-
-
-            am.close();
-        }catch (Exception ex){
-            System.out.println(ex.getMessage());
-        }
-    }*/
-
-    private List result;
 
     private static String MANIFEST_HEADER = "manifest:";
 
@@ -131,23 +95,7 @@ public class ManifestXMLParser {
             Class currentClass = classObj;
             boolean bIsValue = false;
             while(!currentClass.equals(Object.class)){                  //handle XmlElement
-                /*Annotation classAnnotations[] = currentClass.getAnnotations();
-                if (classAnnotations != null && classAnnotations.length > 0){
-                    for(Annotation thisAnnotation : classAnnotations){
-                        if (thisAnnotation instanceof XmlType && ((XmlType)thisAnnotation).propOrder() != null && ((XmlType)thisAnnotation).propOrder().length > 0){
-                            for (String fieldName : ((XmlType)thisAnnotation).propOrder()){
-                                if (!StringHelper.isEmpty(fieldName)) {
-                                    Field field = currentClass.getDeclaredField(fieldName);
-                                    for (Annotation annotation : field.getAnnotations()) {
-                                        if (annotation instanceof XmlElement) {
-                                            classXmlNameToFieldMap.put(((XmlElement) annotation).name(), new FieldClassObject(field, currentClass));
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }*/
+
                 Field declaredFields[] = currentClass.getDeclaredFields();
                 for (Field field: declaredFields) {
 
@@ -156,7 +104,7 @@ public class ManifestXMLParser {
                         if (annotation instanceof XmlElement) {
                             classXmlNameToFieldMap.put(((XmlElement) annotation).name(), new FieldClassObject(field, currentClass));
                         } else if (annotation instanceof XmlValue) {
-
+                            bIsValue = true;
                         } else if (annotation instanceof XmlAttribute) {
                             String attributValue = parser.getAttributeValue("", ((XmlAttribute) annotation).name());
                             if (!StringHelper.isEmpty(attributValue)) {
@@ -171,16 +119,14 @@ public class ManifestXMLParser {
             }
 
             if (bIsValue){
-                if (parser.getEventType() == XmlPullParser.TEXT) {
-                    try {
-                        Method setter = classObj.getDeclaredMethod("setValue", String.class);
-                        setter.invoke(retObj, readText(parser));
+                try {
+                    Method setter = classObj.getDeclaredMethod("setValue", String.class);
+                    setter.invoke(retObj, readText(parser));
 
-                    } catch (Exception ex) {
-
-                    }
+                } catch (Exception ex) {
 
                 }
+
             }
 
 
@@ -190,16 +136,7 @@ public class ManifestXMLParser {
             //Parse the element
             parser.require(XmlPullParser.START_TAG, ns, tagName);
             while (parser.next() != XmlPullParser.END_TAG) {
-                /*if (parser.getEventType() == XmlPullParser.TEXT){
-                    try{
-                        Method setter = classObj.getDeclaredMethod("setValue", String.class);
-                        setter.invoke(retObj, readText(parser));
-                        return retObj;
-                    }catch (Exception ex){
-
-                    }
-                    continue;
-                }else*/ if (parser.getEventType() != XmlPullParser.START_TAG) {
+                if (parser.getEventType() != XmlPullParser.START_TAG) {
                     continue;
                 }
                 String xmlElementName = parser.getName();
@@ -240,15 +177,7 @@ public class ManifestXMLParser {
 
 
                             //setter.invoke(retObj, listObj);
-                        }/*else if (thisFieldClass.field.getType().isPrimitive()) {
-
-                        Method setter = thisFieldClass.fieldClass.getDeclaredMethod("set" + xmlElementName, thisFieldClass.field.getType());
-                        if (parser.next() == XmlPullParser.TEXT) {
-                            setter.invoke(retObj, parser.get);
-                            parser.nextTag();
-                        }
-                        setter.invoke(retObj, obj);
-                    }*/ else {
+                        } else {
                             //String stringValue = readText(parser, parser.getName());
                             Object obj = toObject(thisFieldClass.field.getType(), readText(parser));
                             Method setter = thisFieldClass.fieldClass.getDeclaredMethod("set" + xmlElementName, thisFieldClass.field.getType());
@@ -351,102 +280,11 @@ public class ManifestXMLParser {
         }
     }
 
-/*
-    private void getObjectValue(XmlPullParser parser, Field field, Class fieldClass, Object targetObj) throws IOException, XmlPullParserException, NoSuchMethodException,IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        if (field.getType().isAnnotationPresent(XmlType.class)){
-            String stringValue = readText(parser, parser.getName());
-            Method setter = fieldClass.getDeclaredMethod("set" + StringHelper.capitalize(field.getName()), field.getType());
-            setter.invoke(targetObj, stringValue);
-        }else {
-            String stringValue = readText(parser, parser.getName());
-        }
-    }*/
-
 
     private MediaManifestType parseManifest(XmlPullParser parser) throws XmlPullParserException, IOException {
         return parseElement(parser, MediaManifestType.class, "manifest:MediaManifest");
 
     }
-
-    private List readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
-        List entries = new ArrayList();
-
-        parser.require(XmlPullParser.START_TAG, ns, "manifest:MediaManifest");
-        while (parser.next() != XmlPullParser.END_TAG) {
-            if (parser.getEventType() != XmlPullParser.START_TAG) {
-                continue;
-            }
-            String name = parser.getName();
-            // Starts by looking for the entry tag
-            Object obj = null;
-            Class c = null;
-            try {
-                String className = name.replace("manifest:", this.getClass().getPackage().getName() + ".");
-                c = Class.forName(name);
-                //Object o = c.getConstructor(int.class).newInstance(1);
-            }catch (Exception ex){
-
-            }
-            if (obj != null ) {
-                entries.add(createObject(parser, c));
-            } else {
-                skip(parser);
-            }
-        }
-        return entries;
-    }
-
-    public static class Entry {
-        public final String title;
-        public final String link;
-        public final String summary;
-
-        private Entry(String title, String summary, String link) {
-            this.title = title;
-            this.summary = summary;
-            this.link = link;
-        }
-    }
-
-    private Object createObject(XmlPullParser parser, Class c) throws XmlPullParserException, IOException {
-        Object obj = null;
-        try {
-            obj = c.getConstructor().newInstance();
-        }catch (Exception ex){
-
-        }
-        while (parser.next() != XmlPullParser.END_TAG) {
-            if (parser.getEventType() != XmlPullParser.START_TAG) {
-                continue;
-            }
-            String name = parser.getName();
-            Field field = null;
-            try {
-                field = c.getField(name);
-            }catch (NoSuchFieldException nex){
-
-            }
-            /*if (field != null) {
-                c.get
-            } else if (name.equals("summary")) {
-                summary = readSummary(parser);
-            } else if (name.equals("link")) {
-                link = readLink(parser);
-            } else {
-                skip(parser);
-            }*/
-        }
-        return obj;
-    }
-
-
-    // Processes summary tags in the feed.
-    /*private String readSummary(XmlPullParser parser) throws IOException, XmlPullParserException {
-        parser.require(XmlPullParser.START_TAG, ns, "summary");
-        String summary = readText(parser);
-        parser.require(XmlPullParser.END_TAG, ns, "summary");
-        return summary;
-    }*/
 
     // For the tags title and summary, extracts their text values.
     private String readText(XmlPullParser parser) throws IOException, XmlPullParserException {

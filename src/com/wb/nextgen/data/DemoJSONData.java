@@ -8,8 +8,6 @@ import com.google.gson.annotations.SerializedName;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.util.utils.StringHelper;
 
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -90,7 +88,7 @@ public class DemoJSONData {
         public String movieInfoUrl;
     }
 
-    public class MovieMetaData{
+    public class MovieJSONData {
         public String title;
         @SerializedName("people")
         public List<ActorInfo> actorsInfo;
@@ -103,7 +101,7 @@ public class DemoJSONData {
     public ScenesInfo[] scenesInfos;
 
     @SerializedName("metadata")
-    public MovieMetaData movieMetaData;
+    public MovieJSONData movieMetaData;
 
     public static DemoJSONData createFromUri(String fileUri){
         AssetManager am = NextGenApplication.getContext().getAssets();
@@ -120,13 +118,13 @@ public class DemoJSONData {
                 read = br.readLine();
             }
         } catch (IOException e) {
-           // FlixsterLogger.e(F.TAG, "ResourceUtils.getStringFromAssets: " + e.getMessage(), e);
+           // NextGenLogger.e(F.TAG, "ResourceUtils.getStringFromAssets: " + e.getMessage(), e);
         } finally {
             try {
                 if (in != null)
                     in.close();
             } catch (IOException e) {
-               // FlixsterLogger.e(F.TAG, "ResourceUtils.getStringFromAssets: " + e.getMessage(), e);
+               // NextGenLogger.e(F.TAG, "ResourceUtils.getStringFromAssets: " + e.getMessage(), e);
             }
         }
         try {

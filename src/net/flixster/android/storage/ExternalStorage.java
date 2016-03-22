@@ -14,7 +14,8 @@ import java.util.Collection;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.util.HttpHelper;
 import com.wb.nextgen.util.utils.F;
-import com.wb.nextgen.util.utils.FlixsterLogger;
+import com.wb.nextgen.util.utils.NextGenLogger;
+
 import android.os.Environment;
 
 
@@ -35,7 +36,7 @@ public class ExternalStorage {
 
         // Check if available and not read only
         if (!isAvailable() || isReadOnly()) {
-            FlixsterLogger.w(F.TAG, "ExternalStorage.writeFile storage unavailable or read-only");
+            NextGenLogger.w(F.TAG, "ExternalStorage.writeFile storage unavailable or read-only");
             return false;
         }
 
@@ -54,9 +55,9 @@ public class ExternalStorage {
             os.flush();
             success = true;
         } catch (IOException e) {
-            FlixsterLogger.w(F.TAG, "ExternalStorage.writeFile " + file, e);
+            NextGenLogger.w(F.TAG, "ExternalStorage.writeFile " + file, e);
         } catch (Exception e) {
-            FlixsterLogger.w(F.TAG, "ExternalStorage.writeFile " + file, e);
+            NextGenLogger.w(F.TAG, "ExternalStorage.writeFile " + file, e);
         } finally {
             try {
                 if (os != null) {
@@ -66,7 +67,7 @@ public class ExternalStorage {
             }
         }
 
-        FlixsterLogger.d(F.TAG, "ExternalStorage.writeFile " + file + (success ? " successful" : " failed"));
+        NextGenLogger.d(F.TAG, "ExternalStorage.writeFile " + file + (success ? " successful" : " failed"));
         return success;
     }
 
@@ -81,14 +82,14 @@ public class ExternalStorage {
 
         // Check if available and not read only
         if (!isAvailable() || isReadOnly()) {
-            FlixsterLogger.w(F.TAG, "ExternalStorage.readFile storage unavailable or read-only");
+            NextGenLogger.w(F.TAG, "ExternalStorage.readFile storage unavailable or read-only");
             return null;
         }
 
         localUri = localUri.startsWith("file://") ? localUri.substring(7) : localUri;
         File file = new File(localUri);
         if (!file.exists()) {
-            FlixsterLogger.d(F.TAG, "ExternalStorage.readFile " + file + " not found");
+            NextGenLogger.d(F.TAG, "ExternalStorage.readFile " + file + " not found");
             return null;
         }
 
@@ -97,11 +98,11 @@ public class ExternalStorage {
             in = new BufferedInputStream(new FileInputStream(file));
             result = new String(HttpHelper.streamToByteArray(in));
         } catch (FileNotFoundException e) {
-            FlixsterLogger.w(F.TAG, "ExternalStorage.readFile " + file, e);
+            NextGenLogger.w(F.TAG, "ExternalStorage.readFile " + file, e);
         } catch (IOException e) {
-            FlixsterLogger.w(F.TAG, "ExternalStorage.readFile " + file, e);
+            NextGenLogger.w(F.TAG, "ExternalStorage.readFile " + file, e);
         } catch (Exception e) {
-            FlixsterLogger.w(F.TAG, "ExternalStorage.readFile " + file, e);
+            NextGenLogger.w(F.TAG, "ExternalStorage.readFile " + file, e);
         } finally {
             if (in != null) {
                 try {
@@ -118,7 +119,7 @@ public class ExternalStorage {
     public static boolean findFile(String localUri) {
         // Check if available
         if (!isAvailable()) {
-            FlixsterLogger.w(F.TAG, "ExternalStorage.findFile storage unavailable");
+            NextGenLogger.w(F.TAG, "ExternalStorage.findFile storage unavailable");
             return false;
         }
         localUri = localUri.startsWith("file://") ? localUri.substring(7) : localUri;
@@ -134,7 +135,7 @@ public class ExternalStorage {
     public static Collection<String> findFiles(String subDir, String fileExtension) {
         // Check if available
         if (!isAvailable()) {
-            FlixsterLogger.w(F.TAG, "ExternalStorage.findFiles storage unavailable");
+            NextGenLogger.w(F.TAG, "ExternalStorage.findFiles storage unavailable");
             return null;
         }
 
@@ -159,7 +160,7 @@ public class ExternalStorage {
     public static boolean renameFile(String oldLocalUri, String newSubDir, String newFileName) {
         // Check if available and not read only
         if (!isAvailable() || isReadOnly()) {
-            FlixsterLogger.w(F.TAG, "ExternalStorage.readFile storage unavailable or read-only");
+            NextGenLogger.w(F.TAG, "ExternalStorage.readFile storage unavailable or read-only");
             return false;
         }
 
@@ -189,7 +190,7 @@ public class ExternalStorage {
 
         // Check if available and not read only
         if (!isAvailable() || isReadOnly()) {
-            FlixsterLogger.w(F.TAG, "ExternalStorage.deleteFile storage unavailable or read-only");
+            NextGenLogger.w(F.TAG, "ExternalStorage.deleteFile storage unavailable or read-only");
             return false;
         }
 
@@ -197,7 +198,7 @@ public class ExternalStorage {
         File file = new File(localUri);
         if (file.exists()) {
             if (file.delete()) {
-                FlixsterLogger.d(F.TAG, "ExternalStorage.deleteFile removed " + file);
+                NextGenLogger.d(F.TAG, "ExternalStorage.deleteFile removed " + file);
                 return true;
             }
         }

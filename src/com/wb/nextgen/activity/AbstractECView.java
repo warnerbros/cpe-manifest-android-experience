@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.DemoData;
+import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.fragment.ECViewLeftListFragment;
 import com.wb.nextgen.fragment.NextGenExtraLeftListFragment;
 import com.wb.nextgen.util.PicassoTrustAll;
@@ -28,17 +29,17 @@ import com.wb.nextgen.util.utils.F;
  */
 public abstract class AbstractECView extends AbstractNextGenActivity {
 
-    protected DemoData.ECGroupData ecGroupData ;
+    protected MovieMetaData.ECGroupData ecGroupData ;
     protected ECViewLeftListFragment listFragment;
     protected TextView selectedECNameTextView;
     protected FrameLayout leftListFrame;
     protected boolean isContentFullScreen = false;
 
-    public abstract void onLeftListItemSelected(DemoData.ECContentData ecContentData);
+    public abstract void onLeftListItemSelected(MovieMetaData.ECContentData ecContentData);
 
     public abstract int getContentViewId();
 
-    public DemoData.ECGroupData getECGroupData(){
+    public MovieMetaData.ECGroupData getECGroupData(){
         return ecGroupData;
     }
 
@@ -47,7 +48,7 @@ public abstract class AbstractECView extends AbstractNextGenActivity {
 
         Intent intent = getIntent();
         String groupId = intent.getStringExtra(F.ID);
-        ecGroupData = DemoData.findECGroupDataById(groupId);
+        ecGroupData = NextGenApplication.getMovieMetaData().findECGroupDataById(groupId);
 
         setContentView(getContentViewId());
 

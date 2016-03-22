@@ -20,10 +20,10 @@ public class GoogleApiDetector {
                 Class.forName("com.google.android.maps.MapActivity");
                 isVanillaAndroid = false;
             } catch (ClassNotFoundException e) {
-                FlixsterLogger.w(F.TAG, "GoogleApiDetector.isVanillaAndroid true", e);
+                NextGenLogger.w(F.TAG, "GoogleApiDetector.isVanillaAndroid true", e);
                 isVanillaAndroid = true;
             } catch (Error e) {
-                FlixsterLogger.e(F.TAG, "GoogleApiDetector.isVanillaAndroid true", e);
+                NextGenLogger.e(F.TAG, "GoogleApiDetector.isVanillaAndroid true", e);
                 isVanillaAndroid = true;
             }
         }

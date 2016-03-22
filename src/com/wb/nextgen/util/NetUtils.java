@@ -8,7 +8,8 @@ import java.util.Enumeration;
 import org.apache.http.conn.util.InetAddressUtils;
 
 import com.wb.nextgen.util.utils.F;
-import com.wb.nextgen.util.utils.FlixsterLogger;
+import com.wb.nextgen.util.utils.NextGenLogger;
+
 import android.content.Context;
 import android.net.ConnectivityManager;
 
@@ -26,14 +27,14 @@ public class NetUtils {
 						boolean isIPv4 = InetAddressUtils.isIPv4Address(sAddr);
 						if (useIPv4) {
 							if (isIPv4) {
-								FlixsterLogger.d(F.TAG, "Local IP: " + sAddr);
+								NextGenLogger.d(F.TAG, "Local IP: " + sAddr);
 								return sAddr;
 							}
 						} else {
 							if (!isIPv4) {
 								int delim = sAddr.indexOf('%'); // drop ip6 port suffix
 								String ipv6 = delim<0 ? sAddr : sAddr.substring(0, delim);
-								FlixsterLogger.d(F.TAG, "Local IP: " + ipv6);
+								NextGenLogger.d(F.TAG, "Local IP: " + ipv6);
 								return ipv6;
 							}
 						}
@@ -41,7 +42,7 @@ public class NetUtils {
 				}
 			}
 		} catch (SocketException ex) {
-			FlixsterLogger.e(F.TAG, ex.toString(), ex);
+			NextGenLogger.e(F.TAG, ex.toString(), ex);
 		}
 		return "";
 	}

@@ -15,7 +15,8 @@ import net.flixster.android.storage.ExternalStorage;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.util.HttpHelper;
 import com.wb.nextgen.util.utils.F;
-import com.wb.nextgen.util.utils.FlixsterLogger;
+import com.wb.nextgen.util.utils.NextGenLogger;
+
 import android.content.Context;
 import android.os.Environment;
 
@@ -57,24 +58,24 @@ public class FlixsterCacheManager {
 		//
 		// sTimerTask = new TimerTask() {
 		// public void run() {
-		FlixsterLogger.v(F.TAG,
+		NextGenLogger.v(F.TAG,
 				"FlixsterCacheManager MEDIA Mounted =" + Environment.getExternalStorageState().contentEquals(Environment.MEDIA_MOUNTED) + "");
 		
 		// create cache directory
-		FlixsterLogger.d(F.TAG,
+		NextGenLogger.d(F.TAG,
 				"FlixsterCacheManager Environment.getExternalStorageState():" + Environment.getExternalStorageState() + " sCacheLimit:"
 						+ sCacheLimit);
 		boolean activeState = false;
 		if (Environment.getExternalStorageState().contentEquals(Environment.MEDIA_MOUNTED)) {
 			File sdDir = ExternalStorage.getExternalFilesDir(F.CACHE_DIR);
-			FlixsterLogger.d(F.TAG, "FlixsterCacheManager sdDir:" + sdDir);
+			NextGenLogger.d(F.TAG, "FlixsterCacheManager sdDir:" + sdDir);
 			sCacheDir = new File(sdDir.toString());
 			if (sCacheDir.exists() && sCacheDir.isDirectory() && sCacheDir.canWrite()) {
-				FlixsterLogger.v(F.TAG, "FlixsterCacheManager  mCacheDir exists == true");
+				NextGenLogger.v(F.TAG, "FlixsterCacheManager  mCacheDir exists == true");
 				buildCacheIndex();
 				activeState = true;
 			} else {
-				FlixsterLogger.v(F.TAG, "FlixsterCacheManager mCacheDir mkdirs()");
+				NextGenLogger.v(F.TAG, "FlixsterCacheManager mCacheDir mkdirs()");
 				if (sCacheDir.mkdirs()) {
 					activeState = true;
 				}
@@ -83,10 +84,10 @@ public class FlixsterCacheManager {
 			setCacheLimit();
 			// TrimCache(0L);
 			sIsActive = activeState;
-			FlixsterLogger.v(F.TAG, "FlixsterCacheManager active: " + sIsActive);
+			NextGenLogger.v(F.TAG, "FlixsterCacheManager active: " + sIsActive);
 			
 		} else {
-			FlixsterLogger.e(F.TAG, "FlixsterCacheManager SDCARD not avalable!");
+			NextGenLogger.e(F.TAG, "FlixsterCacheManager SDCARD not avalable!");
 		}
 		// }
 		// };
@@ -96,7 +97,7 @@ public class FlixsterCacheManager {
 	}
 	
 	public static void setCacheLimit() {
-		FlixsterLogger.v(F.TAG, "FlixsterCacheManager SetCacheLimit() before sCacheLimit:" + sCacheLimit + " getCachePolicy:"
+		NextGenLogger.v(F.TAG, "FlixsterCacheManager SetCacheLimit() before sCacheLimit:" + sCacheLimit + " getCachePolicy:"
 				+ NextGenApplication.getCachePolicy());
 		switch (NextGenApplication.getCachePolicy()) {
 		case POLICY_OFF:
@@ -114,18 +115,18 @@ public class FlixsterCacheManager {
 		default:
 			sCacheLimit = 0;
 		}
-		FlixsterLogger.v(F.TAG, "FlixsterCacheManager SetCacheLimit() after sCacheLimit:" + sCacheLimit);
+		NextGenLogger.v(F.TAG, "FlixsterCacheManager SetCacheLimit() after sCacheLimit:" + sCacheLimit);
 	}
 	
 	public void buildCacheIndex() {
-		FlixsterLogger.v(F.TAG, "FlixsterCacheManager.buildCacheIndex start");
+		NextGenLogger.v(F.TAG, "FlixsterCacheManager.buildCacheIndex start");
 		
 		// sCacheDir = mContext.getFilesDir();
 		sCacheDir = ExternalStorage.getExternalFilesDir(F.CACHE_DIR);
 		File fileObj;
 		String files[] = sCacheDir.list();
 		
-		FlixsterLogger.v(F.TAG, "FlixsterCacheManager.buildCacheIndex files:" + files);
+		NextGenLogger.v(F.TAG, "FlixsterCacheManager.buildCacheIndex files:" + files);
 		if (files != null) {
 			CacheItem tempItem;
 			for (String file : files) {
@@ -144,7 +145,7 @@ public class FlixsterCacheManager {
 			}
 		}
 		
-		FlixsterLogger.v(F.TAG, "FlixsterCacheManager.buildCacheIndex mCacheByteSize:" + sCacheByteSize + " mCacheItemSize:"
+		NextGenLogger.v(F.TAG, "FlixsterCacheManager.buildCacheIndex mCacheByteSize:" + sCacheByteSize + " mCacheItemSize:"
 				+ sCacheItemSize + " sCacheLimit:" + sCacheLimit);
 		
 	}
@@ -155,7 +156,7 @@ public class FlixsterCacheManager {
 		// sCacheByteSize
 		// + " mCacheItemSize:" + sCacheItemSize+" sCacheLimit:"+sCacheLimit);
 		if (!sIsActive) {
-			FlixsterLogger.e(F.TAG, "FlixsterCacheManager.get NOT ACTIVE YET");
+			NextGenLogger.e(F.TAG, "FlixsterCacheManager.get NOT ACTIVE YET");
 			return null;
 		}
 		try {
@@ -176,10 +177,10 @@ public class FlixsterCacheManager {
 				return results;
 			}
 		} catch (FileNotFoundException e) {
-			FlixsterLogger.e(F.TAG, "FlixsterCacheManager.get", e);
+			NextGenLogger.e(F.TAG, "FlixsterCacheManager.get", e);
 			
 		} catch (IOException e) {
-			FlixsterLogger.e(F.TAG, "FlixsterCacheManager.get", e);
+			NextGenLogger.e(F.TAG, "FlixsterCacheManager.get", e);
 		}
 		return null;
 	}
@@ -189,7 +190,7 @@ public class FlixsterCacheManager {
 		// Trim Cache on disk if needed....
 		
 		if (trimSize > sCacheLimit) {
-			FlixsterLogger.w(F.TAG, "trimSize size exceeds cache size!!");
+			NextGenLogger.w(F.TAG, "trimSize size exceeds cache size!!");
 			return;
 		}
 		
@@ -204,7 +205,7 @@ public class FlixsterCacheManager {
 				// if successful, mange queue part...
 				DecapCacheItem(sHead);
 			}
-			FlixsterLogger.v(F.TAG, "FlixsterCacheManager.put TRIM, mCacheByteSize:" + sCacheByteSize + " mCacheItemSize:"
+			NextGenLogger.v(F.TAG, "FlixsterCacheManager.put TRIM, mCacheByteSize:" + sCacheByteSize + " mCacheItemSize:"
 					+ sCacheItemSize + " sCacheLimit:" + sCacheLimit);
 		}
 	}
@@ -225,7 +226,7 @@ public class FlixsterCacheManager {
 		// + " sCacheLimit:" + sCacheLimit);
 		
 		if (!sIsActive) {
-			FlixsterLogger.v(F.TAG, "FlixsterCacheManager.put NOT ACTIVE YET byteArray.length:" + byteArray.length);
+			NextGenLogger.v(F.TAG, "FlixsterCacheManager.put NOT ACTIVE YET byteArray.length:" + byteArray.length);
 			return;
 		}
 		
@@ -255,10 +256,10 @@ public class FlixsterCacheManager {
 			
 			// Loggerflx.v(F.TAG, "FlixsterCacheManager put success. filename:" + filename);
 		} catch (FileNotFoundException e) {
-			FlixsterLogger.v(F.TAG, "FlixsterCacheManager put FileNotFoundException");
+			NextGenLogger.v(F.TAG, "FlixsterCacheManager put FileNotFoundException");
 			e.printStackTrace();
 		} catch (IOException e) {
-			FlixsterLogger.v(F.TAG, "FlixsterCacheManager put IOException");
+			NextGenLogger.v(F.TAG, "FlixsterCacheManager put IOException");
 			e.printStackTrace();
 		} finally {
 			if (sFileOutputStream != null) {
@@ -292,10 +293,10 @@ public class FlixsterCacheManager {
 		// Loggerflx.v(F.TAG,
 		// "FlixsterCacheManager.DecapCacheItem mHead:"+mHead+" mTail:"+mTail+"mCacheHash.size:"+mCacheHash.size());
 		if (topItem == null) {
-			FlixsterLogger.e(F.TAG, "FlixsterCacheManager.DecapCacheItem topItem is null");
+			NextGenLogger.e(F.TAG, "FlixsterCacheManager.DecapCacheItem topItem is null");
 			return;
 		} else if (sHead == sTail) { // special case of only one item
-			FlixsterLogger.v(F.TAG, "FlixsterCacheManager.DecapCacheItem empty? mHead:" + sHead + " tail:" + sTail);
+			NextGenLogger.v(F.TAG, "FlixsterCacheManager.DecapCacheItem empty? mHead:" + sHead + " tail:" + sTail);
 			sHead = null;
 			sTail = null;
 		} else {

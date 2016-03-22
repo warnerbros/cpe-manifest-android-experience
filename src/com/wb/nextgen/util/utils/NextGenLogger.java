@@ -29,7 +29,7 @@ import android.widget.Toast;
 /**
  * A wrapper around android.util.Log with support for sensitive logging and logging toggle
  */
-public class FlixsterLogger {
+public class NextGenLogger {
 
 	static final String LOGGER_NAME = "com.flixster.FlixsterVideoLogger";
 	static final int MAX_NUMBER_OF_LOG_FILES = 7;
@@ -351,7 +351,7 @@ public class FlixsterLogger {
 			email.putExtra(Intent.EXTRA_SUBJECT, "Next Gen Support");
 		email.putExtra(Intent.EXTRA_TEXT, "Log file attached");
 		
-		email.putParcelableArrayListExtra(Intent.EXTRA_STREAM, FlixsterLogger.getLogFileUriListForEmail());
+		email.putParcelableArrayListExtra(Intent.EXTRA_STREAM, NextGenLogger.getLogFileUriListForEmail());
 		try {
 			// the user can choose the email client
 			context.startActivity(Intent.createChooser(email, Localizer.get(KEYS.PARATURE_CONTACT_US)));

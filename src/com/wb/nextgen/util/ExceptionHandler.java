@@ -1,7 +1,8 @@
 package com.wb.nextgen.util;
 
 import com.wb.nextgen.util.utils.F;
-import com.wb.nextgen.util.utils.FlixsterLogger;
+import com.wb.nextgen.util.utils.NextGenLogger;
+
 import android.app.Activity;
 
 public class ExceptionHandler {
@@ -11,7 +12,7 @@ public class ExceptionHandler {
 	
 	public static void handleException(final Throwable e, final Activity a) {
 		if (e != null && e.getMessage() != null)
-			FlixsterLogger.d(F.TAG, "ExceptionHandler.handleException: " + (a!= null && a.getClass() != null ? a.getClass() + ": " + e.getMessage() : e.getMessage()));
+			NextGenLogger.d(F.TAG, "ExceptionHandler.handleException: " + (a != null && a.getClass() != null ? a.getClass() + ": " + e.getMessage() : e.getMessage()));
 		/*
 		 * if (!FlixsterApplication.isConnected()) { // DialogBuilder.showNoInternetDialog(a); } else
 		 if (a != null && !a.isFinishing()) {
@@ -70,6 +71,6 @@ public class ExceptionHandler {
 
 	
 	public static void logException(Exception e, Class<?> clazz) {
-		FlixsterLogger.e(F.TAG, clazz.getSimpleName() + " " + e.getMessage(), e);
+		NextGenLogger.e(F.TAG, clazz.getSimpleName() + " " + e.getMessage(), e);
 	}
 }

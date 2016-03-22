@@ -7,14 +7,11 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.widget.ImageView;
 
-import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
 
-
-import com.wb.nextgen.util.utils.FlixsterLogger;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -76,7 +73,7 @@ public class PicassoTrustAll {
                 .listener(new Picasso.Listener() {
                     @Override
                     public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
-                        //FlixsterLogger.e("PICASSO", exception.getLocalizedMessage());
+                        //NextGenLogger.e("PICASSO", exception.getLocalizedMessage());
                         if (!cannotResetUris.contains(uri.toString())) {
                             cannotResetUris.add(uri.toString());
                             /*PicassoCannotResetDataSource picassoDS = new PicassoCannotResetDataSource(NextGenApplication.getContext());

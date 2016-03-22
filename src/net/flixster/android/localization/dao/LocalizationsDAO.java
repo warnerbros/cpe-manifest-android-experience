@@ -17,7 +17,7 @@ import java.util.TimeZone;
 import net.flixster.android.localization.constants.KEYS;
 import com.wb.nextgen.util.HttpHelper;
 import com.wb.nextgen.util.utils.F;
-import com.wb.nextgen.util.utils.FlixsterLogger;
+import com.wb.nextgen.util.utils.NextGenLogger;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,7 +34,7 @@ final public class LocalizationsDAO {
 		String lastModification = HttpHelper.fetchFileLastModifiedDateFromUrl(new URL(url));
 		if (lastModification == null || lastModification.length() == 0)
 			return false;
-		FlixsterLogger.d(F.TAG_API, "Localizer lastModification: " + lastModification);
+		NextGenLogger.d(F.TAG_API, "Localizer lastModification: " + lastModification);
 		DateFormat date = new SimpleDateFormat("EEE, dd MMM yyyy kk:mm:ss z", Locale.ENGLISH);
 		date.setTimeZone(TimeZone.getTimeZone("GMT"));
 		Date newDate = date.parse(lastModification);

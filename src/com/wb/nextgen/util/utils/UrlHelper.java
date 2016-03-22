@@ -50,7 +50,7 @@ public class UrlHelper {
         try {
             return URLDecoder.decode(value, "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            FlixsterLogger.e(F.TAG, "UrlHelper.urlDecode", e);
+            NextGenLogger.e(F.TAG, "UrlHelper.urlDecode", e);
             return null;
         }
     }
@@ -63,7 +63,7 @@ public class UrlHelper {
         try {
             return URLEncoder.encode(value, "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            FlixsterLogger.e(F.TAG_GA, "UrlHelper.urlEncode", e);
+            NextGenLogger.e(F.TAG_GA, "UrlHelper.urlEncode", e);
             return defaultValue;
         }
     }

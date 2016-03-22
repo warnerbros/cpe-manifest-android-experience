@@ -88,7 +88,7 @@ public class VersionedDeviceDetector {
         }
 
         private boolean isAtLeastTvdpi(Resources res) {
-            FlixsterLogger.i(F.TAG, "DonutScreenDetector.densityDpi=" + res.getDisplayMetrics().densityDpi);
+            NextGenLogger.i(F.TAG, "DonutScreenDetector.densityDpi=" + res.getDisplayMetrics().densityDpi);
             return res.getDisplayMetrics().densityDpi >= DisplayMetrics.DENSITY_TV;
         }
     }

@@ -9,8 +9,8 @@ import java.util.List;
 /**
  * Created by gzcheng on 3/2/16.
  */
-public class DemoData {
-
+public class  DemoData {
+    /*
     public static enum ECGroupType{
         FEATURETTES, VISUAL_EFFECT, GALLERY
     }
@@ -77,7 +77,7 @@ public class DemoData {
 
     final static public List<ECGroupData> DEMO_MAN_OF_STEEL_EC_GROUPS = new ArrayList<ECGroupData>();
 
-    final static public List<ECContentData> DEMODATA_MAN_OF_STEEL_EC_LIST = new ArrayList<ECContentData>();
+    final static public List<ECContentData> DEMODATA_MAN_OF_STEEL_EC_LIST = new ArrayList<ECContentData>();*/
     final static public String DEMODATA_MAN_OF_STEEL_TITLE_TEXT = "Man of Steel";
 
     public static class AudSubLang{
@@ -119,7 +119,7 @@ public class DemoData {
     public static String getExtraRightTitleImageUrl(){
         return "android.resource://com.wb.nextgen/" + R.drawable.extras_header;
     }
-
+    /*
     public static ECGroupData findECGroupDataById(String id){
         if (!StringHelper.isEmpty(id)) {
             for (ECGroupData group : DEMO_MAN_OF_STEEL_EC_GROUPS) {
@@ -128,10 +128,10 @@ public class DemoData {
             }
         }
         return null;
-    }
+    }*/
 
     static {
-        DEMO_MAN_OF_STEEL_EC_GROUPS.add(new ECGroupData("experience.bonus.4", "Legacy", ECGroupType.FEATURETTES));
+        /*DEMO_MAN_OF_STEEL_EC_GROUPS.add(new ECGroupData("experience.bonus.4", "Legacy", ECGroupType.FEATURETTES));
         DEMO_MAN_OF_STEEL_EC_GROUPS.add(new ECGroupData("experience.bonus.8", "Out of this World", ECGroupType.FEATURETTES));
         DEMO_MAN_OF_STEEL_EC_GROUPS.add(new ECGroupData("experience.bonus.11", "X-Ray Vision", ECGroupType.FEATURETTES));
         DEMO_MAN_OF_STEEL_EC_GROUPS.add(new ECGroupData("experience.bonus.17", "Additional Features", ECGroupType.VISUAL_EFFECT));
@@ -460,7 +460,7 @@ public class DemoData {
         DEMO_MAN_OF_STEEL_EC_GROUPS.get(4).ecContents.add(gallery5);
         DEMO_MAN_OF_STEEL_EC_GROUPS.get(4).ecContents.add(gallery6);
         DEMO_MAN_OF_STEEL_EC_GROUPS.get(4).ecContents.add(gallery7);
-        DEMO_MAN_OF_STEEL_EC_GROUPS.get(4).ecContents.add(gallery8);
+        DEMO_MAN_OF_STEEL_EC_GROUPS.get(4).ecContents.add(gallery8);*/
 
 
         audioList.add(new AudSubLang("English (US)", "en_US"));

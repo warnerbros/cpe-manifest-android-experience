@@ -20,7 +20,7 @@ import com.wb.nextgen.R;
 
 import com.wb.nextgen.util.utils.ActivityHolder;
 import com.wb.nextgen.util.utils.F;
-import com.wb.nextgen.util.utils.FlixsterLogger;
+import com.wb.nextgen.util.utils.NextGenLogger;
 
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.scheme.LayeredSocketFactory;
@@ -133,7 +133,7 @@ public class EasySSLSocketFactory implements SocketFactory, LayeredSocketFactory
 			InputStream in = activity.getResources().openRawResource(R.raw.addtrust_external_ca_root);
 			try {
 				trusted.load(in, "flix208utah".toCharArray());
-				FlixsterLogger.d(F.TAG, "EasySSLSocketFactory.getAddTrustRootCert: " + trusted.size());
+				NextGenLogger.d(F.TAG, "EasySSLSocketFactory.getAddTrustRootCert: " + trusted.size());
 			} finally {
 				in.close();
 			}

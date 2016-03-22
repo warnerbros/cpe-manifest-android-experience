@@ -12,9 +12,12 @@ import android.view.Display;
 import android.view.WindowManager;
 
 import com.wb.nextgen.data.DemoData;
+import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.parser.ManifestXMLParser;
 import com.wb.nextgen.model.NextGenSettings;
 import com.wb.nextgen.parser.manifest.schema.v1_4.MediaManifestType;
+import com.wb.nextgen.util.utils.F;
+import com.wb.nextgen.util.utils.NextGenLogger;
 
 import net.flixster.android.FlixsterCacheManager;
 
@@ -65,6 +68,7 @@ public class NextGenApplication extends Application {
     private static NextGenSettings sAppSettings;
 
     private static MediaManifestType manifest;
+    private static MovieMetaData movieMetaData;
     // ///////////////////////////////////////////////////////
     // Flixster Cache
 
@@ -94,21 +98,15 @@ public class NextGenApplication extends Application {
             DemoData.parseDemoJSONData();
 
             manifest = new ManifestXMLParser().startParsing();
+            movieMetaData = MovieMetaData.process(manifest);
 
-            /*
-            JAXBContext jc = JAXBContext.newInstance(MediaManifestType.class);
-
-            Unmarshaller unmarshaller = jc.createUnmarshaller();
-            JAXBElement<MediaManifestType> unmarshalledRoot = unmarshaller.unmarshal(new StreamSource(new File("")), MediaManifestType.class);
-            MediaManifestType manifest = unmarshalledRoot.getValue();*/
-
-            //System.out.println(manifest.getInventory().getMetadata().get(0).getBasicMetadata().getLocalizedInfo().get(0).getOriginalTitle());
-
-        }catch (Exception ex){}
+        }catch (Exception ex){
+            NextGenLogger.e(F.TAG, ex.getLocalizedMessage());
+        }
     }
 
-    public static MediaManifestType getMovieManifest(){
-        return manifest;
+    public static MovieMetaData getMovieMetaData(){
+        return movieMetaData;
     }
 
     /** @return The application context */
