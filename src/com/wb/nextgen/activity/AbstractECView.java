@@ -64,7 +64,7 @@ public abstract class AbstractECView extends AbstractNextGenActivity {
     public void onStart() {
         super.onStart();
         if (listFragment != null){
-            listFragment.onListItemClick(ecGroupData.ecContents.get(0));
+            listFragment.onListItemClick(ecGroupData.getAllECChildren().get(0));
             listFragment.scrollToTop();
         }
     }

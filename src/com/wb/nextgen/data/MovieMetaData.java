@@ -31,6 +31,7 @@ public class MovieMetaData {
     final private List<ECGroupData> extraECGroups = new ArrayList<ECGroupData>();
     final private List<ECGroupData> imeECGroups = new ArrayList<ECGroupData>();
     final private List<IMEElementsGroup> imeElementGroups = new ArrayList<IMEElementsGroup>();
+    final private HashMap<String, ECGroupData> experienceIdToECGroupMap = new HashMap<String, ECGroupData>();
 
     final static public String movieTitleText = "Man of Steel";
 
@@ -47,7 +48,7 @@ public class MovieMetaData {
         HashMap<String, ECContentData> presentationIdToECMap = new HashMap<String, ECContentData>();
         HashMap<String, ECContentData> galleryIdToECMap = new HashMap<String, ECContentData>();
 
-        HashMap<String, ECGroupData> experienceIdToECGroupMap = new HashMap<String, ECGroupData>();
+
         //HashMap<String, ExperienceType>
 
         HashMap<String, ECGroupData> experienceChildrenToParentMap = new HashMap<String, ECGroupData>();
@@ -116,7 +117,7 @@ public class MovieMetaData {
                     }
 
                     if (groupData != null) {
-                        experienceIdToECGroupMap.put(experience.getExperienceID(), groupData);
+                        result.experienceIdToECGroupMap.put(experience.getExperienceID(), groupData);
                         exprienceParentList.add(experience);
                     }
                     //experienceIdMap.put(experience.getExperienceID(), groupData);
@@ -188,7 +189,7 @@ public class MovieMetaData {
             }
             if (exprienceParentList.size() > 0){
                 ExperienceType rootElement = exprienceParentList.get(0);
-                ECGroupData rootGroup = experienceIdToECGroupMap.get(rootElement.getExperienceID());
+                ECGroupData rootGroup = result.experienceIdToECGroupMap.get(rootElement.getExperienceID());
                 if (rootGroup.ecGroups.size() == 2) {
                     result.extraECGroups.addAll(rootGroup.ecGroups.get(0).ecGroups);
                     result.imeECGroups.addAll(rootGroup.ecGroups.get(1).ecGroups);
@@ -272,10 +273,8 @@ public class MovieMetaData {
 
     public ECGroupData findECGroupDataById(String id){
         if (!StringHelper.isEmpty(id)) {
-            for (ECGroupData group : movieExperiences) {
-                if (id.equals(group.id))
-                    return group;
-            }
+            return experienceIdToECGroupMap.get(id);
+
         }
         return null;
     }
@@ -297,13 +296,13 @@ public class MovieMetaData {
         final public String id;
         private String posterImgUrl;
         private ECGroupType type;
-        final public List<ECContentData>  ecContents = new ArrayList<ECContentData>();
-        final public List<ECGroupData>  ecGroups = new ArrayList<ECGroupData>();
+        final private List<ECContentData>  ecContents = new ArrayList<ECContentData>();
+        final private List<ECGroupData>  ecGroups = new ArrayList<ECGroupData>();
 
         public ECGroupData(ExperienceType experience, InventoryMetadataType metaData){
             BasicMetadataInfoType localizedInfo = metaData.getBasicMetadata().getLocalizedInfo().get(0);
             title = localizedInfo.getTitleDisplayUnlimited(); // should loop the list and look for the correct language code
-            id = experience.getContentID();     // or experience Id
+            id = experience.getExperienceID();     // or experience Id
             //this.type = (experience.getGallery() != null && experience.getGallery().size() > 0) ? ECGroupType.GALLERY : ECGroupType.FEATURETTES;
             if (localizedInfo.getArtReference().size() > 0)
                 posterImgUrl = localizedInfo.getArtReference().get(0).getValue();   // should parse for different resolutions
@@ -325,19 +324,26 @@ public class MovieMetaData {
         public ECGroupType getECGroupType(){
             return type;
         }
-        /*
-        public ECGroupData(String id, String title, ECGroupType type){
-            this.id = id;
-            this.title = title;
-            //this.posterImgUrl = posterImgUrl;
-            this.type = type;
-        }*/
+
+        public List<ECContentData> getAllECChildren(){
+            if (ecContents.size() == 0){
+                for (ECGroupData childGroup : ecGroups){
+                    ecContents.addAll(childGroup.getAllECChildren());
+                }
+
+            }
+            return ecContents;
+
+        }
+
         public String getPosterImgUrl(){
-            if (StringHelper.isEmpty(posterImgUrl) && ecContents.size() > 0){
-                for (ECContentData ec : ecContents){
-                    if (!StringHelper.isEmpty(ec.posterImgUrl) ){
-                        posterImgUrl = ec.posterImgUrl;
-                        break;
+            if (StringHelper.isEmpty(posterImgUrl) && getAllECChildren().size() > 0){
+                if (getAllECChildren().size() > 0) {
+                    for (ECContentData ec : getAllECChildren()) {
+                        if (!StringHelper.isEmpty(ec.getPosterImgUrl())) {
+                            posterImgUrl = ec.getPosterImgUrl();
+                            break;
+                        }
                     }
                 }
             }
@@ -376,7 +382,7 @@ public class MovieMetaData {
 
     static public class ECContentData{
         final public String title;
-        final public String posterImgUrl;
+        final private String posterImgUrl;
         final public String ecVideoUrl;
         final public List<ECGalleryImageItem>  galleryItems = new ArrayList<ECGalleryImageItem>();
         public ECContentData(InventoryMetadataType metaData, InventoryVideoType videoData){

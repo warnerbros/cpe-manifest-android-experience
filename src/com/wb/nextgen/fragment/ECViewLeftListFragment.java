@@ -45,11 +45,11 @@ public class ECViewLeftListFragment extends NextGenExtraLeftListFragment{
     }
 
     protected int getListItemCount(){
-        return listECGroupData.ecContents.size();
+        return listECGroupData.getAllECChildren().size();
     }
 
     protected Object getListItemAtPosition(int i){
-        return listECGroupData.ecContents.get(i);
+        return listECGroupData.getAllECChildren().get(i);
     }
 
     protected int getListItemViewId(){
@@ -66,7 +66,7 @@ public class ECViewLeftListFragment extends NextGenExtraLeftListFragment{
         if (imageView != null){
             //ViewGroup.LayoutParams imageLayoutParams = imageView.getLayoutParams();
             imageView.setTag(thisEC.title);
-            PicassoTrustAll.loadImageIntoView(getActivity(), thisEC.posterImgUrl, imageView);
+            PicassoTrustAll.loadImageIntoView(getActivity(), thisEC.getPosterImgUrl(), imageView);
         }
 
         TextView ecNameText = (TextView)rowView.findViewById(R.id.ec_list_name_text);

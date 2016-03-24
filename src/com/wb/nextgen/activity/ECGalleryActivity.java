@@ -37,7 +37,7 @@ public class ECGalleryActivity extends AbstractECView {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        currentGallery = ecGroupData.ecContents.get(0);
+        currentGallery = ecGroupData.getAllECChildren().get(0);
         galleryViewPager = (ViewPager) findViewById(R.id.next_gen_gallery_view_pager);
         adapter = new GalleryPagerAdapter(this);
         fullscreenToggleBtn = (ImageButton)findViewById(R.id.gallery_fullscreen_toggle);
