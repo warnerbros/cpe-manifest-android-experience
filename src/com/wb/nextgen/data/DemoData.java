@@ -20,7 +20,7 @@ public class  DemoData {
         final public String id;
         private String posterImgUrl;
         final public ECGroupType type;
-        final public List<ECContentData>  ecContents = new ArrayList<ECContentData>();
+        final public List<ExperienceData>  ecContents = new ArrayList<ExperienceData>();
         public ECGroupData(String id, String title, ECGroupType type){
             this.id = id;
             this.title = title;
@@ -29,7 +29,7 @@ public class  DemoData {
         }
         public String getPosterImgUrl(){
             if (StringHelper.isEmpty(posterImgUrl) && ecContents.size() > 0){
-                for (ECContentData ec : ecContents){
+                for (ExperienceData ec : ecContents){
                     if (!StringHelper.isEmpty(ec.posterImgUrl) ){
                         posterImgUrl = ec.posterImgUrl;
                         break;
@@ -63,12 +63,12 @@ public class  DemoData {
         }
     }
 
-    static public class ECContentData{
+    static public class ExperienceData{
         final public String title;
         final public String posterImgUrl;
         final public String ecVideoUrl;
         final public List<ECGalleryImageItem>  galleryItems = new ArrayList<ECGalleryImageItem>();
-        public ECContentData(String title, String posterImgUrl, String videoUrl){
+        public ExperienceData(String title, String posterImgUrl, String videoUrl){
             this.title = title;
             this.posterImgUrl = posterImgUrl;
             this.ecVideoUrl = videoUrl;
@@ -77,7 +77,7 @@ public class  DemoData {
 
     final static public List<ECGroupData> DEMO_MAN_OF_STEEL_EC_GROUPS = new ArrayList<ECGroupData>();
 
-    final static public List<ECContentData> DEMODATA_MAN_OF_STEEL_EC_LIST = new ArrayList<ECContentData>();*/
+    final static public List<ExperienceData> DEMODATA_MAN_OF_STEEL_EC_LIST = new ArrayList<ExperienceData>();*/
     final static public String DEMODATA_MAN_OF_STEEL_TITLE_TEXT = "Man of Steel";
 
     public static class AudSubLang{
@@ -120,7 +120,7 @@ public class  DemoData {
         return "android.resource://com.wb.nextgen/" + R.drawable.extras_header;
     }
     /*
-    public static ECGroupData findECGroupDataById(String id){
+    public static ECGroupData findExperienceDataById(String id){
         if (!StringHelper.isEmpty(id)) {
             for (ECGroupData group : DEMO_MAN_OF_STEEL_EC_GROUPS) {
                 if (id.equals(group.id))
@@ -139,52 +139,52 @@ public class  DemoData {
 
 
         // legacy
-        DEMO_MAN_OF_STEEL_EC_GROUPS.get(0).ecContents.add(new ECContentData("Strong Characters, Legendary Roles",
+        DEMO_MAN_OF_STEEL_EC_GROUPS.get(0).ecContents.add(new ExperienceData("Strong Characters, Legendary Roles",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOS_NG_StrongCharacters_SML.jpg",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/video/ManOfSteel_EC_TheMilitaryMightOfManOfSteel_HD_2ch_en-US.m3u8"));
-        DEMO_MAN_OF_STEEL_EC_GROUPS.get(0).ecContents.add(new ECContentData("Superman 75th Anniversary Animated Short",
+        DEMO_MAN_OF_STEEL_EC_GROUPS.get(0).ecContents.add(new ExperienceData("Superman 75th Anniversary Animated Short",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/ManOfSteel_EC_Superman75thAnniversary_HD_SML.jpg",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/video/MOS_4548967020816_6Superman75thAnniversary.m3u8"));
-        DEMO_MAN_OF_STEEL_EC_GROUPS.get(0).ecContents.add(new ECContentData("The Iconic Characters of MAN OF STEEL",
+        DEMO_MAN_OF_STEEL_EC_GROUPS.get(0).ecContents.add(new ExperienceData("The Iconic Characters of MAN OF STEEL",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOS_NG_IconicCharacters_of_MOS_SML.jpg",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/video/ManOfSteel_EC_TheIconicCharactersOfManOfSteel_HD_2ch_en-US.m3u8"));
 
 
         //Out of this world
-        DEMO_MAN_OF_STEEL_EC_GROUPS.get(1).ecContents.add(new ECContentData("Planet Krypton",
+        DEMO_MAN_OF_STEEL_EC_GROUPS.get(1).ecContents.add(new ExperienceData("Planet Krypton",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOS_NG_PlanetKrypton_SML.jpg",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/video/MOS_883316669075_2PlanetKrypton.m3u8"));
-        DEMO_MAN_OF_STEEL_EC_GROUPS.get(1).ecContents.add(new ECContentData("Krypton Decoded",
+        DEMO_MAN_OF_STEEL_EC_GROUPS.get(1).ecContents.add(new ExperienceData("Krypton Decoded",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOS_NG_KryptonDecoded_SML.jpg",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/video/MOS_883316669075_5KryptonDecoded.m3u8"));
 
         //X-Ray Vision
-        DEMO_MAN_OF_STEEL_EC_GROUPS.get(2).ecContents.add(new ECContentData("The Creation and Destruction of Krypton",
+        DEMO_MAN_OF_STEEL_EC_GROUPS.get(2).ecContents.add(new ExperienceData("The Creation and Destruction of Krypton",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOS_NG_CreationDestruction_SML.jpg",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/video/ManOfSteel_EC_CreationAndDestructionOfKrypton_HD_2ch_en-US.m3u8"));
-        DEMO_MAN_OF_STEEL_EC_GROUPS.get(2).ecContents.add(new ECContentData("Clark Discovers the Scout Ship",
+        DEMO_MAN_OF_STEEL_EC_GROUPS.get(2).ecContents.add(new ExperienceData("Clark Discovers the Scout Ship",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOS_NG_ScoutShip_SML.jpg",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/video/ManOfSteel_EC_ClarkDiscoversTheScoutShip_HD_2ch_en-US.m3u8"));
-        DEMO_MAN_OF_STEEL_EC_GROUPS.get(2).ecContents.add(new ECContentData("Battle on the Streets of Smallville",
+        DEMO_MAN_OF_STEEL_EC_GROUPS.get(2).ecContents.add(new ExperienceData("Battle on the Streets of Smallville",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOS_NG_BattleSmallville_SML.jpg",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/video/ManOfSteel_EC_BattleOnTheStreetsOfSmallville_HD_2ch_en-US.m3u8"));
-        DEMO_MAN_OF_STEEL_EC_GROUPS.get(2).ecContents.add(new ECContentData("The Military Might of MAN OF STEEL",
+        DEMO_MAN_OF_STEEL_EC_GROUPS.get(2).ecContents.add(new ExperienceData("The Military Might of MAN OF STEEL",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOS_NG_MilitaryMight_SML.jpg",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/video/ManOfSteel_EC_TheMilitaryMightOfManOfSteel_HD_2ch_en-US.m3u8"));
-        DEMO_MAN_OF_STEEL_EC_GROUPS.get(2).ecContents.add(new ECContentData("Attack on Metropolis",
+        DEMO_MAN_OF_STEEL_EC_GROUPS.get(2).ecContents.add(new ExperienceData("Attack on Metropolis",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOS_NG_AttackMetropolis_SML.jpg",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/video/MOSNG_111_AttackonMetropolis.m3u8"));
 
         //Additional Features
-        DEMO_MAN_OF_STEEL_EC_GROUPS.get(3).ecContents.add(new ECContentData("All-Out Action",
+        DEMO_MAN_OF_STEEL_EC_GROUPS.get(3).ecContents.add(new ExperienceData("All-Out Action",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOSNG_215_ExposingZodsArmor_SML.jpg",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/video/MOSNG_215_ExposingZodsArmor.m3u8"));
-        DEMO_MAN_OF_STEEL_EC_GROUPS.get(3).ecContents.add(new ECContentData("The Sonic Landscape of MAN OF STEEL",
+        DEMO_MAN_OF_STEEL_EC_GROUPS.get(3).ecContents.add(new ExperienceData("The Sonic Landscape of MAN OF STEEL",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOSNG_311_LiquidGeoDefense_SML.jpg",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/video/MOSNG_311_LiquidGeoDefense.m3u8"));
 
         //Galleries
-        ECContentData gallery1 = new ECContentData("Kryptonian Council Wardrobe Gallery",
+        ExperienceData gallery1 = new ExperienceData("Kryptonian Council Wardrobe Gallery",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOSNG_701_KryptonianCouncilWardrobe_SML.jpg",
                 "");
         gallery1.galleryItems.add(new ECGalleryImageItem("",
@@ -207,7 +207,7 @@ public class  DemoData {
                 new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_701_KryptonianCouncilWardrobe_050.jpg", 1920, 1080),
                 new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_701_KryptonianCouncilWardrobe_050.jpg", 352, 198)) );
 
-        ECContentData gallery2 = new ECContentData("Kryptonian Weapons Gallery",
+        ExperienceData gallery2 = new ExperienceData("Kryptonian Weapons Gallery",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOSNG_702_KryptonianWeapons_SML.jpg",
                 "");
 
@@ -248,7 +248,7 @@ public class  DemoData {
                 new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_702_KryptonianWeapons_090.jpg", 352, 198)) );
 
 
-        ECContentData gallery3 = new ECContentData("Kryptonian Noble Wardrobe Gallery",
+        ExperienceData gallery3 = new ExperienceData("Kryptonian Noble Wardrobe Gallery",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOSNG_704_KryptonianNoble_SML.jpg",
                 "");
 
@@ -282,7 +282,7 @@ public class  DemoData {
 
 
 
-        ECContentData gallery4 =new ECContentData("Superman Gallery",
+        ExperienceData gallery4 =new ExperienceData("Superman Gallery",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOSNG_705_SupermanGallery_SML.jpg",
                 "");
 
@@ -314,7 +314,7 @@ public class  DemoData {
                 new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_704_KryptonianNoble_070.jpg", 1920, 1080),
                 new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_704_KryptonianNoble_070.jpg", 352, 198)) );
 
-        ECContentData gallery5 = new ECContentData("Earth Armor Gallery",
+        ExperienceData gallery5 = new ExperienceData("Earth Armor Gallery",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOSNG_706_EarthArmorGallery_SML.jpg",
                 "");
 
@@ -347,7 +347,7 @@ public class  DemoData {
                 new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_705_SupermanGallery_070.jpg", 352, 198)) );
 
 
-        ECContentData gallery6 = new ECContentData("Interior Black Zero Gallery",
+        ExperienceData gallery6 = new ExperienceData("Interior Black Zero Gallery",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOSNG_707_InteriorBlackZero_SML.jpg",
                 "");
 
@@ -372,7 +372,7 @@ public class  DemoData {
                 new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_706_EarthArmorGallery_050.jpg", 352, 198)) );
 
 
-        ECContentData gallery7 = new ECContentData("Black Zero Phantom Zone Gallery",
+        ExperienceData gallery7 = new ExperienceData("Black Zero Phantom Zone Gallery",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOSNG_708_BlackZeroPhantomZone_SML.jpg",
                 "");
 
@@ -400,7 +400,7 @@ public class  DemoData {
                 new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/MOSNG_707_InteriorBlackZero_060.jpg", 1920, 1080),
                 new ECGalleryImageData("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_707_InteriorBlackZero_060.jpg", 352, 198)) );
 
-        ECContentData gallery8 = new ECContentData("Black Zero Phantom Zone Gallery",
+        ExperienceData gallery8 = new ExperienceData("Black Zero Phantom Zone Gallery",
                 "http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOSNG_708_BlackZeroPhantomZone_SML.jpg",
                 "");
 

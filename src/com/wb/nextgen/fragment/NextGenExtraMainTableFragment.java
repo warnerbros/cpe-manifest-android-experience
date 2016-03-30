@@ -12,7 +12,7 @@ import com.wb.nextgen.activity.ECVideoActivity;
 import com.wb.nextgen.R;
 
 import com.wb.nextgen.data.MovieMetaData;
-import com.wb.nextgen.data.MovieMetaData.ECGroupData;
+import com.wb.nextgen.data.MovieMetaData.ExperienceData;
 import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.utils.F;
 
@@ -25,10 +25,10 @@ public class NextGenExtraMainTableFragment extends NextGenGridViewFragment {
 
 
     public final static int GRID_SPACING_DP = 10;
-    private static List<ECGroupData> ecGroups = NextGenApplication.getMovieMetaData().getExtraECGroups();
+    private static List<ExperienceData> ecGroups = NextGenApplication.getMovieMetaData().getExtraECGroups();
 
     protected void onListItmeClick(View v, int position, long id){
-        ECGroupData selectedGroup = ecGroups.get(position);
+        ExperienceData selectedGroup = ecGroups.get(position);
         Intent intent = new Intent(getActivity(), ECVideoActivity.class);
         if (selectedGroup.getECGroupType() == MovieMetaData.ECGroupType.GALLERY){
             intent = new Intent(getActivity(), ECGalleryActivity.class);
@@ -36,7 +36,7 @@ public class NextGenExtraMainTableFragment extends NextGenGridViewFragment {
 
 
         intent.setAction(android.content.Intent.ACTION_VIEW);
-        intent.putExtra(F.ID, getListItemAtPosition(position).id);
+        intent.putExtra(F.ID, getListItemAtPosition(position).experienceId);
         //intent.setDataAndType(Uri.parse("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/feature/ManOfSteel_Clean.mp4"), "video/*");
         //intent.setDataAndType(Uri.parse("http://d1x310wzaeunai.cloudfront.net/video/man-of-steel-trailer3.mp4"), "video/*");
         //       intent.setDataAndType(Uri.parse("https://ia802304.us.archive.org/17/items/BigBuckBunny1280x720Stereo/big_buck_bunny_720_stereo.mp4"), "video/*");
@@ -51,7 +51,7 @@ public class NextGenExtraMainTableFragment extends NextGenGridViewFragment {
         return ecGroups.size();
     }
 
-    protected ECGroupData getListItemAtPosition(int i) {
+    protected ExperienceData getListItemAtPosition(int i) {
         return ecGroups.get(i);
     }
 
@@ -95,7 +95,7 @@ public class NextGenExtraMainTableFragment extends NextGenGridViewFragment {
 
 
 
-        ECGroupData thisExtra = (ECGroupData)item;
+        ExperienceData thisExtra = (ExperienceData)item;
         if(!thisExtra.title.equals(titleTxt.getText())){
             titleTxt.setText(thisExtra.title);
             PicassoTrustAll.loadImageIntoView(getActivity(), thisExtra.getPosterImgUrl(), thumbnailImg);

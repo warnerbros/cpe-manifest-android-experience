@@ -3,13 +3,10 @@ package com.wb.nextgen.activity;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.wb.nextgen.R;
-import com.wb.nextgen.data.DemoData;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.widget.ECMediaController;
 
@@ -64,10 +61,10 @@ public class ECVideoActivity extends AbstractECView {
     }
 
     @Override
-    public void onLeftListItemSelected(MovieMetaData.ECContentData ec){
-        if (ec != null) {
-            selectedECNameTextView.setText(ec.title);
-            videoView.setVideoURI(Uri.parse(ec.ecVideoUrl));
+    public void onLeftListItemSelected(MovieMetaData.ExperienceData ec){
+        if (ec != null && ec.audioVisualItems.size() > 0) {
+            selectedECNameTextView.setText(ec.audioVisualItems.get(0).title);
+            videoView.setVideoURI(Uri.parse(ec.audioVisualItems.get(0).videoUrl));
         }
     }
 

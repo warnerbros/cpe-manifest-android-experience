@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
 import com.wb.nextgen.R;
 import com.wb.nextgen.interfaces.NextGenPlaybackStatusListener;
 
@@ -20,8 +21,9 @@ import java.util.List;
  */
 public class NextGenPlayerBottomFragment extends Fragment implements NextGenPlaybackStatusListener{
 
-    final List<NextGenPlaybackStatusListener> listeners = new ArrayList<NextGenPlaybackStatusListener>();
+    //final List<NextGenPlaybackStatusListener> listeners = new ArrayList<NextGenPlaybackStatusListener>();
     TextView imeText;
+    StickyGridHeadersGridView gridView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -35,7 +37,8 @@ public class NextGenPlayerBottomFragment extends Fragment implements NextGenPlay
         imeText = (TextView)view.findViewById(R.id.next_gen_ime_text);
         NextGenIMEActorFragment imeActorFragment = (NextGenIMEActorFragment)getChildFragmentManager().findFragmentById(R.id.ime_actor_fragment);
 
-        NextGenPlaybackStatusListener imeFragmentFrame1 = (NextGenPlaybackStatusListener)getChildFragmentManager().findFragmentById(R.id.ime_fragment_frame_1);
+        gridView = (StickyGridHeadersGridView)view.findViewById(R.id.ime_gridview);
+        /*NextGenPlaybackStatusListener imeFragmentFrame1 = (NextGenPlaybackStatusListener)getChildFragmentManager().findFragmentById(R.id.ime_fragment_frame_1);
         NextGenPlaybackStatusListener imeFragmentFrame2 = (NextGenPlaybackStatusListener)getChildFragmentManager().findFragmentById(R.id.ime_fragment_frame_2);
         NextGenPlaybackStatusListener imeFragmentFrame3 = (NextGenPlaybackStatusListener)getChildFragmentManager().findFragmentById(R.id.ime_fragment_frame_3);
         NextGenPlaybackStatusListener imeFragmentFrame4 = (NextGenPlaybackStatusListener)getChildFragmentManager().findFragmentById(R.id.ime_fragment_frame_4);
@@ -43,17 +46,17 @@ public class NextGenPlayerBottomFragment extends Fragment implements NextGenPlay
         listeners.add(imeFragmentFrame1);
         listeners.add(imeFragmentFrame2);
         listeners.add(imeFragmentFrame3);
-        listeners.add(imeFragmentFrame4);
+        listeners.add(imeFragmentFrame4);*/
 
     }
 
     public void playbackStatusUpdate(final NextGenPlaybackStatus playbackStatus, final long timecode){
-        if (listeners.size()> 0 ){
+        /*if (listeners.size()> 0 ){
             for (NextGenPlaybackStatusListener listener :listeners) {
                     if (listener !=  null)
                     listener.playbackStatusUpdate(playbackStatus, timecode);
             }
-        }
+        }*/
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {

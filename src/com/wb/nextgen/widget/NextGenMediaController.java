@@ -56,6 +56,7 @@ public class NextGenMediaController extends MediaController {
                     if ((currentVis & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) != View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) {
                         if (!isShown()) {
                             show();
+                            hideShowControls(true);
                         }
                     }
                 }
@@ -87,7 +88,7 @@ public class NextGenMediaController extends MediaController {
                     if (mBaseSystemUIView == null)
                         return;
                     if (isFullScreen()) {
-                        mBaseSystemUIView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN); // hide nav bar
+                        hideShowControls(false);
 
                        /* mBaseSystemUIView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -101,5 +102,14 @@ public class NextGenMediaController extends MediaController {
                 }
             }.run();
         }
+    }
+
+    protected void hideShowControls(boolean bShow){
+        if (!bShow){
+            mBaseSystemUIView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN); // hide nav bar
+        }else{
+
+        }
+
     }
 }

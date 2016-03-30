@@ -1,8 +1,6 @@
 package com.wb.nextgen.activity;
 
-import android.app.ActionBar;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -11,7 +9,6 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -22,7 +19,6 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.wb.nextgen.R;
-import com.wb.nextgen.data.DemoData;
 import com.wb.nextgen.data.MovieMetaData;
 
 /**
@@ -31,13 +27,13 @@ import com.wb.nextgen.data.MovieMetaData;
 public class ECGalleryActivity extends AbstractECView {
 
     private ViewPager galleryViewPager;
-    private MovieMetaData.ECContentData currentGallery;
+    private MovieMetaData.ExperienceData currentGallery;
     private GalleryPagerAdapter adapter;
     private ImageButton fullscreenToggleBtn;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        currentGallery = ecGroupData.getAllECChildren().get(0);
+        currentGallery = ecGroupData.getChildrenContents().get(0);
         galleryViewPager = (ViewPager) findViewById(R.id.next_gen_gallery_view_pager);
         adapter = new GalleryPagerAdapter(this);
         fullscreenToggleBtn = (ImageButton)findViewById(R.id.gallery_fullscreen_toggle);
@@ -112,7 +108,7 @@ public class ECGalleryActivity extends AbstractECView {
 
             MovieMetaData.ECGalleryImageItem currentItem = currentGallery.galleryItems.get(position);
 
-            itemView.setTag(currentItem.name);
+            itemView.setTag(currentItem.title);
 
             // Get the border size to show around each image
             int borderSize = 0;//_thumbnails.getPaddingTop();
@@ -160,7 +156,7 @@ public class ECGalleryActivity extends AbstractECView {
 
 
     @Override
-    public void onLeftListItemSelected(MovieMetaData.ECContentData ec){
+    public void onLeftListItemSelected(MovieMetaData.ExperienceData ec){
         if (ec != null){
             currentGallery = ec;
             selectedECNameTextView.setText(ec.title);

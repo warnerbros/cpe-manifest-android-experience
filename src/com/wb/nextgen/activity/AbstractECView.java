@@ -1,18 +1,10 @@
 package com.wb.nextgen.activity;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.wb.nextgen.NextGenApplication;
@@ -20,8 +12,6 @@ import com.wb.nextgen.R;
 import com.wb.nextgen.data.DemoData;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.fragment.ECViewLeftListFragment;
-import com.wb.nextgen.fragment.NextGenExtraLeftListFragment;
-import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.utils.F;
 
 /**
@@ -29,17 +19,17 @@ import com.wb.nextgen.util.utils.F;
  */
 public abstract class AbstractECView extends AbstractNextGenActivity {
 
-    protected MovieMetaData.ECGroupData ecGroupData ;
+    protected MovieMetaData.ExperienceData ecGroupData ;
     protected ECViewLeftListFragment listFragment;
     protected TextView selectedECNameTextView;
     protected FrameLayout leftListFrame;
     protected boolean isContentFullScreen = false;
 
-    public abstract void onLeftListItemSelected(MovieMetaData.ECContentData ecContentData);
+    public abstract void onLeftListItemSelected(MovieMetaData.ExperienceData ecContentData);
 
     public abstract int getContentViewId();
 
-    public MovieMetaData.ECGroupData getECGroupData(){
+    public MovieMetaData.ExperienceData getECGroupData(){
         return ecGroupData;
     }
 
@@ -48,7 +38,7 @@ public abstract class AbstractECView extends AbstractNextGenActivity {
 
         Intent intent = getIntent();
         String groupId = intent.getStringExtra(F.ID);
-        ecGroupData = NextGenApplication.getMovieMetaData().findECGroupDataById(groupId);
+        ecGroupData = NextGenApplication.getMovieMetaData().findExperienceDataById(groupId);
 
         setContentView(getContentViewId());
 
@@ -64,7 +54,7 @@ public abstract class AbstractECView extends AbstractNextGenActivity {
     public void onStart() {
         super.onStart();
         if (listFragment != null){
-            listFragment.onListItemClick(ecGroupData.getAllECChildren().get(0));
+            listFragment.onListItemClick(ecGroupData.getChildrenContents().get(0));
             listFragment.scrollToTop();
         }
     }

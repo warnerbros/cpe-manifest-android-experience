@@ -24,44 +24,12 @@
             android:id="@+id/next_gen_ime_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-        <LinearLayout
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="horizontal">
+        <com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView
+            android:id="@+id/ime_gridview"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
 
-                <fragment android:name="com.wb.nextgen.fragment.NextGenIMEPresentationFragment"
-                    android:id="@+id/ime_fragment_frame_1"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="fill_parent" />
-
-            <fragment android:id="@+id/ime_fragment_frame_2"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"
-                android:name="com.wb.nextgen.fragment.NextGenSocialFragment"/>
-
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="horizontal">
-
-            <fragment android:name="com.wb.nextgen.fragment.NextGenIMEPresentationFragment"
-                android:id="@+id/ime_fragment_frame_3"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="fill_parent" />
-            <fragment android:name="com.wb.nextgen.fragment.NextGenSocialFragment"
-                android:id="@+id/ime_fragment_frame_4"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="fill_parent" />
-
-        </LinearLayout>
+        </com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView>
 
     </LinearLayout>
 </LinearLayout>

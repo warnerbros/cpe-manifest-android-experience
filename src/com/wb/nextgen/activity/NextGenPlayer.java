@@ -1,24 +1,34 @@
 package com.wb.nextgen.activity;
 
+import android.app.ActionBar;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.MediaController;
 
 import com.flixster.android.captioning.CaptionedPlayer;
 import com.wb.nextgen.R;
 
+import com.wb.nextgen.data.DemoData;
 import com.wb.nextgen.fragment.NextGenPlayerBottomFragment;
 import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgen.interfaces.NextGenPlaybackStatusListener;
+import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.TabletUtils;
 import com.wb.nextgen.util.utils.NextGenFragmentTransactionEngine;
+import com.wb.nextgen.widget.MainFeatureMediaController;
 import com.wb.nextgen.widget.NextGenMediaController;
 
 import net.flixster.android.drm.IVideoViewActionListener;
@@ -42,15 +52,46 @@ public class NextGenPlayer extends CaptionedPlayer implements NextGenFragmentTra
 
     private Timer imeUpdateTimer;
 
+    private Button actionBarLeftButton;
+
+    private MainFeatureMediaController mediaController;
+
     NextGenFragmentTransactionEngine nextGenFragmentTransactionEngine;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        final ActionBar actionBar = getActionBar();
+        TypedValue tv = new TypedValue();
+        if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true))
+        {
+         //   actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data,getResources().getDisplayMetrics());
+        }
+        LayoutInflater inflator = (LayoutInflater) this .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View actionBarCustomView = inflator.inflate(R.layout.action_bar_custom_view, null);
+
+        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
+        actionBar.setStackedBackgroundDrawable(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setLogo(null);
+        actionBar.setTitle("");
+
+        //actionBarLeftButton = (Button) actionBarCustomView.findViewById(R.id.action_bar_left_button);
+        ImageView centerBanner = (ImageView) actionBarCustomView.findViewById(R.id.action_bar_center_banner);
+        ImageView rightLogo = (ImageView) actionBarCustomView.findViewById(R.id.action_bar_right_logo);
+        actionBar.setCustomView(actionBarCustomView);
+
+        if (centerBanner != null)
+            PicassoTrustAll.loadImageIntoView(this, DemoData.getMovieLogoUrl(), centerBanner);
+
+        actionBarLeftButton = (Button) actionBarCustomView.findViewById(R.id.action_bar_left_button);
+
         nextGenFragmentTransactionEngine = new NextGenFragmentTransactionEngine(this);
         setContentView(R.layout.next_gen_videoview);
         videoView = (ObservableVideoView) findViewById(R.id.surface_view);
-        videoView.setMediaController(new NextGenMediaController(this));
+        mediaController = new MainFeatureMediaController(this);
+        videoView.setMediaController(mediaController);
         videoView.setOnErrorListener(getOnErrorListener());
         videoView.setOnPreparedListener(getOnPreparedListener());
         videoView.setOnCompletionListener(getOnCompletionListener());
@@ -101,9 +142,11 @@ public class NextGenPlayer extends CaptionedPlayer implements NextGenFragmentTra
             switch (this.getResources().getConfiguration().orientation) {
                 case Configuration.ORIENTATION_PORTRAIT:
                     nextGenView.setVisibility(View.VISIBLE);
+                    mediaController.hideShowControls(true);
                     break;
                 case Configuration.ORIENTATION_LANDSCAPE:
                     nextGenView.setVisibility(View.GONE);
+                    mediaController.hideShowControls(false);
             }
         }
     }

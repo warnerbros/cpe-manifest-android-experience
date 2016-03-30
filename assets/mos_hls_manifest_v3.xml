@@ -3814,189 +3814,189 @@
                 <ReleaseDate>2013-06-14</ReleaseDate>
                 <WorkType>Movie</WorkType>
                 <ThreeD>false</ThreeD>
-                
+
                 <People>
-					<Job>
-						<JobFunction>Actor</JobFunction>
-						<BillingBlockOrder>1</BillingBlockOrder>
-						<Character>Clark Kent / Kal-El</Character>
-					</Job>
-					<Name>
-						<DisplayName>Henry Cavill</DisplayName>
-						<SortName>Cavill, Henry</SortName>
-						<FirstGivenName>Henry</FirstGivenName>
-						<FamilyName>Cavill</FamilyName>
-					</Name>
-				</People>
-				<People>
-					<Job>
-						<JobFunction>Actor</JobFunction>
-						<BillingBlockOrder>2</BillingBlockOrder>
-						<Character>Lois Lane</Character>
-					</Job>
-					<Name>
-						<DisplayName>Amy Adams</DisplayName>
-						<SortName>Adams, Amy</SortName>
-						<FirstGivenName>Amy</FirstGivenName>
-						<FamilyName>Adams</FamilyName>
-					</Name>
-				</People>
-				<People>
-					<Job>
-						<JobFunction>Actor</JobFunction>
-						<BillingBlockOrder>3</BillingBlockOrder>
-						<Character>General Zod</Character>
-					</Job>
-					<Name>
-						<DisplayName>Michael Shannon</DisplayName>
-						<SortName>Shannon, Michael</SortName>
-						<FirstGivenName>Michael</FirstGivenName>
-						<FamilyName>Shannon</FamilyName>
-					</Name>
-				</People>
-				<People>
-					<Job>
-						<JobFunction>Actor</JobFunction>
-						<BillingBlockOrder>4</BillingBlockOrder>
-						<Character>Martha Kent</Character>
-					</Job>
-					<Name>
-						<DisplayName>Diane Lane</DisplayName>
-						<SortName>Lane, Diane</SortName>
-						<FirstGivenName>Diane</FirstGivenName>
-						<FamilyName>Lane</FamilyName>
-					</Name>
-				</People>
-				<People>
-					<Job>
-						<JobFunction>Actor</JobFunction>
-						<BillingBlockOrder>5</BillingBlockOrder>
-						<Character>Jor-El</Character>
-					</Job>
-					<Name>
-						<DisplayName>Russell Crowe</DisplayName>
-						<SortName>Crowe, Russell</SortName>
-						<FirstGivenName>Russell</FirstGivenName>
-						<FamilyName>Crowe</FamilyName>
-					</Name>
-				</People>
-				<People>
-					<Job>
-						<JobFunction>Actor</JobFunction>
-						<BillingBlockOrder>6</BillingBlockOrder>
-						<Character>Faora-Ul</Character>
-					</Job>
-					<Name>
-						<DisplayName>Antje Traue</DisplayName>
-						<SortName>Traue, Antje</SortName>
-						<FirstGivenName>Antje</FirstGivenName>
-						<FamilyName>Traue</FamilyName>
-					</Name>
-				</People>
-				<People>
-					<Job>
-						<JobFunction>Actor</JobFunction>
-						<BillingBlockOrder>7</BillingBlockOrder>
-						<Character>General Swanwick</Character>
-					</Job>
-					<Name>
-						<DisplayName>Harry Lennix</DisplayName>
-						<SortName>Lennix, Harry</SortName>
-						<FirstGivenName>Harry</FirstGivenName>
-						<FamilyName>Lennix</FamilyName>
-					</Name>
-				</People>
-				<People>
-					<Job>
-						<JobFunction>Actor</JobFunction>
-						<BillingBlockOrder>8</BillingBlockOrder>
-						<Character>Dr. Emil Hamilton</Character>
-					</Job>
-					<Name>
-						<DisplayName>Richard Schiff</DisplayName>
-						<SortName>Schiff, Richard</SortName>
-						<FirstGivenName>Richard</FirstGivenName>
-						<FamilyName>Schiff</FamilyName>
-					</Name>
-				</People>
-				<People>
-					<Job>
-						<JobFunction>Actor</JobFunction>
-						<BillingBlockOrder>9</BillingBlockOrder>
-						<Character>Colonel Nathan Hardy</Character>
-					</Job>
-					<Name>
-						<DisplayName>Christopher Meloni</DisplayName>
-						<SortName>Meloni, Christopher</SortName>
-						<FirstGivenName>Christopher</FirstGivenName>
-						<FamilyName>Meloni</FamilyName>
-					</Name>
-				</People>
-				<People>
-					<Job>
-						<JobFunction>Actor</JobFunction>
-						<BillingBlockOrder>10</BillingBlockOrder>
-						<Character>Jonathan Kent</Character>
-					</Job>
-					<Name>
-						<DisplayName>Kevin Costner</DisplayName>
-						<SortName>Costner, Kevin</SortName>
-						<FirstGivenName>Kevin</FirstGivenName>
-						<FamilyName>Costner</FamilyName>
-					</Name>
-				</People>
-				<People>
-					<Job>
-						<JobFunction>Actor</JobFunction>
-						<BillingBlockOrder>11</BillingBlockOrder>
-						<Character>Lara Lor-Van</Character>
-					</Job>
-					<Name>
-						<DisplayName>Ayelet Zurer</DisplayName>
-						<SortName>Zurer, Ayelet</SortName>
-						<FirstGivenName>Ayelet</FirstGivenName>
-						<FamilyName>Zurer</FamilyName>
-					</Name>
-				</People>
-				<People>
-					<Job>
-						<JobFunction>Actor</JobFunction>
-						<BillingBlockOrder>12</BillingBlockOrder>
-						<Character>Perry White</Character>
-					</Job>
-					<Name>
-						<DisplayName>Laurence Fishburne</DisplayName>
-						<SortName>Fishburne, Laurence</SortName>
-						<FirstGivenName>Laurence</FirstGivenName>
-						<FamilyName>Fishburne</FamilyName>
-					</Name>
-				</People>
-				
-				<People>
-					<Job>
-						<JobFunction>Director</JobFunction>
-						<BillingBlockOrder>1</BillingBlockOrder>
-					</Job>
-					<Name>
-						<DisplayName>Zack Snyder</DisplayName>
-						<SortName>Snyder, Zack</SortName>
-						<FirstGivenName>Zack</FirstGivenName>
-						<FamilyName>Snyder</FamilyName>
-					</Name>
-				</People>
-				<People>
-					<Job>
-						<JobFunction>Writer</JobFunction>
-						<BillingBlockOrder>2</BillingBlockOrder>
-					</Job>
-					<Name>
-						<DisplayName>David S. Goyer</DisplayName>
-						<SortName>Goyer, David Samuel</SortName>
-						<FirstGivenName>David</FirstGivenName>
-						<SecondGivenName>Samuel</SecondGivenName>
-						<FamilyName>Goyer</FamilyName>
-					</Name>
-				</People>
+                    <Job>
+                        <JobFunction>Actor</JobFunction>
+                        <BillingBlockOrder>1</BillingBlockOrder>
+                        <Character>Clark Kent / Kal-El</Character>
+                    </Job>
+                    <Name>
+                        <DisplayName>Henry Cavill</DisplayName>
+                        <SortName>Cavill, Henry</SortName>
+                        <FirstGivenName>Henry</FirstGivenName>
+                        <FamilyName>Cavill</FamilyName>
+                    </Name>
+                </People>
+                <People>
+                    <Job>
+                        <JobFunction>Actor</JobFunction>
+                        <BillingBlockOrder>2</BillingBlockOrder>
+                        <Character>Lois Lane</Character>
+                    </Job>
+                    <Name>
+                        <DisplayName>Amy Adams</DisplayName>
+                        <SortName>Adams, Amy</SortName>
+                        <FirstGivenName>Amy</FirstGivenName>
+                        <FamilyName>Adams</FamilyName>
+                    </Name>
+                </People>
+                <People>
+                    <Job>
+                        <JobFunction>Actor</JobFunction>
+                        <BillingBlockOrder>3</BillingBlockOrder>
+                        <Character>General Zod</Character>
+                    </Job>
+                    <Name>
+                        <DisplayName>Michael Shannon</DisplayName>
+                        <SortName>Shannon, Michael</SortName>
+                        <FirstGivenName>Michael</FirstGivenName>
+                        <FamilyName>Shannon</FamilyName>
+                    </Name>
+                </People>
+                <People>
+                    <Job>
+                        <JobFunction>Actor</JobFunction>
+                        <BillingBlockOrder>4</BillingBlockOrder>
+                        <Character>Martha Kent</Character>
+                    </Job>
+                    <Name>
+                        <DisplayName>Diane Lane</DisplayName>
+                        <SortName>Lane, Diane</SortName>
+                        <FirstGivenName>Diane</FirstGivenName>
+                        <FamilyName>Lane</FamilyName>
+                    </Name>
+                </People>
+                <People>
+                    <Job>
+                        <JobFunction>Actor</JobFunction>
+                        <BillingBlockOrder>5</BillingBlockOrder>
+                        <Character>Jor-El</Character>
+                    </Job>
+                    <Name>
+                        <DisplayName>Russell Crowe</DisplayName>
+                        <SortName>Crowe, Russell</SortName>
+                        <FirstGivenName>Russell</FirstGivenName>
+                        <FamilyName>Crowe</FamilyName>
+                    </Name>
+                </People>
+                <People>
+                    <Job>
+                        <JobFunction>Actor</JobFunction>
+                        <BillingBlockOrder>6</BillingBlockOrder>
+                        <Character>Faora-Ul</Character>
+                    </Job>
+                    <Name>
+                        <DisplayName>Antje Traue</DisplayName>
+                        <SortName>Traue, Antje</SortName>
+                        <FirstGivenName>Antje</FirstGivenName>
+                        <FamilyName>Traue</FamilyName>
+                    </Name>
+                </People>
+                <People>
+                    <Job>
+                        <JobFunction>Actor</JobFunction>
+                        <BillingBlockOrder>7</BillingBlockOrder>
+                        <Character>General Swanwick</Character>
+                    </Job>
+                    <Name>
+                        <DisplayName>Harry Lennix</DisplayName>
+                        <SortName>Lennix, Harry</SortName>
+                        <FirstGivenName>Harry</FirstGivenName>
+                        <FamilyName>Lennix</FamilyName>
+                    </Name>
+                </People>
+                <People>
+                    <Job>
+                        <JobFunction>Actor</JobFunction>
+                        <BillingBlockOrder>8</BillingBlockOrder>
+                        <Character>Dr. Emil Hamilton</Character>
+                    </Job>
+                    <Name>
+                        <DisplayName>Richard Schiff</DisplayName>
+                        <SortName>Schiff, Richard</SortName>
+                        <FirstGivenName>Richard</FirstGivenName>
+                        <FamilyName>Schiff</FamilyName>
+                    </Name>
+                </People>
+                <People>
+                    <Job>
+                        <JobFunction>Actor</JobFunction>
+                        <BillingBlockOrder>9</BillingBlockOrder>
+                        <Character>Colonel Nathan Hardy</Character>
+                    </Job>
+                    <Name>
+                        <DisplayName>Christopher Meloni</DisplayName>
+                        <SortName>Meloni, Christopher</SortName>
+                        <FirstGivenName>Christopher</FirstGivenName>
+                        <FamilyName>Meloni</FamilyName>
+                    </Name>
+                </People>
+                <People>
+                    <Job>
+                        <JobFunction>Actor</JobFunction>
+                        <BillingBlockOrder>10</BillingBlockOrder>
+                        <Character>Jonathan Kent</Character>
+                    </Job>
+                    <Name>
+                        <DisplayName>Kevin Costner</DisplayName>
+                        <SortName>Costner, Kevin</SortName>
+                        <FirstGivenName>Kevin</FirstGivenName>
+                        <FamilyName>Costner</FamilyName>
+                    </Name>
+                </People>
+                <People>
+                    <Job>
+                        <JobFunction>Actor</JobFunction>
+                        <BillingBlockOrder>11</BillingBlockOrder>
+                        <Character>Lara Lor-Van</Character>
+                    </Job>
+                    <Name>
+                        <DisplayName>Ayelet Zurer</DisplayName>
+                        <SortName>Zurer, Ayelet</SortName>
+                        <FirstGivenName>Ayelet</FirstGivenName>
+                        <FamilyName>Zurer</FamilyName>
+                    </Name>
+                </People>
+                <People>
+                    <Job>
+                        <JobFunction>Actor</JobFunction>
+                        <BillingBlockOrder>12</BillingBlockOrder>
+                        <Character>Perry White</Character>
+                    </Job>
+                    <Name>
+                        <DisplayName>Laurence Fishburne</DisplayName>
+                        <SortName>Fishburne, Laurence</SortName>
+                        <FirstGivenName>Laurence</FirstGivenName>
+                        <FamilyName>Fishburne</FamilyName>
+                    </Name>
+                </People>
+
+                <People>
+                    <Job>
+                        <JobFunction>Director</JobFunction>
+                        <BillingBlockOrder>1</BillingBlockOrder>
+                    </Job>
+                    <Name>
+                        <DisplayName>Zack Snyder</DisplayName>
+                        <SortName>Snyder, Zack</SortName>
+                        <FirstGivenName>Zack</FirstGivenName>
+                        <FamilyName>Snyder</FamilyName>
+                    </Name>
+                </People>
+                <People>
+                    <Job>
+                        <JobFunction>Writer</JobFunction>
+                        <BillingBlockOrder>2</BillingBlockOrder>
+                    </Job>
+                    <Name>
+                        <DisplayName>David S. Goyer</DisplayName>
+                        <SortName>Goyer, David Samuel</SortName>
+                        <FirstGivenName>David</FirstGivenName>
+                        <SecondGivenName>Samuel</SecondGivenName>
+                        <FamilyName>Goyer</FamilyName>
+                    </Name>
+                </People>
             </manifest:BasicMetadata>
         </manifest:Metadata>
         <manifest:Metadata ContentID="md:cid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.characters_and_story.1">
@@ -7899,50 +7899,36 @@
                 <manifest:SequenceInfo>
                     <Number>1</Number>
                 </manifest:SequenceInfo>
-                <manifest:ExperienceID>md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.3</manifest:ExperienceID>
+                <manifest:ExperienceID>md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.4</manifest:ExperienceID>
             </manifest:ExperienceChild>
             <manifest:ExperienceChild>
                 <manifest:Relationship>ispartof</manifest:Relationship>
                 <manifest:SequenceInfo>
                     <Number>2</Number>
                 </manifest:SequenceInfo>
-                <manifest:ExperienceID>md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.4</manifest:ExperienceID>
+                <manifest:ExperienceID>md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.8</manifest:ExperienceID>
             </manifest:ExperienceChild>
             <manifest:ExperienceChild>
                 <manifest:Relationship>ispartof</manifest:Relationship>
                 <manifest:SequenceInfo>
                     <Number>3</Number>
                 </manifest:SequenceInfo>
-                <manifest:ExperienceID>md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.8</manifest:ExperienceID>
+                <manifest:ExperienceID>md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.11</manifest:ExperienceID>
             </manifest:ExperienceChild>
             <manifest:ExperienceChild>
                 <manifest:Relationship>ispartof</manifest:Relationship>
                 <manifest:SequenceInfo>
                     <Number>4</Number>
                 </manifest:SequenceInfo>
-                <manifest:ExperienceID>md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.11</manifest:ExperienceID>
+                <manifest:ExperienceID>md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.17</manifest:ExperienceID>
             </manifest:ExperienceChild>
             <manifest:ExperienceChild>
                 <manifest:Relationship>ispartof</manifest:Relationship>
                 <manifest:SequenceInfo>
                     <Number>5</Number>
                 </manifest:SequenceInfo>
-                <manifest:ExperienceID>md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.17</manifest:ExperienceID>
-            </manifest:ExperienceChild>
-            <manifest:ExperienceChild>
-                <manifest:Relationship>ispartof</manifest:Relationship>
-                <manifest:SequenceInfo>
-                    <Number>6</Number>
-                </manifest:SequenceInfo>
                 <manifest:ExperienceID>md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.20</manifest:ExperienceID>
             </manifest:ExperienceChild>
-        </manifest:Experience>
-        <manifest:Experience ExperienceID="md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.3" version="1">
-            <manifest:Language>en</manifest:Language>
-            <manifest:Region>
-                <country>US</country>
-            </manifest:Region>
-            <manifest:ContentID>md:cid:eidr-x:C80F-C561-EE65-C5E4-C039-U:experience.bonus.3</manifest:ContentID>
         </manifest:Experience>
         <manifest:Experience ExperienceID="md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.4" version="1">
             <manifest:Language>en</manifest:Language>

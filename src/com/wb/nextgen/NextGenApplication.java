@@ -99,7 +99,6 @@ public class NextGenApplication extends Application {
 
             manifest = new ManifestXMLParser().startParsing();
             movieMetaData = MovieMetaData.process(manifest);
-
         }catch (Exception ex){
             NextGenLogger.e(F.TAG, ex.getLocalizedMessage());
         }

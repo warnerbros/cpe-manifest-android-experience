@@ -27,6 +27,7 @@
         <item name="android:tabWidgetStyle">@style/CustomTabStyle</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:textAppearance">@style/TextNormalBold</item>
+        <item name="android:windowNoTitle">true</item>
         
         <item name="android:icon">@android:color/transparent</item>
         <item name="android:gravity">center_horizontal</item>

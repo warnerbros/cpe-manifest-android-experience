@@ -122,7 +122,8 @@
 			android:screenOrientation="fullSensor"
 			android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
 			android:exported="false"
-			android:theme="@style/Theme.Flx.FullscreenVideo" >
+			android:theme="@style/ExtraActionBar" >
+			<!--android:theme="@style/Theme.Flx.FullscreenVideo" >-->
 
 		</activity>
 

@@ -3,12 +3,10 @@ package com.wb.nextgen.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wb.nextgen.R;
 import com.wb.nextgen.activity.AbstractECView;
-import com.wb.nextgen.data.DemoData;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.widget.SelectedOverlayImageView;
@@ -17,7 +15,7 @@ import com.wb.nextgen.widget.SelectedOverlayImageView;
  * Created by gzcheng on 3/7/16.
  */
 public class ECViewLeftListFragment extends NextGenExtraLeftListFragment{
-    MovieMetaData.ECGroupData listECGroupData;
+    MovieMetaData.ExperienceData listECGroupData;
     AbstractECView ecViewActivity;
 
     @Override
@@ -41,15 +39,15 @@ public class ECViewLeftListFragment extends NextGenExtraLeftListFragment{
     }
 
     public void onListItemClick(Object selectedObject){
-        ecViewActivity.onLeftListItemSelected((MovieMetaData.ECContentData) selectedObject);
+        ecViewActivity.onLeftListItemSelected((MovieMetaData.ExperienceData) selectedObject);
     }
 
     protected int getListItemCount(){
-        return listECGroupData.getAllECChildren().size();
+        return listECGroupData.getChildrenContents().size();
     }
 
     protected Object getListItemAtPosition(int i){
-        return listECGroupData.getAllECChildren().get(i);
+        return listECGroupData.getChildrenContents().get(i);
     }
 
     protected int getListItemViewId(){
@@ -60,7 +58,7 @@ public class ECViewLeftListFragment extends NextGenExtraLeftListFragment{
     }
 
     protected void fillListRowWithObjectInfo(View rowView, Object item){
-        MovieMetaData.ECContentData thisEC = (MovieMetaData.ECContentData) item;
+        MovieMetaData.ExperienceData thisEC = (MovieMetaData.ExperienceData) item;
 
         SelectedOverlayImageView imageView = (SelectedOverlayImageView)rowView.findViewById(R.id.ec_list_image);
         if (imageView != null){
