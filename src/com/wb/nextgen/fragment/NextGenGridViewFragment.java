@@ -57,7 +57,7 @@ public abstract class NextGenGridViewFragment extends Fragment implements Adapte
             gridView.setHorizontalSpacing(spacing);
             gridView.setVerticalSpacing(spacing);
             gridView.setPadding(spacing, 0, spacing, spacing);
-            gridView.setHeadersIgnorePadding(true);
+            //gridView.setHeadersIgnorePadding(true);
             listAdaptor = new NextGenExtraLeftPanelAdapter();
             gridView.setAdapter(listAdaptor);
             gridView.setOnItemClickListener(this);
