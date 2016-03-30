@@ -122,7 +122,7 @@ public class ManifestXMLParser {
                 try {
                     Method setter = classObj.getDeclaredMethod("setValue", String.class);
                     setter.invoke(retObj, readText(parser));
-
+                    return retObj;
                 } catch (Exception ex) {
 
                 }
@@ -194,7 +194,7 @@ public class ManifestXMLParser {
 
 
 
-        }catch (Exception ex){
+    }catch (Exception ex){
             System.out.println(ex.getLocalizedMessage() + "Current injecting class: " + classObj.getName() + " Field: " + currentFieldName );
             ex.printStackTrace();
         }

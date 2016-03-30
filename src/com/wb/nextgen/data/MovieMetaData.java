@@ -32,10 +32,16 @@ public class MovieMetaData {
     final private List<ExperienceData> imeECGroups = new ArrayList<ExperienceData>();
     final private List<IMEElementsGroup> imeElementGroups = new ArrayList<IMEElementsGroup>();
     final private HashMap<String, ExperienceData> experienceIdToExperienceMap = new HashMap<String, ExperienceData>();
+    private ExperienceData rootExperience;
 
     final static public String movieTitleText = "Man of Steel";
 
-
+    public String getMainMovieUrl(){
+        if (rootExperience != null && rootExperience.audioVisualItems.size() > 0){
+            return rootExperience.audioVisualItems.get(0).videoUrl;
+        }
+        return "";
+    }
 
     public static MovieMetaData process(MediaManifestType mediaManifest){
         MovieMetaData result = new MovieMetaData();
@@ -51,10 +57,7 @@ public class MovieMetaData {
         HashMap<String, ExperienceData> timeSequenceIdToECGroup = new HashMap<String, ExperienceData>();
 
 
-        //HashMap<String, ExperienceType>
-
         HashMap<String, ExperienceData> experienceChildrenToParentMap = new HashMap<String, ExperienceData>();
-        //HashMap<String, ECGroupData> experienceIdMap = new HashMap<String, ECGroupData>();
 
         String mainMovieExperienceId = mediaManifest.getALIDExperienceMaps().getALIDExperienceMap().get(0).getExperienceID().get(0).getValue();
 
@@ -170,91 +173,12 @@ public class MovieMetaData {
                     //experienceIdMap.put(experience.getExperienceID(), groupData);
                 }
 
-                /*
-                //ExperienceData thisExperience = null;
-                if ((experience.getExperienceChild() != null && experience.getExperienceChild().size() > 0) || (experience.getAudiovisual() != null && experience.getAudiovisual().size() > 0) ) {
-
-
-
-                    //result.movieExperiences.add(groupData);
-                    if (experience.getExperienceChild() != null && experience.getExperienceChild().size() > 0) {
-                        for (ExperienceChildType child : experience.getExperienceChild()) {
-                            experienceChildrenToParentMap.put(child.getExperienceID(), groupData);    //skip these IDs when encounter.
-                        }
-                    }
-
-                    if ((experience.getAudiovisual() != null && experience.getAudiovisual().size() > 0) && !mainMovieExperienceId.equals(experience.getExperienceID())){
-                        thisGroupData = groupData;
-                    }
-
-                    if (parentGroup != null){
-                        parentGroup.addChild(groupData);
-                    }
-
-                    if (groupData != null) {
-                        result.experienceIdToECGroupMap.put(experience.getExperienceID(), groupData);
-                        exprienceParentList.add(experience);
-                    }
-                    //experienceIdMap.put(experience.getExperienceID(), groupData);
-                }
-
-
-                if (parentGroup != null && thisGroupData != null){
-                    List<ExperienceData> ecGalleryDatas = new ArrayList<ExperienceData>();
-                    List<ExperienceData> ecVideoDatas = new ArrayList<ExperienceData>();
-                    if (experience.getGallery() != null && experience.getGallery().size() > 0) {
-                        for(GalleryType gallery : experience.getGallery()) {
-                            String pictureGroupId = experience.getGallery().get(0).getPictureGroupID();
-                            PictureGroupType pictureGroup = pictureGroupAssetsMap.get(pictureGroupId);
-                            List<ECGalleryImageItem> items = new ArrayList<ECGalleryImageItem>();
-                            if (pictureGroup != null) {
-                                for (PictureType picture : pictureGroup.getPicture()) {
-                                    InventoryImageType fullImageData = imageAssetsMap.get(picture.getImageID());
-                                    InventoryImageType thumbNailImageData = imageAssetsMap.get(picture.getThumbnailImageID());
-                                    ECGalleryImageItem galleryItem = new ECGalleryImageItem(metaData, fullImageData, thumbNailImageData);
-                                    items.add(galleryItem);
-                                }
-
-                            }
-
-                            ExperienceData ecData = new ExperienceData(experience, metaData, null, items);
-                            ecGalleryDatas.add(ecData);
-                            galleryIdToECMap.put(experience.getGallery().get(0).getGalleryID(), ecData);
-                        }
-                    }
-
-                    if (experience.getAudiovisual() != null){
-                        InventoryVideoType video = null;
-                        String presentationId = "";
-                        if (experience.getAudiovisual().size() > 0) {                           // for video Asset
-                            for (AudiovisualType audioviual : experience.getAudiovisual()) {
-                                metaData = metaDataAssetsMap.get(audioviual.getContentID());        // get Video asset by ContentID of its AudioVisual
-                                presentationId = audioviual.getPresentationID();
-                                PresentationType presentation = presentationAssetMap.get(presentationId);  // get Presentation by presentation id
-                                if (presentation.getTrackMetadata().size() > 0 &&
-                                        presentation.getTrackMetadata().get(0).getVideoTrackReference().size() > 0 &&
-                                        presentation.getTrackMetadata().get(0).getVideoTrackReference().get(0).getVideoTrackID().size() > 0) {                                           // get the video id from presentation
-                                    video = videoAssetsMap.get(presentation.getTrackMetadata().get(0).getVideoTrackReference().get(0).getVideoTrackID().get(0));
-                                }
-                                if (video != null) {
-                                    ExperienceData ecData = new ExperienceData(experience, metaData, video, null);
-                                    presentationIdToECMap.put(presentationId, ecData);
-                                    ecVideoDatas.add(ecData);
-                                } else {
-
-                                }
-                            }
-                        }
-                    }
-                }*/
             }
 
-
-            //ExperienceType rootElement = exprienceParentList.get(0);
-            //ExperienceData rootGroup = result.experienceIdToExperienceMap.get(rootData.getExperienceID());
             if (rootData != null && rootData.childrenExperience.size() == 2) {
                 result.extraECGroups.addAll(rootData.childrenExperience.get(0).childrenExperience);
                 result.imeECGroups.addAll(rootData.childrenExperience.get(1).childrenExperience);
+                result.rootExperience = rootData;
             }
 
 
