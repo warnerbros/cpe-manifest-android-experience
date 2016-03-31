@@ -15,6 +15,7 @@ import com.wb.nextgen.util.PicassoTrustAll;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.wb.nextgen.data.MovieMetaData.IMEElementsGroup;
 
 /**
  * Created by gzcheng on 3/28/16.
@@ -24,17 +25,34 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
     List<MovieMetaData.IMEElementsGroup> imeGroups;
     final List<NextGenIMEEngine> imeEngines = new ArrayList<NextGenIMEEngine>();
     long currentTimeCode = 0L;
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         imeGroups = NextGenApplication.getMovieMetaData().getImeElementGroups();
-        for (MovieMetaData.IMEElementsGroup group : imeGroups){
+        for (IMEElementsGroup group : imeGroups){
             imeEngines.add(new NextGenIMEEngine(group.getIMEElementesList()));
         }
         super.onViewCreated(view, savedInstanceState);
     }
 
-    protected void onListItmeClick(View v, int position, long id){
+    @Override
+    public void onDestroyView()  {
+        super.onDestroyView();
+    }
 
+    protected void onListItmeClick(View v, int position, long id){
+        if (position < 0 || position >= imeGroups.size())
+            return;
+        IMEElementsGroup group = imeGroups.get(position);
+        NextGenIMEEngine engine = imeEngines.get(position);
+        Object imeObject = engine.getCurrentIMEElement();
+        if (imeObject instanceof MovieMetaData.PresentationDataItem){
+            if (imeObject instanceof MovieMetaData.ECGalleryImageItem){
+
+            }else if (imeObject instanceof MovieMetaData.ECAudioVisualItem){
+
+            }
+        }
     }
 
     protected int getNumberOfColumns(){
@@ -54,39 +72,62 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
     }
 
     protected void fillListRowWithObjectInfo(int position, View rowView, Object item, boolean isSelected){
+        /*TextView titleText= (TextView)rowView.findViewById(R.id.ime_title);
+        TextView subText1= (TextView)rowView.findViewById(R.id.ime_desc_text1);
+        TextView subText2= (TextView)rowView.findViewById(R.id.ime_desc_text2);
+        ImageView poster = (ImageView)rowView.findViewById(R.id.ime_image_poster);*/
+
+        IMEElementsGroup group = (IMEElementsGroup)item;
+        NextGenIMEEngine engine = imeEngines.get(position);
+        if (group.linkedExperience != null){
+            rowView.setTag(group.linkedExperience.experienceId);
+        }
+
+        localFill(engine, rowView, group);
+
+    }
+
+    private void localFill(NextGenIMEEngine engine, View rowView, IMEElementsGroup group){
         TextView titleText= (TextView)rowView.findViewById(R.id.ime_title);
         TextView subText1= (TextView)rowView.findViewById(R.id.ime_desc_text1);
         TextView subText2= (TextView)rowView.findViewById(R.id.ime_desc_text2);
         ImageView poster = (ImageView)rowView.findViewById(R.id.ime_image_poster);
 
-        MovieMetaData.IMEElementsGroup group = (MovieMetaData.IMEElementsGroup)item;
 
         if (titleText != null && group.linkedExperience != null){
-            titleText.setText(group.linkedExperience.title);
+            titleText.setText(group.linkedExperience.title);      // set a tag with the linked Experience Id
         }
 
-        NextGenIMEEngine engine = imeEngines.get(position);
         boolean hasChanged = engine.computeCurrentIMEElement(currentTimeCode);
         Object imeObj = engine.getCurrentIMEElement();
-        if (hasChanged && imeObj != null ){
-            if (imeObj instanceof MovieMetaData.PresentationDataItem) {
-                if (poster != null) {
-                    PicassoTrustAll.loadImageIntoView(getActivity(), ((MovieMetaData.PresentationDataItem) imeObj).getPosterImgUrl(), poster);
-                }
 
-                if (subText1 != null) {
-                    subText1.invalidate();
-                    subText1.setText(((MovieMetaData.PresentationDataItem) imeObj).title);
+        if (imeObj instanceof MovieMetaData.PresentationDataItem) {
+            Object currentPresentationId = rowView.getTag(R.id.next_gen_ime_frame);
+            rowView.setTag(R.id.next_gen_ime_frame, ((MovieMetaData.PresentationDataItem) imeObj).id);
+            if (poster != null) {
+                String imageUrl = ((MovieMetaData.PresentationDataItem) imeObj).getPosterImgUrl();
+                if (poster.getTag() == null ||  !poster.getTag().equals(imageUrl)) {
+                    poster.setTag(imageUrl);
+                    PicassoTrustAll.loadImageIntoView(getContext(), imageUrl, poster);
                 }
             }
-        }
 
+            if (subText1 != null && !subText1.getText().equals(((MovieMetaData.PresentationDataItem) imeObj).title)) {
+                subText1.setText(((MovieMetaData.PresentationDataItem) imeObj).title);
+            }
+        }
 
     }
 
     public void playbackStatusUpdate(final NextGenPlaybackStatus playbackStatus, final long timecode){
         currentTimeCode = timecode;
         listAdaptor.notifyDataSetChanged();
+        /*for (int i = 0; i< imeGroups.size(); i++){
+            try {
+                if (imeGroups.get(i).linkedExperience.experienceId.equals(rowViews[i].getTag()))
+                    localFill(imeEngines.get(i), rowViews[i], imeGroups.get(i));
+            }catch (Exception ex){}
+        }*/
     }
 
     protected String getHeaderText(){

@@ -3,12 +3,12 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="fill_parent">
-    <com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView
+    <GridView
         android:id="@+id/next_gen_grid"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_gravity="center"
         android:stretchMode="columnWidth" >
-    </com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView>
+    </GridView>
 
 </LinearLayout>

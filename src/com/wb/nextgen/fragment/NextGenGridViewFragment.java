@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.TextView;
 
 import com.tonicartos.widget.stickygridheaders.StickyGridHeadersBaseAdapter;
@@ -19,27 +20,13 @@ import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 
 
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.TextView;
-
-import com.wb.nextgen.NextGenApplication;
-import com.wb.nextgen.R;
-import com.tonicartos.widget.stickygridheaders.StickyGridHeadersBaseAdapter;
-
-
 /**
  * Created by gzcheng on 1/12/16.
  */
 public abstract class NextGenGridViewFragment extends Fragment implements AdapterView.OnItemClickListener{
 
-    protected StickyGridHeadersGridView gridView;
-    protected NextGenExtraLeftPanelAdapter listAdaptor;
+    protected GridView gridView;
+    protected NextGenGridViewAdapter listAdaptor;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -51,14 +38,14 @@ public abstract class NextGenGridViewFragment extends Fragment implements Adapte
         super.onViewCreated(view, savedInstanceState);
         float density = NextGenApplication.getScreenDensity(getActivity());
         int spacing = (int)(10 *density);
-        gridView = (StickyGridHeadersGridView)view.findViewById(R.id.next_gen_grid);
+        gridView = (GridView)view.findViewById(R.id.next_gen_grid);
         if (gridView != null){
             gridView.setNumColumns(getNumberOfColumns());
             gridView.setHorizontalSpacing(spacing);
             gridView.setVerticalSpacing(spacing);
             gridView.setPadding(spacing, 0, spacing, spacing);
             //gridView.setHeadersIgnorePadding(true);
-            listAdaptor = new NextGenExtraLeftPanelAdapter();
+            listAdaptor = new NextGenGridViewAdapter();
             gridView.setAdapter(listAdaptor);
             gridView.setOnItemClickListener(this);
         }
@@ -95,7 +82,7 @@ public abstract class NextGenGridViewFragment extends Fragment implements Adapte
         listAdaptor.selectedIndex = getStartupSelectedIndex();
     }
 
-    public class NextGenExtraLeftPanelAdapter extends BaseAdapter implements StickyGridHeadersBaseAdapter {
+    public class NextGenGridViewAdapter extends BaseAdapter{
 
         //protected NextGenExtraActivity activity;
 
@@ -105,7 +92,7 @@ public abstract class NextGenGridViewFragment extends Fragment implements Adapte
 
         private TextView headerTextView;
 
-        NextGenExtraLeftPanelAdapter() {
+        NextGenGridViewAdapter() {
 
             mInflater = LayoutInflater.from(getActivity());
         }
@@ -143,7 +130,7 @@ public abstract class NextGenGridViewFragment extends Fragment implements Adapte
         public long getItemId(int position) {
             return position;
         }
-
+/*
         @Override
         public View getHeaderView(int position, View convertView, ViewGroup parent) {
             if (headerTextView == null){
@@ -164,7 +151,7 @@ public abstract class NextGenGridViewFragment extends Fragment implements Adapte
         public int getNumHeaders() {
             // TODO Auto-generated method stub
             return getHeaderCount();
-        }
+        }*/
 
     }
 }

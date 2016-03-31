@@ -309,10 +309,12 @@ public class MovieMetaData {
     }
 
     static public abstract class PresentationDataItem{
+        final public String id;
         final public String title;
         final public String parentExperienceId;
         public PresentationDataItem(InventoryMetadataType metaData, String parentExperienceId){
             BasicMetadataInfoType localizedInfo = metaData.getBasicMetadata().getLocalizedInfo().get(0);
+            this.id = metaData.getContentID();
             title = localizedInfo.getTitleDisplayUnlimited();
             this.parentExperienceId = parentExperienceId;
         }
@@ -352,6 +354,7 @@ public class MovieMetaData {
             }
         }
         public String getPosterImgUrl(){
+
             return posterImgUrl;
         }
     }
@@ -435,8 +438,10 @@ public class MovieMetaData {
         public String getPosterImgUrl(){
             if (!StringHelper.isEmpty(posterImgUrl))
                 return posterImgUrl;
-            else if (galleryItems.size() > 0){
-                return  galleryItems.get(0).thumbnail.url;
+            else if (galleryItems.size() > 0) {
+                posterImgUrl = galleryItems.get(0).thumbnail.url;
+            }else if (audioVisualItems.size() > 0){
+                posterImgUrl = audioVisualItems.get(0).getPosterImgUrl();
             }else if (StringHelper.isEmpty(posterImgUrl) && childrenExperience.size() > 0) {
                 for (ExperienceData ec : childrenExperience) {
                     if (!StringHelper.isEmpty(ec.getPosterImgUrl())) {
@@ -444,9 +449,8 @@ public class MovieMetaData {
                         break;
                     }
                 }
-                return posterImgUrl;
-            }else
-                return null;
+            }
+            return posterImgUrl;
         }
     }
 

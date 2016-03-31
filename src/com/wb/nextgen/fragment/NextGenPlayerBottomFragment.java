@@ -24,6 +24,7 @@ public class NextGenPlayerBottomFragment extends Fragment implements NextGenPlay
     //final List<NextGenPlaybackStatusListener> listeners = new ArrayList<NextGenPlaybackStatusListener>();
     TextView imeText;
     IMEElementsGridFragment imeGridFragment;
+    private long lastTimeCode = -1;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -38,16 +39,6 @@ public class NextGenPlayerBottomFragment extends Fragment implements NextGenPlay
         NextGenIMEActorFragment imeActorFragment = (NextGenIMEActorFragment)getChildFragmentManager().findFragmentById(R.id.ime_actor_fragment);
 
         imeGridFragment = (IMEElementsGridFragment)getChildFragmentManager().findFragmentById(R.id.ime_grid_fragment);
-        /*NextGenPlaybackStatusListener imeFragmentFrame1 = (NextGenPlaybackStatusListener)getChildFragmentManager().findFragmentById(R.id.ime_fragment_frame_1);
-        NextGenPlaybackStatusListener imeFragmentFrame2 = (NextGenPlaybackStatusListener)getChildFragmentManager().findFragmentById(R.id.ime_fragment_frame_2);
-        NextGenPlaybackStatusListener imeFragmentFrame3 = (NextGenPlaybackStatusListener)getChildFragmentManager().findFragmentById(R.id.ime_fragment_frame_3);
-        NextGenPlaybackStatusListener imeFragmentFrame4 = (NextGenPlaybackStatusListener)getChildFragmentManager().findFragmentById(R.id.ime_fragment_frame_4);
-        listeners.add(imeActorFragment);
-        listeners.add(imeFragmentFrame1);
-        listeners.add(imeFragmentFrame2);
-        listeners.add(imeFragmentFrame3);
-        listeners.add(imeFragmentFrame4);*/
-
 
     }
 
@@ -58,6 +49,12 @@ public class NextGenPlayerBottomFragment extends Fragment implements NextGenPlay
                     listener.playbackStatusUpdate(playbackStatus, timecode);
             }
         }*/
+
+        if (lastTimeCode == timecode)
+            return;
+
+        lastTimeCode = timecode;
+
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
