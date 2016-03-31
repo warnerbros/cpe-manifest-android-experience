@@ -1,5 +1,6 @@
 package com.wb.nextgen.data;
 
+import com.wb.nextgen.model.NextGenIMEEngine;
 import com.wb.nextgen.parser.manifest.schema.v1_4.AudiovisualType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.ExperienceChildType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.ExperienceType;
@@ -18,6 +19,9 @@ import com.wb.nextgen.parser.md.schema.v2_3.BasicMetadataInfoType;
 import com.wb.nextgen.util.utils.StringHelper;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -103,17 +107,18 @@ public class MovieMetaData {
             for (ExperienceType experience : mediaManifest.getExperiences().getExperience()) {
                 List<ECGalleryImageItem> galleryItems = new ArrayList<ECGalleryImageItem>();
                 List<ECAudioVisualItem> avItems = new ArrayList<ECAudioVisualItem>();
-                InventoryMetadataType metaData = metaDataAssetsMap.get(experience.getContentID());
+                InventoryMetadataType experienceMetaData = metaDataAssetsMap.get(experience.getContentID());
 
                 if (experience.getGallery() != null && experience.getGallery().size() > 0) {
                     for(GalleryType gallery : experience.getGallery()) {
-                        String pictureGroupId = experience.getGallery().get(0).getPictureGroupID();
+                        String pictureGroupId = gallery.getPictureGroupID();
                         PictureGroupType pictureGroup = pictureGroupAssetsMap.get(pictureGroupId);
                         if (pictureGroup != null) {
                             for (PictureType picture : pictureGroup.getPicture()) {
                                 InventoryImageType fullImageData = imageAssetsMap.get(picture.getImageID());
                                 InventoryImageType thumbNailImageData = imageAssetsMap.get(picture.getThumbnailImageID());
-                                ECGalleryImageItem galleryItem = new ECGalleryImageItem(experience.getExperienceID(), metaData, fullImageData, thumbNailImageData);
+                                InventoryMetadataType galleryMataData = metaDataAssetsMap.get(gallery.getContentID());
+                                ECGalleryImageItem galleryItem = new ECGalleryImageItem(experience.getExperienceID(), galleryMataData, fullImageData, thumbNailImageData);
                                 galleryItems.add(galleryItem);
                                 galleryIdToGalleryItemMap.put(gallery.getGalleryID(), galleryItem);
                             }
@@ -126,7 +131,7 @@ public class MovieMetaData {
                     String presentationId = "";
                     if (experience.getAudiovisual().size() > 0) {                           // for video Asset
                         for (AudiovisualType audioVisual : experience.getAudiovisual()) {
-                            metaData = metaDataAssetsMap.get(audioVisual.getContentID());        // get Video asset by ContentID of its AudioVisual
+                            InventoryMetadataType avMetaData = metaDataAssetsMap.get(audioVisual.getContentID());        // get Video asset by ContentID of its AudioVisual
                             presentationId = audioVisual.getPresentationID();
                             PresentationType presentation = presentationAssetMap.get(presentationId);  // get Presentation by presentation id
                             if (presentation.getTrackMetadata().size() > 0 &&
@@ -136,7 +141,7 @@ public class MovieMetaData {
                             }
                             if (video != null) {
                                 //ExperienceData ecData = new ExperienceData(experience, metaData, video, null);
-                                ECAudioVisualItem item = new ECAudioVisualItem(experience.getExperienceID(), metaData, video);
+                                ECAudioVisualItem item = new ECAudioVisualItem(experience.getExperienceID(), avMetaData, video);
                                 avItems.add(item);
                                 presentationIdToAVItemMap.put(presentationId, item);
                             } else {
@@ -146,7 +151,7 @@ public class MovieMetaData {
                     }
                 }
 
-                ExperienceData thisExperience = new ExperienceData(experience, metaData, avItems, galleryItems);
+                ExperienceData thisExperience = new ExperienceData(experience, experienceMetaData, avItems, galleryItems);
                 result.experienceIdToExperienceMap.put(experience.getExperienceID(), thisExperience);
                 ExperienceData parentGroup = experienceChildrenToParentMap.get(experience.getExperienceID());
                 if (parentGroup != null){
@@ -209,33 +214,33 @@ public class MovieMetaData {
                         String eventPID = timedEvent.getPresentationID();
                         String galleryId = timedEvent.getGalleryID();
 
-                        ExperienceData ecData = null;
+                        PresentationDataItem presentationData = null;
                         if (!StringHelper.isEmpty(eventPID)) {
                             if (presentationIdToAVItemMap.containsKey(eventPID)) {
-                                ECAudioVisualItem avItem = null;
-                                avItem = presentationIdToAVItemMap.get(eventPID);
-                                if (!StringHelper.isEmpty(avItem.parentExperienceId) && result.experienceIdToExperienceMap.containsKey(avItem.parentExperienceId)){
-                                    ecData = result.experienceIdToExperienceMap.get(avItem.parentExperienceId);
-                                }
+                                presentationData = presentationIdToAVItemMap.get(eventPID);
+
                             }
                         }else if (!StringHelper.isEmpty(galleryId)){
                             if (galleryIdToGalleryItemMap.containsKey(galleryId)){
-                                ECGalleryImageItem item = galleryIdToGalleryItemMap.get(galleryId);
-                                String experienceId = item.parentExperienceId;
-                                if (!StringHelper.isEmpty(experienceId) && result.experienceIdToExperienceMap.containsKey(experienceId)){
-                                    ecData = result.experienceIdToExperienceMap.get(experienceId);
-                                }
+                                presentationData = galleryIdToGalleryItemMap.get(galleryId);
+
                             }
                         }
 
-                        if (ecData != null){
-                            IMEElement<ExperienceData> element = new IMEElement((long)startTime, (long)endTime, ecData);
+                        if (presentationData != null){
+                            IMEElement<PresentationDataItem> element = new IMEElement((long)startTime, (long)endTime, presentationData);
                             imeGroup.addElement(element);
                         }
 
                     }
                 }
+                Collections.sort(imeGroup.imeElementsList, new Comparator<IMEElement>() {
+                    @Override
+                    public int compare(IMEElement lhs, IMEElement rhs) {
 
+                        return (int)(lhs.startTimecode - rhs.startTimecode);
+                    }
+                });
                 result.imeElementGroups.add(imeGroup);
 
             }
@@ -303,34 +308,38 @@ public class MovieMetaData {
         }
     }
 
-    static public class ECGalleryImageItem{
-        final public ECGalleryImageData fullImage;
-        final public ECGalleryImageData thumbnail;
+    static public abstract class PresentationDataItem{
         final public String title;
         final public String parentExperienceId;
-        /*public ECGalleryImageItem(String name, ECGalleryImageData fullImage, ECGalleryImageData thumbnail){
-            this.name = name;
-            this.fullImage = fullImage;
-            this.thumbnail = thumbnail;
-        }*/
-        public ECGalleryImageItem(String parentExperienceId, InventoryMetadataType metaData, InventoryImageType fullImage, InventoryImageType thumbnail){
+        public PresentationDataItem(InventoryMetadataType metaData, String parentExperienceId){
             BasicMetadataInfoType localizedInfo = metaData.getBasicMetadata().getLocalizedInfo().get(0);
             title = localizedInfo.getTitleDisplayUnlimited();
             this.parentExperienceId = parentExperienceId;
+        }
+
+        public abstract String getPosterImgUrl();
+    }
+
+    static public class ECGalleryImageItem extends PresentationDataItem{
+        final public ECGalleryImageData fullImage;
+        final public ECGalleryImageData thumbnail;
+
+        public ECGalleryImageItem(String parentExperienceId, InventoryMetadataType metaData, InventoryImageType fullImage, InventoryImageType thumbnail){
+            super(metaData, parentExperienceId);
             this.fullImage = new ECGalleryImageData(fullImage.getContainerReference().getContainerLocation(), fullImage.getWidth(), fullImage.getHeight());
             this.thumbnail = new ECGalleryImageData(thumbnail.getContainerReference().getContainerLocation(), thumbnail.getWidth(), thumbnail.getHeight());
         }
+        public String getPosterImgUrl(){
+            return thumbnail.url;
+        }
     }
 
-    static public class ECAudioVisualItem{
+    static public class ECAudioVisualItem extends PresentationDataItem{
         final public String videoUrl;
         private String posterImgUrl;
-        final public String title;
-        final public String parentExperienceId;
         public ECAudioVisualItem(String parentExperienceId, InventoryMetadataType metaData, InventoryVideoType videoData){
+            super(metaData, parentExperienceId);
             BasicMetadataInfoType localizedInfo = metaData.getBasicMetadata().getLocalizedInfo().get(0);
-            title = localizedInfo.getTitleDisplayUnlimited();
-            this.parentExperienceId = parentExperienceId;
             if (videoData != null) {
                 videoUrl = videoData.getContainerReference().getContainerLocation();
                 if (localizedInfo.getArtReference() != null && localizedInfo.getArtReference().size() > 0)
@@ -341,6 +350,9 @@ public class MovieMetaData {
                 videoUrl = null;
                 posterImgUrl = null;
             }
+        }
+        public String getPosterImgUrl(){
+            return posterImgUrl;
         }
     }
 
@@ -438,20 +450,22 @@ public class MovieMetaData {
         }
     }
 
-    public static class IMEElementsGroup{
-        private final ExperienceData linkedExperience;
-        private final List<IMEElement> imeElementsList = new ArrayList<IMEElement>();
+    public static class IMEElementsGroup<T>{
+        public final ExperienceData linkedExperience;
+        private final List<IMEElement<T>> imeElementsList = new ArrayList<IMEElement<T>>();
         public void addElement(IMEElement element){
             imeElementsList.add(element);
         }
         public IMEElementsGroup(ExperienceData ecGroupData){
             this.linkedExperience = ecGroupData;
         }
-
+        public List<IMEElement<T>> getIMEElementesList(){
+            return  imeElementsList;
+        }
 
     }
 
-    public static class IMEElement<T> {
+    public static class IMEElement<T>{
         public final long startTimecode;
         public final long endTimecode;
         public final T imeObject;

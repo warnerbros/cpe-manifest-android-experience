@@ -23,7 +23,7 @@ public class NextGenPlayerBottomFragment extends Fragment implements NextGenPlay
 
     //final List<NextGenPlaybackStatusListener> listeners = new ArrayList<NextGenPlaybackStatusListener>();
     TextView imeText;
-    StickyGridHeadersGridView gridView;
+    IMEElementsGridFragment imeGridFragment;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -37,7 +37,7 @@ public class NextGenPlayerBottomFragment extends Fragment implements NextGenPlay
         imeText = (TextView)view.findViewById(R.id.next_gen_ime_text);
         NextGenIMEActorFragment imeActorFragment = (NextGenIMEActorFragment)getChildFragmentManager().findFragmentById(R.id.ime_actor_fragment);
 
-        gridView = (StickyGridHeadersGridView)view.findViewById(R.id.ime_gridview);
+        imeGridFragment = (IMEElementsGridFragment)getChildFragmentManager().findFragmentById(R.id.ime_grid_fragment);
         /*NextGenPlaybackStatusListener imeFragmentFrame1 = (NextGenPlaybackStatusListener)getChildFragmentManager().findFragmentById(R.id.ime_fragment_frame_1);
         NextGenPlaybackStatusListener imeFragmentFrame2 = (NextGenPlaybackStatusListener)getChildFragmentManager().findFragmentById(R.id.ime_fragment_frame_2);
         NextGenPlaybackStatusListener imeFragmentFrame3 = (NextGenPlaybackStatusListener)getChildFragmentManager().findFragmentById(R.id.ime_fragment_frame_3);
@@ -47,6 +47,7 @@ public class NextGenPlayerBottomFragment extends Fragment implements NextGenPlay
         listeners.add(imeFragmentFrame2);
         listeners.add(imeFragmentFrame3);
         listeners.add(imeFragmentFrame4);*/
+
 
     }
 
@@ -60,6 +61,8 @@ public class NextGenPlayerBottomFragment extends Fragment implements NextGenPlay
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                if (imeGridFragment != null)
+                    imeGridFragment.playbackStatusUpdate(playbackStatus, timecode);
                 if (imeText != null)
                     imeText.setText(Long.toString(timecode));
             }

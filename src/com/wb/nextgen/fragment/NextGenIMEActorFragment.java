@@ -9,6 +9,7 @@ import com.wb.nextgen.model.NextGenIMEEngine;
 import com.wb.nextgen.data.DemoJSONData.ActorInfo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -18,7 +19,7 @@ public class NextGenIMEActorFragment extends NextGenActorListFragment implements
 
     NextGenIMEEngine<List<DemoJSONData.ActorInfo>> actorIMEEngine = new NextGenIMEEngine<List<ActorInfo>>();
 
-    List <NextGenIMEEngine<List<ActorInfo>>.NextGenIMEElement> actorElements = new ArrayList<NextGenIMEEngine<List<ActorInfo>>.NextGenIMEElement>();
+    List <NextGenIMEEngine<List<ActorInfo>>> actorElements = new ArrayList<NextGenIMEEngine<List<ActorInfo>>>();
 
     void handleIMEUpdate(long timecode, final List<ActorInfo> imeElement){
 
@@ -49,23 +50,26 @@ public class NextGenIMEActorFragment extends NextGenActorListFragment implements
     }
 
     public void playbackStatusUpdate(NextGenPlaybackStatusListener.NextGenPlaybackStatus playbackStatus, long timecode){
-        handleIMEUpdate(timecode, actorIMEEngine.getCurrentIMEElement(timecode));
+        boolean bHasUpdate = actorIMEEngine.computeCurrentIMEElement(timecode);
+        if (bHasUpdate)
+            handleIMEUpdate(timecode, actorIMEEngine.getCurrentIMEElement());
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        /*actors = new ArrayList<Actor>();
-        actorElements.add(actorIMEEngine.createNextGenIMEElement(0, 9000, new ArrayList<Actor>(Arrays.asList(new Actor[]{Actor.RUSSELL_CROWE}))));
+        List<ActorInfo> actors = new ArrayList<ActorInfo>();
+        /*
+        actorElements.add(actorIMEEngine.createNextGenIMEElement(0, 9000, new ArrayList<ActorInfo>(Arrays.asList(new ActorInfo()[]{ActorInfo.RUSSELL_CROWE}))));
 
-        actorElements.add(actorIMEEngine.createNextGenIMEElement(10000,20000, new ArrayList<Actor>(Arrays.asList(new Actor[]{Actor.RUSSELL_CROWE, Actor.AYELET_ZURER}))));
-        actorElements.add(actorIMEEngine.createNextGenIMEElement(56000,68000, new ArrayList<Actor>(Arrays.asList(new Actor[]{Actor.KEVIN_COSTER}))));
-        actorElements.add(actorIMEEngine.createNextGenIMEElement(69000,79000, new ArrayList<Actor>(Arrays.asList(new Actor[]{Actor.HENRY_CAVILL}))));
-        actorElements.add(actorIMEEngine.createNextGenIMEElement(80000,82000, new ArrayList<Actor>(Arrays.asList(new Actor[]{Actor.AMY_ADAM}))));
-        actorElements.add(actorIMEEngine.createNextGenIMEElement(83000,125000, new ArrayList<Actor>(Arrays.asList(new Actor[]{Actor.HENRY_CAVILL}))));
-        actorElements.add(actorIMEEngine.createNextGenIMEElement(130000,137000, new ArrayList<Actor>(Arrays.asList(new Actor[]{Actor.HENRY_CAVILL, Actor.DIANE_LANE, Actor.MICHAEL_SHANNON}))));
-        actorElements.add(actorIMEEngine.createNextGenIMEElement(155000,166000, new ArrayList<Actor>(Arrays.asList(new Actor[]{Actor.HENRY_CAVILL, Actor.AMY_ADAM}))));
-        actorElements.add(actorIMEEngine.createNextGenIMEElement(167000,170000, new ArrayList<Actor>(Arrays.asList(new Actor[]{Actor.HENRY_CAVILL, Actor.MICHAEL_SHANNON}))));
+        actorElements.add(actorIMEEngine.createNextGenIMEElement(10000,20000, new ArrayList<ActorInfo>(Arrays.asList(new ActorInfo[]{ActorInfo.RUSSELL_CROWE, ActorInfo.AYELET_ZURER}))));
+        actorElements.add(actorIMEEngine.createNextGenIMEElement(56000,68000, new ArrayList<ActorInfo>(Arrays.asList(new Actor[]{Actor.KEVIN_COSTER}))));
+        actorElements.add(actorIMEEngine.createNextGenIMEElement(69000,79000, new ArrayList<ActorInfo>(Arrays.asList(new Actor[]{Actor.HENRY_CAVILL}))));
+        actorElements.add(actorIMEEngine.createNextGenIMEElement(80000,82000, new ArrayList<ActorInfo>(Arrays.asList(new Actor[]{Actor.AMY_ADAM}))));
+        actorElements.add(actorIMEEngine.createNextGenIMEElement(83000,125000, new ArrayList<ActorInfo>(Arrays.asList(new Actor[]{Actor.HENRY_CAVILL}))));
+        actorElements.add(actorIMEEngine.createNextGenIMEElement(130000,137000, new ArrayList<ActorInfo>(Arrays.asList(new Actor[]{Actor.HENRY_CAVILL, Actor.DIANE_LANE, Actor.MICHAEL_SHANNON}))));
+        actorElements.add(actorIMEEngine.createNextGenIMEElement(155000,166000, new ArrayList<ActorInfo>(Arrays.asList(new Actor[]{Actor.HENRY_CAVILL, Actor.AMY_ADAM}))));
+        actorElements.add(actorIMEEngine.createNextGenIMEElement(167000,170000, new ArrayList<ActorInfo>(Arrays.asList(new Actor[]{Actor.HENRY_CAVILL, Actor.MICHAEL_SHANNON}))));
         actorIMEEngine.setImeElements(actorElements);*/
     }
 }

@@ -24,6 +24,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
+import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.interfaces.NextGenPlaybackStatusListener;
 import com.wb.nextgen.model.NextGenIMEEngine;
 import com.wb.nextgen.model.Presentation;
@@ -45,7 +46,7 @@ public class NextGenIMEMapFragment extends SupportMapFragment implements NextGen
 
     NextGenIMEEngine<SceneLocation> mapIMEEngine = new NextGenIMEEngine<SceneLocation>();
 
-    List<NextGenIMEEngine<SceneLocation>.NextGenIMEElement> mapElements = new ArrayList<NextGenIMEEngine<SceneLocation>.NextGenIMEElement>();
+    List<MovieMetaData.IMEElement<SceneLocation>> mapElements = new ArrayList<MovieMetaData.IMEElement<SceneLocation>>();
    /* public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.next_gen_ime_map, container, false);
@@ -117,7 +118,11 @@ public class NextGenIMEMapFragment extends SupportMapFragment implements NextGen
     }
 
     public void playbackStatusUpdate(NextGenPlaybackStatusListener.NextGenPlaybackStatus playbackStatus, long timecode){
-        final SceneLocation location = mapIMEEngine.getCurrentIMEElement(timecode);
+        if (! mapIMEEngine.computeCurrentIMEElement(timecode))
+            return;
+
+
+        final SceneLocation location = mapIMEEngine.getCurrentIMEElement();
         if (location == null)
             return;
         else{

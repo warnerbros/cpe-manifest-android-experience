@@ -81,7 +81,7 @@ public abstract class NextGenGridViewFragment extends Fragment implements Adapte
 
     protected abstract int getListItemViewId();
 
-    protected abstract void fillListRowWithObjectInfo(View rowView, Object item, boolean isSelected);
+    protected abstract void fillListRowWithObjectInfo(int position, View rowView, Object item, boolean isSelected);
 
     protected abstract String getHeaderText();
 
@@ -127,7 +127,7 @@ public abstract class NextGenGridViewFragment extends Fragment implements Adapte
 
 
             gridView.setItemChecked(position, selectedIndex == position);
-            fillListRowWithObjectInfo(convertView, getItem(position), selectedIndex == position);
+            fillListRowWithObjectInfo(position, convertView, getItem(position), selectedIndex == position);
 
             return convertView;
         }

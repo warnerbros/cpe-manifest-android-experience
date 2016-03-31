@@ -1,8 +1,7 @@
 # Development Guide #
 ## Workspace ##
-1. Download eclipse and install ADT plugin
-2. Check out Flixster Android at this repository, e.g. FlixsterVideo/Android folder
-3. Check out [https://bitbucket.org/wbdigital/android-dependencies/src](https://bitbucket.org/wbdigital/android-dependencies/src) and put them at the same parent directory as FlixsterVideo, e.g. FlixsterVideo/StickyGridHeaders, FlixsterVideo/flixster-android-closedcaptions
+1. Download Android Studio
+2. Check out NextGen Android at this repository, e.g. NextGen/Android folder
 ## How to build with Grade ##
 ### Set Up ###
 1. Install Gradle  

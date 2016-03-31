@@ -63,7 +63,7 @@ public class NextGenExtraMainTableFragment extends NextGenGridViewFragment {
         return -1;
     }
 
-    protected void fillListRowWithObjectInfo(View rowView, Object item, boolean isSelected) {
+    protected void fillListRowWithObjectInfo(int position, View rowView, Object item, boolean isSelected) {
 
 
         ImageView thumbnailImg = (ImageView) rowView.findViewById(R.id.next_gen_extra_thumbnail);
