@@ -70,7 +70,6 @@
 	<application
 		android:name="com.wb.nextgen.NextGenApplication"
 		android:allowClearUserData="true"
-		android:icon="@drawable/icon_launcher"
 		android:label="@string/app_name"
 		android:theme="@style/NextGenActionBar" >
 

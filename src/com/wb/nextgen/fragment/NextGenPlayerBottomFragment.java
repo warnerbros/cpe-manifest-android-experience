@@ -8,9 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
 import com.wb.nextgen.R;
+import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgen.interfaces.NextGenPlaybackStatusListener;
+import com.wb.nextgen.util.utils.NextGenFragmentTransactionEngine;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -19,11 +20,12 @@ import java.util.List;
 /**
  * Created by gzcheng on 1/19/16.
  */
-public class NextGenPlayerBottomFragment extends Fragment implements NextGenPlaybackStatusListener{
+public class NextGenPlayerBottomFragment extends Fragment implements NextGenPlaybackStatusListener, NextGenFragmentTransactionInterface {
 
     //final List<NextGenPlaybackStatusListener> listeners = new ArrayList<NextGenPlaybackStatusListener>();
     TextView imeText;
     IMEElementsGridFragment imeGridFragment;
+    NextGenFragmentTransactionEngine nextGenFragmentTransactionEngine;
     private long lastTimeCode = -1;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,20 +37,17 @@ public class NextGenPlayerBottomFragment extends Fragment implements NextGenPlay
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        nextGenFragmentTransactionEngine = new NextGenFragmentTransactionEngine(getActivity());
+
         imeText = (TextView)view.findViewById(R.id.next_gen_ime_text);
         NextGenIMEActorFragment imeActorFragment = (NextGenIMEActorFragment)getChildFragmentManager().findFragmentById(R.id.ime_actor_fragment);
 
         imeGridFragment = (IMEElementsGridFragment)getChildFragmentManager().findFragmentById(R.id.ime_grid_fragment);
-
+        imeGridFragment.setFragmentTransactionInterface(this);
     }
 
     public void playbackStatusUpdate(final NextGenPlaybackStatus playbackStatus, final long timecode){
-        /*if (listeners.size()> 0 ){
-            for (NextGenPlaybackStatusListener listener :listeners) {
-                    if (listener !=  null)
-                    listener.playbackStatusUpdate(playbackStatus, timecode);
-            }
-        }*/
+
 
         if (lastTimeCode == timecode)
             return;
@@ -88,5 +87,34 @@ public class NextGenPlayerBottomFragment extends Fragment implements NextGenPlay
     public int getRightFrameId(){
         return R.id.next_gen_ime_right_frame;
 
+    }
+
+    //*************** NextGenFragmentTransactionInterface ***************
+    @Override
+    public void transitRightFragment(Fragment nextFragment){
+        nextGenFragmentTransactionEngine.transitFragment(getRightFrameId(), nextFragment);
+
+    }
+
+    @Override
+    public void transitLeftFragment(Fragment nextFragment){
+        nextGenFragmentTransactionEngine.transitFragment(getLeftFrameId(), nextFragment);
+
+    }
+
+    @Override
+    public void transitMainFragment(Fragment nextFragment){
+        nextGenFragmentTransactionEngine.transitFragment(getMainFrameId(), nextFragment);
+    }
+
+    @Override
+    public void resetUI(boolean bIsRoot){
+        /*if (bIsRoot){
+            setBackButtonLogo(R.drawable.home_logo);
+            setBackButtonText(getResources().getString(R.string.home_button_text) );
+        }else{
+            setBackButtonLogo(R.drawable.back_logo);
+            setBackButtonText(getResources().getString(R.string.back_button_text) );
+        }*/
     }
 }

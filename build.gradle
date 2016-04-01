@@ -13,7 +13,7 @@ buildscript {
 
 
 apply plugin: 'android'
-
+//apply plugin: 'com.android.library'
 android {
 	buildToolsVersion "21.1.2"
 	compileSdkVersion 21
@@ -39,7 +39,7 @@ android {
 			assets.srcDirs = ['assets']
 			jni.srcDirs = []		//disable automatic ndk-build call
 		}
-
+		/*
 		debug{
 			jniLibs.srcDirs = ['lib/widevine_android_50012210/dev']
 
@@ -53,67 +53,11 @@ android {
 		rc{
 			jniLibs.srcDirs = ['lib/widevine_android_50012210/rel']
 
-		}
+		}*/
 
 		androidTest.setRoot('test')
 	}
 
-	/*tasks.whenTaskAdded { task ->
-		if (task.name.matches("validateDebugSigning")) {
-			task.dependsOn('runBeforeDebugSigning')
-		} else if (task.name.matches("validateReleaseSigning")) {
-			task.dependsOn('runBeforeReleaseSigning')
-		} else if (task.name.matches('zipalignDebug')) {
-			task.dependsOn('signDebugWV')
-		} else if (task.name.matches('zipalignRelease')) {
-			task.dependsOn('signReleaseWV')
-		}
-	}
-	
-	task runBeforeDebugSigning << {
-		def storePassword = new String(System.console().readPassword("\n\$ Enter keystore password: "))
-		//def keyPassword = new String(System.console().readPassword("\n\$ Enter key password: "))
-	
-		android.signingConfigs.debug.storePassword = storePassword
-	    android.signingConfigs.debug.keyPassword = storePassword	
-	}
-
-	task runBeforeReleaseSigning << {
-		def storePassword = new String(System.console().readPassword("\n\$ Enter keystore password: "))
-		//def keyPassword = new String(System.console().readPassword("\n\$ Enter key password: "))
-	
-		android.signingConfigs.release.storePassword = storePassword
-	    android.signingConfigs.release.keyPassword = storePassword	
-	}
-*/
-
-	// Gradle cannot pre-sign apk with Widevine apksigtool before signing with keystore, for now we turn off Gradle signing
-	// and run Widevine apksigtool after packageRelease/packageRc. so the output files only need to be signed and zip-aligned
-	gradle.taskGraph.afterTask { task ->
-		if (task.name.matches('packageRelease') || task.name.matches('packageRc')) {
-			task.outputs.files.each { outputFile ->
-				def filePath = outputFile.absolutePath
-				println '[Widevine Pre-sign] Signing ' + filePath
-				javaexec { main="-jar"; args = ['lib/widevine_android_50012210/rel/apksigtool.jar', filePath, 'release/widevine_pk_wb.der', 'release/wb_widevine_cert_sign_req.crt']}
-			}
-		}
-	}
-
-	signingConfigs {
-		/*rc {
-			//storeFile file("./release/jillmoto_android_key")
-			storePassword "To be prompted"
-			keyAlias "jillmoto"
-			keyPassword "To be prompted"
-		}
-		
-		release {
-			storeFile file("./release/jillmoto_android_key")
-			storePassword "To be prompted"
-			keyAlias "jillmoto"
-			keyPassword "To be prompted"
-		}*/
-	}
 	
 	buildTypes {
 		debug {
@@ -169,105 +113,5 @@ dependencies {
 	compile 'com.android.support:multidex:1.0.0'
 
 
-	debugCompile files('lib/widevine_android_50012210/dev/WidevineDRM-Debug-5.0.0.12210.jar')
-	rcCompile files('lib/widevine_android_50012210/rel/WidevineDRM-5.0.0.12210.jar')
-	releaseCompile files('lib/widevine_android_50012210/rel/WidevineDRM-5.0.0.12210.jar')
 }
 
-/*gradle.taskGraph.afterTask { task ->
-	StringBuffer taskDetails = new StringBuffer()
-	taskDetails << "-------------\n"
-	taskDetails << "name:$task.name group:$task.group : $task.description conv:$task.convention.plugins\n"
-	taskDetails << "inputs:\n"
-	task.inputs.files.each{ it ->
-		taskDetails << "   ${it.absolutePath}\n"
-	}
-	taskDetails << "outputs:\n"
-	task.outputs.files.each{ it ->
-		taskDetails << "   ${it.absolutePath}\n"
-	}
-	taskDetails << "-------------"
-	println taskDetails
-}
-
-/*task copyLibs() {
-	description 'Adding dependencies from configuration to libs folder'
-
-	def armeabiDir = file('libs/armeabi');
-	armeabiDir.mkdir();
-	
-	sync {
-		from configurations.compile
-		from configurations.debugCompile {
-			exclude 'support-v4*.jar'
-			exclude '*.aar'
-			exclude '*.so'
-		}
-		into "$projectDir/libs"
-	}
-	
-	sync {
-		from configurations.debugCompile
-		include '*.so'
-		into "$projectDir/libs/armeabi"
-	}
-}*/
-
-// Crowdin API Settings
-String CROWDIN_PROJECT_NAME = 'digital-copy'
-String CROWDIN_API_KEY = '4fc5ea49f0a770005b4fabfba1800b6e'
-
-// Map of locale codes that need to be normalized from Crowdin's output
-Map<String, String> normalizedLocales = new HashMap<String, String>()
-normalizedLocales.put('da', 'da_DK')
-normalizedLocales.put('de', 'de_DE')
-normalizedLocales.put('fi', 'fi_FI')
-normalizedLocales.put('fr', 'fr_FR')
-normalizedLocales.put('it', 'it_IT')
-normalizedLocales.put('ja', 'ja_JP')
-normalizedLocales.put('nl', 'nl_NL')
-normalizedLocales.put('no', 'nb_NO')
-
-task crowdin(type: Copy) {
-    // Build the latest Crowdin data
-    def curl = 'curl https://api.crowdin.net/api/project/' + CROWDIN_PROJECT_NAME + '/export?key=' + CROWDIN_API_KEY
-    curl.execute().waitFor()
-
-    // Download the Crowdin translations to a temporary zip file
-    def zipFile = file('all.zip')
-    if (!zipFile.exists()) {
-        new URL('http://api.crowdin.net/api/project/' + CROWDIN_PROJECT_NAME + '/download/all.zip?key=' + CROWDIN_API_KEY).withInputStream{ i -> zipFile.withOutputStream{ it << i }}
-    }
-    
-    // Extract zip file to directory
-    def assetsDir = file('assets/')
-    from zipTree(zipFile)
-    eachFile {
-        // Save the file as xx_XX.json
-        String locale = it.getRelativePath().getParent().toString().replace('-', '_')
-        
-        // Normalize the locale file name if necessary
-        if (normalizedLocales.containsKey(locale)) {
-            locale = normalizedLocales.get(locale);
-        }
-        
-        it.path = locale + '.json'
-    }
-    into assetsDir
-    
-    doLast {
-        // Delete the leftover empty directories
-        def emptyDirs = []
-        fileTree(dir: assetsDir).visit {
-            def file = it.file
-            if (file.isDirectory() && (file.list().length == 0)) {
-                emptyDirs << file
-            }
-        }
-        
-        emptyDirs.each { dir -> dir.delete() }
-        
-        // Delete the temporary zip file
-        zipFile.delete()
-    }
-}

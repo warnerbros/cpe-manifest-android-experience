@@ -104,39 +104,37 @@ public class NextGenNavigationDrawerFragment extends Fragment implements View.On
 
 	@Override
 	public void onClick(View v){
-		switch (v.getId()){
-			case R.id.drawer_audio_row:
-				final ScaleAnimation growAnim = new ScaleAnimation(1.0f, 1.15f, 1.0f, 1.15f);
-				final ScaleAnimation shrinkAnim = new ScaleAnimation(1.15f, 1.0f, 1.15f, 1.0f);
+		if (v.getId() == R.id.drawer_audio_row) {
+			final ScaleAnimation growAnim = new ScaleAnimation(1.0f, 1.15f, 1.0f, 1.15f);
+			final ScaleAnimation shrinkAnim = new ScaleAnimation(1.15f, 1.0f, 1.15f, 1.0f);
 
-				growAnim.setDuration(2000);
-				shrinkAnim.setDuration(2000);
+			growAnim.setDuration(2000);
+			shrinkAnim.setDuration(2000);
 
-				if (audioList.getVisibility() == View.GONE || audioList.getHeight() == 0) {
+			if (audioList.getVisibility() == View.GONE || audioList.getHeight() == 0) {
 
-					audioList.setVisibility(View.VISIBLE);
+				audioList.setVisibility(View.VISIBLE);
 
-					new ExpandShrinkRunnable(audioList, true, 0, audioListHeight).run();
-				}else {
-					new ExpandShrinkRunnable(audioList, false, 0, audioListHeight).run();
-					AudSubLang lang = audioSelectionAdaptor.getSelectedLanguage();
-					if (lang != null)
-						audioSelectionText.setText(lang.displayName);
+				new ExpandShrinkRunnable(audioList, true, 0, audioListHeight).run();
+			} else {
+				new ExpandShrinkRunnable(audioList, false, 0, audioListHeight).run();
+				AudSubLang lang = audioSelectionAdaptor.getSelectedLanguage();
+				if (lang != null)
+					audioSelectionText.setText(lang.displayName);
+			}
+		} else if (v.getId() == R.id.drawer_subtitle_row) {
+			if (subtitleList.getVisibility() == View.GONE || subtitleList.getHeight() == 0) {
+				subtitleList.setVisibility(View.VISIBLE );
+				new ExpandShrinkRunnable(subtitleList, true, 0, subtitleListHeight).run();
+			}else {
+				new ExpandShrinkRunnable(subtitleList, false, 0, subtitleListHeight).run();
+				AudSubLang lang = subtitleSelectionAdaptor.getSelectedLanguage();
+				if (lang != null){
+					subtitleSelectionText.setText(lang.displayName);
 				}
-				break;
-			case R.id.drawer_subtitle_row:
-				if (subtitleList.getVisibility() == View.GONE || subtitleList.getHeight() == 0) {
-					subtitleList.setVisibility(View.VISIBLE );
-					new ExpandShrinkRunnable(subtitleList, true, 0, subtitleListHeight).run();
-				}else {
-					new ExpandShrinkRunnable(subtitleList, false, 0, subtitleListHeight).run();
-					AudSubLang lang = subtitleSelectionAdaptor.getSelectedLanguage();
-					if (lang != null){
-						subtitleSelectionText.setText(lang.displayName);
-					}
 
-				}
-				break;
+			}
+
 		}
 	}
 

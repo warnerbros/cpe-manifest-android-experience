@@ -9,6 +9,7 @@ import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.data.MovieMetaData.ExperienceData;
+import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgen.interfaces.NextGenPlaybackStatusListener;
 import com.wb.nextgen.model.NextGenIMEEngine;
 import com.wb.nextgen.util.PicassoTrustAll;
@@ -26,6 +27,8 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
     final List<NextGenIMEEngine> imeEngines = new ArrayList<NextGenIMEEngine>();
     long currentTimeCode = 0L;
 
+    NextGenFragmentTransactionInterface fragmentTransaction = null;
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         imeGroups = NextGenApplication.getMovieMetaData().getImeElementGroups();
@@ -40,17 +43,28 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
         super.onDestroyView();
     }
 
+    public void setFragmentTransactionInterface(NextGenFragmentTransactionInterface fragmentTransaction){
+        this.fragmentTransaction = fragmentTransaction;
+
+    }
+
     protected void onListItmeClick(View v, int position, long id){
         if (position < 0 || position >= imeGroups.size())
             return;
         IMEElementsGroup group = imeGroups.get(position);
         NextGenIMEEngine engine = imeEngines.get(position);
         Object imeObject = engine.getCurrentIMEElement();
+
+
+
         if (imeObject instanceof MovieMetaData.PresentationDataItem){
-            if (imeObject instanceof MovieMetaData.ECGalleryImageItem){
+            if (fragmentTransaction != null) {
+                if (imeObject instanceof MovieMetaData.ECGalleryItem) {
 
-            }else if (imeObject instanceof MovieMetaData.ECAudioVisualItem){
 
+                } else if (imeObject instanceof MovieMetaData.ECAudioVisualItem) {
+
+                }
             }
         }
     }

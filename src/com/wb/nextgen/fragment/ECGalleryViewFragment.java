@@ -1,0 +1,159 @@
+package com.wb.nextgen.fragment;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.davemorrissey.labs.subscaleview.ImageSource;
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
+import com.wb.nextgen.R;
+import com.wb.nextgen.activity.AbstractECView;
+import com.wb.nextgen.data.MovieMetaData;
+
+import java.util.List;
+
+/**
+ * Created by gzcheng on 3/31/16.
+ */
+public class ECGalleryViewFragment extends Fragment {
+    private ViewPager galleryViewPager;
+    private MovieMetaData.ECGalleryItem currentGallery;
+    private GalleryPagerAdapter adapter;
+    private ImageButton fullscreenToggleBtn;
+
+    //private List<MovieMetaData.ECGalleryImageItem>
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.ec_gallery_frame_view, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        //currentGallery = ecGroupData.getChildrenContents().get(0);
+        galleryViewPager = (ViewPager) view.findViewById(R.id.next_gen_gallery_view_pager);
+        adapter = new GalleryPagerAdapter(getActivity());
+        fullscreenToggleBtn = (ImageButton)view.findViewById(R.id.gallery_fullscreen_toggle);
+        if (fullscreenToggleBtn != null){
+            fullscreenToggleBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (getActivity() instanceof AbstractECView) {
+                        ((AbstractECView)getActivity()).onRequestToggleFullscreen();
+                    }
+                }
+            });
+        }
+        galleryViewPager.setAdapter(adapter);
+    }
+
+    public void setCurrentGallery(MovieMetaData.ECGalleryItem gallery){
+        currentGallery = gallery;
+        if (adapter != null) {
+
+            adapter.notifyDataSetChanged();
+            galleryViewPager.setCurrentItem(0);
+        }
+    }
+
+    public void onRequestToggleFullscreen(boolean isContentFullScreen){
+/*
+        if (!isContentFullScreen){    // make it full screen
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+        } else {                     // shrink it
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+        }*/
+        fullscreenToggleBtn.setImageDrawable(getResources().getDrawable(isContentFullScreen ? R.drawable.controller_shrink : R.drawable.controller_expand));
+        adapter.notifyDataSetChanged();
+
+    }
+
+    class GalleryPagerAdapter extends PagerAdapter {
+
+        Context mContext;
+        LayoutInflater mInflater;
+
+        public GalleryPagerAdapter(Context context) {
+            mContext = context;
+            mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        }
+
+        @Override
+        public int getCount() {
+            if (currentGallery != null)
+                return currentGallery.galleryImages.size();
+            else
+                return 0;
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view == ((LinearLayout) object);
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, final int position) {
+            View itemView = mInflater.inflate(R.layout.pager_gallery_item, container, false);
+            container.addView(itemView);
+
+            MovieMetaData.ECGalleryItem currentItem = currentGallery;
+
+            itemView.setTag(currentItem.title);
+
+            // Get the border size to show around each image
+            int borderSize = 0;//_thumbnails.getPaddingTop();
+
+            // Get the size of the actual thumbnail image
+            int thumbnailSize = ((FrameLayout.LayoutParams)
+                    galleryViewPager.getLayoutParams()).bottomMargin - (borderSize*2);
+
+            // Set the thumbnail layout parameters. Adjust as required
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(thumbnailSize, thumbnailSize);
+            params.setMargins(0, 0, borderSize, 0);
+
+            final SubsamplingScaleImageView imageView =
+                    (SubsamplingScaleImageView) itemView.findViewById(R.id.image);
+
+            // Asynchronously load the image and set the thumbnail and pager view
+            Glide.with(mContext)
+                    .load(currentItem.galleryImages.get(position).fullImage.url)
+                    .asBitmap()
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
+                            imageView.setImage(ImageSource.bitmap(bitmap));
+                            //thumbView.setImageBitmap(bitmap);
+                        }
+                    });
+
+            return itemView;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            container.removeView((LinearLayout) object);
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            int position = super.getItemPosition(object);
+            if (position >= 0)
+                return  position;
+            else
+                return POSITION_NONE;
+        }
+    }
+}

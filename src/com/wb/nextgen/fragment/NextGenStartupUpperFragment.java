@@ -59,20 +59,17 @@ public class NextGenStartupUpperFragment extends Fragment implements View.OnClic
 
     @Override
     public void onClick(View v){
-        switch(v.getId()){
-            case R.id.next_gen_startup_play_button:
-                Intent intent = new Intent(getActivity(), InterStitialVideoPlayerActivity.class);
-                intent.setAction(android.content.Intent.ACTION_VIEW);
-                //intent.setDataAndType(Uri.parse("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/video/MOSNG_202_KryptonianRobots.m3u8"), "video/*");
-                intent.setDataAndType(Uri.parse("android.resource://com.wb.nextgen/" + R.raw.mos_nextgen_interstitial), "video/*");
-                startActivity(intent);
-                //Drm.manager().playMovie(getActivity(), FlixsterApplication.getCurrentPlayableContent(), PhysicalAsset.Definition.HD, "en_US", "en_US");
-                //        lockOrientation();
-                break;
-            case R.id.next_gen_startup_extra_button:
-                Intent extraIntent = new Intent(getActivity(), NextGenExtraActivity.class);
-                startActivity(extraIntent);
-                break;
+        if (v.getId() == R.id.next_gen_startup_play_button) {
+            Intent intent = new Intent(getActivity(), InterStitialVideoPlayerActivity.class);
+            intent.setAction(android.content.Intent.ACTION_VIEW);
+            //intent.setDataAndType(Uri.parse("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/video/MOSNG_202_KryptonianRobots.m3u8"), "video/*");
+            intent.setDataAndType(Uri.parse("android.resource://com.wb.nextgen/" + R.raw.mos_nextgen_interstitial), "video/*");
+            startActivity(intent);
+            //Drm.manager().playMovie(getActivity(), FlixsterApplication.getCurrentPlayableContent(), PhysicalAsset.Definition.HD, "en_US", "en_US");
+            //        lockOrientation();
+        } else if (v.getId() == R.id.next_gen_startup_extra_button) {
+            Intent extraIntent = new Intent(getActivity(), NextGenExtraActivity.class);
+            startActivity(extraIntent);
         }
     }
 

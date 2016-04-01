@@ -22,69 +22,11 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
-            xmlns:nextgen="http://schemas.android.com/apk/res-auto"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            nextgen:aspectRatioHeight="9"
-            nextgen:aspectRatioWidth="16"
-            nextgen:priority="WIDTH_PRIORITY">
-        <RelativeLayout
-            android:id="@+id/video_view_container"
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:background="@color/black">
-
-            <net.flixster.android.drm.ObservableVideoView
-                android:id="@+id/surface_view"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_centerInParent="true" />
-
-            <com.flixster.android.captioning.CaptionView
-                android:id="@+id/caption1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/black"
-                android:text="Caption1"
-                android:textColor="@color/white"
-                android:visibility="gone" />
-
-            <com.flixster.android.captioning.CaptionView
-                android:id="@+id/caption2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/black"
-                android:text="Caption2"
-                android:textColor="@color/white"
-                android:visibility="gone" />
-
-            <com.flixster.android.captioning.CaptionView
-                android:id="@+id/caption3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/black"
-                android:text="Caption3"
-                android:textColor="@color/white"
-                android:visibility="gone" />
-
-            <com.flixster.android.captioning.CaptionView
-                android:id="@+id/caption4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/black"
-                android:text="Caption4"
-                android:textColor="@color/white"
-                android:visibility="gone" />
-
-        </RelativeLayout>
-        </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
-
-        <TextView
-            android:id="@+id/ec_content_name"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/textLarge"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+       <fragment
+           android:layout_width="fill_parent"
+           android:layout_height="fill_parent"
+           android:name="com.wb.nextgen.fragment.ECVideoViewFragment"
+           android:id="@+id/ec_video_view_fragment"
+           />
     </LinearLayout>
 </LinearLayout>

@@ -21,7 +21,6 @@ public abstract class AbstractECView extends AbstractNextGenActivity {
 
     protected MovieMetaData.ExperienceData ecGroupData ;
     protected ECViewLeftListFragment listFragment;
-    protected TextView selectedECNameTextView;
     protected FrameLayout leftListFrame;
     protected boolean isContentFullScreen = false;
 
@@ -48,7 +47,7 @@ public abstract class AbstractECView extends AbstractNextGenActivity {
         int spacing = (int)(10 *density);
 
         listFragment = (ECViewLeftListFragment) getSupportFragmentManager().findFragmentById(R.id.ec_fragment_list);
-        selectedECNameTextView = (TextView)findViewById(R.id.ec_content_name);
+
     }
 
     public void onStart() {
@@ -88,32 +87,23 @@ public abstract class AbstractECView extends AbstractNextGenActivity {
         ActionBar bar = getActionBar();
         if (!isContentFullScreen){    // make it full screen
             leftListFrame.setVisibility(View.GONE);
-            selectedECNameTextView.setVisibility(View.GONE);
-/*
-            getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-                            | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE);*/
+            onFullScreenChange(true);
+
             if (bar != null)
                 bar.hide();
 
 
         } else {                     // shrink it
             leftListFrame.setVisibility(View.VISIBLE);
-            selectedECNameTextView.setVisibility(View.VISIBLE);
+            onFullScreenChange(false);
             if (bar != null)
                 bar.show();
-/*
-            getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_VISIBLE);*/
 
         }
         isContentFullScreen = !isContentFullScreen;
     }
+
+    abstract void onFullScreenChange(boolean bFullscreen);
 
     @Override
     public void onBackPressed() {

@@ -22,34 +22,10 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
-            xmlns:nextgen="http://schemas.android.com/apk/res-auto"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            nextgen:aspectRatioHeight="9"
-            nextgen:aspectRatioWidth="16"
-            nextgen:priority="WIDTH_PRIORITY">
-            <android.support.v4.view.ViewPager
-                android:id="@+id/next_gen_gallery_view_pager"
-                android:background="@android:color/transparent"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent" >
-            </android.support.v4.view.ViewPager>
-            <ImageButton
-                android:id="@+id/gallery_fullscreen_toggle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|right"
-                android:src="@drawable/expand_shrink"
-                android:background="@android:color/transparent"
-                android:text="TEST"/>
-        </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
-
-        <TextView
-            android:id="@+id/ec_content_name"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/textLarge"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        <fragment
+            android:id="@+id/ec_gallery_left_frame"
+            android:name="com.wb.nextgen.fragment.ECGalleryViewFragment"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"/>
     </LinearLayout>
 </LinearLayout>
