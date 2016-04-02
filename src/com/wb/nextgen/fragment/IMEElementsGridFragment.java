@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
+import com.wb.nextgen.data.DemoData;
+import com.wb.nextgen.data.DemoJSONData;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.data.MovieMetaData.ExperienceData;
 import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
@@ -60,10 +62,17 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
         if (imeObject instanceof MovieMetaData.PresentationDataItem){
             if (fragmentTransaction != null) {
                 if (imeObject instanceof MovieMetaData.ECGalleryItem) {
+                    ECGalleryViewFragment fragment = new ECGalleryViewFragment();
+                    fragment.setBGImageUrl( DemoData.getExtraBackgroundUrl());
+                    fragment.setCurrentGallery((MovieMetaData.ECGalleryItem) imeObject);
+                    fragmentTransaction.transitMainFragment(fragment);
 
 
                 } else if (imeObject instanceof MovieMetaData.ECAudioVisualItem) {
-
+                    ECVideoViewFragment fragment = new ECVideoViewFragment();
+                    fragment.setBGImageUrl( DemoData.getExtraBackgroundUrl());
+                    fragment.setAudioVisualItem((MovieMetaData.ECAudioVisualItem)imeObject);
+                    fragmentTransaction.transitMainFragment(fragment);
                 }
             }
         }
@@ -116,8 +125,8 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
         Object imeObj = engine.getCurrentIMEElement();
 
         if (imeObj instanceof MovieMetaData.PresentationDataItem) {
-            Object currentPresentationId = rowView.getTag(R.id.next_gen_ime_frame);
-            rowView.setTag(R.id.next_gen_ime_frame, ((MovieMetaData.PresentationDataItem) imeObj).id);
+            Object currentPresentationId = rowView.getTag(R.id.ime_title);
+            rowView.setTag(R.id.ime_title, ((MovieMetaData.PresentationDataItem) imeObj).id);
             if (poster != null) {
                 String imageUrl = ((MovieMetaData.PresentationDataItem) imeObj).getPosterImgUrl();
                 if (poster.getTag() == null ||  !poster.getTag().equals(imageUrl)) {
@@ -135,7 +144,8 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
 
     public void playbackStatusUpdate(final NextGenPlaybackStatus playbackStatus, final long timecode){
         currentTimeCode = timecode;
-        listAdaptor.notifyDataSetChanged();
+        if (listAdaptor != null)
+            listAdaptor.notifyDataSetChanged();
         /*for (int i = 0; i< imeGroups.size(); i++){
             try {
                 if (imeGroups.get(i).linkedExperience.experienceId.equals(rowViews[i].getTag()))

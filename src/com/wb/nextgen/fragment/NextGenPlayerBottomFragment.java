@@ -92,19 +92,19 @@ public class NextGenPlayerBottomFragment extends Fragment implements NextGenPlay
     //*************** NextGenFragmentTransactionInterface ***************
     @Override
     public void transitRightFragment(Fragment nextFragment){
-        nextGenFragmentTransactionEngine.transitFragment(getRightFrameId(), nextFragment);
+        nextGenFragmentTransactionEngine.transitFragment(getFragmentManager(), getRightFrameId(), nextFragment);
 
     }
 
     @Override
     public void transitLeftFragment(Fragment nextFragment){
-        nextGenFragmentTransactionEngine.transitFragment(getLeftFrameId(), nextFragment);
+        nextGenFragmentTransactionEngine.transitFragment(getFragmentManager(), getLeftFrameId(), nextFragment);
 
     }
 
     @Override
     public void transitMainFragment(Fragment nextFragment){
-        nextGenFragmentTransactionEngine.transitFragment(getMainFrameId(), nextFragment);
+        nextGenFragmentTransactionEngine.transitFragment(getFragmentManager(), getMainFrameId(), nextFragment);
     }
 
     @Override

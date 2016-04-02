@@ -3,6 +3,7 @@ package com.wb.nextgen.util.utils;
 import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import com.wb.nextgen.R;
@@ -38,12 +39,15 @@ public class NextGenFragmentTransactionEngine {
         transitFragment(mainFrameId, nextFragment);
     }*/
 
-    public void transitFragment(int frameId, Fragment nextFragment){
+    public void transitFragment(FragmentManager fragmentManager, int frameId, Fragment nextFragment){
+        if (fragmentManager == null)
+            fragmentManager = activity.getSupportFragmentManager();
+
         Fragment rightFragment = nextFragment;
-        FragmentTransaction ftRight = activity.getSupportFragmentManager().beginTransaction();
+        FragmentTransaction ftRight = fragmentManager.beginTransaction();
         //ftRight.setCustomAnimations(R.anim.push_left_in, R.anim.push_left_out, R.anim.push_right_in, R.anim.push_right_out);
         ftRight.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out);
-        if (activity.getSupportFragmentManager().getBackStackEntryCount() == 0) {
+        if (fragmentManager.getBackStackEntryCount() == 0) {
             ftRight.replace(frameId, rightFragment, rightFragment.getClass().toString());
             ftRight.addToBackStack(rightFragment.getClass().toString());
             ftRight.commit();
@@ -52,7 +56,7 @@ public class NextGenFragmentTransactionEngine {
         }else{
             //int currentFragmentId = rightFrameStack.peek();
             //int currentFragmentId = getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getId();
-            Fragment currentFragment = activity.getSupportFragmentManager().findFragmentByTag(rightFragment.getClass().toString());
+            Fragment currentFragment = fragmentManager.findFragmentByTag(rightFragment.getClass().toString());
             if (currentFragment != null && currentFragment.getClass().equals(nextFragment.getClass())){
                 //Fragment fragment = getSupportFragmentManager().findFragmentById(currentFragmentId);
                 if (currentFragment instanceof NextGenActorDetailFragment && nextFragment instanceof NextGenActorDetailFragment){

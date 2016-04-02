@@ -70,19 +70,19 @@ public class NextGenExtraActivity extends AbstractNextGenActivity implements Nex
     //*************** NextGenFragmentTransactionInterface ***************
     @Override
     public void transitRightFragment(Fragment nextFragment){
-        nextGenFragmentTransactionEngine.transitFragment(R.id.next_gen_extra_right_view, nextFragment);
+        nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.next_gen_extra_right_view, nextFragment);
 
     }
 
     @Override
     public void transitLeftFragment(Fragment nextFragment){
-        nextGenFragmentTransactionEngine.transitFragment(R.id.next_gen_extra_left_view, nextFragment);
+        nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.next_gen_extra_left_view, nextFragment);
 
     }
 
     @Override
     public void transitMainFragment(Fragment nextFragment){
-        nextGenFragmentTransactionEngine.transitFragment(R.id.next_gen_extra_main_frame, nextFragment);
+        nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.next_gen_extra_main_frame, nextFragment);
     }
 
     @Override

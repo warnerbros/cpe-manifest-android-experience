@@ -7,11 +7,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.MovieMetaData;
+import com.wb.nextgen.util.PicassoTrustAll;
+import com.wb.nextgen.util.utils.StringHelper;
 import com.wb.nextgen.widget.ECMediaController;
 
 import net.flixster.android.drm.ObservableVideoView;
@@ -24,6 +27,17 @@ public class ECVideoViewFragment extends Fragment {
 
     ECMediaController mediaController;
     protected TextView selectedECNameTextView;
+
+    MovieMetaData.ECAudioVisualItem selectedAVItem = null;
+    boolean bSetOnResume= false;
+    ImageView bgImageView;
+
+    String bgImageUrl = null;
+
+    public void setBGImageUrl(String url){
+        bgImageUrl = url;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -40,6 +54,12 @@ public class ECVideoViewFragment extends Fragment {
         videoView.setMediaController(mediaController);
         videoView.setOnPreparedListener(new PreparedListener());
         videoView.requestFocus();
+
+        bgImageView = (ImageView)view.findViewById(R.id.ec_video_frame_bg);
+
+        if (bgImageView != null && !StringHelper.isEmpty(bgImageUrl)){
+            PicassoTrustAll.loadImageIntoView(getActivity(), bgImageUrl, bgImageView);
+        }
     }
 
     private class PreparedListener implements MediaPlayer.OnPreparedListener {
@@ -55,12 +75,21 @@ public class ECVideoViewFragment extends Fragment {
         /*Intent intent = getIntent();
         Uri uri = intent.getData();*/
         videoView.setVisibility(View.VISIBLE);
+        if (bSetOnResume){
+            bSetOnResume = false;
+            setAudioVisualItem(selectedAVItem);
+        }
     }
 
     public void setAudioVisualItem(MovieMetaData.ECAudioVisualItem avItem){
         if (avItem != null) {
-            selectedECNameTextView.setText(avItem.title);
-            videoView.setVideoURI(Uri.parse(avItem.videoUrl));
+            selectedAVItem = avItem;
+            if (selectedECNameTextView != null && videoView != null) {
+                selectedECNameTextView.setText(avItem.title);
+                videoView.setVideoURI(Uri.parse(avItem.videoUrl));
+            }else{
+                bSetOnResume = true;
+            }
         }
     }
 

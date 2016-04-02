@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
@@ -21,6 +22,8 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.wb.nextgen.R;
 import com.wb.nextgen.activity.AbstractECView;
 import com.wb.nextgen.data.MovieMetaData;
+import com.wb.nextgen.util.PicassoTrustAll;
+import com.wb.nextgen.util.utils.StringHelper;
 
 import java.util.List;
 
@@ -32,9 +35,16 @@ public class ECGalleryViewFragment extends Fragment {
     private MovieMetaData.ECGalleryItem currentGallery;
     private GalleryPagerAdapter adapter;
     private ImageButton fullscreenToggleBtn;
+    ImageView bgImageView;
 
+    String bgImageUrl = null;
+
+    boolean bSetOnResume= false;
     //private List<MovieMetaData.ECGalleryImageItem>
 
+    public void setBGImageUrl(String url){
+        bgImageUrl = url;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -52,12 +62,18 @@ public class ECGalleryViewFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     if (getActivity() instanceof AbstractECView) {
-                        ((AbstractECView)getActivity()).onRequestToggleFullscreen();
+                        ((AbstractECView) getActivity()).onRequestToggleFullscreen();
                     }
                 }
             });
         }
         galleryViewPager.setAdapter(adapter);
+
+        bgImageView = (ImageView)view.findViewById(R.id.ec_gallery_frame_bg);
+
+        if (bgImageView != null && !StringHelper.isEmpty(bgImageUrl)){
+            PicassoTrustAll.loadImageIntoView(getActivity(), bgImageUrl, bgImageView);
+        }
     }
 
     public void setCurrentGallery(MovieMetaData.ECGalleryItem gallery){
@@ -66,6 +82,17 @@ public class ECGalleryViewFragment extends Fragment {
 
             adapter.notifyDataSetChanged();
             galleryViewPager.setCurrentItem(0);
+        }else{
+            bSetOnResume = true;
+        }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        if (bSetOnResume){
+            bSetOnResume = false;
+            setCurrentGallery(currentGallery);
         }
     }
 

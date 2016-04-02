@@ -82,10 +82,10 @@ public abstract class AbstractNextGenActivity extends FragmentActivity implement
                 }
             });
         }
-        if (centerBanner != null)
+        if (centerBanner != null && !StringHelper.isEmpty(DemoData.getMovieLogoUrl()))
             PicassoTrustAll.loadImageIntoView(this, DemoData.getMovieLogoUrl(), centerBanner);
 
-        if (rightLogo != null)
+        if (rightLogo != null && !StringHelper.isEmpty(getRightTitleImageUri()))
             PicassoTrustAll.loadImageIntoView(this, getRightTitleImageUri(), rightLogo);
 
         super.onCreate(savedInstanceState);
@@ -113,17 +113,17 @@ public abstract class AbstractNextGenActivity extends FragmentActivity implement
         super.onStart();
         //int spacerPost = 0;
 
-        if (backgroundImageView == null && !StringHelper.isEmpty(getBackgroundImgUri())){
+        if (backgroundImageView == null){
             backgroundImageView = new ImageView(this);
             backgroundImageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             ViewGroup contentView = (ViewGroup)this.getWindow().getDecorView().findViewById(android.R.id.content);
             if (contentView != null){
                 contentView.addView(backgroundImageView, 0);
             }
-            //spacerPost = 1;
-            loadBGImage();
-            //PicassoTrustAll.loadImageIntoView(this, getBackgroundImgUri(), backgroundImageView);
         }
+
+        if (!StringHelper.isEmpty(getBackgroundImgUri()))
+            loadBGImage();
 
         if (topUnderlayActionbarSpacer == null){
             topUnderlayActionbarSpacer = new LinearLayout(this);

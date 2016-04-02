@@ -17,14 +17,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.MediaController;
+import android.widget.TextView;
 
-import com.flixster.android.captioning.CaptionedPlayer;
 import com.wb.nextgen.R;
 
 import com.wb.nextgen.data.DemoData;
+import com.wb.nextgen.fragment.IMEElementsGridFragment;
+import com.wb.nextgen.fragment.NextGenIMEActorFragment;
 import com.wb.nextgen.fragment.NextGenPlayerBottomFragment;
 import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgen.interfaces.NextGenPlaybackStatusListener;
+import com.wb.nextgen.interfaces.SensitiveFragmentInterface;
 import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.TabletUtils;
 import com.wb.nextgen.util.utils.NextGenFragmentTransactionEngine;
@@ -41,12 +44,10 @@ import java.util.TimerTask;
 /**
  * Created by gzcheng on 1/5/16.
  */
-public class NextGenPlayer extends CaptionedPlayer implements NextGenFragmentTransactionInterface {
+public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFragmentTransactionInterface {
 
 
     protected ObservableVideoView videoView;
-
-    protected NextGenPlayerBottomFragment imeFragment;
 
     private TimerTask imeUpdateTask;
 
@@ -57,6 +58,12 @@ public class NextGenPlayer extends CaptionedPlayer implements NextGenFragmentTra
     private MainFeatureMediaController mediaController;
 
     NextGenFragmentTransactionEngine nextGenFragmentTransactionEngine;
+
+
+    //TextView imeText;
+    IMEElementsGridFragment imeGridFragment;
+    private long lastTimeCode = -1;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,9 +93,18 @@ public class NextGenPlayer extends CaptionedPlayer implements NextGenFragmentTra
             PicassoTrustAll.loadImageIntoView(this, DemoData.getMovieLogoUrl(), centerBanner);
 
         actionBarLeftButton = (Button) actionBarCustomView.findViewById(R.id.action_bar_left_button);
-
+        actionBarLeftButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         nextGenFragmentTransactionEngine = new NextGenFragmentTransactionEngine(this);
+
         setContentView(R.layout.next_gen_videoview);
+
+        backgroundImageView = (ImageView)findViewById(R.id.ime_background_image_view);
+
         videoView = (ObservableVideoView) findViewById(R.id.surface_view);
         mediaController = new MainFeatureMediaController(this);
         videoView.setMediaController(mediaController);
@@ -96,7 +112,6 @@ public class NextGenPlayer extends CaptionedPlayer implements NextGenFragmentTra
         videoView.setOnPreparedListener(getOnPreparedListener());
         videoView.setOnCompletionListener(getOnCompletionListener());
         videoView.requestFocus();
-        imeFragment = (NextGenPlayerBottomFragment)getSupportFragmentManager().findFragmentById(R.id.next_gen_ime_frame);
         videoView.setVideoViewListener(new IVideoViewActionListener() {
 
             @Override
@@ -116,11 +131,58 @@ public class NextGenPlayer extends CaptionedPlayer implements NextGenFragmentTra
         });
 
 
+        imeGridFragment =new IMEElementsGridFragment();
+        imeGridFragment.setFragmentTransactionInterface(this);
+
+        transitLeftFragment(new NextGenIMEActorFragment());
+        transitRightFragment(imeGridFragment);
+
+        //imeText = (TextView)findViewById(R.id.next_gen_ime_text);
+        /*NextGenIMEActorFragment imeActorFragment = (NextGenIMEActorFragment)getSupportFragmentManager().findFragmentById(R.id.ime_actor_fragment);
+
+        imeGridFragment = (IMEElementsGridFragment)getSupportFragmentManager().findFragmentById(R.id.ime_grid_fragment);
+        imeGridFragment.setFragmentTransactionInterface(this);*/
+
     }
 
-    protected void updateImeFragment(NextGenPlaybackStatusListener.NextGenPlaybackStatus playbackStatus, long timecode){
-        if (imeFragment != null){
-            imeFragment.playbackStatusUpdate(playbackStatus, timecode);
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+
+        if (getSupportFragmentManager().getBackStackEntryCount() == 1 )
+            finish();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    protected void updateImeFragment(final NextGenPlaybackStatusListener.NextGenPlaybackStatus playbackStatus, final long timecode){
+        if (lastTimeCode == timecode)
+            return;
+
+        lastTimeCode = timecode;
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (imeGridFragment != null)
+                    imeGridFragment.playbackStatusUpdate(playbackStatus, timecode);
+                //if (imeText != null)
+                 //   imeText.setText(Long.toString(timecode));
+            }
+        });
+
+        switch (playbackStatus){
+            case PREPARED:
+                break;
+            case STARTED:
+                break;
+            case STOP:
+                break;
+            case TIMESTAMP_UPDATE:
+                break;
         }
     }
 
@@ -136,7 +198,7 @@ public class NextGenPlayer extends CaptionedPlayer implements NextGenFragmentTra
 
     private void hideShowNextGenView(){
         if (TabletUtils.isTablet()) {
-            View nextGenView = findViewById(R.id.nextgenview);
+            View nextGenView = findViewById(R.id.next_gen_ime_bottom_view);
             if (nextGenView == null)
                 return;
             switch (this.getResources().getConfiguration().orientation) {
@@ -243,18 +305,43 @@ public class NextGenPlayer extends CaptionedPlayer implements NextGenFragmentTra
 
     }
 
+    public int getMainFrameId(){
+        return R.id.next_gen_ime_bottom_view;//next_gen_ime_main_frame;
+    }
+
+    public int getLeftFrameId(){
+        return R.id.next_gen_ime_left_frame;
+    }
+
+    public int getRightFrameId(){
+        return R.id.next_gen_ime_right_frame;
+
+    }
+
     @Override
     public void transitLeftFragment(Fragment nextFragment){
-        nextGenFragmentTransactionEngine.transitFragment(imeFragment.getLeftFrameId(), nextFragment);
+        nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), getLeftFrameId(), nextFragment);
     }
 
     @Override
     public void transitRightFragment(Fragment nextFragment){
-        nextGenFragmentTransactionEngine.transitFragment(imeFragment.getRightFrameId(), nextFragment);
+        nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), getRightFrameId(), nextFragment);
     }
 
     @Override
     public void transitMainFragment(Fragment nextFragment){
-        nextGenFragmentTransactionEngine.transitFragment(imeFragment.getMainFrameId(), nextFragment);
+        nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), getMainFrameId(), nextFragment);
+    }
+
+    public String getBackgroundImgUri(){
+        return DemoData.getExtraBackgroundUrl();
+    }
+    public String getLeftButtonText(){
+        return "";
+
+    }
+    public String getRightTitleImageUri(){
+        return "";
+
     }
 }
