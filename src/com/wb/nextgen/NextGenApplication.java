@@ -13,6 +13,7 @@ import android.view.WindowManager;
 
 import com.wb.nextgen.data.DemoData;
 import com.wb.nextgen.data.MovieMetaData;
+import com.wb.nextgen.network.BaselineApiDAO;
 import com.wb.nextgen.parser.ManifestXMLParser;
 import com.wb.nextgen.model.NextGenSettings;
 import com.wb.nextgen.parser.manifest.schema.v1_4.MediaManifestType;
@@ -67,7 +68,6 @@ public class NextGenApplication extends Application {
 
     private static NextGenSettings sAppSettings;
 
-    private static MediaManifestType manifest;
     private static MovieMetaData movieMetaData;
     // ///////////////////////////////////////////////////////
     // Flixster Cache
@@ -97,7 +97,9 @@ public class NextGenApplication extends Application {
                     + "; " + Build.MODEL + ")";
             DemoData.parseDemoJSONData();
 
-            manifest = new ManifestXMLParser().startParsing();
+            BaselineApiDAO.init();
+
+            MediaManifestType manifest = new ManifestXMLParser().startParsing();
             movieMetaData = MovieMetaData.process(manifest);
         }catch (Exception ex){
             NextGenLogger.e(F.TAG, ex.getLocalizedMessage());

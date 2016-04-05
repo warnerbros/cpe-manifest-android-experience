@@ -11,6 +11,7 @@ import com.wb.nextgen.R;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
+import com.wb.nextgen.util.utils.StringHelper;
 
 
 import java.io.InputStream;
@@ -87,6 +88,8 @@ public class PicassoTrustAll {
     }
 
     public static void loadImageIntoView(Context context, String url, ImageView poster){
+        if (StringHelper.isEmpty(url))
+            return;
         if (cannotResetUris.contains(url)){
             new ImageLoadTask(url, poster).execute();
         }else

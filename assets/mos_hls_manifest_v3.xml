@@ -3778,17 +3778,7 @@
                 <manifest:ContainerLocation>http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_708_BlackZeroPhantomZone_120.jpg</manifest:ContainerLocation>
             </manifest:ContainerReference>
         </manifest:Image>
-        <manifest:Interactive InteractiveTrackID="md:interactiveid:eidr-x:C80F-C561-EE65-C5E4-C039-U:other.placestab.1">
-            <Type>other</Type>
-            <Encoding>
-                <RuntimeEnvironment>HTML5</RuntimeEnvironment>
-            </Encoding>
-            <manifest:ContainerReference>
-                <manifest:ContainerLocation>http://demo.www.theplatform.services/wb/Man_of_Steel/MicroHtml/#5757efb2-f71c-4830-b96f-76430a26a985</manifest:ContainerLocation>
-            </manifest:ContainerReference>
-        </manifest:Interactive>
         <manifest:Interactive InteractiveTrackID="md:interactiveid:eidr-x:C80F-C561-EE65-C5E4-C039-U:other.dc_multiverse.2">
-            <Type>other</Type>
             <Encoding>
                 <RuntimeEnvironment>HTML5</RuntimeEnvironment>
             </Encoding>
@@ -3814,7 +3804,14 @@
                 <ReleaseDate>2013-06-14</ReleaseDate>
                 <WorkType>Movie</WorkType>
                 <ThreeD>false</ThreeD>
-
+                <AltIdentifier>
+                    <Namespace>thetake</Namespace>
+                    <Identifier>421</Identifier>
+                </AltIdentifier>
+                <AltIdentifier>
+                    <Namespace>baseline</Namespace>
+                    <Identifier>4667130</Identifier>
+                </AltIdentifier>
                 <People>
                     <Job>
                         <JobFunction>Actor</JobFunction>
@@ -3827,6 +3824,10 @@
                         <FirstGivenName>Henry</FirstGivenName>
                         <FamilyName>Cavill</FamilyName>
                     </Name>
+                    <Identifier>
+                        <Namespace>baseline</Namespace>
+                        <Identifier>3822492</Identifier>
+                    </Identifier>
                 </People>
                 <People>
                     <Job>
@@ -3840,6 +3841,10 @@
                         <FirstGivenName>Amy</FirstGivenName>
                         <FamilyName>Adams</FamilyName>
                     </Name>
+                    <Identifier>
+                        <Namespace>baseline</Namespace>
+                        <Identifier>3993995</Identifier>
+                    </Identifier>
                 </People>
                 <People>
                     <Job>
@@ -3853,6 +3858,10 @@
                         <FirstGivenName>Michael</FirstGivenName>
                         <FamilyName>Shannon</FamilyName>
                     </Name>
+                    <Identifier>
+                        <Namespace>baseline</Namespace>
+                        <Identifier>3510995</Identifier>
+                    </Identifier>
                 </People>
                 <People>
                     <Job>
@@ -3866,6 +3875,10 @@
                         <FirstGivenName>Diane</FirstGivenName>
                         <FamilyName>Lane</FamilyName>
                     </Name>
+                    <Identifier>
+                        <Namespace>baseline</Namespace>
+                        <Identifier>4319243</Identifier>
+                    </Identifier>
                 </People>
                 <People>
                     <Job>
@@ -3879,6 +3892,10 @@
                         <FirstGivenName>Russell</FirstGivenName>
                         <FamilyName>Crowe</FamilyName>
                     </Name>
+                    <Identifier>
+                        <Namespace>baseline</Namespace>
+                        <Identifier>3845593</Identifier>
+                    </Identifier>
                 </People>
                 <People>
                     <Job>
@@ -3892,6 +3909,10 @@
                         <FirstGivenName>Antje</FirstGivenName>
                         <FamilyName>Traue</FamilyName>
                     </Name>
+                    <Identifier>
+                        <Namespace>baseline</Namespace>
+                        <Identifier>4344676</Identifier>
+                    </Identifier>
                 </People>
                 <People>
                     <Job>
@@ -3905,6 +3926,10 @@
                         <FirstGivenName>Harry</FirstGivenName>
                         <FamilyName>Lennix</FamilyName>
                     </Name>
+                    <Identifier>
+                        <Namespace>baseline</Namespace>
+                        <Identifier>4006586</Identifier>
+                    </Identifier>
                 </People>
                 <People>
                     <Job>
@@ -3918,6 +3943,10 @@
                         <FirstGivenName>Richard</FirstGivenName>
                         <FamilyName>Schiff</FamilyName>
                     </Name>
+                    <Identifier>
+                        <Namespace>baseline</Namespace>
+                        <Identifier>3000924</Identifier>
+                    </Identifier>
                 </People>
                 <People>
                     <Job>
@@ -3931,6 +3960,10 @@
                         <FirstGivenName>Christopher</FirstGivenName>
                         <FamilyName>Meloni</FamilyName>
                     </Name>
+                    <Identifier>
+                        <Namespace>baseline</Namespace>
+                        <Identifier>4041411</Identifier>
+                    </Identifier>
                 </People>
                 <People>
                     <Job>
@@ -3944,6 +3977,10 @@
                         <FirstGivenName>Kevin</FirstGivenName>
                         <FamilyName>Costner</FamilyName>
                     </Name>
+                    <Identifier>
+                        <Namespace>baseline</Namespace>
+                        <Identifier>4393002</Identifier>
+                    </Identifier>
                 </People>
                 <People>
                     <Job>
@@ -3957,6 +3994,10 @@
                         <FirstGivenName>Ayelet</FirstGivenName>
                         <FamilyName>Zurer</FamilyName>
                     </Name>
+                    <Identifier>
+                        <Namespace>baseline</Namespace>
+                        <Identifier>4036340</Identifier>
+                    </Identifier>
                 </People>
                 <People>
                     <Job>
@@ -3970,6 +4011,10 @@
                         <FirstGivenName>Laurence</FirstGivenName>
                         <FamilyName>Fishburne</FamilyName>
                     </Name>
+                    <Identifier>
+                        <Namespace>baseline</Namespace>
+                        <Identifier>3388348</Identifier>
+                    </Identifier>
                 </People>
 
                 <People>
@@ -6027,11 +6072,8 @@
         <manifest:Metadata ContentID="md:cid:eidr-x:C80F-C561-EE65-C5E4-C039-U:other.placestab.1">
             <manifest:BasicMetadata ContentID="md:cid:eidr-x:C80F-C561-EE65-C5E4-C039-U:other.placestab.1">
                 <LocalizedInfo default="true" language="en">
-                    <TitleDisplayUnlimited>Places</TitleDisplayUnlimited>
-                    <TitleSort>Places</TitleSort>
-                    <ArtReference resolution="352x198">http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/ManOfSteel_Places_HD_SML.jpg</ArtReference>
-                    <ArtReference resolution="714x406">http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/ManOfSteel_Places_HD_MED.jpg</ArtReference>
-                    <ArtReference resolution="1076x614">http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/ManOfSteel_Places_HD_LRG.jpg</ArtReference>
+                    <TitleDisplayUnlimited>Scene Location</TitleDisplayUnlimited>
+                    <TitleSort>SceneLocation</TitleSort>
                     <Summary190/>
                 </LocalizedInfo>
                 <ReleaseYear>2013</ReleaseYear>
@@ -6432,8 +6474,8 @@
         <manifest:Metadata ContentID="md:cid:eidr-x:C80F-C561-EE65-C5E4-C039-U:experience.bonus.31">
             <manifest:BasicMetadata ContentID="md:cid:eidr-x:C80F-C561-EE65-C5E4-C039-U:experience.bonus.31">
                 <LocalizedInfo language="en">
-                    <TitleDisplayUnlimited>Places</TitleDisplayUnlimited>
-                    <TitleSort>Places</TitleSort>
+                    <TitleDisplayUnlimited>Scene Location</TitleDisplayUnlimited>
+                    <TitleSort>Scene Location</TitleSort>
                     <Summary190/>
                 </LocalizedInfo>
                 <ReleaseYear>2013</ReleaseYear>
@@ -6465,96 +6507,120 @@
                 <WorkType>Supplemental</WorkType>
             </manifest:BasicMetadata>
         </manifest:Metadata>
+        <manifest:Metadata ContentID="md:cid:eidr-x:C80F-C561-EE65-C5E4-C039-U:experience.bonus.34">
+            <manifest:BasicMetadata ContentID="md:cid:eidr-x:C80F-C561-EE65-C5E4-C039-U:experience.bonus.34">
+                <LocalizedInfo language="en">
+                    <TitleDisplayUnlimited>Shop This Scene</TitleDisplayUnlimited>
+                    <TitleSort>Shop This Scene</TitleSort>
+                    <Summary190/>
+                </LocalizedInfo>
+                <ReleaseYear>2013</ReleaseYear>
+                <ReleaseDate>2013-06-14</ReleaseDate>
+                <WorkType>Supplemental</WorkType>
+            </manifest:BasicMetadata>
+        </manifest:Metadata>
+        <manifest:Metadata ContentID="md:cid:eidr-x:C80F-C561-EE65-C5E4-C039-U:experience.bonus.35">
+            <manifest:BasicMetadata ContentID="md:cid:eidr-x:C80F-C561-EE65-C5E4-C039-U:experience.bonus.35">
+                <LocalizedInfo language="en">
+                    <TitleDisplayUnlimited>Shopping</TitleDisplayUnlimited>
+                    <TitleSort>Shopping</TitleSort>
+                    <Summary190/>
+                </LocalizedInfo>
+                <ReleaseYear>2013</ReleaseYear>
+                <ReleaseDate>2013-06-14</ReleaseDate>
+                <WorkType>Supplemental</WorkType>
+            </manifest:BasicMetadata>
+        </manifest:Metadata>
         <manifest:TextObject TextObjectID="md:textobjectid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.trivia.1" language="en">
             <manifest:TextString index="1">The Warner Bros. and Legendary logos have Kryptonian carving on their edges.</manifest:TextString>
-            <manifest:TextString index="2">The look of the master shots in the â€œbirth of Kal-El sceneâ€ was partially inspired by the Tenebrism of Italian Baroque paintings, especially Artemisia Gentileschiâ€™s â€œJudith Slaying Holofernes.â€</manifest:TextString>
+            <manifest:TextString index="2">The look of the master shots in the "birth of Kal-El scene" was partially inspired by the Tenebrism of Italian Baroque paintings, especially Artemisia Gentileschi's "Judith Slaying Holofernes."</manifest:TextString>
             <manifest:TextString index="3">Ruins of the previous Kryptonian age are in the background of every shot of the planet.</manifest:TextString>
             <manifest:TextString index="4">Each council member represents a guild of Krypton.</manifest:TextString>
             <manifest:TextString index="5">Each guild member chair is carved with various Kryptonian phrases that are unique to that particular guild.</manifest:TextString>
             <manifest:TextString index="6">The weapons are covered in poetry and have been passed down in each family/guild.</manifest:TextString>
             <manifest:TextString index="7">Robots are in families/guilds for generations and are older than their masters.</manifest:TextString>
             <manifest:TextString index="8">Armor is also ancient and handed down through generations.</manifest:TextString>
-            <manifest:TextString index="9">The Codex is like Lucy â€“ a proto-Kryptonian being.</manifest:TextString>
+            <manifest:TextString index="9">The Codex is like Lucy - a proto-Kryptonian being.</manifest:TextString>
             <manifest:TextString index="10">The voice of the Kryptonian warning announcements is Henry Cavill.</manifest:TextString>
             <manifest:TextString index="11">Writer and artist John Byrne reimagined Kryptonian society for his mythology reboot series The Man of Steel, showing a colder, more emotionally detached society than had been depicted before, one that had dominated its home planet to the point of collapse.</manifest:TextString>
-            <manifest:TextString index="12">The skull shown in the liquid geo display is proto-human â€“ more Cro-Magnon than Homo sapiens â€“ the data being 20,000 years old as relayed from the Scout Ship we will see later buried in the ice on Earth.</manifest:TextString>
-            <manifest:TextString index="13">The proto-Kryptonian is now inside Kal-Elâ€™s genes.</manifest:TextString>
+            <manifest:TextString index="12">The skull shown in the liquid geo display is proto-human - more Cro-Magnon than Homo sapiens - the data being 20,000 years old as relayed from the Scout Ship we will see later buried in the ice on Earth.</manifest:TextString>
+            <manifest:TextString index="13">The proto-Kryptonian is now inside Kal-El's genes.</manifest:TextString>
             <manifest:TextString index="14">The Command Key becomes an integral plot point throughout the movie.</manifest:TextString>
             <manifest:TextString index="15">Kryptonian weapons are treated within the culture as ancient artifacts and family heirlooms; they are not mass-produced.</manifest:TextString>
             <manifest:TextString index="16">There are personal robots with the other council members watching the sentencing, like pages in medieval times.</manifest:TextString>
             <manifest:TextString index="17">The sun is a red dwarf star in the movie. In the comics, it was a red giant.</manifest:TextString>
             <manifest:TextString index="18">The violin soloist is playing a Stradivarius built in 1728, one of the rarest instruments in the world.</manifest:TextString>
-            <manifest:TextString index="19"> The core has been ignited, and now the planet is becoming a failed sun, or neutron star.</manifest:TextString>
+            <manifest:TextString index="19">The core has been ignited, and now the planet is becoming a failed sun, or neutron star.</manifest:TextString>
             <manifest:TextString index="20">The Debbie Sue is a trawler. The average number of crewmembers on a crab boat is 5-10. Crabbing is considered one of the most dangerous jobs in the world.</manifest:TextString>
             <manifest:TextString index="21">The tank set was the largest underwater green screen ever built.</manifest:TextString>
-            <manifest:TextString index="22">The two whales are the last of their species â€“ extinction binds them to Clark.</manifest:TextString>
-            <manifest:TextString index="23"> The girl across from Clark in the school bus is Lana Lang. In the comics, Lana Lang is Clarkâ€™s love interest.</manifest:TextString>
+            <manifest:TextString index="22">The two whales are the last of their species - extinction binds them to Clark.</manifest:TextString>
+            <manifest:TextString index="23">The girl across from Clark in the school bus is Lana Lang. In the comics, Lana Lang is Clark's love interest.</manifest:TextString>
             <manifest:TextString index="24">The stuntman who played Nam-Ek, Mike Justus, is also the same person driving the car.</manifest:TextString>
-            <manifest:TextString index="25">The depiction of the Kents in Man of Steel harkens back to the very first page of Superman #1 and what the as-yet unnamed adoptive parents say to young Clark. â€œNow listen to me, Clark! This great strength of yours â€“ youâ€™ve got to hide it from people or theyâ€™ll be scared of you!â€ â€œBut when the proper time comes, you must use it to assist humanity.â€</manifest:TextString>
-            <manifest:TextString index="26">The scene where Jonathan shows Clark the spacecraft was partially inspired by the limited-series comic Superman: Secret Origin, in which young Clark tearfully says, â€œI want to be Clark Kent. I want to be your son,â€ to which Jonathan responds, â€œClark...You are my son.â€</manifest:TextString>
-            <manifest:TextString index="27">The 1986 limited series The Man of Steel changed many elements of the classic Superman mythology, including having both of his adoptive parents remaining alive well into Clarkâ€™s adult life.</manifest:TextString>
+            <manifest:TextString index="25">The depiction of the Kents in Man of Steel harkens back to the very first page of Superman #1 and what the as-yet unnamed adoptive parents say to young Clark. "Now listen to me, Clark! This great strength of yours - you've got to hide it from people or they'll be scared of you!" "But when the proper time comes, you must use it to assist humanity."</manifest:TextString>
+            <manifest:TextString index="26">The scene where Jonathan shows Clark the spacecraft was partially inspired by the limited-series comic Superman: Secret Origin, in which young Clark tearfully says, "I want to be Clark Kent. I want to be your son," to which Jonathan responds, "Clark...You are my son."</manifest:TextString>
+            <manifest:TextString index="27">The 1986 limited series The Man of Steel changed many elements of the classic Superman mythology, including having both of his adoptive parents remaining alive well into Clark's adult life.</manifest:TextString>
             <manifest:TextString index="28">In the 2003/2004 limited series Superman: Birthright, Clark Kent travels the world not knowing his own background/heritage, while trying to use his powers to help people without revealing himself, similar to in the movie.</manifest:TextString>
-            <manifest:TextString index="29">Alessandro Juliani (â€œOfficer Sekowskyâ€) portrayed Dr. Emil Hamilton on Smallville. He also appeared in Watchmen.</manifest:TextString>
+            <manifest:TextString index="29">Alessandro Juliani ("Officer Sekowsky") portrayed Dr. Emil Hamilton on Smallville. He also appeared in Watchmen.</manifest:TextString>
             <manifest:TextString index="30">The picture that Lois takes on her camera of Clark walking on the ice-shelf wall was inspired by blurry photos of Bigfoot.</manifest:TextString>
             <manifest:TextString index="31">Robots have been keeping the Scout Ship running for over 20,000 years.</manifest:TextString>
-            <manifest:TextString index="32">Loisâ€™ scared first reaction to Clark in the Scout Ship recalls what Superman says to the reporter in their first meeting in Action Comics #1: â€œYou neednâ€™t be afraid of me. I wonâ€™t harm you.â€</manifest:TextString>
-            <manifest:TextString index="33">The scene when Dr. Manhattan is discovered to have escaped to Mars in Zack Snyderâ€™s film Watchmen inspired the landscape on the military computerâ€™s screen.</manifest:TextString>
-            <manifest:TextString index="34">The polar bear is a reminder that Clark, like the bear, is an endangered species â€“ the last of his kind.</manifest:TextString>
+            <manifest:TextString index="32">Lois' scared first reaction to Clark in the Scout Ship recalls what Superman says to the reporter in their first meeting in Action Comics #1: "You needn't be afraid of me. I won't harm you."</manifest:TextString>
+            <manifest:TextString index="33">The scene when Dr. Manhattan is discovered to have escaped to Mars in Zack Snyder's film Watchmen inspired the landscape on the military computer's screen.</manifest:TextString>
+            <manifest:TextString index="34">The polar bear is a reminder that Clark, like the bear, is an endangered species - the last of his kind.</manifest:TextString>
             <manifest:TextString index="35">ï¿¼ The voice of the Scout Ship computer is that of Carla Gugino, who played Sally Jupiter in Watchmen.</manifest:TextString>
             <manifest:TextString index="36">The visual style of the Kryptonian history lesson in liquid geo is influenced by a mix of Soviet and bas-relief art.</manifest:TextString>
             <manifest:TextString index="37">The longest visual effects shot in the movie is the history lesson of Krypton that Jor-El explains to Clark as the camera continually pans and pivots around the room (it is 90 seconds long).</manifest:TextString>
             <manifest:TextString index="38">It took five months of careful preparation to figure out how to build the Superman suit.</manifest:TextString>
-            <manifest:TextString index="39">Jor-El gets the classic â€œSâ€ reveal of pulling back his cloak in this scene.</manifest:TextString>
+            <manifest:TextString index="39">Jor-El gets the classic "S" reveal of pulling back his cloak in this scene.</manifest:TextString>
             <manifest:TextString index="40">Each Superman suit would require 20 different artisans from four costuming companies to create.</manifest:TextString>
             <manifest:TextString index="41">Each Superman cape required 14 3/4 yards of ultrasuede fabric to create.</manifest:TextString>
             <manifest:TextString index="42">There were 14 Superman suits made for Man of Steel.</manifest:TextString>
-            <manifest:TextString index="43">When Superman flies, heâ€™s manipulating space and gravity because of the effect the sun and earth have on him.</manifest:TextString>
+            <manifest:TextString index="43">When Superman flies, he's manipulating space and gravity because of the effect the sun and earth have on him.</manifest:TextString>
             <manifest:TextString index="44">Each sonic boom = Mach speed.</manifest:TextString>
-            <manifest:TextString index="45">Amy Adamsâ€™ auburn-haired Lois Lane is a departure for the typically brunette or raven-haired character.</manifest:TextString>
+            <manifest:TextString index="45">Amy Adams' auburn-haired Lois Lane is a departure for the typically brunette or raven-haired character.</manifest:TextString>
             <manifest:TextString index="46">As in the movie, a tornado threatens Smallville in the 1998 limited-series comic Superman For All Seasons.</manifest:TextString>
-            <manifest:TextString index="47">In Superman: Earth One, Jonathan dies while Clark is still growing up, leaving the young man conflicted over how to honor his late adoptive fatherâ€™s wishes for how he should use his abilities.</manifest:TextString>
-            <manifest:TextString index="48">Lois and Perryâ€™s contentious but mutually respectful relationship has its basis in the comics, such as in Superman: Birthright, which shows Perry making a list of reasons why and why not to fire Lois.</manifest:TextString>
-            <manifest:TextString index="49">The LexCorp truck that drops Clark off reads â€œBetter Farming Through Science,â€ alluding to Lex Luthorâ€™s character as having a brilliant, if misguided, scientific mind.</manifest:TextString>
+            <manifest:TextString index="47">In Superman: Earth One, Jonathan dies while Clark is still growing up, leaving the young man conflicted over how to honor his late adoptive father's wishes for how he should use his abilities.</manifest:TextString>
+            <manifest:TextString index="48">Lois and Perry's contentious but mutually respectful relationship has its basis in the comics, such as in Superman: Birthright, which shows Perry making a list of reasons why and why not to fire Lois.</manifest:TextString>
+            <manifest:TextString index="49">The LexCorp truck that drops Clark off reads "Better Farming Through Science," alluding to Lex Luthor's character as having a brilliant, if misguided, scientific mind.</manifest:TextString>
             <manifest:TextString index="50">The farmland surrounding the Kent Farm location was due to grow soy that year, so production arranged to grow corn and timed the planting so the corn could be the correct height during filming.</manifest:TextString>
             <manifest:TextString index="51">The Black Zero looks like the International Space Station when tracked from the ground.</manifest:TextString>
-            <manifest:TextString index="52">The earliest depictions of Krypton, in the Superman newspaper strips of 1939, described its inhabitants as being a â€œcivilization of supermen â€“ beings which represent the human race at its ultimate peak of perfect development!â€</manifest:TextString>
-            <manifest:TextString index="53">Platoâ€™s The Republic discusses the meaning of justice, the theory of forms and the immortality of the soul, among other philosophical topics.</manifest:TextString>
+            <manifest:TextString index="52">The earliest depictions of Krypton, in the Superman newspaper strips of 1939, described its inhabitants as being a "civilization of supermen - beings which represent the human race at its ultimate peak of perfect development!"</manifest:TextString>
+            <manifest:TextString index="53">Plato's The Republic discusses the meaning of justice, the theory of forms and the immortality of the soul, among other philosophical topics.</manifest:TextString>
             <manifest:TextString index="54">The Smallville High School sports team name is The Spartans, in homage to 300.</manifest:TextString>
-            <manifest:TextString index="55">Sullivanâ€™s Truck &amp; Tractor Repair is a reference to the TV series Smallville.</manifest:TextString>
+            <manifest:TextString index="55">Sullivan's Truck &amp; Tractor Repair is a reference to the TV series Smallville.</manifest:TextString>
             <manifest:TextString index="56">The stained glass image behind Clark depicts the biblical story of Jesus in the Garden of Gethsemane.</manifest:TextString>
-            <manifest:TextString index="57">In the 2010 graphic novel Superman: Earth One volume one, Clarkâ€™s first public appearance as Superman is when an invading alien force threatens to destroy Earth, as in the movie.</manifest:TextString>
-            <manifest:TextString index="58">Although there have been variations through the years, the red, blue and yellow color scheme of Supermanâ€™s costume dates back to the first Action Comic in 1938.</manifest:TextString>
+            <manifest:TextString index="57">In the 2010 graphic novel Superman: Earth One volume one, Clark's first public appearance as Superman is when an invading alien force threatens to destroy Earth, as in the movie.</manifest:TextString>
+            <manifest:TextString index="58">Although there have been variations through the years, the red, blue and yellow color scheme of Superman's costume dates back to the first Action Comic in 1938.</manifest:TextString>
             <manifest:TextString index="59">All of the military personnel are real-life airmen, guardsmen, sailors and soldiers who each had at least one deployment to Iraq or Afghanistan.</manifest:TextString>
             <manifest:TextString index="60">The first Faora, Faora Hu-Ul, was introduced in Action Comics #471 and #472 in 1977.</manifest:TextString>
             <manifest:TextString index="61">DC Comics killed Superman in Superman #75 (1993).</manifest:TextString>
-            <manifest:TextString index="62">The character of Tor-An is played by Richard Cetrone, who has appeared in all but one of Mr. Snyderâ€™s films.</manifest:TextString>
+            <manifest:TextString index="62">The character of Tor-An is played by Richard Cetrone, who has appeared in all but one of Mr. Snyder's films.</manifest:TextString>
             <manifest:TextString index="63">Superman famously wore a black and silver costume when he returned from the dead in 1993, except with a longer hairstyle and no cape.</manifest:TextString>
             <manifest:TextString index="64">The straps restraining Kal-El are made of liquid geo, just like the display screens throughout Krypton.</manifest:TextString>
             <manifest:TextString index="65">The Command Key that Jor-El sends to help educate and guide his son in the film has a variety of comic book counterparts, such as the historical chronicle tablet in Superman: Birthright, and the sunstone crystal in Superman: Secret Origin.</manifest:TextString>
             <manifest:TextString index="66">The character of Jax-Ur, portrayed in the film by Mackenzie Grey, first appeared in Adventure Comics #289 (1961).</manifest:TextString>
-            <manifest:TextString index="67">The twinkle of light behind Kal-El when he flies away is Jor-El blinking out/unplugging from the shipâ€™s systems.</manifest:TextString>
+            <manifest:TextString index="67">The twinkle of light behind Kal-El when he flies away is Jor-El blinking out/unplugging from the ship's systems.</manifest:TextString>
             <manifest:TextString index="68">Kryptonian plasma is left on Earth when the escape pod crashes in the cornfield.</manifest:TextString>
             <manifest:TextString index="69">During the Smallville battle, a hot dog truck can be seen three times making its way across town. It first appears by the Kent Farm as Superman tackles Zod near the grain silos; it then appears outside the IHOP windows as Faora and Superman trade blows; finally, as the Dropship lands to pick up Faora and Nam-Ek, the hot dog truck arrives at the far end of the street. A miniature version of this truck now sits in the Cruel and Unusual Films office.</manifest:TextString>
-            <manifest:TextString index="70">When Zodâ€™s helmet breaks, it harks back to young Clarkâ€™s X-ray vision fright.</manifest:TextString>
-            <manifest:TextString index="71">Heat vision comes from an internal source, hence the sub-surface glow that is visible under Zodâ€™s skin when he uses it. This is not an easy power to use, as it does cause some discomfort.</manifest:TextString>
+            <manifest:TextString index="70">When Zod's helmet breaks, it harks back to young Clark's X-ray vision fright.</manifest:TextString>
+            <manifest:TextString index="71">Heat vision comes from an internal source, hence the sub-surface glow that is visible under Zod's skin when he uses it. This is not an easy power to use, as it does cause some discomfort.</manifest:TextString>
             <manifest:TextString index="72">Superman is famously more powerful than a locomotive.</manifest:TextString>
-            <manifest:TextString index="73">The Black Zero at the start of the film is very clean. By the time Zod arrives on Earth, it has been retrofitted and the three triangular sections of the Phantom Zone generator can be seen attached to the â€œshouldersâ€ of the Black Zero.</manifest:TextString>
+            <manifest:TextString index="73">The Black Zero at the start of the film is very clean. By the time Zod arrives on Earth, it has been retrofitted and the three triangular sections of the Phantom Zone generator can be seen attached to the "shoulders" of the Black Zero.</manifest:TextString>
             <manifest:TextString index="74">The debris cloud ejected from the top of the World Engine was referenced from images of the volcano EyjafjallajoÌˆkull in Iceland.</manifest:TextString>
             <manifest:TextString index="75">A gravitational singularity, or space-time singularity, is thought to have infinite gravity.</manifest:TextString>
             <manifest:TextString index="76">Original white-board sketch (May 2011) of World Engine with the gravity beam pounding the ground.</manifest:TextString>
             <manifest:TextString index="77">Metropolis is an amalgam of Los Angeles, New York and Chicago, with landmark buildings removed. When rendered digitally by Double Negative, Metropolis comprised 32 square miles of CG buildings and streets.</manifest:TextString>
             <manifest:TextString index="78">The defense mechanisms at work here are the same liquid geo technology seen in display screens throughout Krypton.</manifest:TextString>
-            <manifest:TextString index="79">Richard Schiffâ€™s Dr. Emil Hamilton works for S.T.A.R. Labs, a DC Comics reference.</manifest:TextString>
+            <manifest:TextString index="79">Richard Schiff's Dr. Emil Hamilton works for S.T.A.R. Labs, a DC Comics reference.</manifest:TextString>
             <manifest:TextString index="80">When Kal-El hovers across the crater to Zod, it is a Dr. Manhattan moment, in homage to Watchmen.</manifest:TextString>
-            <manifest:TextString index="81">The second longest visual effects shot in the film is Zod on his knees, explaining how Superman has taken everything from him. Michaelâ€™s performance was so good that his speech was played in one long take.</manifest:TextString>
+            <manifest:TextString index="81">The second longest visual effects shot in the film is Zod on his knees, explaining how Superman has taken everything from him. Michael's performance was so good that his speech was played in one long take.</manifest:TextString>
             <manifest:TextString index="82">Blaze Comics is a cryptic reference from the Superman canon.</manifest:TextString>
             <manifest:TextString index="83">Here is the original (April 2011) white-board drawing, by Zack Snyder, of Zod swinging the I-beam at Superman, while Superman shoots his heat vision at it.</manifest:TextString>
-            <manifest:TextString index="84"> The â€œUtopia Casinoâ€ sign is a possible tease of a villain from the comics, Tony Gallo.</manifest:TextString>
+            <manifest:TextString index="84">The "Utopia Casino" sign is a possible tease of a villain from the comics, Tony Gallo.</manifest:TextString>
             <manifest:TextString index="85">A Wayne Industries satellite hints at future storylines.</manifest:TextString>
             <manifest:TextString index="86">LexCorp is visible on the side of the building, referencing another villain from the canon.</manifest:TextString>
             <manifest:TextString index="87">The statues that are struck are Truth and Justice. Truth falls.</manifest:TextString>
-            <manifest:TextString index="88">A Reaper drone does not cost $12 million, as stated by General Swanwick â€“ its estimated flyaway cost is closer to $17 million.</manifest:TextString>
-            <manifest:TextString index="89">The Daily Planetâ€™s iconic globe has typically been situated on the rooftop of its building.</manifest:TextString>
+            <manifest:TextString index="88">A Reaper drone does not cost $12 million, as stated by General Swanwick - its estimated flyaway cost is closer to $17 million.</manifest:TextString>
+            <manifest:TextString index="89">The Daily Planet's iconic globe has typically been situated on the rooftop of its building.</manifest:TextString>
         </manifest:TextObject>
     </manifest:Inventory>
     <manifest:Presentations>
@@ -7839,14 +7905,6 @@
         </manifest:PictureGroup>
     </manifest:PictureGroups>
     <manifest:AppGroups>
-        <manifest:AppGroup AppGroupID="md:appgroupid:eidr-x:C80F-C561-EE65-C5E4-C039-U:other.placestab.1">
-            <manifest:InteractiveTrackReference>
-                <manifest:InteractiveTrackID>md:interactiveid:eidr-x:C80F-C561-EE65-C5E4-C039-U:other.placestab.1</manifest:InteractiveTrackID>
-                <manifest:Compatibility>
-                    <RuntimeEnvironment>HTML5</RuntimeEnvironment>
-                </manifest:Compatibility>
-            </manifest:InteractiveTrackReference>
-        </manifest:AppGroup>
         <manifest:AppGroup AppGroupID="md:appgroupid:eidr-x:C80F-C561-EE65-C5E4-C039-U:other.dc_multiverse.2">
             <manifest:InteractiveTrackReference>
                 <manifest:InteractiveTrackID>md:interactiveid:eidr-x:C80F-C561-EE65-C5E4-C039-U:other.dc_multiverse.2</manifest:InteractiveTrackID>
@@ -7929,6 +7987,20 @@
                 </manifest:SequenceInfo>
                 <manifest:ExperienceID>md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.20</manifest:ExperienceID>
             </manifest:ExperienceChild>
+            <manifest:ExperienceChild>
+                <manifest:Relationship>ispartof</manifest:Relationship>
+                <manifest:SequenceInfo>
+                    <Number>6</Number>
+                </manifest:SequenceInfo>
+                <manifest:ExperienceID>md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.35</manifest:ExperienceID>
+            </manifest:ExperienceChild>
+        </manifest:Experience>
+        <manifest:Experience ExperienceID="md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.3" version="1">
+            <manifest:Language>en</manifest:Language>
+            <manifest:Region>
+                <country>US</country>
+            </manifest:Region>
+            <manifest:ContentID>md:cid:eidr-x:C80F-C561-EE65-C5E4-C039-U:experience.bonus.3</manifest:ContentID>
         </manifest:Experience>
         <manifest:Experience ExperienceID="md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.4" version="1">
             <manifest:Language>en</manifest:Language>
@@ -8374,21 +8446,21 @@
             <manifest:ExperienceChild>
                 <manifest:Relationship>ispartof</manifest:Relationship>
                 <manifest:SequenceInfo>
-                    <Number>1</Number>
+                    <Number>2</Number>
                 </manifest:SequenceInfo>
                 <manifest:ExperienceID>md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.30</manifest:ExperienceID>
             </manifest:ExperienceChild>
             <manifest:ExperienceChild>
                 <manifest:Relationship>ispartof</manifest:Relationship>
                 <manifest:SequenceInfo>
-                    <Number>2</Number>
+                    <Number>1</Number>
                 </manifest:SequenceInfo>
                 <manifest:ExperienceID>md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.31</manifest:ExperienceID>
             </manifest:ExperienceChild>
             <manifest:ExperienceChild>
                 <manifest:Relationship>ispartof</manifest:Relationship>
                 <manifest:SequenceInfo>
-                    <Number>3</Number>
+                    <Number>5</Number>
                 </manifest:SequenceInfo>
                 <manifest:ExperienceID>md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.32</manifest:ExperienceID>
             </manifest:ExperienceChild>
@@ -8396,6 +8468,13 @@
                 <manifest:Relationship>ispartof</manifest:Relationship>
                 <manifest:SequenceInfo>
                     <Number>4</Number>
+                </manifest:SequenceInfo>
+                <manifest:ExperienceID>md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.34</manifest:ExperienceID>
+            </manifest:ExperienceChild>
+            <manifest:ExperienceChild>
+                <manifest:Relationship>ispartof</manifest:Relationship>
+                <manifest:SequenceInfo>
+                    <Number>3</Number>
                 </manifest:SequenceInfo>
                 <manifest:ExperienceID>md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.33</manifest:ExperienceID>
             </manifest:ExperienceChild>
@@ -8858,11 +8937,6 @@
                 <country>US</country>
             </manifest:Region>
             <manifest:ContentID>md:cid:eidr-x:C80F-C561-EE65-C5E4-C039-U:experience.bonus.31</manifest:ContentID>
-            <manifest:App>
-                <manifest:Type>other</manifest:Type>
-                <manifest:AppGroupID>md:appgroupid:eidr-x:C80F-C561-EE65-C5E4-C039-U:other.placestab.1</manifest:AppGroupID>
-                <manifest:ContentID>md:cid:eidr-x:C80F-C561-EE65-C5E4-C039-U:other.placestab.1</manifest:ContentID>
-            </manifest:App>
             <manifest:TimedSequenceID>md:timedsequenceid:eidr-x:C80F-C561-EE65-C5E4-C039-U:placestab</manifest:TimedSequenceID>
         </manifest:Experience>
         <manifest:Experience ExperienceID="md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.32" version="1">
@@ -8885,6 +8959,25 @@
             </manifest:Region>
             <manifest:ContentID>md:cid:eidr-x:C80F-C561-EE65-C5E4-C039-U:experience.bonus.33</manifest:ContentID>
             <manifest:TimedSequenceID>md:timedsequenceid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.trivia.1</manifest:TimedSequenceID>
+        </manifest:Experience>
+        <manifest:Experience ExperienceID="md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.34" version="1">
+            <manifest:Language>en</manifest:Language>
+            <manifest:Region>
+                <country>US</country>
+            </manifest:Region>
+            <manifest:ContentID>md:cid:eidr-x:C80F-C561-EE65-C5E4-C039-U:experience.bonus.34</manifest:ContentID>
+            <manifest:TimedSequenceID>md:timedsequenceid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.shop.1</manifest:TimedSequenceID>
+        </manifest:Experience>
+        <manifest:Experience ExperienceID="md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.35" version="1">
+            <manifest:Language>en</manifest:Language>
+            <manifest:Region>
+                <country>US</country>
+            </manifest:Region>
+            <manifest:ContentID>md:cid:eidr-x:C80F-C561-EE65-C5E4-C039-U:experience.bonus.35</manifest:ContentID>
+            <manifest:App>
+                <manifest:Type>thetake</manifest:Type>
+                <manifest:SubType>421</manifest:SubType>
+            </manifest:App>
         </manifest:Experience>
     </manifest:Experiences>
     <manifest:TimedEventSequences>
@@ -9341,7 +9434,15 @@
                 <manifest:StartTimecode>0.000000</manifest:StartTimecode>
                 <manifest:EndTimecode>8577.000000</manifest:EndTimecode>
                 <manifest:Type>Synchronous</manifest:Type>
-                <manifest:AppGroupID>md:appgroupid:eidr-x:C80F-C561-EE65-C5E4-C039-U:other.placestab.1</manifest:AppGroupID>
+                <manifest:Location>
+                    <manifest:Type fictional="false">Apple</manifest:Type>
+                    <manifest:Name>Kent Family Farm</manifest:Name>
+                    <manifest:Address>Route 126 Yorkville, IL 60560</manifest:Address>
+                    <manifest:EarthCoordinate>
+                        <manifest:Latitude>41.630501</manifest:Latitude>
+                        <manifest:Longitude>-88.438485</manifest:Longitude>
+                    </manifest:EarthCoordinate>
+                </manifest:Location>
             </manifest:TimedEvent>
         </manifest:TimedEventSequence>
         <manifest:TimedEventSequence TimedSequenceID="md:timedsequenceid:eidr-x:C80F-C561-EE65-C5E4-C039-U:multiverse">
@@ -9351,6 +9452,18 @@
                 <manifest:EndTimecode>8577.000000</manifest:EndTimecode>
                 <manifest:Type>Synchronous</manifest:Type>
                 <manifest:AppGroupID>md:appgroupid:eidr-x:C80F-C561-EE65-C5E4-C039-U:other.dc_multiverse.2</manifest:AppGroupID>
+            </manifest:TimedEvent>
+        </manifest:TimedEventSequence>
+        <manifest:TimedEventSequence TimedSequenceID="md:timedsequenceid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.shop.1">
+            <manifest:PresentationID>md:presentationid:eidr-x:C80F-C561-EE65-C5E4-C039-U:main</manifest:PresentationID>
+            <manifest:TimedEvent>
+                <manifest:StartTimecode>0.000000</manifest:StartTimecode>
+                <manifest:EndTimecode>8577.000000</manifest:EndTimecode>
+                <manifest:Type>Synchronous</manifest:Type>
+                <manifest:ProductID>
+                    <Namespace>thetake</Namespace>
+                    <Identifier>421</Identifier>
+                </manifest:ProductID>
             </manifest:TimedEvent>
         </manifest:TimedEventSequence>
         <manifest:TimedEventSequence TimedSequenceID="md:timedsequenceid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.trivia.1">

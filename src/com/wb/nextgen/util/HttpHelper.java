@@ -9,6 +9,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
@@ -35,6 +36,7 @@ import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpConnectionParams;
@@ -315,7 +317,7 @@ public class HttpHelper {
 	
 
 	
-	public static String getFromUrl(String url, JSONObject json, boolean shouldAuth) throws IOException {
+	public static String getFromUrl(String url, List <NameValuePair> params/*, boolean shouldAuth*/) throws IOException {
 		NextGenLogger.d(F.TAG_API, "HttpHelper.getFromUrl url:" + url);
 		InputStream content = null;
 		try {
@@ -325,17 +327,17 @@ public class HttpHelper {
 			HttpParams clientParameters = httpClient.getParams();
 			HttpConnectionParams.setConnectionTimeout(clientParameters, TIMEOUT_CONNECTION);
 			HttpConnectionParams.setSoTimeout(clientParameters, TIMEOUT_HTTP_POST);
+
+			if (params != null)
+				url += "?" + URLEncodedUtils.format(params, "utf-8");
 			HttpGet get = new HttpGet(url);
 			//StringEntity entityJson = new StringEntity(json.toString());
 			//entityJson.setContentType("application/json");
-			if (shouldAuth)
-				get.setHeader(F.AUTHORIZATION, getAuthHeader());
-			get.setHeader(HTTP.CONTENT_TYPE, "application/json");
+			/*if (shouldAuth)
+				get.setHeader(F.AUTHORIZATION, getAuthHeader());*/
+					get.setHeader(HTTP.CONTENT_TYPE, "application/json");
 			get.setHeader(HTTP.USER_AGENT, NextGenApplication.getUserAgent());
 			get.setHeader(F.ACCEPT, ACCEPT_HEADER_VALUE);
-			//get.setHeader(F.X_FORWARDED_FOR, "23.72.0.0");		// default US ip
-			//get.setEntity(entityJson);
-			
 			HttpResponse response = httpClient.execute(get);
 			StringBuilder responseBuilder = new StringBuilder();
 			HttpEntity entity = response.getEntity();
@@ -347,8 +349,8 @@ public class HttpHelper {
 					responseBuilder.append(line).append("\n");
 				}
 			}
-			NextGenLogger.d(F.TAG_API, "HttpHelper.getFromUrl response code:" + response.getStatusLine().getStatusCode());
-			NextGenLogger.d(F.TAG_API, "HttpHelper.getFromUrl response body:" + responseBuilder.toString().trim());
+			//NextGenLogger.d(F.TAG_API, "HttpHelper.getFromUrl response code:" + response.getStatusLine().getStatusCode());
+			//NextGenLogger.d(F.TAG_API, "HttpHelper.getFromUrl response body:" + responseBuilder.toString().trim());
 			
 			if (response.getStatusLine().getStatusCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
 				//NextGenApplication.logout(true);

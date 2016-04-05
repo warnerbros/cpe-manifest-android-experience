@@ -6,15 +6,22 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 
-import com.wb.nextgen.data.DemoData;
-import com.wb.nextgen.data.DemoJSONData.ActorInfo;
+import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgen.interfaces.SensitiveFragmentInterface;
+import com.wb.nextgen.network.BaselineApiDAO;
 import com.wb.nextgen.util.PicassoTrustAll;
 
+import com.wb.nextgen.data.MovieMetaData.CastData;
+import com.wb.nextgen.util.concurrent.ResultListener;
+import com.wb.nextgen.util.utils.StringHelper;
+import com.wb.nextgen.widget.CircularClippedImageView;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -26,13 +33,46 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment imple
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        List<String> castIds = new ArrayList<String>();
+        for (CastData cast : NextGenApplication.getMovieMetaData().getCastData()){
+            if (!StringHelper.isEmpty(cast.getBaselineActorId()))
+                castIds.add(cast.getBaselineActorId());
+        }
+
+        BaselineApiDAO.getCastActorsData(castIds, new ResultListener<HashMap<String, MovieMetaData.BaselineCastData>>() {
+            @Override
+            public void onResult(HashMap<String, MovieMetaData.BaselineCastData> resultMap) {
+                for (CastData cast : NextGenApplication.getMovieMetaData().getCastData()) {
+                    if (!StringHelper.isEmpty(cast.getBaselineActorId())) {
+                        MovieMetaData.BaselineCastData baselineData = resultMap.get(cast.getBaselineActorId());
+                        if (baselineData != null)
+                            cast.baselineCastData = baselineData;
+                    }
+                }
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        listAdaptor.notifyDataSetChanged();
+                    }
+                });
+            }
+
+            @Override
+            public <E extends Exception> void onException(E e) {
+
+            }
+        });
     }
 
-    public List<ActorInfo> getActorInfos(){
-        if (DemoData.getDemoJSONData().movieMetaData.actorsInfo != null)
-            return DemoData.getDemoJSONData().movieMetaData.actorsInfo;
+
+
+    public List<CastData> getActorInfos(){
+        if (NextGenApplication.getMovieMetaData().getCastData() != null)
+            return NextGenApplication.getMovieMetaData().getCastData();
         else
-            return new ArrayList<ActorInfo>();
+            return new ArrayList<CastData>();
     }
 
 
@@ -42,7 +82,7 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment imple
         if (getActivity() instanceof NextGenFragmentTransactionInterface){
             NextGenActorDetailFragment target = new NextGenActorDetailFragment();
 
-            target.setDetailObject((ActorInfo) selectedObject);
+            target.setDetailObject((CastData) selectedObject);
             ((NextGenFragmentTransactionInterface)getActivity()).transitRightFragment(target);
             ((NextGenFragmentTransactionInterface)getActivity()).resetUI(false);
 
@@ -69,22 +109,26 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment imple
     protected void fillListRowWithObjectInfo(View rowView, Object item) {
 
 
-        ImageView avatarImg = (ImageView) rowView.findViewById(R.id.next_gen_actor_avatar);
+        final CircularClippedImageView avatarImg = (CircularClippedImageView) rowView.findViewById(R.id.next_gen_actor_avatar);
         TextView realNameTxt = (TextView) rowView.findViewById(R.id.next_gen_actor_real_name);
         TextView characterNameTxt = (TextView) rowView.findViewById(R.id.next_gen_actor_character_name);
 
 
-        ActorInfo thisActor = (ActorInfo) item;
+        final CastData thisActor = (CastData) item;
 
 
+        if(!thisActor.displayName.equals(realNameTxt.getText())) {
+            realNameTxt.setText(thisActor.displayName);
+            characterNameTxt.setText(thisActor.charactorName);
 
-        if(!thisActor.realName.equals(realNameTxt.getText())) {
-            realNameTxt.setText(thisActor.realName);
-            characterNameTxt.setText(thisActor.character);
-
-            avatarImg.setTag(thisActor.realName);
+            avatarImg.setTag(thisActor.displayName);
         }
-        PicassoTrustAll.loadImageIntoView(getActivity(), thisActor.getThumbnailUri(), avatarImg);
+
+
+        if (thisActor.getBaselineCastData() != null)
+            PicassoTrustAll.loadImageIntoView(getActivity(), thisActor.getBaselineCastData().getThumbnailImageUrl(), avatarImg);
+
+
 
 
     }

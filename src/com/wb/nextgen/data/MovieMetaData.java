@@ -1,5 +1,6 @@
 package com.wb.nextgen.data;
 
+import com.google.gson.annotations.SerializedName;
 import com.wb.nextgen.model.NextGenIMEEngine;
 import com.wb.nextgen.parser.manifest.schema.v1_4.AudiovisualType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.ExperienceChildType;
@@ -16,6 +17,8 @@ import com.wb.nextgen.parser.manifest.schema.v1_4.TimecodeType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.TimedEventSequenceType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.TimedEventType;
 import com.wb.nextgen.parser.md.schema.v2_3.BasicMetadataInfoType;
+import com.wb.nextgen.parser.md.schema.v2_3.BasicMetadataPeopleType;
+import com.wb.nextgen.parser.md.schema.v2_3.PersonIdentifierType;
 import com.wb.nextgen.util.utils.StringHelper;
 
 import java.util.ArrayList;
@@ -35,6 +38,7 @@ public class MovieMetaData {
     final private List<ExperienceData> extraECGroups = new ArrayList<ExperienceData>();
     final private List<ExperienceData> imeECGroups = new ArrayList<ExperienceData>();
     final private List<IMEElementsGroup> imeElementGroups = new ArrayList<IMEElementsGroup>();
+    final private List<CastData> castsList = new ArrayList<CastData>();
     final private HashMap<String, ExperienceData> experienceIdToExperienceMap = new HashMap<String, ExperienceData>();
     private ExperienceData rootExperience;
 
@@ -109,6 +113,7 @@ public class MovieMetaData {
                 List<ECAudioVisualItem> avItems = new ArrayList<ECAudioVisualItem>();
                 InventoryMetadataType experienceMetaData = metaDataAssetsMap.get(experience.getContentID());
 
+
                 if (experience.getGallery() != null && experience.getGallery().size() > 0) {
                     for(GalleryType gallery : experience.getGallery()) {
                         String pictureGroupId = gallery.getPictureGroupID();
@@ -135,6 +140,14 @@ public class MovieMetaData {
                     if (experience.getAudiovisual().size() > 0) {                           // for video Asset
                         for (AudiovisualType audioVisual : experience.getAudiovisual()) {
                             InventoryMetadataType avMetaData = metaDataAssetsMap.get(audioVisual.getContentID());        // get Video asset by ContentID of its AudioVisual
+
+                            if (avMetaData.getBasicMetadata() != null && avMetaData.getBasicMetadata().getPeople() != null && avMetaData.getBasicMetadata().getPeople().size() > 0){
+                                for (BasicMetadataPeopleType people : avMetaData.getBasicMetadata().getPeople()){
+                                    CastData cast = new CastData(people);
+                                    result.castsList.add(cast);
+                                }
+                            }
+
                             presentationId = audioVisual.getPresentationID();
                             PresentationType presentation = presentationAssetMap.get(presentationId);  // get Presentation by presentation id
                             if (presentation.getTrackMetadata().size() > 0 &&
@@ -266,6 +279,9 @@ public class MovieMetaData {
         return imeElementGroups;
     }
 
+    public List<CastData> getCastData(){
+        return  castsList;
+    }
 
     public ExperienceData findExperienceDataById(String id){
         if (!StringHelper.isEmpty(id)) {
@@ -274,14 +290,192 @@ public class MovieMetaData {
         }
         return null;
     }
-/*
 
-    public InventoryVideoType getVideoAssetByExperienceId(String experienceId){
-        InventoryVideoType video = videoAssetsMap.get(experienceId + VIDEO_ASSETS_ID_EXTENTION);
+    /*
+    "CHARACTER_NAME": "Kate",
+	"PROJECT_ID": 4789621,
+	"PROJECT_NAME": "Serving Sara",
+	"SORT_ORDER": 9,
+	"PROJECT_TYPE": "Feature Film",
+	"ROLE": "Actor",
+	"ROLE_GROUP": "Cast"
+     */
 
-        return video;
+    static public class Filmography{
+        @SerializedName("CHARACTER_NAME")
+        public String characterName;
+        @SerializedName("PROJECT_NAME")
+        public String title;
+        @SerializedName("PROJECT_ID")
+        public String projectId;
+        @SerializedName("ROLE")
+        public String role;
+        @SerializedName("SORT_ORDER")
+        public int sortOrder;
+        @SerializedName("ROLE_GROUP")
+        public String roleGroup;
 
-    }*/
+        private FilmPoster filmPoster;
+        public void setFilmPoster(FilmPoster poster){
+            filmPoster = poster;
+        }
+
+        public String getFilmPosterImageUrl(){
+            if (filmPoster !=  null)
+                return filmPoster.mediumUrl;
+            else
+                return "";
+        }
+
+        public String movieInfoUrl;
+    }
+
+    static public class BaselineCastData{
+
+
+        public CastHeadShot headShot;
+        public String biography;
+        public List<Filmography> filmogrphies;
+
+        public String getThumbnailImageUrl(){
+            if (headShot != null){
+                return headShot.smallUrl;
+            }else
+                return null;
+        }
+
+        public String getIconImageUrl(){
+            if (headShot != null){
+                return headShot.iconUrl;
+            }else
+                return null;
+        }
+
+        public String getFullImageUrl(){
+            if (headShot != null){
+                return headShot.mediumUrl;
+            }else
+                return null;
+        }
+    }
+
+    static public class FilmPoster{
+
+        @SerializedName("IMAGE_ID")	//Integer	933554
+        public String imageId;
+        @SerializedName("HEIGHT")//Integer	3388348
+        public int hegiht;
+        @SerializedName("WEIGHT")//Integer	3388348
+        public int weight;
+        @SerializedName("CAPTION")//String	Laurence Fishburne
+        public String name;
+        @SerializedName("FULL_URL")//String	http://media.baselineresearch.com/images/933554/933554_full.jpg
+        public String fullSizeUrl;
+        @SerializedName("LARGE_URL")//String	http://media.baselineresearch.com/images/933554/933554_large.jpg
+        public String largeUrl;
+        @SerializedName("MEDIUM_URL")//String	http://media.baselineresearch.com/images/933554/933554_medium.jpg
+        public String mediumUrl;
+        @SerializedName("SMALL_URL")//String	http://media.baselineresearch.com/images/933554/933554_small.jpg
+        public String smallUrl;
+        @SerializedName("LARGE_THUMBNAIL_URL")  //String	http://media.baselineresearch.com/images/933554/933554_gThumb.jpg
+        public String largeThumbnailUrl;
+        @SerializedName("THUMBNAIL_URL")	//String	http://media.baselineresearch.com/images/933554/933554_sThumb.jpg
+        public String thumbnailUrl;
+        @SerializedName("ICON_URL")	//String	http://media.baselineresearch.com/images/933554/933554_icon.jpg
+        public String iconUrl;
+    }
+
+    static public class CastHeadShot{
+
+        @SerializedName("IMAGE_ID")	//Integer	933554
+        public String imageId;
+        @SerializedName("PERSON_ID")//Integer	3388348
+        public String personId;
+        @SerializedName("PERSON_NAME")//String	Laurence Fishburne
+        public String name;
+        @SerializedName("FULL_URL")//String	http://media.baselineresearch.com/images/933554/933554_full.jpg
+        public String fullSizeUrl;
+        @SerializedName("LARGE_URL")//String	http://media.baselineresearch.com/images/933554/933554_large.jpg
+        public String largeUrl;
+        @SerializedName("MEDIUM_URL")//String	http://media.baselineresearch.com/images/933554/933554_medium.jpg
+        public String mediumUrl;
+        @SerializedName("SMALL_URL")//String	http://media.baselineresearch.com/images/933554/933554_small.jpg
+        public String smallUrl;
+        @SerializedName("LARGE_THUMBNAIL_URL")  //String	http://media.baselineresearch.com/images/933554/933554_gThumb.jpg
+        public String largeThumbnailUrl;
+        @SerializedName("THUMBNAIL_URL")	//String	http://media.baselineresearch.com/images/933554/933554_sThumb.jpg
+        public String thumbnailUrl;
+        @SerializedName("ICON_URL")	//String	http://media.baselineresearch.com/images/933554/933554_icon.jpg
+        public String iconUrl;
+    }
+
+    static public class CastData{
+
+        final public String displayName;
+        final public String charactorName;
+        final public String firstGivenName;
+        final public String secondGivenName;
+        final public String lastName;
+        final public String gender;
+        private String baselineApiActorId;
+        final public String job;
+        public BaselineCastData baselineCastData;
+
+        public CastData(BasicMetadataPeopleType castInfo){
+            if (castInfo.getJob() != null && castInfo.getJob().size() > 0){     // this may have multiple values
+                job = castInfo.getJob().get(0).getJobFunction().getValue();
+                if (castInfo.getJob().get(0).getCharacter() != null && castInfo.getJob().get(0).getCharacter().size() > 0)
+                    charactorName = castInfo.getJob().get(0).getCharacter().get(0);
+                else
+                    charactorName = "";
+
+            }else{
+                job = "";
+                charactorName = "";
+            }
+
+            if (castInfo.getName() != null){
+                lastName = castInfo.getName().getFamilyName();
+                firstGivenName = castInfo.getName().getFirstGivenName();
+                secondGivenName = castInfo.getName().getSecondGivenName();
+                if (castInfo.getName().getDisplayName() != null && castInfo.getName().getDisplayName().size() > 0) {
+                    displayName = castInfo.getName().getDisplayName().get(0).getValue();
+                }else{
+                    displayName = firstGivenName + " " + lastName;
+                }
+
+            }else{
+                lastName = "";
+                firstGivenName = "";
+                secondGivenName = "";
+                displayName = "";
+            }
+
+            if (castInfo.getGender() != null){
+                gender = castInfo.getGender();
+            }else{
+                gender = "";
+            }
+
+            if (castInfo.getIdentifier() != null){
+                for (PersonIdentifierType personId : castInfo.getIdentifier()) {
+                    if ("baseline".equals(personId.getNamespace()) ) {
+                        baselineApiActorId = personId.getIdentifier();
+                        break;
+                    }
+                }
+            }
+
+        }
+
+        public BaselineCastData getBaselineCastData() {
+            return baselineCastData;
+        }
+
+        public String getBaselineActorId(){
+            return baselineApiActorId;
+        }
+    }
 
     public static enum ECGroupType{
         FEATURETTES, VISUAL_EFFECT, GALLERY, MIX, UNKNOWN

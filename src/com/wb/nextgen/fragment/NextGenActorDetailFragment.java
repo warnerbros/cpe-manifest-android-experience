@@ -21,19 +21,23 @@ import com.squareup.picasso.Picasso;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 
-import com.wb.nextgen.data.DemoJSONData.ActorInfo;
-import com.wb.nextgen.data.DemoJSONData.Filmography;
-import com.wb.nextgen.util.DialogUtils;
+import com.wb.nextgen.data.MovieMetaData;
+import com.wb.nextgen.data.MovieMetaData.Filmography;
+import com.wb.nextgen.data.MovieMetaData.CastData;
+import com.wb.nextgen.network.BaselineApiDAO;
 import com.wb.nextgen.util.PicassoTrustAll;
+import com.wb.nextgen.util.concurrent.ResultListener;
 
 import org.w3c.dom.Text;
+
+import java.util.List;
 
 /**
  * Created by gzcheng on 1/13/16.
  */
 public class NextGenActorDetailFragment extends Fragment{
 
-    ActorInfo actorOjbect;
+    CastData actorOjbect;
     ImageView fullImageView;
     TextView detailTextView;
     TextView actorNameTextView;
@@ -66,29 +70,44 @@ public class NextGenActorDetailFragment extends Fragment{
         reloadDetail(actorOjbect);
     }
 
-    public void setDetailObject(ActorInfo object){
+    public void setDetailObject(CastData object){
         actorOjbect = object;
     }
 
-    public void reloadDetail(ActorInfo object){
+    public void reloadDetail(CastData object){
         actorOjbect = object;
-        if (actorOjbect != null){
-            PicassoTrustAll.loadImageIntoView(getActivity(), actorOjbect.getFullImageUri(), fullImageView);
 
-            /*
-            ViewTreeObserver vto = fullImageView.getViewTreeObserver();
-            vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                public boolean onPreDraw() {
-                    fullImageView.getViewTreeObserver().removeOnPreDrawListener(this);
-                    Picasso.with(getActivity()).load(actorOjbect.getFullImageUri()).centerCrop().resize(fullImageView.getMeasuredWidth(), fullImageView.getMeasuredHeight()).into(fullImageView);
 
-                    return true;
-                }
-            });*/
 
-            detailTextView.setText(actorOjbect.biography);
-            characterTextView.setText(actorOjbect.character);
-            actorNameTextView.setText(actorOjbect.realName);
+        if (actorOjbect != null && actorOjbect.getBaselineCastData() != null){
+            PicassoTrustAll.loadImageIntoView(getActivity(), actorOjbect.getBaselineCastData().getFullImageUrl(), fullImageView);
+
+            if (actorOjbect.getBaselineCastData().filmogrphies == null){
+                BaselineApiDAO.getFilmographyOfPerson(actorOjbect.getBaselineActorId(), new ResultListener<List<Filmography>>() {
+                    @Override
+                    public void onResult(List<Filmography> result) {
+                        actorOjbect.getBaselineCastData().filmogrphies = result;
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                filmographyAdaptor.notifyDataSetChanged();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public <E extends Exception> void onException(E e) {
+
+                    }
+                });
+            }else{
+                filmographyAdaptor.notifyDataSetChanged();
+            }
+
+
+            detailTextView.setText(actorOjbect.getBaselineCastData().biography);
+            characterTextView.setText(actorOjbect.charactorName);
+            actorNameTextView.setText(actorOjbect.displayName);
             filmographyAdaptor.notifyDataSetChanged();
         }
     }
@@ -139,14 +158,14 @@ public class NextGenActorDetailFragment extends Fragment{
         @Override
         public FilmographyViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.actor_filmography_cardview, viewGroup, false);
-            FilmographyViewHolder pvh = new FilmographyViewHolder(v, actorOjbect.actorFilmography[i]);
+            FilmographyViewHolder pvh = new FilmographyViewHolder(v, actorOjbect.getBaselineCastData().filmogrphies.get(i));
             return pvh;
         }
         public void onBindViewHolder(FilmographyViewHolder holder, int position){
             //holder.personName.setText(actorOjbect.actorFilmography[position].title);
             //holder.personAge.setText(actorOjbect.actorFilmography[position].title);
-            if (actorOjbect.actorFilmography != null)
-                PicassoTrustAll.loadImageIntoView(getActivity(), actorOjbect.actorFilmography[position].posterImageUrl, holder.personPhoto);
+            if (actorOjbect.getBaselineCastData().filmogrphies != null && actorOjbect.getBaselineCastData().filmogrphies.size() > position)
+                PicassoTrustAll.loadImageIntoView(getActivity(), actorOjbect.getBaselineCastData().filmogrphies.get(position).getFilmPosterImageUrl(), holder.personPhoto);
             //holder.personPhoto.setImageResource(persons.get(i).photoId);
         }
 
@@ -156,15 +175,15 @@ public class NextGenActorDetailFragment extends Fragment{
         }
 
         public int getItemCount(){
-            if (actorOjbect.actorFilmography != null )
-                return actorOjbect.actorFilmography.length;
+            if (actorOjbect.getBaselineCastData().filmogrphies != null )
+                return actorOjbect.getBaselineCastData().filmogrphies.size();
             else
                 return 0;
         }
 
     }
 
-    public ActorInfo getDetailObject(){
+    public CastData getDetailObject(){
         return actorOjbect;
     }
 
