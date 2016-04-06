@@ -19,6 +19,8 @@ import com.wb.nextgen.parser.manifest.schema.v1_4.TimedEventType;
 import com.wb.nextgen.parser.md.schema.v2_3.BasicMetadataInfoType;
 import com.wb.nextgen.parser.md.schema.v2_3.BasicMetadataPeopleType;
 import com.wb.nextgen.parser.md.schema.v2_3.PersonIdentifierType;
+import com.wb.nextgen.util.utils.F;
+import com.wb.nextgen.util.utils.NextGenLogger;
 import com.wb.nextgen.util.utils.StringHelper;
 
 import java.util.ArrayList;
@@ -39,8 +41,10 @@ public class MovieMetaData {
     final private List<ExperienceData> imeECGroups = new ArrayList<ExperienceData>();
     final private List<IMEElementsGroup> imeElementGroups = new ArrayList<IMEElementsGroup>();
     final private List<CastData> castsList = new ArrayList<CastData>();
+    final private List<CastData> actorsList = new ArrayList<CastData>();
     final private HashMap<String, ExperienceData> experienceIdToExperienceMap = new HashMap<String, ExperienceData>();
     private ExperienceData rootExperience;
+    private boolean hasCalledBaselineAPI = false;
 
     final static public String movieTitleText = "Man of Steel";
 
@@ -49,6 +53,14 @@ public class MovieMetaData {
             return rootExperience.audioVisualItems.get(0).videoUrl;
         }
         return "";
+    }
+
+    public boolean isHasCalledBaselineAPI(){
+        return hasCalledBaselineAPI;
+    }
+
+    public void setHasCalledBaselineAPI(boolean bCalled){
+        hasCalledBaselineAPI = bCalled;
     }
 
     public static MovieMetaData process(MediaManifestType mediaManifest){
@@ -145,6 +157,8 @@ public class MovieMetaData {
                                 for (BasicMetadataPeopleType people : avMetaData.getBasicMetadata().getPeople()){
                                     CastData cast = new CastData(people);
                                     result.castsList.add(cast);
+                                    if (cast.isActor())
+                                        result.actorsList.add(cast);
                                 }
                             }
 
@@ -279,8 +293,8 @@ public class MovieMetaData {
         return imeElementGroups;
     }
 
-    public List<CastData> getCastData(){
-        return  castsList;
+    public List<CastData> getActorsList(){
+        return  actorsList;
     }
 
     public ExperienceData findExperienceDataById(String id){
@@ -325,6 +339,10 @@ public class MovieMetaData {
                 return filmPoster.mediumUrl;
             else
                 return "";
+        }
+
+        public boolean isFilmPosterRequest(){
+            return filmPoster != null;
         }
 
         public String movieInfoUrl;
@@ -383,6 +401,14 @@ public class MovieMetaData {
         public String thumbnailUrl;
         @SerializedName("ICON_URL")	//String	http://media.baselineresearch.com/images/933554/933554_icon.jpg
         public String iconUrl;
+
+        public static FilmPoster getDefaultEmptyPoster(){
+            FilmPoster empty = new FilmPoster();
+            empty.fullSizeUrl = empty.largeUrl = empty.mediumUrl = empty.smallUrl = empty.largeThumbnailUrl = empty.thumbnailUrl = empty.iconUrl = "android.resource://com.wb.nextgen/drawable/poster_blank";
+            empty.imageId = "0";
+            return empty;
+        }
+
     }
 
     static public class CastHeadShot{
@@ -468,6 +494,10 @@ public class MovieMetaData {
 
         }
 
+        public boolean isActor(){
+            return "Actor".equalsIgnoreCase(job);
+        }
+
         public BaselineCastData getBaselineCastData() {
             return baselineCastData;
         }
@@ -544,6 +574,7 @@ public class MovieMetaData {
 
     static public class ECAudioVisualItem extends PresentationDataItem{
         final public String videoUrl;
+        final public String duration;
         public ECAudioVisualItem(String parentExperienceId, InventoryMetadataType metaData, InventoryVideoType videoData){
             super(metaData, parentExperienceId);
             BasicMetadataInfoType localizedInfo = metaData.getBasicMetadata().getLocalizedInfo().get(0);
@@ -553,9 +584,19 @@ public class MovieMetaData {
                     posterImgUrl = localizedInfo.getArtReference().get(0).getValue();
                 else
                     posterImgUrl = null;
+
+
+                String dValue = "";
+                try {
+                    dValue = metaData.getBasicMetadata().getRunLength().toString();
+                }catch ( Exception ex){
+                    NextGenLogger.d(F.TAG, ex.getLocalizedMessage());
+                }
+                duration = dValue;
             }else{
                 videoUrl = null;
                 posterImgUrl = null;
+                duration = null;
             }
         }
 

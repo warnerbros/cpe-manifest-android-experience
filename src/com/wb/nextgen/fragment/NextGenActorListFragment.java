@@ -3,7 +3,6 @@ package com.wb.nextgen.fragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wb.nextgen.NextGenApplication;
@@ -35,42 +34,44 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment imple
         super.onViewCreated(view, savedInstanceState);
 
         List<String> castIds = new ArrayList<String>();
-        for (CastData cast : NextGenApplication.getMovieMetaData().getCastData()){
+        for (CastData cast : NextGenApplication.getMovieMetaData().getActorsList()){
             if (!StringHelper.isEmpty(cast.getBaselineActorId()))
                 castIds.add(cast.getBaselineActorId());
         }
-
-        BaselineApiDAO.getCastActorsData(castIds, new ResultListener<HashMap<String, MovieMetaData.BaselineCastData>>() {
-            @Override
-            public void onResult(HashMap<String, MovieMetaData.BaselineCastData> resultMap) {
-                for (CastData cast : NextGenApplication.getMovieMetaData().getCastData()) {
-                    if (!StringHelper.isEmpty(cast.getBaselineActorId())) {
-                        MovieMetaData.BaselineCastData baselineData = resultMap.get(cast.getBaselineActorId());
-                        if (baselineData != null)
-                            cast.baselineCastData = baselineData;
+        if (!NextGenApplication.getMovieMetaData().isHasCalledBaselineAPI()) {
+            BaselineApiDAO.getCastActorsData(castIds, new ResultListener<HashMap<String, MovieMetaData.BaselineCastData>>() {
+                @Override
+                public void onResult(HashMap<String, MovieMetaData.BaselineCastData> resultMap) {
+                    NextGenApplication.getMovieMetaData().setHasCalledBaselineAPI(true);
+                    for (CastData cast : NextGenApplication.getMovieMetaData().getActorsList()) {
+                        if (!StringHelper.isEmpty(cast.getBaselineActorId())) {
+                            MovieMetaData.BaselineCastData baselineData = resultMap.get(cast.getBaselineActorId());
+                            if (baselineData != null)
+                                cast.baselineCastData = baselineData;
+                        }
                     }
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            listAdaptor.notifyDataSetChanged();
+                        }
+                    });
                 }
 
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        listAdaptor.notifyDataSetChanged();
-                    }
-                });
-            }
+                @Override
+                public <E extends Exception> void onException(E e) {
 
-            @Override
-            public <E extends Exception> void onException(E e) {
-
-            }
-        });
+                }
+            });
+        }
     }
 
 
 
     public List<CastData> getActorInfos(){
-        if (NextGenApplication.getMovieMetaData().getCastData() != null)
-            return NextGenApplication.getMovieMetaData().getCastData();
+        if (NextGenApplication.getMovieMetaData().getActorsList() != null)
+            return NextGenApplication.getMovieMetaData().getActorsList();
         else
             return new ArrayList<CastData>();
     }

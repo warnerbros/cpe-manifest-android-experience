@@ -4,14 +4,17 @@ import android.content.res.AssetManager;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.data.MovieMetaData;
+import com.wb.nextgen.data.MovieMetaData.FilmPoster;
 import com.wb.nextgen.data.MovieMetaData.CastHeadShot;
 import com.wb.nextgen.data.MovieMetaData.BaselineCastData;
 import com.wb.nextgen.data.MovieMetaData.Filmography;
 import com.wb.nextgen.util.HttpHelper;
 import com.wb.nextgen.util.concurrent.ResultListener;
 import com.wb.nextgen.util.concurrent.Worker;
+import com.wb.nextgen.util.utils.F;
 import com.wb.nextgen.util.utils.NextGenLogger;
 import com.wb.nextgen.util.utils.StringHelper;
 
@@ -115,11 +118,11 @@ public class BaselineApiDAO {
                     params.add(new BasicNameValuePair("id", castId));
                     params.add(new BasicNameValuePair("apikey", baselineAPIKey));
 
-                    String bio = getActorBio(params);
+                    //String bio = getActorBio(params);
                     //List<Filmography> films = getActorFilmnography(params);
                     CastHeadShot headShot = getHeadShot(params);
 
-                    thisData.biography = bio;
+                   // thisData.biography = bio;
                     //thisData.filmogrphies = films;
                     thisData.headShot = headShot;
 
@@ -133,13 +136,16 @@ public class BaselineApiDAO {
         }, l);
     }
 
-    public static void getFilmographyOfPerson(final String castId, ResultListener<List<Filmography>> l) {
-        Worker.execute(new Callable<List<Filmography>>() {
+    public static void getFilmographyAndBioOfPerson(final String castId, ResultListener<BaselineCastData> l) {
+        Worker.execute(new Callable<BaselineCastData>() {
             @Override
-            public List<Filmography> call() throws Exception {
+            public BaselineCastData call() throws Exception {
                 List<NameValuePair> params = new ArrayList<NameValuePair>();
                 params.add(new BasicNameValuePair("id", castId));
                 params.add(new BasicNameValuePair("apikey", baselineAPIKey));
+                BaselineCastData thisData = new BaselineCastData();
+
+                thisData.biography = getActorBio(params);
 
                 List<Filmography> films = getActorFilmnography(params);
                 if (films != null && films.size() > 0) {
@@ -150,11 +156,12 @@ public class BaselineApiDAO {
                     }
                 }
 
-
-                return films;
+                thisData.filmogrphies = films;
+                return thisData;
             }
         }, l);
     }
+
 
     private static String getActorBio(List<NameValuePair> params) throws JSONException, IOException {
 
@@ -177,22 +184,49 @@ public class BaselineApiDAO {
 
         JSONArray jsonArray = new JSONArray(response);
         if (jsonArray != null) {
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject object = (JSONObject) jsonArray.get(i);
-                Gson gson = new GsonBuilder().create();
-                Filmography film = gson.fromJson(object.toString(), Filmography.class);
-                if (film == null)
-                    continue;
-                MovieMetaData.FilmPoster poster = getFilmDetail(film.projectId);
-                if (poster != null)
-                    film.setFilmPoster(poster);
-                result.add(film);
+            for (int i = jsonArray.length() - 1; i >= Math.max(0, jsonArray.length()-10); i--) {
+                try {
+                    JSONObject object = (JSONObject) jsonArray.get(i);
+                    Gson gson = new GsonBuilder().create();
+                    Filmography film = gson.fromJson(object.toString(), Filmography.class);
+                    if (film == null)
+                        continue;
+                    result.add(film);
+                } catch (JsonSyntaxException jex){
+                    NextGenLogger.e(F.TAG_API, jex.getLocalizedMessage());
+                } catch (JSONException jex2){
+                    NextGenLogger.e(F.TAG_API, jex2.getLocalizedMessage());
+                }
             }
             //DemoJSONData data = gson.fromJson(object, MovieMetaData..class);
         }
 
 
         return result;
+    }
+
+    public static void getFilmographyPosters(final List<Filmography> sourceFilms, int startIndex, int count, ResultListener<List<FilmPoster>> l){
+        final List<Filmography> films = sourceFilms.subList(startIndex, (startIndex + count)< sourceFilms.size() ? startIndex + count : sourceFilms.size());
+        Worker.execute(new Callable<List<FilmPoster>>() {
+            @Override
+            public List<FilmPoster> call() throws Exception {
+                List<FilmPoster> resultList = new ArrayList<FilmPoster>();
+                for (Filmography film: films) {
+                    FilmPoster poster = null;
+
+                    try {
+                        poster = getFilmDetail(film.projectId);
+                    }catch (Exception ex){}
+                    if (poster != null && !StringHelper.isEmpty(poster.imageId)) {
+                        film.setFilmPoster(poster);
+                    }else{
+                        poster = FilmPoster.getDefaultEmptyPoster();
+                    }
+                    resultList.add(poster);
+                }
+                return resultList;
+            }
+        }, l);
     }
 
     private static CastHeadShot getHeadShot(List<NameValuePair> params) throws JSONException, IOException {

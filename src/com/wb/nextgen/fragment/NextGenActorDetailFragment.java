@@ -27,6 +27,8 @@ import com.wb.nextgen.data.MovieMetaData.CastData;
 import com.wb.nextgen.network.BaselineApiDAO;
 import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.concurrent.ResultListener;
+import com.wb.nextgen.util.utils.F;
+import com.wb.nextgen.util.utils.NextGenLogger;
 
 import org.w3c.dom.Text;
 
@@ -76,20 +78,22 @@ public class NextGenActorDetailFragment extends Fragment{
 
     public void reloadDetail(CastData object){
         actorOjbect = object;
-
+        filmographyAdaptor.reset();
 
 
         if (actorOjbect != null && actorOjbect.getBaselineCastData() != null){
             PicassoTrustAll.loadImageIntoView(getActivity(), actorOjbect.getBaselineCastData().getFullImageUrl(), fullImageView);
 
             if (actorOjbect.getBaselineCastData().filmogrphies == null){
-                BaselineApiDAO.getFilmographyOfPerson(actorOjbect.getBaselineActorId(), new ResultListener<List<Filmography>>() {
+                BaselineApiDAO.getFilmographyAndBioOfPerson(actorOjbect.getBaselineActorId(), new ResultListener<MovieMetaData.BaselineCastData>() {
                     @Override
-                    public void onResult(List<Filmography> result) {
-                        actorOjbect.getBaselineCastData().filmogrphies = result;
+                    public void onResult(MovieMetaData.BaselineCastData result) {
+                        actorOjbect.getBaselineCastData().filmogrphies = result.filmogrphies;
+                        actorOjbect.getBaselineCastData().biography = result.biography;
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                detailTextView.setText(actorOjbect.getBaselineCastData().biography);
                                 filmographyAdaptor.notifyDataSetChanged();
                             }
                         });
@@ -129,6 +133,10 @@ public class NextGenActorDetailFragment extends Fragment{
             itemView.setOnClickListener(this);
         }
 
+        public void setFilmInfo(Filmography filmInfo){
+            this.filmInfo = filmInfo;
+        }
+
         @Override
         public void onClick(View v) {
             final String url = filmInfo.movieInfoUrl;
@@ -155,6 +163,14 @@ public class NextGenActorDetailFragment extends Fragment{
 
     public class ActorDetailFimograpyAdapter extends RecyclerView.Adapter<FilmographyViewHolder>{
 
+
+        int lastloadingIndex = -1;
+        static final int PAGEITEMCOUNT = 6;
+
+        public void reset(){
+            lastloadingIndex = -1;
+        }
+
         @Override
         public FilmographyViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.actor_filmography_cardview, viewGroup, false);
@@ -164,8 +180,48 @@ public class NextGenActorDetailFragment extends Fragment{
         public void onBindViewHolder(FilmographyViewHolder holder, int position){
             //holder.personName.setText(actorOjbect.actorFilmography[position].title);
             //holder.personAge.setText(actorOjbect.actorFilmography[position].title);
-            if (actorOjbect.getBaselineCastData().filmogrphies != null && actorOjbect.getBaselineCastData().filmogrphies.size() > position)
-                PicassoTrustAll.loadImageIntoView(getActivity(), actorOjbect.getBaselineCastData().filmogrphies.get(position).getFilmPosterImageUrl(), holder.personPhoto);
+
+
+            if (actorOjbect.getBaselineCastData().filmogrphies != null && actorOjbect.getBaselineCastData().filmogrphies.size() > position) {
+                Filmography film = actorOjbect.getBaselineCastData().filmogrphies.get(position);
+                holder.setFilmInfo(film);
+                if (film.isFilmPosterRequest()) {
+                    PicassoTrustAll.loadImageIntoView(getActivity(), film.getFilmPosterImageUrl(), holder.personPhoto);
+                    NextGenLogger.d(F.TAG, "Position: " + position  +" loaded: " + film.getFilmPosterImageUrl());
+                }else if (position < lastloadingIndex) {
+                    //holder.personPhoto.setImageResource(R.drawable.poster_blank);
+                    holder.personPhoto.setImageDrawable(null);
+                } else {
+                    holder.personPhoto.setImageDrawable(null);
+                    final int requestStartIndex = position;
+                    lastloadingIndex = requestStartIndex + PAGEITEMCOUNT;
+                    BaselineApiDAO.getFilmographyPosters(actorOjbect.getBaselineCastData().filmogrphies, requestStartIndex, PAGEITEMCOUNT, new ResultListener<List<MovieMetaData.FilmPoster>>() {
+                        @Override
+                        public void onResult(List<MovieMetaData.FilmPoster> result) {
+                            for (int i = 0; i < result.size(); i++){
+                                if (i + requestStartIndex >= actorOjbect.getBaselineCastData().filmogrphies.size())
+                                    break;
+                                else{
+                                    Filmography filmography = actorOjbect.getBaselineCastData().filmogrphies.get(i + requestStartIndex);
+                                    filmography.setFilmPoster(result.get(i));
+                                }
+                            }
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    filmographyAdaptor.notifyDataSetChanged();
+                                }
+                            });
+
+                        }
+
+                        @Override
+                        public <E extends Exception> void onException(E e) {
+
+                        }
+                    });
+                }
+            }
             //holder.personPhoto.setImageResource(persons.get(i).photoId);
         }
 
@@ -175,7 +231,7 @@ public class NextGenActorDetailFragment extends Fragment{
         }
 
         public int getItemCount(){
-            if (actorOjbect.getBaselineCastData().filmogrphies != null )
+            if (actorOjbect.getBaselineCastData() != null && actorOjbect.getBaselineCastData().filmogrphies != null )
                 return actorOjbect.getBaselineCastData().filmogrphies.size();
             else
                 return 0;

@@ -224,6 +224,7 @@ public class ManifestXMLParser {
                 return null;
             }
         }else if (targetClass.equals(Duration.class)){
+            final com.wb.nextgen.model.Duration d = new com.wb.nextgen.model.Duration(stringValue);
             return new Duration() {
                 @Override
                 public int getSign() {
@@ -232,7 +233,45 @@ public class ManifestXMLParser {
 
                 @Override
                 public Number getField(DatatypeConstants.Field field) {
+                    if (field.equals(DatatypeConstants.HOURS))
+                        return BigInteger.valueOf(d.hour);
+                    else if (field.equals(DatatypeConstants.MINUTES))
+                        return BigInteger.valueOf(d.minutes);
+                    else if (field.equals(DatatypeConstants.SECONDS))
+                        return BigInteger.valueOf(d.second);
                     return null;
+                }
+
+                String formattedString;
+                @Override
+                public String toString() {
+                    if (formattedString != null)
+                        return formattedString;
+
+                    formattedString = "";
+                    String hString="", mString="00", sString="00", resultString = "00";
+                    if (d.hour > 0){
+                        hString = Integer.toString(d.hour);
+                    }
+                    if (d.minutes > 0){
+                        mString = d.minutes < 10 ? "0" + d.minutes : Integer.toString(d.minutes);
+                    }else{
+
+                    }
+                    if (d.second > 0){
+                        sString = d.second < 10 ? "0" + d.second : Integer.toString(d.second);
+                    }
+
+
+
+                    formattedString += hString + ":" + mString + ":" + sString;
+
+                    while (formattedString.startsWith("0") || formattedString.startsWith(":")){
+                        formattedString = formattedString.substring(1);
+                    }
+
+
+                    return formattedString;
                 }
 
                 @Override

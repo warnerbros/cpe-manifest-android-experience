@@ -104,7 +104,7 @@ public class BasicMetadataType {
     protected Duration runLength;
     @XmlElement(name = "ReleaseYear", required = true)
     @XmlSchemaType(name = "gYear")
-    protected XMLGregorianCalendar releaseYear;
+    protected String releaseYear;
     @XmlElement(name = "ReleaseDate")
     @XmlSchemaType(name = "anySimpleType")
     protected String releaseDate;
@@ -237,7 +237,7 @@ public class BasicMetadataType {
      *     {@link XMLGregorianCalendar }
      *     
      */
-    public XMLGregorianCalendar getReleaseYear() {
+    public String getReleaseYear() {
         return releaseYear;
     }
 
@@ -249,7 +249,7 @@ public class BasicMetadataType {
      *     {@link XMLGregorianCalendar }
      *     
      */
-    public void setReleaseYear(XMLGregorianCalendar value) {
+    public void setReleaseYear(String value) {
         this.releaseYear = value;
     }
 
