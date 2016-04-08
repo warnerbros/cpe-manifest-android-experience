@@ -22,29 +22,36 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
     protected ListView listView;
     protected NextGenExtraLeftPanelAdapter listAdaptor;
     protected TextView titleTextView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.next_gen_list_view, container, false);
     }
 
+    protected int getPadding(){
+        float density = NextGenApplication.getScreenDensity(getActivity());
+        int spacing = (int)(10 *density);
+        return spacing;
+    }
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        float density = NextGenApplication.getScreenDensity(getActivity());
-        int spacing = (int)(10 *density);
+
         listView = (ListView)view.findViewById(R.id.next_gen_lists);
         if (listView != null){
-            listView.setPadding(spacing, 0, spacing, spacing);
+            listView.setPadding(getPadding(), 0, getPadding(), getPadding());
             listAdaptor = new NextGenExtraLeftPanelAdapter();
             listView.setAdapter(listAdaptor);
             listView.setOnItemClickListener(this);
 
+            /*
             titleTextView = new TextView(getActivity());
             titleTextView.setText(getHeaderText());
             titleTextView.setTextSize(getResources().getDimension(R.dimen.textMedium));
             titleTextView.setTextColor(getResources().getColor(R.color.list_title_text_color));
-            listView.addHeaderView(titleTextView, null, false);
+            listView.addHeaderView(titleTextView, null, false);*/
             listView.setItemChecked(getStartupSelectedIndex() + listView.getHeaderViewsCount(), true);
         }
 

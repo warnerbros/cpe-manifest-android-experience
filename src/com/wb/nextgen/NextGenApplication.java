@@ -14,9 +14,11 @@ import android.view.WindowManager;
 import com.wb.nextgen.data.DemoData;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.network.BaselineApiDAO;
+import com.wb.nextgen.network.TheTakeApiDAO;
 import com.wb.nextgen.parser.ManifestXMLParser;
 import com.wb.nextgen.model.NextGenSettings;
 import com.wb.nextgen.parser.manifest.schema.v1_4.MediaManifestType;
+import com.wb.nextgen.util.concurrent.ResultListener;
 import com.wb.nextgen.util.utils.F;
 import com.wb.nextgen.util.utils.NextGenLogger;
 
@@ -97,10 +99,24 @@ public class NextGenApplication extends Application {
                     + "; " + Build.MODEL + ")";
             DemoData.parseDemoJSONData();
 
-            BaselineApiDAO.init();
 
             MediaManifestType manifest = new ManifestXMLParser().startParsing();
             movieMetaData = MovieMetaData.process(manifest);
+
+
+            BaselineApiDAO.init();
+            TheTakeApiDAO.init();
+            TheTakeApiDAO.prefetchProductFrames(0, 300, new ResultListener<Object>() {
+                @Override
+                public void onResult(Object object) {
+
+                }
+
+                @Override
+                public <E extends Exception> void onException(E e) {
+
+                }
+            });
         }catch (Exception ex){
             NextGenLogger.e(F.TAG, ex.getLocalizedMessage());
         }

@@ -19,24 +19,30 @@ import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.TextView;
 
+import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 
 import com.wb.nextgen.data.DemoData;
+import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.fragment.IMEElementsGridFragment;
 import com.wb.nextgen.fragment.NextGenIMEActorFragment;
 import com.wb.nextgen.fragment.NextGenPlayerBottomFragment;
 import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgen.interfaces.NextGenPlaybackStatusListener;
 import com.wb.nextgen.interfaces.SensitiveFragmentInterface;
+import com.wb.nextgen.network.TheTakeApiDAO;
 import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.TabletUtils;
+import com.wb.nextgen.util.concurrent.ResultListener;
 import com.wb.nextgen.util.utils.NextGenFragmentTransactionEngine;
+import com.wb.nextgen.util.utils.StringHelper;
 import com.wb.nextgen.widget.MainFeatureMediaController;
 import com.wb.nextgen.widget.NextGenMediaController;
 
 import net.flixster.android.drm.IVideoViewActionListener;
 import net.flixster.android.drm.ObservableVideoView;
 
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -137,7 +143,19 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         transitLeftFragment(new NextGenIMEActorFragment());
         transitRightFragment(imeGridFragment);
 
-        //imeText = (TextView)findViewById(R.id.next_gen_ime_text);
+        TheTakeApiDAO.prefetchProductFrames(0, 300, new ResultListener<Object>() {
+            @Override
+            public void onResult(Object object) {
+
+            }
+
+            @Override
+            public <E extends Exception> void onException(E e) {
+
+            }
+        });
+
+                //imeText = (TextView)findViewById(R.id.next_gen_ime_text);
         /*NextGenIMEActorFragment imeActorFragment = (NextGenIMEActorFragment)getSupportFragmentManager().findFragmentById(R.id.ime_actor_fragment);
 
         imeGridFragment = (IMEElementsGridFragment)getSupportFragmentManager().findFragmentById(R.id.ime_grid_fragment);

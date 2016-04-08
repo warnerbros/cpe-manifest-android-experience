@@ -1,7 +1,6 @@
 package com.wb.nextgen.data;
 
 import com.google.gson.annotations.SerializedName;
-import com.wb.nextgen.model.NextGenIMEEngine;
 import com.wb.nextgen.parser.manifest.schema.v1_4.AudiovisualType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.ExperienceChildType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.ExperienceType;
@@ -18,13 +17,13 @@ import com.wb.nextgen.parser.manifest.schema.v1_4.TimedEventSequenceType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.TimedEventType;
 import com.wb.nextgen.parser.md.schema.v2_3.BasicMetadataInfoType;
 import com.wb.nextgen.parser.md.schema.v2_3.BasicMetadataPeopleType;
+import com.wb.nextgen.parser.md.schema.v2_3.ContentIdentifierType;
 import com.wb.nextgen.parser.md.schema.v2_3.PersonIdentifierType;
 import com.wb.nextgen.util.utils.F;
 import com.wb.nextgen.util.utils.NextGenLogger;
 import com.wb.nextgen.util.utils.StringHelper;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -71,7 +70,7 @@ public class MovieMetaData {
         HashMap<String, PresentationType> presentationAssetMap = new HashMap<String, PresentationType>();
         HashMap<String, InventoryImageType> imageAssetsMap = new HashMap<String, InventoryImageType>();
         HashMap<String, PictureGroupType> pictureGroupAssetsMap = new HashMap<String, PictureGroupType>();
-        HashMap<String, ECAudioVisualItem> presentationIdToAVItemMap = new HashMap<String, ECAudioVisualItem>();
+        HashMap<String, AudioVisualItem> presentationIdToAVItemMap = new HashMap<String, AudioVisualItem>();
         HashMap<String, ECGalleryItem> galleryIdToGalleryItemMap = new HashMap<String, ECGalleryItem>();
 
         HashMap<String, ExperienceData> timeSequenceIdToECGroup = new HashMap<String, ExperienceData>();
@@ -122,9 +121,8 @@ public class MovieMetaData {
 
             for (ExperienceType experience : mediaManifest.getExperiences().getExperience()) {
                 List<ECGalleryItem> galleryItems = new ArrayList<ECGalleryItem>();
-                List<ECAudioVisualItem> avItems = new ArrayList<ECAudioVisualItem>();
+                List<AudioVisualItem> avItems = new ArrayList<AudioVisualItem>();
                 InventoryMetadataType experienceMetaData = metaDataAssetsMap.get(experience.getContentID());
-
 
                 if (experience.getGallery() != null && experience.getGallery().size() > 0) {
                     for(GalleryType gallery : experience.getGallery()) {
@@ -152,6 +150,12 @@ public class MovieMetaData {
                     if (experience.getAudiovisual().size() > 0) {                           // for video Asset
                         for (AudiovisualType audioVisual : experience.getAudiovisual()) {
                             InventoryMetadataType avMetaData = metaDataAssetsMap.get(audioVisual.getContentID());        // get Video asset by ContentID of its AudioVisual
+                            List<ExternalApiData> externalApiDatas = new ArrayList<ExternalApiData>();
+                            if (avMetaData.getBasicMetadata() != null && avMetaData.getBasicMetadata().getAltIdentifier() != null){
+                                for (ContentIdentifierType identifier : avMetaData.getBasicMetadata().getAltIdentifier()){
+                                    externalApiDatas.add(new ExternalApiData(identifier.getNamespace(), identifier.getIdentifier()));
+                                }
+                            }
 
                             if (avMetaData.getBasicMetadata() != null && avMetaData.getBasicMetadata().getPeople() != null && avMetaData.getBasicMetadata().getPeople().size() > 0){
                                 for (BasicMetadataPeopleType people : avMetaData.getBasicMetadata().getPeople()){
@@ -171,7 +175,7 @@ public class MovieMetaData {
                             }
                             if (video != null) {
                                 //ExperienceData ecData = new ExperienceData(experience, metaData, video, null);
-                                ECAudioVisualItem item = new ECAudioVisualItem(experience.getExperienceID(), avMetaData, video);
+                                AudioVisualItem item = new AudioVisualItem(experience.getExperienceID(), avMetaData, video, externalApiDatas);
                                 avItems.add(item);
                                 presentationIdToAVItemMap.put(presentationId, item);
                             } else {
@@ -371,7 +375,7 @@ public class MovieMetaData {
 
         public String getFullImageUrl(){
             if (headShot != null){
-                return headShot.mediumUrl;
+                return headShot.fullSizeUrl;
             }else
                 return null;
         }
@@ -508,7 +512,7 @@ public class MovieMetaData {
     }
 
     public static enum ECGroupType{
-        FEATURETTES, VISUAL_EFFECT, GALLERY, MIX, UNKNOWN
+        FEATURETTES, VISUAL_EFFECT, GALLERY, MIX, EXTERNAL_APP, UNKNOWN
     }
 
     static public class PictureImageData{
@@ -572,10 +576,20 @@ public class MovieMetaData {
 
     }
 
-    static public class ECAudioVisualItem extends PresentationDataItem{
+    static public class ExternalApiData{
+        final public String externalApiName;
+        final public String apiUniqueProjectId;
+        public ExternalApiData(String apiName, String uniqueId){
+            externalApiName = apiName;
+            apiUniqueProjectId = uniqueId;
+        }
+    }
+
+    static public class AudioVisualItem extends PresentationDataItem{
         final public String videoUrl;
         final public String duration;
-        public ECAudioVisualItem(String parentExperienceId, InventoryMetadataType metaData, InventoryVideoType videoData){
+        final public List<ExternalApiData> externalApiDataList = new ArrayList<ExternalApiData>();
+        public AudioVisualItem(String parentExperienceId, InventoryMetadataType metaData, InventoryVideoType videoData){
             super(metaData, parentExperienceId);
             BasicMetadataInfoType localizedInfo = metaData.getBasicMetadata().getLocalizedInfo().get(0);
             if (videoData != null) {
@@ -600,6 +614,12 @@ public class MovieMetaData {
             }
         }
 
+        public AudioVisualItem(String parentExperienceId, InventoryMetadataType metaData, InventoryVideoType videoData, List<ExternalApiData> apiDataList){
+            this(parentExperienceId, metaData, videoData);
+            if (apiDataList != null)
+                externalApiDataList.addAll(apiDataList);
+        }
+
         @Override
         public String getPosterImgUrl(){
 
@@ -616,14 +636,19 @@ public class MovieMetaData {
         final private List<ExperienceData> childrenExperience = new ArrayList<ExperienceData>();
         //final public List<ECGalleryImageItem> galleryItems = new ArrayList<ECGalleryImageItem>();
         final public List<ECGalleryItem> galleryItems = new ArrayList<ECGalleryItem>();
-        final public List<ECAudioVisualItem> audioVisualItems = new ArrayList<ECAudioVisualItem>();
+        final public List<AudioVisualItem> audioVisualItems = new ArrayList<AudioVisualItem>();
         final public String experienceId;
         final private HashMap<String, Integer> childIdToSequenceNumber = new HashMap<String, Integer>();
+        private ExternalApiData externalApp;
 
-        public ExperienceData(ExperienceType experience, InventoryMetadataType metaData, List<ECAudioVisualItem> avItems, List<ECGalleryItem> galleryItems){
+        public ExperienceData(ExperienceType experience, InventoryMetadataType metaData, List<AudioVisualItem> avItems, List<ECGalleryItem> galleryItems){
             BasicMetadataInfoType localizedInfo = metaData.getBasicMetadata().getLocalizedInfo().get(0);
             title = localizedInfo.getTitleDisplayUnlimited(); // should loop the list and look for the correct language code
             experienceId = experience.getExperienceID();     // or experience Id
+
+            if (experience.getApp() != null && experience.getApp().size() > 0 && experience.getApp().get(0).getSubType() != null && experience.getApp().get(0).getSubType().size() > 0){
+                externalApp = new ExternalApiData(experience.getApp().get(0).getType(), experience.getApp().get(0).getSubType().get(0));
+            }
 
             if (avItems != null && avItems.size() > 0){
                 audioVisualItems.addAll(avItems);
@@ -649,13 +674,30 @@ public class MovieMetaData {
 
         }
 
+        public String getDuration(){
+            if (audioVisualItems.size() > 0){
+                return audioVisualItems.get(0).duration;
+            }
+            return null;
+        }
+
+        public ExternalApiData getExternalApp(){
+            return externalApp;
+        }
+
         public ECGroupType getECGroupType(){
             if (type == ECGroupType.UNKNOWN ){
                 if (galleryItems.size() > 0)
                     type = ECGroupType.GALLERY;
                 else if (audioVisualItems.size() > 0)
                     type = ECGroupType.FEATURETTES;
+                else if (externalApp != null)
+                    type = ECGroupType.EXTERNAL_APP;
                 else if (childrenExperience.size() > 0)
+
+
+
+
                     type = childrenExperience.get(0).getECGroupType();
 
             }
@@ -748,5 +790,16 @@ public class MovieMetaData {
             else
                 return -1;
         }
+    }
+
+    public String getIdentifierForExternalAPI(String key){
+        if (!StringHelper.isEmpty(key) && rootExperience != null && rootExperience.audioVisualItems != null && rootExperience.audioVisualItems.size() > 0 &&
+                rootExperience.audioVisualItems.get(0).externalApiDataList != null){
+            for (ExternalApiData data : rootExperience.audioVisualItems.get(0).externalApiDataList){
+                if (key.equals(data.externalApiName))
+                    return data.apiUniqueProjectId;
+            }
+        }
+        return null;
     }
 }

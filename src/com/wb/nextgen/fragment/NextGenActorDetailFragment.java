@@ -43,7 +43,6 @@ public class NextGenActorDetailFragment extends Fragment{
     ImageView fullImageView;
     TextView detailTextView;
     TextView actorNameTextView;
-    TextView characterTextView;
     RecyclerView filmographyRecyclerView;
     LinearLayoutManager filmographyLayoutManager;
     ActorDetailFimograpyAdapter filmographyAdaptor;
@@ -59,7 +58,6 @@ public class NextGenActorDetailFragment extends Fragment{
         super.onViewCreated(view, savedInstanceState);
         fullImageView = (ImageView)view.findViewById(R.id.next_gen_detail_full_image);
         detailTextView = (TextView)view.findViewById(R.id.actor_biography_text);
-        characterTextView = (TextView)view.findViewById(R.id.actor_character_name_text);
         actorNameTextView = (TextView)view.findViewById(R.id.actor_real_name_text);
         filmographyRecyclerView = (RecyclerView)view.findViewById(R.id.actor_detail_filmography);
 
@@ -82,7 +80,8 @@ public class NextGenActorDetailFragment extends Fragment{
 
 
         if (actorOjbect != null && actorOjbect.getBaselineCastData() != null){
-            PicassoTrustAll.loadImageIntoView(getActivity(), actorOjbect.getBaselineCastData().getFullImageUrl(), fullImageView);
+            Picasso.with(getActivity()).load(actorOjbect.getBaselineCastData().getFullImageUrl()).fit().centerCrop().into(fullImageView);
+            //PicassoTrustAll.loadImageIntoView(getActivity(), actorOjbect.getBaselineCastData().getFullImageUrl(), fullImageView);
 
             if (actorOjbect.getBaselineCastData().filmogrphies == null){
                 BaselineApiDAO.getFilmographyAndBioOfPerson(actorOjbect.getBaselineActorId(), new ResultListener<MovieMetaData.BaselineCastData>() {
@@ -110,7 +109,6 @@ public class NextGenActorDetailFragment extends Fragment{
 
 
             detailTextView.setText(actorOjbect.getBaselineCastData().biography);
-            characterTextView.setText(actorOjbect.charactorName);
             actorNameTextView.setText(actorOjbect.displayName);
             filmographyAdaptor.notifyDataSetChanged();
         }

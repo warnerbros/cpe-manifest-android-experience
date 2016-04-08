@@ -13,7 +13,7 @@
             android:layout_width="wrap_content"
             android:text="Title"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/textMedium"
+            android:textSize="@dimen/textLarge"
             android:layout_height="wrap_content"/>
     </RelativeLayout>
 

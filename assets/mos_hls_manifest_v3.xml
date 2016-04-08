@@ -3778,14 +3778,6 @@
                 <manifest:ContainerLocation>http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/Galleries/thumbnails/MOSNG_708_BlackZeroPhantomZone_120.jpg</manifest:ContainerLocation>
             </manifest:ContainerReference>
         </manifest:Image>
-        <manifest:Interactive InteractiveTrackID="md:interactiveid:eidr-x:C80F-C561-EE65-C5E4-C039-U:other.dc_multiverse.2">
-            <Encoding>
-                <RuntimeEnvironment>HTML5</RuntimeEnvironment>
-            </Encoding>
-            <manifest:ContainerReference>
-                <manifest:ContainerLocation>http://demo.www.theplatform.services/wb/Man_of_Steel/MicroHtml/#459daac7-dbdd-429b-ac65-20e5da1d2812</manifest:ContainerLocation>
-            </manifest:ContainerReference>
-        </manifest:Interactive>
         <manifest:Metadata ContentID="md:cid:eidr-x:C80F-C561-EE65-C5E4-C039-U:main">
             <manifest:BasicMetadata ContentID="md:cid:eidr-x:C80F-C561-EE65-C5E4-C039-U:main">
                 <LocalizedInfo default="true" language="en">
@@ -6081,21 +6073,6 @@
                 <WorkType>Supplemental</WorkType>
             </manifest:BasicMetadata>
         </manifest:Metadata>
-        <manifest:Metadata ContentID="md:cid:eidr-x:C80F-C561-EE65-C5E4-C039-U:other.dc_multiverse.2">
-            <manifest:BasicMetadata ContentID="md:cid:eidr-x:C80F-C561-EE65-C5E4-C039-U:other.dc_multiverse.2">
-                <LocalizedInfo default="true" language="en">
-                    <TitleDisplayUnlimited>DC Multiverse</TitleDisplayUnlimited>
-                    <TitleSort>DC Multiverse</TitleSort>
-                    <ArtReference resolution="352x198">http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOS_NG_superman101_SML.jpg</ArtReference>
-                    <ArtReference resolution="714x406">http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOS_NG_superman101_MED.jpg</ArtReference>
-                    <ArtReference resolution="1076x614">http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/thumbnails/MOS_NG_superman101_LRG.jpg</ArtReference>
-                    <Summary190/>
-                </LocalizedInfo>
-                <ReleaseYear>2013</ReleaseYear>
-                <ReleaseDate>2013-06-14</ReleaseDate>
-                <WorkType>Supplemental</WorkType>
-            </manifest:BasicMetadata>
-        </manifest:Metadata>
         <manifest:Metadata ContentID="md:cid:eidr-x:C80F-C561-EE65-C5E4-C039-U:experience.main.1">
             <manifest:BasicMetadata ContentID="md:cid:eidr-x:C80F-C561-EE65-C5E4-C039-U:experience.main.1">
                 <LocalizedInfo language="en">
@@ -6483,23 +6460,11 @@
                 <WorkType>Supplemental</WorkType>
             </manifest:BasicMetadata>
         </manifest:Metadata>
-        <manifest:Metadata ContentID="md:cid:eidr-x:C80F-C561-EE65-C5E4-C039-U:experience.bonus.32">
-            <manifest:BasicMetadata ContentID="md:cid:eidr-x:C80F-C561-EE65-C5E4-C039-U:experience.bonus.32">
-                <LocalizedInfo language="en">
-                    <TitleDisplayUnlimited>DC Multiverse</TitleDisplayUnlimited>
-                    <TitleSort>DC Multiverse</TitleSort>
-                    <Summary190/>
-                </LocalizedInfo>
-                <ReleaseYear>2013</ReleaseYear>
-                <ReleaseDate>2013-06-14</ReleaseDate>
-                <WorkType>Supplemental</WorkType>
-            </manifest:BasicMetadata>
-        </manifest:Metadata>
         <manifest:Metadata ContentID="md:cid:eidr-x:C80F-C561-EE65-C5E4-C039-U:experience.bonus.33">
             <manifest:BasicMetadata ContentID="md:cid:eidr-x:C80F-C561-EE65-C5E4-C039-U:experience.bonus.33">
                 <LocalizedInfo language="en">
-                    <TitleDisplayUnlimited>Trivia</TitleDisplayUnlimited>
-                    <TitleSort>Trivia</TitleSort>
+                    <TitleDisplayUnlimited>Scene Factoids</TitleDisplayUnlimited>
+                    <TitleSort>Scene Factoids</TitleSort>
                     <Summary190/>
                 </LocalizedInfo>
                 <ReleaseYear>2013</ReleaseYear>
@@ -6525,6 +6490,7 @@
                     <TitleDisplayUnlimited>Shopping</TitleDisplayUnlimited>
                     <TitleSort>Shopping</TitleSort>
                     <Summary190/>
+                    <ArtReference resolution="714x406">http://fv-static-cdn-integration.s3.amazonaws.com/nextgen/shopping.png</ArtReference>
                 </LocalizedInfo>
                 <ReleaseYear>2013</ReleaseYear>
                 <ReleaseDate>2013-06-14</ReleaseDate>
@@ -7904,16 +7870,6 @@
             </manifest:Picture>
         </manifest:PictureGroup>
     </manifest:PictureGroups>
-    <manifest:AppGroups>
-        <manifest:AppGroup AppGroupID="md:appgroupid:eidr-x:C80F-C561-EE65-C5E4-C039-U:other.dc_multiverse.2">
-            <manifest:InteractiveTrackReference>
-                <manifest:InteractiveTrackID>md:interactiveid:eidr-x:C80F-C561-EE65-C5E4-C039-U:other.dc_multiverse.2</manifest:InteractiveTrackID>
-                <manifest:Compatibility>
-                    <RuntimeEnvironment>HTML5</RuntimeEnvironment>
-                </manifest:Compatibility>
-            </manifest:InteractiveTrackReference>
-        </manifest:AppGroup>
-    </manifest:AppGroups>
     <manifest:TextGroups>
         <manifest:TextGroup TextGroupID="md:textgroupid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.trivia.1">
             <manifest:TextObjectID>md:textobjectid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.trivia.1</manifest:TextObjectID>
@@ -8460,13 +8416,6 @@
             <manifest:ExperienceChild>
                 <manifest:Relationship>ispartof</manifest:Relationship>
                 <manifest:SequenceInfo>
-                    <Number>5</Number>
-                </manifest:SequenceInfo>
-                <manifest:ExperienceID>md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.32</manifest:ExperienceID>
-            </manifest:ExperienceChild>
-            <manifest:ExperienceChild>
-                <manifest:Relationship>ispartof</manifest:Relationship>
-                <manifest:SequenceInfo>
                     <Number>4</Number>
                 </manifest:SequenceInfo>
                 <manifest:ExperienceID>md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.34</manifest:ExperienceID>
@@ -8938,19 +8887,6 @@
             </manifest:Region>
             <manifest:ContentID>md:cid:eidr-x:C80F-C561-EE65-C5E4-C039-U:experience.bonus.31</manifest:ContentID>
             <manifest:TimedSequenceID>md:timedsequenceid:eidr-x:C80F-C561-EE65-C5E4-C039-U:placestab</manifest:TimedSequenceID>
-        </manifest:Experience>
-        <manifest:Experience ExperienceID="md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.32" version="1">
-            <manifest:Language>en</manifest:Language>
-            <manifest:Region>
-                <country>US</country>
-            </manifest:Region>
-            <manifest:ContentID>md:cid:eidr-x:C80F-C561-EE65-C5E4-C039-U:experience.bonus.32</manifest:ContentID>
-            <manifest:App>
-                <manifest:Type>other</manifest:Type>
-                <manifest:AppGroupID>md:appgroupid:eidr-x:C80F-C561-EE65-C5E4-C039-U:other.dc_multiverse.2</manifest:AppGroupID>
-                <manifest:ContentID>md:cid:eidr-x:C80F-C561-EE65-C5E4-C039-U:other.dc_multiverse.2</manifest:ContentID>
-            </manifest:App>
-            <manifest:TimedSequenceID>md:timedsequenceid:eidr-x:C80F-C561-EE65-C5E4-C039-U:multiverse</manifest:TimedSequenceID>
         </manifest:Experience>
         <manifest:Experience ExperienceID="md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.33" version="1">
             <manifest:Language>en</manifest:Language>
@@ -9443,15 +9379,6 @@
                         <manifest:Longitude>-88.438485</manifest:Longitude>
                     </manifest:EarthCoordinate>
                 </manifest:Location>
-            </manifest:TimedEvent>
-        </manifest:TimedEventSequence>
-        <manifest:TimedEventSequence TimedSequenceID="md:timedsequenceid:eidr-x:C80F-C561-EE65-C5E4-C039-U:multiverse">
-            <manifest:PresentationID>md:presentationid:eidr-x:C80F-C561-EE65-C5E4-C039-U:main</manifest:PresentationID>
-            <manifest:TimedEvent>
-                <manifest:StartTimecode>0.000000</manifest:StartTimecode>
-                <manifest:EndTimecode>8577.000000</manifest:EndTimecode>
-                <manifest:Type>Synchronous</manifest:Type>
-                <manifest:AppGroupID>md:appgroupid:eidr-x:C80F-C561-EE65-C5E4-C039-U:other.dc_multiverse.2</manifest:AppGroupID>
             </manifest:TimedEvent>
         </manifest:TimedEventSequence>
         <manifest:TimedEventSequence TimedSequenceID="md:timedsequenceid:eidr-x:C80F-C561-EE65-C5E4-C039-U:bonus.shop.1">

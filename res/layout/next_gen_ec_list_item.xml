@@ -1,42 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.wb.nextgen.widget.FixedAspectRatioFrameLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:nextgen="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    nextgen:aspectRatioWidth="16"
-    nextgen:aspectRatioHeight="9">
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <RelativeLayout
-        android:orientation="vertical" android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <com.wb.nextgen.widget.SelectedOverlayImageView
-            android:id="@+id/ec_list_image"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_centerHorizontal="true"
-            nextgen:inActiveOverlayDrawable="@drawable/play_button"
-            nextgen:inActiveOverlayColor="@color/transparent_black"
-            android:scaleType="fitCenter"
-            android:duplicateParentState="true"
-            android:src="@drawable/ec_sample_thumbnail"/>
-        <TextView
-            android:id="@+id/ec_list_name_text"
-            android:layout_below="@+id/ec_list_image"
+        android:id="@+id/ec_list_image_frame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:lines="1"
-            android:ellipsize="end"
-            android:text="goes here"/>
-
-            <!--<ImageView
-                android:id="@+id/ec_inactive_mask"
-                android:background="@color/transparent_gray"
-                android:layout_centerInParent="true"
+            nextgen:aspectRatioWidth="16"
+            nextgen:aspectRatioHeight="9">
+            <com.wb.nextgen.widget.SelectedOverlayImageView
+                android:id="@+id/ec_list_image"
                 android:layout_width="fill_parent"
-                android:layout_height="150dp"
-                android:scaleType="center"
-                android:src="@android:drawable/ic_media_play"/>-->
+                android:layout_height="fill_parent"
+                android:layout_centerHorizontal="true"
+                nextgen:inActiveOverlayDrawable="@drawable/play_button"
+                nextgen:inActiveOverlayColor="@color/inactive_mask_color"
+                android:scaleType="fitCenter"
+                android:duplicateParentState="true"
+                android:src="@drawable/ec_sample_thumbnail"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_weight="4"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"/>
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_weight="2"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"/>
+                    <RelativeLayout
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent">
+                        <!--<com.wb.nextgen.widget.SelectedOverlayImageView
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_centerHorizontal="true"
+                            android:background="@color/transparent_black"
+                            nextgen:inActiveOverlayColor="@color/inactive_mask_color"
+                            android:duplicateParentState="true"/>-->
+                        <TextView
+                            android:id="@+id/ec_duration_text"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:textColor="@android:color/white"
+                            android:textSize="@dimen/textNormal"
+                            android:fontFamily="sans-serif-condensed"
+                            android:background="@drawable/selectable_rectangle_border"
+                            android:gravity="center"
+                            android:text="Play time"/>
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
 
     </RelativeLayout>
-</com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
+    <TextView
+        android:id="@+id/ec_list_name_text"
+        android:layout_below="@+id/ec_list_image_frame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/selectable_text_color"
+        android:textSize="@dimen/textNormal"
+        android:fontFamily="sans-serif-condensed"
+        android:lines="1"
+        android:ellipsize="end"
+        android:text="goes here"/>
+
+
+
+</RelativeLayout>

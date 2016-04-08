@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <!-- Pressed -->
+    <item android:state_activated="true" android:drawable="@drawable/rectangle_border"/>
+
+
+    <item android:state_activated="false" android:drawable="@color/transparent_black"/>
+
+</selector>

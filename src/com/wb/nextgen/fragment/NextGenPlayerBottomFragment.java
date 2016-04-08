@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Created by gzcheng on 1/19/16.
  */
-public class NextGenPlayerBottomFragment extends Fragment implements NextGenPlaybackStatusListener, NextGenFragmentTransactionInterface {
+public class  NextGenPlayerBottomFragment extends Fragment implements NextGenPlaybackStatusListener, NextGenFragmentTransactionInterface {
 
     //final List<NextGenPlaybackStatusListener> listeners = new ArrayList<NextGenPlaybackStatusListener>();
     TextView imeText;

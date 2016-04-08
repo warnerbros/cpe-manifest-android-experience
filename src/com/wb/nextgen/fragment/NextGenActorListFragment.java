@@ -3,8 +3,10 @@ package com.wb.nextgen.fragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 
@@ -67,6 +69,12 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment imple
         }
     }
 
+    @Override
+    protected int getPadding(){
+        float density = NextGenApplication.getScreenDensity(getActivity());
+        int spacing = (int)(5 *density);
+        return 0;
+    }
 
 
     public List<CastData> getActorInfos(){
@@ -110,7 +118,7 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment imple
     protected void fillListRowWithObjectInfo(View rowView, Object item) {
 
 
-        final CircularClippedImageView avatarImg = (CircularClippedImageView) rowView.findViewById(R.id.next_gen_actor_avatar);
+        final ImageView avatarImg = (ImageView) rowView.findViewById(R.id.next_gen_actor_avatar);
         TextView realNameTxt = (TextView) rowView.findViewById(R.id.next_gen_actor_real_name);
         TextView characterNameTxt = (TextView) rowView.findViewById(R.id.next_gen_actor_character_name);
 
@@ -126,8 +134,12 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment imple
         }
 
 
-        if (thisActor.getBaselineCastData() != null)
-            PicassoTrustAll.loadImageIntoView(getActivity(), thisActor.getBaselineCastData().getThumbnailImageUrl(), avatarImg);
+        if (thisActor.getBaselineCastData() != null){
+            int imageWidth = getResources().getDimensionPixelSize(R.dimen.next_gen_actor_thumbnail_dimen);
+            Picasso.with(getActivity()).load(thisActor.getBaselineCastData().getThumbnailImageUrl()).fit().centerCrop().into(avatarImg);
+            //PicassoTrustAll.loadImageIntoView(getActivity(), thisActor.getBaselineCastData().getThumbnailImageUrl(), avatarImg);
+
+        }
 
 
 

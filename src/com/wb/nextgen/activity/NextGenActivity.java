@@ -48,32 +48,21 @@ public class NextGenActivity extends FragmentActivity {
     @Override
     public void onCreate(Bundle savedState) {
         super.onCreate(savedState);
-        /*if (Build.VERSION.SDK_INT < 16) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        }else{
-            View decorView = getWindow().getDecorView();
-// Hide the status bar.
-            int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-            decorView.setSystemUiVisibility(uiOptions);
-        }*/
         setContentView(R.layout.next_gen_drawer_view);
 
         // Navigation Drawer
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        /*mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerFragment = (NextGenNavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.drawer_list);
-        //mDrawerFragment.setListener(this);
-        leftdrawer = (RelativeLayout) findViewById(R.id.left_drawer);
+        leftdrawer = (RelativeLayout) findViewById(R.id.left_drawer);*/
 
         ImageView menuBG = (ImageView)findViewById(R.id.menu_bg_image_view);
         if (menuBG != null){
             String bgImageUri = "android.resource://com.wb.nextgen/" + R.drawable.man_of_steel_menu;
             PicassoTrustAll.getInstance(this).load(bgImageUri).fit().into(menuBG);
-            //PicassoTrustAll.loadImageIntoView(NextGenApplication.getContext(), bgImageUri, menuBG);
         }
 
-        mDrawerToggle = new NextGenActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close);
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        //mDrawerToggle = new NextGenActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close);
+        //mDrawerLayout.setDrawerListener(mDrawerToggle);
         /*
         try {
             JAXBContext jc = JAXBContext.newInstance(MediaManifestType.class);

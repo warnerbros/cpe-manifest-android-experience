@@ -8,9 +8,7 @@ import android.widget.TextView;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.DemoData;
-import com.wb.nextgen.data.DemoJSONData;
 import com.wb.nextgen.data.MovieMetaData;
-import com.wb.nextgen.data.MovieMetaData.ExperienceData;
 import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgen.interfaces.NextGenPlaybackStatusListener;
 import com.wb.nextgen.model.NextGenIMEEngine;
@@ -68,10 +66,10 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                     fragmentTransaction.transitMainFragment(fragment);
 
 
-                } else if (imeObject instanceof MovieMetaData.ECAudioVisualItem) {
+                } else if (imeObject instanceof MovieMetaData.AudioVisualItem) {
                     ECVideoViewFragment fragment = new ECVideoViewFragment();
                     fragment.setBGImageUrl( DemoData.getExtraBackgroundUrl());
-                    fragment.setAudioVisualItem((MovieMetaData.ECAudioVisualItem)imeObject);
+                    fragment.setAudioVisualItem((MovieMetaData.AudioVisualItem)imeObject);
                     fragmentTransaction.transitMainFragment(fragment);
                 }
             }

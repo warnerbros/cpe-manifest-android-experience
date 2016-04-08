@@ -314,10 +314,13 @@ public class HttpHelper {
 			}
 		}
 	}
-	
 
+	public static String getFromUrl(String url, List <NameValuePair> params) throws IOException {
+
+		return  getFromUrl(url, params, null);
+	}
 	
-	public static String getFromUrl(String url, List <NameValuePair> params/*, boolean shouldAuth*/) throws IOException {
+	public static String getFromUrl(String url, List <NameValuePair> params, List <NameValuePair> headerValues) throws IOException {
 		NextGenLogger.d(F.TAG_API, "HttpHelper.getFromUrl url:" + url);
 		InputStream content = null;
 		try {
@@ -338,6 +341,13 @@ public class HttpHelper {
 					get.setHeader(HTTP.CONTENT_TYPE, "application/json");
 			get.setHeader(HTTP.USER_AGENT, NextGenApplication.getUserAgent());
 			get.setHeader(F.ACCEPT, ACCEPT_HEADER_VALUE);
+
+			if (headerValues != null && headerValues.size() > 0){
+				for(NameValuePair pair: headerValues){
+					get.setHeader(pair.getName(), pair.getValue());
+				}
+			}
+
 			HttpResponse response = httpClient.execute(get);
 			StringBuilder responseBuilder = new StringBuilder();
 			HttpEntity entity = response.getEntity();

@@ -11,8 +11,10 @@ import com.wb.nextgen.activity.ECGalleryActivity;
 import com.wb.nextgen.activity.ECVideoActivity;
 import com.wb.nextgen.R;
 
+import com.wb.nextgen.activity.TheTakeShopCategoryActivity;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.data.MovieMetaData.ExperienceData;
+import com.wb.nextgen.network.TheTakeApiDAO;
 import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.utils.F;
 
@@ -29,18 +31,25 @@ public class NextGenExtraMainTableFragment extends NextGenGridViewFragment {
 
     protected void onListItmeClick(View v, int position, long id){
         ExperienceData selectedGroup = ecGroups.get(position);
-        Intent intent = new Intent(getActivity(), ECVideoActivity.class);
-        if (selectedGroup.getECGroupType() == MovieMetaData.ECGroupType.GALLERY){
+        Intent intent = null;
+        if (selectedGroup.getECGroupType() == MovieMetaData.ECGroupType.FEATURETTES){
+            intent = new Intent(getActivity(), ECVideoActivity.class);
+        }else if (selectedGroup.getECGroupType() == MovieMetaData.ECGroupType.EXTERNAL_APP){
+            if (selectedGroup.getExternalApp() != null){
+                if (selectedGroup.getExternalApp().externalApiName.equals("thetake")){
+                    intent = new Intent(getActivity(), TheTakeShopCategoryActivity.class);
+
+                }
+            }
+        }else if (selectedGroup.getECGroupType() == MovieMetaData.ECGroupType.GALLERY){
             intent = new Intent(getActivity(), ECGalleryActivity.class);
         }
 
-
-        intent.setAction(android.content.Intent.ACTION_VIEW);
-        intent.putExtra(F.ID, getListItemAtPosition(position).experienceId);
-        //intent.setDataAndType(Uri.parse("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/feature/ManOfSteel_Clean.mp4"), "video/*");
-        //intent.setDataAndType(Uri.parse("http://d1x310wzaeunai.cloudfront.net/video/man-of-steel-trailer3.mp4"), "video/*");
-        //       intent.setDataAndType(Uri.parse("https://ia802304.us.archive.org/17/items/BigBuckBunny1280x720Stereo/big_buck_bunny_720_stereo.mp4"), "video/*");
-        startActivity(intent);
+        if (intent != null) {
+            intent.setAction(android.content.Intent.ACTION_VIEW);
+            intent.putExtra(F.ID, getListItemAtPosition(position).experienceId);
+            startActivity(intent);
+        }
     }
 
     protected int getNumberOfColumns(){

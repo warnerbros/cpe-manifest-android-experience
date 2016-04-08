@@ -28,7 +28,7 @@ public class ECVideoViewFragment extends Fragment {
     ECMediaController mediaController;
     protected TextView selectedECNameTextView;
 
-    MovieMetaData.ECAudioVisualItem selectedAVItem = null;
+    MovieMetaData.AudioVisualItem selectedAVItem = null;
     boolean bSetOnResume= false;
     ImageView bgImageView;
 
@@ -81,7 +81,7 @@ public class ECVideoViewFragment extends Fragment {
         }
     }
 
-    public void setAudioVisualItem(MovieMetaData.ECAudioVisualItem avItem){
+    public void setAudioVisualItem(MovieMetaData.AudioVisualItem avItem){
         if (avItem != null) {
             selectedAVItem = avItem;
             if (selectedECNameTextView != null && videoView != null) {

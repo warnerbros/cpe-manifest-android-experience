@@ -71,6 +71,11 @@ public class ECViewLeftListFragment extends NextGenExtraLeftListFragment{
         if (ecNameText != null){
             ecNameText.setText(thisEC.title);
         }
+
+        TextView ecDurationText = (TextView)rowView.findViewById(R.id.ec_duration_text);
+        if (ecDurationText != null && thisEC.getDuration() != null){
+            ecDurationText.setText(thisEC.getDuration());
+        }
         /*
         ImageView mask = (ImageView)rowView.findViewById(R.id.ec_inactive_mask);
         if (mask != null){

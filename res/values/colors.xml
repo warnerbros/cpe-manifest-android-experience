@@ -116,4 +116,6 @@
 
     <color name="list_title_text_color">#FFFFFF</color>
     <color name="drawer_yellow">#fecd48</color>
+
+    <color name="inactive_mask_color">#48000000</color>
 </resources>

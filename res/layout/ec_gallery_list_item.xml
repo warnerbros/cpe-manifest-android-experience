@@ -9,7 +9,7 @@
         android:layout_width="fill_parent"
         android:layout_height="130dp"
         android:layout_centerHorizontal="true"
-        nextgen:inActiveOverlayColor="@color/transparent_black"
+        nextgen:inActiveOverlayColor="@color/inactive_mask_color"
         android:scaleType="fitCenter"
         android:duplicateParentState="true"
         android:src="@drawable/ec_sample_thumbnail"/>
