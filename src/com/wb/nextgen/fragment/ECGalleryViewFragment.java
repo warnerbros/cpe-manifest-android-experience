@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -35,6 +36,7 @@ public class ECGalleryViewFragment extends Fragment {
     private MovieMetaData.ECGalleryItem currentGallery;
     private GalleryPagerAdapter adapter;
     private ImageButton fullscreenToggleBtn;
+    private TextView galleryNameTextView;
     ImageView bgImageView;
 
     String bgImageUrl = null;
@@ -57,6 +59,7 @@ public class ECGalleryViewFragment extends Fragment {
         galleryViewPager = (ViewPager) view.findViewById(R.id.next_gen_gallery_view_pager);
         adapter = new GalleryPagerAdapter(getActivity());
         fullscreenToggleBtn = (ImageButton)view.findViewById(R.id.gallery_fullscreen_toggle);
+        galleryNameTextView = (TextView)view.findViewById(R.id.ec_content_name);
         if (fullscreenToggleBtn != null){
             fullscreenToggleBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -82,6 +85,9 @@ public class ECGalleryViewFragment extends Fragment {
 
             adapter.notifyDataSetChanged();
             galleryViewPager.setCurrentItem(0);
+            if (galleryNameTextView != null){
+                galleryNameTextView.setText(gallery.title);
+            }
         }else{
             bSetOnResume = true;
         }
