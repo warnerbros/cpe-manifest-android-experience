@@ -5,20 +5,23 @@
     android:background="@android:color/transparent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingLeft="@dimen/spacing_normal"
+    android:paddingRight="@dimen/spacing_normal"
     tools:context=".activity.NextGenExtraActivity">
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="fill_parent">
-        <ListView
+        <ExpandableListView
             android:id="@+id/the_take_category_list"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
+            android:choiceMode="singleChoice"
             android:orientation="vertical">
 
-        </ListView>
+        </ExpandableListView>
 
         <GridView
             android:layout_width="0dp"

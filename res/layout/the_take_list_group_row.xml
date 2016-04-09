@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/spacing_large">
+    <TextView
+        android:id="@+id/lblListHeader"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:duplicateParentState="true"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="@dimen/textLarge"
+        android:textColor="@color/selectable_text_color" />
+</LinearLayout>

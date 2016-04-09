@@ -127,7 +127,7 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment imple
 
 
         if(!thisActor.displayName.equals(realNameTxt.getText())) {
-            realNameTxt.setText(thisActor.displayName);
+            realNameTxt.setText(thisActor.displayName.toUpperCase());
             characterNameTxt.setText(thisActor.charactorName);
 
             avatarImg.setTag(thisActor.displayName);

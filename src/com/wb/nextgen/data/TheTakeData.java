@@ -12,6 +12,7 @@ public class TheTakeData {
         public int categoryId;
         public String categoryName;
         public List<TheTakeCategory> childCategories;
+        public List<TheTakeProduct> products;
     }
 
     public static class TheTakeProductFrame{
@@ -27,46 +28,55 @@ public class TheTakeData {
         fullSizeFrameLink	String	https://img.thetake.com/frame_images/1f2f2a96e774b50a8563b7d9582c9a76940eaccec42f4d747de7c3547d3870a9.jpeg
                 250pxFrameLink	String	https://img.thetake.com/frame_images/d197416f8b5e04ab8b5b2fc53afe843ae09300abc5c41413d176f368f9a330ce.jpeg
                 125pxFrameLink	String	https://img.thetake.com/frame_images/fe47367a66b108532eacbb1245d9b13be01b1a6f7c08fda0fd9697e52a40fd9e.jpeg*/
-        @SerializedName("1000pxFrameLink")
+        @SerializedName(value="1000pxLink", alternate={"1000pxFrameLink", "1000pxKeyFrameLink", "1000pxCropLink"})//"1000pxFrameLink")
         public String image1000px;
-        @SerializedName("500pxFrameLink")
+        @SerializedName(value="500pxLink", alternate={"500pxFrameLink", "500pxKeyFrameLink", "500pxCropLink"})
         public String image500px;
-        @SerializedName("fullSizeFrameLink")
+        @SerializedName(value="fullSizeFrameLink")
         public String image1FullSize;
-        @SerializedName("250pxFrameLink")
+        @SerializedName(value="250pxLink", alternate={"250pxFrameLink", "250pxKeyFrameLink", "250pxCropLink"})
         public String image250px;
-        @SerializedName("125pxFrameLink")
+        @SerializedName(value="125pxLink", alternate={"125pxFrameLink", "125pxKeyFrameLink", "125pxCropLink"})
         public String image125px;
-        @SerializedName("50pxFrameLink")
+        @SerializedName(value="50pxLink", alternate={"50pxFrameLink", "50pxKeyFrameLink", "50pxCropLink"})
         public String image50px;
     }
 
+
+
+
+    public static class TheTakeProduct{
+        @SerializedName("cropImage")
+        public FrameImages cropImage;
+        @SerializedName("productImage")
+        public FrameImages productImage;
+        @SerializedName("keyFrameImage")
+        public FrameImages keyFrameImage;
+        public String characterId;
+        public String actorId;
+        public boolean verified;
+        public float keyCropProductY;
+        public float keyCropProductX;
+        public String actorName;
+        public String mediaId;
+        public String productBrand;
+        @SerializedName("unavailable")
+        public int bUnavailable;
+        public String characterName;
+        public boolean soldOut;
+        public String mediaName;
+        public String purchaseLink;
+        public float trendingScore;
+        public long keyFrameImageTime;
+        public long productId;
+        public float keyFrameProductX;
+        public float keyFrameProductY;
+        public String productPrice;
+        public String productName;
+
+        public String getThumbnailUrl(){
+            return cropImage.image500px;
+        }
+    }
+
 }
-/*
-class TheTakeCategory: NSObject {
-
-        struct Keys {
-static let CategoryID = "categoryId"
-static let CategoryName = "categoryName"
-static let ChildCategories = "childCategories"
-        }
-
-        var id: Int!
-        var name: String!
-        var children: [TheTakeCategory]?
-
-        convenience init(info: NSDictionary) {
-        self.init()
-
-        id = (info[Keys.CategoryID] as! NSNumber).integerValue
-        name = info[Keys.CategoryName] as! String
-
-        if let childCategories = info[Keys.ChildCategories] as? [NSDictionary] {
-        children = [TheTakeCategory]()
-        for childCategory in childCategories {
-        children!.append(TheTakeCategory(info: childCategory))
-        }
-        }
-        }
-
-        }*/

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
+        xmlns:nextgen="http://schemas.android.com/apk/res-auto"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        nextgen:aspectRatioHeight="198"
+        nextgen:aspectRatioWidth="352"
+        nextgen:priority="WIDTH_PRIORITY">
+        <ImageView
+            android:id="@+id/the_take_item_thumbnail"
+            android:scaleType="centerInside"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+    </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:background="@android:color/transparent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/the_take_brand_name"
+            android:layout_width="wrap_content"
+            android:text="brand"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="@dimen/textNormal"
+            android:fontFamily="sans-serif-condensed"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/the_take_product_name"
+            android:layout_width="wrap_content"
+            android:text="product"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/textNormal"
+            android:fontFamily="sans-serif-condensed"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</LinearLayout>

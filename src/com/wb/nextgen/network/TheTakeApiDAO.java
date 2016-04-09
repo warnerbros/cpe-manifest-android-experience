@@ -8,11 +8,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.data.MovieMetaData;
+import com.wb.nextgen.data.TheTakeData.TheTakeProduct;
 import com.wb.nextgen.data.TheTakeData.TheTakeCategory;
 import com.wb.nextgen.data.TheTakeData.TheTakeProductFrame;
 import com.wb.nextgen.util.HttpHelper;
 import com.wb.nextgen.util.concurrent.ResultListener;
 import com.wb.nextgen.util.concurrent.Worker;
+import com.wb.nextgen.util.utils.F;
 import com.wb.nextgen.util.utils.NextGenLogger;
 import com.wb.nextgen.util.utils.StringHelper;
 
@@ -58,6 +60,7 @@ public class TheTakeApiDAO {
         static final String Start = "start";
     }
 
+    private static final List<TheTakeCategory> categories = new ArrayList<TheTakeCategory>();
 
     public static void init(){
         theTakeMediaId = NextGenApplication.getMovieMetaData().getIdentifierForExternalAPI(THE_TAKE_MANIFEST_IDENTIFIER);
@@ -100,13 +103,17 @@ public class TheTakeApiDAO {
     private static String getFromUrl(String url, List <NameValuePair> params) throws IOException {
         List<NameValuePair> headerValues = new ArrayList<NameValuePair>();
         headerValues.add(new BasicNameValuePair("X-Mashape-Key", theTakeAPIKey));
-        return HttpHelper.getFromUrl(THETAKE_DOMAIN + Endpoints.PrefetchProductFrames, params, headerValues);
+        return HttpHelper.getFromUrl(url, params, headerValues);
     }
 
     public static void prefetchProductFrames(final int start, final int count, ResultListener<Object> l) {
         Worker.execute(new Callable<Object>() {
             @Override
             public Object call() throws Exception {
+
+                if (categories != null)
+                    return categories;
+
                 try {
                     List<NameValuePair> params = new ArrayList<NameValuePair>();
                     params.add(new BasicNameValuePair(Keys.Media, theTakeMediaId));
@@ -122,15 +129,15 @@ public class TheTakeApiDAO {
 
                     Gson gson = new GsonBuilder().create();
 
-                    List<TheTakeProductFrame> category = gson.fromJson(result, listType);
+                    List<TheTakeProductFrame> productFrames = gson.fromJson(result, listType);
                     //TheTakeProductFrame
-                    JSONArray jsonArray = new JSONArray(result);
+                    /*JSONArray jsonArray = new JSONArray(result);
                     if (jsonArray != null && jsonArray.length() > 0){
                         for (int i = 0; i < jsonArray.length(); i++){
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                         }
-                    }
-
+                    }*/
+                    return productFrames;
 
                 } catch (Exception ex) {
 
@@ -145,29 +152,32 @@ public class TheTakeApiDAO {
         Worker.execute(new Callable<List<TheTakeCategory>>() {
             @Override
             public List<TheTakeCategory> call() throws Exception {
+                if (categories.size() > 0)
+                    return categories;
+
                 List<TheTakeCategory> resultList = new ArrayList<TheTakeCategory>();
                 try {
                     List<NameValuePair> params = new ArrayList<NameValuePair>();
                     params.add(new BasicNameValuePair(Keys.Media, theTakeMediaId));
 
                     String result = getFromUrl(THETAKE_DOMAIN + Endpoints.PrefetchProductCategories, params);
-                    JSONObject resultObj = new JSONObject(result);
-                    JSONArray jsonArray= resultObj.getJSONArray("result");
-                    if (jsonArray != null && jsonArray.length() > 0) {
-                        for (int i = 0; i< jsonArray.length(); i++){
-                            JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            Gson gson = new GsonBuilder().create();
-                            TheTakeCategory category = gson.fromJson(jsonObject.toString(), TheTakeCategory.class);
-                            resultList.add(category);
-                        }
-                    }
 
+                    Type listType = new TypeToken<ArrayList<TheTakeCategory>>() {
+                    }.getType();
+
+                    Gson gson = new GsonBuilder().create();
+
+                    resultList = gson.fromJson(result, listType);
+
+
+                    categories.addAll(resultList);
                     //return category;
                 } catch (Exception ex) {
+                    NextGenLogger.d(F.TAG_API, ex.getLocalizedMessage());
 
                 }
 
-                return resultList;
+                return categories;
             }
         }, l);
     }
@@ -183,6 +193,7 @@ public class TheTakeApiDAO {
 
                     String result = getFromUrl(THETAKE_DOMAIN + Endpoints.GetFrameProducts, params);
                 } catch (Exception ex) {
+                    NextGenLogger.d(F.TAG_API, ex.getLocalizedMessage());
 
                 }
 
@@ -192,18 +203,27 @@ public class TheTakeApiDAO {
 
     }
 
-    public static void getCategoryProducts(final String categoryId, ResultListener<Object> l){
-        Worker.execute(new Callable<Object>() {
+    public static void getCategoryProducts(final int categoryId, ResultListener<List<TheTakeProduct>> l){
+        Worker.execute(new Callable<List<TheTakeProduct>>() {
             @Override
-            public Object call() throws Exception {
+            public List<TheTakeProduct> call() throws Exception {
                 try {
+
                     List<NameValuePair> params = new ArrayList<NameValuePair>();
                     params.add(new BasicNameValuePair(Keys.Media, theTakeMediaId));
-                    params.add(new BasicNameValuePair(Keys.Category, categoryId));
+                    params.add(new BasicNameValuePair(Keys.Category, Integer.toString(categoryId) ));
 
                     String result = getFromUrl(THETAKE_DOMAIN + Endpoints.GetCategoryProducts, params);
-                } catch (Exception ex) {
+                    Type listType = new TypeToken<ArrayList<TheTakeProduct>>() {
+                    }.getType();
 
+                    Gson gson = new GsonBuilder().create();
+
+                    List<TheTakeProduct> resultList = gson.fromJson(result, listType);
+                    return resultList;
+
+                } catch (Exception ex) {
+                    NextGenLogger.d(F.TAG_API, ex.getLocalizedMessage());
                 }
 
                 return null;

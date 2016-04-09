@@ -153,6 +153,12 @@
 			android:exported="false"
 			android:theme="@style/ExtraActionBar" >
 		</activity>
+		<activity android:name=".activity.TheTakeShopCategoryActivity"
+			android:screenOrientation="sensorLandscape"
+			android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+			android:exported="false"
+			android:theme="@style/ExtraActionBar" >
+		</activity>
 		<!-- ChromeCast -->
 		<!--<activity android:name="net.flixster.android.view.CastPlayerActivity"
 			 android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"

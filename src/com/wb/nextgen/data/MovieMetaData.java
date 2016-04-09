@@ -361,7 +361,7 @@ public class MovieMetaData {
 
         public String getThumbnailImageUrl(){
             if (headShot != null){
-                return headShot.smallUrl;
+                return headShot.largeUrl;
             }else
                 return null;
         }
