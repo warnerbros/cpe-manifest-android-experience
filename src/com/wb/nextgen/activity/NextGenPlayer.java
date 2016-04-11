@@ -13,31 +13,22 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.MediaController;
-import android.widget.TextView;
-
-import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 
 import com.wb.nextgen.data.DemoData;
-import com.wb.nextgen.data.MovieMetaData;
-import com.wb.nextgen.fragment.IMEElementsGridFragment;
-import com.wb.nextgen.fragment.NextGenIMEActorFragment;
 import com.wb.nextgen.fragment.NextGenPlayerBottomFragment;
 import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgen.interfaces.NextGenPlaybackStatusListener;
-import com.wb.nextgen.interfaces.SensitiveFragmentInterface;
 import com.wb.nextgen.network.TheTakeApiDAO;
 import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.TabletUtils;
 import com.wb.nextgen.util.concurrent.ResultListener;
 import com.wb.nextgen.util.utils.NextGenFragmentTransactionEngine;
-import com.wb.nextgen.util.utils.StringHelper;
 import com.wb.nextgen.widget.MainFeatureMediaController;
-import com.wb.nextgen.widget.NextGenMediaController;
 
 import net.flixster.android.drm.IVideoViewActionListener;
 import net.flixster.android.drm.ObservableVideoView;
@@ -65,9 +56,14 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
     NextGenFragmentTransactionEngine nextGenFragmentTransactionEngine;
 
+    NextGenPlayerBottomFragment imeBottomFragment;
+
+    public static final Uri INTERSTITIAL_VIDEO_URI = Uri.parse("android.resource://com.wb.nextgen/" + R.raw.mos_nextgen_interstitial);
+
+    private Uri currentUri = null;
 
     //TextView imeText;
-    IMEElementsGridFragment imeGridFragment;
+    //IMEElementsGridFragment imeGridFragment;
     private long lastTimeCode = -1;
 
     @Override
@@ -113,7 +109,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
         videoView = (ObservableVideoView) findViewById(R.id.surface_view);
         mediaController = new MainFeatureMediaController(this);
-        videoView.setMediaController(mediaController);
+        //videoView.setMediaController(mediaController);
         videoView.setOnErrorListener(getOnErrorListener());
         videoView.setOnPreparedListener(getOnPreparedListener());
         videoView.setOnCompletionListener(getOnCompletionListener());
@@ -136,12 +132,13 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
             }
         });
 
+        imeBottomFragment = new NextGenPlayerBottomFragment();
 
-        imeGridFragment =new IMEElementsGridFragment();
-        imeGridFragment.setFragmentTransactionInterface(this);
 
-        transitLeftFragment(new NextGenIMEActorFragment());
-        transitRightFragment(imeGridFragment);
+        //transitLeftFragment(new NextGenIMEActorFragment());
+        transitMainFragment(imeBottomFragment);
+
+        //imeBottomFragment.setFragmentTransactionInterface(this);
 
         TheTakeApiDAO.prefetchProductFrames(0, 300, new ResultListener<Object>() {
             @Override
@@ -167,13 +164,14 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     public void onBackPressed(){
         super.onBackPressed();
 
-        if (getSupportFragmentManager().getBackStackEntryCount() == 1 )
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0 )
             finish();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        hideShowNextGenView();
     }
 
     protected void updateImeFragment(final NextGenPlaybackStatusListener.NextGenPlaybackStatus playbackStatus, final long timecode){
@@ -185,8 +183,8 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (imeGridFragment != null)
-                    imeGridFragment.playbackStatusUpdate(playbackStatus, timecode);
+                if (imeBottomFragment != null)
+                    imeBottomFragment.playbackStatusUpdate(playbackStatus, timecode);
                 //if (imeText != null)
                  //   imeText.setText(Long.toString(timecode));
             }
@@ -221,10 +219,11 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                 return;
             switch (this.getResources().getConfiguration().orientation) {
                 case Configuration.ORIENTATION_PORTRAIT:
+
                     nextGenView.setVisibility(View.VISIBLE);
                     mediaController.hideShowControls(true);
                     break;
-                case Configuration.ORIENTATION_LANDSCAPE:
+                 case Configuration.ORIENTATION_LANDSCAPE:
                     nextGenView.setVisibility(View.GONE);
                     mediaController.hideShowControls(false);
             }
@@ -278,14 +277,20 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         @Override
         public void onCompletion(MediaPlayer mp) {
             updateImeFragment(NextGenPlaybackStatusListener.NextGenPlaybackStatus.STOP, -1L);
-            /*trackPlaybackEvent("playback_complete", 0);
-            NextGenLogger.d(F.TAG_DRM, "WidevinePlayer.onCompletion: rightId=" + rightId + ", resetting seek time");
-
-            mPlaybackCompleted = true;
-            savePlayPosition(0);*/
-            finish();
+            if (currentUri.equals(INTERSTITIAL_VIDEO_URI)){
+                playMainMovie();
+            }else
+                finish();
 
         }
+    }
+
+    private void playMainMovie(){
+        Intent intent = getIntent();
+        Uri uri = intent.getData();
+        currentUri = uri;
+        videoView.setVideoURI(uri);
+        videoView.setMediaController(mediaController);
     }
 
     protected MediaPlayer.OnCompletionListener getOnCompletionListener(){
@@ -294,12 +299,32 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
     public void onResume() {
         super.onResume();
-        Intent intent = getIntent();
-        Uri uri = intent.getData();
         videoView.setVisibility(View.VISIBLE);
-        videoView.setVideoURI(uri);
-
+        if (currentUri == null) {
+            currentUri = INTERSTITIAL_VIDEO_URI;
+            videoView.setVideoURI(currentUri);
+            videoView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    playMainMovie();
+                    videoView.setOnTouchListener(null);
+                    return true;
+                }
+            });
+        } else{
+            videoView.seekTo(resumePlayTime);
+            /*Intent intent = getIntent();
+            Uri uri = intent.getData();
+            videoView.setVideoURI(uri);*/
+        }
         hideShowNextGenView();
+    }
+
+    int resumePlayTime = 0;
+    @Override
+    public void onPause(){
+        resumePlayTime = videoView.getCurrentPosition();
+        super.onPause();
     }
 
     @Override
@@ -328,11 +353,11 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     }
 
     public int getLeftFrameId(){
-        return R.id.next_gen_ime_left_frame;
+        return R.id.next_gen_ime_bottom_view;
     }
 
     public int getRightFrameId(){
-        return R.id.next_gen_ime_right_frame;
+        return R.id.next_gen_ime_bottom_view;
 
     }
 
@@ -351,13 +376,21 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), getMainFrameId(), nextFragment);
     }
 
+    @Override
+    public int getLeftButtonLogoId(){
+        return R.drawable.home_logo;
+    }
+
+    @Override
     public String getBackgroundImgUri(){
         return DemoData.getExtraBackgroundUrl();
     }
-    public String getLeftButtonText(){
-        return "";
 
+    @Override
+    public String getLeftButtonText(){
+        return getResources().getString(R.string.home_button_text);
     }
+
     public String getRightTitleImageUri(){
         return "";
 

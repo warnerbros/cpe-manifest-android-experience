@@ -1,40 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/next_gen_ime_main_frame"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="fill_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:id="@+id/next_gen_ime_bottom_view">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/next_gen_ime_main_frame">
     <LinearLayout
-        android:layout_weight="1"
-        android:layout_width="0dp"
-        android:id="@+id/next_gen_ime_left_frame"
-        android:layout_height="match_parent">
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal">
         <fragment android:name="com.wb.nextgen.fragment.NextGenIMEActorFragment"
-            android:id="@+id/ime_actor_fragment"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" />
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/next_gen_ime_right_frame"
-        android:layout_weight="3"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <TextView
-            android:text="klsajdljsa"
-            android:id="@+id/next_gen_ime_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <fragment
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/ime_actor_fragment" />
+       <fragment
             android:id="@+id/ime_grid_fragment"
             android:name="com.wb.nextgen.fragment.IMEElementsGridFragment"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"/>
-        <!--<com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView
-            android:id="@+id/ime_gridview"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-
-        </com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView>-->
+            android:layout_weight="3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"/>
 
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>
+
+
+</RelativeLayout>

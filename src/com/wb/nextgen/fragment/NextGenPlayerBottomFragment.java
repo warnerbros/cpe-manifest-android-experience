@@ -2,65 +2,60 @@ package com.wb.nextgen.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.wb.nextgen.R;
 import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgen.interfaces.NextGenPlaybackStatusListener;
-import com.wb.nextgen.util.utils.NextGenFragmentTransactionEngine;
-
-import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by gzcheng on 1/19/16.
  */
-public class  NextGenPlayerBottomFragment extends Fragment implements NextGenPlaybackStatusListener, NextGenFragmentTransactionInterface {
-
-    //final List<NextGenPlaybackStatusListener> listeners = new ArrayList<NextGenPlaybackStatusListener>();
-    TextView imeText;
+public class  NextGenPlayerBottomFragment extends Fragment implements NextGenPlaybackStatusListener {
     IMEElementsGridFragment imeGridFragment;
-    NextGenFragmentTransactionEngine nextGenFragmentTransactionEngine;
-    private long lastTimeCode = -1;
+    NextGenIMEActorFragment imeActorsFragment;
+
+    View view;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.next_gen_ime_lower_frame, container, false);
-    }
+        if (view != null) {
+            ViewGroup parent = (ViewGroup) view.getParent();
+            if (parent != null)
+                parent.removeView(view);
+        }
+        try {
+            view = inflater.inflate(R.layout.next_gen_ime_lower_frame, container, false);
+        } catch (InflateException e) {
+        /* map is already there, just return view as it is */
+        }
+        return view;
 
+    }
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        nextGenFragmentTransactionEngine = new NextGenFragmentTransactionEngine(getActivity());
-
-        imeText = (TextView)view.findViewById(R.id.next_gen_ime_text);
-        NextGenIMEActorFragment imeActorFragment = (NextGenIMEActorFragment)getChildFragmentManager().findFragmentById(R.id.ime_actor_fragment);
-
-        imeGridFragment = (IMEElementsGridFragment)getChildFragmentManager().findFragmentById(R.id.ime_grid_fragment);
-        imeGridFragment.setFragmentTransactionInterface(this);
+        imeGridFragment = (IMEElementsGridFragment) getChildFragmentManager().findFragmentById(R.id.ime_grid_fragment);
+        imeActorsFragment = (NextGenIMEActorFragment) getChildFragmentManager().findFragmentById(R.id.ime_actor_fragment);
     }
 
-    public void playbackStatusUpdate(final NextGenPlaybackStatus playbackStatus, final long timecode){
+    public void setFragmentTransactionInterface(NextGenFragmentTransactionInterface fragmentTransaction){
 
+    }
 
-        if (lastTimeCode == timecode)
+    public void playbackStatusUpdate(final NextGenPlaybackStatusListener.NextGenPlaybackStatus playbackStatus, final long timecode){
+
+        if (getActivity() == null)
             return;
-
-        lastTimeCode = timecode;
-
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (imeGridFragment != null)
                     imeGridFragment.playbackStatusUpdate(playbackStatus, timecode);
-                if (imeText != null)
-                    imeText.setText(Long.toString(timecode));
+                //if (imeText != null)
+                //   imeText.setText(Long.toString(timecode));
             }
         });
 
@@ -76,45 +71,14 @@ public class  NextGenPlayerBottomFragment extends Fragment implements NextGenPla
         }
     }
 
-    public int getMainFrameId(){
-        return R.id.next_gen_ime_main_frame;
-    }
-
-    public int getLeftFrameId(){
-        return R.id.next_gen_ime_left_frame;
-    }
-
-    public int getRightFrameId(){
-        return R.id.next_gen_ime_right_frame;
-
-    }
-
-    //*************** NextGenFragmentTransactionInterface ***************
     @Override
-    public void transitRightFragment(Fragment nextFragment){
-        nextGenFragmentTransactionEngine.transitFragment(getFragmentManager(), getRightFrameId(), nextFragment);
-
+    public void onDestroyView(){
+        super.onDestroyView();
     }
 
     @Override
-    public void transitLeftFragment(Fragment nextFragment){
-        nextGenFragmentTransactionEngine.transitFragment(getFragmentManager(), getLeftFrameId(), nextFragment);
-
-    }
-
-    @Override
-    public void transitMainFragment(Fragment nextFragment){
-        nextGenFragmentTransactionEngine.transitFragment(getFragmentManager(), getMainFrameId(), nextFragment);
-    }
-
-    @Override
-    public void resetUI(boolean bIsRoot){
-        /*if (bIsRoot){
-            setBackButtonLogo(R.drawable.home_logo);
-            setBackButtonText(getResources().getString(R.string.home_button_text) );
-        }else{
-            setBackButtonLogo(R.drawable.back_logo);
-            setBackButtonText(getResources().getString(R.string.back_button_text) );
-        }*/
+    public void onResume(){
+        super.onResume();
+        imeActorsFragment.resetSelectedItem();
     }
 }

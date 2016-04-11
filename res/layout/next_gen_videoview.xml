@@ -11,18 +11,24 @@
         android:layout_height="wrap_content"
         android:background="@color/black">
 
-    <!--     <VideoView
-            android:id="@+id/surface_view"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_centerInParent="true" /> -->
         <net.flixster.android.drm.ObservableVideoView
             android:id="@+id/surface_view"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true" />
 
     </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/next_gen_ime_bottom_view">
+
+        <ImageView
+            android:id="@+id/ime_background_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
+    <!--
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -45,10 +51,6 @@
                     android:id="@+id/next_gen_ime_left_frame"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
-                    <!--<fragment android:name="com.wb.nextgen.fragment.NextGenIMEActorFragment"
-                        android:id="@+id/ime_actor_fragment"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent" />-->
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/next_gen_ime_right_frame"
@@ -56,16 +58,11 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
-                    <!--<fragment
-                        android:id="@+id/ime_grid_fragment"
-                        android:name="com.wb.nextgen.fragment.IMEElementsGridFragment"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"/>-->
 
                 </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
 
 
-    </RelativeLayout>
+    </RelativeLayout>-->
 </LinearLayout>

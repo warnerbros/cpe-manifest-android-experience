@@ -1,6 +1,7 @@
 package com.wb.nextgen.widget;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -78,7 +79,8 @@ public class FixedAspectRatioFrameLayout extends FrameLayout
         int finalWidth, finalHeight;
 
         if (!bKeepRatioWhenFullScreen &&
-                priority == Priority.WIDTH_PRIORITY && originalWidth == NextGenApplication.getScreenWidth(NextGenApplication.getContext()))  {       // this is full screen when width priority
+                priority == Priority.WIDTH_PRIORITY && originalWidth == NextGenApplication.getScreenWidth(NextGenApplication.getContext()) &&
+                NextGenApplication.getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)  {       // this is full screen when width priority
 
             /*WindowManager wm = (WindowManager) NextGenApplication.getContext().getSystemService(Context.WINDOW_SERVICE);
             Display display = wm.getDefaultDisplay();

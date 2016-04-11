@@ -1,97 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <LinearLayout
+    <ImageView
+        android:id="@+id/actor_detail_bg_image"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="4"
-        android:orientation="vertical">
-
+        android:layout_height="match_parent" />
+    <LinearLayout
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:orientation="horizontal">
-            
-            <ImageView
-                android:id="@+id/next_gen_detail_full_image"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"/>
+            android:layout_height="0dp"
+            android:layout_weight="4"
+            android:orientation="vertical">
+
             <LinearLayout
-                android:layout_width="0dp"
-                android:paddingLeft="@dimen/spacing_xsmall"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:orientation="vertical">
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/next_gen_detail_full_image"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"/>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:paddingLeft="@dimen/spacing_xsmall"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:orientation="vertical">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:id="@+id/actor_real_name_text"
+                            android:textColor="@android:color/white"
+                            android:textSize="@dimen/textXLarge"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                        <LinearLayout
+                            android:layout_alignParentRight="true"
+                            android:id="@+id/actor_social_buttons"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/social_icon_dimen"
+                            android:orientation="horizontal">
+                            <ImageButton
+                                android:id="@+id/actor_page_facebook_button"
+                                android:layout_width="@dimen/social_icon_dimen"
+                                android:layout_height="@dimen/social_icon_dimen" />
+                            <ImageButton
+                                android:id="@+id/actor_page_twitter_button"
+                                android:layout_width="@dimen/social_icon_dimen"
+                                android:layout_height="@dimen/social_icon_dimen" />
+                        </LinearLayout>
+
+                    </RelativeLayout>
                     <TextView
-                        android:id="@+id/actor_real_name_text"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/textXLarge"
+                        android:id="@+id/actor_biography_title"
+                        android:textColor="@android:color/darker_gray"
+                        android:text="@string/biography"
+                        android:textSize="@dimen/textMedium"
+                        android:paddingTop="@dimen/spacing_normal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
-                    <LinearLayout
-                        android:layout_alignParentRight="true"
-                        android:id="@+id/actor_social_buttons"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/social_icon_dimen"
-                        android:orientation="horizontal">
-                        <ImageButton
-                            android:id="@+id/actor_page_facebook_button"
-                            android:layout_width="@dimen/social_icon_dimen"
-                            android:layout_height="@dimen/social_icon_dimen" />
-                        <ImageButton
-                            android:id="@+id/actor_page_twitter_button"
-                            android:layout_width="@dimen/social_icon_dimen"
-                            android:layout_height="@dimen/social_icon_dimen" />
-                    </LinearLayout>
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="fill_parent">
+                        <TextView
+                            android:id="@+id/actor_biography_text"
+                            android:textColor="@android:color/white"
+                            android:textSize="@dimen/textMedium"
+                            android:fontFamily="sans-serif-condensed"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content" />
+                    </ScrollView>
+                </LinearLayout>
 
-                </RelativeLayout>
-                <TextView
-                    android:id="@+id/actor_biography_title"
-                    android:textColor="@android:color/darker_gray"
-                    android:text="@string/biography"
-                    android:textSize="@dimen/textMedium"
-                    android:paddingTop="@dimen/spacing_normal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-                <ScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="fill_parent">
-                    <TextView
-                        android:id="@+id/actor_biography_text"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/textMedium"
-                        android:fontFamily="sans-serif-condensed"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content" />
-                </ScrollView>
             </LinearLayout>
 
         </LinearLayout>
+        <LinearLayout
+            android:layout_weight="3"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/darker_gray"
+                android:fontFamily="sans-serif-condensed"
+                android:text="@string/filmography"
+                android:textSize="@dimen/textMedium" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/actor_detail_filmography"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal">
+            </android.support.v7.widget.RecyclerView>
+        </LinearLayout>
 
     </LinearLayout>
-    <LinearLayout
-        android:layout_weight="3"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="0dp">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/darker_gray"
-            android:fontFamily="sans-serif-condensed"
-            android:text="@string/filmography"
-            android:textSize="@dimen/textMedium" />
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/actor_detail_filmography"
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:orientation="horizontal">
-        </android.support.v7.widget.RecyclerView>
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

@@ -16,6 +16,7 @@ import com.wb.nextgen.R;
 import com.wb.nextgen.activity.InterStitialVideoPlayerActivity;
 import com.wb.nextgen.activity.NextGenExtraActivity;
 import com.wb.nextgen.activity.NextGenPlayer;
+import com.wb.nextgen.data.DemoData;
 import com.wb.nextgen.util.PicassoTrustAll;
 
 /**
@@ -60,11 +61,18 @@ public class NextGenStartupUpperFragment extends Fragment implements View.OnClic
     @Override
     public void onClick(View v){
         if (v.getId() == R.id.next_gen_startup_play_button) {
+
+            Intent intent = new Intent(getActivity(), NextGenPlayer.class);
+            //intent.setAction(android.content.Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.parse(DemoData.getMovieStreamUrl()), "video/*");
+            //intent.setDataAndType(Uri.parse("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/feature/ManOfSteel_Clean.mp4"), "video/*");
+            startActivity(intent);
+            /*
             Intent intent = new Intent(getActivity(), InterStitialVideoPlayerActivity.class);
             intent.setAction(android.content.Intent.ACTION_VIEW);
             //intent.setDataAndType(Uri.parse("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/video/MOSNG_202_KryptonianRobots.m3u8"), "video/*");
             intent.setDataAndType(Uri.parse("android.resource://com.wb.nextgen/" + R.raw.mos_nextgen_interstitial), "video/*");
-            startActivity(intent);
+            startActivity(intent);*/
             //Drm.manager().playMovie(getActivity(), FlixsterApplication.getCurrentPlayableContent(), PhysicalAsset.Definition.HD, "en_US", "en_US");
             //        lockOrientation();
         } else if (v.getId() == R.id.next_gen_startup_extra_button) {

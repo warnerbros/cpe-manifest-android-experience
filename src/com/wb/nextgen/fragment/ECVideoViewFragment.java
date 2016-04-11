@@ -81,6 +81,12 @@ public class ECVideoViewFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onDestroyView(){
+        videoView.pause();
+        super.onDestroyView();
+    }
+
     public void setAudioVisualItem(MovieMetaData.AudioVisualItem avItem){
         if (avItem != null) {
             selectedAVItem = avItem;

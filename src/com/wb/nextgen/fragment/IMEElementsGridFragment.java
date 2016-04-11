@@ -58,6 +58,10 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
 
 
         if (imeObject instanceof MovieMetaData.PresentationDataItem){
+            if (fragmentTransaction == null && getActivity() instanceof NextGenFragmentTransactionInterface){
+                fragmentTransaction = (NextGenFragmentTransactionInterface)getActivity();
+            }
+
             if (fragmentTransaction != null) {
                 if (imeObject instanceof MovieMetaData.ECGalleryItem) {
                     ECGalleryViewFragment fragment = new ECGalleryViewFragment();
@@ -99,7 +103,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
         ImageView poster = (ImageView)rowView.findViewById(R.id.ime_image_poster);*/
 
         IMEElementsGroup group = (IMEElementsGroup)item;
-        NextGenIMEEngine engine = imeEngines.get(position);
+         NextGenIMEEngine engine = imeEngines.get(position);
         if (group.linkedExperience != null){
             rowView.setTag(group.linkedExperience.experienceId);
         }
@@ -144,12 +148,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
         currentTimeCode = timecode;
         if (listAdaptor != null)
             listAdaptor.notifyDataSetChanged();
-        /*for (int i = 0; i< imeGroups.size(); i++){
-            try {
-                if (imeGroups.get(i).linkedExperience.experienceId.equals(rowViews[i].getTag()))
-                    localFill(imeEngines.get(i), rowViews[i], imeGroups.get(i));
-            }catch (Exception ex){}
-        }*/
+
     }
 
     protected String getHeaderText(){

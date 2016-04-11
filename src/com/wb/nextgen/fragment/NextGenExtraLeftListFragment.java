@@ -2,6 +2,7 @@ package com.wb.nextgen.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,13 +23,23 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
     protected ListView listView;
     protected NextGenExtraLeftPanelAdapter listAdaptor;
     protected TextView titleTextView;
-
+    View view;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.next_gen_list_view, container, false);
-    }
+        if (view != null) {
+            ViewGroup parent = (ViewGroup) view.getParent();
+            if (parent != null)
+                parent.removeView(view);
+        }
+        try {
+            view = inflater.inflate(R.layout.next_gen_list_view, container, false);
+        } catch (InflateException e) {
+        /* map is already there, just return view as it is */
+        }
+        return view;
 
+    }
     protected int getPadding(){
         float density = NextGenApplication.getScreenDensity(getActivity());
         int spacing = (int)(10 *density);

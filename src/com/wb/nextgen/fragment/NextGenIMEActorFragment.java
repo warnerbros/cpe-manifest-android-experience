@@ -2,8 +2,12 @@ package com.wb.nextgen.fragment;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 
+import com.wb.nextgen.R;
 import com.wb.nextgen.data.DemoJSONData;
+import com.wb.nextgen.data.MovieMetaData;
+import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgen.interfaces.NextGenPlaybackStatusListener;
 import com.wb.nextgen.model.NextGenIMEEngine;
 import com.wb.nextgen.data.DemoJSONData.ActorInfo;
@@ -15,8 +19,27 @@ import java.util.List;
 /**
  * Created by gzcheng on 1/26/16.
  */
-public class NextGenIMEActorFragment extends NextGenActorListFragment implements NextGenPlaybackStatusListener{
+public class NextGenIMEActorFragment extends NextGenActorListFragment/* implements NextGenPlaybackStatusListener*/{
 
+
+    protected int getListItemViewId() {
+        return R.layout.ime_actor_row;
+    }
+
+    @Override
+    protected void onListItemClick(Object selectedObject){
+
+        if (getActivity() instanceof NextGenFragmentTransactionInterface){
+            NextGenActorDetailFragment target = new NextGenActorDetailFragment();
+
+            target.setDetailObject((MovieMetaData.CastData) selectedObject);
+            ((NextGenFragmentTransactionInterface)getActivity()).transitMainFragment( target);
+            ((NextGenFragmentTransactionInterface)getActivity()).resetUI(false);
+
+        }
+        listAdaptor.notifyDataSetChanged();
+    }
+/*
     NextGenIMEEngine<List<DemoJSONData.ActorInfo>> actorIMEEngine = new NextGenIMEEngine<List<ActorInfo>>();
 
     List <NextGenIMEEngine<List<ActorInfo>>> actorElements = new ArrayList<NextGenIMEEngine<List<ActorInfo>>>();
@@ -53,12 +76,12 @@ public class NextGenIMEActorFragment extends NextGenActorListFragment implements
         boolean bHasUpdate = actorIMEEngine.computeCurrentIMEElement(timecode);
         if (bHasUpdate)
             handleIMEUpdate(timecode, actorIMEEngine.getCurrentIMEElement());
-    }
+    }*/
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        List<ActorInfo> actors = new ArrayList<ActorInfo>();
+       // List<ActorInfo> actors = new ArrayList<ActorInfo>();
         /*
         actorElements.add(actorIMEEngine.createNextGenIMEElement(0, 9000, new ArrayList<ActorInfo>(Arrays.asList(new ActorInfo()[]{ActorInfo.RUSSELL_CROWE}))));
 

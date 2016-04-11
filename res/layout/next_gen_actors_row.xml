@@ -22,6 +22,7 @@
                android:id="@+id/next_gen_actor_real_name"
                android:layout_width="fill_parent"
                android:textColor="@color/selectable_text_color"
+               android:fontFamily="sans-serif-condensed"
                android:textSize="@dimen/textMedium"
                android:layout_height="wrap_content"/>
            <TextView
