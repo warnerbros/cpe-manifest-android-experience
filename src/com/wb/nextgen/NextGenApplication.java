@@ -1,11 +1,14 @@
 package com.wb.nextgen;
 
 import android.app.Application;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.net.Uri;
 import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -255,5 +258,19 @@ public class NextGenApplication extends Application {
 
     public static boolean getSubtitleOn(){
         return sAppSettings.getSubtitleOn();
+    }
+
+    public static void launchChromeWithUrl(String urlString){
+
+        Intent intent=new Intent(Intent.ACTION_VIEW, Uri.parse(urlString));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setPackage("com.android.chrome");
+        try {
+            getContext().startActivity(intent);
+        } catch (ActivityNotFoundException ex) {
+            // Chrome browser presumably not installed so allow user to choose instead
+            intent.setPackage(null);
+            getContext().startActivity(intent);
+        }
     }
 }

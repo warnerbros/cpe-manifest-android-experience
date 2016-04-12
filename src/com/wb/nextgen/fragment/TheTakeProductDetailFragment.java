@@ -1,5 +1,6 @@
 package com.wb.nextgen.fragment;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -8,11 +9,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.TheTakeData;
 import com.wb.nextgen.data.TheTakeData.TheTakeProduct;
 import com.wb.nextgen.data.TheTakeData.TheTakeProductDetail;
 import com.wb.nextgen.network.TheTakeApiDAO;
+import com.wb.nextgen.util.DialogUtils;
 import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.concurrent.ResultListener;
 import com.wb.nextgen.util.utils.StringHelper;
@@ -61,9 +64,14 @@ public class TheTakeProductDetailFragment extends AbstractNextGenFragment implem
 
     public void onClick(View v){
         if (v.getId() == R.id.shop_at_the_take_button){
-
+            DialogUtils.showLeavingAppDialog(getActivity(), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    NextGenApplication.launchChromeWithUrl(productsList.get(0).getProductDetail().purchaseLink);
+                }
+            });
         }else if (v.getId() == R.id.send_link_button){
-
+            NextGenApplication.launchChromeWithUrl(productsList.get(0).getProductDetail().shareUrl);
         }
     }
 
@@ -77,9 +85,12 @@ public class TheTakeProductDetailFragment extends AbstractNextGenFragment implem
             priceText.setText(product.getProductDetail().productPrice);
             if (!StringHelper.isEmpty(product.getProductDetail().purchaseLink)) {
                 shopAtTheTakeBtn.setVisibility(View.VISIBLE);
-                sendLinkBtn.setVisibility(View.VISIBLE);
             }else {
                 shopAtTheTakeBtn.setVisibility(View.GONE);
+            }
+            if (!StringHelper.isEmpty(product.getProductDetail().shareUrl)) {
+                sendLinkBtn.setVisibility(View.VISIBLE);
+            }else {
                 sendLinkBtn.setVisibility(View.GONE);
             }
         }

@@ -27,6 +27,7 @@ import com.wb.nextgen.data.TheTakeData.TheTakeCategory;
 import com.wb.nextgen.fragment.NextGenActorListFragment;
 import com.wb.nextgen.fragment.NextGenExtraMainTableFragment;
 import com.wb.nextgen.fragment.TheTakeCategoryGridFragment;
+import com.wb.nextgen.fragment.TheTakeProductDetailFragment;
 import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgen.network.TheTakeApiDAO;
 import com.wb.nextgen.util.PicassoTrustAll;
@@ -109,12 +110,14 @@ public class TheTakeShopCategoryActivity extends AbstractNextGenActivity impleme
 
         @Override
         public TheTakeCategory getChild(int groupPosition, int childPosititon) {
-            return categories.get(groupPosition).childCategories.get(childPosititon);
+            if (childPosititon == 0)
+                return categories.get(groupPosition);
+            return categories.get(groupPosition).childCategories.get(childPosititon-1);
         }
 
         @Override
         public long getChildId(int groupPosition, int childPosition) {
-            return categories.get(groupPosition).childCategories.get(childPosition).categoryId;
+            return getChild(groupPosition, childPosition).categoryId;
         }
 
         @Override
@@ -131,7 +134,10 @@ public class TheTakeShopCategoryActivity extends AbstractNextGenActivity impleme
             TextView txtListChild = (TextView) convertView
                     .findViewById(R.id.lblListItem);
 
-            txtListChild.setText(childText);
+            if (childPosition == 0)
+                txtListChild.setText(getResources().getString(R.string.label_all));
+            else
+                txtListChild.setText(childText);
             return convertView;
         }
 
@@ -141,7 +147,7 @@ public class TheTakeShopCategoryActivity extends AbstractNextGenActivity impleme
                 return 0;
             TheTakeCategory category = categories.get(groupPosition);
             if (category != null && category.childCategories != null)
-                return categories.get(groupPosition).childCategories.size();
+                return categories.get(groupPosition).childCategories.size() + 1;
             else
                 return 0;
         }
@@ -195,9 +201,12 @@ public class TheTakeShopCategoryActivity extends AbstractNextGenActivity impleme
         }
 
         public void setItemChecked(int groupPosition, int childPosition) {
-            if (groupPosition >= categories.size() || childPosition >= categories.get(groupPosition).childCategories.size())
+            if (groupPosition >= categories.size() || childPosition >= getChildrenCount(groupPosition))
                 return;
             else if (groupPosition != -1 && childPosition != -1) {
+                Fragment f = getSupportFragmentManager().findFragmentByTag(TheTakeProductDetailFragment.class.toString());
+                if (f != null)
+                    getSupportFragmentManager().popBackStack();
                 if (selectedGroupIndex != groupPosition || selectedItemIndex != childPosition) {
                     selectedGroupIndex = groupPosition;
                     selectedItemIndex = childPosition;
@@ -206,33 +215,17 @@ public class TheTakeShopCategoryActivity extends AbstractNextGenActivity impleme
                     }
                     reComputeCheckedItem();
                     final TheTakeCategory selectedCategory = getSelectedCategory();
-                    if (selectedCategory.products != null){
 
-                    }
-                    TheTakeApiDAO.getCategoryProducts(selectedCategory.categoryId, new ResultListener<List<TheTakeProduct>>() {
-                        @Override
-                        public void onResult(List<TheTakeProduct> result) {
-                            selectedCategory.products = result;
-                            TheTakeShopCategoryActivity.this.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    gridFrament.refreshWithCategory(selectedCategory);
-                                }
-                            });
-                        }
+                    gridFrament.refreshWithCategory(selectedCategory);
 
-                        @Override
-                        public <E extends Exception> void onException(E e) {
 
-                        }
-                    });
                 }
             }
         }
 
         public TheTakeCategory getSelectedCategory(){
             if (selectedGroupIndex != -1 && selectedItemIndex != -1){
-                return categories.get(selectedGroupIndex).childCategories.get(selectedItemIndex);
+                return getChild(selectedGroupIndex, selectedItemIndex);
             }else
                 return null;
         }

@@ -16,6 +16,9 @@
 	<string name="filmography">FILMOGRAPHY</string>
 	<string name="label_ok">OK</string>
 	<string name="label_cancel">Cancel</string>
+	<string name="label_yes">Yes</string>
+	<string name="label_no">No</string>
+	<string name="label_all">All</string>
 	<string name="label_submit">Submit</string>
 	<string name="dialog_leave_app">Leaving App</string>
 	<string name="dialog_follow_link">Following this link will exit the app and launch your browser. Would you like to continue?</string>
@@ -37,7 +40,10 @@
 	<string name="subtitles">Subtitles</string>
 	<string name="menu">Menu</string>
 
-	<string name="shop_at_the_take">"SHOP ON THE TAKE.COM"</string>
-	<string name="send_the_link">"SEND THE LINK"</string>
+	<string name="shop_at_the_take">SHOP ON THE TAKE.COM</string>
+	<string name="send_the_link">SEND THE LINK</string>
+
+	<string name="leave_app_dialogbox_title">Leaving App</string>
+	<string name="leave_app_dialogbox_text">Following this link will exit the app and launch your browser. Would you like to continue?</string>
 
 </resources>

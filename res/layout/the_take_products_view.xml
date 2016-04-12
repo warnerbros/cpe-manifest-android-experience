@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content" />
             <TextView
                 android:id="@+id/the_take_product_brand_name"
-                android:textColor="@color/gray"
+                android:textColor="@android:color/darker_gray"
                 android:gravity="left"
                 android:fontFamily="sans-serif-condensed"
                 android:textSize="@dimen/textMedium"

@@ -14,7 +14,9 @@ import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.TheTakeData;
 import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
+import com.wb.nextgen.network.TheTakeApiDAO;
 import com.wb.nextgen.util.PicassoTrustAll;
+import com.wb.nextgen.util.concurrent.ResultListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +35,35 @@ public class TheTakeCategoryGridFragment extends AbstractNextGenFragment{
 
     public void refreshWithCategory(TheTakeData.TheTakeCategory category){
         selectedCategory = category;
-        if (itemsGridViewAdaptor != null)
-            itemsGridViewAdaptor.notifyDataSetChanged();
+
+        if (selectedCategory.products == null) {
+
+
+            TheTakeApiDAO.getCategoryProducts(selectedCategory.categoryId, new ResultListener<List<TheTakeData.TheTakeProduct>>() {
+                @Override
+                public void onResult(List<TheTakeData.TheTakeProduct> result) {
+                    selectedCategory.products = result;
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            if (itemsGridViewAdaptor != null)
+                                itemsGridViewAdaptor.notifyDataSetChanged();
+                        }
+                    });
+                }
+
+                @Override
+                public <E extends Exception> void onException(E e) {
+
+                }
+            });
+        }else {
+            if (itemsGridViewAdaptor != null)
+                itemsGridViewAdaptor.notifyDataSetChanged();
+        }
+
+
     }
 
     @Override

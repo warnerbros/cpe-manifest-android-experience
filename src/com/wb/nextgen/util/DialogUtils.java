@@ -3,10 +3,18 @@ package com.wb.nextgen.util;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v4.app.Fragment;
+import android.view.ContextThemeWrapper;
 
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
+
+import net.flixster.android.localization.Localizer;
+import net.flixster.android.localization.constants.KEYS;
 
 public class DialogUtils {
     private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("E, MMM d");
@@ -32,5 +40,26 @@ public class DialogUtils {
         locations[1] = "( change postal code )";
         //locations[2] = "" + NextGenApplication.getUserLocation();
         return locations;
+    }
+
+    public static void showLeavingAppDialog(Activity activity, DialogInterface.OnClickListener  okClickListener){
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(activity, R.style.CenterAlignedAlertDialog));
+        builder.setTitle(activity.getResources().getString(R.string.leave_app_dialogbox_title));
+        builder.setMessage(activity.getResources().getString(R.string.leave_app_dialogbox_text));
+        builder.setCancelable(true);
+        builder.setNegativeButton(activity.getResources().getString(R.string.label_no), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        /*builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                dialog.dismiss();
+            }
+        });*/
+        builder.setPositiveButton(activity.getResources().getString(R.string.label_yes), okClickListener);
+        builder.create().show();
     }
 }
