@@ -22,15 +22,24 @@
             android:orientation="vertical">
 
         </ExpandableListView>
-
-        <GridView
+        <FrameLayout
             android:layout_width="0dp"
             android:layout_weight="3"
-            android:id="@+id/the_take_items_grid"
+            android:id="@+id/category_left_frame"
             android:layout_height="fill_parent"
             android:orientation="vertical">
 
-        </GridView>
+        </FrameLayout>
+        <!--<GridView
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:id="@+id/the_take_items_grid"
+            android:verticalSpacing="@dimen/spacing_normal"
+            android:horizontalSpacing="@dimen/spacing_normal"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+
+        </GridView>-->
     </LinearLayout>
 
 </LinearLayout>

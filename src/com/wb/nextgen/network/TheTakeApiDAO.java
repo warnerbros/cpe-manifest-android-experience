@@ -9,6 +9,7 @@ import com.google.gson.reflect.TypeToken;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.data.TheTakeData.TheTakeProduct;
+import com.wb.nextgen.data.TheTakeData.TheTakeProductDetail;
 import com.wb.nextgen.data.TheTakeData.TheTakeCategory;
 import com.wb.nextgen.data.TheTakeData.TheTakeProductFrame;
 import com.wb.nextgen.util.HttpHelper;
@@ -232,18 +233,20 @@ public class TheTakeApiDAO {
 
     }
 
-    public static void getProductDetails(final String productId, ResultListener<Object> l){
-        Worker.execute(new Callable<Object>() {
+    public static void getProductDetails(final long productId, ResultListener<TheTakeProductDetail> l){
+        Worker.execute(new Callable<TheTakeProductDetail>() {
             @Override
-            public Object call() throws Exception {
+            public TheTakeProductDetail call() throws Exception {
                 try {
                     List<NameValuePair> params = new ArrayList<NameValuePair>();
                     params.add(new BasicNameValuePair(Keys.Media, theTakeMediaId));
-                    params.add(new BasicNameValuePair(Keys.Product, productId));
+                    params.add(new BasicNameValuePair(Keys.Product, Long.toString(productId)));
 
                     String result = getFromUrl(THETAKE_DOMAIN + Endpoints.GetProductDetails, params);
+                    Gson gson = new GsonBuilder().create();
+                    return gson.fromJson(result, TheTakeProductDetail.class);
                 } catch (Exception ex) {
-
+                    NextGenLogger.d(F.TAG_API, ex.getLocalizedMessage());
                 }
 
                 return null;

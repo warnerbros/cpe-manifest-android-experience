@@ -3,6 +3,7 @@ package com.wb.nextgen.activity;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,6 +26,8 @@ import com.wb.nextgen.data.TheTakeData.TheTakeProduct;
 import com.wb.nextgen.data.TheTakeData.TheTakeCategory;
 import com.wb.nextgen.fragment.NextGenActorListFragment;
 import com.wb.nextgen.fragment.NextGenExtraMainTableFragment;
+import com.wb.nextgen.fragment.TheTakeCategoryGridFragment;
+import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgen.network.TheTakeApiDAO;
 import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.concurrent.ResultListener;
@@ -37,14 +41,16 @@ import java.util.List;
 /**
  * Created by gzcheng on 4/8/16.
  */
-public class TheTakeShopCategoryActivity extends AbstractNextGenActivity {
+public class TheTakeShopCategoryActivity extends AbstractNextGenActivity implements NextGenFragmentTransactionInterface {
 
     List<TheTakeCategory> categories = new ArrayList<TheTakeCategory>();
 
     ExpandableListView categoryListView;
     TheTakeExpandableListAdapter categoryListAdaptor;
-    GridView itemsGridView;
-    TheTakeProductsGridViewAdapter itemsGridViewAdaptor;
+    TheTakeCategoryGridFragment gridFrament;
+
+    FrameLayout leftFrame;
+    NextGenFragmentTransactionEngine nextGenFragmentTransactionEngine;
 
 
     @Override
@@ -61,23 +67,14 @@ public class TheTakeShopCategoryActivity extends AbstractNextGenActivity {
             categoryListView.setOnGroupCollapseListener(categoryListAdaptor);
             categoryListView.setOnGroupExpandListener(categoryListAdaptor);
             requestCategoryList();
-
         }
-        itemsGridView = (GridView)findViewById(R.id.the_take_items_grid);
 
-        if (itemsGridView != null){
-            float density = NextGenApplication.getScreenDensity(this);
-            int spacing = (int)(10 *density);
-            itemsGridView.setNumColumns(3);
-            itemsGridView.setHorizontalSpacing(spacing);
-            itemsGridView.setVerticalSpacing(spacing);
-            itemsGridView.setPadding(spacing, 0, spacing, spacing);
+        leftFrame = (FrameLayout)findViewById(R.id.category_left_frame);
 
-            itemsGridViewAdaptor = new TheTakeProductsGridViewAdapter();
-            itemsGridView.setAdapter(itemsGridViewAdaptor);
-            itemsGridView.setOnItemClickListener(itemsGridViewAdaptor);
+        gridFrament = new TheTakeCategoryGridFragment();
 
-        }
+        nextGenFragmentTransactionEngine = new NextGenFragmentTransactionEngine(this);
+        transitLeftFragment(gridFrament);
     }
 
     private void requestCategoryList(){
@@ -219,7 +216,7 @@ public class TheTakeShopCategoryActivity extends AbstractNextGenActivity {
                             TheTakeShopCategoryActivity.this.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    itemsGridViewAdaptor.notifyDataSetChanged();
+                                    gridFrament.refreshWithCategory(selectedCategory);
                                 }
                             });
                         }
@@ -265,82 +262,6 @@ public class TheTakeShopCategoryActivity extends AbstractNextGenActivity {
         }
     }
 
-    public class TheTakeProductsGridViewAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
-
-        //protected NextGenExtraActivity activity;
-
-        TheTakeCategory selectedCategory = null;
-
-        @Override
-        public void notifyDataSetChanged(){
-            selectedCategory = categoryListAdaptor.getSelectedCategory();
-            super.notifyDataSetChanged();
-        }
-
-
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if (position >= getCount() || position < 0){
-                return null;
-            }
-
-
-            if (convertView == null  ) {
-                LayoutInflater inflater = getLayoutInflater();
-                convertView = inflater.inflate(R.layout.the_take_grid_item, parent, false);
-
-
-            } else {
-
-            }
-
-            ImageView productThumbnail = (ImageView)convertView.findViewById(R.id.the_take_item_thumbnail);
-            TextView brandName = (TextView) convertView.findViewById(R.id.the_take_brand_name);
-            TextView productName = (TextView) convertView.findViewById(R.id.the_take_product_name);
-
-            TheTakeProduct product = getItem(position);
-            if (product != null){
-                if (productThumbnail != null){
-                    PicassoTrustAll.loadImageIntoView(TheTakeShopCategoryActivity.this, product.getThumbnailUrl(), productThumbnail);
-                }
-                if (brandName != null)
-                    brandName.setText(product.productBrand);
-                if (productName != null)
-                    productName.setText(product.productName);
-            }
-
-
-
-            return convertView;
-        }
-
-        public int getCount() {
-            if (selectedCategory != null && selectedCategory.products != null)
-                return selectedCategory.products.size();
-            else
-                return 0;
-        }
-
-        public TheTakeProduct getItem(int position) {
-            if (selectedCategory != null && selectedCategory.products != null && position < selectedCategory.products.size())
-                return selectedCategory.products.get(position);
-            else
-                return null;
-        }
-
-        public long getItemId(int position) {
-            if (selectedCategory != null && selectedCategory.products != null && position < selectedCategory.products.size())
-                return selectedCategory.products.get(position).productId;
-            else
-                return 0;
-        }
-
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id){
-
-        }
-
-    }
-
     @Override
     public int getLeftButtonLogoId(){
         return R.drawable.back_logo;
@@ -359,5 +280,38 @@ public class TheTakeShopCategoryActivity extends AbstractNextGenActivity {
     @Override
     public String getRightTitleImageUri(){
         return DemoData.getExtraRightTitleImageUrl();
+    }
+
+    //*************** NextGenFragmentTransactionInterface ***************
+    @Override
+    public void transitRightFragment(Fragment nextFragment){
+        nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.category_left_frame, nextFragment);
+
+    }
+
+    @Override
+    public void transitLeftFragment(Fragment nextFragment){
+        nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.category_left_frame, nextFragment);
+
+    }
+
+    @Override
+    public void transitMainFragment(Fragment nextFragment){
+        nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.category_left_frame, nextFragment);
+    }
+
+    @Override
+    public void resetUI(boolean bIsRoot){
+
+        setBackButtonLogo(R.drawable.back_logo);
+        setBackButtonText(getResources().getString(R.string.back_button_text) );
+
+    }
+
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0 )
+            finish();
     }
 }

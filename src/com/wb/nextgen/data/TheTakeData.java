@@ -28,17 +28,17 @@ public class TheTakeData {
         fullSizeFrameLink	String	https://img.thetake.com/frame_images/1f2f2a96e774b50a8563b7d9582c9a76940eaccec42f4d747de7c3547d3870a9.jpeg
                 250pxFrameLink	String	https://img.thetake.com/frame_images/d197416f8b5e04ab8b5b2fc53afe843ae09300abc5c41413d176f368f9a330ce.jpeg
                 125pxFrameLink	String	https://img.thetake.com/frame_images/fe47367a66b108532eacbb1245d9b13be01b1a6f7c08fda0fd9697e52a40fd9e.jpeg*/
-        @SerializedName(value="1000pxLink", alternate={"1000pxFrameLink", "1000pxKeyFrameLink", "1000pxCropLink"})//"1000pxFrameLink")
+        @SerializedName(value="1000pxLink", alternate={"1000pxFrameLink", "1000pxKeyFrameLink", "1000pxCropLink", "1000pxHeadshotLink"})//"1000pxFrameLink")
         public String image1000px;
-        @SerializedName(value="500pxLink", alternate={"500pxFrameLink", "500pxKeyFrameLink", "500pxCropLink"})
+        @SerializedName(value="500pxLink", alternate={"500pxFrameLink", "500pxKeyFrameLink", "500pxCropLink", "500pxHeadshotLink"})
         public String image500px;
         @SerializedName(value="fullSizeFrameLink")
         public String image1FullSize;
-        @SerializedName(value="250pxLink", alternate={"250pxFrameLink", "250pxKeyFrameLink", "250pxCropLink"})
+        @SerializedName(value="250pxLink", alternate={"250pxFrameLink", "250pxKeyFrameLink", "250pxCropLink", "250pxHeadshotLink"})
         public String image250px;
-        @SerializedName(value="125pxLink", alternate={"125pxFrameLink", "125pxKeyFrameLink", "125pxCropLink"})
+        @SerializedName(value="125pxLink", alternate={"125pxFrameLink", "125pxKeyFrameLink", "125pxCropLink", "125pxHeadshotLink"})
         public String image125px;
-        @SerializedName(value="50pxLink", alternate={"50pxFrameLink", "50pxKeyFrameLink", "50pxCropLink"})
+        @SerializedName(value="50pxLink", alternate={"50pxFrameLink", "50pxKeyFrameLink", "50pxCropLink", "50pxHeadshotLink"})
         public String image50px;
     }
 
@@ -74,8 +74,69 @@ public class TheTakeData {
         public String productPrice;
         public String productName;
 
+        private TheTakeProductDetail productDetail;
+
         public String getThumbnailUrl(){
             return cropImage.image500px;
+        }
+
+        public TheTakeProductDetail getProductDetail(){
+            return productDetail;
+        }
+
+        public void setProductDetail(TheTakeProductDetail detail){
+            productDetail = detail;
+        }
+    }
+
+    public static class TheTakeProductDetail{
+        public FrameImages cropImage;//	Object
+        public FrameImages actorImage;//	Object
+        public FrameImages posterImage;//	Object
+        public FrameImages keyFrameImage;//	Object
+        public FrameImages productImage;//	Object
+
+        public List<TheTakeProductDetail> compProducts;//	Array
+        public List<TheTakeProduct> accessories;//	Array
+
+        public String productBrand;//	String	Etro
+        public int tertiaryCategoryId;//	Integer	42
+        public boolean verified;//	Boolean	false
+        public String mediaDescription;//	String
+        public String shortUrl;//	String	thetake.com/LoisScarf
+        public int primaryCategoryId;//	Integer	1
+        public double frameLetterboxRatio;//	Number	0.12963
+        public int mediaId;//	Integer	421
+        @SerializedName("unavailable")
+        public int isUnavailable;//	Integer	0
+        public String characterName;//	String	Lois Lane
+        public boolean soldOut;//	Boolean	false
+        public String mediaName	;//String	Man of Steel (Full Movie - Theatrical)
+        public double trendingScore;//	Integer	10
+        public String shareUrl;//	String	https://thetake.com/product/104741/amy-adams-etro-paisley-print-scarf-man-of-steel-full-movie-theatrical
+        public int characterId;//	Integer	941
+        public int actorId;//	Integer	1078
+        public double keyCropProductY;//	Number	0.6167012264556395
+        public double keyCropProductX;//	Number	0.3425107458083145
+        public String actorName;//	String	Amy Adams
+        public String itunesLink;//	String
+        public String primaryCategoryName;//	String	Women's Fashion
+        public String tertiaryCategoryName;//	String	Scarves
+        public String purchaseLink;//	String	http://www.farfetch.com/shopping/item11136152.aspx
+        public int secondaryCategoryId;//	Integer	35
+        public int productId;//	Integer	104741
+        public String keyFrameProductX;//	Number	0.618824
+        public int keyFrameTime;//	Integer	3157000
+        public String amazonLink;//	String
+        public String keyFrameProductY;//	Number	0.48583
+        public String secondaryCategoryName;//	String	Accessories
+        public String productName;//	String	Paisley Print Scarf
+        public String productPrice;//	String	$242.82
+        public String fandangoLink;//	String
+
+
+        public String getProductImage(){
+            return productImage.image500px;
         }
     }
 

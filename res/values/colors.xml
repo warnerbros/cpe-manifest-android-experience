@@ -118,4 +118,6 @@
     <color name="drawer_yellow">#fecd48</color>
 
     <color name="inactive_mask_color">#48000000</color>
+
+    <color name="the_take_red">#bb0f0f</color>
 </resources>

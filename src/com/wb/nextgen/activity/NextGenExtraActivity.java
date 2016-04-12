@@ -58,13 +58,7 @@ public class NextGenExtraActivity extends AbstractNextGenActivity implements Nex
     @Override
     protected void onStart() {
         super.onStart();
-        /*if (extraLogoImageView != null){
-            //PicassoTrustAll.loadImageIntoView(NextGenApplication.getContext(), "http://img07.deviantart.net/b14a/i/2013/072/2/7/man_of_steel__2013____superman_symbol_logo_by_gbmpersonal-d5xz08y.jpg", extraLogoImageView);
-            String logoUri = "android.resource://com.wb.nextgen/" + R.drawable.man_of_sett_top_logo;
-            PicassoTrustAll.loadImageIntoView(NextGenApplication.getContext(), logoUri, extraLogoImageView);
 
-
-        }*/
     }
 
     //*************** NextGenFragmentTransactionInterface ***************

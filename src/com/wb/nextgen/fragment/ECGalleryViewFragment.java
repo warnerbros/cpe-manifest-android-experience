@@ -31,7 +31,7 @@ import java.util.List;
 /**
  * Created by gzcheng on 3/31/16.
  */
-public class ECGalleryViewFragment extends Fragment {
+public class ECGalleryViewFragment extends AbstractNextGenFragment {
     private ViewPager galleryViewPager;
     private MovieMetaData.ECGalleryItem currentGallery;
     private GalleryPagerAdapter adapter;
@@ -47,10 +47,10 @@ public class ECGalleryViewFragment extends Fragment {
     public void setBGImageUrl(String url){
         bgImageUrl = url;
     }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.ec_gallery_frame_view, container, false);
+    public int getContentViewId(){
+        return R.layout.ec_gallery_frame_view;
     }
 
     @Override

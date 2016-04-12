@@ -37,4 +37,7 @@
 	<string name="subtitles">Subtitles</string>
 	<string name="menu">Menu</string>
 
+	<string name="shop_at_the_take">"SHOP ON THE TAKE.COM"</string>
+	<string name="send_the_link">"SEND THE LINK"</string>
+
 </resources>
