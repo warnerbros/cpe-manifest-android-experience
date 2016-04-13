@@ -108,7 +108,6 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         backgroundImageView = (ImageView)findViewById(R.id.ime_background_image_view);
 
         videoView = (ObservableVideoView) findViewById(R.id.surface_view);
-        mediaController = new MainFeatureMediaController(this);
         //videoView.setMediaController(mediaController);
         videoView.setOnErrorListener(getOnErrorListener());
         videoView.setOnPreparedListener(getOnPreparedListener());
@@ -166,6 +165,10 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
         if (getSupportFragmentManager().getBackStackEntryCount() == 0 )
             finish();
+        else if (getSupportFragmentManager().getBackStackEntryCount() == 1 && isPausedByIME){
+            isPausedByIME = false;
+            videoView.start();
+        }
     }
 
     @Override
@@ -221,11 +224,13 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                 case Configuration.ORIENTATION_PORTRAIT:
 
                     nextGenView.setVisibility(View.VISIBLE);
-                    mediaController.hideShowControls(true);
+                    if (mediaController != null)
+                        mediaController.hideShowControls(true);
                     break;
                  case Configuration.ORIENTATION_LANDSCAPE:
                     nextGenView.setVisibility(View.GONE);
-                    mediaController.hideShowControls(false);
+                    if (mediaController != null)
+                        mediaController.hideShowControls(false);
             }
         }
     }
@@ -286,11 +291,17 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     }
 
     private void playMainMovie(){
-        Intent intent = getIntent();
-        Uri uri = intent.getData();
-        currentUri = uri;
-        videoView.setVideoURI(uri);
-        videoView.setMediaController(mediaController);
+        if (INTERSTITIAL_VIDEO_URI.equals(currentUri)) {
+            videoView.setOnTouchListener(null);
+            Intent intent = getIntent();
+            Uri uri = intent.getData();
+            currentUri = uri;
+            videoView.setVideoURI(uri);
+            if (mediaController == null) {
+                mediaController = new MainFeatureMediaController(this);
+                videoView.setMediaController(mediaController);
+            }
+        }
     }
 
     protected MediaPlayer.OnCompletionListener getOnCompletionListener(){
@@ -307,7 +318,6 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     playMainMovie();
-                    videoView.setOnTouchListener(null);
                     return true;
                 }
             });
@@ -359,6 +369,12 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     public int getRightFrameId(){
         return R.id.next_gen_ime_bottom_view;
 
+    }
+
+    boolean isPausedByIME = false;
+    public void pausMovieForImeECPiece(){
+        videoView.pause();
+        isPausedByIME = true;
     }
 
     @Override

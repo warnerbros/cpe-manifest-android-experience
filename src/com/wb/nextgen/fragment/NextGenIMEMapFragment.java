@@ -44,7 +44,7 @@ public class NextGenIMEMapFragment extends SupportMapFragment implements NextGen
     final int RQS_GooglePlayServices = 1;
     LocationManager locationMng;
 
-    NextGenIMEEngine<SceneLocation> mapIMEEngine = new NextGenIMEEngine<SceneLocation>();
+    NextGenIMEEngine<SceneLocation> mapIMEEngine = null;//new NextGenIMEEngine<SceneLocation>();
 
     List<MovieMetaData.IMEElement<SceneLocation>> mapElements = new ArrayList<MovieMetaData.IMEElement<SceneLocation>>();
    /* public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

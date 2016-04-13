@@ -26,7 +26,7 @@
                 android:background="@color/black">
 
                 <net.flixster.android.drm.ObservableVideoView
-                    android:id="@+id/surface_view"
+                    android:id="@+id/ec_video_view"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:layout_centerInParent="true" />

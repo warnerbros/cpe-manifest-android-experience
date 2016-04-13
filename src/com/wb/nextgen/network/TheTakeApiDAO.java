@@ -42,7 +42,6 @@ public class TheTakeApiDAO {
     private static String theTakeAPIKey;
     private static String theTakeMediaId;
     private static String API_KEY_KEY = "thetake_api_key";
-    private static final String THE_TAKE_MANIFEST_IDENTIFIER = "thetake";
 
     private static class Endpoints {
         static final String PrefetchProductFrames = "/frames/listFrames";
@@ -64,7 +63,7 @@ public class TheTakeApiDAO {
     private static final List<TheTakeCategory> categories = new ArrayList<TheTakeCategory>();
 
     public static void init(){
-        theTakeMediaId = NextGenApplication.getMovieMetaData().getIdentifierForExternalAPI(THE_TAKE_MANIFEST_IDENTIFIER);
+        theTakeMediaId = NextGenApplication.getMovieMetaData().getIdentifierForExternalAPI(MovieMetaData.THE_TAKE_MANIFEST_IDENTIFIER);
         if (StringHelper.isEmpty(theTakeAPIKey)) {
             AssetManager am = NextGenApplication.getContext().getAssets();
             StringBuilder sb = new StringBuilder();

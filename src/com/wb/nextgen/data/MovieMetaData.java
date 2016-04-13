@@ -34,7 +34,7 @@ import java.util.List;
  */
 public class MovieMetaData {
 
-
+    final public static String THE_TAKE_MANIFEST_IDENTIFIER = "thetake";
     //final private List<ECGroupData> movieExperiences = new ArrayList<ECGroupData>();
     final private List<ExperienceData> extraECGroups = new ArrayList<ExperienceData>();
     final private List<ExperienceData> imeECGroups = new ArrayList<ExperienceData>();
@@ -762,6 +762,7 @@ public class MovieMetaData {
         public List<IMEElement<T>> getIMEElementesList(){
             return  imeElementsList;
         }
+        public void init(){};
 
     }
 

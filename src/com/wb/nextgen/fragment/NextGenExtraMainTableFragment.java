@@ -36,7 +36,7 @@ public class NextGenExtraMainTableFragment extends NextGenGridViewFragment {
             intent = new Intent(getActivity(), ECVideoActivity.class);
         }else if (selectedGroup.getECGroupType() == MovieMetaData.ECGroupType.EXTERNAL_APP){
             if (selectedGroup.getExternalApp() != null){
-                if (selectedGroup.getExternalApp().externalApiName.equals("thetake")){
+                if (selectedGroup.getExternalApp().externalApiName.equals(MovieMetaData.THE_TAKE_MANIFEST_IDENTIFIER)){
                     intent = new Intent(getActivity(), TheTakeShopCategoryActivity.class);
 
                 }

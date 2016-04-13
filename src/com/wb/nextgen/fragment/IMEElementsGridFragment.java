@@ -7,11 +7,14 @@ import android.widget.TextView;
 
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
+import com.wb.nextgen.activity.NextGenPlayer;
 import com.wb.nextgen.data.DemoData;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgen.interfaces.NextGenPlaybackStatusListener;
+import com.wb.nextgen.model.AVGalleryIMEEngine;
 import com.wb.nextgen.model.NextGenIMEEngine;
+import com.wb.nextgen.model.TheTakeIMEEngine;
 import com.wb.nextgen.util.PicassoTrustAll;
 
 import java.util.ArrayList;
@@ -27,13 +30,21 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
     final List<NextGenIMEEngine> imeEngines = new ArrayList<NextGenIMEEngine>();
     long currentTimeCode = 0L;
 
-    NextGenFragmentTransactionInterface fragmentTransaction = null;
+
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         imeGroups = NextGenApplication.getMovieMetaData().getImeElementGroups();
         for (IMEElementsGroup group : imeGroups){
-            imeEngines.add(new NextGenIMEEngine(group.getIMEElementesList()));
+
+            if (group.linkedExperience.getExternalApp() != null){
+                if(MovieMetaData.THE_TAKE_MANIFEST_IDENTIFIER.equals(group.linkedExperience.getExternalApp().externalApiName)){
+                    imeEngines.add(new TheTakeIMEEngine());
+                }else
+                    imeEngines.add(new AVGalleryIMEEngine(group.getIMEElementesList()));
+
+            }else
+                imeEngines.add(new AVGalleryIMEEngine(group.getIMEElementesList()));
         }
         super.onViewCreated(view, savedInstanceState);
     }
@@ -43,10 +54,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
         super.onDestroyView();
     }
 
-    public void setFragmentTransactionInterface(NextGenFragmentTransactionInterface fragmentTransaction){
-        this.fragmentTransaction = fragmentTransaction;
 
-    }
 
     protected void onListItmeClick(View v, int position, long id){
         if (position < 0 || position >= imeGroups.size())
@@ -58,23 +66,26 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
 
 
         if (imeObject instanceof MovieMetaData.PresentationDataItem){
-            if (fragmentTransaction == null && getActivity() instanceof NextGenFragmentTransactionInterface){
-                fragmentTransaction = (NextGenFragmentTransactionInterface)getActivity();
+            NextGenPlayer playerActivity = null;
+            if (getActivity() instanceof NextGenPlayer){
+                playerActivity = (NextGenPlayer)getActivity();
             }
 
-            if (fragmentTransaction != null) {
+            if (playerActivity != null) {
                 if (imeObject instanceof MovieMetaData.ECGalleryItem) {
                     ECGalleryViewFragment fragment = new ECGalleryViewFragment();
                     fragment.setBGImageUrl( DemoData.getExtraBackgroundUrl());
                     fragment.setCurrentGallery((MovieMetaData.ECGalleryItem) imeObject);
-                    fragmentTransaction.transitMainFragment(fragment);
+                    playerActivity.transitMainFragment(fragment);
+                    playerActivity.pausMovieForImeECPiece();
 
 
                 } else if (imeObject instanceof MovieMetaData.AudioVisualItem) {
                     ECVideoViewFragment fragment = new ECVideoViewFragment();
                     fragment.setBGImageUrl( DemoData.getExtraBackgroundUrl());
                     fragment.setAudioVisualItem((MovieMetaData.AudioVisualItem)imeObject);
-                    fragmentTransaction.transitMainFragment(fragment);
+                    playerActivity.transitMainFragment(fragment);
+                    playerActivity.pausMovieForImeECPiece();
                 }
             }
         }
@@ -137,8 +148,8 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                 }
             }
 
-            if (subText1 != null && !subText1.getText().equals(((MovieMetaData.PresentationDataItem) imeObj).title)) {
-                subText1.setText(((MovieMetaData.PresentationDataItem) imeObj).title);
+            if (subText1 != null && !subText1.getText().equals(((MovieMetaData.PresentationDataItem) imeObj).title.toUpperCase())) {
+                subText1.setText(((MovieMetaData.PresentationDataItem) imeObj).title.toUpperCase());
             }
         }
 

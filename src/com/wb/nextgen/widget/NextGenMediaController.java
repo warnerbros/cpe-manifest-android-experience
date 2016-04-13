@@ -33,7 +33,13 @@ public class NextGenMediaController extends MediaController {
 
     public NextGenMediaController(Context context) {
         super(context);
-        init(context);
+        init(context);;
+    }
+    @Override
+    protected void onDetachedFromWindow() {
+        mContext = null;
+        mBaseSystemUIView = null;
+        super.onDetachedFromWindow();
     }
 
     public boolean isFullScreen(){

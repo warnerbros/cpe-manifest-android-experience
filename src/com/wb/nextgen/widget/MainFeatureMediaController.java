@@ -2,6 +2,7 @@ package com.wb.nextgen.widget;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,7 @@ public class MainFeatureMediaController extends  NextGenMediaController {
         if (mContext instanceof Activity) {
             if (bShow) {
                 ((Activity)mContext).getActionBar().show();
-            } else {
+            } else if (mContext.getResources().getConfiguration().equals(Configuration.ORIENTATION_LANDSCAPE)){
                 ((Activity)mContext).getActionBar().hide();
             }
         }

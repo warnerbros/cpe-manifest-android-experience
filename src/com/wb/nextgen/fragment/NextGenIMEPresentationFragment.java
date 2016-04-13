@@ -28,7 +28,7 @@ public class NextGenIMEPresentationFragment extends Fragment implements NextGenP
     private TextView titleTxt;
     //private Presentation
 
-    NextGenIMEEngine<MovieMetaData.ExperienceData> presentationIMEEngine = new NextGenIMEEngine<MovieMetaData.ExperienceData>();
+    NextGenIMEEngine<MovieMetaData.ExperienceData> presentationIMEEngine = null;//new NextGenIMEEngine<MovieMetaData.ExperienceData>();
 
     MovieMetaData.IMEElementsGroup<MovieMetaData.ExperienceData> imeGroup;
 

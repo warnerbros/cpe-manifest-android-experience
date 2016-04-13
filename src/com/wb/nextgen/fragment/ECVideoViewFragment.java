@@ -47,7 +47,7 @@ public class ECVideoViewFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        videoView = (ObservableVideoView) view.findViewById(R.id.surface_view);
+        videoView = (ObservableVideoView) view.findViewById(R.id.ec_video_view);
         mediaController = new ECMediaController(getActivity(), (RelativeLayout) view.findViewById(R.id.video_view_container));
         selectedECNameTextView = (TextView)view.findViewById(R.id.ec_content_name);
 
@@ -83,7 +83,9 @@ public class ECVideoViewFragment extends Fragment {
 
     @Override
     public void onDestroyView(){
-        videoView.pause();
+        videoView.setMediaController(null);
+        videoView.stopPlayback();
+        mediaController = null;
         super.onDestroyView();
     }
 
