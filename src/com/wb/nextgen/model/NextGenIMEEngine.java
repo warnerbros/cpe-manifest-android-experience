@@ -18,31 +18,31 @@ public abstract class NextGenIMEEngine <T>{
 
     //abstract void handleIMEUpdate(long timecode, T imeElement);
 
-    protected List<MovieMetaData.IMEElement<T>> imeElements = new ArrayList<MovieMetaData.IMEElement<T>>();
+    protected List<T> imeElements = new ArrayList<T>();
     protected int currentIndex = -1;
-    protected MovieMetaData.IMEElement<T> currentIMEItem = null;
+    protected T currentIMEItem = null;
 
 
-    public NextGenIMEEngine(List<MovieMetaData.IMEElement<T>> elements){
+    public NextGenIMEEngine(List<T> elements){
         imeElements = elements;
     }
 
     public NextGenIMEEngine(){}
 
-    public void setImeElements(List<MovieMetaData.IMEElement<T>> elements){
+    public void setImeElements(List<T> elements){
         imeElements = elements;
     }
 
     public T getCurrentIMEElement(){
         if (currentIMEItem != null)
-            return currentIMEItem.imeObject;
+            return currentIMEItem;
         else
             return null;
     }
 
     // returns true if there is an update of the current item
     public boolean computeCurrentIMEElement(long timecode){
-        MovieMetaData.IMEElement<T> computedIMEItem = null;
+        T computedIMEItem = null;
         if (currentIMEItem != null && compareCurrentTimeWithItemAtIndex(timecode, currentIndex) == 0) {
            return false;
         }
@@ -61,7 +61,7 @@ public abstract class NextGenIMEEngine <T>{
         int lowerBoundIndex = 0;
 
         while(searchIndex >= 0 && searchIndex < imeElements.size()) {
-            MovieMetaData.IMEElement currentElement = imeElements.get(searchIndex);
+            T currentElement = imeElements.get(searchIndex);
 
             int compareTimeCodeValue = compareCurrentTimeWithItemAtIndex(timecode, searchIndex);
             if (compareTimeCodeValue == 0) {
@@ -71,7 +71,7 @@ public abstract class NextGenIMEEngine <T>{
             } else if (compareTimeCodeValue > 0  && searchIndex < upperBoundIndex) { //after
                 //check in next element is after this time code => gap in IME, no element for this time
                 lowerBoundIndex = searchIndex;
-                MovieMetaData.IMEElement<T> nextElement = imeElements.get(searchIndex + 1);
+                T nextElement = imeElements.get(searchIndex + 1);
                 int nextCompare = compareCurrentTimeWithItemAtIndex(timecode, searchIndex+1);
                 if (nextCompare < 0) {
                     computedIMEItem = null;
@@ -90,7 +90,7 @@ public abstract class NextGenIMEEngine <T>{
                 }
             } else if (compareTimeCodeValue < 0 && searchIndex > lowerBoundIndex) { // before
                 upperBoundIndex = searchIndex;
-                MovieMetaData.IMEElement<T> nextElement = imeElements.get(searchIndex - 1);
+                T nextElement = imeElements.get(searchIndex - 1);
                 int nextCompare = compareCurrentTimeWithItemAtIndex(timecode, searchIndex - 1);
                 if (nextCompare > 0) {
                     computedIMEItem = null;
@@ -121,7 +121,7 @@ public abstract class NextGenIMEEngine <T>{
 
 
     public MovieMetaData.IMEElement<T> createNextGenIMEElement(long startTimeCode, long endTimeCode, T object){
-        return new MovieMetaData.IMEElement(startTimeCode, endTimeCode, object);
+        return new MovieMetaData.IMEElement<T>(startTimeCode, endTimeCode, object);
     }
 
     public abstract int compareCurrentTimeWithItemAtIndex(long timecode, int index);

@@ -28,7 +28,7 @@ public class NextGenIMEPresentationFragment extends Fragment implements NextGenP
     private TextView titleTxt;
     //private Presentation
 
-    NextGenIMEEngine<MovieMetaData.ExperienceData> presentationIMEEngine = null;//new NextGenIMEEngine<MovieMetaData.ExperienceData>();
+    NextGenIMEEngine<MovieMetaData.IMEElement<MovieMetaData.ExperienceData>> presentationIMEEngine = null;//new NextGenIMEEngine<MovieMetaData.ExperienceData>();
 
     MovieMetaData.IMEElementsGroup<MovieMetaData.ExperienceData> imeGroup;
 
@@ -60,7 +60,7 @@ public class NextGenIMEPresentationFragment extends Fragment implements NextGenP
     public void playbackStatusUpdate(NextGenPlaybackStatusListener.NextGenPlaybackStatus playbackStatus, long timecode){
         boolean bHasUpdated = presentationIMEEngine.computeCurrentIMEElement(timecode);
         if (bHasUpdated)
-            handleIMEUpdate(timecode, presentationIMEEngine.getCurrentIMEElement());
+            handleIMEUpdate(timecode, presentationIMEEngine.getCurrentIMEElement().imeObject);
     }
 
     void handleIMEUpdate(long timecode, final MovieMetaData.ExperienceData imeElement){

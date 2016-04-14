@@ -106,13 +106,13 @@ public class TheTakeApiDAO {
         return HttpHelper.getFromUrl(url, params, headerValues);
     }
 
-    public static void prefetchProductFrames(final int start, final int count, ResultListener<Object> l) {
-        Worker.execute(new Callable<Object>() {
+    public static void fetchProductFrames(final int start, final int count, ResultListener<List<TheTakeProductFrame>> l) {
+        Worker.execute(new Callable<List<TheTakeProductFrame>>() {
             @Override
-            public Object call() throws Exception {
+            public List<TheTakeProductFrame> call() throws Exception {
 
-                if (categories != null)
-                    return categories;
+                /*if (categories != null)
+                    return categories;*/
 
                 try {
                     List<NameValuePair> params = new ArrayList<NameValuePair>();

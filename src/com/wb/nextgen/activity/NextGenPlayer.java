@@ -139,17 +139,6 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
         //imeBottomFragment.setFragmentTransactionInterface(this);
 
-        TheTakeApiDAO.prefetchProductFrames(0, 300, new ResultListener<Object>() {
-            @Override
-            public void onResult(Object object) {
-
-            }
-
-            @Override
-            public <E extends Exception> void onException(E e) {
-
-            }
-        });
 
                 //imeText = (TextView)findViewById(R.id.next_gen_ime_text);
         /*NextGenIMEActorFragment imeActorFragment = (NextGenIMEActorFragment)getSupportFragmentManager().findFragmentById(R.id.ime_actor_fragment);

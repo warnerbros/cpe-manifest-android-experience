@@ -44,7 +44,7 @@ public class NextGenIMEMapFragment extends SupportMapFragment implements NextGen
     final int RQS_GooglePlayServices = 1;
     LocationManager locationMng;
 
-    NextGenIMEEngine<SceneLocation> mapIMEEngine = null;//new NextGenIMEEngine<SceneLocation>();
+    NextGenIMEEngine<MovieMetaData.IMEElement<SceneLocation>> mapIMEEngine = null;//new NextGenIMEEngine<SceneLocation>();
 
     List<MovieMetaData.IMEElement<SceneLocation>> mapElements = new ArrayList<MovieMetaData.IMEElement<SceneLocation>>();
    /* public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,7 +65,7 @@ public class NextGenIMEMapFragment extends SupportMapFragment implements NextGen
             myCriteria.setAccuracy(Criteria.ACCURACY_FINE);
             locationMng = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
         }
-
+/*
         mapElements.add(mapIMEEngine.createNextGenIMEElement(2000, 5000, SceneLocation.LOCATION_LOS_ANGELES));
         mapElements.add(mapIMEEngine.createNextGenIMEElement(7000, 17000, SceneLocation.LOCATION_NEW_YORK));
         mapElements.add(mapIMEEngine.createNextGenIMEElement(20000, 25000, SceneLocation.LOCATION_SYDNEY));
@@ -76,7 +76,7 @@ public class NextGenIMEMapFragment extends SupportMapFragment implements NextGen
         mapElements.add(mapIMEEngine.createNextGenIMEElement(132000, 145000, SceneLocation.LOCATION_LOS_ANGELES));
         mapElements.add(mapIMEEngine.createNextGenIMEElement(152000, 165000, SceneLocation.LOCATION_SYDNEY));
         mapElements.add(mapIMEEngine.createNextGenIMEElement(172000, 185000, SceneLocation.LOCATION_CHICAGO));
-        mapElements.add(mapIMEEngine.createNextGenIMEElement(192000, 205000, SceneLocation.LOCATION_BOSTON));
+        mapElements.add(mapIMEEngine.createNextGenIMEElement(192000, 205000, SceneLocation.LOCATION_BOSTON));*/
         mapIMEEngine.setImeElements(mapElements);
         //map = (GoogleMap)view.findViewById(R.id.ime_map);
     }
@@ -122,7 +122,7 @@ public class NextGenIMEMapFragment extends SupportMapFragment implements NextGen
             return;
 
 
-        final SceneLocation location = mapIMEEngine.getCurrentIMEElement();
+        final SceneLocation location = mapIMEEngine.getCurrentIMEElement().imeObject;
         if (location == null)
             return;
         else{

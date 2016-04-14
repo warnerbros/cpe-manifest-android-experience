@@ -64,28 +64,30 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
         Object imeObject = engine.getCurrentIMEElement();
 
 
+        if (imeObject instanceof MovieMetaData.IMEElement) {
+           Object dataObj = ((MovieMetaData.IMEElement)imeObject).imeObject ;
+            if (dataObj instanceof MovieMetaData.PresentationDataItem) {
+                NextGenPlayer playerActivity = null;
+                if (getActivity() instanceof NextGenPlayer) {
+                    playerActivity = (NextGenPlayer) getActivity();
+                }
 
-        if (imeObject instanceof MovieMetaData.PresentationDataItem){
-            NextGenPlayer playerActivity = null;
-            if (getActivity() instanceof NextGenPlayer){
-                playerActivity = (NextGenPlayer)getActivity();
-            }
-
-            if (playerActivity != null) {
-                if (imeObject instanceof MovieMetaData.ECGalleryItem) {
-                    ECGalleryViewFragment fragment = new ECGalleryViewFragment();
-                    fragment.setBGImageUrl( DemoData.getExtraBackgroundUrl());
-                    fragment.setCurrentGallery((MovieMetaData.ECGalleryItem) imeObject);
-                    playerActivity.transitMainFragment(fragment);
-                    playerActivity.pausMovieForImeECPiece();
+                if (playerActivity != null) {
+                    if (dataObj instanceof MovieMetaData.ECGalleryItem) {
+                        ECGalleryViewFragment fragment = new ECGalleryViewFragment();
+                        fragment.setBGImageUrl(DemoData.getExtraBackgroundUrl());
+                        fragment.setCurrentGallery((MovieMetaData.ECGalleryItem) dataObj);
+                        playerActivity.transitMainFragment(fragment);
+                        playerActivity.pausMovieForImeECPiece();
 
 
-                } else if (imeObject instanceof MovieMetaData.AudioVisualItem) {
-                    ECVideoViewFragment fragment = new ECVideoViewFragment();
-                    fragment.setBGImageUrl( DemoData.getExtraBackgroundUrl());
-                    fragment.setAudioVisualItem((MovieMetaData.AudioVisualItem)imeObject);
-                    playerActivity.transitMainFragment(fragment);
-                    playerActivity.pausMovieForImeECPiece();
+                    } else if (dataObj instanceof MovieMetaData.AudioVisualItem) {
+                        ECVideoViewFragment fragment = new ECVideoViewFragment();
+                        fragment.setBGImageUrl(DemoData.getExtraBackgroundUrl());
+                        fragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) dataObj);
+                        playerActivity.transitMainFragment(fragment);
+                        playerActivity.pausMovieForImeECPiece();
+                    }
                 }
             }
         }
@@ -135,21 +137,23 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
         }
 
         boolean hasChanged = engine.computeCurrentIMEElement(currentTimeCode);
-        Object imeObj = engine.getCurrentIMEElement();
-
-        if (imeObj instanceof MovieMetaData.PresentationDataItem) {
-            Object currentPresentationId = rowView.getTag(R.id.ime_title);
-            rowView.setTag(R.id.ime_title, ((MovieMetaData.PresentationDataItem) imeObj).id);
-            if (poster != null) {
-                String imageUrl = ((MovieMetaData.PresentationDataItem) imeObj).getPosterImgUrl();
-                if (poster.getTag() == null ||  !poster.getTag().equals(imageUrl)) {
-                    poster.setTag(imageUrl);
-                    PicassoTrustAll.loadImageIntoView(getContext(), imageUrl, poster);
+        Object element = engine.getCurrentIMEElement();
+        if (element instanceof MovieMetaData.IMEElement) {
+            Object dataObj = ((MovieMetaData.IMEElement) element).imeObject;
+            if (dataObj instanceof MovieMetaData.PresentationDataItem) {
+                Object currentPresentationId = rowView.getTag(R.id.ime_title);
+                rowView.setTag(R.id.ime_title, ((MovieMetaData.PresentationDataItem) dataObj).id);
+                if (poster != null) {
+                    String imageUrl = ((MovieMetaData.PresentationDataItem) dataObj).getPosterImgUrl();
+                    if (poster.getTag() == null || !poster.getTag().equals(imageUrl)) {
+                        poster.setTag(imageUrl);
+                        PicassoTrustAll.loadImageIntoView(getContext(), imageUrl, poster);
+                    }
                 }
-            }
 
-            if (subText1 != null && !subText1.getText().equals(((MovieMetaData.PresentationDataItem) imeObj).title.toUpperCase())) {
-                subText1.setText(((MovieMetaData.PresentationDataItem) imeObj).title.toUpperCase());
+                if (subText1 != null && !subText1.getText().equals(((MovieMetaData.PresentationDataItem) dataObj).title.toUpperCase())) {
+                    subText1.setText(((MovieMetaData.PresentationDataItem) dataObj).title.toUpperCase());
+                }
             }
         }
 

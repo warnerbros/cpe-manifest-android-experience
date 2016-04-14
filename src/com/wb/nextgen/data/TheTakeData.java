@@ -15,7 +15,7 @@ public class TheTakeData {
         public List<TheTakeProduct> products;
     }
 
-    public static class TheTakeProductFrame{
+    public static class TheTakeProductFrame {
         public FrameImages frameImages;
         public int frameTime;
         public double frameLetterboxRatio;

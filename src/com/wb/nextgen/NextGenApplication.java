@@ -109,17 +109,7 @@ public class NextGenApplication extends Application {
 
             BaselineApiDAO.init();
             TheTakeApiDAO.init();
-            TheTakeApiDAO.prefetchProductFrames(0, 300, new ResultListener<Object>() {
-                @Override
-                public void onResult(Object object) {
 
-                }
-
-                @Override
-                public <E extends Exception> void onException(E e) {
-
-                }
-            });
         }catch (Exception ex){
             NextGenLogger.e(F.TAG, ex.getLocalizedMessage());
         }
