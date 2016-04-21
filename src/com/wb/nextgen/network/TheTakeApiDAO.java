@@ -182,16 +182,24 @@ public class TheTakeApiDAO {
         }, l);
     }
 
-    public static void getFrameProducts(final double frameTime, ResultListener<Object> l){
-        Worker.execute(new Callable<Object>() {
+    public static void getFrameProducts(final double frameTime, ResultListener<List<TheTakeProduct>> l){
+        Worker.execute(new Callable<List<TheTakeProduct>>() {
             @Override
-            public Object call() throws Exception {
+            public List<TheTakeProduct> call() throws Exception {
                 try {
                     List<NameValuePair> params = new ArrayList<NameValuePair>();
                     params.add(new BasicNameValuePair(Keys.Media, theTakeMediaId));
                     params.add(new BasicNameValuePair(Keys.Time, Double.toString(frameTime)));
 
                     String result = getFromUrl(THETAKE_DOMAIN + Endpoints.GetFrameProducts, params);
+                    Type listType = new TypeToken<ArrayList<TheTakeProduct>>() {
+                    }.getType();
+
+                    Gson gson = new GsonBuilder().create();
+
+                    List<TheTakeProduct> products = gson.fromJson(result, listType);
+
+                    return products;
                 } catch (Exception ex) {
                     NextGenLogger.d(F.TAG_API, ex.getLocalizedMessage());
 

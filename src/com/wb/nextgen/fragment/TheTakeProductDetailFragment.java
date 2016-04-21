@@ -4,42 +4,44 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
-import com.wb.nextgen.data.TheTakeData;
 import com.wb.nextgen.data.TheTakeData.TheTakeProduct;
 import com.wb.nextgen.data.TheTakeData.TheTakeProductDetail;
 import com.wb.nextgen.network.TheTakeApiDAO;
 import com.wb.nextgen.util.DialogUtils;
-import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.concurrent.ResultListener;
 import com.wb.nextgen.util.utils.StringHelper;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by gzcheng on 4/11/16.
  */
 public class TheTakeProductDetailFragment extends AbstractNextGenFragment implements View.OnClickListener{
 
-    List<TheTakeProduct> productsList;
+    TheTakeProduct product;
     ImageView productPoster;
     TextView matchStatus, brandText, nameText, priceText;
     Button shopAtTheTakeBtn, sendLinkBtn;
 
-    public void setProductList(List<TheTakeProduct> products){
-        productsList = products;
+    int contentViewId = R.layout.the_take_product_view;
+
+    public void setContentViewId(int viewId){
+        contentViewId = viewId;
     }
+
+
+    public void setProduct(TheTakeProduct product){
+        this.product = product;
+    }
+
 
     @Override
     public int getContentViewId(){
-        return R.layout.the_take_products_view;
+        return contentViewId;
     }
 
     @Override
@@ -58,8 +60,8 @@ public class TheTakeProductDetailFragment extends AbstractNextGenFragment implem
         if (sendLinkBtn != null)
             sendLinkBtn.setOnClickListener(this);
 
-        if (productsList != null && productsList.size() > 0)
-            getProductDetail(productsList.get(0));
+        if (product != null)
+            getProductDetail();
     }
 
     public void onClick(View v){
@@ -67,11 +69,11 @@ public class TheTakeProductDetailFragment extends AbstractNextGenFragment implem
             DialogUtils.showLeavingAppDialog(getActivity(), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    NextGenApplication.launchChromeWithUrl(productsList.get(0).getProductDetail().purchaseLink);
+                    NextGenApplication.launchChromeWithUrl(product.getProductDetail().purchaseLink);
                 }
             });
         }else if (v.getId() == R.id.send_link_button){
-            NextGenApplication.launchChromeWithUrl(productsList.get(0).getProductDetail().shareUrl);
+            NextGenApplication.launchChromeWithUrl(product.getProductDetail().shareUrl);
         }
     }
 
@@ -96,7 +98,7 @@ public class TheTakeProductDetailFragment extends AbstractNextGenFragment implem
         }
     }
 
-    public void getProductDetail(final TheTakeProduct product){
+    public void getProductDetail(){
         if (product.getProductDetail() != null)
             populateProductDetail(product);
         else {

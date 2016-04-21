@@ -167,6 +167,9 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     }
 
     protected void updateImeFragment(final NextGenPlaybackStatusListener.NextGenPlaybackStatus playbackStatus, final long timecode){
+        if (INTERSTITIAL_VIDEO_URI.equals(currentUri))
+            return;
+
         if (lastTimeCode == timecode)
             return;
 

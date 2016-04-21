@@ -149,10 +149,10 @@ public class TheTakeCategoryGridFragment extends AbstractNextGenFragment{
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id){
             TheTakeProductDetailFragment fragment = new TheTakeProductDetailFragment();
+            fragment.setContentViewId(R.layout.the_take_single_product_view);
             TheTakeData.TheTakeProduct product = getItem(position);
-            List<TheTakeData.TheTakeProduct> list = new ArrayList<TheTakeData.TheTakeProduct>();
-            list.add(product);
-            fragment.setProductList(list);
+
+            fragment.setProduct(product);
             if (getActivity() instanceof NextGenFragmentTransactionInterface){
                 ((NextGenFragmentTransactionInterface)getActivity()).transitMainFragment(fragment);
             }

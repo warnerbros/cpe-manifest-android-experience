@@ -10,6 +10,7 @@ import com.wb.nextgen.R;
 import com.wb.nextgen.activity.NextGenPlayer;
 import com.wb.nextgen.data.DemoData;
 import com.wb.nextgen.data.MovieMetaData;
+import com.wb.nextgen.data.TheTakeData.TheTakeProductFrame;
 import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgen.interfaces.NextGenPlaybackStatusListener;
 import com.wb.nextgen.model.AVGalleryIMEEngine;
@@ -31,14 +32,13 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
     long currentTimeCode = 0L;
 
 
-
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         imeGroups = NextGenApplication.getMovieMetaData().getImeElementGroups();
         for (IMEElementsGroup group : imeGroups){
 
-            if (group.linkedExperience.getExternalApp() != null){
-                if(MovieMetaData.THE_TAKE_MANIFEST_IDENTIFIER.equals(group.linkedExperience.getExternalApp().externalApiName)){
+            if (group.getExternalApiData() != null){
+                if(MovieMetaData.THE_TAKE_MANIFEST_IDENTIFIER.equals(group.getExternalApiData().externalApiName)){
                     imeEngines.add(new TheTakeIMEEngine());
                 }else
                     imeEngines.add(new AVGalleryIMEEngine(group.getIMEElementesList()));
@@ -62,15 +62,15 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
         IMEElementsGroup group = imeGroups.get(position);
         NextGenIMEEngine engine = imeEngines.get(position);
         Object imeObject = engine.getCurrentIMEElement();
-
+        NextGenPlayer playerActivity = null;
+        if (getActivity() instanceof NextGenPlayer) {
+            playerActivity = (NextGenPlayer) getActivity();
+        }
 
         if (imeObject instanceof MovieMetaData.IMEElement) {
            Object dataObj = ((MovieMetaData.IMEElement)imeObject).imeObject ;
             if (dataObj instanceof MovieMetaData.PresentationDataItem) {
-                NextGenPlayer playerActivity = null;
-                if (getActivity() instanceof NextGenPlayer) {
-                    playerActivity = (NextGenPlayer) getActivity();
-                }
+
 
                 if (playerActivity != null) {
                     if (dataObj instanceof MovieMetaData.ECGalleryItem) {
@@ -89,6 +89,13 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                         playerActivity.pausMovieForImeECPiece();
                     }
                 }
+            }
+        } else if (imeObject instanceof TheTakeProductFrame){
+            if (playerActivity != null){
+                TheTakeFrameProductsFragment fragment = new TheTakeFrameProductsFragment();
+                fragment.setFrameProductTime(((TheTakeProductFrame)imeObject).frameTime);
+                playerActivity.transitMainFragment(fragment);
+                playerActivity.pausMovieForImeECPiece();
             }
         }
     }
@@ -136,7 +143,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
             titleText.setText(group.linkedExperience.title);      // set a tag with the linked Experience Id
         }
 
-        boolean hasChanged = engine.computeCurrentIMEElement(currentTimeCode);
+        boolean hasChanged =  engine.computeCurrentIMEElement(currentTimeCode);
         Object element = engine.getCurrentIMEElement();
         if (element instanceof MovieMetaData.IMEElement) {
             Object dataObj = ((MovieMetaData.IMEElement) element).imeObject;
@@ -153,6 +160,15 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
 
                 if (subText1 != null && !subText1.getText().equals(((MovieMetaData.PresentationDataItem) dataObj).title.toUpperCase())) {
                     subText1.setText(((MovieMetaData.PresentationDataItem) dataObj).title.toUpperCase());
+                }
+            }
+        }else if (element instanceof TheTakeProductFrame){
+            rowView.setTag(R.id.ime_title, ((TheTakeProductFrame) element).frameTime);
+            if (poster != null) {
+                String imageUrl = ((TheTakeProductFrame) element).frameImages.image1000px;
+                if (poster.getTag() == null || !poster.getTag().equals(imageUrl)) {
+                    poster.setTag(imageUrl);
+                    PicassoTrustAll.loadImageIntoView(getContext(), imageUrl, poster);
                 }
             }
         }

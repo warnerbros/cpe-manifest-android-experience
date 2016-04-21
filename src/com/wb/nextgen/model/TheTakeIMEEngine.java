@@ -13,13 +13,14 @@ import java.util.List;
 public class TheTakeIMEEngine extends NextGenIMEEngine<TheTakeProductFrame>{
     long earliestTimecode = 0L;
     long lastTimecode = 0L;
+    int currentStart = -1;
     private boolean hasMore = true;
 
     //private List<TheTakeData.TheTakeProductFrame> productFrames = new ArrayList<TheTakeData.TheTakeProductFrame>();
     final static int FRAME_GROUP_ITEM_LIMIT = 400;
 
     public TheTakeIMEEngine(){
-        requestNextGroupOfData();
+        //requestNextGroupOfData();
     }
 
     public int compareCurrentTimeWithItemAtIndex(long timecode, int index){
@@ -43,13 +44,24 @@ public class TheTakeIMEEngine extends NextGenIMEEngine<TheTakeProductFrame>{
     }
 
     private void requestNextGroupOfData(){
+        if (currentStart == imeElements.size()){
+            return;
+        }else{
+            currentStart = imeElements.size();
+        }
         TheTakeApiDAO.fetchProductFrames(imeElements.size(), FRAME_GROUP_ITEM_LIMIT, new ResultListener<List<TheTakeProductFrame>>() {
             @Override
             public void onResult(List<TheTakeProductFrame> result) {
                 synchronized (imeElements){
                     hasMore = result.size() == FRAME_GROUP_ITEM_LIMIT;
 
-                    imeElements.addAll(result);
+                    if (result != null && result.size() > 0) {
+                        lastTimecode = result.get(result.size() - 1).frameTime;
+                        imeElements.addAll(result);
+                    }
+                }
+                if (hasMore){
+                    //geta
                 }
             }
 
@@ -60,15 +72,26 @@ public class TheTakeIMEEngine extends NextGenIMEEngine<TheTakeProductFrame>{
         });
     }
 
+    static int counter = 0;
     // returns true if there is an update of the current item
     @Override
-    public boolean computeCurrentIMEElement(long timecode){
+    public boolean computeCurrentIMEElement(long timecode) {
+        if (timecode + 3000 > lastTimecode && hasMore){
+            requestNextGroupOfData();
+        }
+        if (counter < 15){
+            counter++;
+            return false;
+        }else {
+            counter = 0;
 
+            synchronized (imeElements) {
 
-        boolean result = super.computeCurrentIMEElement(timecode);
-
-
-        return result;
+                boolean result = super.computeCurrentIMEElement(timecode);
+                return result;
+            }
+        }
     }
+
 
 }

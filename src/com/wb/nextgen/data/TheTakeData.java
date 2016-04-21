@@ -46,11 +46,11 @@ public class TheTakeData {
 
 
     public static class TheTakeProduct{
-        @SerializedName("cropImage")
+        @SerializedName(value="cropImage", alternate={"cropImages"})
         public FrameImages cropImage;
-        @SerializedName("productImage")
+        @SerializedName(value="productImage", alternate={"productImages"})
         public FrameImages productImage;
-        @SerializedName("keyFrameImage")
+        @SerializedName(value="keyFrameImage", alternate={"keyFrameImages", "frameImages"})
         public FrameImages keyFrameImage;
         public String characterId;
         public String actorId;
@@ -77,7 +77,19 @@ public class TheTakeData {
         private TheTakeProductDetail productDetail;
 
         public String getThumbnailUrl(){
-            return cropImage.image500px;
+            if (cropImage != null)
+                return cropImage.image500px;
+            else if (keyFrameImage != null)
+                return keyFrameImage.image500px;
+            else
+                return "";
+        }
+
+        public String getProductThumbnailUrl(){
+            if (productImage != null)
+                return productImage.image500px;
+            else
+                return "";
         }
 
         public TheTakeProductDetail getProductDetail(){

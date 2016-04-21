@@ -261,6 +261,11 @@ public class MovieMetaData {
                             }
                         }
 
+                        if (timedEvent.getProductID() != null ){
+                            ExternalApiData data = new ExternalApiData(timedEvent.getProductID().getNamespace(), timedEvent.getProductID().getIdentifier());
+                            imeGroup.setExtenralApiData(data);
+                        }
+
                         if (presentationData != null){
                             IMEElement<PresentationDataItem> element = new IMEElement((long)startTime, (long)endTime, presentationData);
                             imeGroup.addElement(element);
@@ -753,12 +758,22 @@ public class MovieMetaData {
     public static class IMEElementsGroup<T>{
         public final ExperienceData linkedExperience;
         private final List<IMEElement<T>> imeElementsList = new ArrayList<IMEElement<T>>();
+        private ExternalApiData externalApiData;
         public void addElement(IMEElement element){
             imeElementsList.add(element);
         }
         public IMEElementsGroup(ExperienceData ecGroupData){
             this.linkedExperience = ecGroupData;
         }
+
+        public void setExtenralApiData(ExternalApiData data){
+            externalApiData = data;
+        }
+
+        public ExternalApiData getExternalApiData(){
+            return externalApiData;
+        }
+
         public List<IMEElement<T>> getIMEElementesList(){
             return  imeElementsList;
         }
