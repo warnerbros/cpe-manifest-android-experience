@@ -31,6 +31,17 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
     final List<NextGenIMEEngine> imeEngines = new ArrayList<NextGenIMEEngine>();
     long currentTimeCode = 0L;
 
+    List<IMEDisplayObject> activeIMEs = new ArrayList<IMEDisplayObject>();
+
+    private class IMEDisplayObject{
+        final Object imeObject;
+        final String title;
+
+        public IMEDisplayObject(String title, Object imeObject){
+            this.title = title;
+            this.imeObject = imeObject;
+        }
+    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -57,18 +68,18 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
 
 
     protected void onListItmeClick(View v, int position, long id){
-        if (position < 0 || position >= imeGroups.size())
+        if (position < 0 || position >= activeIMEs.size())
             return;
-        IMEElementsGroup group = imeGroups.get(position);
-        NextGenIMEEngine engine = imeEngines.get(position);
-        Object imeObject = engine.getCurrentIMEElement();
+        IMEDisplayObject activeObj = activeIMEs.get(position);
+        //NextGenIMEEngine engine = imeEngines.get(position);
+        //Object imeObject = engine.getCurrentIMEElement();
         NextGenPlayer playerActivity = null;
         if (getActivity() instanceof NextGenPlayer) {
             playerActivity = (NextGenPlayer) getActivity();
         }
 
-        if (imeObject instanceof MovieMetaData.IMEElement) {
-           Object dataObj = ((MovieMetaData.IMEElement)imeObject).imeObject ;
+        if (activeObj.imeObject instanceof MovieMetaData.IMEElement) {
+           Object dataObj = ((MovieMetaData.IMEElement)activeObj.imeObject).imeObject ;
             if (dataObj instanceof MovieMetaData.PresentationDataItem) {
 
 
@@ -90,10 +101,10 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                     }
                 }
             }
-        } else if (imeObject instanceof TheTakeProductFrame){
+        } else if (activeObj.imeObject instanceof TheTakeProductFrame){
             if (playerActivity != null){
                 TheTakeFrameProductsFragment fragment = new TheTakeFrameProductsFragment();
-                fragment.setFrameProductTime(((TheTakeProductFrame)imeObject).frameTime);
+                fragment.setFrameProductTime(((TheTakeProductFrame)activeObj.imeObject).frameTime);
                 playerActivity.transitMainFragment(fragment);
                 playerActivity.pausMovieForImeECPiece();
             }
@@ -105,11 +116,11 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
     }
 
     protected int getListItemCount(){
-        return imeGroups.size();
+        return activeIMEs.size();
     }
 
     protected Object getListItemAtPosition(int i){
-        return imeGroups.get(i);
+        return activeIMEs.get(i);
     }
 
     protected int getListItemViewId(){
@@ -122,31 +133,31 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
         TextView subText2= (TextView)rowView.findViewById(R.id.ime_desc_text2);
         ImageView poster = (ImageView)rowView.findViewById(R.id.ime_image_poster);*/
 
-        IMEElementsGroup group = (IMEElementsGroup)item;
-         NextGenIMEEngine engine = imeEngines.get(position);
-        if (group.linkedExperience != null){
+        //IMEElementsGroup group = (IMEElementsGroup)item;
+        //NextGenIMEEngine engine = imeEngines.get(position);
+       /* if (group.linkedExperience != null){
             rowView.setTag(group.linkedExperience.experienceId);
-        }
+        }*/
 
-        localFill(engine, rowView, group);
+        localFill((IMEDisplayObject)item, rowView);
 
     }
 
-    private void localFill(NextGenIMEEngine engine, View rowView, IMEElementsGroup group){
+    private void localFill(IMEDisplayObject activeObj, View rowView){
         TextView titleText= (TextView)rowView.findViewById(R.id.ime_title);
         TextView subText1= (TextView)rowView.findViewById(R.id.ime_desc_text1);
         TextView subText2= (TextView)rowView.findViewById(R.id.ime_desc_text2);
         ImageView poster = (ImageView)rowView.findViewById(R.id.ime_image_poster);
 
 
-        if (titleText != null && group.linkedExperience != null){
-            titleText.setText(group.linkedExperience.title);      // set a tag with the linked Experience Id
-        }
+        //if (titleText != null && group.linkedExperience != null){
+            titleText.setText(activeObj.title);      // set a tag with the linked Experience Id
+        //}
 
-        boolean hasChanged =  engine.computeCurrentIMEElement(currentTimeCode);
-        Object element = engine.getCurrentIMEElement();
-        if (element instanceof MovieMetaData.IMEElement) {
-            Object dataObj = ((MovieMetaData.IMEElement) element).imeObject;
+       // boolean hasChanged =  engine.computeCurrentIMEElement(currentTimeCode);
+        //Object element = engine.getCurrentIMEElement();
+        if (activeObj.imeObject instanceof MovieMetaData.IMEElement) {
+            Object dataObj = ((MovieMetaData.IMEElement) activeObj.imeObject).imeObject;
             if (dataObj instanceof MovieMetaData.PresentationDataItem) {
                 Object currentPresentationId = rowView.getTag(R.id.ime_title);
                 rowView.setTag(R.id.ime_title, ((MovieMetaData.PresentationDataItem) dataObj).id);
@@ -162,13 +173,16 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                     subText1.setText(((MovieMetaData.PresentationDataItem) dataObj).title.toUpperCase());
                 }
             }
-        }else if (element instanceof TheTakeProductFrame){
-            rowView.setTag(R.id.ime_title, ((TheTakeProductFrame) element).frameTime);
+        }else if (activeObj.imeObject instanceof TheTakeProductFrame){
+            rowView.setTag(R.id.ime_title, ((TheTakeProductFrame) activeObj.imeObject).frameTime);
             if (poster != null) {
-                String imageUrl = ((TheTakeProductFrame) element).frameImages.image1000px;
+                String imageUrl = ((TheTakeProductFrame) activeObj.imeObject).frameImages.image1000px;
                 if (poster.getTag() == null || !poster.getTag().equals(imageUrl)) {
                     poster.setTag(imageUrl);
                     PicassoTrustAll.loadImageIntoView(getContext(), imageUrl, poster);
+                }
+                if (subText1 != null) {
+                    subText1.setText("");
                 }
             }
         }
@@ -177,6 +191,18 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
 
     public void playbackStatusUpdate(final NextGenPlaybackStatus playbackStatus, final long timecode){
         currentTimeCode = timecode;
+
+        List<IMEDisplayObject> objList = new ArrayList<IMEDisplayObject>();
+        for(int i = 0 ; i< imeEngines.size(); i++){
+            NextGenIMEEngine engine = imeEngines.get(i);
+            boolean hasChanged =  engine.computeCurrentIMEElement(currentTimeCode);
+            Object element = engine.getCurrentIMEElement();
+            if (element != null){
+                objList.add(new IMEDisplayObject(imeGroups.get(i).linkedExperience.title, element));
+            }
+        }
+        activeIMEs = objList;
+
         if (listAdaptor != null)
             listAdaptor.notifyDataSetChanged();
 
@@ -188,7 +214,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
 
     protected int getHeaderChildenCount(int header){
         if (header == 0)
-            return imeGroups.size();
+            return activeIMEs.size();
         else
             return 0;
     }
