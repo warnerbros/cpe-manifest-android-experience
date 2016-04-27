@@ -85,6 +85,7 @@ public class ECVideoViewFragment extends Fragment {
     public void onDestroyView(){
         videoView.setMediaController(null);
         videoView.stopPlayback();
+        mediaController.onPlayerDestroy();
         mediaController = null;
         super.onDestroyView();
     }

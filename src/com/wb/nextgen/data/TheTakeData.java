@@ -8,7 +8,8 @@ import java.util.List;
  * Created by gzcheng on 4/7/16.
  */
 public class TheTakeData {
-    public static class TheTakeCategory{
+    public static class
+    TheTakeCategory{
         public int categoryId;
         public String categoryName;
         public List<TheTakeCategory> childCategories;

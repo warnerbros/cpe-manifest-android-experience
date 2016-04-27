@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,6 +26,7 @@ import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.data.MovieMetaData.Filmography;
 import com.wb.nextgen.data.MovieMetaData.CastData;
 import com.wb.nextgen.network.BaselineApiDAO;
+import com.wb.nextgen.util.NextGenUtils;
 import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.concurrent.ResultListener;
 import com.wb.nextgen.util.utils.F;
@@ -46,7 +48,9 @@ public class NextGenActorDetailFragment extends Fragment{
     RecyclerView filmographyRecyclerView;
     LinearLayoutManager filmographyLayoutManager;
     ActorDetailFimograpyAdapter filmographyAdaptor;
-
+    ImageButton facebookBtn;
+    ImageButton twitterBtn;
+    ImageButton instagramBtn;
 
 
     @Override
@@ -62,6 +66,19 @@ public class NextGenActorDetailFragment extends Fragment{
         detailTextView = (TextView)view.findViewById(R.id.actor_biography_text);
         actorNameTextView = (TextView)view.findViewById(R.id.actor_real_name_text);
         filmographyRecyclerView = (RecyclerView)view.findViewById(R.id.actor_detail_filmography);
+
+        facebookBtn = (ImageButton)view.findViewById(R.id.actor_page_facebook_button);
+        twitterBtn = (ImageButton)view.findViewById(R.id.actor_page_twitter_button);
+        instagramBtn = (ImageButton)view.findViewById(R.id.actor_page_instagram_button);
+        if (facebookBtn != null){
+            Picasso.with(getActivity()).load(NextGenUtils.getFacebookLogoUrl()).fit().into(facebookBtn);
+        }
+        if (twitterBtn != null){
+            Picasso.with(getActivity()).load(NextGenUtils.getTwitterLogoutUrl()).fit().into(twitterBtn);
+        }
+        if (instagramBtn != null){
+            Picasso.with(getActivity()).load(NextGenUtils.getInstagramLogoUrl()).fit().into(instagramBtn);
+        }
 
         if (filmographyRecyclerView != null){
             filmographyLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);

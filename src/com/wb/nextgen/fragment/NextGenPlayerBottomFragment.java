@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.wb.nextgen.R;
+import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgen.interfaces.NextGenPlaybackStatusListener;
 /**
@@ -81,4 +82,5 @@ public class  NextGenPlayerBottomFragment extends Fragment implements NextGenPla
         super.onResume();
         imeActorsFragment.resetSelectedItem();
     }
+
 }

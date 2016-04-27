@@ -17,6 +17,7 @@ import com.wb.nextgen.activity.InterStitialVideoPlayerActivity;
 import com.wb.nextgen.activity.NextGenExtraActivity;
 import com.wb.nextgen.activity.NextGenPlayer;
 import com.wb.nextgen.data.DemoData;
+import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.util.PicassoTrustAll;
 
 /**
@@ -64,7 +65,7 @@ public class NextGenStartupUpperFragment extends Fragment implements View.OnClic
 
             Intent intent = new Intent(getActivity(), NextGenPlayer.class);
             //intent.setAction(android.content.Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.parse(DemoData.getMovieStreamUrl()), "video/*");
+            intent.setDataAndType(Uri.parse(NextGenApplication.getMovieMetaData().getMainMovieUrl()), "video/*");
             //intent.setDataAndType(Uri.parse("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/feature/ManOfSteel_Clean.mp4"), "video/*");
             startActivity(intent);
             /*

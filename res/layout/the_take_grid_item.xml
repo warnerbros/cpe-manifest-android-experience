@@ -12,8 +12,9 @@
         nextgen:aspectRatioHeight="198"
         nextgen:aspectRatioWidth="352"
         nextgen:priority="WIDTH_PRIORITY">
-        <ImageView
+        <com.wb.nextgen.widget.DotIndicatorImageView
             android:id="@+id/the_take_item_thumbnail"
+            nextgen:indicatorDrawable="@drawable/shopping_bullseye"
             android:scaleType="centerInside"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" />

@@ -6,7 +6,7 @@ import java.util.Arrays;
 import android.os.Build;
 
 
-public class FlixUtils {
+public class NextGenUtils {
 
     // copy a String with a NEW tailored backing char[]
     public static String copyString(String string) {
@@ -51,4 +51,16 @@ public class FlixUtils {
 		return bIsGalaxyS5;
     	
     }
+
+	public static String getFacebookLogoUrl(){
+		return "https://www.facebookbrand.com/img/trademarks/fb-2.jpg";
+	}
+
+	public static String getInstagramLogoUrl(){
+		return "https://www.facebookbrand.com/img/trademarks/instagram-2.jpg";
+	}
+
+	public static String getTwitterLogoutUrl(){
+		return "https://g.twimg.com/about/feature-corporate/image/twitterbird_RGB.png";
+	}
 }

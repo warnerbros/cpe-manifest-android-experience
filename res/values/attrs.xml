@@ -78,4 +78,8 @@
             <enum name="HEIGHT_PRIORITY" value="2" />
         </attr>
     </declare-styleable>
+
+    <declare-styleable name="DotIndicatorImageView">
+        <attr name="indicatorDrawable" format="integer" />
+    </declare-styleable>
 </resources>

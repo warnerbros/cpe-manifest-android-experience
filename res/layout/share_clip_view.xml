@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/ec_video_frame_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <LinearLayout
+        android:id="@+id/next_gen_ec_content_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
+            xmlns:nextgen="http://schemas.android.com/apk/res-auto"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            nextgen:aspectRatioHeight="9"
+            nextgen:aspectRatioWidth="16"
+            nextgen:priority="WIDTH_PRIORITY">
+
+                <net.flixster.android.drm.ObservableVideoView
+                    android:id="@+id/ec_video_view"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_centerInParent="true" />
+
+        </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_alignParentLeft="true"
+                android:id="@+id/ec_content_name"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/textMedium"
+                android:fontFamily="sans-serif-condensed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_alignParentRight="true"
+                android:id="@+id/share_clip_duration"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/textMedium"
+                android:fontFamily="sans-serif-condensed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+        <Button
+            android:padding="@dimen/spacing_xsmall"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/share_clip_button"
+            android:text="@string/share_this_clip"
+            android:textColor="@color/selectable_text_white_grey_color"
+            android:fontFamily="sans-serif-condensed"
+            android:textSize="@dimen/textMedium"
+            android:background="@drawable/red_rounded_corner_drawable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</RelativeLayout>

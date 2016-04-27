@@ -33,6 +33,7 @@ public class ECMediaController extends NextGenMediaController {
     //private VideoView videoView;
 
 
+    ImageButton maxminButton;
     public ECMediaController(Context context, ViewGroup videoViewContainer) {
         super(context);
     }
@@ -77,7 +78,7 @@ public class ECMediaController extends NextGenMediaController {
     }
 
     public void onToggledFullScreen(boolean isFullScreen){
-        maxminButton.setImageDrawable(getResources().getDrawable(isFullScreen ? R.drawable.controller_shrink : R.drawable.controller_expand));
+        maxminButton.setImageDrawable(getResources().getDrawable(isFullScreen ? R.drawable.icon_player_minimize : R.drawable.icon_player_maximize));
         if (!isFullScreen){
             mBaseSystemUIView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                     | View.SYSTEM_UI_FLAG_VISIBLE );

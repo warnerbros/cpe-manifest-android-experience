@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.MovieMetaData;
@@ -96,17 +97,17 @@ public class TheTakeFrameProductsFragment extends AbstractNextGenFragment {
 
     public class FrameProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         CardView cv;
-        // TextView personName;
-        // TextView personAge;
+        TextView productBrand;
+        TextView productName;
         ImageView personPhoto;
         TheTakeProduct product;
 
         FrameProductViewHolder(View itemView, TheTakeProduct product) {
             super(itemView);
-            cv = (CardView)itemView.findViewById(R.id.cv);
-            // personName = (TextView)itemView.findViewById(R.id.person_name);
-            //personAge = (TextView)itemView.findViewById(R.id.person_age);
-            personPhoto = (ImageView)itemView.findViewById(R.id.person_photo);
+            cv = (CardView)itemView.findViewById(R.id.product_cv);
+            productBrand = (TextView)itemView.findViewById(R.id.cv_product_brand_name);
+            productName = (TextView)itemView.findViewById(R.id.cv_product_name);
+            personPhoto = (ImageView)itemView.findViewById(R.id.cv_product_photo);
             this.product = product;
             itemView.setOnClickListener(this);
         }
@@ -133,7 +134,7 @@ public class TheTakeFrameProductsFragment extends AbstractNextGenFragment {
 
         @Override
         public FrameProductViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.actor_filmography_cardview, viewGroup, false);
+            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.the_take_fram_product_cardview, viewGroup, false);
             FrameProductViewHolder pvh = new FrameProductViewHolder(v, productList.get(i));
             return pvh;
         }
@@ -147,12 +148,18 @@ public class TheTakeFrameProductsFragment extends AbstractNextGenFragment {
                 holder.setTheTakeProduct(thisProduct);
                 if (!StringHelper.isEmpty(thisProduct.getProductThumbnailUrl())) {
                     PicassoTrustAll.loadImageIntoView(getActivity(), thisProduct.getProductThumbnailUrl(), holder.personPhoto);
+                    holder.productBrand.setText(thisProduct.productBrand);
+                    holder.productName.setText(thisProduct.productName);
 
                 }else if (position < lastloadingIndex) {
                     //holder.personPhoto.setImageResource(R.drawable.poster_blank);
                     holder.personPhoto.setImageDrawable(null);
+                    holder.productBrand.setText("");
+                    holder.productName.setText("");
                 } else {
                     holder.personPhoto.setImageDrawable(null);
+                    holder.productBrand.setText("");
+                    holder.productName.setText("");
                     final int requestStartIndex = position;
                     lastloadingIndex = requestStartIndex + PAGEITEMCOUNT;
 

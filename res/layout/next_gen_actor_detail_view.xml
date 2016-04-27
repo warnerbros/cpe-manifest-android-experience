@@ -54,6 +54,10 @@
                                 android:id="@+id/actor_page_twitter_button"
                                 android:layout_width="@dimen/social_icon_dimen"
                                 android:layout_height="@dimen/social_icon_dimen" />
+                            <ImageButton
+                                android:id="@+id/actor_page_instagram_button"
+                                android:layout_width="@dimen/social_icon_dimen"
+                                android:layout_height="@dimen/social_icon_dimen" />
                         </LinearLayout>
 
                     </RelativeLayout>

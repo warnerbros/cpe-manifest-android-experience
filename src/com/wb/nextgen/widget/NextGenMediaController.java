@@ -28,18 +28,23 @@ import com.wb.nextgen.interfaces.ContentViewFullscreenRequestInterface;
 public class NextGenMediaController extends MediaController {
 
     Context mContext;
-    ImageButton maxminButton;
     protected View mBaseSystemUIView;
 
     public NextGenMediaController(Context context) {
         super(context);
-        init(context);;
+        init(context);
     }
     @Override
     protected void onDetachedFromWindow() {
+        //mContext = null;
+        //mBaseSystemUIView = null;
+        super.onDetachedFromWindow();
+    }
+
+    public void onPlayerDestroy(){
+        mBaseSystemUIView.setOnSystemUiVisibilityChangeListener(null);
         mContext = null;
         mBaseSystemUIView = null;
-        super.onDetachedFromWindow();
     }
 
     public boolean isFullScreen(){

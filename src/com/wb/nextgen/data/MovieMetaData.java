@@ -1,6 +1,8 @@
 package com.wb.nextgen.data;
 
 import com.google.gson.annotations.SerializedName;
+import com.wb.nextgen.parser.manifest.schema.v1_4.ALIDExperienceMapListType;
+import com.wb.nextgen.parser.manifest.schema.v1_4.ALIDExperienceMapType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.AudiovisualType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.ExperienceChildType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.ExperienceType;
@@ -34,7 +36,11 @@ import java.util.List;
  */
 public class MovieMetaData {
 
-    final public static String THE_TAKE_MANIFEST_IDENTIFIER = "thetake";
+    final public static String THE_TAKE_MANIFEST_IDENTIFIER = "thetake.com";
+    final public static String BASELINE_NAMESPACE = "baselineapi.com";
+    final public static String SHARE_CLIP_KEY = ":clipshare";
+
+
     //final private List<ECGroupData> movieExperiences = new ArrayList<ECGroupData>();
     final private List<ExperienceData> extraECGroups = new ArrayList<ExperienceData>();
     final private List<ExperienceData> imeECGroups = new ArrayList<ExperienceData>();
@@ -44,6 +50,7 @@ public class MovieMetaData {
     final private HashMap<String, ExperienceData> experienceIdToExperienceMap = new HashMap<String, ExperienceData>();
     private ExperienceData rootExperience;
     private boolean hasCalledBaselineAPI = false;
+    private IMEElementsGroup shareClipIMEGroup;
 
     final static public String movieTitleText = "Man of Steel";
 
@@ -280,7 +287,10 @@ public class MovieMetaData {
                         return (int)(lhs.startTimecode - rhs.startTimecode);
                     }
                 });
-                result.imeElementGroups.add(imeGroup);
+                if (imeGroup.linkedExperience != null && imeGroup.linkedExperience.experienceId.endsWith(SHARE_CLIP_KEY)){
+                    result.shareClipIMEGroup = imeGroup;
+                }else
+                    result.imeElementGroups.add(imeGroup);
 
             }
         }
@@ -312,6 +322,10 @@ public class MovieMetaData {
 
         }
         return null;
+    }
+
+    public IMEElementsGroup getShareClipIMEGroup(){
+        return shareClipIMEGroup;
     }
 
     /*
@@ -363,6 +377,7 @@ public class MovieMetaData {
         public CastHeadShot headShot;
         public String biography;
         public List<Filmography> filmogrphies;
+        private List<CastSocialMedia> socialMedium;
 
         public String getThumbnailImageUrl(){
             if (headShot != null){
@@ -384,6 +399,11 @@ public class MovieMetaData {
             }else
                 return null;
         }
+        public void setSocialMedium(List<CastSocialMedia> socialMedium){
+            this.socialMedium = socialMedium;
+        }
+
+        public List<CastSocialMedia> getSocialMedium(){ return socialMedium;}
     }
 
     static public class FilmPoster{
@@ -444,6 +464,13 @@ public class MovieMetaData {
         public String iconUrl;
     }
 
+    static public class CastSocialMedia{
+        @SerializedName("HANDLE")	//Integer	933554
+        public String handle;
+        @SerializedName("URL")//Integer	3388348
+        public String url;
+    }
+
     static public class CastData{
 
         final public String displayName;
@@ -494,7 +521,7 @@ public class MovieMetaData {
 
             if (castInfo.getIdentifier() != null){
                 for (PersonIdentifierType personId : castInfo.getIdentifier()) {
-                    if ("baseline".equals(personId.getNamespace()) ) {
+                    if (BASELINE_NAMESPACE.equals(personId.getNamespace()) ) {
                         baselineApiActorId = personId.getIdentifier();
                         break;
                     }
@@ -514,6 +541,7 @@ public class MovieMetaData {
         public String getBaselineActorId(){
             return baselineApiActorId;
         }
+
     }
 
     public static enum ECGroupType{

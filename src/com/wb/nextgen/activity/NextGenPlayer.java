@@ -17,10 +17,16 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+
+import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 
 import com.wb.nextgen.data.DemoData;
+import com.wb.nextgen.data.MovieMetaData;
+import com.wb.nextgen.fragment.ECGalleryViewFragment;
+import com.wb.nextgen.fragment.ECVideoViewFragment;
 import com.wb.nextgen.fragment.NextGenPlayerBottomFragment;
+import com.wb.nextgen.fragment.ShareClipFragment;
 import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgen.interfaces.NextGenPlaybackStatusListener;
 import com.wb.nextgen.network.TheTakeApiDAO;
@@ -180,8 +186,8 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
             public void run() {
                 if (imeBottomFragment != null)
                     imeBottomFragment.playbackStatusUpdate(playbackStatus, timecode);
-                //if (imeText != null)
-                 //   imeText.setText(Long.toString(timecode));
+                if (mediaController != null)
+                    mediaController.playbackStatusUpdate(playbackStatus, timecode);
             }
         });
 
@@ -291,6 +297,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
             videoView.setVideoURI(uri);
             if (mediaController == null) {
                 mediaController = new MainFeatureMediaController(this);
+                mediaController.setShareClipIMEGroup(NextGenApplication.getMovieMetaData().getShareClipIMEGroup());
                 videoView.setMediaController(mediaController);
             }
         }
@@ -333,6 +340,9 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     protected void onDestroy() {
         //ContentLocker content = FlixsterApplication.getCurrentPlayableContent();
         super.onDestroy();
+        if (mediaController != null){
+            mediaController.onPlayerDestroy();
+        }
         if (imeUpdateTask != null) {
             imeUpdateTask.cancel();
             imeUpdateTask = null;
@@ -402,5 +412,28 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     public String getRightTitleImageUri(){
         return "";
 
+    }
+
+    public void handleSelectedShareClip(MovieMetaData.IMEElement element){
+        if (element != null) {
+            Object dataObj = element.imeObject ;
+            if (dataObj instanceof MovieMetaData.PresentationDataItem) {
+                if (dataObj instanceof MovieMetaData.ECGalleryItem) {
+                    ECGalleryViewFragment fragment = new ECGalleryViewFragment();
+                    fragment.setBGImageUrl(DemoData.getExtraBackgroundUrl());
+                    fragment.setCurrentGallery((MovieMetaData.ECGalleryItem) dataObj);
+                    transitMainFragment(fragment);
+                    pausMovieForImeECPiece();
+
+
+                } else if (dataObj instanceof MovieMetaData.AudioVisualItem) {
+                    ShareClipFragment fragment = new ShareClipFragment();
+                    fragment.setBGImageUrl(DemoData.getExtraBackgroundUrl());
+                    fragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) dataObj);
+                    transitMainFragment(fragment);
+                    pausMovieForImeECPiece();
+                }
+            }
+        }
     }
 }

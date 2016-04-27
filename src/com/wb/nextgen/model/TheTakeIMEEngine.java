@@ -72,19 +72,20 @@ public class TheTakeIMEEngine extends NextGenIMEEngine<TheTakeProductFrame>{
         });
     }
 
-    static int counter = 0;
+    //static int counter = 0;
     // returns true if there is an update of the current item
+    long lastGetTimecode = 0L;
     @Override
     public boolean computeCurrentIMEElement(long timecode) {
         if (timecode + 3000 > lastTimecode && hasMore){
             requestNextGroupOfData();
         }
-        if (counter < 15){
-            counter++;
+        if (lastGetTimecode + 15000 > timecode && lastGetTimecode < timecode ){
+
             return false;
         }else {
-            counter = 0;
 
+            lastGetTimecode = timecode;
             synchronized (imeElements) {
 
                 boolean result = super.computeCurrentIMEElement(timecode);

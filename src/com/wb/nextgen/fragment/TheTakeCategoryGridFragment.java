@@ -10,6 +10,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.TheTakeData;
@@ -17,6 +18,7 @@ import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgen.network.TheTakeApiDAO;
 import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.concurrent.ResultListener;
+import com.wb.nextgen.widget.DotIndicatorImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +76,7 @@ public class TheTakeCategoryGridFragment extends AbstractNextGenFragment{
         if (itemsGridView != null){
             float density = NextGenApplication.getScreenDensity(getActivity());
             int spacing = (int)(10 *density);
-            itemsGridView.setNumColumns(3);
+            itemsGridView.setNumColumns(2);
             itemsGridView.setHorizontalSpacing(spacing);
             itemsGridView.setVerticalSpacing(spacing);
             itemsGridView.setPadding(spacing, 0, spacing, spacing);
@@ -105,13 +107,14 @@ public class TheTakeCategoryGridFragment extends AbstractNextGenFragment{
 
             }
 
-            ImageView productThumbnail = (ImageView)convertView.findViewById(R.id.the_take_item_thumbnail);
+            DotIndicatorImageView productThumbnail = (DotIndicatorImageView) convertView.findViewById(R.id.the_take_item_thumbnail);
             TextView brandName = (TextView) convertView.findViewById(R.id.the_take_brand_name);
             TextView productName = (TextView) convertView.findViewById(R.id.the_take_product_name);
 
             TheTakeData.TheTakeProduct product = getItem(position);
             if (product != null){
                 if (productThumbnail != null){
+                    productThumbnail.setKeyCropXY(product.keyCropProductX, product.keyCropProductY);
                     PicassoTrustAll.loadImageIntoView(getActivity(), product.getThumbnailUrl(), productThumbnail);
                 }
                 if (brandName != null)

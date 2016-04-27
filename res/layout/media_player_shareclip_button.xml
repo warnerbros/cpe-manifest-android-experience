@@ -4,11 +4,11 @@
     android:layout_height="64dp">
 
     <ImageButton
-        android:id="@+id/mc_expand_shrink"
+        android:id="@+id/mc_shareclip_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="@android:color/transparent"
-        android:src="@drawable/icon_player_maximize" />
+        android:src="@drawable/icon_player_share" />
 
 </FrameLayout>

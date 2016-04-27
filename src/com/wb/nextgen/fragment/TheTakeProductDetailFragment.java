@@ -79,7 +79,7 @@ public class TheTakeProductDetailFragment extends AbstractNextGenFragment implem
 
     private void populateProductDetail(TheTakeProduct product){
         if(product.getProductDetail() != null){
-            Picasso.with(getActivity()).load(product.getProductDetail().getProductImage()).fit().centerCrop().into(productPoster);
+            Picasso.with(getActivity()).load(product.getProductDetail().getProductImage()).fit().centerInside().into(productPoster);
 
             matchStatus.setText("exact match");
             brandText.setText(product.getProductDetail().productBrand);

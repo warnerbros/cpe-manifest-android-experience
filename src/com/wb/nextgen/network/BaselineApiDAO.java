@@ -5,12 +5,15 @@ import android.content.res.AssetManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.data.MovieMetaData.FilmPoster;
 import com.wb.nextgen.data.MovieMetaData.CastHeadShot;
+import com.wb.nextgen.data.MovieMetaData.CastSocialMedia;
 import com.wb.nextgen.data.MovieMetaData.BaselineCastData;
 import com.wb.nextgen.data.MovieMetaData.Filmography;
+import com.wb.nextgen.data.TheTakeData;
 import com.wb.nextgen.util.HttpHelper;
 import com.wb.nextgen.util.concurrent.ResultListener;
 import com.wb.nextgen.util.concurrent.Worker;
@@ -28,6 +31,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -121,6 +125,8 @@ public class BaselineApiDAO {
                     //String bio = getActorBio(params);
                     //List<Filmography> films = getActorFilmnography(params);
                     CastHeadShot headShot = getHeadShot(params);
+                    List<CastSocialMedia> socialMedias = getCastSocialMedia(params);
+                    thisData.setSocialMedium(socialMedias);
 
                    // thisData.biography = bio;
                     //thisData.filmogrphies = films;
@@ -134,6 +140,23 @@ public class BaselineApiDAO {
                 return castsInfoMap;
             }
         }, l);
+    }
+
+
+    private static List<CastSocialMedia> getCastSocialMedia(List<NameValuePair> params) throws JSONException, IOException {
+
+        String result = HttpHelper.getFromUrl(BASELINE_DOMAIN + Endpoints.GetSocialMedia, params);
+
+
+        Type listType = new TypeToken<ArrayList<CastSocialMedia>>() {
+        }.getType();
+
+        Gson gson = new GsonBuilder().create();
+
+        List<CastSocialMedia> socialMedium = gson.fromJson(result, listType);
+
+
+        return socialMedium;
     }
 
     public static void getFilmographyAndBioOfPerson(final String castId, ResultListener<BaselineCastData> l) {
