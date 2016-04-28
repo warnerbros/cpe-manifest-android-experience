@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:nextgen="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/menu_bg_image_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@android:color/transparent"/>
+    <!-- The main content view -->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        tools:context=".activity.NextGenActivity">
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:background="@color/black">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/next_gen_startup_layout"
+                    android:scaleType="centerCrop"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="left"
+                    android:weightSum="2">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:weightSum="3">
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2">
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="50dp"
+                                android:scaleType="fitCenter"
+                                android:id="@+id/next_gen_startup_movie_logo"
+                                android:layout_above="@+id/next_gen_startup_play_button"/>
+                            <com.wb.nextgen.widget.SelectedMaskImageButton
+                                android:id="@+id/next_gen_startup_play_button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="80dp"
+                                android:scaleType="fitCenter"
+                                android:layout_centerInParent="true"
+                                nextgen:selectedOverlayColor="@color/transparent_black"
+                                android:background="@android:color/transparent" />
+                            <com.wb.nextgen.widget.SelectedMaskImageButton
+                                android:id="@+id/next_gen_startup_extra_button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="80dp"
+                                android:layout_below="@+id/next_gen_startup_play_button"
+                                android:layout_centerInParent="true"
+                                android:scaleType="fitCenter"
+                                nextgen:selectedOverlayColor="@color/transparent_black"
+                                android:background="@android:color/transparent"/>
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+            </RelativeLayout>
+        </RelativeLayout>
+    </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/startuo_video_view_frame"
+        android:background="@android:color/black"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <VideoView
+            android:id="@+id/startup_video_view"
+            android:layout_centerInParent="true"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+    </RelativeLayout>
+</RelativeLayout>

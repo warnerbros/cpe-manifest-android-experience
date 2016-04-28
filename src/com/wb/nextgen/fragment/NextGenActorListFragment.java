@@ -52,13 +52,14 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment imple
                                 cast.baselineCastData = baselineData;
                         }
                     }
-
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            listAdaptor.notifyDataSetChanged();
-                        }
-                    });
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                listAdaptor.notifyDataSetChanged();
+                            }
+                        });
+                    }
                 }
 
                 @Override

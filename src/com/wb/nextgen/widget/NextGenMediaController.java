@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 import com.wb.nextgen.interfaces.ContentViewFullscreenRequestInterface;
+import com.wb.nextgen.interfaces.NextGenPlayerInterface;
 
 /**
  * Created by gzcheng on 3/16/16.
@@ -29,6 +30,7 @@ public class NextGenMediaController extends MediaController {
 
     Context mContext;
     protected View mBaseSystemUIView;
+    NextGenPlayerInterface player;
 
     public NextGenMediaController(Context context) {
         super(context);
