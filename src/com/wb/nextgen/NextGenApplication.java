@@ -254,7 +254,14 @@ public class NextGenApplication extends Application {
 
         Intent intent=new Intent(Intent.ACTION_VIEW, Uri.parse(urlString));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setPackage("com.android.chrome");
+
+        //Intent i = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(urlString));
+        //startActivity(i);
+
+
+
+        //intent.setPackage("com.android.chrome");
         try {
             getContext().startActivity(intent);
         } catch (ActivityNotFoundException ex) {

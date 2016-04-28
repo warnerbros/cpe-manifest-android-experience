@@ -26,11 +26,13 @@ import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.data.MovieMetaData.Filmography;
 import com.wb.nextgen.data.MovieMetaData.CastData;
 import com.wb.nextgen.network.BaselineApiDAO;
+import com.wb.nextgen.util.DialogUtils;
 import com.wb.nextgen.util.NextGenUtils;
 import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.concurrent.ResultListener;
 import com.wb.nextgen.util.utils.F;
 import com.wb.nextgen.util.utils.NextGenLogger;
+import com.wb.nextgen.util.utils.StringHelper;
 
 import org.w3c.dom.Text;
 
@@ -39,7 +41,7 @@ import java.util.List;
 /**
  * Created by gzcheng on 1/13/16.
  */
-public class NextGenActorDetailFragment extends Fragment{
+public class NextGenActorDetailFragment extends Fragment implements View.OnClickListener{
 
     CastData actorOjbect;
     ImageView fullImageView;
@@ -71,13 +73,13 @@ public class NextGenActorDetailFragment extends Fragment{
         twitterBtn = (ImageButton)view.findViewById(R.id.actor_page_twitter_button);
         instagramBtn = (ImageButton)view.findViewById(R.id.actor_page_instagram_button);
         if (facebookBtn != null){
-            Picasso.with(getActivity()).load(NextGenUtils.getFacebookLogoUrl()).fit().into(facebookBtn);
+            facebookBtn.setOnClickListener(this);
         }
         if (twitterBtn != null){
-            Picasso.with(getActivity()).load(NextGenUtils.getTwitterLogoutUrl()).fit().into(twitterBtn);
+            twitterBtn.setOnClickListener(this);
         }
         if (instagramBtn != null){
-            Picasso.with(getActivity()).load(NextGenUtils.getInstagramLogoUrl()).fit().into(instagramBtn);
+            instagramBtn.setOnClickListener(this);
         }
 
         if (filmographyRecyclerView != null){
@@ -125,6 +127,25 @@ public class NextGenActorDetailFragment extends Fragment{
             }else{
                 filmographyAdaptor.notifyDataSetChanged();
             }
+
+            String facebookUrl = actorOjbect.getBaselineCastData().getSocialMediaUrl(MovieMetaData.BaselineCastData.SOCIAL_MEDIA_KEY.FACEBOOK_KEY);
+            if (!StringHelper.isEmpty(facebookUrl)){
+                facebookBtn.setVisibility(View.VISIBLE);
+            }else
+                facebookBtn.setVisibility(View.GONE);
+
+            String instagramUrl = actorOjbect.getBaselineCastData().getSocialMediaUrl(MovieMetaData.BaselineCastData.SOCIAL_MEDIA_KEY.INSTAGRAM_KEY);
+            if (!StringHelper.isEmpty(instagramUrl)){
+                instagramBtn.setVisibility(View.VISIBLE);
+            }else
+                instagramBtn.setVisibility(View.GONE);
+
+            String twitterUrl = actorOjbect.getBaselineCastData().getSocialMediaUrl(MovieMetaData.BaselineCastData.SOCIAL_MEDIA_KEY.TWITTER_KEY);
+            if (!StringHelper.isEmpty(twitterUrl)){
+                twitterBtn.setVisibility(View.VISIBLE);
+            }else
+                twitterBtn.setVisibility(View.GONE);
+
 
 
             detailTextView.setText(actorOjbect.getBaselineCastData().biography);
@@ -195,8 +216,6 @@ public class NextGenActorDetailFragment extends Fragment{
             return pvh;
         }
         public void onBindViewHolder(FilmographyViewHolder holder, int position){
-            //holder.personName.setText(actorOjbect.actorFilmography[position].title);
-            //holder.personAge.setText(actorOjbect.actorFilmography[position].title);
 
 
             if (actorOjbect.getBaselineCastData().filmogrphies != null && actorOjbect.getBaselineCastData().filmogrphies.size() > position) {
@@ -258,6 +277,28 @@ public class NextGenActorDetailFragment extends Fragment{
 
     public CastData getDetailObject(){
         return actorOjbect;
+    }
+
+    @Override
+    public void onClick(View v){
+        String socialUrl = null;
+        if (v.equals(facebookBtn)){
+            socialUrl = actorOjbect.getBaselineCastData().getSocialMediaUrl(MovieMetaData.BaselineCastData.SOCIAL_MEDIA_KEY.FACEBOOK_KEY);
+        }else if (v.equals(twitterBtn)){
+            socialUrl = actorOjbect.getBaselineCastData().getSocialMediaUrl(MovieMetaData.BaselineCastData.SOCIAL_MEDIA_KEY.TWITTER_KEY);
+        }else if (v.equals(instagramBtn)){
+            socialUrl = actorOjbect.getBaselineCastData().getSocialMediaUrl(MovieMetaData.BaselineCastData.SOCIAL_MEDIA_KEY.INSTAGRAM_KEY);
+        }
+
+        if (!StringHelper.isEmpty(socialUrl)){
+            final String targetUrl = socialUrl;
+            DialogUtils.showLeavingAppDialog(getActivity(), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    NextGenApplication.launchChromeWithUrl(targetUrl);
+                }
+            });
+        }
     }
 
 }

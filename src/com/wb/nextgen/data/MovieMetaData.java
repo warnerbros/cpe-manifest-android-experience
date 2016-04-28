@@ -373,6 +373,15 @@ public class MovieMetaData {
 
     static public class BaselineCastData{
 
+        private static final String FACEBOOK_KEY = "facebook.com";
+
+        public static enum SOCIAL_MEDIA_KEY{
+            FACEBOOK_KEY("www.facebook.com"), INSTAGRAM_KEY("www.instagram.com"), TWITTER_KEY("www.twitter.com");
+            String keyValue;
+            SOCIAL_MEDIA_KEY(String keyValue){
+                this.keyValue = keyValue;
+            }
+        }
 
         public CastHeadShot headShot;
         public String biography;
@@ -404,6 +413,18 @@ public class MovieMetaData {
         }
 
         public List<CastSocialMedia> getSocialMedium(){ return socialMedium;}
+
+        public String getSocialMediaUrl(SOCIAL_MEDIA_KEY Key){
+            if (socialMedium != null && socialMedium.size() > 0){
+                for (CastSocialMedia socialMedia : socialMedium){
+                    if (socialMedia.url.contains(Key.keyValue)){
+                        return socialMedia.url;
+                    }
+                }
+            }
+            return null;
+
+        }
     }
 
     static public class FilmPoster{
