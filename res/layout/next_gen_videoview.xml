@@ -13,7 +13,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <net.flixster.android.drm.ObservableVideoView
+            <com.wb.nextgen.videoview.ObservableVideoView
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:id="@+id/surface_view"

@@ -25,7 +25,7 @@
                 android:layout_height="match_parent"
                 android:background="@color/black">
 
-                <net.flixster.android.drm.ObservableVideoView
+                <com.wb.nextgen.videoview.ObservableVideoView
                     android:id="@+id/ec_video_view"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
