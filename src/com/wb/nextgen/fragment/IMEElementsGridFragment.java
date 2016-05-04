@@ -99,7 +99,10 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                         playerActivity.transitMainFragment(fragment);
                         playerActivity.pausMovieForImeECPiece();
                     } else  if (dataObj instanceof  MovieMetaData.TextItem){
-                        //TODO: text screen
+                        ECTrviaViewFragment fragment = new ECTrviaViewFragment();
+                        fragment.setTextItem(activeObj.title, (MovieMetaData.TextItem)dataObj);
+                        playerActivity.transitMainFragment(fragment);
+                        playerActivity.pausMovieForImeECPiece();
                     }
                 }
             }
