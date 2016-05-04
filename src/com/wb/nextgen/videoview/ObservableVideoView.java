@@ -1,4 +1,4 @@
-package net.flixster.android.drm;
+package com.wb.nextgen.videoview;
 
 import android.content.Context;
 import android.util.AttributeSet;

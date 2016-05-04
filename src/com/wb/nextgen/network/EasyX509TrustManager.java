@@ -1,4 +1,4 @@
-package net.flixster.android.net.ssl;
+package com.wb.nextgen.network;
 
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -29,14 +29,14 @@ public class EasyX509TrustManager implements X509TrustManager {
     }
 
     /**
-     * @see javax.net.ssl.X509TrustManager#checkClientTrusted(X509Certificate[],String authType)
+     * @see X509TrustManager#checkClientTrusted(X509Certificate[],String authType)
      */
     public void checkClientTrusted(X509Certificate[] certificates, String authType) throws CertificateException {
         standardTrustManager.checkClientTrusted(certificates, authType);
     }
 
     /**
-     * @see javax.net.ssl.X509TrustManager#checkServerTrusted(X509Certificate[],String authType)
+     * @see X509TrustManager#checkServerTrusted(X509Certificate[],String authType)
      */
     public void checkServerTrusted(X509Certificate[] certificates, String authType) throws CertificateException {
 
@@ -95,7 +95,7 @@ public class EasyX509TrustManager implements X509TrustManager {
     }
 
     /**
-     * @see javax.net.ssl.X509TrustManager#getAcceptedIssuers()
+     * @see X509TrustManager#getAcceptedIssuers()
      */
     public X509Certificate[] getAcceptedIssuers() {
         return this.standardTrustManager.getAcceptedIssuers();

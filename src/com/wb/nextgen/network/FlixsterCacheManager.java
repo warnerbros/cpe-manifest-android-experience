@@ -1,4 +1,13 @@
-package net.flixster.android;
+package com.wb.nextgen.network;
+
+import android.content.Context;
+import android.os.Environment;
+
+import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.storage.ExternalStorage;
+import com.wb.nextgen.util.HttpHelper;
+import com.wb.nextgen.util.utils.F;
+import com.wb.nextgen.util.utils.NextGenLogger;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,16 +18,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import net.flixster.android.storage.ExternalStorage;
-
-import com.wb.nextgen.NextGenApplication;
-import com.wb.nextgen.util.HttpHelper;
-import com.wb.nextgen.util.utils.F;
-import com.wb.nextgen.util.utils.NextGenLogger;
-
-import android.content.Context;
-import android.os.Environment;
 
 
 public class FlixsterCacheManager {

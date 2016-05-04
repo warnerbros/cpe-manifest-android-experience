@@ -17,15 +17,14 @@ import android.view.WindowManager;
 import com.wb.nextgen.data.DemoData;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.network.BaselineApiDAO;
+import com.wb.nextgen.network.FlixsterCacheManager;
 import com.wb.nextgen.network.TheTakeApiDAO;
 import com.wb.nextgen.parser.ManifestXMLParser;
 import com.wb.nextgen.model.NextGenSettings;
 import com.wb.nextgen.parser.manifest.schema.v1_4.MediaManifestType;
-import com.wb.nextgen.util.concurrent.ResultListener;
 import com.wb.nextgen.util.utils.F;
 import com.wb.nextgen.util.utils.NextGenLogger;
 
-import net.flixster.android.FlixsterCacheManager;
 
 import java.io.ByteArrayInputStream;
 import java.security.cert.CertificateException;

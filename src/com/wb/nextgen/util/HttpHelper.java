@@ -20,9 +20,9 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import net.flixster.android.net.ssl.SecureFlxHttpClient;
 
 import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.network.SecureFlxHttpClient;
 import com.wb.nextgen.util.utils.F;
 import com.wb.nextgen.util.utils.NextGenLogger;
 import com.wb.nextgen.util.utils.StringHelper;
@@ -54,14 +54,14 @@ public class HttpHelper {
 
 	private static final String ACCEPT_HEADER_VALUE = "application/vnd.fv-v2.6+json";//"application/json";
 
-	
+
 	public static String fetchUrl(URL url, boolean checkCache, boolean shouldCache) throws IOException {
 		byte[] responseBody = fetchUrlBytes(url, checkCache, shouldCache, false);
 		String responseString = new String(responseBody, "UTF-8"); // hmmm don't think so
 //		String responseString = new String(responseBody, "windows-1252"); // Microsoft!...0x92 == stylized ' in Windows
 		return responseString;
 	}
-	
+
 	public static String fetchFileLastModifiedDateFromUrl(URL url) throws IOException {
 		NextGenLogger.d(F.TAG_API, "HttpHelper.fetchFileLastModifiedDateFromUrl " + url);
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -71,7 +71,7 @@ public class HttpHelper {
 		connection.disconnect();
 		return lastModified;
 	}
-	
+
 	public static String fetchUrl(URL url, boolean checkCache, boolean shouldCache, boolean shouldAuth)
 			throws IOException {
 		byte[] responseBody = fetchUrlBytes(url, checkCache, shouldCache, false, shouldAuth);
@@ -123,7 +123,7 @@ public class HttpHelper {
 		
 		return result;
 	}
-	
+
 	/**
 	 * Public for Netflix to call using oauth "signed" connections. Caller is responsible for calling disconnect() to
 	 * free all resources held by the connection

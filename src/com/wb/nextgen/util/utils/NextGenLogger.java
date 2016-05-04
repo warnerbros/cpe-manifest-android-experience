@@ -16,9 +16,6 @@ import java.util.regex.Pattern;
 import com.crashlytics.android.Crashlytics;
 import com.wb.nextgen.NextGenApplication;
 
-//import net.flixster.android.FlixsterApplication;
-import net.flixster.android.localization.Localizer;
-import net.flixster.android.localization.constants.KEYS;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -337,27 +334,5 @@ public class NextGenLogger {
 		}
 
 
-	}
-
-	public static void emailSupport(Context context, EmailTypeEnum emailType){
-		String[] recipients = {""};
-		Intent email = new Intent(Intent.ACTION_SEND_MULTIPLE, Uri.parse("mailto:"));
-		// prompts email clients only
-		email.setType("message/rfc822");
-		email.putExtra(Intent.EXTRA_EMAIL, recipients);
-		/*if (!StringHelper.isEmpty(NextGenApplication.getUserID()))
-			email.putExtra(Intent.EXTRA_SUBJECT, "Flixster Video Support, Flixster ID: " + NextGenApplication.getUserID());
-		else*/
-			email.putExtra(Intent.EXTRA_SUBJECT, "Next Gen Support");
-		email.putExtra(Intent.EXTRA_TEXT, "Log file attached");
-		
-		email.putParcelableArrayListExtra(Intent.EXTRA_STREAM, NextGenLogger.getLogFileUriListForEmail());
-		try {
-			// the user can choose the email client
-			context.startActivity(Intent.createChooser(email, Localizer.get(KEYS.PARATURE_CONTACT_US)));
-		} catch (android.content.ActivityNotFoundException ex) {
-			Toast.makeText(context, "No email client installed.",
-					Toast.LENGTH_LONG).show();
-		}
 	}
 }

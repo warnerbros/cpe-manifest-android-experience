@@ -1,4 +1,11 @@
-package net.flixster.android.storage;
+package com.wb.nextgen.storage;
+
+import android.os.Environment;
+
+import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.util.HttpHelper;
+import com.wb.nextgen.util.utils.F;
+import com.wb.nextgen.util.utils.NextGenLogger;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -10,13 +17,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
-
-import com.wb.nextgen.NextGenApplication;
-import com.wb.nextgen.util.HttpHelper;
-import com.wb.nextgen.util.utils.F;
-import com.wb.nextgen.util.utils.NextGenLogger;
-
-import android.os.Environment;
 
 
 /**

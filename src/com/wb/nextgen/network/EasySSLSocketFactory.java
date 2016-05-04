@@ -1,4 +1,17 @@
-package net.flixster.android.net.ssl;
+package com.wb.nextgen.network;
+
+import android.content.Context;
+
+import com.wb.nextgen.R;
+import com.wb.nextgen.util.utils.ActivityHolder;
+import com.wb.nextgen.util.utils.F;
+import com.wb.nextgen.util.utils.NextGenLogger;
+
+import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.conn.scheme.LayeredSocketFactory;
+import org.apache.http.conn.scheme.SocketFactory;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,20 +29,6 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import com.wb.nextgen.R;
-
-import com.wb.nextgen.util.utils.ActivityHolder;
-import com.wb.nextgen.util.utils.F;
-import com.wb.nextgen.util.utils.NextGenLogger;
-
-import org.apache.http.conn.ConnectTimeoutException;
-import org.apache.http.conn.scheme.LayeredSocketFactory;
-import org.apache.http.conn.scheme.SocketFactory;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
-
-import android.content.Context;
-
 
 /**
  * This socket factory will create ssl socket that accepts Flixster certificates signed by AddTrust Root CA
@@ -37,8 +36,8 @@ import android.content.Context;
 public class EasySSLSocketFactory implements SocketFactory, LayeredSocketFactory {
 	
 	/**
-	 * @see org.apache.http.conn.scheme.SocketFactory#connectSocket(java.net.Socket, java.lang.String, int,
-	 *      java.net.InetAddress, int, org.apache.http.params.HttpParams)
+	 * @see SocketFactory#connectSocket(Socket, String, int,
+	 *      InetAddress, int, HttpParams)
 	 */
 	public Socket connectSocket(Socket sock, String host, int port, InetAddress localAddress, int localPort,
 			HttpParams params) throws IOException, UnknownHostException, ConnectTimeoutException {
@@ -46,7 +45,7 @@ public class EasySSLSocketFactory implements SocketFactory, LayeredSocketFactory
 		int soTimeout = HttpConnectionParams.getSoTimeout(params);
 		InetSocketAddress remoteAddress = new InetSocketAddress(host, port);
 		SSLSocket sslsock = (SSLSocket) ((sock != null) ? sock : createSocket());
-		
+
 		if ((localAddress != null) || (localPort > 0)) {
 			// we need to bind explicitly
 			if (localPort < 0) {
@@ -55,45 +54,45 @@ public class EasySSLSocketFactory implements SocketFactory, LayeredSocketFactory
 			InetSocketAddress isa = new InetSocketAddress(localAddress, localPort);
 			sslsock.bind(isa);
 		}
-		
+
 		sslsock.connect(remoteAddress, connTimeout);
 		sslsock.setSoTimeout(soTimeout);
 		return sslsock;
-		
+
 	}
-	
+
 	/**
-	 * @see org.apache.http.conn.scheme.SocketFactory#createSocket()
+	 * @see SocketFactory#createSocket()
 	 */
 	public Socket createSocket() throws IOException {
 		return getSSLContext().getSocketFactory().createSocket();
 	}
-	
+
 	/**
-	 * @see org.apache.http.conn.scheme.SocketFactory#isSecure(java.net.Socket)
+	 * @see SocketFactory#isSecure(Socket)
 	 */
 	public boolean isSecure(Socket socket) throws IllegalArgumentException {
 		return true;
 	}
-	
+
 	/**
-	 * @see org.apache.http.conn.scheme.LayeredSocketFactory#createSocket(java.net.Socket, java.lang.String, int,
+	 * @see LayeredSocketFactory#createSocket(Socket, String, int,
 	 *      boolean)
 	 */
 	public Socket createSocket(Socket socket, String host, int port, boolean autoClose) throws IOException,
 			UnknownHostException {
 		return getSSLContext().getSocketFactory().createSocket(socket, host, port, autoClose);
 	}
-	
+
 	private SSLContext sslContext;
-	
+
 	private SSLContext getSSLContext() throws IOException {
 		if (sslContext == null) {
 			sslContext = createEasySSLContext();
 		}
 		return sslContext;
 	}
-	
+
 	private static SSLContext createEasySSLContext() throws IOException {
         try {
             SSLContext context = SSLContext.getInstance("TLS");
@@ -102,16 +101,16 @@ public class EasySSLSocketFactory implements SocketFactory, LayeredSocketFactory
     			public java.security.cert.X509Certificate[] getAcceptedIssuers() {
     				return new java.security.cert.X509Certificate[] {};
     			}
-    			
+
     			@Override
     			public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType)
-    					throws java.security.cert.CertificateException {
-    				
+    					throws CertificateException {
+
     			}
-    			
+
     			@Override
     			public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType)
-    					throws java.security.cert.CertificateException {
+    					throws CertificateException {
     				
     			}
     		} }, null);

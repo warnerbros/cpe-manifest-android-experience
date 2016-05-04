@@ -35,10 +35,10 @@ import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.TabletUtils;
 import com.wb.nextgen.util.concurrent.ResultListener;
 import com.wb.nextgen.util.utils.NextGenFragmentTransactionEngine;
+import com.wb.nextgen.videoview.IVideoViewActionListener;
+import com.wb.nextgen.videoview.ObservableVideoView;
 import com.wb.nextgen.widget.MainFeatureMediaController;
 
-import net.flixster.android.drm.IVideoViewActionListener;
-import net.flixster.android.drm.ObservableVideoView;
 
 import java.util.HashMap;
 import java.util.Timer;

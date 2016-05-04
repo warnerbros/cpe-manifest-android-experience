@@ -19,7 +19,6 @@ import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.utils.StringHelper;
 import com.wb.nextgen.widget.ECMediaController;
 
-import net.flixster.android.drm.ObservableVideoView;
 
 /**
  * Created by gzcheng on 3/31/16.

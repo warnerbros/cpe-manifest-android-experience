@@ -13,8 +13,6 @@ import android.view.ContextThemeWrapper;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 
-import net.flixster.android.localization.Localizer;
-import net.flixster.android.localization.constants.KEYS;
 
 public class DialogUtils {
     private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("E, MMM d");

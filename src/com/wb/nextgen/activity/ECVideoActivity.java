@@ -11,7 +11,6 @@ import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.fragment.ECVideoViewFragment;
 import com.wb.nextgen.widget.ECMediaController;
 
-import net.flixster.android.drm.ObservableVideoView;
 
 /**
  * Created by gzcheng on 3/7/16.

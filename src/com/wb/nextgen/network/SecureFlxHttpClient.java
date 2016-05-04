@@ -1,4 +1,4 @@
-package net.flixster.android.net.ssl;
+package com.wb.nextgen.network;
 
 import com.wb.nextgen.util.utils.F;
 import com.wb.nextgen.util.utils.NextGenLogger;

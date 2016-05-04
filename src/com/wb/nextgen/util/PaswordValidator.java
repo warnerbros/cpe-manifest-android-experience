@@ -1,6 +1,5 @@
 package com.wb.nextgen.util;
 
-import net.flixster.android.localization.Localizer;
 
 import com.wb.nextgen.util.utils.F;
 import com.wb.nextgen.util.utils.StringHelper;
@@ -23,7 +22,7 @@ final public class PaswordValidator {
 		StringBuilder s = new StringBuilder();
 		
 		if (!username.matches(EMAIL_PATTERN) || !password.matches(PASSWORD_PATTERN) || password.length() == 0) {
-			s.append(Localizer.getMessageForErrorCode(F.DC2_ERROR_LOGIN_FAIL) + "\n\n");
+			//s.append(Localizer.getMessageForErrorCode(F.DC2_ERROR_LOGIN_FAIL) + "\n\n");
 		}
 		
 		if (s.length() > 0) {
