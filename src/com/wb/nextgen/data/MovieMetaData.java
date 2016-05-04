@@ -1,6 +1,7 @@
 package com.wb.nextgen.data;
 
 import com.google.gson.annotations.SerializedName;
+import com.wb.nextgen.R;
 import com.wb.nextgen.parser.manifest.schema.v1_4.ALIDExperienceMapListType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.ALIDExperienceMapType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.AudiovisualType;
@@ -9,11 +10,13 @@ import com.wb.nextgen.parser.manifest.schema.v1_4.ExperienceType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.GalleryType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.InventoryImageType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.InventoryMetadataType;
+import com.wb.nextgen.parser.manifest.schema.v1_4.InventoryTextObjectType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.InventoryVideoType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.MediaManifestType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.PictureGroupType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.PictureType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.PresentationType;
+import com.wb.nextgen.parser.manifest.schema.v1_4.TextGroupType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.TimecodeType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.TimedEventSequenceType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.TimedEventType;
@@ -21,10 +24,12 @@ import com.wb.nextgen.parser.md.schema.v2_3.BasicMetadataInfoType;
 import com.wb.nextgen.parser.md.schema.v2_3.BasicMetadataPeopleType;
 import com.wb.nextgen.parser.md.schema.v2_3.ContentIdentifierType;
 import com.wb.nextgen.parser.md.schema.v2_3.PersonIdentifierType;
+import com.wb.nextgen.util.NextGenUtils;
 import com.wb.nextgen.util.utils.F;
 import com.wb.nextgen.util.utils.NextGenLogger;
 import com.wb.nextgen.util.utils.StringHelper;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -79,6 +84,7 @@ public class MovieMetaData {
         HashMap<String, PictureGroupType> pictureGroupAssetsMap = new HashMap<String, PictureGroupType>();
         HashMap<String, AudioVisualItem> presentationIdToAVItemMap = new HashMap<String, AudioVisualItem>();
         HashMap<String, ECGalleryItem> galleryIdToGalleryItemMap = new HashMap<String, ECGalleryItem>();
+        HashMap<BigInteger, String> indexToTextMap = new HashMap<BigInteger, String>();
 
         HashMap<String, ExperienceData> timeSequenceIdToECGroup = new HashMap<String, ExperienceData>();
 
@@ -117,6 +123,13 @@ public class MovieMetaData {
         if (mediaManifest.getPictureGroups().getPictureGroup().size() > 0){
             for(PictureGroupType pictureGroup : mediaManifest.getPictureGroups().getPictureGroup()){
                 pictureGroupAssetsMap.put(pictureGroup.getPictureGroupID(), pictureGroup);
+            }
+        }
+
+        if (mediaManifest.getInventory().getTextObject()!= null && mediaManifest.getInventory().getTextObject().size() > 0 &&
+                mediaManifest.getInventory().getTextObject().get(0).getTextString() != null){
+            for (InventoryTextObjectType.TextString textString : mediaManifest.getInventory().getTextObject().get(0).getTextString()){
+                indexToTextMap.put(textString.getIndex(), textString.getValue());
             }
         }
 
@@ -254,6 +267,7 @@ public class MovieMetaData {
 
                         String eventPID = timedEvent.getPresentationID();
                         String galleryId = timedEvent.getGalleryID();
+                        TimedEventType.TextGroupID textGroupId = timedEvent.getTextGroupID();
 
                         PresentationDataItem presentationData = null;
                         if (!StringHelper.isEmpty(eventPID)) {
@@ -266,6 +280,10 @@ public class MovieMetaData {
                                 presentationData = galleryIdToGalleryItemMap.get(galleryId);
 
                             }
+                        }else if (textGroupId != null && !StringHelper.isEmpty(textGroupId.getValue())){
+                            BigInteger index = textGroupId.getIndex();
+                            String triviaText = indexToTextMap.get(index);
+                            presentationData = new TextItem(index, triviaText);
                         }
 
                         if (timedEvent.getProductID() != null ){
@@ -594,7 +612,25 @@ public class MovieMetaData {
             this.parentExperienceId = parentExperienceId;
         }
 
+        public PresentationDataItem(String id, String title, String parentExperienceId){
+            this.id = id;
+            this.title = title;
+            this.parentExperienceId = parentExperienceId;
+        }
+
         public abstract String getPosterImgUrl();
+    }
+
+    static public class TextItem extends PresentationDataItem{
+        final public BigInteger index;
+
+        public TextItem(BigInteger index, String text){
+            super("",text, null);
+            this.index = index;
+        }
+        public String getPosterImgUrl(){
+            return NextGenUtils.getPacakageImageUrl(R.drawable.mos_grid_default_logo);
+        }
     }
 
     static public class PictureItem extends PresentationDataItem{

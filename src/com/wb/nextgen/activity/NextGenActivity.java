@@ -82,6 +82,13 @@ NextGenActivity extends FragmentActivity implements View.OnClickListener {
                     startUpVideoViewFrame.setVisibility(View.GONE);
                 }
             });
+            startupVideoView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startUpVideoViewFrame.setVisibility(View.GONE);
+                    startupVideoView.stopPlayback();
+                }
+            });
             startupVideoView.requestFocus();
             startupVideoView.setVideoURI(Uri.parse("android.resource://com.wb.nextgen/" + R.raw.mos_nextgen_background));
         }

@@ -10,13 +10,17 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@color/black">
-
-        <net.flixster.android.drm.ObservableVideoView
-            android:id="@+id/surface_view"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true" />
-
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <net.flixster.android.drm.ObservableVideoView
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:id="@+id/surface_view"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_centerInParent="true" />
+        </RelativeLayout>
     </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
     <RelativeLayout
         android:layout_width="fill_parent"

@@ -63,4 +63,8 @@ public class NextGenUtils {
 	public static String getTwitterLogoutUrl(){
 		return "https://g.twimg.com/about/feature-corporate/image/twitterbird_RGB.png";
 	}
+
+	public static String getPacakageImageUrl(int id){
+		return "android.resource://com.wb.nextgen/drawable/" + id;
+	}
 }

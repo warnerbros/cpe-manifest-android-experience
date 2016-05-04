@@ -1,6 +1,7 @@
 package com.wb.nextgen.activity;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -227,6 +228,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                     break;
                  case Configuration.ORIENTATION_LANDSCAPE:
                     nextGenView.setVisibility(View.GONE);
+                     getActionBar().hide();
                     if (mediaController != null)
                         mediaController.hideShowControls(false);
             }

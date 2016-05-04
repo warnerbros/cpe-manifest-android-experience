@@ -98,6 +98,8 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                         fragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) dataObj);
                         playerActivity.transitMainFragment(fragment);
                         playerActivity.pausMovieForImeECPiece();
+                    } else  if (dataObj instanceof  MovieMetaData.TextItem){
+                        //TODO: text screen
                     }
                 }
             }
@@ -151,7 +153,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
 
 
         //if (titleText != null && group.linkedExperience != null){
-            titleText.setText(activeObj.title);      // set a tag with the linked Experience Id
+            titleText.setText(activeObj.title.toUpperCase());      // set a tag with the linked Experience Id
         //}
 
        // boolean hasChanged =  engine.computeCurrentIMEElement(currentTimeCode);
@@ -169,8 +171,8 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                     }
                 }
 
-                if (subText1 != null && !subText1.getText().equals(((MovieMetaData.PresentationDataItem) dataObj).title.toUpperCase())) {
-                    subText1.setText(((MovieMetaData.PresentationDataItem) dataObj).title.toUpperCase());
+                if (subText1 != null && !subText1.getText().equals(((MovieMetaData.PresentationDataItem) dataObj).title)) {
+                    subText1.setText(((MovieMetaData.PresentationDataItem) dataObj).title);
                 }
             }
         }else if (activeObj.imeObject instanceof TheTakeProductFrame){
