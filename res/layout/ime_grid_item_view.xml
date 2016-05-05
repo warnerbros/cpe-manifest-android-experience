@@ -15,10 +15,23 @@
         android:layout_height="wrap_content"
         nextgen:aspectRatioWidth="16"
         nextgen:aspectRatioHeight="9">
-        <ImageView
-            android:id="@+id/ime_image_poster"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/ime_image_poster"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" />
+            <com.google.android.gms.maps.MapView
+                xmlns:map="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/ime_map_view"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                map:cameraZoom="13"
+                map:mapType="normal"
+                map:liteMode="true"/>
+
+        </RelativeLayout>
 
     </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
     <TextView

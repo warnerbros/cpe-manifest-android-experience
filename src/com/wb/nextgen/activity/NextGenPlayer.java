@@ -1,6 +1,5 @@
 package com.wb.nextgen.activity;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -57,8 +56,6 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
     private Timer imeUpdateTimer;
 
-    private Button actionBarLeftButton;
-
     private MainFeatureMediaController mediaController;
 
     NextGenFragmentTransactionEngine nextGenFragmentTransactionEngine;
@@ -77,37 +74,6 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final ActionBar actionBar = getActionBar();
-        TypedValue tv = new TypedValue();
-        if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true))
-        {
-         //   actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data,getResources().getDisplayMetrics());
-        }
-        LayoutInflater inflator = (LayoutInflater) this .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View actionBarCustomView = inflator.inflate(R.layout.action_bar_custom_view, null);
-
-        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
-        actionBar.setStackedBackgroundDrawable(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setLogo(null);
-        actionBar.setTitle("");
-
-        //actionBarLeftButton = (Button) actionBarCustomView.findViewById(R.id.action_bar_left_button);
-        ImageView centerBanner = (ImageView) actionBarCustomView.findViewById(R.id.action_bar_center_banner);
-        ImageView rightLogo = (ImageView) actionBarCustomView.findViewById(R.id.action_bar_right_logo);
-        actionBar.setCustomView(actionBarCustomView);
-
-        if (centerBanner != null)
-            PicassoTrustAll.loadImageIntoView(this, DemoData.getMovieLogoUrl(), centerBanner);
-
-        actionBarLeftButton = (Button) actionBarCustomView.findViewById(R.id.action_bar_left_button);
-        actionBarLeftButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
         nextGenFragmentTransactionEngine = new NextGenFragmentTransactionEngine(this);
 
         setContentView(R.layout.next_gen_videoview);
@@ -228,7 +194,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                     break;
                  case Configuration.ORIENTATION_LANDSCAPE:
                     nextGenView.setVisibility(View.GONE);
-                     getActionBar().hide();
+                     getSupportActionBar().hide();
                     if (mediaController != null)
                         mediaController.hideShowControls(false);
             }
@@ -437,5 +403,10 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                 }
             }
         }
+    }
+
+    @Override
+    protected void onLeftTopActionBarButtonPressed(){
+        finish();
     }
 }

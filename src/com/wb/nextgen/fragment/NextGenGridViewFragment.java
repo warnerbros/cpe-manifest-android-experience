@@ -76,6 +76,10 @@ public abstract class NextGenGridViewFragment extends Fragment implements Adapte
 
     protected abstract int getStartupSelectedIndex();
 
+    protected void setupNewContentView(View view){
+
+    }
+
     public void resetSelectedItem(){
         listAdaptor.selectedIndex = getStartupSelectedIndex();
     }
@@ -104,7 +108,7 @@ public abstract class NextGenGridViewFragment extends Fragment implements Adapte
             if (convertView == null  ) {
                 LayoutInflater inflater = getActivity().getLayoutInflater();
                 convertView = inflater.inflate(getListItemViewId(), parent, false);
-
+                setupNewContentView(convertView);
 
             } else {
 

@@ -1,10 +1,17 @@
 package com.wb.nextgen.data;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.MediaStore;
+
 import com.google.gson.annotations.SerializedName;
+import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 import com.wb.nextgen.parser.manifest.schema.v1_4.ALIDExperienceMapListType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.ALIDExperienceMapType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.AudiovisualType;
+import com.wb.nextgen.parser.manifest.schema.v1_4.EventLocationType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.ExperienceChildType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.ExperienceType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.GalleryType;
@@ -29,7 +36,11 @@ import com.wb.nextgen.util.utils.F;
 import com.wb.nextgen.util.utils.NextGenLogger;
 import com.wb.nextgen.util.utils.StringHelper;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigInteger;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -284,6 +295,8 @@ public class MovieMetaData {
                             BigInteger index = textGroupId.getIndex();
                             String triviaText = indexToTextMap.get(index);
                             presentationData = new TextItem(index, triviaText);
+                        } else if (timedEvent.getLocation() != null){
+                            presentationData = new LocationItem(timedEvent.getLocation());
                         }
 
                         if (timedEvent.getProductID() != null ){
@@ -633,6 +646,31 @@ public class MovieMetaData {
         }
     }
 
+    static public class LocationItem extends PresentationDataItem{
+        public final boolean isFrictional;
+        public final String address;
+        public final float longitude;
+        public final float latitude;
+        public LocationItem(EventLocationType eventLocation){
+            super("",eventLocation.getName(), null);
+            isFrictional = eventLocation.getType().isFictional();
+            address = eventLocation.getAddress().toString();
+            if (eventLocation.getEarthCoordinate() != null) {
+                longitude = eventLocation.getEarthCoordinate().getLongitude().floatValue();
+                latitude = eventLocation.getEarthCoordinate().getLatitude().floatValue();
+            }/*else if (eventLocation.getOtherCoordinates() != null){
+                longitude = eventLocation.getOtherCoordinates().getCoordinate()..getLongitude().floatValue();
+                latitude = eventLocation.getOtherCoordinates().getLatitude().floatValue();
+            }*/else{
+                longitude = -1.0f;
+                latitude = -1.0f;
+            }
+        }
+        public String getPosterImgUrl(){
+            return NextGenUtils.getPacakageImageUrl(R.drawable.mos_grid_default_logo);
+        }
+    }
+
     static public class PictureItem extends PresentationDataItem{
         final public PictureImageData fullImage;
         final public PictureImageData thumbnail;
@@ -902,5 +940,25 @@ public class MovieMetaData {
             }
         }
         return null;
+    }
+
+    private Bitmap mapPinBitmap = null;
+    public Bitmap getMapPinBitmap() {
+        if (mapPinBitmap != null)
+            return mapPinBitmap;
+        try {
+
+            Bitmap myBitmap = MediaStore.Images.Media.getBitmap(NextGenApplication.getContext().getContentResolver(), Uri.parse(NextGenUtils.getPacakageImageUrl(R.drawable.mos_map_pin)));
+            //URL url = new URL(NextGenUtils.getPacakageImageUrl(R.drawable.mos_map_pin));
+            //Bitmap myBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+
+
+
+            mapPinBitmap = myBitmap;
+            return mapPinBitmap;
+        } catch (Exception e) {
+            // Log exception
+            return null;
+        }
     }
 }

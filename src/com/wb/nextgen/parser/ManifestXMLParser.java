@@ -216,6 +216,10 @@ public class ManifestXMLParser {
             return new Integer(stringValue);
         }else if (targetClass.equals(Boolean.class)){
             return new Boolean(stringValue);
+        }else if (targetClass.equals(Float.class)){
+            return new Float(stringValue);
+        }else if (targetClass.equals(Double.class)){
+            return new Double(stringValue);
         }else if (targetClass.equals(XMLGregorianCalendar.class)){
             try {
 

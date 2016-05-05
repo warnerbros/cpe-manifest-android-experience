@@ -1,10 +1,29 @@
 package com.wb.nextgen.fragment;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMapOptions;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 import com.wb.nextgen.activity.NextGenPlayer;
@@ -31,6 +50,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
     final List<NextGenIMEEngine> imeEngines = new ArrayList<NextGenIMEEngine>();
     long currentTimeCode = 0L;
 
+
     List<IMEDisplayObject> activeIMEs = new ArrayList<IMEDisplayObject>();
 
     private class IMEDisplayObject{
@@ -43,9 +63,11 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
         }
     }
 
+    Bundle savedInstanceState = null;
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         imeGroups = NextGenApplication.getMovieMetaData().getImeElementGroups();
+        this.savedInstanceState = savedInstanceState;
         for (IMEElementsGroup group : imeGroups){
 
             if (group.getExternalApiData() != null){
@@ -133,18 +155,13 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
     }
 
     protected void fillListRowWithObjectInfo(int position, View rowView, Object item, boolean isSelected){
-        /*TextView titleText= (TextView)rowView.findViewById(R.id.ime_title);
-        TextView subText1= (TextView)rowView.findViewById(R.id.ime_desc_text1);
-        TextView subText2= (TextView)rowView.findViewById(R.id.ime_desc_text2);
-        ImageView poster = (ImageView)rowView.findViewById(R.id.ime_image_poster);*/
-
-        //IMEElementsGroup group = (IMEElementsGroup)item;
-        //NextGenIMEEngine engine = imeEngines.get(position);
-       /* if (group.linkedExperience != null){
-            rowView.setTag(group.linkedExperience.experienceId);
-        }*/
 
         localFill((IMEDisplayObject)item, rowView);
+    }
+
+    protected void setupNewContentView(View view){
+        MapView mapView = (MapView)view.findViewById(R.id.ime_map_view);
+        mapView.onCreate(savedInstanceState);
 
     }
 
@@ -153,6 +170,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
         TextView subText1= (TextView)rowView.findViewById(R.id.ime_desc_text1);
         TextView subText2= (TextView)rowView.findViewById(R.id.ime_desc_text2);
         ImageView poster = (ImageView)rowView.findViewById(R.id.ime_image_poster);
+        MapView mapView = (MapView)rowView.findViewById(R.id.ime_map_view);
 
 
         //if (titleText != null && group.linkedExperience != null){
@@ -166,7 +184,41 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
             if (dataObj instanceof MovieMetaData.PresentationDataItem) {
                 Object currentPresentationId = rowView.getTag(R.id.ime_title);
                 rowView.setTag(R.id.ime_title, ((MovieMetaData.PresentationDataItem) dataObj).id);
-                if (poster != null) {
+                if (dataObj instanceof MovieMetaData.LocationItem){
+                    mapView.setVisibility(View.VISIBLE);
+                    poster.setVisibility(View.GONE);
+                    MovieMetaData.LocationItem locationItem = (MovieMetaData.LocationItem)dataObj;
+                    //mapView.getMaps
+                    final LatLng location = new LatLng(locationItem.latitude, locationItem.longitude);
+
+                    mapView.getMapAsync(new OnMapReadyCallback() {
+                        @Override
+                        public void onMapReady(GoogleMap googleMap) {
+
+                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 13.0f));   // set location
+
+                            BitmapDescriptor bmDes = BitmapDescriptorFactory.fromBitmap(NextGenApplication.getMovieMetaData().getMapPinBitmap());
+
+                            googleMap.addMarker(new MarkerOptions()
+                                    .position(location)
+                                    .icon(bmDes));
+                            googleMap.getUiSettings().setMapToolbarEnabled(false);
+                            googleMap.setOnMapClickListener(null);
+                            //googleMap.addMarker(new MarkerOptions().position(new LatLng(locationItem.latitude, locationItem.longitude)).title("Marker"));
+                        }
+                    });
+
+
+                    /*Criteria criteria = new Criteria();
+                    LocationManager locationManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+                    String bestProvider = locationManager.getBestProvider(criteria, true);
+                    Location location = locationManager.getLastKnownLocation(bestProvider);*/
+
+
+
+                }else if (poster != null) {
+                    poster.setVisibility(View.VISIBLE);
+                    mapView.setVisibility(View.GONE);
                     String imageUrl = ((MovieMetaData.PresentationDataItem) dataObj).getPosterImgUrl();
                     if (poster.getTag() == null || !poster.getTag().equals(imageUrl)) {
                         poster.setTag(imageUrl);
@@ -179,6 +231,8 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                 }
             }
         }else if (activeObj.imeObject instanceof TheTakeProductFrame){
+            poster.setVisibility(View.VISIBLE);
+            mapView.setVisibility(View.GONE);
             rowView.setTag(R.id.ime_title, ((TheTakeProductFrame) activeObj.imeObject).frameTime);
             if (poster != null) {
                 String imageUrl = ((TheTakeProductFrame) activeObj.imeObject).frameImages.image1000px;
