@@ -88,7 +88,9 @@ public class DemoJSONData {
         public String movieInfoUrl;
     }
 
-    public class MovieJSONData {
+    public class
+
+    MovieJSONData {
         public String title;
         @SerializedName("people")
         public List<ActorInfo> actorsInfo;

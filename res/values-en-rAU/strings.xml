@@ -13,7 +13,7 @@
 		the tickets. Tickets are for general admission seating; there is no reserved seating. Please come
 		early to ensure best
 		seating. There are no refunds on tickets or service charges.</string>
-    <string name="Theater:">Cinema:</string>
+    <string name="Theater">Cinema:</string>
     <string name="label_date">Sessions Date</string>
     <string name="get_showtimes">Get Sessions</string>
     <string name="label_showtimes">Sessions</string>

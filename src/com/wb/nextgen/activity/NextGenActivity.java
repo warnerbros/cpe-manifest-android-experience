@@ -20,12 +20,11 @@ import com.wb.nextgen.widget.NextGenVideoView;
 /**
  * Created by gzcheng on 1/7/16.
  */
-public class
-NextGenActivity extends FragmentActivity implements View.OnClickListener {
+public class NextGenActivity extends FragmentActivity implements View.OnClickListener {
     // wrapper of ProfileViewFragment
 
     VideoView startupVideoView;
-    RelativeLayout startUpVideoViewFrame;
+    //RelativeLayout startUpVideoViewFrame;
 
     @Override
     public void onCreate(Bundle savedState) {
@@ -33,12 +32,8 @@ NextGenActivity extends FragmentActivity implements View.OnClickListener {
         setContentView(R.layout.next_gen_startup_view);
 
         startupVideoView = (VideoView)findViewById(R.id.startup_video_view);
-        startUpVideoViewFrame = (RelativeLayout)findViewById(R.id.startuo_video_view_frame);
-        ImageView menuBG = (ImageView)findViewById(R.id.menu_bg_image_view);
-        if (menuBG != null){
-            String bgImageUri = "android.resource://com.wb.nextgen/" + R.drawable.man_of_steel_menu;
-            PicassoTrustAll.getInstance(this).load(bgImageUri).fit().into(menuBG);
-        }
+        //startUpVideoViewFrame = (RelativeLayout)findViewById(R.id.startuo_video_view_frame);
+
 
         ImageButton playMovieButton;
         ImageButton extraButton;
@@ -69,7 +64,7 @@ NextGenActivity extends FragmentActivity implements View.OnClickListener {
     @Override
     public void onStart(){
         super.onStart();
-        if (startupVideoView != null && startUpVideoViewFrame != null && startUpVideoViewFrame.getVisibility() == View.VISIBLE){
+        if (startupVideoView != null ){
             startupVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mp) {
@@ -79,13 +74,13 @@ NextGenActivity extends FragmentActivity implements View.OnClickListener {
             startupVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    startUpVideoViewFrame.setVisibility(View.GONE);
+                    //startUpVideoViewFrame.setVisibility(View.GONE);
                 }
             });
             startupVideoView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startUpVideoViewFrame.setVisibility(View.GONE);
+                    //startUpVideoViewFrame.setVisibility(View.GONE);
                     startupVideoView.stopPlayback();
                 }
             });

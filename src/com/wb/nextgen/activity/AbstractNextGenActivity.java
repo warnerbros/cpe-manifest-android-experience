@@ -1,6 +1,5 @@
 package com.wb.nextgen.activity;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -11,6 +10,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +33,7 @@ import com.wb.nextgen.util.utils.StringHelper;
 /**
  * Created by gzcheng on 3/9/16.
  */
-public abstract class AbstractNextGenActivity extends FragmentActivity implements ContentViewFullscreenRequestInterface {
+public abstract class AbstractNextGenActivity extends AppCompatActivity implements ContentViewFullscreenRequestInterface {
 
     public abstract String getBackgroundImgUri();
     public abstract String getLeftButtonText();
@@ -48,8 +49,9 @@ public abstract class AbstractNextGenActivity extends FragmentActivity implement
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_ACTION_BAR);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
-        final ActionBar actionBar = getActionBar();
+        final ActionBar actionBar = getSupportActionBar();
         TypedValue tv = new TypedValue();
         if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true))
         {
@@ -78,7 +80,7 @@ public abstract class AbstractNextGenActivity extends FragmentActivity implement
             actionBarLeftButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                   onBackPressed();
+                   onLeftTopActionBarButtonPressed();
                 }
             });
         }
@@ -124,7 +126,7 @@ public abstract class AbstractNextGenActivity extends FragmentActivity implement
 
         if (!StringHelper.isEmpty(getBackgroundImgUri()))
             loadBGImage();
-
+        /*
         if (topUnderlayActionbarSpacer == null){
             topUnderlayActionbarSpacer = new LinearLayout(this);
             //int actionBarHeight = 0;
@@ -136,7 +138,7 @@ public abstract class AbstractNextGenActivity extends FragmentActivity implement
             if (layout != null){
                 layout.addView(topUnderlayActionbarSpacer, 0);
             }
-        }
+        }*/
     }
 
     protected void loadBGImage(){
@@ -175,5 +177,9 @@ public abstract class AbstractNextGenActivity extends FragmentActivity implement
             topUnderlayActionbarSpacer.setVisibility(View.VISIBLE);
         }else
             topUnderlayActionbarSpacer.setVisibility(View.GONE);
+    }
+
+    protected void onLeftTopActionBarButtonPressed(){
+        onBackPressed();
     }
 }

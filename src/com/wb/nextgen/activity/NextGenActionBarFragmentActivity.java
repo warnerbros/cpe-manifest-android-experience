@@ -1,6 +1,5 @@
 package com.wb.nextgen.activity;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -8,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,12 +22,12 @@ import java.util.Stack;
 /**
  * Created by gzcheng on 1/14/16.
  */
-public class NextGenActionBarFragmentActivity  extends FragmentActivity{
+public class NextGenActionBarFragmentActivity  extends AppCompatActivity{
     //final Stack<Class<?>> fragmentClassStack = new Stack<Class<?>>();
     Fragment currentFragment;
 
     private void setupActionBar() {
-        ActionBar ab = getActionBar();
+        ActionBar ab = getSupportActionBar();
         ab.setDisplayShowCustomEnabled(true);
         ab.setDisplayShowTitleEnabled(false);
         ab.setDisplayUseLogoEnabled(false);

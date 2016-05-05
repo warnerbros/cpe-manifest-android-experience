@@ -73,13 +73,13 @@
         <item name="android:background">@drawable/ab_solid_flxabv44</item>
         <item name="android:backgroundStacked">@drawable/ab_stacked_solid_flxabv44</item>
         <item name="android:backgroundSplit">@drawable/ab_bottom_solid_flxabv44</item>
-        <item name="android:progressBarStyle">@style/flxabv44_ProgressBar</item>
+        <!--<item name="android:progressBarStyle">@style/flxabv44_ProgressBar</item>-->
         <item name="android:titleTextStyle">@style/header_text</item> <!-- Flx custom -->
     </style>
 
     <style name="flxabv44_transparent_ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
         <item name="android:background">@drawable/ab_transparent_flxabv44</item>
-        <item name="android:progressBarStyle">@style/flxabv44_ProgressBar</item>
+        <!--<item name="android:progressBarStyle">@style/flxabv44_ProgressBar</item>-->
     </style>
 
     <style name="flxabv44_PopupMenu" parent="@android:style/Widget.Holo.Light.ListPopupWindow">
@@ -99,10 +99,10 @@
         <item name="android:popupBackground">@drawable/menu_dropdown_panel_flxabv44</item>
         <item name="android:dropDownSelector">@drawable/selectable_background_flxabv44</item>
     </style>
-    
+    <!--
     <style name="flxabv44_ProgressBar" parent="@style/Widget.AppCompat.Base.ProgressBar.Horizontal">
         <item name="android:progressDrawable">@drawable/progress_horizontal_flxabv44</item>
-    </style>
+    </style>-->
     
 
     <!-- End of Flixster Action Bar v4.4 -->

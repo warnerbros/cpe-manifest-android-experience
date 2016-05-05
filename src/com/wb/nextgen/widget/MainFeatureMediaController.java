@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Build;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,9 +80,9 @@ public class MainFeatureMediaController extends  NextGenMediaController implemen
         super.hideShowControls(bShow);
         if (mContext instanceof Activity) {
             if (bShow) {
-                ((Activity)mContext).getActionBar().show();
+                ((AppCompatActivity)mContext).getSupportActionBar().show();
             } else if (mContext.getResources().getConfiguration().equals(Configuration.ORIENTATION_LANDSCAPE)){
-                ((Activity)mContext).getActionBar().hide();
+                ((AppCompatActivity)mContext).getSupportActionBar().hide();
             }
         }
     }

@@ -13,7 +13,7 @@
 		to purchase the tickets. Tickets are for general admission seating; there is no reserved seating. Please come
 		early to
 		ensure best seating. There are no refunds on tickets or service charges.</string>
-    <string name="Theater:">Theatre:</string>
+    <string name="Theater">Theatre:</string>
     <string name="format_theaterlist_distance_subheader">Within %.0f km</string>
     <string name="format_theaterlist_distance_subheader_final">More than %.0f km</string>
     <string name="format_dialog_distances">%d km</string>
