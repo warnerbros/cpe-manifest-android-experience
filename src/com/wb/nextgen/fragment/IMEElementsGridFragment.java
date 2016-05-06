@@ -125,6 +125,11 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                         fragment.setTextItem(activeObj.title, (MovieMetaData.TextItem)dataObj);
                         playerActivity.transitMainFragment(fragment);
                         playerActivity.pausMovieForImeECPiece();
+                    } else if (dataObj instanceof  MovieMetaData.LocationItem){
+                        ECMapViewFragment fragment = new ECMapViewFragment();
+                        fragment.setLocationItem(activeObj.title, (MovieMetaData.LocationItem)dataObj);
+                        playerActivity.transitMainFragment(fragment);
+                        playerActivity.pausMovieForImeECPiece();
                     }
                 }
             }
@@ -165,7 +170,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
 
     }
 
-    private void localFill(IMEDisplayObject activeObj, View rowView){
+    private void localFill(final IMEDisplayObject activeObj, View rowView){
         TextView titleText= (TextView)rowView.findViewById(R.id.ime_title);
         TextView subText1= (TextView)rowView.findViewById(R.id.ime_desc_text1);
         TextView subText2= (TextView)rowView.findViewById(R.id.ime_desc_text2);
@@ -187,7 +192,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                 if (dataObj instanceof MovieMetaData.LocationItem){
                     mapView.setVisibility(View.VISIBLE);
                     poster.setVisibility(View.GONE);
-                    MovieMetaData.LocationItem locationItem = (MovieMetaData.LocationItem)dataObj;
+                    final MovieMetaData.LocationItem locationItem = (MovieMetaData.LocationItem)dataObj;
                     //mapView.getMaps
                     final LatLng location = new LatLng(locationItem.latitude, locationItem.longitude);
 
@@ -195,15 +200,28 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                         @Override
                         public void onMapReady(GoogleMap googleMap) {
 
-                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 13.0f));   // set location
+                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 14.0f));   // set location
 
                             BitmapDescriptor bmDes = BitmapDescriptorFactory.fromBitmap(NextGenApplication.getMovieMetaData().getMapPinBitmap());
-
+                            googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
                             googleMap.addMarker(new MarkerOptions()
                                     .position(location)
                                     .icon(bmDes));
                             googleMap.getUiSettings().setMapToolbarEnabled(false);
-                            googleMap.setOnMapClickListener(null);
+                            final String ecGroupTitle = activeObj.title;
+                            googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                                @Override
+                                public void onMapClick(LatLng latLng) {
+                                    NextGenPlayer playerActivity = null;
+                                    if (getActivity() instanceof NextGenPlayer) {
+                                        playerActivity = (NextGenPlayer) getActivity();
+                                    }
+                                    ECMapViewFragment fragment = new ECMapViewFragment();
+                                    fragment.setLocationItem(ecGroupTitle, locationItem);
+                                    playerActivity.transitMainFragment(fragment);
+                                    playerActivity.pausMovieForImeECPiece();
+                                }
+                            });
                             //googleMap.addMarker(new MarkerOptions().position(new LatLng(locationItem.latitude, locationItem.longitude)).title("Marker"));
                         }
                     });

@@ -27,6 +27,7 @@
                 android:id="@+id/ime_map_view"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
+                android:clickable="false"
                 map:cameraZoom="13"
                 map:mapType="normal"
                 map:liteMode="true"/>
