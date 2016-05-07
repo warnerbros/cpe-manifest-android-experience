@@ -57,6 +57,7 @@
                             android:layout_height="fill_parent"
                             android:textColor="@android:color/white"
                             android:textSize="@dimen/textNormal"
+                            android:textStyle="italic"
                             android:fontFamily="sans-serif-condensed"
                             android:background="@drawable/selectable_rectangle_border"
                             android:gravity="center"

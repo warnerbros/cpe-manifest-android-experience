@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -32,8 +33,9 @@ public class NextGenMediaController extends MediaController {
     protected View mBaseSystemUIView;
     NextGenPlayerInterface player;
 
-    public NextGenMediaController(Context context) {
-        super(context);
+    public NextGenMediaController(Context context, NextGenPlayerInterface nextGenPlayer) {
+        super(new ContextThemeWrapper(context, R.style.MediaControllerStyle), false);
+        player = nextGenPlayer;
         init(context);
     }
     @Override
@@ -79,10 +81,11 @@ public class NextGenMediaController extends MediaController {
 
     @Override
     public void hide() {
-        super.hide();
-        if (isFullScreen())
-            dismissNavHandler.sendEmptyMessage(0);
-        //dismissSoftButtonsIfPossible();
+        if (player.isPlaying()) {
+            super.hide();
+            if (isFullScreen())
+                dismissNavHandler.sendEmptyMessage(0);
+        }
     }
 
     Handler dismissNavHandler = new Handler(){
@@ -112,7 +115,7 @@ public class NextGenMediaController extends MediaController {
     }
 
     protected void hideShowControls(boolean bShow){
-        if (!bShow){
+        if (!bShow  ){
             mBaseSystemUIView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN); // hide nav bar
         }else{
 

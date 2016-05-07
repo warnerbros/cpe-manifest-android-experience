@@ -264,7 +264,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
             currentUri = uri;
             videoView.setVideoURI(uri);
             if (mediaController == null) {
-                mediaController = new MainFeatureMediaController(this);
+                mediaController = new MainFeatureMediaController(this, videoView);
                 mediaController.setShareClipIMEGroup(NextGenApplication.getMovieMetaData().getShareClipIMEGroup());
                 videoView.setMediaController(mediaController);
             }

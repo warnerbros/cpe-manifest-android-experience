@@ -399,5 +399,12 @@
         <item name="android:selectableItemBackground">@drawable/selectable_background_flxabv44</item>-->
 
     </style>
-		
+    <style name="MediaControllerStyle">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:progressBackgroundTint">@android:color/white</item>
+        <item name="android:progressBackgroundTintMode">src_over</item>
+        <item name="android:progressTint">@color/drawer_yellow</item>
+        <item name="android:progressTintMode">src_atop</item>
+        <item name="android:progressDrawable">@drawable/mos_map_pin</item>
+    </style>
 </resources>

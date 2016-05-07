@@ -22,6 +22,7 @@ import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.data.MovieMetaData.IMEElementsGroup;
 import com.wb.nextgen.interfaces.ContentViewFullscreenRequestInterface;
 import com.wb.nextgen.interfaces.NextGenPlaybackStatusListener;
+import com.wb.nextgen.interfaces.NextGenPlayerInterface;
 import com.wb.nextgen.model.AVGalleryIMEEngine;
 import com.wb.nextgen.model.NextGenIMEEngine;
 
@@ -32,8 +33,8 @@ public class MainFeatureMediaController extends  NextGenMediaController implemen
     ImageButton shareClipButton;
     IMEElementsGroup shareClipIMEGroup;
     AVGalleryIMEEngine shareClipIMEEngine;
-    public MainFeatureMediaController(Context context) {
-        super(context);
+    public MainFeatureMediaController(Context context, NextGenPlayerInterface player) {
+        super(context, player);
     }
 
     @Override

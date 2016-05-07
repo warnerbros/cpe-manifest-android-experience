@@ -25,6 +25,7 @@ import android.widget.VideoView;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 import com.wb.nextgen.interfaces.ContentViewFullscreenRequestInterface;
+import com.wb.nextgen.interfaces.NextGenPlayerInterface;
 
 /**
  * Created by gzcheng on 3/9/16.
@@ -34,8 +35,8 @@ public class ECMediaController extends NextGenMediaController {
 
 
     ImageButton maxminButton;
-    public ECMediaController(Context context, ViewGroup videoViewContainer) {
-        super(context);
+    public ECMediaController(Context context, NextGenPlayerInterface player) {
+        super(context, player);
     }
 
     @Override

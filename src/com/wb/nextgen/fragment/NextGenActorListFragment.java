@@ -56,7 +56,8 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment imple
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                listAdaptor.notifyDataSetChanged();
+                                if (listAdaptor != null)
+                                    listAdaptor.notifyDataSetChanged();
                             }
                         });
                     }

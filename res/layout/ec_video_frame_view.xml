@@ -14,6 +14,7 @@
 
         <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
             xmlns:nextgen="http://schemas.android.com/apk/res-auto"
+            android:padding="@dimen/spacing_large"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             nextgen:aspectRatioHeight="9"
@@ -30,7 +31,26 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:layout_centerInParent="true" />
+                <RelativeLayout
+                    android:id="@+id/ec_video_preview_image_frame"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:visibility="gone">
+                    <ImageView
+                        android:id="@+id/ec_video_preview_image"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"/>
+                    <ImageButton
+                        android:id="@+id/ec_video_preview_playButton"
+                        android:background="@android:color/transparent"
+                        android:layout_width="@dimen/ime_actor_thumbnail_dimen"
+                        android:layout_height="@dimen/ime_actor_thumbnail_dimen"
+                        android:scaleType="fitCenter"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/play_button"
+                        android:visibility="gone"/>
 
+                </RelativeLayout>
             </RelativeLayout>
         </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
 
@@ -38,6 +58,13 @@
             android:id="@+id/ec_content_name"
             android:textColor="@android:color/white"
             android:textSize="@dimen/textXLarge"
+            android:fontFamily="sans-serif-condensed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/ec_content_runtime"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="@dimen/textLarge"
             android:fontFamily="sans-serif-condensed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

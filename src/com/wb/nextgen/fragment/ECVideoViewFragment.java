@@ -1,5 +1,8 @@
 package com.wb.nextgen.fragment;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,13 +10,19 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.util.PicassoTrustAll;
+import com.wb.nextgen.util.utils.F;
+import com.wb.nextgen.util.utils.NextGenLogger;
 import com.wb.nextgen.util.utils.StringHelper;
 import com.wb.nextgen.videoview.ObservableVideoView;
 import com.wb.nextgen.widget.ECMediaController;
@@ -27,12 +36,20 @@ public class ECVideoViewFragment extends Fragment {
 
     ECMediaController mediaController;
     protected TextView selectedECNameTextView;
+    protected TextView ecDurationTextView;
+
+    ImageView previewImageView = null;
+    RelativeLayout previewFrame = null;
+    ImageButton previewPlayBtn = null;
 
     MovieMetaData.AudioVisualItem selectedAVItem = null;
     boolean bSetOnResume= false;
     ImageView bgImageView;
 
     String bgImageUrl = null;
+
+    boolean shouldAutoPlay = false;
+
 
     public void setBGImageUrl(String url){
         bgImageUrl = url;
@@ -48,9 +65,24 @@ public class ECVideoViewFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         videoView = (ObservableVideoView) view.findViewById(R.id.ec_video_view);
-        mediaController = new ECMediaController(getActivity(), (RelativeLayout) view.findViewById(R.id.video_view_container));
+        mediaController = new ECMediaController(getActivity(), videoView);
         selectedECNameTextView = (TextView)view.findViewById(R.id.ec_content_name);
+        ecDurationTextView = (TextView)view.findViewById(R.id.ec_content_runtime);
+        previewImageView = (ImageView)view.findViewById(R.id.ec_video_preview_image);
+        previewFrame = (RelativeLayout)view.findViewById(R.id.ec_video_preview_image_frame);
+        previewPlayBtn = (ImageButton)view.findViewById(R.id.ec_video_preview_playButton);
 
+        if (previewPlayBtn != null) {
+            previewPlayBtn.setVisibility(View.GONE);
+            previewPlayBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (previewFrame != null)
+                        previewFrame.setVisibility(View.GONE);
+                    videoView.start();
+                }
+            });
+        }
         videoView.setMediaController(mediaController);
         videoView.setOnPreparedListener(new PreparedListener());
         videoView.requestFocus();
@@ -65,7 +97,13 @@ public class ECVideoViewFragment extends Fragment {
     private class PreparedListener implements MediaPlayer.OnPreparedListener {
         @Override
         public void onPrepared(MediaPlayer mp) {
-            videoView.start();
+            if (shouldAutoPlay) {
+                videoView.start();
+            }else {
+                if (previewPlayBtn != null){
+                    previewPlayBtn.setVisibility(View.VISIBLE);
+                }
+            }
         }
     }
 
@@ -90,11 +128,48 @@ public class ECVideoViewFragment extends Fragment {
         super.onDestroyView();
     }
 
+    Target target = new Target() {
+        @Override
+        public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    videoView.setBackground(new BitmapDrawable(bitmap));
+
+                }
+            });
+        }
+        @Override
+
+        public void onPrepareLoad(Drawable var1){
+            NextGenLogger.d(F.TAG, "haha");
+        }
+
+        @Override
+        public void onBitmapFailed(Drawable var1) {
+            NextGenLogger.d(F.TAG, "haha");
+        }
+    };
+
     public void setAudioVisualItem(MovieMetaData.AudioVisualItem avItem){
         if (avItem != null) {
             selectedAVItem = avItem;
             if (selectedECNameTextView != null && videoView != null) {
                 selectedECNameTextView.setText(avItem.title);
+                if (ecDurationTextView != null) {
+                    ecDurationTextView.setText(avItem.getFullDurationString());
+                }
+                if (!shouldAutoPlay) {
+                    if (previewFrame != null) {
+                        previewFrame.setVisibility(View.VISIBLE);
+                        previewPlayBtn.setVisibility(View.GONE);
+                    }
+                    if (!StringHelper.isEmpty(selectedAVItem.getPosterImgUrl())) {
+
+                        Picasso.with(getActivity()).load(selectedAVItem.getPreviewImageUrl()).fit().into(previewImageView);
+
+                    }
+                }
                 videoView.setVideoURI(Uri.parse(avItem.videoUrl));
             }else{
                 bSetOnResume = true;

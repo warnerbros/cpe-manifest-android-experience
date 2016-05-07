@@ -47,6 +47,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.xml.datatype.Duration;
+
 /**
  * Created by gzcheng on 3/21/16.
  */
@@ -612,6 +614,30 @@ public class MovieMetaData {
         }
     }
 
+    static public class PresentationImageData{
+        public final String imageUrl;
+        public final int width;
+        public final int height;
+        public PresentationImageData(BasicMetadataInfoType.ArtReference artReference){
+            imageUrl = artReference.getValue();
+            String dimensionStr = artReference.getResolution();
+            if (!StringHelper.isEmpty(dimensionStr)){
+                int tempW = 0, tempH = 0;
+                try {
+                    int xPostion = dimensionStr.indexOf("x");
+                    String w = dimensionStr.substring(0, xPostion);
+                    String h = dimensionStr.substring(xPostion + 1, dimensionStr.length() );
+                    tempW = Integer.parseInt(w);
+                    tempH = Integer.parseInt(h);
+                }catch(Exception ex){}
+                width = tempW;
+                height = tempH;
+            }else{
+                width = height = 0;
+            }
+        }
+    }
+
     static public abstract class PresentationDataItem{
         final public String id;
         final public String title;
@@ -717,18 +743,27 @@ public class MovieMetaData {
         final public String videoUrl;
         final public String duration;
         final public List<ExternalApiData> externalApiDataList = new ArrayList<ExternalApiData>();
+        final PresentationImageData[] images;
+        final Duration durationObject;
         public AudioVisualItem(String parentExperienceId, InventoryMetadataType metaData, InventoryVideoType videoData){
             super(metaData, parentExperienceId);
             BasicMetadataInfoType localizedInfo = metaData.getBasicMetadata().getLocalizedInfo().get(0);
             if (videoData != null) {
                 videoUrl = videoData.getContainerReference().getContainerLocation();
-                if (localizedInfo.getArtReference() != null && localizedInfo.getArtReference().size() > 0)
-                    posterImgUrl = localizedInfo.getArtReference().get(0).getValue();
-                else
-                    posterImgUrl = null;
 
+                if (localizedInfo.getArtReference() != null && localizedInfo.getArtReference().size() > 0) {
+                    posterImgUrl = localizedInfo.getArtReference().get(0).getValue();
+                    images = new PresentationImageData[localizedInfo.getArtReference().size()];
+                    for (int i = 0; i< localizedInfo.getArtReference().size(); i++){
+                        images[i] = new PresentationImageData(localizedInfo.getArtReference().get(i));
+                    }
+                }else {
+                    images = null;
+                    posterImgUrl = null;
+                }
 
                 String dValue = "";
+                durationObject = metaData.getBasicMetadata().getRunLength();
                 try {
                     dValue = metaData.getBasicMetadata().getRunLength().toString();
                 }catch ( Exception ex){
@@ -739,13 +774,39 @@ public class MovieMetaData {
                 videoUrl = null;
                 posterImgUrl = null;
                 duration = null;
+                images = null;
+                durationObject = null;
             }
+        }
+
+        public String getFullDurationString(){
+            if (durationObject == null)
+                return "";
+            int h = durationObject.getHours();
+            int m = durationObject.getMinutes();
+            int s = durationObject.getSeconds();
+            String retString = "";
+            if (s > 0)
+                retString = s + " sec";
+            if (m > 0)
+                retString = m + " min " + retString;
+            if (h > 0)
+                retString = h + " hour " + retString;
+
+            return  retString;
         }
 
         public AudioVisualItem(String parentExperienceId, InventoryMetadataType metaData, InventoryVideoType videoData, List<ExternalApiData> apiDataList){
             this(parentExperienceId, metaData, videoData);
             if (apiDataList != null)
                 externalApiDataList.addAll(apiDataList);
+        }
+
+        public String getPreviewImageUrl(){
+            if (images != null){
+                return images[images.length-1].imageUrl;
+            }else
+                return null;
         }
 
         @Override

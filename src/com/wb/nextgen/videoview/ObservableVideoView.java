@@ -4,8 +4,10 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.VideoView;
 
+import com.wb.nextgen.interfaces.NextGenPlayerInterface;
 
-public final class ObservableVideoView extends VideoView {
+
+public final class ObservableVideoView extends VideoView implements NextGenPlayerInterface {
 	
 	private IVideoViewActionListener mVideoViewListener;
 	private boolean mIsOnPauseMode = false;
@@ -79,6 +81,7 @@ public final class ObservableVideoView extends VideoView {
     public interface PlayPauseListener {
         void playerPaused(boolean paused);
     }
+
 }
 
 
