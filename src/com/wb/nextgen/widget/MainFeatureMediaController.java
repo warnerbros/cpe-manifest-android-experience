@@ -36,7 +36,7 @@ public class MainFeatureMediaController extends  NextGenMediaController implemen
     public MainFeatureMediaController(Context context, NextGenPlayerInterface player) {
         super(context, player);
     }
-
+/*
     @Override
     public void setAnchorView(View view) {
         super.setAnchorView(view);
@@ -68,7 +68,7 @@ public class MainFeatureMediaController extends  NextGenMediaController implemen
                 }
             });
         }
-    }
+    }*/
 
     public void setShareClipIMEGroup(IMEElementsGroup shareClipGroup){
         if (shareClipGroup != null) {

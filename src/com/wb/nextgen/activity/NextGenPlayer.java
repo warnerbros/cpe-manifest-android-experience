@@ -17,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
@@ -36,6 +37,7 @@ import com.wb.nextgen.util.concurrent.ResultListener;
 import com.wb.nextgen.util.utils.NextGenFragmentTransactionEngine;
 import com.wb.nextgen.videoview.IVideoViewActionListener;
 import com.wb.nextgen.videoview.ObservableVideoView;
+import com.wb.nextgen.widget.ECMediaController;
 import com.wb.nextgen.widget.MainFeatureMediaController;
 
 
@@ -51,6 +53,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
 
     protected ObservableVideoView videoView;
+    protected RelativeLayout containerView;
 
     private TimerTask imeUpdateTask;
 
@@ -80,8 +83,12 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
         backgroundImageView = (ImageView)findViewById(R.id.ime_background_image_view);
 
+        containerView = (RelativeLayout)findViewById(R.id.video_view_container);
+
         videoView = (ObservableVideoView) findViewById(R.id.surface_view);
         //videoView.setMediaController(mediaController);
+        mediaController = new MainFeatureMediaController(this, videoView);
+        videoView.setCustomMediaController(mediaController);
         videoView.setOnErrorListener(getOnErrorListener());
         videoView.setOnPreparedListener(getOnPreparedListener());
         videoView.setOnCompletionListener(getOnCompletionListener());
@@ -266,7 +273,10 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
             if (mediaController == null) {
                 mediaController = new MainFeatureMediaController(this, videoView);
                 mediaController.setShareClipIMEGroup(NextGenApplication.getMovieMetaData().getShareClipIMEGroup());
-                videoView.setMediaController(mediaController);
+
+                //mediaController.setMediaPlayer(videoView);
+                //mediaController.setAnchorView(containerView);
+                //videoView.setCustomMediaController(mediaController);
             }
         }
     }

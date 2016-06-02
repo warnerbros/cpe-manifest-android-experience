@@ -4,6 +4,9 @@ import android.content.res.AssetManager;
 import android.util.Xml;
 
 import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.parser.appdata.AppDataFeedSetType;
+import com.wb.nextgen.parser.appdata.AppDataType;
+import com.wb.nextgen.parser.appdata.ManifestAppDataSetType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.MediaManifestType;
 import com.wb.nextgen.util.utils.StringHelper;
 
@@ -42,18 +45,42 @@ public class ManifestXMLParser {
     private static final String ns = null;
 
     private static String MANIFEST_HEADER = "manifest:";
+    private static String MANIFEST_APPDATA_HEADER = "manifestdata:";
+    private static String MD_HEADER = "md:";
 
-    public MediaManifestType startParsing(){
-        MediaManifestType manifest = null;
+    public static class NextGenManifestData{
+        public final MediaManifestType mainManifest;
+        public final ManifestAppDataSetType appDataManifest;
+
+        public NextGenManifestData(MediaManifestType mediaManifestType, ManifestAppDataSetType appDataFeedSetType){
+            mainManifest = mediaManifestType;
+            appDataManifest = appDataFeedSetType;
+        }
+    }
+
+    public NextGenManifestData startParsing(){
+        NextGenManifestData manifest = null;
         try{
+
+            XmlPullParser parser2 = Xml.newPullParser();
+            parser2.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+            AssetManager am2 = NextGenApplication.getContext().getAssets();
+            parser2.setInput(am2.open("mos_appdata_locations_r60_v0.3.xml"), null);
+            parser2.nextTag();
+
+            ManifestAppDataSetType appData = parseAppData(parser2);
+
             XmlPullParser parser = Xml.newPullParser();
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
             AssetManager am = NextGenApplication.getContext().getAssets();
-            parser.setInput(am.open("mos_hls_manifest_v3.xml"), null);
+            //parser.setInput(am.open("mos_hls_manifest_v3.xml"), null);
+            parser.setInput(am.open("mos_hls_manifest_r60_v0.4.xml"), null);
             parser.nextTag();
-            //result = readFeed(parser);
 
-            manifest = parseManifest(parser);
+
+            MediaManifestType mainManifest = parseManifest(parser);
+            manifest = new NextGenManifestData(mainManifest, appData);
+
         }catch (Exception ex){
             System.out.println(ex.getMessage());
         }
@@ -140,9 +167,16 @@ public class ManifestXMLParser {
                     continue;
                 }
                 String xmlElementName = parser.getName();
-                if (xmlElementName.startsWith(MANIFEST_HEADER)){
-                    xmlElementName = xmlElementName.replaceFirst(MANIFEST_HEADER, "");
+                int nameSpaceendPos = xmlElementName.indexOf(":");
+                if (nameSpaceendPos != -1){
+                    xmlElementName = xmlElementName.substring(nameSpaceendPos+1);
+
                 }
+                /*if (xmlElementName.startsWith(MANIFEST_HEADER)){
+                    xmlElementName = xmlElementName.replaceFirst(MANIFEST_HEADER, "");
+                } else if (xmlElementName.startsWith(MANIFEST_APPDATA_HEADER)){
+                    xmlElementName = xmlElementName.replaceFirst(MANIFEST_APPDATA_HEADER, "");
+                }*/
                 currentFieldName = xmlElementName;
                 if (classXmlNameToFieldMap.containsKey(xmlElementName)){
                     FieldClassObject thisFieldClass = classXmlNameToFieldMap.get(xmlElementName);
@@ -326,6 +360,11 @@ public class ManifestXMLParser {
 
     private MediaManifestType parseManifest(XmlPullParser parser) throws XmlPullParserException, IOException {
         return parseElement(parser, MediaManifestType.class, "manifest:MediaManifest");
+
+    }
+
+    private ManifestAppDataSetType parseAppData(XmlPullParser parser) throws XmlPullParserException, IOException {
+        return parseElement(parser, ManifestAppDataSetType.class, "manifestdata:ManifestAppDataSet");
 
     }
 

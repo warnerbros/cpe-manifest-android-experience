@@ -46,5 +46,5 @@
 
 	<string name="leave_app_dialogbox_title">Leaving App</string>
 	<string name="leave_app_dialogbox_text">Following this link will exit the app and launch your browser. Would you like to continue?</string>
-
+	<string name="description">sth</string>
 </resources>

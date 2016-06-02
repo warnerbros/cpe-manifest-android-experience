@@ -102,7 +102,7 @@ public class NextGenApplication extends Application {
             DemoData.parseDemoJSONData();
 
 
-            MediaManifestType manifest = new ManifestXMLParser().startParsing();
+            ManifestXMLParser.NextGenManifestData manifest = new ManifestXMLParser().startParsing();
             movieMetaData = MovieMetaData.process(manifest);
 
 
@@ -111,6 +111,7 @@ public class NextGenApplication extends Application {
 
         }catch (Exception ex){
             NextGenLogger.e(F.TAG, ex.getLocalizedMessage());
+            NextGenLogger.e(F.TAG, ex.getStackTrace().toString());
         }
     }
 

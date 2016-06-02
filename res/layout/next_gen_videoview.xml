@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:background="@color/black">
         <RelativeLayout
+            android:id="@+id/video_view_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <com.wb.nextgen.videoview.ObservableVideoView

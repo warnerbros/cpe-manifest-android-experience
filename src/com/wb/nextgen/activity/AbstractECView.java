@@ -1,8 +1,8 @@
 package com.wb.nextgen.activity;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -84,7 +84,7 @@ public abstract class AbstractECView extends AbstractNextGenActivity {
     @Override
     public void onRequestToggleFullscreen(){
         super.onRequestToggleFullscreen();
-        ActionBar bar = getActionBar();
+        ActionBar bar = getSupportActionBar();
         if (!isContentFullScreen){    // make it full screen
             leftListFrame.setVisibility(View.GONE);
             onFullScreenChange(true);

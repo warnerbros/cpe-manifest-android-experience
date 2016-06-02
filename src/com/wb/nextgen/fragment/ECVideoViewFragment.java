@@ -25,13 +25,14 @@ import com.wb.nextgen.util.utils.F;
 import com.wb.nextgen.util.utils.NextGenLogger;
 import com.wb.nextgen.util.utils.StringHelper;
 import com.wb.nextgen.videoview.ObservableVideoView;
+import com.wb.nextgen.widget.CustomMediaController;
 import com.wb.nextgen.widget.ECMediaController;
 
 
 /**
  * Created by gzcheng on 3/31/16.
  */
-public class ECVideoViewFragment extends Fragment {
+public class ECVideoViewFragment extends Fragment{
     protected ObservableVideoView videoView;
 
     ECMediaController mediaController;
@@ -83,7 +84,9 @@ public class ECVideoViewFragment extends Fragment {
                 }
             });
         }
-        videoView.setMediaController(mediaController);
+        //videoView.setMediaController(mediaController);
+        videoView.setCustomMediaController(mediaController);
+
         videoView.setOnPreparedListener(new PreparedListener());
         videoView.requestFocus();
 
