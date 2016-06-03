@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 
+import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.DemoJSONData;
 import com.wb.nextgen.data.MovieMetaData;
@@ -19,8 +20,12 @@ import java.util.List;
 /**
  * Created by gzcheng on 1/26/16.
  */
-public class NextGenIMEActorFragment extends NextGenActorListFragment/* implements NextGenPlaybackStatusListener*/{
+public class NextGenIMEActorFragment extends NextGenActorListFragment implements NextGenPlaybackStatusListener{
 
+    List<CastIMEEngine> castIMEEngines = new ArrayList<CastIMEEngine>();
+    List<MovieMetaData.CastData> currentActiveActorList = new ArrayList<MovieMetaData.CastData>();
+
+    boolean fullListEnabled = false;
 
     protected int getListItemViewId() {
         return R.layout.ime_actor_row;
@@ -39,60 +44,57 @@ public class NextGenIMEActorFragment extends NextGenActorListFragment/* implemen
         }
         listAdaptor.notifyDataSetChanged();
     }
-/*
-    NextGenIMEEngine<List<DemoJSONData.ActorInfo>> actorIMEEngine = new NextGenIMEEngine<List<ActorInfo>>();
 
-    List <NextGenIMEEngine<List<ActorInfo>>> actorElements = new ArrayList<NextGenIMEEngine<List<ActorInfo>>>();
+    private static class CastIMEEngine extends NextGenIMEEngine<MovieMetaData.IMEElement<MovieMetaData.CastData>>{
+        public CastIMEEngine(List<MovieMetaData.IMEElement<MovieMetaData.CastData>> elements){
+            imeElements = elements;
+        }
 
-    void handleIMEUpdate(long timecode, final List<ActorInfo> imeElement){
-
-        if (getActivity() != null){
-            getActivity().runOnUiThread(new Runnable() {
-
-                @Override
-                public void run() {
-                    try {
-                        if (getActorInfos().equals(imeElement) || (getActorInfos().size() == 0 && imeElement == null))
-                            return;
-                        if (imeElement != null)
-                            setActorInfo(imeElement);
-                        else
-                            setActorInfo(new ArrayList<ActorInfo>());
-
-                        listAdaptor.notifyDataSetChanged();
-                    }catch (Exception ex){
-
-                    }
-                }
-            });
+        public int compareCurrentTimeWithItemAtIndex(long timecode, int index){
+            return imeElements.get(index).compareTimeCode(timecode);
         }
     }
 
-    public void setActorInfo(List<ActorInfo> actorInfos){
+    @Override
+    public List<MovieMetaData.CastData> getActorInfos(){
+        if (fullListEnabled){
+            currentActiveActorList = super.getActorInfos();
+        }
+        return currentActiveActorList;
 
     }
 
-    public void playbackStatusUpdate(NextGenPlaybackStatusListener.NextGenPlaybackStatus playbackStatus, long timecode){
-        boolean bHasUpdate = actorIMEEngine.computeCurrentIMEElement(timecode);
-        if (bHasUpdate)
-            handleIMEUpdate(timecode, actorIMEEngine.getCurrentIMEElement());
-    }*/
+    @Override
+    public void playbackStatusUpdate(NextGenPlaybackStatus playbackStatus, long timecode){
+        if (fullListEnabled)
+            return;
+        currentActiveActorList.clear();
+        if (timecode != -1){
+            for(CastIMEEngine thisEngine: castIMEEngines){
+                thisEngine.computeCurrentIMEElement(timecode);
+                MovieMetaData.IMEElement<MovieMetaData.CastData> thisData = thisEngine.getCurrentIMEElement();
+                if (thisData != null){
+                    currentActiveActorList.add(thisData.imeObject);
+                }
+            }
+            listAdaptor.notifyDataSetChanged();
+        }
+
+    }
+
+    private void setCastIMEElementLists(List<List<MovieMetaData.IMEElement<MovieMetaData.CastData>>> castIMEElementLists){
+        if (castIMEElementLists != null && castIMEElementLists.size() > 0){
+            for(List<MovieMetaData.IMEElement<MovieMetaData.CastData>> imeList : castIMEElementLists){
+                castIMEEngines.add(new CastIMEEngine(imeList));
+            }
+        }
+    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-       // List<ActorInfo> actors = new ArrayList<ActorInfo>();
-        /*
-        actorElements.add(actorIMEEngine.createNextGenIMEElement(0, 9000, new ArrayList<ActorInfo>(Arrays.asList(new ActorInfo()[]{ActorInfo.RUSSELL_CROWE}))));
+        setCastIMEElementLists(NextGenApplication.getMovieMetaData().getCastIMEElements());
 
-        actorElements.add(actorIMEEngine.createNextGenIMEElement(10000,20000, new ArrayList<ActorInfo>(Arrays.asList(new ActorInfo[]{ActorInfo.RUSSELL_CROWE, ActorInfo.AYELET_ZURER}))));
-        actorElements.add(actorIMEEngine.createNextGenIMEElement(56000,68000, new ArrayList<ActorInfo>(Arrays.asList(new Actor[]{Actor.KEVIN_COSTER}))));
-        actorElements.add(actorIMEEngine.createNextGenIMEElement(69000,79000, new ArrayList<ActorInfo>(Arrays.asList(new Actor[]{Actor.HENRY_CAVILL}))));
-        actorElements.add(actorIMEEngine.createNextGenIMEElement(80000,82000, new ArrayList<ActorInfo>(Arrays.asList(new Actor[]{Actor.AMY_ADAM}))));
-        actorElements.add(actorIMEEngine.createNextGenIMEElement(83000,125000, new ArrayList<ActorInfo>(Arrays.asList(new Actor[]{Actor.HENRY_CAVILL}))));
-        actorElements.add(actorIMEEngine.createNextGenIMEElement(130000,137000, new ArrayList<ActorInfo>(Arrays.asList(new Actor[]{Actor.HENRY_CAVILL, Actor.DIANE_LANE, Actor.MICHAEL_SHANNON}))));
-        actorElements.add(actorIMEEngine.createNextGenIMEElement(155000,166000, new ArrayList<ActorInfo>(Arrays.asList(new Actor[]{Actor.HENRY_CAVILL, Actor.AMY_ADAM}))));
-        actorElements.add(actorIMEEngine.createNextGenIMEElement(167000,170000, new ArrayList<ActorInfo>(Arrays.asList(new Actor[]{Actor.HENRY_CAVILL, Actor.MICHAEL_SHANNON}))));
-        actorIMEEngine.setImeElements(actorElements);*/
     }
+
 }

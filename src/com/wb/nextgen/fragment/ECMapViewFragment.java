@@ -77,7 +77,7 @@ public class ECMapViewFragment extends Fragment {
             title = textTitle;
             selectedLocationItem = locationItem;
             if (triviaContent != null) {
-                triviaContent.setText(selectedLocationItem.title);
+                triviaContent.setText(selectedLocationItem.getTitle());
             }
             if (triviaTitle != null) {
                 triviaTitle.setText(textTitle);
@@ -93,7 +93,7 @@ public class ECMapViewFragment extends Fragment {
                         BitmapDescriptor bmDes = BitmapDescriptorFactory.fromBitmap(NextGenApplication.getMovieMetaData().getMapPinBitmap());
                         googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
                         MarkerOptions markerOpt = new MarkerOptions()
-                                .position(location).title(selectedLocationItem.title).snippet(selectedLocationItem.address)
+                                .position(location).title(selectedLocationItem.getTitle()).snippet(selectedLocationItem.address)
                                 .icon(bmDes);
 
                         googleMap.addMarker(markerOpt).showInfoWindow();

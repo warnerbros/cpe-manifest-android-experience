@@ -86,7 +86,7 @@ public class ECGalleryViewFragment extends AbstractNextGenFragment {
             adapter.notifyDataSetChanged();
             galleryViewPager.setCurrentItem(0);
             if (galleryNameTextView != null){
-                galleryNameTextView.setText(gallery.title);
+                galleryNameTextView.setText(gallery.getTitle());
             }
         }else{
             bSetOnResume = true;
@@ -144,7 +144,7 @@ public class ECGalleryViewFragment extends AbstractNextGenFragment {
 
             MovieMetaData.ECGalleryItem currentItem = currentGallery;
 
-            itemView.setTag(currentItem.title);
+            itemView.setTag(currentItem.getTitle());
 
             // Get the border size to show around each image
             int borderSize = 0;//_thumbnails.getPaddingTop();

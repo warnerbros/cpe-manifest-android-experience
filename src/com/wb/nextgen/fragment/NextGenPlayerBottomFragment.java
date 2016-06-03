@@ -55,6 +55,9 @@ public class  NextGenPlayerBottomFragment extends Fragment implements NextGenPla
             public void run() {
                 if (imeGridFragment != null)
                     imeGridFragment.playbackStatusUpdate(playbackStatus, timecode);
+                if (imeActorsFragment != null){
+                    imeActorsFragment.playbackStatusUpdate(playbackStatus, timecode);
+                }
                 //if (imeText != null)
                 //   imeText.setText(Long.toString(timecode));
             }

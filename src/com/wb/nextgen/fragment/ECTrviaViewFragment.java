@@ -55,7 +55,7 @@ public class ECTrviaViewFragment extends Fragment {
             title = textTitle;
             selectedTextItem = textItem;
             if (triviaContent != null) {
-                triviaContent.setText(textItem.title);
+                triviaContent.setText(textItem.getTitle());
             }
             if (triviaTitle != null) {
                 triviaTitle.setText(textTitle);

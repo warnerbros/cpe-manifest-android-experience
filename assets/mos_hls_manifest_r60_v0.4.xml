@@ -43479,76 +43479,7 @@
         </manifest:Experience>
         <manifest:Experience ExperienceID='md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:ecp_tab.4' version='1.0'>
             <manifest:ContentID>md:cid:eidr-x:C80F-C561-EE65-C5E4-C039-U:ecp_tab.4</manifest:ContentID>
-            <manifest:ExperienceChild>
-                <manifest:Relationship>ispartof</manifest:Relationship>
-                <manifest:SequenceInfo>
-                    <md:Number>5</md:Number>
-                </manifest:SequenceInfo>
-                <manifest:ExperienceID>md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:ecp_tab.4.1</manifest:ExperienceID>
-            </manifest:ExperienceChild>
-            <manifest:ExperienceChild>
-                <manifest:Relationship>ispartof</manifest:Relationship>
-                <manifest:SequenceInfo>
-                    <md:Number>3</md:Number>
-                </manifest:SequenceInfo>
-                <manifest:ExperienceID>md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:ecp_tab.4.2</manifest:ExperienceID>
-            </manifest:ExperienceChild>
-            <manifest:ExperienceChild>
-                <manifest:Relationship>ispartof</manifest:Relationship>
-                <manifest:SequenceInfo>
-                    <md:Number>1</md:Number>
-                </manifest:SequenceInfo>
-                <manifest:ExperienceID>md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:ecp_tab.4.3</manifest:ExperienceID>
-            </manifest:ExperienceChild>
-            <manifest:ExperienceChild>
-                <manifest:Relationship>ispartof</manifest:Relationship>
-                <manifest:SequenceInfo>
-                    <md:Number>4</md:Number>
-                </manifest:SequenceInfo>
-                <manifest:ExperienceID>md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:ecp_tab.4.4</manifest:ExperienceID>
-            </manifest:ExperienceChild>
-            <manifest:ExperienceChild>
-                <manifest:Relationship>ispartof</manifest:Relationship>
-                <manifest:SequenceInfo>
-                    <md:Number>6</md:Number>
-                </manifest:SequenceInfo>
-                <manifest:ExperienceID>md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:ecp_tab.4.5</manifest:ExperienceID>
-            </manifest:ExperienceChild>
-            <manifest:ExperienceChild>
-                <manifest:Relationship>ispartof</manifest:Relationship>
-                <manifest:SequenceInfo>
-                    <md:Number>2</md:Number>
-                </manifest:SequenceInfo>
-                <manifest:ExperienceID>md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:ecp_tab.4.6</manifest:ExperienceID>
-            </manifest:ExperienceChild>
-            <manifest:ExperienceChild>
-                <manifest:Relationship>ispartof</manifest:Relationship>
-                <manifest:SequenceInfo>
-                    <md:Number>7</md:Number>
-                </manifest:SequenceInfo>
-                <manifest:ExperienceID>md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:ecp_tab.4.7</manifest:ExperienceID>
-            </manifest:ExperienceChild>
-        </manifest:Experience>
-        <manifest:Experience ExperienceID='md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:ecp_tab.4.1'>
             <manifest:TimedSequenceID>md:timesequenceid:eidr-x:C80F-C561-EE65-C5E4-C039-U:timesequence.3</manifest:TimedSequenceID>
-        </manifest:Experience>
-        <manifest:Experience ExperienceID='md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:ecp_tab.4.2'>
-            <manifest:TimedSequenceID>md:timesequenceid:eidr-x:C80F-C561-EE65-C5E4-C039-U:timesequence.5</manifest:TimedSequenceID>
-        </manifest:Experience>
-        <manifest:Experience ExperienceID='md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:ecp_tab.4.3'>
-            <manifest:TimedSequenceID>md:timesequenceid:eidr-x:C80F-C561-EE65-C5E4-C039-U:timesequence.6</manifest:TimedSequenceID>
-        </manifest:Experience>
-        <manifest:Experience ExperienceID='md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:ecp_tab.4.4'>
-            <manifest:TimedSequenceID>md:timesequenceid:eidr-x:C80F-C561-EE65-C5E4-C039-U:timesequence.7</manifest:TimedSequenceID>
-        </manifest:Experience>
-        <manifest:Experience ExperienceID='md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:ecp_tab.4.5'>
-            <manifest:TimedSequenceID>md:timesequenceid:eidr-x:C80F-C561-EE65-C5E4-C039-U:timesequence.8</manifest:TimedSequenceID>
-        </manifest:Experience>
-        <manifest:Experience ExperienceID='md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:ecp_tab.4.6'>
-            <manifest:TimedSequenceID>md:timesequenceid:eidr-x:C80F-C561-EE65-C5E4-C039-U:timesequence.9</manifest:TimedSequenceID>
-        </manifest:Experience>
-        <manifest:Experience ExperienceID='md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:ecp_tab.4.7'>
-            <manifest:TimedSequenceID>md:timesequenceid:eidr-x:C80F-C561-EE65-C5E4-C039-U:timesequence.10</manifest:TimedSequenceID>
         </manifest:Experience>
         <manifest:Experience ExperienceID='md:experiencedid:eidr-x:C80F-C561-EE65-C5E4-C039-U:ecp_tab.5' version='1.0'>
             <manifest:ContentID>md:cid:eidr-x:C80F-C561-EE65-C5E4-C039-U:ecp_tab.5</manifest:ContentID>
@@ -46012,9 +45943,6 @@
                     <md:Identifier>md:peopleid:eidr-x:C80F-C561-EE65-C5E4-C039-U:people.1</md:Identifier>
                 </manifest:OtherID>
             </manifest:TimedEvent>
-        </manifest:TimedEventSequence>
-        <manifest:TimedEventSequence TimedSequenceID='md:timesequenceid:eidr-x:C80F-C561-EE65-C5E4-C039-U:timesequence.5'>
-            <manifest:PresentationID>md:presentationid:eidr-x:C80F-C561-EE65-C5E4-C039-U:feature</manifest:PresentationID>
             <manifest:TimedEvent>
                 <manifest:StartTimecode>173.0</manifest:StartTimecode>
                 <manifest:EndTimecode>254.0</manifest:EndTimecode>
@@ -46114,10 +46042,7 @@
                     <md:Identifier>md:peopleid:eidr-x:C80F-C561-EE65-C5E4-C039-U:people.2</md:Identifier>
                 </manifest:OtherID>
             </manifest:TimedEvent>
-        </manifest:TimedEventSequence>
-        <manifest:TimedEventSequence TimedSequenceID='md:timesequenceid:eidr-x:C80F-C561-EE65-C5E4-C039-U:timesequence.6'>
-            <manifest:PresentationID>md:presentationid:eidr-x:C80F-C561-EE65-C5E4-C039-U:feature</manifest:PresentationID>
-                <manifest:TimedEvent>
+            <manifest:TimedEvent>
                 <manifest:StartTimecode>1206.0</manifest:StartTimecode>
                 <manifest:EndTimecode>1371.0</manifest:EndTimecode>
                 <manifest:Type>Synchronous</manifest:Type>
@@ -46324,9 +46249,6 @@
                     <md:Identifier>md:peopleid:eidr-x:C80F-C561-EE65-C5E4-C039-U:people.3</md:Identifier>
                 </manifest:OtherID>
             </manifest:TimedEvent>
-        </manifest:TimedEventSequence> 
-        <manifest:TimedEventSequence TimedSequenceID='md:timesequenceid:eidr-x:C80F-C561-EE65-C5E4-C039-U:timesequence.7'>
-            <manifest:PresentationID>md:presentationid:eidr-x:C80F-C561-EE65-C5E4-C039-U:feature</manifest:PresentationID>
             <manifest:TimedEvent>
                 <manifest:StartTimecode>1700.0</manifest:StartTimecode>
                 <manifest:EndTimecode>1731.0</manifest:EndTimecode>
@@ -46417,9 +46339,6 @@
                     <md:Identifier>md:peopleid:eidr-x:C80F-C561-EE65-C5E4-C039-U:people.4</md:Identifier>
                 </manifest:OtherID>
             </manifest:TimedEvent>
-        </manifest:TimedEventSequence>    
-        <manifest:TimedEventSequence TimedSequenceID='md:timesequenceid:eidr-x:C80F-C561-EE65-C5E4-C039-U:timesequence.8'>
-            <manifest:PresentationID>md:presentationid:eidr-x:C80F-C561-EE65-C5E4-C039-U:feature</manifest:PresentationID>
             <manifest:TimedEvent>
                 <manifest:StartTimecode>1700.0</manifest:StartTimecode>
                 <manifest:EndTimecode>1933.0</manifest:EndTimecode>
@@ -46456,9 +46375,6 @@
                     <md:Identifier>md:peopleid:eidr-x:C80F-C561-EE65-C5E4-C039-U:people.5</md:Identifier>
                 </manifest:OtherID>
             </manifest:TimedEvent>
-        </manifest:TimedEventSequence>
-        <manifest:TimedEventSequence TimedSequenceID='md:timesequenceid:eidr-x:C80F-C561-EE65-C5E4-C039-U:timesequence.9'>
-            <manifest:PresentationID>md:presentationid:eidr-x:C80F-C561-EE65-C5E4-C039-U:feature</manifest:PresentationID>
             <manifest:TimedEvent>
                 <manifest:StartTimecode>2062.0</manifest:StartTimecode>
                 <manifest:EndTimecode>2652.0</manifest:EndTimecode>
@@ -46585,9 +46501,6 @@
                     <md:Identifier>md:peopleid:eidr-x:C80F-C561-EE65-C5E4-C039-U:people.6</md:Identifier>
                 </manifest:OtherID>
             </manifest:TimedEvent>
-        </manifest:TimedEventSequence>
-        <manifest:TimedEventSequence TimedSequenceID='md:timesequenceid:eidr-x:C80F-C561-EE65-C5E4-C039-U:timesequence.10'>
-            <manifest:PresentationID>md:presentationid:eidr-x:C80F-C561-EE65-C5E4-C039-U:feature</manifest:PresentationID>
             <manifest:TimedEvent>
                 <manifest:StartTimecode>2576.0</manifest:StartTimecode>
                 <manifest:EndTimecode>2623.0</manifest:EndTimecode>

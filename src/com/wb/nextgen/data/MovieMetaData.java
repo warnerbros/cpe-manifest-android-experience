@@ -1,10 +1,10 @@
 package com.wb.nextgen.data;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 
+import com.google.android.gms.plus.model.people.Person;
 import com.google.gson.annotations.SerializedName;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
@@ -13,10 +13,7 @@ import com.wb.nextgen.parser.appdata.AppDataLocationType;
 import com.wb.nextgen.parser.appdata.AppDataType;
 import com.wb.nextgen.parser.appdata.AppNVPairType;
 import com.wb.nextgen.parser.appdata.ManifestAppDataSetType;
-import com.wb.nextgen.parser.manifest.schema.v1_4.ALIDExperienceMapListType;
-import com.wb.nextgen.parser.manifest.schema.v1_4.ALIDExperienceMapType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.AudiovisualType;
-import com.wb.nextgen.parser.manifest.schema.v1_4.EventLocationType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.ExperienceChildType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.ExperienceType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.GalleryType;
@@ -29,30 +26,26 @@ import com.wb.nextgen.parser.manifest.schema.v1_4.OtherIDType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.PictureGroupType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.PictureType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.PresentationType;
-import com.wb.nextgen.parser.manifest.schema.v1_4.TextGroupType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.TimecodeType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.TimedEventSequenceType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.TimedEventType;
 import com.wb.nextgen.parser.md.schema.v2_3.BasicMetadataInfoType;
 import com.wb.nextgen.parser.md.schema.v2_3.BasicMetadataPeopleType;
 import com.wb.nextgen.parser.md.schema.v2_3.ContentIdentifierType;
-import com.wb.nextgen.parser.md.schema.v2_3.NVPairType;
 import com.wb.nextgen.parser.md.schema.v2_3.PersonIdentifierType;
 import com.wb.nextgen.util.NextGenUtils;
 import com.wb.nextgen.util.utils.F;
 import com.wb.nextgen.util.utils.NextGenLogger;
 import com.wb.nextgen.util.utils.StringHelper;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigInteger;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.datatype.Duration;
 
@@ -64,7 +57,9 @@ public class MovieMetaData {
     final public static String THE_TAKE_MANIFEST_IDENTIFIER = "thetake.com";
     final public static String BASELINE_NAMESPACE = "baselineapi.com";
     final public static String SHARE_CLIP_KEY = ":clipshare";
-    final public static String APP_DATA_ID = "AppID";
+
+    final public static String OTHER_APP_DATA_ID = "AppID";
+    final public static String OTHER_PEOPLE_ID = "PeopleOtherID";
 
     private static String ITEM_DISPLAY_ORDER = "display_order";
     private static String ITEM_TYPE = "type";
@@ -80,9 +75,12 @@ public class MovieMetaData {
     final private List<CastData> castsList = new ArrayList<CastData>();
     final private List<CastData> actorsList = new ArrayList<CastData>();
     final private HashMap<String, ExperienceData> experienceIdToExperienceMap = new HashMap<String, ExperienceData>();
+
     private ExperienceData rootExperience;
     private boolean hasCalledBaselineAPI = false;
     private IMEElementsGroup shareClipIMEGroup;
+
+    private List<List<IMEElement<CastData>>> castIMEElements = new ArrayList<List<IMEElement<CastData>>>() ;
 
     final static public String movieTitleText = "Man of Steel";
 
@@ -119,6 +117,8 @@ public class MovieMetaData {
         HashMap<BigInteger, String> indexToTextMap = new HashMap<BigInteger, String>();
 
         HashMap<String, ExperienceData> timeSequenceIdToECGroup = new HashMap<String, ExperienceData>();
+
+        HashMap<String, CastData> peopleIdToCastData = new HashMap<String, CastData>();
 
 
         HashMap<String, ExperienceData> experienceChildrenToParentMap = new HashMap<String, ExperienceData>();
@@ -220,6 +220,10 @@ public class MovieMetaData {
                             if (avMetaData.getBasicMetadata() != null && avMetaData.getBasicMetadata().getPeople() != null && avMetaData.getBasicMetadata().getPeople().size() > 0){
                                 for (BasicMetadataPeopleType people : avMetaData.getBasicMetadata().getPeople()){
                                     CastData cast = new CastData(people);
+
+                                    if (!StringHelper.isEmpty(cast.getOtherPeopleId()))
+                                        peopleIdToCastData.put(cast.getOtherPeopleId(), cast);
+
                                     result.castsList.add(cast);
                                     if (cast.isActor())
                                         result.actorsList.add(cast);
@@ -245,6 +249,10 @@ public class MovieMetaData {
                             }
                         }
                     }
+                }
+
+                if (experience.getTimedSequenceID() != null){
+
                 }
 
                 ExperienceData thisExperience = new ExperienceData(experience, experienceMetaData, avItems, galleryItems);
@@ -287,13 +295,13 @@ public class MovieMetaData {
 
 
 
-
         /*****************End of Experiences****************************/
 
         /*****************Time Sequence Events****************************/
         if (mediaManifest.getTimedEventSequences() != null && mediaManifest.getTimedEventSequences().getTimedEventSequence().size() > 0){
             for (TimedEventSequenceType timedEventSequence : mediaManifest.getTimedEventSequences().getTimedEventSequence()){
                 ExperienceData timedECGroup = null;
+                boolean isCast = false;
                 if (timeSequenceIdToECGroup.containsKey(timedEventSequence.getTimedSequenceID())){
                     timedECGroup = timeSequenceIdToECGroup.get(timedEventSequence.getTimedSequenceID());
                 }
@@ -328,7 +336,7 @@ public class MovieMetaData {
                             String triviaText = indexToTextMap.get(index);
                             presentationData = new TextItem(index, triviaText);
                         } else if (otherID != null) {
-                            if (APP_DATA_ID.equals(otherID.getNamespace())){
+                            if (OTHER_APP_DATA_ID.equals(otherID.getNamespace())){
                                 String locationId = otherID.getIdentifier();
                                 if (!StringHelper.isEmpty(locationId)){
                                     AppDataType appData = appDataIdTpAppDataMap.get(locationId);
@@ -354,6 +362,10 @@ public class MovieMetaData {
                                     }
                                     presentationData = new LocationItem(displayOrder, type, location, zoom, text);
                                 }
+                            } else if (OTHER_PEOPLE_ID.equals(otherID.getNamespace())){
+                                isCast = true;
+                                CastData cast = peopleIdToCastData.get(otherID.getIdentifier());
+                                presentationData = cast;
                             }
                         }/*else if (timedEvent.getLocation() != null){
                             presentationData = new LocationItem(timedEvent.getLocation());
@@ -379,9 +391,14 @@ public class MovieMetaData {
                         return (int)(lhs.startTimecode - rhs.startTimecode);
                     }
                 });
+
+
+
                 if (imeGroup.linkedExperience != null && imeGroup.linkedExperience.experienceId.endsWith(SHARE_CLIP_KEY)){
                     result.shareClipIMEGroup = imeGroup;
-                }else
+                }else if (isCast){
+                    result.reGroupCastIMEEventGroup(imeGroup);
+                } else
                     result.imeElementGroups.add(imeGroup);
 
             }
@@ -418,6 +435,10 @@ public class MovieMetaData {
 
     public IMEElementsGroup getShareClipIMEGroup(){
         return shareClipIMEGroup;
+    }
+
+    public List<List<IMEElement<CastData>>> getCastIMEElements(){
+        return castIMEElements;
     }
 
     /*
@@ -584,7 +605,8 @@ public class MovieMetaData {
         public String url;
     }
 
-    static public class CastData{
+
+    static public class CastData extends PresentationDataItem{
 
         final public String displayName;
         final public String charactorName;
@@ -593,10 +615,12 @@ public class MovieMetaData {
         final public String lastName;
         final public String gender;
         private String baselineApiActorId;
+        private String peopleOtherId;
         final public String job;
         public BaselineCastData baselineCastData;
 
         public CastData(BasicMetadataPeopleType castInfo){
+            super(null, null, null);
             if (castInfo.getJob() != null && castInfo.getJob().size() > 0){     // this may have multiple values
                 job = castInfo.getJob().get(0).getJobFunction().getValue();
                 if (castInfo.getJob().get(0).getCharacter() != null && castInfo.getJob().get(0).getCharacter().size() > 0)
@@ -636,11 +660,14 @@ public class MovieMetaData {
                 for (PersonIdentifierType personId : castInfo.getIdentifier()) {
                     if (BASELINE_NAMESPACE.equals(personId.getNamespace()) ) {
                         baselineApiActorId = personId.getIdentifier();
-                        break;
+                    } else if (OTHER_PEOPLE_ID.equals(personId.getNamespace())){
+                        peopleOtherId = personId.getIdentifier();
                     }
                 }
             }
-
+            id = peopleOtherId;
+            title = displayName;
+            parentExperienceId = null;
         }
 
         public boolean isActor(){
@@ -653,6 +680,14 @@ public class MovieMetaData {
 
         public String getBaselineActorId(){
             return baselineApiActorId;
+        }
+
+        public String getOtherPeopleId() {
+            return peopleOtherId;
+        }
+
+        public String getPosterImgUrl(){
+            return "";
         }
 
     }
@@ -698,9 +733,9 @@ public class MovieMetaData {
     }
 
     static public abstract class PresentationDataItem{
-        final public String id;
-        final public String title;
-        final public String parentExperienceId;
+        protected String id;
+        protected String title;
+        protected String parentExperienceId;
         protected String posterImgUrl;
 
         public PresentationDataItem(InventoryMetadataType metaData, String parentExperienceId){
@@ -719,6 +754,18 @@ public class MovieMetaData {
             this.id = id;
             this.title = title;
             this.parentExperienceId = parentExperienceId;
+        }
+
+        public String getId(){
+            return id;
+        }
+
+        public String getTitle(){
+            return title;
+        }
+
+        public String getParentExperienceId(){
+            return parentExperienceId;
         }
 
         public abstract String getPosterImgUrl();
@@ -1107,5 +1154,29 @@ public class MovieMetaData {
             // Log exception
             return null;
         }
+    }
+
+    private void reGroupCastIMEEventGroup(IMEElementsGroup<CastData> castCombinedGroup){
+        if (castCombinedGroup == null || castCombinedGroup.getIMEElementesList() == null || castCombinedGroup.getIMEElementesList().size() == 0)
+            return;
+        HashMap<String, List<IMEElement<CastData>>> peopleIDToImeListMap = new HashMap<String, List<IMEElement<CastData>>>();
+        for (IMEElement<CastData> castIMEElement : castCombinedGroup.getIMEElementesList()){
+            String peopleId = castIMEElement.imeObject.getOtherPeopleId();
+            if (!StringHelper.isEmpty(peopleId)){
+                List<IMEElement<CastData>> thisIMEList;
+                if (peopleIDToImeListMap.containsKey(peopleId)){
+                    thisIMEList = peopleIDToImeListMap.get(peopleId);
+                }else{
+                    thisIMEList = new ArrayList<IMEElement<CastData>>();
+                    peopleIDToImeListMap.put(peopleId, thisIMEList);
+                    castIMEElements.add(thisIMEList);
+                }
+                thisIMEList.add(castIMEElement);
+            }
+        }
+
+
+
+        //castIMEGroups
     }
 }

@@ -188,7 +188,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
             Object dataObj = ((MovieMetaData.IMEElement) activeObj.imeObject).imeObject;
             if (dataObj instanceof MovieMetaData.PresentationDataItem) {
                 Object currentPresentationId = rowView.getTag(R.id.ime_title);
-                rowView.setTag(R.id.ime_title, ((MovieMetaData.PresentationDataItem) dataObj).id);
+                rowView.setTag(R.id.ime_title, ((MovieMetaData.PresentationDataItem) dataObj).getId());
                 if (dataObj instanceof MovieMetaData.LocationItem){
                     mapView.setVisibility(View.VISIBLE);
                     poster.setVisibility(View.GONE);
@@ -244,8 +244,8 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                     }
                 }
 
-                if (subText1 != null && !subText1.getText().equals(((MovieMetaData.PresentationDataItem) dataObj).title)) {
-                    subText1.setText(((MovieMetaData.PresentationDataItem) dataObj).title);
+                if (subText1 != null && !subText1.getText().equals(((MovieMetaData.PresentationDataItem) dataObj).getTitle())) {
+                    subText1.setText(((MovieMetaData.PresentationDataItem) dataObj).getTitle());
                 }
             }
         }else if (activeObj.imeObject instanceof TheTakeProductFrame){

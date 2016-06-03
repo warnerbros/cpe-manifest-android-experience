@@ -158,7 +158,7 @@ public class ECVideoViewFragment extends Fragment{
         if (avItem != null) {
             selectedAVItem = avItem;
             if (selectedECNameTextView != null && videoView != null) {
-                selectedECNameTextView.setText(avItem.title);
+                selectedECNameTextView.setText(avItem.getTitle());
                 if (ecDurationTextView != null) {
                     ecDurationTextView.setText(avItem.getFullDurationString());
                 }
