@@ -112,6 +112,7 @@ public class MovieMetaData {
         HashMap<String, PresentationType> presentationAssetMap = new HashMap<String, PresentationType>();
         HashMap<String, InventoryImageType> imageAssetsMap = new HashMap<String, InventoryImageType>();
         HashMap<String, PictureGroupType> pictureGroupAssetsMap = new HashMap<String, PictureGroupType>();
+        HashMap<String, PictureType> pictureTypeAssetsMap = new HashMap<String, PictureType>();
         HashMap<String, AudioVisualItem> presentationIdToAVItemMap = new HashMap<String, AudioVisualItem>();
         HashMap<String, ECGalleryItem> galleryIdToGalleryItemMap = new HashMap<String, ECGalleryItem>();
         HashMap<BigInteger, String> indexToTextMap = new HashMap<BigInteger, String>();
@@ -156,13 +157,24 @@ public class MovieMetaData {
         if (mediaManifest.getPictureGroups().getPictureGroup().size() > 0){
             for(PictureGroupType pictureGroup : mediaManifest.getPictureGroups().getPictureGroup()){
                 pictureGroupAssetsMap.put(pictureGroup.getPictureGroupID(), pictureGroup);
+                if (pictureGroup.getPicture() != null && pictureGroup.getPicture().size() > 0){
+                    for (PictureType picture : pictureGroup.getPicture()){
+                        pictureTypeAssetsMap.put(picture.getPictureID(), picture);
+                    }
+                }
             }
         }
 
         if (mediaManifest.getInventory().getTextObject()!= null && mediaManifest.getInventory().getTextObject().size() > 0 &&
                 mediaManifest.getInventory().getTextObject().get(0).getTextString() != null){
-            for (InventoryTextObjectType.TextString textString : mediaManifest.getInventory().getTextObject().get(0).getTextString()){
-                indexToTextMap.put(textString.getIndex(), textString.getValue());
+            for (int i = 0 ; i< mediaManifest.getInventory().getTextObject().get(0).getTextString().size(); i++){
+                InventoryTextObjectType.TextString textString = mediaManifest.getInventory().getTextObject().get(0).getTextString().get(i);
+                BigInteger index = textString.getIndex();
+                if (index != null) {
+                    indexToTextMap.put(textString.getIndex(), textString.getValue());
+                }else {
+                    indexToTextMap.put(BigInteger.valueOf(i+1), textString.getValue());
+                }
             }
         }
 
@@ -317,6 +329,7 @@ public class MovieMetaData {
 
                         String eventPID = timedEvent.getPresentationID();
                         String galleryId = timedEvent.getGalleryID();
+                        String pictureID = timedEvent.getPictureID();
                         OtherIDType otherID = timedEvent.getOtherID();
                         TimedEventType.TextGroupID textGroupId = timedEvent.getTextGroupID();
 
@@ -335,6 +348,12 @@ public class MovieMetaData {
                             BigInteger index = textGroupId.getIndex();
                             String triviaText = indexToTextMap.get(index);
                             presentationData = new TextItem(index, triviaText);
+                        } else if (!StringHelper.isEmpty(pictureID)){
+                            PictureType picture = pictureTypeAssetsMap.get(pictureID);
+                            InventoryImageType fullImageData = imageAssetsMap.get(picture.getImageID());
+                            InventoryImageType thumbNailImageData = imageAssetsMap.get(picture.getThumbnailImageID());
+                            //String imageText= picture.getAlternateText()
+                            presentationData = new PictureItem(null, null, fullImageData, thumbNailImageData);
                         } else if (otherID != null) {
                             if (OTHER_APP_DATA_ID.equals(otherID.getNamespace())){
                                 String locationId = otherID.getIdentifier();
@@ -814,6 +833,7 @@ public class MovieMetaData {
             this.address = location.getAddress().toString();
             this.latitude = location.getEarthCoordinate().getLatitude().floatValue();
             this.longitude = location.getEarthCoordinate().getLongitude().floatValue();
+            this.title = location.getName();
         }
 
         public String getPosterImgUrl(){

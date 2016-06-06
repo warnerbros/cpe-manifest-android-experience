@@ -44404,14 +44404,24 @@
                 <manifest:EndTimecode>10.0</manifest:EndTimecode>
                 <manifest:Type>Synchronous</manifest:Type>
                 <manifest:TextGroupID index='1'>md:textgroupid:eidr-x:C80F-C561-EE65-C5E4-C039-U:trivia.1</manifest:TextGroupID>
-                <manifest:Initialization>md:pictureid:eidr-x:C80F-C561-EE65-C5E4-C039-U:trivia.1</manifest:Initialization>
+            </manifest:TimedEvent>
+            <manifest:TimedEvent>
+                <manifest:StartTimecode>0.0</manifest:StartTimecode>
+                <manifest:EndTimecode>10.0</manifest:EndTimecode>
+                <manifest:Type>Synchronous</manifest:Type>
+                <manifest:PictureID>md:pictureid:eidr-x:C80F-C561-EE65-C5E4-C039-U:trivia.1</manifest:PictureID>
             </manifest:TimedEvent>
             <manifest:TimedEvent>
                 <manifest:StartTimecode>85.0</manifest:StartTimecode>
                 <manifest:EndTimecode>105.0</manifest:EndTimecode>
                 <manifest:Type>Synchronous</manifest:Type>
                 <manifest:TextGroupID index='2'>md:textgroupid:eidr-x:C80F-C561-EE65-C5E4-C039-U:trivia.1</manifest:TextGroupID>
-                <manifest:Initialization>md:pictureid:eidr-x:C80F-C561-EE65-C5E4-C039-U:trivia.2</manifest:Initialization>
+            </manifest:TimedEvent>
+            <manifest:TimedEvent>
+                <manifest:StartTimecode>85.0</manifest:StartTimecode>
+                <manifest:EndTimecode>105.0</manifest:EndTimecode>
+                <manifest:Type>Synchronous</manifest:Type>
+                <manifest:PictureID>md:pictureid:eidr-x:C80F-C561-EE65-C5E4-C039-U:trivia.2</manifest:PictureID>
             </manifest:TimedEvent>
             <manifest:TimedEvent>
                 <manifest:StartTimecode>117.0</manifest:StartTimecode>
