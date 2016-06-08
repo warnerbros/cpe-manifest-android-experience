@@ -155,6 +155,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
         lastTimeCode = timecode;
 
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {

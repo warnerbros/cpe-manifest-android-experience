@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.MovieMetaData;
+import com.wb.nextgen.model.AVGalleryIMEEngine.IMECombineItem;
 import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.utils.StringHelper;
 import com.wb.nextgen.videoview.ObservableVideoView;
@@ -29,7 +30,7 @@ public class ECTrviaViewFragment extends Fragment {
     protected TextView triviaContent;
 
 
-    MovieMetaData.TextItem selectedTextItem = null;
+    IMECombineItem selectedTriviaItem = null;
     String title = null;
 
     @Override
@@ -43,25 +44,25 @@ public class ECTrviaViewFragment extends Fragment {
         posterImageView = (ImageView) view.findViewById(R.id.ec_trivia_image);
         triviaTitle = (TextView) view.findViewById(R.id.ec_title_name);
         triviaContent = (TextView) view.findViewById(R.id.ec_content_name);
-        if (selectedTextItem != null && title != null){
-            setTextItem(title, selectedTextItem);
+        if (selectedTriviaItem != null && title != null){
+            setTextItem(title, selectedTriviaItem);
         }
 
     }
 
 
-    public void setTextItem(String textTitle, MovieMetaData.TextItem textItem){
-        if (textItem != null) {
+    public void setTextItem(String textTitle, IMECombineItem triviaItem){
+        if (triviaItem != null) {
             title = textTitle;
-            selectedTextItem = textItem;
+            selectedTriviaItem = triviaItem;
             if (triviaContent != null) {
-                triviaContent.setText(textItem.getTitle());
+                triviaContent.setText(selectedTriviaItem.getTextItem().getTitle());
             }
             if (triviaTitle != null) {
                 triviaTitle.setText(textTitle);
             }
             if (posterImageView != null) {
-                PicassoTrustAll.getInstance(getActivity()).load(textItem.getPosterImgUrl()).into(posterImageView);
+                PicassoTrustAll.getInstance(getActivity()).load(triviaItem.getPictureItem().fullImage.url).into(posterImageView);
             }
 
         }

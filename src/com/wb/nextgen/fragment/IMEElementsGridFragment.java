@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
@@ -29,17 +30,21 @@ import com.wb.nextgen.R;
 import com.wb.nextgen.activity.NextGenPlayer;
 import com.wb.nextgen.data.DemoData;
 import com.wb.nextgen.data.MovieMetaData;
+import com.wb.nextgen.data.TheTakeData;
 import com.wb.nextgen.data.TheTakeData.TheTakeProductFrame;
 import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgen.interfaces.NextGenPlaybackStatusListener;
 import com.wb.nextgen.model.AVGalleryIMEEngine;
 import com.wb.nextgen.model.NextGenIMEEngine;
 import com.wb.nextgen.model.TheTakeIMEEngine;
+import com.wb.nextgen.network.TheTakeApiDAO;
 import com.wb.nextgen.util.PicassoTrustAll;
 
 import java.util.ArrayList;
 import java.util.List;
 import com.wb.nextgen.data.MovieMetaData.IMEElementsGroup;
+import com.wb.nextgen.util.concurrent.ResultListener;
+import com.wb.nextgen.util.utils.StringHelper;
 
 /**
  * Created by gzcheng on 3/28/16.
@@ -101,33 +106,43 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
         }
 
         if (activeObj.imeObject instanceof MovieMetaData.IMEElement) {
-           Object dataObj = ((MovieMetaData.IMEElement)activeObj.imeObject).imeObject ;
+            Object dataObj = ((MovieMetaData.IMEElement)activeObj.imeObject).imeObject ;
             if (dataObj instanceof MovieMetaData.PresentationDataItem) {
+                MovieMetaData.PresentationDataItem headElement = (MovieMetaData.PresentationDataItem) dataObj;
 
+                if (dataObj instanceof AVGalleryIMEEngine.IMECombineItem){
+                    headElement = ((AVGalleryIMEEngine.IMECombineItem)dataObj).getAllPresentationItems().get(0);
+                }
 
                 if (playerActivity != null) {
-                    if (dataObj instanceof MovieMetaData.ECGalleryItem) {
+                    if (headElement instanceof MovieMetaData.ECGalleryItem) {
                         ECGalleryViewFragment fragment = new ECGalleryViewFragment();
                         fragment.setBGImageUrl(DemoData.getExtraBackgroundUrl());
-                        fragment.setCurrentGallery((MovieMetaData.ECGalleryItem) dataObj);
+                        fragment.setCurrentGallery((MovieMetaData.ECGalleryItem) headElement);
                         playerActivity.transitMainFragment(fragment);
                         playerActivity.pausMovieForImeECPiece();
 
 
-                    } else if (dataObj instanceof MovieMetaData.AudioVisualItem) {
+                    } else if (headElement instanceof MovieMetaData.AudioVisualItem) {
                         ECVideoViewFragment fragment = new ECVideoViewFragment();
                         fragment.setBGImageUrl(DemoData.getExtraBackgroundUrl());
-                        fragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) dataObj);
+                        fragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) headElement);
                         playerActivity.transitMainFragment(fragment);
                         playerActivity.pausMovieForImeECPiece();
-                    } else  if (dataObj instanceof  MovieMetaData.TextItem){
-                        ECTrviaViewFragment fragment = new ECTrviaViewFragment();
-                        fragment.setTextItem(activeObj.title, (MovieMetaData.TextItem)dataObj);
-                        playerActivity.transitMainFragment(fragment);
-                        playerActivity.pausMovieForImeECPiece();
-                    } else if (dataObj instanceof  MovieMetaData.LocationItem){
+                    } else if (headElement instanceof MovieMetaData.LocationItem ||
+                            (headElement instanceof AVGalleryIMEEngine.IMECombineItem && ((AVGalleryIMEEngine.IMECombineItem)headElement).isLocation() ) ){
+
+                        // TODO: deal with multiple locations at the same timecode later on.
+                        if (headElement instanceof AVGalleryIMEEngine.IMECombineItem){
+                            headElement = ((AVGalleryIMEEngine.IMECombineItem)headElement).getAllPresentationItems().get(0);
+                        }
                         ECMapViewFragment fragment = new ECMapViewFragment();
-                        fragment.setLocationItem(activeObj.title, (MovieMetaData.LocationItem)dataObj);
+                        fragment.setLocationItem(activeObj.title, (MovieMetaData.LocationItem)headElement);
+                        playerActivity.transitMainFragment(fragment);
+                        playerActivity.pausMovieForImeECPiece();
+                    } else if (dataObj instanceof AVGalleryIMEEngine.IMECombineItem){
+                        ECTrviaViewFragment fragment = new ECTrviaViewFragment();
+                        fragment.setTextItem(activeObj.title, (AVGalleryIMEEngine.IMECombineItem)dataObj);
                         playerActivity.transitMainFragment(fragment);
                         playerActivity.pausMovieForImeECPiece();
                     }
@@ -172,9 +187,9 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
 
     private void localFill(final IMEDisplayObject activeObj, View rowView){
         TextView titleText= (TextView)rowView.findViewById(R.id.ime_title);
-        TextView subText1= (TextView)rowView.findViewById(R.id.ime_desc_text1);
+        final TextView subText1= (TextView)rowView.findViewById(R.id.ime_desc_text1);
         TextView subText2= (TextView)rowView.findViewById(R.id.ime_desc_text2);
-        ImageView poster = (ImageView)rowView.findViewById(R.id.ime_image_poster);
+        final ImageView poster = (ImageView)rowView.findViewById(R.id.ime_image_poster);
         MapView mapView = (MapView)rowView.findViewById(R.id.ime_map_view);
 
 
@@ -187,9 +202,16 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
         if (activeObj.imeObject instanceof MovieMetaData.IMEElement) {
             Object dataObj = ((MovieMetaData.IMEElement) activeObj.imeObject).imeObject;
             if (dataObj instanceof MovieMetaData.PresentationDataItem) {
-                Object currentPresentationId = rowView.getTag(R.id.ime_title);
+
                 rowView.setTag(R.id.ime_title, ((MovieMetaData.PresentationDataItem) dataObj).getId());
-                if (dataObj instanceof MovieMetaData.LocationItem){
+                if (dataObj instanceof MovieMetaData.LocationItem ||
+                        (dataObj instanceof AVGalleryIMEEngine.IMECombineItem && ((AVGalleryIMEEngine.IMECombineItem)dataObj).isLocation() ) ){
+
+                    // TODO: deal with multiple locations at the same timecode later on.
+                    if (dataObj instanceof AVGalleryIMEEngine.IMECombineItem){
+                        dataObj = ((AVGalleryIMEEngine.IMECombineItem)dataObj).getAllPresentationItems().get(0);
+                    }
+
                     mapView.setVisibility(View.VISIBLE);
                     poster.setVisibility(View.GONE);
                     final MovieMetaData.LocationItem locationItem = (MovieMetaData.LocationItem)dataObj;
@@ -238,30 +260,68 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                     poster.setVisibility(View.VISIBLE);
                     mapView.setVisibility(View.GONE);
                     String imageUrl = ((MovieMetaData.PresentationDataItem) dataObj).getPosterImgUrl();
-                    if (poster.getTag() == null || !poster.getTag().equals(imageUrl)) {
-                        poster.setTag(imageUrl);
-                        PicassoTrustAll.loadImageIntoView(getContext(), imageUrl, poster);
-                    }
+                    //if (poster.getTag() == null || !poster.getTag().equals(imageUrl)) {
+                      //  poster.setTag(imageUrl);
+
+                        Glide.with(getContext())
+                                .load(imageUrl).centerCrop()
+                                .into(poster);
+                        //PicassoTrustAll.loadImageIntoView(getContext(), imageUrl, poster);
+                   // }
                 }
 
                 if (subText1 != null && !subText1.getText().equals(((MovieMetaData.PresentationDataItem) dataObj).getTitle())) {
                     subText1.setText(((MovieMetaData.PresentationDataItem) dataObj).getTitle());
+                    subText1.setTag(R.id.ime_title, "");
                 }
             }
         }else if (activeObj.imeObject instanceof TheTakeProductFrame){
             poster.setVisibility(View.VISIBLE);
             mapView.setVisibility(View.GONE);
-            rowView.setTag(R.id.ime_title, ((TheTakeProductFrame) activeObj.imeObject).frameTime);
-            if (poster != null) {
-                String imageUrl = ((TheTakeProductFrame) activeObj.imeObject).frameImages.image1000px;
-                if (poster.getTag() == null || !poster.getTag().equals(imageUrl)) {
-                    poster.setTag(imageUrl);
-                    PicassoTrustAll.loadImageIntoView(getContext(), imageUrl, poster);
+            final int frameTime = ((TheTakeProductFrame) activeObj.imeObject).frameTime;
+            if  (rowView.getTag(R.id.ime_title) != null && !rowView.getTag(R.id.ime_title).equals(frameTime))
+            {
+                rowView.setTag(R.id.ime_title, ((TheTakeProductFrame) activeObj.imeObject).frameTime);
+                if (poster != null) {
+
+                    poster.setImageDrawable(null);
+
+                    //Glide.with(getContext()).load(imageUrl).centerCrop().into(poster);
                 }
-                if (subText1 != null) {
+
+                if (subText1 != null && subText1.getTag(R.id.ime_title) != null && !subText1.getTag(R.id.ime_title).equals(frameTime)) {
                     subText1.setText("");
+                    subText1.setTag(R.id.ime_title, frameTime);
                 }
+
+                TheTakeApiDAO.getFrameProducts(frameTime, new ResultListener<List<TheTakeData.TheTakeProduct>>() {
+                    @Override
+                    public void onResult(final List<TheTakeData.TheTakeProduct> result) {
+                        if (subText1.getTag(R.id.ime_title).equals(frameTime)) {
+                            if (result != null && result.size() > 0 && getActivity() != null) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        subText1.setText(result.get(0).productName);
+                                        poster.setBackgroundColor(getResources().getColor(android.R.color.white));
+                                        Glide.with(getContext()).load(result.get(0).getProductThumbnailUrl()).into(poster);
+
+                                    }
+                                });
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    public <E extends Exception> void onException(E e) {
+                        subText1.setText("");
+
+                    }
+                });
             }
+
+
         }
 
     }

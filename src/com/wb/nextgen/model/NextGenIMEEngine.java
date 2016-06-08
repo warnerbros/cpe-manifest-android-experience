@@ -22,6 +22,7 @@ public abstract class NextGenIMEEngine <T>{
     protected int currentIndex = -1;
     protected T currentIMEItem = null;
 
+    protected long lastSearchedTime = 0L;
 
     public NextGenIMEEngine(List<T> elements){
         imeElements = elements;
@@ -113,6 +114,7 @@ public abstract class NextGenIMEEngine <T>{
         }
         if (computedIMEItem == null || !computedIMEItem.equals(currentIMEItem) ) {
             currentIMEItem = computedIMEItem;
+            lastSearchedTime = timecode;
             return true;
         }else
             return false;
@@ -124,9 +126,9 @@ public abstract class NextGenIMEEngine <T>{
         return new MovieMetaData.IMEElement<T>(startTimeCode, endTimeCode, object);
     }
 
+
     public abstract int compareCurrentTimeWithItemAtIndex(long timecode, int index);
-    /*
-    public void playbackStatusUpdate(NextGenPlaybackStatus playbackStatus, long timecode){
-        handleIMEUpdate(timecode, getCurrentIMEElement(timecode));
-    }*/
+
+
+
 }

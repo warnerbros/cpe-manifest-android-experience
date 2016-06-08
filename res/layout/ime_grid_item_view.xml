@@ -2,13 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:nextgen="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:background="@color/transparent_black">
     <TextView
         android:id="@+id/ime_title"
         android:layout_width="wrap_content"
         android:text="Title"
         android:textColor="@android:color/white"
         android:textSize="@dimen/textMedium"
+        android:fontFamily="sans-serif-condensed"
         android:layout_height="wrap_content"/>
     <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
         android:layout_width="match_parent"
@@ -39,6 +42,7 @@
         android:id="@+id/ime_desc_text1"
         android:layout_width="wrap_content"
         android:textColor="@android:color/white"
+        android:fontFamily="sans-serif-condensed"
         android:textSize="@dimen/textMedium"
         android:maxLines="1"
         android:ellipsize="end"
@@ -47,6 +51,7 @@
         android:id="@+id/ime_desc_text2"
         android:layout_width="wrap_content"
         android:textColor="@android:color/white"
+        android:fontFamily="sans-serif-condensed"
         android:textSize="@dimen/textMedium"
         android:layout_height="wrap_content"/>
 

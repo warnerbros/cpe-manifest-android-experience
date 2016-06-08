@@ -759,13 +759,14 @@ public class MovieMetaData {
 
         public PresentationDataItem(InventoryMetadataType metaData, String parentExperienceId){
             BasicMetadataInfoType localizedInfo = null;
-            if (metaData.getBasicMetadata().getLocalizedInfo() != null && metaData.getBasicMetadata().getLocalizedInfo().size() > 0) {
+            if (metaData != null && metaData.getBasicMetadata().getLocalizedInfo() != null && metaData.getBasicMetadata().getLocalizedInfo().size() > 0) {
                 localizedInfo = metaData.getBasicMetadata().getLocalizedInfo().get(0);
                 title = localizedInfo.getTitleDisplayUnlimited();
+                this.id = metaData.getContentID();
             } else{
                 title = "";
+                this.id = "";
             }
-            this.id = metaData.getContentID();
             this.parentExperienceId = parentExperienceId;
         }
 
@@ -798,7 +799,7 @@ public class MovieMetaData {
             this.index = index;
         }
         public String getPosterImgUrl(){
-            return NextGenUtils.getPacakageImageUrl(R.drawable.mos_grid_default_logo);
+            return "";
         }
     }
 
@@ -850,6 +851,7 @@ public class MovieMetaData {
             this.fullImage = new PictureImageData(fullImage.getContainerReference().getContainerLocation(), fullImage.getWidth(), fullImage.getHeight());
             this.thumbnail = new PictureImageData(thumbnail.getContainerReference().getContainerLocation(), thumbnail.getWidth(), thumbnail.getHeight());
         }
+
         public String getPosterImgUrl(){
             return thumbnail.url;
         }
