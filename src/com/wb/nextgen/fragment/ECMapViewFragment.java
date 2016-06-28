@@ -14,7 +14,9 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.wb.nextgen.NextGenApplication;
@@ -72,7 +74,7 @@ public class ECMapViewFragment extends Fragment {
     }
 
 
-    public void setLocationItem(String textTitle, MovieMetaData.LocationItem locationItem){
+    public void setLocationItem(String textTitle, final MovieMetaData.LocationItem locationItem){
         if (locationItem != null) {
             title = textTitle;
             selectedLocationItem = locationItem;
@@ -86,10 +88,10 @@ public class ECMapViewFragment extends Fragment {
                 final LatLng location = new LatLng(selectedLocationItem.latitude, selectedLocationItem.longitude);
                 mapView.getMapAsync(new OnMapReadyCallback() {
                     @Override
-                    public void onMapReady(GoogleMap googleMap) {
+                    public void onMapReady(final GoogleMap googleMap) {
 
-                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 14.0f));   // set location
-
+                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, locationItem.zoom));   // set location
+                        googleMap.getMaxZoomLevel();
                         BitmapDescriptor bmDes = BitmapDescriptorFactory.fromBitmap(NextGenApplication.getMovieMetaData().getMapPinBitmap());
                         googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
                         MarkerOptions markerOpt = new MarkerOptions()
@@ -99,6 +101,23 @@ public class ECMapViewFragment extends Fragment {
                         googleMap.addMarker(markerOpt).showInfoWindow();
                         //googleMap.getUiSettings().setMapToolbarEnabled(false);
                         googleMap.setOnMapClickListener(null);
+                        googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+                            @Override
+                            public void onCameraChange(CameraPosition camPos) {
+                                if (camPos.zoom > locationItem.zoom && location != null) {
+                                    // set zoom 17 and disable zoom gestures so map can't be zoomed out
+                                    // all the way
+                                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location,locationItem.zoom));
+                                    googleMap.getUiSettings().setZoomGesturesEnabled(false);
+                                }
+                                if (camPos.zoom <= 17) {
+                                    googleMap.getUiSettings().setZoomGesturesEnabled(true);
+                                }
+
+                                //LatLngBounds visibleBounds =  googleMap.getProjection().getVisibleRegion().latLngBounds;
+
+                            }
+                        });
                         //googleMap.addMarker(new MarkerOptions().position(new LatLng(locationItem.latitude, locationItem.longitude)).title("Marker"));
                     }
                 });

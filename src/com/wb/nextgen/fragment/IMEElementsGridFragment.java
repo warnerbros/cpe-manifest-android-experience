@@ -222,7 +222,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                         @Override
                         public void onMapReady(GoogleMap googleMap) {
 
-                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 14.0f));   // set location
+                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, locationItem.zoom));   // set location
 
                             BitmapDescriptor bmDes = BitmapDescriptorFactory.fromBitmap(NextGenApplication.getMovieMetaData().getMapPinBitmap());
                             googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
