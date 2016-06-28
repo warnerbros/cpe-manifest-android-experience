@@ -18,42 +18,66 @@
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:gravity="left"
-        android:weightSum="2">
+        android:weightSum="100">
+
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:layout_weight="29"
+            android:id="@+id/startup_left_padding"/>
+        <LinearLayout
+            android:id="@+id/startup_right_portion"
+            android:layout_width="0dp"
+            android:layout_weight="71"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:weightSum="3">
-            <RelativeLayout
+            android:weightSum="100">
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="2">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:scaleType="fitCenter"
-                    android:id="@+id/next_gen_startup_movie_logo"
-                    android:layout_above="@+id/next_gen_startup_play_button"/>
-                <com.wb.nextgen.widget.SelectedMaskImageButton
-                    android:id="@+id/next_gen_startup_play_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="80dp"
-                    android:scaleType="fitCenter"
-                    android:layout_centerInParent="true"
-                    nextgen:selectedOverlayColor="@color/transparent_black"
-                    android:background="@android:color/transparent" />
-                <com.wb.nextgen.widget.SelectedMaskImageButton
-                    android:id="@+id/next_gen_startup_extra_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="80dp"
-                    android:layout_below="@+id/next_gen_startup_play_button"
-                    android:layout_centerInParent="true"
-                    android:scaleType="fitCenter"
-                    nextgen:selectedOverlayColor="@color/transparent_black"
-                    android:background="@android:color/transparent"/>
+                android:layout_weight="46"
+                android:id="@+id/startup_top_padding"
+                android:orientation="horizontal"
+                />
+            <LinearLayout
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:id="@+id/startup_buttons_layout"
+                android:gravity="left"
+                android:orientation="vertical">
 
-            </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="left">
+                    <!--<ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:scaleType="fitCenter"
+                        android:id="@+id/next_gen_startup_movie_logo"
+                        android:layout_above="@+id/next_gen_startup_play_button"/>-->
+                    <com.wb.nextgen.widget.SelectedMaskImageButton
+                        android:id="@+id/next_gen_startup_play_button"
+                        android:layout_width="fill_parent"
+                        android:layout_height="80dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/front_page_paly_button"
+                        nextgen:selectedOverlayColor="@color/transparent_black"
+                        android:background="@android:color/transparent" />
+                    <com.wb.nextgen.widget.SelectedMaskImageButton
+                        android:id="@+id/next_gen_startup_extra_button"
+                        android:layout_width="fill_parent"
+                        android:layout_height="80dp"
+                        android:layout_below="@+id/next_gen_startup_play_button"
+                        android:src="@drawable/front_page_extra_button"
+                        android:scaleType="fitCenter"
+                        nextgen:selectedOverlayColor="@color/transparent_black"
+                        android:background="@android:color/transparent"/>
+
+                </RelativeLayout>
+            </LinearLayout>
 
         </LinearLayout>
     </LinearLayout>

@@ -84,6 +84,8 @@
 			android:name="com.google.android.maps"
 			android:required="false" />
 
+		<meta-data android:name="net.hockeyapp.android.appIdentifier" android:value="38d269d0079144528e95c04cdc386452" />
+
 		<meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 		<meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyCMzsJN-trHSzOsVLFc0ZrTzKA-YtlN7ac"/>
 		<meta-data android:name="com.crashlytics.ApiKey" android:value="672734f5363b289563cbb85b6da95e747cc7eabd"/>

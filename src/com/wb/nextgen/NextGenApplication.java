@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.net.Uri;
 import android.os.Build;
+import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
@@ -101,10 +102,17 @@ public class NextGenApplication extends Application {
                     + "; " + Build.MODEL + ")";
             DemoData.parseDemoJSONData();
 
-
+            long systime = SystemClock.currentThreadTimeMillis();
             ManifestXMLParser.NextGenManifestData manifest = new ManifestXMLParser().startParsing();
+            long currentTime = SystemClock.currentThreadTimeMillis() - systime;
+            NextGenLogger.d("TIME_THIS", "Time to finish parsing: " + currentTime);
+
+
             movieMetaData = MovieMetaData.process(manifest);
 
+
+            currentTime = SystemClock.currentThreadTimeMillis() - currentTime;
+            NextGenLogger.d("TIME_THIS", "Time to finish processing: " + currentTime);
 
             BaselineApiDAO.init();
             TheTakeApiDAO.init();

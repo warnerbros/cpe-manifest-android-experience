@@ -990,8 +990,8 @@ public class MovieMetaData {
                 BasicMetadataInfoType localizedInfo = metaData.getBasicMetadata().getLocalizedInfo().get(0);
                 title = localizedInfo.getTitleDisplayUnlimited(); // should loop the list and look for the correct language code
 
-                if (experience.getApp() != null && experience.getApp().size() > 0 && experience.getApp().get(0).getSubType() != null && experience.getApp().get(0).getSubType().size() > 0) {
-                    externalApp = new ExternalApiData(experience.getApp().get(0).getType(), experience.getApp().get(0).getSubType().get(0));
+                if (experience.getApp() != null && experience.getApp().size() > 0 && experience.getApp().get(0).getAppName() != null && experience.getApp().get(0).getAppName().size() > 0) {
+                    externalApp = new ExternalApiData(experience.getApp().get(0).getAppName().get(0).getValue(), "");
                 }
 
                 if (avItems != null && avItems.size() > 0) {

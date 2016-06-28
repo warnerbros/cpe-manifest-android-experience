@@ -20,10 +20,11 @@ android {
 	useLibrary 'org.apache.http.legacy'
 
 	defaultConfig {
-		minSdkVersion 14
+		minSdkVersion 19
 		targetSdkVersion 19
 		// Enabling multidex support.
 		multiDexEnabled true
+		manifestPlaceholders = [HOCKEYAPP_APP_ID: "38d269d0079144528e95c04cdc386452"]
     }
 
 	compileOptions {
@@ -102,6 +103,7 @@ dependencies {
 
 
 	//compile project(':flixster-android-closedcaptions')
+	compile 'net.hockeyapp.android:HockeySDK:4.0.0'
 	compile 'com.google.android.gms:play-services:8.4.0'
 	compile 'com.android.support:appcompat-v7:23.3.0'
 	compile 'com.android.support:mediarouter-v7:23.3.0'

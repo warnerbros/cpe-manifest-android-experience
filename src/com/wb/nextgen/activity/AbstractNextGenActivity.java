@@ -173,10 +173,12 @@ public abstract class AbstractNextGenActivity extends AppCompatActivity implemen
     }
 
     public void onRequestToggleFullscreen(){
-        if (topUnderlayActionbarSpacer.getVisibility() == View.GONE){
-            topUnderlayActionbarSpacer.setVisibility(View.VISIBLE);
-        }else
-            topUnderlayActionbarSpacer.setVisibility(View.GONE);
+        if (topUnderlayActionbarSpacer != null) {
+            if (topUnderlayActionbarSpacer.getVisibility() == View.GONE) {
+                topUnderlayActionbarSpacer.setVisibility(View.VISIBLE);
+            } else
+                topUnderlayActionbarSpacer.setVisibility(View.GONE);
+        }
     }
 
     protected void onLeftTopActionBarButtonPressed(){
