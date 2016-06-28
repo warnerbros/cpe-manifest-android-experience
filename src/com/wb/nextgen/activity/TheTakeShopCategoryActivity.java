@@ -67,6 +67,7 @@ public class TheTakeShopCategoryActivity extends AbstractNextGenActivity impleme
             categoryListView.setOnChildClickListener(categoryListAdaptor);
             categoryListView.setOnGroupCollapseListener(categoryListAdaptor);
             categoryListView.setOnGroupExpandListener(categoryListAdaptor);
+            categoryListView.setOnGroupClickListener(categoryListAdaptor);
             requestCategoryList();
         }
 
@@ -83,12 +84,21 @@ public class TheTakeShopCategoryActivity extends AbstractNextGenActivity impleme
             @Override
             public void onResult(List<TheTakeCategory> result) {
                 categories = result;
+                if (categories != null && categories.size() > 0) {
+                    if (!categories.get(0).categoryName.equals(getResources().getString(R.string.label_all))) {
+                        TheTakeCategory rootCate = new TheTakeCategory();
+                        rootCate.categoryId = 0;
+                        rootCate.categoryName = getResources().getString(R.string.label_all);
+                        categories.add(0, rootCate);
+                    }
+                }
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         if (categoryListAdaptor != null)
                             categoryListAdaptor.notifyDataSetChanged();
-                        categoryListAdaptor.setItemChecked(0,0);
+                        categoryListAdaptor.setItemChecked(0,-1);
                     }
                 });
             }
@@ -101,7 +111,7 @@ public class TheTakeShopCategoryActivity extends AbstractNextGenActivity impleme
     }
 
     public class TheTakeExpandableListAdapter extends BaseExpandableListAdapter implements ExpandableListView.OnChildClickListener,
-            ExpandableListView.OnGroupCollapseListener, ExpandableListView.OnGroupExpandListener {
+            ExpandableListView.OnGroupCollapseListener, ExpandableListView.OnGroupExpandListener, ExpandableListView.OnGroupClickListener {
 
 
         int selectedGroupIndex = -1;
@@ -200,46 +210,77 @@ public class TheTakeShopCategoryActivity extends AbstractNextGenActivity impleme
             return false;
         }
 
+        @Override
+        public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id){
+            if (groupPosition < categories.size()) {
+                TheTakeCategory selectedCategory = categories.get(groupPosition);
+                if (selectedCategory.childCategories == null || selectedCategory.childCategories.size() == 0){
+                    setItemChecked(groupPosition, -1);
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public void setItemChecked(int groupPosition, int childPosition) {
-            if (groupPosition >= categories.size() || childPosition >= getChildrenCount(groupPosition))
-                return;
-            else if (groupPosition != -1 && childPosition != -1) {
+            TheTakeCategory selectedCategory = null;
+            if (groupPosition >= categories.size()) {
+
+            }else if (groupPosition != -1) {
+                if (selectedGroupIndex != groupPosition)
+                    selectedGroupIndex = groupPosition;
+
+                if (childPosition != -1) {
+                     if (selectedItemIndex != childPosition) {
+                        selectedItemIndex = childPosition;
+                        if (!categoryListView.isGroupExpanded(selectedGroupIndex)) {
+                            categoryListView.expandGroup(selectedGroupIndex);
+                        }
+
+                    }
+                } else {
+                    selectedItemIndex = -1;
+                }
+                reComputeCheckedItem();
+                selectedCategory = getSelectedCategory();
+            }
+
+            if (selectedCategory != null){
                 Fragment f = getSupportFragmentManager().findFragmentByTag(TheTakeProductDetailFragment.class.toString());
                 if (f != null)
                     getSupportFragmentManager().popBackStack();
-                if (selectedGroupIndex != groupPosition || selectedItemIndex != childPosition) {
-                    selectedGroupIndex = groupPosition;
-                    selectedItemIndex = childPosition;
-                    if (!categoryListView.isGroupExpanded(selectedGroupIndex)){
-                        categoryListView.expandGroup(selectedGroupIndex);
-                    }
-                    reComputeCheckedItem();
-                    final TheTakeCategory selectedCategory = getSelectedCategory();
-
-                    gridFrament.refreshWithCategory(selectedCategory);
-
-
-                }
+                gridFrament.refreshWithCategory(selectedCategory);
             }
+
+
         }
 
         public TheTakeCategory getSelectedCategory(){
-            if (selectedGroupIndex != -1 && selectedItemIndex != -1){
-                return getChild(selectedGroupIndex, selectedItemIndex);
-            }else
-                return null;
+            if (selectedGroupIndex != -1){
+                if (selectedItemIndex != -1) {
+                    return getChild(selectedGroupIndex, selectedItemIndex);
+                }else if (categories != null && selectedItemIndex < categories.size()){
+                    return categories.get(selectedGroupIndex);
+                }
+
+            }
+            return null;
         }
 
         public void reComputeCheckedItem(){
-            if (selectedGroupIndex != -1 && selectedItemIndex != -1){
-
-
-                if (categoryListView.isGroupExpanded(selectedGroupIndex)) {
-
-                    selectedFlatIndex = categoryListView.getFlatListPosition(ExpandableListView.getPackedPositionForChild(selectedGroupIndex, selectedItemIndex));
+            if (selectedGroupIndex != -1){
+                TheTakeCategory selectedCategory = categories.get(selectedGroupIndex);
+                if (selectedCategory.childCategories == null || selectedCategory.childCategories.size() == 0) {
+                    selectedFlatIndex = categoryListView.getFlatListPosition(ExpandableListView.getPackedPositionForGroup(selectedGroupIndex));
                     categoryListView.setItemChecked(selectedFlatIndex, true);
-                }else if (selectedFlatIndex != -1){
-                    categoryListView.setItemChecked(selectedFlatIndex, false);
+                }else if (selectedItemIndex != -1) {
+                    if (categoryListView.isGroupExpanded(selectedGroupIndex)) {
+
+                        selectedFlatIndex = categoryListView.getFlatListPosition(ExpandableListView.getPackedPositionForChild(selectedGroupIndex, selectedItemIndex));
+                        categoryListView.setItemChecked(selectedFlatIndex, true);
+                    } else if (selectedFlatIndex != -1) {
+                        categoryListView.setItemChecked(selectedFlatIndex, false);
+                    }
                 }
             }
         }
