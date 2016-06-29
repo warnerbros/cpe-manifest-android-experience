@@ -126,6 +126,9 @@ dependencies {
 
 	compile 'com.google.code.gson:gson:2.2.4'
 
+	compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
+
+	//compile group: 'com.ximpleware', name: 'vtd-xml', version: '2.11'
 
 }
 
