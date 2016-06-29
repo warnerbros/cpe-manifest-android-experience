@@ -15,7 +15,7 @@ import com.wb.nextgen.widget.ECMediaController;
 /**
  * Created by gzcheng on 3/7/16.
  */
-public class ECVideoActivity extends AbstractECView {
+public class ECVideoActivity extends AbstractECView implements ECVideoViewFragment.ECVideoListAdaptor{
 
     ECVideoViewFragment rightVideoFrame;
 
@@ -24,7 +24,7 @@ public class ECVideoActivity extends AbstractECView {
 
         rightVideoFrame = (ECVideoViewFragment) getSupportFragmentManager().findFragmentById(R.id.ec_video_view_fragment);
 
-
+        rightVideoFrame.setEcsAdaptor(this);
     }
 
 
@@ -59,5 +59,7 @@ public class ECVideoActivity extends AbstractECView {
         rightVideoFrame.onFullScreenChange(bFullscreen);
     }
 
-
+    public void playbackFinished(){
+        listFragment.selectNextItem();
+    }
 }

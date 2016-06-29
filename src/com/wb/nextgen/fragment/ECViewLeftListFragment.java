@@ -99,4 +99,13 @@ public class ECViewLeftListFragment extends NextGenExtraLeftListFragment{
     protected int getStartupSelectedIndex(){
         return 0;
     }
+
+    public void selectNextItem(){
+        if (listAdaptor != null){
+            int currentSelection = listAdaptor.selectedIndex;
+            if (listAdaptor.getCount() -1  > currentSelection) {
+                onItemClick(null, listView, currentSelection + 1, 0);
+            }
+        }
+    }
 }

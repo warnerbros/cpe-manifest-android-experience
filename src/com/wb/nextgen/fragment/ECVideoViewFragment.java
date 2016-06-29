@@ -51,6 +51,11 @@ public class ECVideoViewFragment extends Fragment{
 
     boolean shouldAutoPlay = false;
 
+    ECVideoListAdaptor ecsAdaptor = null;
+
+    public static interface ECVideoListAdaptor{
+        void playbackFinished();
+    }
 
     public void setBGImageUrl(String url){
         bgImageUrl = url;
@@ -86,6 +91,13 @@ public class ECVideoViewFragment extends Fragment{
         }
         //videoView.setMediaController(mediaController);
         videoView.setCustomMediaController(mediaController);
+        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                if (ecsAdaptor != null)
+                    ecsAdaptor.playbackFinished();
+            }
+        });
 
         videoView.setOnPreparedListener(new PreparedListener());
         videoView.requestFocus();
@@ -187,5 +199,9 @@ public class ECVideoViewFragment extends Fragment{
 
     public void onRequestToggleFullscreen(boolean bFullscreen) {
         mediaController.onToggledFullScreen(bFullscreen);
+    }
+
+    public void setEcsAdaptor(ECVideoListAdaptor adaptor){
+        ecsAdaptor = adaptor;
     }
 }
