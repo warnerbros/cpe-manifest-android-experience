@@ -4,22 +4,16 @@ import android.content.res.AssetManager;
 import android.util.Xml;
 
 import com.wb.nextgen.NextGenApplication;
-import com.wb.nextgen.parser.appdata.AppDataFeedSetType;
-import com.wb.nextgen.parser.appdata.AppDataType;
 import com.wb.nextgen.parser.appdata.ManifestAppDataSetType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.MediaManifestType;
 import com.wb.nextgen.util.utils.StringHelper;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -28,10 +22,8 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.TimeZone;
 
 import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
@@ -65,7 +57,8 @@ public class ManifestXMLParser {
             XmlPullParser parser2 = Xml.newPullParser();
             parser2.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
             AssetManager am2 = NextGenApplication.getContext().getAssets();
-            parser2.setInput(am2.open("mos_appdata_locations_r60_v0.3.xml"), null);
+            //parser2.setInput(am2.open("mos_appdata_locations_r60_v0.3.xml"), null);
+            parser2.setInput(am2.open("mos_appdata_locations_r60-v0.5.xml"), null);
             parser2.nextTag();
 
             ManifestAppDataSetType appData = parseAppData(parser2);
@@ -74,7 +67,8 @@ public class ManifestXMLParser {
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
             AssetManager am = NextGenApplication.getContext().getAssets();
             //parser.setInput(am.open("mos_hls_manifest_v3.xml"), null);
-            parser.setInput(am.open("mos_hls_manifest_r60_v0.4.xml"), null);
+            //parser.setInput(am.open("mos_hls_manifest_r60_v0.4.xml"), null);
+            parser.setInput(am.open("mos_hls_manifest_r60-v0.5.xml"), null);
             parser.nextTag();
 
 

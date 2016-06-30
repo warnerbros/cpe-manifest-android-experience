@@ -1,13 +1,5 @@
 package com.wb.nextgen.fragment;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,11 +8,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -30,28 +19,25 @@ import com.wb.nextgen.R;
 import com.wb.nextgen.activity.NextGenPlayer;
 import com.wb.nextgen.data.DemoData;
 import com.wb.nextgen.data.MovieMetaData;
+import com.wb.nextgen.data.MovieMetaData.IMEElementsGroup;
 import com.wb.nextgen.data.TheTakeData;
 import com.wb.nextgen.data.TheTakeData.TheTakeProductFrame;
-import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgen.interfaces.NextGenPlaybackStatusListener;
 import com.wb.nextgen.model.AVGalleryIMEEngine;
 import com.wb.nextgen.model.NextGenIMEEngine;
 import com.wb.nextgen.model.TheTakeIMEEngine;
 import com.wb.nextgen.network.TheTakeApiDAO;
-import com.wb.nextgen.util.PicassoTrustAll;
+import com.wb.nextgen.util.concurrent.ResultListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.wb.nextgen.data.MovieMetaData.IMEElementsGroup;
-import com.wb.nextgen.util.concurrent.ResultListener;
-import com.wb.nextgen.util.utils.StringHelper;
 
 /**
  * Created by gzcheng on 3/28/16.
  */
 public class IMEElementsGridFragment extends NextGenGridViewFragment implements NextGenPlaybackStatusListener {
 
-    List<MovieMetaData.IMEElementsGroup> imeGroups;
+    List<IMEElementsGroup> imeGroups;
     final List<NextGenIMEEngine> imeEngines = new ArrayList<NextGenIMEEngine>();
     long currentTimeCode = 0L;
 
@@ -140,11 +126,17 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                         fragment.setLocationItem(activeObj.title, (MovieMetaData.LocationItem)headElement);
                         playerActivity.transitMainFragment(fragment);
                         playerActivity.pausMovieForImeECPiece();
-                    } else if (dataObj instanceof AVGalleryIMEEngine.IMECombineItem){
+                    /*} else if (dataObj instanceof AVGalleryIMEEngine.IMECombineItem){
                         ECTrviaViewFragment fragment = new ECTrviaViewFragment();
                         fragment.setTextItem(activeObj.title, (AVGalleryIMEEngine.IMECombineItem)dataObj);
                         playerActivity.transitMainFragment(fragment);
+                        playerActivity.pausMovieForImeECPiece();*/
+                    } else if (dataObj instanceof MovieMetaData.TriviaItem){
+                        ECTrviaViewFragment fragment = new ECTrviaViewFragment();
+                        fragment.setTriviaItem(activeObj.title, (MovieMetaData.TriviaItem)dataObj);
+                        playerActivity.transitMainFragment(fragment);
                         playerActivity.pausMovieForImeECPiece();
+
                     }
                 }
             }
