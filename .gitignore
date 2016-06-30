@@ -14,3 +14,6 @@ target/
 *.gradle/
 *.project
 *.settings/
+
+# data files
+assets/*.xml

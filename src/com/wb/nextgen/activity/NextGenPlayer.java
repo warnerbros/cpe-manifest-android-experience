@@ -1,47 +1,31 @@
 package com.wb.nextgen.activity;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.util.TypedValue;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
-
 import com.wb.nextgen.data.DemoData;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.fragment.ECGalleryViewFragment;
-import com.wb.nextgen.fragment.ECVideoViewFragment;
 import com.wb.nextgen.fragment.NextGenPlayerBottomFragment;
 import com.wb.nextgen.fragment.ShareClipFragment;
 import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgen.interfaces.NextGenPlaybackStatusListener;
-import com.wb.nextgen.network.TheTakeApiDAO;
-import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.TabletUtils;
-import com.wb.nextgen.util.concurrent.ResultListener;
 import com.wb.nextgen.util.utils.NextGenFragmentTransactionEngine;
 import com.wb.nextgen.videoview.IVideoViewActionListener;
 import com.wb.nextgen.videoview.ObservableVideoView;
-import com.wb.nextgen.widget.ECMediaController;
 import com.wb.nextgen.widget.MainFeatureMediaController;
 
-
-import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -419,5 +403,10 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     @Override
     protected void onLeftTopActionBarButtonPressed(){
         finish();
+    }
+
+    @Override
+    public String getRightTitleText(){
+        return "";
     }
 }

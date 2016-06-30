@@ -2,14 +2,10 @@ package com.wb.nextgen.activity;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
@@ -23,7 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.DemoData;
 import com.wb.nextgen.interfaces.ContentViewFullscreenRequestInterface;
@@ -38,6 +33,7 @@ public abstract class AbstractNextGenActivity extends AppCompatActivity implemen
     public abstract String getBackgroundImgUri();
     public abstract String getLeftButtonText();
     public abstract String getRightTitleImageUri();
+    public abstract String getRightTitleText();
     public int getLeftButtonLogoId(){
         return 0;
     }
@@ -45,6 +41,7 @@ public abstract class AbstractNextGenActivity extends AppCompatActivity implemen
     private Button actionBarLeftButton;
     protected ImageView backgroundImageView;
     protected LinearLayout topUnderlayActionbarSpacer;
+    private TextView actionBarRightTextView;
     private int actionBarHeight=0;
 
     @Override
@@ -68,6 +65,7 @@ public abstract class AbstractNextGenActivity extends AppCompatActivity implemen
         actionBar.setTitle("");
 
         actionBarLeftButton = (Button) actionBarCustomView.findViewById(R.id.action_bar_left_button);
+        actionBarRightTextView = (TextView) actionBarCustomView.findViewById(R.id.action_bar_right_text);
         ImageView centerBanner = (ImageView) actionBarCustomView.findViewById(R.id.action_bar_center_banner);
         ImageView rightLogo = (ImageView) actionBarCustomView.findViewById(R.id.action_bar_right_logo);
         actionBar.setCustomView(actionBarCustomView);
@@ -87,8 +85,13 @@ public abstract class AbstractNextGenActivity extends AppCompatActivity implemen
         if (centerBanner != null && !StringHelper.isEmpty(DemoData.getMovieLogoUrl()))
             PicassoTrustAll.loadImageIntoView(this, DemoData.getMovieLogoUrl(), centerBanner);
 
-        if (rightLogo != null && !StringHelper.isEmpty(getRightTitleImageUri()))
+        if (rightLogo != null && !StringHelper.isEmpty(getRightTitleImageUri())) {
             PicassoTrustAll.loadImageIntoView(this, getRightTitleImageUri(), rightLogo);
+            actionBarRightTextView.setVisibility(View.INVISIBLE);
+        }else if (!StringHelper.isEmpty(getRightTitleText())){
+            actionBarRightTextView.setVisibility(View.VISIBLE);
+            actionBarRightTextView.setText(getRightTitleText().toUpperCase());
+        }
 
         super.onCreate(savedInstanceState);
     }

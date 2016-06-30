@@ -1,40 +1,24 @@
 package com.wb.nextgen.activity;
 
-import android.content.Context;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.FrameLayout;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.DemoData;
-import com.wb.nextgen.data.TheTakeData.TheTakeProduct;
 import com.wb.nextgen.data.TheTakeData.TheTakeCategory;
-import com.wb.nextgen.fragment.NextGenActorListFragment;
-import com.wb.nextgen.fragment.NextGenExtraMainTableFragment;
 import com.wb.nextgen.fragment.TheTakeCategoryGridFragment;
 import com.wb.nextgen.fragment.TheTakeProductDetailFragment;
 import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgen.network.TheTakeApiDAO;
-import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.concurrent.ResultListener;
 import com.wb.nextgen.util.utils.NextGenFragmentTransactionEngine;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +37,7 @@ public class TheTakeShopCategoryActivity extends AbstractNextGenActivity impleme
     FrameLayout leftFrame;
     NextGenFragmentTransactionEngine nextGenFragmentTransactionEngine;
 
+    String titleText = null;
 
     @Override
     public void onCreate(Bundle savedState) {
@@ -313,7 +298,7 @@ public class TheTakeShopCategoryActivity extends AbstractNextGenActivity impleme
 
     @Override
     public String getRightTitleImageUri(){
-        return DemoData.getExtraRightTitleImageUrl();
+        return "";
     }
 
     //*************** NextGenFragmentTransactionInterface ***************
@@ -347,5 +332,17 @@ public class TheTakeShopCategoryActivity extends AbstractNextGenActivity impleme
         super.onBackPressed();
         if (getSupportFragmentManager().getBackStackEntryCount() == 0 )
             finish();
+    }
+
+
+    @Override
+    public String getRightTitleText(){
+        if (titleText == null && getIntent() != null) {
+            if (getIntent() != null)
+                titleText = getIntent().getStringExtra("title");
+            else
+                titleText = "";
+        }
+        return titleText;
     }
 }

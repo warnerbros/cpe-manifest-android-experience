@@ -2,29 +2,21 @@ package com.wb.nextgen.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-
 
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.DemoData;
 import com.wb.nextgen.fragment.NextGenActorListFragment;
 import com.wb.nextgen.fragment.NextGenExtraMainTableFragment;
-
 import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgen.interfaces.SensitiveFragmentInterface;
 import com.wb.nextgen.util.utils.NextGenFragmentTransactionEngine;
-import com.wb.nextgen.util.PicassoTrustAll;
 
 /**
  * Created by gzcheng on 1/7/16.
  */
-public class NextGenExtraActivity extends AbstractNextGenActivity implements NextGenFragmentTransactionInterface{
+public class NextGenExtraActivity extends AbstractNextGenActivity implements NextGenFragmentTransactionInterface {
 
     //protected ImageView extraTitleView;
     //protected ImageView extraLogoImageView;
@@ -124,6 +116,11 @@ public class NextGenExtraActivity extends AbstractNextGenActivity implements Nex
     @Override
     public String getRightTitleImageUri(){
         return DemoData.getExtraRightTitleImageUrl();
+    }
+
+    @Override
+    public String getRightTitleText(){
+        return "";
     }
 
 }

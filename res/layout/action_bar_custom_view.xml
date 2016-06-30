@@ -26,4 +26,16 @@
         android:textSize="@dimen/textLarge"
         android:background="@android:color/transparent"
         android:layout_alignParentRight="true" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:id="@+id/action_bar_right_text"
+        android:textColor="@color/white"
+        android:fontFamily="sans-serif-condensed"
+        android:textStyle="bold"
+        android:textSize="@dimen/textLarge"
+        android:background="@android:color/transparent"
+        android:layout_alignParentRight="true" />
+
 </RelativeLayout>

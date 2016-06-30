@@ -2,19 +2,17 @@ package com.wb.nextgen.fragment;
 
 import android.content.Intent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wb.nextgen.NextGenApplication;
-import com.wb.nextgen.activity.ECGalleryActivity;
-import com.wb.nextgen.activity.ECVideoActivity;
 import com.wb.nextgen.R;
-
+import com.wb.nextgen.activity.ECGalleryActivity;
+import com.wb.nextgen.activity.ECSceneLocationActivity;
+import com.wb.nextgen.activity.ECVideoActivity;
 import com.wb.nextgen.activity.TheTakeShopCategoryActivity;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.data.MovieMetaData.ExperienceData;
-import com.wb.nextgen.network.TheTakeApiDAO;
 import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.utils.F;
 
@@ -32,8 +30,10 @@ public class NextGenExtraMainTableFragment extends NextGenGridViewFragment {
     protected void onListItmeClick(View v, int position, long id){
         ExperienceData selectedGroup = ecGroups.get(position);
         Intent intent = null;
-        if (selectedGroup.getECGroupType() == MovieMetaData.ECGroupType.FEATURETTES){
+        if (selectedGroup.getECGroupType() == MovieMetaData.ECGroupType.FEATURETTES) {
             intent = new Intent(getActivity(), ECVideoActivity.class);
+        }else if (selectedGroup.getECGroupType() == MovieMetaData.ECGroupType.LOCATIONS){
+            intent = new Intent(getActivity(), ECSceneLocationActivity.class);
         }else if (selectedGroup.getECGroupType() == MovieMetaData.ECGroupType.EXTERNAL_APP){
             if (selectedGroup.getExternalApp() != null){
                 if (selectedGroup.getExternalApp().externalApiName.equals(MovieMetaData.THE_TAKE_MANIFEST_IDENTIFIER)){
@@ -46,8 +46,9 @@ public class NextGenExtraMainTableFragment extends NextGenGridViewFragment {
         }
 
         if (intent != null) {
-            intent.setAction(android.content.Intent.ACTION_VIEW);
+            intent.setAction(Intent.ACTION_VIEW);
             intent.putExtra(F.ID, getListItemAtPosition(position).experienceId);
+            intent.putExtra(F.TITLE, selectedGroup.title);
             startActivity(intent);
         }
     }

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
@@ -23,6 +22,7 @@ public abstract class AbstractECView extends AbstractNextGenActivity {
     protected ECViewLeftListFragment listFragment;
     protected FrameLayout leftListFrame;
     protected boolean isContentFullScreen = false;
+    private String titleText = null;
 
     public abstract void onLeftListItemSelected(MovieMetaData.ExperienceData ecContentData);
 
@@ -77,13 +77,15 @@ public abstract class AbstractECView extends AbstractNextGenActivity {
 
     @Override
     public String getRightTitleImageUri(){
-        return DemoData.getExtraRightTitleImageUrl();
+        return null;//DemoData.getExtraRightTitleImageUrl();
     }
 
 
     @Override
     public void onRequestToggleFullscreen(){
         super.onRequestToggleFullscreen();
+        if (leftListFrame == null || listFragment == null)
+            return;
         ActionBar bar = getSupportActionBar();
         if (!isContentFullScreen){    // make it full screen
             leftListFrame.setVisibility(View.GONE);
@@ -111,5 +113,15 @@ public abstract class AbstractECView extends AbstractNextGenActivity {
             onRequestToggleFullscreen();
         else
             super.onBackPressed();
+    }
+
+    public String getRightTitleText(){
+        if (titleText == null && getIntent() != null) {
+            if (getIntent() != null)
+                titleText = getIntent().getStringExtra("title");
+            else
+                titleText = "";
+        }
+        return titleText;
     }
 }

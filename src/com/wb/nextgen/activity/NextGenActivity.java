@@ -10,17 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TableLayout;
 import android.widget.VideoView;
 
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
-
-import com.wb.nextgen.interfaces.NextGenPlaybackStatusListener;
 import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.utils.NextGenLogger;
-import com.wb.nextgen.widget.NextGenVideoView;
 
 import net.hockeyapp.android.CrashManager;
 
