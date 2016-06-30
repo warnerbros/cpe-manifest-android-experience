@@ -2,3 +2,15 @@ assets/APIKeysConfig.json
 fabric.properties
 release
 .mp4
+bin/
+gen/
+build/
+target/
+
+# Android Studio / Gradle
+*.iml
+*.idea/
+*.classpath
+*.gradle/
+*.project
+*.settings/
