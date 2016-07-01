@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_pressed="false" android:state_selected="false"><!-- pressed -->
+        <layer-list>
+            <item>
+                <shape android:shape="rectangle">
+                    <solid
+                        android:color="@color/flixster_lightblue_button_color" />
+
+                    <corners android:topRightRadius="10dp" android:bottomRightRadius="10dp" />
+                </shape>
+
+            </item>
+            <item
+                android:top="1dp"
+                android:bottom="1dp"
+                android:left="1dp"
+                android:right="1dp">
+
+                <shape android:shape="rectangle">
+                    <solid
+                        android:color="@android:color/white" />
+
+                    <corners android:topRightRadius="10dp" android:bottomRightRadius="10dp" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+    <item android:state_pressed="true"><!-- pressed -->
+        <layer-list>
+            <item>
+                <shape android:shape="rectangle">
+                    <solid
+                        android:color="@color/flixster_lightblue_button_color" />
+
+                    <corners android:topRightRadius="10dp" android:bottomRightRadius="10dp" />
+                </shape>
+
+            </item>
+            <item
+                android:top="1dp"
+                android:bottom="1dp"
+                android:left="1dp"
+                android:right="1dp">
+
+                <shape android:shape="rectangle">
+                    <solid
+                        android:color="@color/flixster_lightblue_button_color" />
+
+                    <corners android:topRightRadius="10dp" android:bottomRightRadius="10dp" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+    <item android:state_selected="true"><!-- pressed -->
+        <layer-list>
+            <item>
+                <shape android:shape="rectangle">
+                    <solid
+                        android:color="@color/flixster_lightblue_button_color" />
+
+                    <corners android:topRightRadius="10dp" android:bottomRightRadius="10dp" />
+                </shape>
+
+            </item>
+            <item
+                android:top="1dp"
+                android:bottom="1dp"
+                android:left="1dp"
+                android:right="1dp">
+
+                <shape android:shape="rectangle">
+                    <solid
+                        android:color="@color/flixster_lightblue_button_color" />
+
+                    <corners android:topRightRadius="10dp" android:bottomRightRadius="10dp" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+
+</selector>

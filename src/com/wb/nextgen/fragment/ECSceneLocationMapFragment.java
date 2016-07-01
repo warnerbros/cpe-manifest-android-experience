@@ -7,7 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TabHost;
+import android.widget.TabWidget;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -35,13 +39,21 @@ import java.util.List;
 /**
  * Created by gzcheng on 3/31/16.
  */
-public class ECSceneLocationMapFragment extends Fragment implements AdapterView.OnItemSelectedListener{
+public class ECSceneLocationMapFragment extends Fragment implements AdapterView.OnItemSelectedListener, View.OnClickListener{
+
+    public static interface OnSceneLocationSelectedListener{
+        void onSceneLocationSelected(int selectedIndex);
+    }
+
     protected MapView mapView;
 
     private Spinner locationSpinner;
+    private Button mapButton;
+    private Button satelliteButton;
 
     private List<SceneLocation> sceneLocations;
-    private  ArrayAdapter<String> spinnerAdaptor;
+    private ArrayAdapter<String> spinnerAdaptor;
+    private OnSceneLocationSelectedListener onSceneLocationSelectedListener;
 
 
     //LocationItem selectedLocationItem = null;
@@ -76,10 +88,14 @@ public class ECSceneLocationMapFragment extends Fragment implements AdapterView.
                 locationSpinner.setAdapter(spinnerAdaptor);
             setupPins();
         }
-        /*
-        if (selectedLocationItem != null && title != null){
-            setLocationItem(title, selectedLocationItem);
-        }*/
+
+        mapButton = (Button) view.findViewById(R.id.map_button);
+        satelliteButton = (Button) view.findViewById(R.id.satellite_button);
+        if (satelliteButton != null && mapButton != null) {
+            satelliteButton.setOnClickListener(this);
+            mapButton.setOnClickListener(this);
+            onClick(satelliteButton);
+        }
 
     }
     @Override
@@ -97,9 +113,45 @@ public class ECSceneLocationMapFragment extends Fragment implements AdapterView.
             mapView.onResume();
     }
 
+    @Override
+    public void onClick(final View v){
+        if (mapButton != null && satelliteButton != null) {
+
+
+            if (mapView != null) {
+                //final LatLng location = new LatLng(selectedLocationItem.latitude, selectedLocationItem.longitude);
+                mapView.getMapAsync(new OnMapReadyCallback() {
+                    @Override
+                    public void onMapReady(final GoogleMap googleMap) {
+
+                        if (v.equals(mapButton) && googleMap.getMapType() != GoogleMap.MAP_TYPE_NORMAL) {
+                            googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                            mapButton.setSelected(true);
+                            satelliteButton.setSelected(false);
+                        } else if (v.equals(satelliteButton) && googleMap.getMapType() != GoogleMap.MAP_TYPE_SATELLITE) {
+                            googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                            mapButton.setSelected(false);
+                            satelliteButton.setSelected(true);
+
+                        }
+
+
+                    }
+                });
+            }
+        }
+    }
+
+    public void setOnSceneLocationSelectedListener(OnSceneLocationSelectedListener listener){
+        onSceneLocationSelectedListener = listener;
+    }
+
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
         SceneLocation locationItem = sceneLocations.get(pos);
         setLocationItem(locationItem.name, locationItem.getRepresentativeLocationItem());
+        if (onSceneLocationSelectedListener != null){
+            onSceneLocationSelectedListener.onSceneLocationSelected(pos);
+        }
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
@@ -182,8 +234,12 @@ public class ECSceneLocationMapFragment extends Fragment implements AdapterView.
 
                         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, locationItem.zoom));   // set location
                         googleMap.getMaxZoomLevel();
+
+                        googleMap.getUiSettings().setMapToolbarEnabled(true);
+                        googleMap.getUiSettings().setCompassEnabled(true);
+                        googleMap.getUiSettings().setZoomControlsEnabled(true);
                         //BitmapDescriptor bmDes = BitmapDescriptorFactory.fromBitmap(NextGenApplication.getMovieMetaData().getMapPinBitmap());
-                       /* googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                       /* grlgoogleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
                         MarkerOptions markerOpt = new MarkerOptions()
                                 .position(location).title(locationItem.getTitle()).snippet(locationItem.address)
                                 .icon(bmDes);

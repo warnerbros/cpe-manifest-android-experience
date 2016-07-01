@@ -14,9 +14,36 @@
         android:padding="@dimen/spacing_small"
         android:id="@+id/scene_locations_spinner"
         android:background="@color/red"
-
         android:layout_width="200dp"
         android:layout_height="wrap_content" />
 
+    <LinearLayout
+        android:layout_margin="@dimen/spacing_small"
+        android:padding="@dimen/spacing_small"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/map_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:background="@drawable/map_tab_bg"
+            android:textColor="@color/tab_textcolor"
+            android:text="@string/map_string"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/satellite_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:background="@drawable/satellit_tab_bg"
+            android:textColor="@color/tab_textcolor"
+            android:text="@string/satellite_string"
+            android:layout_weight="1"/>
+
+
+    </LinearLayout>
 
 </RelativeLayout>

@@ -1234,6 +1234,7 @@ public class MovieMetaData {
         private final List<SceneLocation> sceneLocations = new ArrayList<SceneLocation>();
         public void computeSceneLocationFeature(){
             HashMap<String, SceneLocation> sceneLocationMap = new HashMap<String, SceneLocation>();
+            HashMap<String, SceneLocation> allSceneLocatioMap = new HashMap<String, SceneLocation>();
             for (ExperienceData child : childrenExperience){
                 LocationItem location = child.locationItems.get(0);
                 SceneLocation group;
@@ -1244,9 +1245,20 @@ public class MovieMetaData {
                     sceneLocations.add(group);
                     sceneLocationMap.put(location.greaterTitle, group);
                 }
-                SceneLocation finalSceneLocation = new SceneLocation(location.getTitle(), location);
 
-                group.childrenSceneLocations.add(finalSceneLocation);
+                if (!allSceneLocatioMap.containsKey(location.address)){
+                    SceneLocation finalSceneLocation = new SceneLocation(location.getTitle(), location);
+                    allSceneLocatioMap.put(location.address, finalSceneLocation);
+                    group.childrenSceneLocations.add(finalSceneLocation);
+                } else {
+                    SceneLocation thisLocation = allSceneLocatioMap.get(location.address);
+                    if (location.avItem != null){
+                        thisLocation.avItems.add(location.avItem);
+                    }
+                    if (location.galleryItem != null){
+                        thisLocation.galleryItems.add(location.galleryItem);
+                    }
+                }
             }
         }
 

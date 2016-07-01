@@ -14,6 +14,15 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp">
+        <TextView
+            android:id="@+id/scene_location_bottom_slider_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/spacing_normal"
+            android:gravity="left"
+            android:textColor="@android:color/darker_gray"
+            android:fontFamily="sans-serif-condensed"
+            android:textSize="@dimen/textMedium" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/scene_location_recycler_view"
