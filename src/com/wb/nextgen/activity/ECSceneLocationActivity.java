@@ -1,6 +1,7 @@
 package com.wb.nextgen.activity;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +18,7 @@ import com.wb.nextgen.data.MovieMetaData.SceneLocation;
 import com.wb.nextgen.fragment.ECGalleryViewFragment;
 import com.wb.nextgen.fragment.ECSceneLocationMapFragment;
 import com.wb.nextgen.fragment.ECVideoViewFragment;
+import com.wb.nextgen.interfaces.SensitiveFragmentInterface;
 import com.wb.nextgen.util.utils.NextGenFragmentTransactionEngine;
 
 import java.util.ArrayList;
@@ -40,6 +42,7 @@ public class ECSceneLocationActivity extends AbstractECView {
 
     private List<SceneLocation> rootSceneLocations;
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -99,6 +102,16 @@ public class ECSceneLocationActivity extends AbstractECView {
         videoViewFragment = null;
         galleryViewFragment = null;
         mapViewFragment = null;
+    }
+
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+
+        if (getSupportFragmentManager().getBackStackEntryCount() == 1 )
+            finish();
+
+
     }
 
     public class LocationECViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{

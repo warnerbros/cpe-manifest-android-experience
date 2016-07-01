@@ -17,3 +17,4 @@ target/
 
 # data files
 assets/*.xml
+res/raw/*.mp4

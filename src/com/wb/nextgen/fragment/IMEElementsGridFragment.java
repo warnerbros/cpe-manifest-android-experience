@@ -27,6 +27,7 @@ import com.wb.nextgen.model.AVGalleryIMEEngine;
 import com.wb.nextgen.model.NextGenIMEEngine;
 import com.wb.nextgen.model.TheTakeIMEEngine;
 import com.wb.nextgen.network.TheTakeApiDAO;
+import com.wb.nextgen.util.HttpImageHelper;
 import com.wb.nextgen.util.concurrent.ResultListener;
 
 import java.util.ArrayList;
@@ -182,7 +183,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
         final TextView subText1= (TextView)rowView.findViewById(R.id.ime_desc_text1);
         TextView subText2= (TextView)rowView.findViewById(R.id.ime_desc_text2);
         final ImageView poster = (ImageView)rowView.findViewById(R.id.ime_image_poster);
-        MapView mapView = (MapView)rowView.findViewById(R.id.ime_map_view);
+        final MapView mapView = (MapView)rowView.findViewById(R.id.ime_map_view);
 
 
         //if (titleText != null && group.linkedExperience != null){
@@ -207,38 +208,58 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                     mapView.setVisibility(View.VISIBLE);
                     poster.setVisibility(View.GONE);
                     final MovieMetaData.LocationItem locationItem = (MovieMetaData.LocationItem)dataObj;
-                    //mapView.getMaps
-                    final LatLng location = new LatLng(locationItem.latitude, locationItem.longitude);
 
-                    mapView.getMapAsync(new OnMapReadyCallback() {
+                    List<MovieMetaData.LocationItem> locList = new ArrayList<MovieMetaData.LocationItem>();
+                    locList.add(locationItem);
+                    HttpImageHelper.getAllMapPins(locList, new ResultListener<Boolean>() {
                         @Override
-                        public void onMapReady(GoogleMap googleMap) {
-
-                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, locationItem.zoom));   // set location
-
-                            BitmapDescriptor bmDes = BitmapDescriptorFactory.fromBitmap(NextGenApplication.getMovieMetaData().getMapPinBitmap());
-                            googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-                            googleMap.addMarker(new MarkerOptions()
-                                    .position(location)
-                                    .icon(bmDes));
-                            googleMap.getUiSettings().setMapToolbarEnabled(false);
-                            final String ecGroupTitle = activeObj.title;
-                            googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                        public void onResult(Boolean result) {
+                            //mapView.getMaps
+                            getActivity().runOnUiThread(new Runnable() {
                                 @Override
-                                public void onMapClick(LatLng latLng) {
-                                    NextGenPlayer playerActivity = null;
-                                    if (getActivity() instanceof NextGenPlayer) {
-                                        playerActivity = (NextGenPlayer) getActivity();
-                                    }
-                                    ECMapViewFragment fragment = new ECMapViewFragment();
-                                    fragment.setLocationItem(ecGroupTitle, locationItem);
-                                    playerActivity.transitMainFragment(fragment);
-                                    playerActivity.pausMovieForImeECPiece();
+                                public void run() {
+                                    final LatLng location = new LatLng(locationItem.latitude, locationItem.longitude);
+
+                                    mapView.getMapAsync(new OnMapReadyCallback() {
+                                        @Override
+                                        public void onMapReady(GoogleMap googleMap) {
+
+                                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, locationItem.zoom));   // set location
+
+                                            BitmapDescriptor bmDes =
+                                                    BitmapDescriptorFactory.fromBitmap(HttpImageHelper.getMapPinBitmap(locationItem.pinImage.url));
+                                            googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                                            googleMap.addMarker(new MarkerOptions()
+                                                    .position(location)
+                                                    .icon(bmDes));
+                                            googleMap.getUiSettings().setMapToolbarEnabled(false);
+                                            final String ecGroupTitle = activeObj.title;
+                                            googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                                                @Override
+                                                public void onMapClick(LatLng latLng) {
+                                                    NextGenPlayer playerActivity = null;
+                                                    if (getActivity() instanceof NextGenPlayer) {
+                                                        playerActivity = (NextGenPlayer) getActivity();
+                                                    }
+                                                    ECMapViewFragment fragment = new ECMapViewFragment();
+                                                    fragment.setLocationItem(ecGroupTitle, locationItem);
+                                                    playerActivity.transitMainFragment(fragment);
+                                                    playerActivity.pausMovieForImeECPiece();
+                                                }
+                                            });
+                                            //googleMap.addMarker(new MarkerOptions().position(new LatLng(locationItem.latitude, locationItem.longitude)).title("Marker"));
+                                        }
+                                    });
                                 }
                             });
-                            //googleMap.addMarker(new MarkerOptions().position(new LatLng(locationItem.latitude, locationItem.longitude)).title("Marker"));
+                        }
+
+                        @Override
+                        public <E extends Exception> void onException(E e) {
+
                         }
                     });
+
 
 
                     /*Criteria criteria = new Criteria();

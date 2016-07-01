@@ -22,6 +22,11 @@ import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.MovieMetaData.LocationItem;
 import com.wb.nextgen.data.MovieMetaData.SceneLocation;
+import com.wb.nextgen.util.HttpImageHelper;
+import com.wb.nextgen.util.concurrent.ResultListener;
+import com.wb.nextgen.util.utils.F;
+import com.wb.nextgen.util.utils.ImageGetter;
+import com.wb.nextgen.util.utils.NextGenLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,33 +114,58 @@ public class ECSceneLocationMapFragment extends Fragment implements AdapterView.
     }
 
     private void setupPins(){
-        if (mapView != null) {
-            //final LatLng location = new LatLng(selectedLocationItem.latitude, selectedLocationItem.longitude);
-            mapView.getMapAsync(new OnMapReadyCallback() {
-                @Override
-                public void onMapReady(final GoogleMap googleMap) {
-                    BitmapDescriptor bmDes = BitmapDescriptorFactory.fromBitmap(NextGenApplication.getMovieMetaData().getMapPinBitmap());
-                    googleMap.getUiSettings().setMapToolbarEnabled(true);
-                    googleMap.getUiSettings().setCompassEnabled(true);
-                    googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        final List<LocationItem> allLocations = new ArrayList<LocationItem>();
+        if (sceneLocations != null && sceneLocations.size() > 1) {
+            for (int i = 1; i < sceneLocations.size(); i++) {
+                allLocations.addAll(sceneLocations.get(i).getAllSubLocationItems());
 
-                    for (SceneLocation sLocation : sceneLocations) {
-                        if (sLocation.locationItems.size() > 0){
-                            for (LocationItem location : sLocation.locationItems){
-                                LatLng latlng = new LatLng(location.latitude, location.longitude);
-                                MarkerOptions markerOpt = new MarkerOptions()
-                                        .position(latlng).title(location.getTitle()).snippet(location.address)
-                                        .icon(bmDes);
-
-                                googleMap.addMarker(markerOpt).showInfoWindow();
-                            }
-                        }
-
-
-                    }
-                }
-            });
+            }
         }
+
+        HttpImageHelper.getAllMapPins(allLocations, new ResultListener<Boolean>() {
+            @Override
+            public void onResult(Boolean result) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mapView != null) {
+                            //final LatLng location = new LatLng(selectedLocationItem.latitude, selectedLocationItem.longitude);
+                            mapView.getMapAsync(new OnMapReadyCallback() {
+                                @Override
+                                public void onMapReady(final GoogleMap googleMap) {
+
+                                    googleMap.getUiSettings().setMapToolbarEnabled(true);
+                                    googleMap.getUiSettings().setCompassEnabled(true);
+                                    googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+
+
+
+                                    for (LocationItem location : allLocations) {
+                                        LatLng latlng = new LatLng(location.latitude, location.longitude);
+                                        BitmapDescriptor bmDes =
+                                                BitmapDescriptorFactory.fromBitmap(HttpImageHelper.getMapPinBitmap(location.pinImage.url));
+                                        MarkerOptions markerOpt = new MarkerOptions()
+                                                .position(latlng).title(location.getTitle()).snippet(location.address)
+                                                .icon(bmDes);
+
+                                        googleMap.addMarker(markerOpt).showInfoWindow();
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+
+            }
+
+            @Override
+            public <E extends Exception> void onException(E e) {
+                NextGenLogger.d(F.TAG, e.getLocalizedMessage());
+            }
+        });
+
+
+
     }
 
 
@@ -152,7 +182,7 @@ public class ECSceneLocationMapFragment extends Fragment implements AdapterView.
 
                         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, locationItem.zoom));   // set location
                         googleMap.getMaxZoomLevel();
-                        BitmapDescriptor bmDes = BitmapDescriptorFactory.fromBitmap(NextGenApplication.getMovieMetaData().getMapPinBitmap());
+                        //BitmapDescriptor bmDes = BitmapDescriptorFactory.fromBitmap(NextGenApplication.getMovieMetaData().getMapPinBitmap());
                        /* googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
                         MarkerOptions markerOpt = new MarkerOptions()
                                 .position(location).title(locationItem.getTitle()).snippet(locationItem.address)

@@ -1,5 +1,6 @@
 package com.wb.nextgen.fragment;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -22,8 +24,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.MovieMetaData;
+import com.wb.nextgen.util.HttpImageHelper;
 import com.wb.nextgen.util.PicassoTrustAll;
+import com.wb.nextgen.util.concurrent.ResultListener;
 
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -86,41 +93,64 @@ public class ECMapViewFragment extends Fragment {
             }
             if (mapView != null) {
                 final LatLng location = new LatLng(selectedLocationItem.latitude, selectedLocationItem.longitude);
-                mapView.getMapAsync(new OnMapReadyCallback() {
+
+                List<MovieMetaData.LocationItem> locList = new ArrayList<MovieMetaData.LocationItem>();
+                locList.add(locationItem);
+                HttpImageHelper.getAllMapPins(locList, new ResultListener<Boolean>() {
                     @Override
-                    public void onMapReady(final GoogleMap googleMap) {
-
-                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, locationItem.zoom));   // set location
-                        googleMap.getMaxZoomLevel();
-                        BitmapDescriptor bmDes = BitmapDescriptorFactory.fromBitmap(NextGenApplication.getMovieMetaData().getMapPinBitmap());
-                        googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-                        MarkerOptions markerOpt = new MarkerOptions()
-                                .position(location).title(selectedLocationItem.getTitle()).snippet(selectedLocationItem.address)
-                                .icon(bmDes);
-
-                        googleMap.addMarker(markerOpt).showInfoWindow();
-                        //googleMap.getUiSettings().setMapToolbarEnabled(false);
-                        googleMap.setOnMapClickListener(null);
-                        googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+                    public void onResult(Boolean result) {
+                        getActivity().runOnUiThread(new Runnable() {
                             @Override
-                            public void onCameraChange(CameraPosition camPos) {
-                                if (camPos.zoom > locationItem.zoom && location != null) {
-                                    // set zoom 17 and disable zoom gestures so map can't be zoomed out
-                                    // all the way
-                                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location,locationItem.zoom));
-                                    googleMap.getUiSettings().setZoomGesturesEnabled(false);
-                                }
-                                if (camPos.zoom <= 17) {
-                                    googleMap.getUiSettings().setZoomGesturesEnabled(true);
-                                }
+                            public void run() {
+                                mapView.getMapAsync(new OnMapReadyCallback() {
+                                    @Override
+                                    public void onMapReady(final GoogleMap googleMap) {
 
-                                //LatLngBounds visibleBounds =  googleMap.getProjection().getVisibleRegion().latLngBounds;
+                                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, locationItem.zoom));   // set location
+                                        googleMap.getMaxZoomLevel();
 
+                                        BitmapDescriptor bmDes =
+                                                BitmapDescriptorFactory.fromBitmap(HttpImageHelper.getMapPinBitmap(selectedLocationItem.pinImage.url));
+
+                                        googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                                        MarkerOptions markerOpt = new MarkerOptions()
+                                                .position(location).title(selectedLocationItem.getTitle()).snippet(selectedLocationItem.address)
+                                                .icon(bmDes);
+
+                                        googleMap.addMarker(markerOpt).showInfoWindow();
+                                        //googleMap.getUiSettings().setMapToolbarEnabled(false);
+                                        googleMap.setOnMapClickListener(null);
+                                        googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+                                            @Override
+                                            public void onCameraChange(CameraPosition camPos) {
+                                                if (camPos.zoom > locationItem.zoom && location != null) {
+                                                    // set zoom 17 and disable zoom gestures so map can't be zoomed out
+                                                    // all the way
+                                                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, locationItem.zoom));
+                                                    googleMap.getUiSettings().setZoomGesturesEnabled(false);
+                                                }
+                                                if (camPos.zoom <= 17) {
+                                                    googleMap.getUiSettings().setZoomGesturesEnabled(true);
+                                                }
+
+                                                //LatLngBounds visibleBounds =  googleMap.getProjection().getVisibleRegion().latLngBounds;
+
+                                            }
+                                        });
+                                        //googleMap.addMarker(new MarkerOptions().position(new LatLng(locationItem.latitude, locationItem.longitude)).title("Marker"));
+                                    }
+                                });
                             }
                         });
-                        //googleMap.addMarker(new MarkerOptions().position(new LatLng(locationItem.latitude, locationItem.longitude)).title("Marker"));
+                    }
+
+                    @Override
+                    public <E extends Exception> void onException(E e) {
+
                     }
                 });
+
+
             }
 
         }

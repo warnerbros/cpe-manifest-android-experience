@@ -452,6 +452,7 @@ public class MovieMetaData {
         AppDataType appData = appDataMap.get(appId);
         if(appData == null)
             return null;
+
         int displayOrder = 0;
         String type = "";
         int zoom = 0;
@@ -461,7 +462,7 @@ public class MovieMetaData {
         ECGalleryItem galleryItem = null;
         AudioVisualItem avItem = null;
 
-        PictureImageData videoThumbnail = null, galleryThumbnail = null, locationThumbnail = null;
+        PictureImageData videoThumbnail = null, galleryThumbnail = null, locationThumbnail = null, pinImage = null;
 
         if (appData.getNVPair() != null && appData.getNVPair().size() > 0){
             for (AppNVPairType pair : appData.getNVPair()){
@@ -469,6 +470,13 @@ public class MovieMetaData {
                     type = pair.getText();
                 } else if (ITEM_LOCATION.equals(pair.getName())){
                     location = pair.getLocationSet();
+                    if (location.getLocation() != null && location.getLocation().size() > 0){
+                        String imageId = location.getLocation().get(0).getIcon();
+                        if (!StringHelper.isEmpty(imageId)){
+                            InventoryImageType imageType = imageAssetsMap.get(imageId);
+                            pinImage = new PictureImageData(imageType.getContainerReference().getContainerLocation(), imageType.getWidth(), imageType.getHeight());
+                        }
+                    }
                 } else if (ITEM_ZOOM.equals(pair.getName())){
                     zoom = pair.getInteger().intValue();
                 } else if (ITEM_DISPLAY_ORDER.equals(pair.getName())){
@@ -495,7 +503,7 @@ public class MovieMetaData {
                 }
             }
         }
-        return new LocationItem(displayOrder, type, location, zoom, text, avItem, galleryItem, videoThumbnail, galleryThumbnail, locationThumbnail);
+        return new LocationItem(displayOrder, type, location, zoom, text, avItem, galleryItem, videoThumbnail, galleryThumbnail, locationThumbnail, pinImage);
     }
 
     public List<ExperienceData> getExtraECGroups(){
@@ -905,9 +913,10 @@ public class MovieMetaData {
         public final PictureImageData galleryThumbnail;
         public final PictureImageData locationThumbnail;
         public final String greaterTitle;
+        public final PictureImageData pinImage;
 
         public LocationItem(int displayOrder, String type, AppDataLocationType appDataLocation, int zoom, String text,
-                            AudioVisualItem avItem, ECGalleryItem galleryItem, PictureImageData videoThumbnail, PictureImageData galleryThumbnail, PictureImageData locationThumbnail){
+                            AudioVisualItem avItem, ECGalleryItem galleryItem, PictureImageData videoThumbnail, PictureImageData galleryThumbnail, PictureImageData locationThumbnail, PictureImageData pinImage){
             super("", "", null);
             description = text;
             this.zoom = zoom;
@@ -922,6 +931,7 @@ public class MovieMetaData {
             this.videoThumbnail = videoThumbnail;
             this.galleryThumbnail = galleryThumbnail;
             this.locationThumbnail = locationThumbnail;
+            this.pinImage = pinImage;
         }
 
         public String getPosterImgUrl(){
@@ -1053,7 +1063,6 @@ public class MovieMetaData {
     static public class SceneLocation{
         public final List<AudioVisualItem> avItems = new ArrayList<AudioVisualItem>();
         public final List<ECGalleryItem> galleryItems = new ArrayList<ECGalleryItem>();
-        public final List<LocationItem> locationItems = new ArrayList<LocationItem>();
         public final List<SceneLocation> childrenSceneLocations = new ArrayList<SceneLocation>();
         public final LocationItem location;
         public final String name;
@@ -1066,12 +1075,22 @@ public class MovieMetaData {
         public LocationItem getRepresentativeLocationItem(){
             if (location != null){
                 return location;
-            }else if (locationItems != null && locationItems.size() > 0){
-                return locationItems.get(0);
             }else if (childrenSceneLocations != null && childrenSceneLocations.size() > 0){
                 return childrenSceneLocations.get(0).getRepresentativeLocationItem();
             }else
                 return null;
+        }
+
+        public List<LocationItem> getAllSubLocationItems(){
+            List<LocationItem> resultList = new ArrayList<LocationItem>();
+            if (location != null){
+                resultList.add(location);
+            }else if (childrenSceneLocations.size() > 0){
+                for (SceneLocation child : childrenSceneLocations){
+                    resultList.addAll(child.getAllSubLocationItems());
+                }
+            }
+            return resultList;
         }
     }
 
@@ -1298,26 +1317,6 @@ public class MovieMetaData {
             }
         }
         return null;
-    }
-
-    private Bitmap mapPinBitmap = null;
-    public Bitmap getMapPinBitmap() {
-        if (mapPinBitmap != null)
-            return mapPinBitmap;
-        try {
-
-            Bitmap myBitmap = MediaStore.Images.Media.getBitmap(NextGenApplication.getContext().getContentResolver(), Uri.parse(NextGenUtils.getPacakageImageUrl(R.drawable.mos_map_pin)));
-            //URL url = new URL(NextGenUtils.getPacakageImageUrl(R.drawable.mos_map_pin));
-            //Bitmap myBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-
-
-
-            mapPinBitmap = myBitmap;
-            return mapPinBitmap;
-        } catch (Exception e) {
-            // Log exception
-            return null;
-        }
     }
 
     private void reGroupCastIMEEventGroup(IMEElementsGroup<CastData> castCombinedGroup){
