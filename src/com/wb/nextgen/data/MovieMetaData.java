@@ -7,6 +7,7 @@ import android.provider.MediaStore;
 import com.google.gson.annotations.SerializedName;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
+import com.wb.nextgen.model.SceneLocation;
 import com.wb.nextgen.parser.ManifestXMLParser;
 import com.wb.nextgen.parser.appdata.AppDataLocationType;
 import com.wb.nextgen.parser.appdata.AppDataType;
@@ -67,7 +68,7 @@ public class MovieMetaData {
     private static String ITEM_VIDEO_ID = "video_id";
     private static String ITEM_VIDEO_THUMBNAIL = "video_thumbnail";
     private static String ITEM_LOCATION_THUMBNAIL = "location_thumbnail";
-    private static String ITEM_GALLERY_ID = "video_id";
+    private static String ITEM_GALLERY_ID = "gallery_id";
     private static String ITEM_GALLERY_THUMBNAIL = "gallery_thumbnail";
 
 
@@ -125,7 +126,7 @@ public class MovieMetaData {
         HashMap<String, CastData> peopleIdToCastData = new HashMap<String, CastData>();
 
 
-        HashMap<String, ExperienceData> experienceChildrenToParentMap = new HashMap<String, ExperienceData>();
+        HashMap<String, List<ExperienceData>> experienceChildrenToParentMap = new HashMap<String, List<ExperienceData>>();
         HashMap<String, AppDataType> appDataIdTpAppDataMap = new HashMap<String, AppDataType>();
 
         String mainMovieExperienceId = mediaManifest.getALIDExperienceMaps().getALIDExperienceMap().get(0).getExperienceID().get(0).getValue();
@@ -274,7 +275,7 @@ public class MovieMetaData {
                         String appGroupId = appType.getAppGroupID();
 
 
-                        LocationItem locationItem = getLocationItemfromMap(appDataIdTpAppDataMap, presentationIdToAVItemMap, galleryIdToGalleryItemMap, imageAssetsMap, appId);
+                        LocationItem locationItem = getLocationItemfromMap(appDataIdTpAppDataMap, presentationIdToAVItemMap, presentationAssetMap, videoAssetsMap, galleryIdToGalleryItemMap, imageAssetsMap, appId);
                         if (locationItem != null)
                             locationItems.add(locationItem);
                     }
@@ -288,9 +289,10 @@ public class MovieMetaData {
                 ExperienceData thisExperience = new ExperienceData(experience, experienceMetaData, avItems, galleryItems, locationItems);
 
                 result.experienceIdToExperienceMap.put(experience.getExperienceID(), thisExperience);
-                ExperienceData parentGroup = experienceChildrenToParentMap.get(experience.getExperienceID());
-                if (parentGroup != null){
-                    parentGroup.addChild(thisExperience);
+                List<ExperienceData> parentGroups = experienceChildrenToParentMap.get(experience.getExperienceID());
+                if (parentGroups != null && parentGroups.size() > 0){
+                    for (ExperienceData parentGroup : parentGroups)
+                        parentGroup.addChild(thisExperience);
                 }
                 if (rootData == null){
                     rootData = thisExperience;
@@ -306,13 +308,19 @@ public class MovieMetaData {
                     //result.movieExperiences.add(groupData);
                     if (experience.getExperienceChild() != null && experience.getExperienceChild().size() > 0) {
                         for (ExperienceChildType child : experience.getExperienceChild()) {
-                            experienceChildrenToParentMap.put(child.getExperienceID(), thisExperience);    //skip these IDs when encounter.
+
+                            if (experienceChildrenToParentMap.containsKey(child.getExperienceID())){
+                                List<ExperienceData> parents =  experienceChildrenToParentMap.get(child.getExperienceID());
+                                parents.add(thisExperience);
+                            } else {
+                                List<ExperienceData> parents = new ArrayList<ExperienceData>();
+                                parents.add(thisExperience);
+                                experienceChildrenToParentMap.put(child.getExperienceID(), parents);    //skip these IDs when encounter.
+
+                            }
                         }
                     }
 
-
-
-                    //experienceIdMap.put(experience.getExperienceID(), groupData);
                 }
 
             }
@@ -393,7 +401,7 @@ public class MovieMetaData {
                             if (OTHER_APP_DATA_ID.equals(otherID.getNamespace())){
                                 String locationId = otherID.getIdentifier();
 
-                                presentationData = getLocationItemfromMap(appDataIdTpAppDataMap, presentationIdToAVItemMap, galleryIdToGalleryItemMap, imageAssetsMap, locationId);
+                                presentationData = getLocationItemfromMap(appDataIdTpAppDataMap, presentationIdToAVItemMap, presentationAssetMap, videoAssetsMap, galleryIdToGalleryItemMap, imageAssetsMap, locationId);
 
                             } else if (OTHER_PEOPLE_ID.equals(otherID.getNamespace())){
                                 isCast = true;
@@ -446,7 +454,10 @@ public class MovieMetaData {
         return result;
     }
 
-    private static LocationItem getLocationItemfromMap(HashMap<String, AppDataType> appDataMap, HashMap<String, AudioVisualItem> presentationIdToAVItemMap,
+    private static LocationItem getLocationItemfromMap(HashMap<String, AppDataType> appDataMap,
+                                                       HashMap<String, AudioVisualItem> presentationIdToAVItemMap,
+                                                       HashMap<String, PresentationType> presentationAssetMap,
+                                                       HashMap<String, InventoryVideoType> videoAssetsMap,
                                                        HashMap<String, ECGalleryItem> galleryIdToGalleryItemMap,
                                                        HashMap<String, InventoryImageType> imageAssetsMap, String appId){
         AppDataType appData = appDataMap.get(appId);
@@ -485,6 +496,15 @@ public class MovieMetaData {
                     text = pair.getText();
                 } else if (ITEM_VIDEO_ID.equals(pair.getName())){
                     avItem = presentationIdToAVItemMap.get(pair.getPresentationID());
+                    if (avItem == null) {
+                        PresentationType presentationType = presentationAssetMap.get(pair.getPresentationID());
+                        if (presentationType.getTrackMetadata() != null && presentationType.getTrackMetadata().size() > 0) {
+                            if (presentationType.getTrackMetadata().get(0).getVideoTrackReference() != null && presentationType.getTrackMetadata().get(0).getVideoTrackReference().size() > 0) {
+                                String avItemId = presentationType.getTrackMetadata().get(0).getVideoTrackReference().get(0).getVideoTrackID().get(0);
+                                avItem = new AudioVisualItem(videoAssetsMap.get(avItemId));
+                            }
+                        }
+                    }
                 } else if (ITEM_VIDEO_THUMBNAIL.equals(pair.getName())){
                     String imageId = pair.getPictureID();
                     InventoryImageType imageType = imageAssetsMap.get(imageId);
@@ -503,6 +523,7 @@ public class MovieMetaData {
                 }
             }
         }
+
         return new LocationItem(displayOrder, type, location, zoom, text, avItem, galleryItem, videoThumbnail, galleryThumbnail, locationThumbnail, pinImage);
     }
 
@@ -932,6 +953,13 @@ public class MovieMetaData {
             this.galleryThumbnail = galleryThumbnail;
             this.locationThumbnail = locationThumbnail;
             this.pinImage = pinImage;
+
+            if (this.avItem != null && this.videoThumbnail != null && !StringHelper.isEmpty(this.title) ){
+                this.avItem.setLocationMetaData(description, this.videoThumbnail.url);
+            }
+
+            if (this.galleryItem != null && galleryThumbnail != null){
+            }
         }
 
         public String getPosterImgUrl(){
@@ -959,6 +987,12 @@ public class MovieMetaData {
         public ECGalleryItem(String parentExperienceId, InventoryMetadataType metaData, List<PictureItem> galleryImages){
             super(metaData, parentExperienceId);
             this.galleryImages.addAll(galleryImages);
+            if (metaData != null) {
+                BasicMetadataInfoType localizedInfo = metaData != null ? metaData.getBasicMetadata().getLocalizedInfo().get(0) : null;
+                if (localizedInfo != null && localizedInfo.getArtReference() != null && localizedInfo.getArtReference().size() > 0) {
+                    posterImgUrl = localizedInfo.getArtReference().get(0).getValue();
+                }
+            }
         }
 
         @Override
@@ -990,11 +1024,11 @@ public class MovieMetaData {
         final Duration durationObject;
         public AudioVisualItem(String parentExperienceId, InventoryMetadataType metaData, InventoryVideoType videoData){
             super(metaData, parentExperienceId);
-            BasicMetadataInfoType localizedInfo = metaData.getBasicMetadata().getLocalizedInfo().get(0);
+            BasicMetadataInfoType localizedInfo = metaData!= null ? metaData.getBasicMetadata().getLocalizedInfo().get(0): null;
             if (videoData != null) {
                 videoUrl = videoData.getContainerReference().getContainerLocation();
 
-                if (localizedInfo.getArtReference() != null && localizedInfo.getArtReference().size() > 0) {
+                if (localizedInfo != null && localizedInfo.getArtReference() != null && localizedInfo.getArtReference().size() > 0) {
                     posterImgUrl = localizedInfo.getArtReference().get(0).getValue();
                     images = new PresentationImageData[localizedInfo.getArtReference().size()];
                     for (int i = 0; i< localizedInfo.getArtReference().size(); i++){
@@ -1006,7 +1040,10 @@ public class MovieMetaData {
                 }
 
                 String dValue = "";
-                durationObject = metaData.getBasicMetadata().getRunLength();
+                if (metaData != null)
+                    durationObject = metaData.getBasicMetadata().getRunLength();
+                else
+                    durationObject = null;
                 try {
                     dValue = metaData.getBasicMetadata().getRunLength().toString();
                 }catch ( Exception ex){
@@ -1020,6 +1057,24 @@ public class MovieMetaData {
                 images = null;
                 durationObject = null;
             }
+        }
+
+        public AudioVisualItem(InventoryVideoType videoData){
+            super(null, null);
+            if (videoData != null) {
+                videoUrl = videoData.getContainerReference().getContainerLocation();
+
+            }else{
+                videoUrl = null;
+            }
+            duration = null;
+            images = null;
+            durationObject = null;
+        }
+
+        public void setLocationMetaData(String title, String url){
+            this.title = title;
+            posterImgUrl = url;
         }
 
         public String getFullDurationString(){
@@ -1056,46 +1111,6 @@ public class MovieMetaData {
         public String getPosterImgUrl(){
 
             return posterImgUrl;
-        }
-    }
-
-
-    static public class SceneLocation{
-        public final List<PresentationDataItem> presentationItems = new ArrayList<PresentationDataItem>();
-        public final List<SceneLocation> childrenSceneLocations = new ArrayList<SceneLocation>();
-        public final LocationItem location;
-        public final String name;
-
-        public SceneLocation(String name, LocationItem location){
-            this.name = name;
-            this.location = location;
-            if (location != null){
-                if (location.avItem != null)
-                    presentationItems.add(location.avItem);
-                if (location.galleryItem != null)
-                    presentationItems.add(location.galleryItem);
-            }
-        }
-
-        public LocationItem getRepresentativeLocationItem(){
-            if (location != null){
-                return location;
-            }else if (childrenSceneLocations != null && childrenSceneLocations.size() > 0){
-                return childrenSceneLocations.get(0).getRepresentativeLocationItem();
-            }else
-                return null;
-        }
-
-        public List<LocationItem> getAllSubLocationItems(){
-            List<LocationItem> resultList = new ArrayList<LocationItem>();
-            if (location != null){
-                resultList.add(location);
-            }else if (childrenSceneLocations.size() > 0){
-                for (SceneLocation child : childrenSceneLocations){
-                    resultList.addAll(child.getAllSubLocationItems());
-                }
-            }
-            return resultList;
         }
     }
 

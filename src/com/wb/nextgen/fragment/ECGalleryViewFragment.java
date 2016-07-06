@@ -25,6 +25,7 @@ import com.wb.nextgen.activity.AbstractECView;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.utils.StringHelper;
+import com.wb.nextgen.widget.FixedAspectRatioFrameLayout;
 
 import java.util.List;
 
@@ -37,9 +38,11 @@ public class ECGalleryViewFragment extends AbstractNextGenFragment {
     private GalleryPagerAdapter adapter;
     private ImageButton fullscreenToggleBtn;
     private TextView galleryNameTextView;
+    FixedAspectRatioFrameLayout aspectRatioFrame = null;
     ImageView bgImageView;
 
     String bgImageUrl = null;
+    FixedAspectRatioFrameLayout.Priority aspectFramePriority = FixedAspectRatioFrameLayout.Priority.WIDTH_PRIORITY;
 
     boolean bSetOnResume= false;
     //private List<MovieMetaData.ECGalleryImageItem>
@@ -72,6 +75,11 @@ public class ECGalleryViewFragment extends AbstractNextGenFragment {
         }
         galleryViewPager.setAdapter(adapter);
 
+        aspectRatioFrame = (FixedAspectRatioFrameLayout) view.findViewById(R.id.gallery_aspect_ratio_frame);
+        if (aspectRatioFrame != null){
+            aspectRatioFrame.setAspectRatioPriority(aspectFramePriority);
+        }
+
         bgImageView = (ImageView)view.findViewById(R.id.ec_gallery_frame_bg);
 
         if (bgImageView != null && !StringHelper.isEmpty(bgImageUrl)){
@@ -91,6 +99,12 @@ public class ECGalleryViewFragment extends AbstractNextGenFragment {
         }else{
             bSetOnResume = true;
         }
+    }
+
+    public void setAspectRatioFramePriority(FixedAspectRatioFrameLayout.Priority priority){
+        if (aspectRatioFrame != null)
+            aspectRatioFrame.setAspectRatioPriority(priority);
+        aspectFramePriority = priority;
     }
 
     @Override

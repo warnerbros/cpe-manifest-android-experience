@@ -5,6 +5,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:gravity="center"
+        android:layout_gravity="center"
         android:id="@+id/scene_location_content_frame"
         android:layout_weight="2">
 

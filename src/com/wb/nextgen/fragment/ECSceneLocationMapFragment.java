@@ -26,7 +26,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.MovieMetaData.LocationItem;
-import com.wb.nextgen.data.MovieMetaData.SceneLocation;
+import com.wb.nextgen.model.SceneLocation;
 import com.wb.nextgen.util.HttpImageHelper;
 import com.wb.nextgen.util.concurrent.ResultListener;
 import com.wb.nextgen.util.utils.F;
@@ -99,6 +99,13 @@ public class ECSceneLocationMapFragment extends Fragment implements AdapterView.
         }
 
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mapView.onSaveInstanceState(outState);
+    }
+
     @Override
     public void onDestroy(){
         if(mapView != null)
@@ -108,10 +115,25 @@ public class ECSceneLocationMapFragment extends Fragment implements AdapterView.
     }
 
     @Override
+    public void onPause(){
+        super.onPause();
+        if (mapView != null) {
+            mapView.onPause();
+        }
+        locationSpinner.setOnItemSelectedListener(null);
+        //locationSpinner.setAdapter(null);
+
+    }
+
+    boolean bFireOnResume = false;
+    @Override
     public void onResume(){
         super.onResume();
         if(mapView != null)
             mapView.onResume();
+        bFireOnResume = true;
+        locationSpinner.setOnItemSelectedListener(this);
+        //locationSpinner.setAdapter(spinnerAdaptor);
     }
 
     @Override
@@ -148,10 +170,18 @@ public class ECSceneLocationMapFragment extends Fragment implements AdapterView.
     }
 
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        SceneLocation locationItem = sceneLocations.get(pos);
-        setLocationItem(locationItem.name, locationItem);
-        if (onSceneLocationSelectedListener != null){
-            onSceneLocationSelectedListener.onSceneLocationIndexSelected(pos);
+
+        if (view != null && view.getParent() != null && view.getParent() == locationSpinner) {
+            if (bFireOnResume){
+                bFireOnResume = false;
+                return;
+            }
+
+            SceneLocation locationItem = sceneLocations.get(pos);
+            setLocationItem(locationItem.name, locationItem);
+            if (onSceneLocationSelectedListener != null) {
+                onSceneLocationSelectedListener.onSceneLocationIndexSelected(pos);
+            }
         }
     }
 

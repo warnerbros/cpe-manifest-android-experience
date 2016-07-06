@@ -14,8 +14,10 @@
         android:orientation="vertical">
         <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
             xmlns:nextgen="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/gallery_aspect_ratio_frame"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:layout_gravity="center"
             nextgen:aspectRatioHeight="9"
             nextgen:aspectRatioWidth="16"
             nextgen:priority="WIDTH_PRIORITY">

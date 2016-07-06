@@ -14,7 +14,9 @@
 
         <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
             xmlns:nextgen="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/ec_video_aspect_ratio_frame"
             android:padding="@dimen/spacing_large"
+            android:layout_gravity="center"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             nextgen:aspectRatioHeight="9"

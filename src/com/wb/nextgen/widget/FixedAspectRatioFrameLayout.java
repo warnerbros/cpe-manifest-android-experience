@@ -24,7 +24,7 @@ public class FixedAspectRatioFrameLayout extends FrameLayout
     private Priority priority;
     private boolean bKeepRatioWhenFullScreen = false;
 
-    enum Priority{
+    public static enum Priority{
         WIDTH_PRIORITY(1), HEIGHT_PRIORITY(2);
         final int intValue;
         Priority(int intValue){
@@ -121,4 +121,7 @@ public class FixedAspectRatioFrameLayout extends FrameLayout
        }
     }
 
+    public void setAspectRatioPriority(Priority priority){
+        this.priority = priority;
+    }
 }

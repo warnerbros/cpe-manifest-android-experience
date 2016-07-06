@@ -16,19 +16,29 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:padding="2dp">
-
-            <ImageView
+            <RelativeLayout
                 android:layout_width="100dp"
-                android:layout_height="fill_parent"
                 android:layout_above="@+id/location_name"
-                android:id="@+id/location_photo"
-                android:layout_alignParentTop="true"
-                android:layout_marginRight="5dp"
-            />
+                android:layout_height="match_parent">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/location_photo"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginRight="5dp"/>
+                <ImageView
+                    android:id="@+id/location_play_image"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/play_button"/>
+            </RelativeLayout>
             <TextView
                 android:id="@+id/location_name"
                 android:layout_above="@+id/location_count_text"
-                android:layout_width="wrap_content"
+                android:layout_width="100dp"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
                 android:fontFamily="sans-serif-condensed"

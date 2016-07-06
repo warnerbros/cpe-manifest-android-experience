@@ -27,6 +27,7 @@ import com.wb.nextgen.util.utils.StringHelper;
 import com.wb.nextgen.videoview.ObservableVideoView;
 import com.wb.nextgen.widget.CustomMediaController;
 import com.wb.nextgen.widget.ECMediaController;
+import com.wb.nextgen.widget.FixedAspectRatioFrameLayout;
 
 
 /**
@@ -42,6 +43,7 @@ public class ECVideoViewFragment extends Fragment{
     ImageView previewImageView = null;
     RelativeLayout previewFrame = null;
     ImageButton previewPlayBtn = null;
+    FixedAspectRatioFrameLayout aspectRatioFrame = null;
 
     MovieMetaData.AudioVisualItem selectedAVItem = null;
     boolean bSetOnResume= false;
@@ -50,6 +52,7 @@ public class ECVideoViewFragment extends Fragment{
     String bgImageUrl = null;
 
     boolean shouldAutoPlay = false;
+    FixedAspectRatioFrameLayout.Priority aspectFramePriority = FixedAspectRatioFrameLayout.Priority.WIDTH_PRIORITY;
 
     ECVideoListAdaptor ecsAdaptor = null;
 
@@ -77,6 +80,11 @@ public class ECVideoViewFragment extends Fragment{
         previewImageView = (ImageView)view.findViewById(R.id.ec_video_preview_image);
         previewFrame = (RelativeLayout)view.findViewById(R.id.ec_video_preview_image_frame);
         previewPlayBtn = (ImageButton)view.findViewById(R.id.ec_video_preview_playButton);
+        aspectRatioFrame = (FixedAspectRatioFrameLayout) view.findViewById(R.id.ec_video_aspect_ratio_frame);
+
+        if (aspectRatioFrame != null){
+            aspectRatioFrame.setAspectRatioPriority(aspectFramePriority);
+        }
 
         if (previewPlayBtn != null) {
             previewPlayBtn.setVisibility(View.GONE);
@@ -107,6 +115,13 @@ public class ECVideoViewFragment extends Fragment{
         if (bgImageView != null && !StringHelper.isEmpty(bgImageUrl)){
             PicassoTrustAll.loadImageIntoView(getActivity(), bgImageUrl, bgImageView);
         }
+    }
+
+
+    public void setAspectRatioFramePriority(FixedAspectRatioFrameLayout.Priority priority){
+        if (aspectRatioFrame != null)
+            aspectRatioFrame.setAspectRatioPriority(priority);
+        aspectFramePriority = priority;
     }
 
     private class PreparedListener implements MediaPlayer.OnPreparedListener {
