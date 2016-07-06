@@ -125,13 +125,11 @@ public class ECSceneLocationMapFragment extends Fragment implements AdapterView.
 
     }
 
-    boolean bFireOnResume = false;
     @Override
     public void onResume(){
         super.onResume();
         if(mapView != null)
             mapView.onResume();
-        bFireOnResume = true;
         locationSpinner.setOnItemSelectedListener(this);
         //locationSpinner.setAdapter(spinnerAdaptor);
     }
@@ -172,10 +170,6 @@ public class ECSceneLocationMapFragment extends Fragment implements AdapterView.
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 
         if (view != null && view.getParent() != null && view.getParent() == locationSpinner) {
-            if (bFireOnResume){
-                bFireOnResume = false;
-                return;
-            }
 
             SceneLocation locationItem = sceneLocations.get(pos);
             setLocationItem(locationItem.name, locationItem);

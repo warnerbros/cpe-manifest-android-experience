@@ -158,6 +158,7 @@ public class ECVideoViewFragment extends Fragment{
         super.onDestroyView();
     }
 
+
     Target target = new Target() {
         @Override
         public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -190,6 +191,8 @@ public class ECVideoViewFragment extends Fragment{
                     ecDurationTextView.setText(avItem.getFullDurationString());
                 }
                 if (!shouldAutoPlay) {
+                    if(videoView.isPlaying())
+                        videoView.stopPlayback();
                     if (previewFrame != null) {
                         previewFrame.setVisibility(View.VISIBLE);
                         previewPlayBtn.setVisibility(View.GONE);
@@ -218,5 +221,9 @@ public class ECVideoViewFragment extends Fragment{
 
     public void setEcsAdaptor(ECVideoListAdaptor adaptor){
         ecsAdaptor = adaptor;
+    }
+
+    public void setShouldAutoPlay(boolean shouldAutoPlay){
+        this.shouldAutoPlay = shouldAutoPlay;
     }
 }

@@ -43,8 +43,7 @@ import java.util.List;
  */
 public class ECSceneLocationActivity extends AbstractECView implements ECSceneLocationMapFragment.OnSceneLocationSelectedListener {
 
-    private ECVideoViewFragment videoViewFragment = null;
-    private ECGalleryViewFragment galleryViewFragment = null;
+
     private ECSceneLocationMapFragment mapViewFragment = null;
 
     private RelativeLayout contentFrame;
@@ -81,10 +80,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
             mapViewFragment.setOnSceneLocationSelectedListener(this);
         }
 
-        videoViewFragment = new ECVideoViewFragment();
-        videoViewFragment.setAspectRatioFramePriority(FixedAspectRatioFrameLayout.Priority.HEIGHT_PRIORITY);
-        galleryViewFragment = new ECGalleryViewFragment();
-        galleryViewFragment.setAspectRatioFramePriority(FixedAspectRatioFrameLayout.Priority.HEIGHT_PRIORITY);
+
 
         sliderTitleTextView = (TextView) findViewById(R.id.scene_location_bottom_slider_text);
         if (sliderTitleTextView != null){
@@ -102,7 +98,8 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
             locationECRecyclerView.setAdapter(locationECsAdapter);
         }
 
-        transitToFragment(mapViewFragment);
+        nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.map_frame, mapViewFragment);
+        //transitToFragment(mapViewFragment);
 
     }
 
@@ -156,8 +153,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
     public void onDestroy(){
         super.onDestroy();
         currentFragment = null;
-        videoViewFragment = null;
-        galleryViewFragment = null;
+        currentFragment = null;
         mapViewFragment = null;
     }
 
@@ -234,10 +230,28 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
                     locationECsAdapter.setSceneLocation((SceneLocation)currentItem);
                     locationECsAdapter.notifyDataSetChanged();
                 }else if (currentItem instanceof MovieMetaData.AudioVisualItem){
+                    ECVideoViewFragment videoViewFragment;
+                    if (currentFragment instanceof ECVideoViewFragment){
+                        videoViewFragment = (ECVideoViewFragment) currentFragment;
+                    } else{
+                        videoViewFragment = new ECVideoViewFragment();
+                        videoViewFragment.setShouldAutoPlay(true);
+                        videoViewFragment.setAspectRatioFramePriority(FixedAspectRatioFrameLayout.Priority.HEIGHT_PRIORITY);
+
+                    }
+
                     videoViewFragment.setAudioVisualItem((MovieMetaData.AudioVisualItem)currentItem);
 
                     transitToFragment(videoViewFragment);
+
                 }else if (currentItem instanceof MovieMetaData.ECGalleryItem){
+                    ECGalleryViewFragment galleryViewFragment;
+                    if (currentFragment instanceof ECGalleryViewFragment){
+                        galleryViewFragment = (ECGalleryViewFragment) currentFragment;
+                    } else{
+                        galleryViewFragment = new ECGalleryViewFragment();
+                        galleryViewFragment.setAspectRatioFramePriority(FixedAspectRatioFrameLayout.Priority.HEIGHT_PRIORITY);
+                    }
                     galleryViewFragment.setCurrentGallery((MovieMetaData.ECGalleryItem)currentItem);
                     transitToFragment(galleryViewFragment);
                 }
