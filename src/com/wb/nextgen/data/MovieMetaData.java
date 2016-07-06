@@ -1061,8 +1061,7 @@ public class MovieMetaData {
 
 
     static public class SceneLocation{
-        public final List<AudioVisualItem> avItems = new ArrayList<AudioVisualItem>();
-        public final List<ECGalleryItem> galleryItems = new ArrayList<ECGalleryItem>();
+        public final List<PresentationDataItem> presentationItems = new ArrayList<PresentationDataItem>();
         public final List<SceneLocation> childrenSceneLocations = new ArrayList<SceneLocation>();
         public final LocationItem location;
         public final String name;
@@ -1070,6 +1069,12 @@ public class MovieMetaData {
         public SceneLocation(String name, LocationItem location){
             this.name = name;
             this.location = location;
+            if (location != null){
+                if (location.avItem != null)
+                    presentationItems.add(location.avItem);
+                if (location.galleryItem != null)
+                    presentationItems.add(location.galleryItem);
+            }
         }
 
         public LocationItem getRepresentativeLocationItem(){
@@ -1253,10 +1258,10 @@ public class MovieMetaData {
                 } else {
                     SceneLocation thisLocation = allSceneLocatioMap.get(location.address);
                     if (location.avItem != null){
-                        thisLocation.avItems.add(location.avItem);
+                        thisLocation.presentationItems.add(location.avItem);
                     }
                     if (location.galleryItem != null){
-                        thisLocation.galleryItems.add(location.galleryItem);
+                        thisLocation.presentationItems.add(location.galleryItem);
                     }
                 }
             }

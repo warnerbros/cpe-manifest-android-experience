@@ -46,6 +46,8 @@
     <dimen name="spacing_xsmall">4dp</dimen>
     <dimen name="spacing_line">2dp</dimen>
 
+
+    <dimen name="negative_spacing_small">-5dp</dimen>
     <!-- Custom hard-coded dimensions
     <dimen name="home_carousel_height">175dp</dimen>
     <dimen name="theater_star_margin">0dp</dimen> -->

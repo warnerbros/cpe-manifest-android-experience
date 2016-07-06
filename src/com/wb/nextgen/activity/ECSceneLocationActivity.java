@@ -26,6 +26,7 @@ import com.wb.nextgen.fragment.ECGalleryViewFragment;
 import com.wb.nextgen.fragment.ECSceneLocationMapFragment;
 import com.wb.nextgen.fragment.ECVideoViewFragment;
 import com.wb.nextgen.interfaces.SensitiveFragmentInterface;
+import com.wb.nextgen.model.Presentation;
 import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.utils.F;
 import com.wb.nextgen.util.utils.NextGenFragmentTransactionEngine;
@@ -79,6 +80,9 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
         galleryViewFragment = new ECGalleryViewFragment();
 
         sliderTitleTextView = (TextView) findViewById(R.id.scene_location_bottom_slider_text);
+        if (sliderTitleTextView != null){
+            sliderTitleTextView.setText(ecGroupData.title.toUpperCase());
+        }
         contentFrame = (RelativeLayout)findViewById(R.id.scene_location_content_frame);
         locationECRecyclerView = (RecyclerView)findViewById(R.id.scene_location_recycler_view);
 
@@ -112,8 +116,14 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
 
     }
 
-    public void onSceneLocationSelected(int selectedIndex){
+    public void onSceneLocationIndexSelected(int selectedIndex){
         currentSelectedIndex = selectedIndex;
+        if (locationECsAdapter != null)
+            locationECsAdapter.notifyDataSetChanged();
+    }
+
+    public void onSceneLocationSelected(SceneLocation location){
+        //currentSelectedIndex = selectedIndex;
         if (locationECsAdapter != null)
             locationECsAdapter.notifyDataSetChanged();
     }
@@ -130,7 +140,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
     public void onBackPressed(){
         super.onBackPressed();
 
-        if (getSupportFragmentManager().getBackStackEntryCount() == 1 )
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0 )
             finish();
 
 
@@ -138,46 +148,48 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
 
     public class LocationECViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         CardView cv;
-        // TextView personName;
-        // TextView personAge;
-        ImageView personPhoto;
-        SceneLocation slItem;
+        TextView locationsCountText;
+        TextView locationName;
+        ImageView locationPhoto;
+        Object currentItem;
+        int itemIndex;
 
-        LocationECViewHolder(View itemView, SceneLocation slItem) {
+        LocationECViewHolder(View itemView, Object item, int index) {
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.cv);
-            // personName = (TextView)itemView.findViewById(R.id.person_name);
-            //personAge = (TextView)itemView.findViewById(R.id.person_age);
-            personPhoto = (ImageView)itemView.findViewById(R.id.person_photo);
-            this.slItem = slItem;
+            locationName = (TextView)itemView.findViewById(R.id.location_name);
+            locationsCountText = (TextView)itemView.findViewById(R.id.location_count_text);
+            locationPhoto = (ImageView)itemView.findViewById(R.id.location_photo);
+            this.currentItem = item;
+            itemIndex = index;
             itemView.setOnClickListener(this);
         }
 
-        public void setSceneLocationItem(SceneLocation item){
-            slItem = item;
+        public void setItem(Object item, int position){
+            currentItem = item;
+            itemIndex = position;
+            if (item instanceof SceneLocation) {
+                MovieMetaData.LocationItem associateLocationItem = ((SceneLocation)item).location;
+                if (associateLocationItem == null) {
+                    MovieMetaData.LocationItem locationItem = ((SceneLocation)item).getRepresentativeLocationItem();
+                    if (locationItem != null && locationItem.locationThumbnail != null) {
+                        Glide.with(ECSceneLocationActivity.this).load(locationItem.locationThumbnail.url).into(locationPhoto);
+                        locationName.setText(((SceneLocation)item).name);
+                        locationsCountText.setText(((SceneLocation)item).childrenSceneLocations.size() + getResources().getString(R.string.locationsCountText));
+                        //PicassoTrustAll.loadImageIntoView(ECSceneLocationActivity.this, locationItem.locationThumbnail.url, holder.personPhoto);
+                        NextGenLogger.d(F.TAG, "Position: " + itemIndex + " loaded: " + locationItem.locationThumbnail.url);
+                    }
+                } else {
+
+                }
+            }
         }
 
         @Override
         public void onClick(View v) {
-            /*final String url = ecItem.movieInfoUrl;
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ECSceneLocationActivity.this);
-            alertDialogBuilder.setTitle(getResources().getString(R.string.dialog_leave_app));
-            alertDialogBuilder.setMessage(getResources().getString(R.string.dialog_follow_link));
-            alertDialogBuilder.setPositiveButton(getResources().getString(android.R.string.yes), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    startActivity(browserIntent);
-                }
-            });
-            alertDialogBuilder.setNegativeButton(getResources().getString(android.R.string.no), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-            alertDialogBuilder.show();*/
+            if (currentItem != null && mapViewFragment != null && currentItem instanceof SceneLocation){
+                mapViewFragment.setSelectionFromSlider(itemIndex);
+            }
         }
     }
 
@@ -187,14 +199,16 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
         int lastloadingIndex = -1;
         static final int PAGEITEMCOUNT = 6;
 
+
+
         public void reset(){
             lastloadingIndex = -1;
         }
 
         @Override
         public LocationECViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.actor_filmography_cardview, viewGroup, false);
-            LocationECViewHolder pvh = new LocationECViewHolder(v, null);
+            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.scene_locations_card_view, viewGroup, false);
+            LocationECViewHolder pvh = new LocationECViewHolder(v, null, i);
             return pvh;
         }
         public void onBindViewHolder(LocationECViewHolder holder, int position){
@@ -205,23 +219,9 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
 
 
             if (currentSL != null) {
-                holder.setSceneLocationItem(currentSL);
-                /*Glide.with(this)
-                        .load(currentItem.galleryImages.get(position).fullImage.url)
-                        .asBitmap()
-                        .into(new SimpleTarget<Bitmap>() {
-                            @Override
-                            public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
-                                imageView.setImage(ImageSource.bitmap(bitmap));
-                                //thumbView.setImageBitmap(bitmap);
-                            }
-                        });*/
-                MovieMetaData.LocationItem locationItem = currentSL.getRepresentativeLocationItem();
-                if (locationItem != null && locationItem.locationThumbnail != null) {
+                holder.setItem(currentSL, position);
 
-                    PicassoTrustAll.loadImageIntoView(ECSceneLocationActivity.this, locationItem.locationThumbnail.url, holder.personPhoto);
-                    NextGenLogger.d(F.TAG, "Position: " + position + " loaded: " + locationItem.locationThumbnail.url);
-                }
+
 
             }
             //holder.personPhoto.setImageResource(persons.get(i).photoId);

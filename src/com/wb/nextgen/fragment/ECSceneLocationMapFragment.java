@@ -21,6 +21,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
@@ -42,7 +43,8 @@ import java.util.List;
 public class ECSceneLocationMapFragment extends Fragment implements AdapterView.OnItemSelectedListener, View.OnClickListener{
 
     public static interface OnSceneLocationSelectedListener{
-        void onSceneLocationSelected(int selectedIndex);
+        void onSceneLocationIndexSelected(int selectedIndex);
+        void onSceneLocationSelected(SceneLocation location);
     }
 
     protected MapView mapView;
@@ -81,9 +83,8 @@ public class ECSceneLocationMapFragment extends Fragment implements AdapterView.
             for (SceneLocation scLoc : sceneLocations) {
                 list.add(scLoc.name);
             }
-            spinnerAdaptor = new ArrayAdapter<String>(getActivity(),
-                    android.R.layout.simple_spinner_item, list);
-            spinnerAdaptor.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerAdaptor = new ArrayAdapter<String>(getActivity(), R.layout.location_spinner_item, list);
+            spinnerAdaptor.setDropDownViewResource(R.layout.location_spinner_dropdown_item);
             if (locationSpinner != null)
                 locationSpinner.setAdapter(spinnerAdaptor);
             setupPins();
@@ -148,9 +149,9 @@ public class ECSceneLocationMapFragment extends Fragment implements AdapterView.
 
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
         SceneLocation locationItem = sceneLocations.get(pos);
-        setLocationItem(locationItem.name, locationItem.getRepresentativeLocationItem());
+        setLocationItem(locationItem.name, locationItem);
         if (onSceneLocationSelectedListener != null){
-            onSceneLocationSelectedListener.onSceneLocationSelected(pos);
+            onSceneLocationSelectedListener.onSceneLocationIndexSelected(pos);
         }
     }
 
@@ -158,10 +159,22 @@ public class ECSceneLocationMapFragment extends Fragment implements AdapterView.
         // Another interface callback
     }
 
+    public void setSelectionFromSlider(int index){
+        if (locationSpinner != null){
+            int parentIndex = locationSpinner.getSelectedItemPosition();
+            if (parentIndex == 0) {
+                locationSpinner.setSelection(index + 1);
+            }
+            SceneLocation selectedSL = sceneLocations.get(parentIndex).childrenSceneLocations.get(index);
+
+            setLocationItem(selectedSL.name, selectedSL);
+        }
+    }
+
     public void setSceneLocations(List<SceneLocation> locations){
         if (locations != null && locations.size() > 0) {
             sceneLocations = locations;
-            setLocationItem(sceneLocations.get(0).name, sceneLocations.get(0).getRepresentativeLocationItem());
+            setLocationItem(sceneLocations.get(0).name, sceneLocations.get(0));
         }
     }
 
@@ -194,6 +207,7 @@ public class ECSceneLocationMapFragment extends Fragment implements AdapterView.
 
                                     for (LocationItem location : allLocations) {
                                         LatLng latlng = new LatLng(location.latitude, location.longitude);
+
                                         BitmapDescriptor bmDes =
                                                 BitmapDescriptorFactory.fromBitmap(HttpImageHelper.getMapPinBitmap(location.pinImage.url));
                                         MarkerOptions markerOpt = new MarkerOptions()
@@ -221,49 +235,52 @@ public class ECSceneLocationMapFragment extends Fragment implements AdapterView.
     }
 
 
-    public void setLocationItem(String textTitle, final LocationItem locationItem){
-        if (locationItem != null) {
+    public void setLocationItem(String textTitle, final SceneLocation sceneLocation){
+        if (sceneLocation != null) {
             title = textTitle;
 
 
             if (mapView != null) {
-                final LatLng location = new LatLng(locationItem.latitude, locationItem.longitude);
                 mapView.getMapAsync(new OnMapReadyCallback() {
                     @Override
                     public void onMapReady(final GoogleMap googleMap) {
 
-                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, locationItem.zoom));   // set location
+                        List<LocationItem> locations = sceneLocation.getAllSubLocationItems();
+
+                        LatLngBounds.Builder boundsBuilder = LatLngBounds.builder();
+                         for (LocationItem item : locations){
+                             boundsBuilder.include(new LatLng(item.latitude, item.longitude));
+                        }
+                        googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 100));
+
                         googleMap.getMaxZoomLevel();
 
                         googleMap.getUiSettings().setMapToolbarEnabled(true);
                         googleMap.getUiSettings().setCompassEnabled(true);
                         googleMap.getUiSettings().setZoomControlsEnabled(true);
-                        //BitmapDescriptor bmDes = BitmapDescriptorFactory.fromBitmap(NextGenApplication.getMovieMetaData().getMapPinBitmap());
-                       /* grlgoogleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-                        MarkerOptions markerOpt = new MarkerOptions()
-                                .position(location).title(locationItem.getTitle()).snippet(locationItem.address)
-                                .icon(bmDes);
 
-                        googleMap.addMarker(markerOpt).showInfoWindow();*/
-                        //googleMap.getUiSettings().setMapToolbarEnabled(false);
                         googleMap.setOnMapClickListener(null);
-                        googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-                            @Override
-                            public void onCameraChange(CameraPosition camPos) {
-                                if (camPos.zoom > locationItem.zoom && location != null) {
-                                    // set zoom 17 and disable zoom gestures so map can't be zoomed out
-                                    // all the way
-                                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location,locationItem.zoom));
-                                    googleMap.getUiSettings().setZoomGesturesEnabled(false);
-                                }
-                                if (camPos.zoom <= 17) {
-                                    googleMap.getUiSettings().setZoomGesturesEnabled(true);
-                                }
 
-                                //LatLngBounds visibleBounds =  googleMap.getProjection().getVisibleRegion().latLngBounds;
+                        final LocationItem locationItem = sceneLocation.getRepresentativeLocationItem();
+                        final LatLng location = new LatLng(locationItem.latitude, locationItem.longitude);
+                        if (locationItem != null) {
+                            googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+                                @Override
+                                public void onCameraChange(CameraPosition camPos) {
+                                    if (camPos.zoom > locationItem.zoom && location != null) {
+                                        // set zoom 17 and disable zoom gestures so map can't be zoomed out
+                                        // all the way
+                                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, locationItem.zoom));
+                                        googleMap.getUiSettings().setZoomGesturesEnabled(false);
+                                    }
+                                    if (camPos.zoom <= 17) {
+                                        googleMap.getUiSettings().setZoomGesturesEnabled(true);
+                                    }
 
-                            }
-                        });
+
+                                }
+                            });
+                        }
                         //googleMap.addMarker(new MarkerOptions().position(new LatLng(locationItem.latitude, locationItem.longitude)).title("Marker"));
                     }
                 });

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_activated="false"  android:drawable="@drawable/drop_down_arrow"><!-- pressed -->
+
+    </item>
+    <item android:state_activated="true"><!-- pressed -->
+        <rotate android:fromDegrees="180.0" android:toDegrees="180.0"
+            android:pivotX="50%" android:pivotY="50%" android:drawable="@drawable/drop_down_arrow" />
+    </item>
+</selector>
