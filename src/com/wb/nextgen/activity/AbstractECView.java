@@ -84,11 +84,11 @@ public abstract class AbstractECView extends AbstractNextGenActivity {
     @Override
     public void onRequestToggleFullscreen(){
         super.onRequestToggleFullscreen();
-        if (leftListFrame == null || listFragment == null)
+        if (getFullScreenDisappearView() == null /*|| listFragment == null*/)
             return;
         ActionBar bar = getSupportActionBar();
         if (!isContentFullScreen){    // make it full screen
-            leftListFrame.setVisibility(View.GONE);
+            getFullScreenDisappearView().setVisibility(View.GONE);
             onFullScreenChange(true);
 
             if (bar != null)
@@ -96,13 +96,17 @@ public abstract class AbstractECView extends AbstractNextGenActivity {
 
 
         } else {                     // shrink it
-            leftListFrame.setVisibility(View.VISIBLE);
+            getFullScreenDisappearView().setVisibility(View.VISIBLE);
             onFullScreenChange(false);
             if (bar != null)
                 bar.show();
 
         }
         isContentFullScreen = !isContentFullScreen;
+    }
+
+    protected View getFullScreenDisappearView(){
+        return leftListFrame;
     }
 
     abstract void onFullScreenChange(boolean bFullscreen);

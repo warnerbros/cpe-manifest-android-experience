@@ -53,6 +53,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
     private LinearLayoutManager locationECLayoutManager;
     private LocationECsAdapter locationECsAdapter;
     private NextGenFragmentTransactionEngine nextGenFragmentTransactionEngine;
+    private View sliderFrame;
 
     private List<SceneLocation> rootSceneLocations;
 
@@ -67,6 +68,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
 
         SceneLocation rootSceneLocation = new SceneLocation(getResources().getString(R.string.location_full_map), null);
         rootSceneLocation.childrenSceneLocations.addAll(ecGroupData.getSceneLocations());
+        sliderFrame = findViewById(R.id.scene_location_slider_frame);
 
         rootSceneLocations = new ArrayList<SceneLocation>();
         rootSceneLocations.add(rootSceneLocation);
@@ -101,6 +103,9 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
         nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.map_frame, mapViewFragment);
         //transitToFragment(mapViewFragment);
 
+    }
+    protected View getFullScreenDisappearView(){
+        return sliderFrame;
     }
 
     private void transitToFragment(Fragment fragment){
@@ -165,6 +170,20 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
             finish();
         else
             currentFragment = mapViewFragment;
+
+    }
+
+    @Override
+    public void onRequestToggleFullscreen(){
+/*
+        if (!isContentFullScreen){    // make it full screen
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+        } else {                     // shrink it
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+        }*/
+        super.onRequestToggleFullscreen();
+        if (currentFragment != null && currentFragment instanceof ECGalleryViewFragment)
+            ((ECGalleryViewFragment)currentFragment).onRequestToggleFullscreen(isContentFullScreen);
 
     }
 

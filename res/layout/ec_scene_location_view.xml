@@ -24,6 +24,7 @@
 
     </RelativeLayout>
     <LinearLayout
+        android:id="@+id/scene_location_slider_frame"
         android:layout_weight="1"
         android:orientation="vertical"
         android:layout_width="match_parent"
