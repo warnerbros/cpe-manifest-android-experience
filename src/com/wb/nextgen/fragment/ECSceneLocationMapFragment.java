@@ -22,6 +22,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
@@ -34,13 +35,14 @@ import com.wb.nextgen.util.utils.ImageGetter;
 import com.wb.nextgen.util.utils.NextGenLogger;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
 /**
  * Created by gzcheng on 3/31/16.
  */
-public class ECSceneLocationMapFragment extends Fragment implements AdapterView.OnItemSelectedListener, View.OnClickListener{
+public class ECSceneLocationMapFragment extends Fragment implements AdapterView.OnItemSelectedListener, View.OnClickListener, GoogleMap.OnMarkerClickListener{
 
     public static interface OnSceneLocationSelectedListener{
         void onSceneLocationIndexSelected(int selectedIndex);
@@ -56,6 +58,7 @@ public class ECSceneLocationMapFragment extends Fragment implements AdapterView.
     private List<SceneLocation> sceneLocations;
     private ArrayAdapter<String> spinnerAdaptor;
     private OnSceneLocationSelectedListener onSceneLocationSelectedListener;
+    private HashMap<LatLng, SceneLocation> markerLocationMap = new HashMap<LatLng, SceneLocation>();
 
 
     //LocationItem selectedLocationItem = null;
@@ -70,9 +73,10 @@ public class ECSceneLocationMapFragment extends Fragment implements AdapterView.
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mapView = (MapView) view.findViewById(R.id.ec_mapview);
-        if(mapView != null)
+        if(mapView != null) {
             mapView.onCreate(savedInstanceState);
-
+            //mapView.setOn
+        }
 
         locationSpinner = (Spinner) view.findViewById(R.id.scene_locations_spinner);
 
@@ -203,7 +207,7 @@ public class ECSceneLocationMapFragment extends Fragment implements AdapterView.
     }
 
     private void setupPins(){
-        final List<LocationItem> allLocations = new ArrayList<LocationItem>();
+        final List<SceneLocation> allLocations = new ArrayList<SceneLocation>();
         if (sceneLocations != null && sceneLocations.size() > 1) {
             for (int i = 1; i < sceneLocations.size(); i++) {
                 allLocations.addAll(sceneLocations.get(i).getAllSubLocationItems());
@@ -211,7 +215,7 @@ public class ECSceneLocationMapFragment extends Fragment implements AdapterView.
             }
         }
 
-        HttpImageHelper.getAllMapPins(allLocations, new ResultListener<Boolean>() {
+        HttpImageHelper.getAllMapPinsBySceneLocation(allLocations, new ResultListener<Boolean>() {
             @Override
             public void onResult(Boolean result) {
                 getActivity().runOnUiThread(new Runnable() {
@@ -223,19 +227,20 @@ public class ECSceneLocationMapFragment extends Fragment implements AdapterView.
                                 @Override
                                 public void onMapReady(final GoogleMap googleMap) {
 
-                                    googleMap.getUiSettings().setMapToolbarEnabled(true);
+                                    //googleMap.getUiSettings().setMapToolbarEnabled(true);
                                     googleMap.getUiSettings().setCompassEnabled(true);
                                     googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                                    googleMap.setOnMarkerClickListener(ECSceneLocationMapFragment.this);
 
 
+                                    for (SceneLocation sceneLocation : allLocations) {
+                                        LatLng latlng = new LatLng(sceneLocation.location.latitude, sceneLocation.location.longitude);
 
-                                    for (LocationItem location : allLocations) {
-                                        LatLng latlng = new LatLng(location.latitude, location.longitude);
-
+                                        markerLocationMap.put(latlng, sceneLocation);
                                         BitmapDescriptor bmDes =
-                                                BitmapDescriptorFactory.fromBitmap(HttpImageHelper.getMapPinBitmap(location.pinImage.url));
+                                                BitmapDescriptorFactory.fromBitmap(HttpImageHelper.getMapPinBitmap(sceneLocation.location.pinImage.url));
                                         MarkerOptions markerOpt = new MarkerOptions()
-                                                .position(latlng).title(location.getTitle()).snippet(location.address)
+                                                .position(latlng).title(sceneLocation.location.getTitle()).snippet(sceneLocation.location.address)
                                                 .icon(bmDes);
 
                                         googleMap.addMarker(markerOpt).showInfoWindow();
@@ -254,8 +259,28 @@ public class ECSceneLocationMapFragment extends Fragment implements AdapterView.
             }
         });
 
+    }
 
-
+    public boolean onMarkerClick(Marker marker){
+        marker.getTitle();
+        LatLng position = marker.getPosition();
+        SceneLocation sl = markerLocationMap.get(position);
+        if (sl != null) {
+            if (onSceneLocationSelectedListener != null && sl != null) {
+                onSceneLocationSelectedListener.onSceneLocationSelected(sl);
+            }
+            setLocationItem(sl.name, sl);
+            if (locationSpinner != null){
+                SceneLocation outMostParent = sl.getOuterMostParent();
+                for(int i = 0; i < sceneLocations.size(); i++){
+                    if (outMostParent.equals(sceneLocations.get(i))){
+                        locationSpinner.setSelection(i);
+                        break;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
 
@@ -269,11 +294,11 @@ public class ECSceneLocationMapFragment extends Fragment implements AdapterView.
                     @Override
                     public void onMapReady(final GoogleMap googleMap) {
 
-                        List<LocationItem> locations = sceneLocation.getAllSubLocationItems();
+                        List<SceneLocation> sceneLocations = sceneLocation.getAllSubLocationItems();
 
                         LatLngBounds.Builder boundsBuilder = LatLngBounds.builder();
-                         for (LocationItem item : locations){
-                             boundsBuilder.include(new LatLng(item.latitude, item.longitude));
+                         for (SceneLocation sceneLocation : sceneLocations){
+                             boundsBuilder.include(new LatLng(sceneLocation.location.latitude, sceneLocation.location.longitude));
                         }
                         googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 100));
 

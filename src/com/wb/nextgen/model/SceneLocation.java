@@ -14,8 +14,10 @@ public class SceneLocation{
     public final List<SceneLocation> childrenSceneLocations = new ArrayList<SceneLocation>();
     public final LocationItem location;
     public final String name;
+    public final SceneLocation parentSceneLocation;
 
-    public SceneLocation(String name, LocationItem location){
+    public SceneLocation(SceneLocation parentSceneLocation, String name, LocationItem location){
+        this.parentSceneLocation = parentSceneLocation;
         this.name = name;
         this.location = location;
         if (location != null){
@@ -35,15 +37,23 @@ public class SceneLocation{
             return null;
     }
 
-    public List<LocationItem> getAllSubLocationItems(){
-        List<LocationItem> resultList = new ArrayList<LocationItem>();
+    public List<SceneLocation> getAllSubLocationItems(){
+        List<SceneLocation> resultList = new ArrayList<SceneLocation>();
         if (location != null){
-            resultList.add(location);
+            resultList.add(this);
         }else if (childrenSceneLocations.size() > 0){
             for (SceneLocation child : childrenSceneLocations){
                 resultList.addAll(child.getAllSubLocationItems());
             }
         }
         return resultList;
+    }
+
+    public SceneLocation getOuterMostParent(){
+        SceneLocation outerMost = this;
+        while (outerMost.parentSceneLocation != null){
+            outerMost = outerMost.parentSceneLocation;
+        }
+        return outerMost;
     }
 }

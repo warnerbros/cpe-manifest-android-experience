@@ -1261,13 +1261,13 @@ public class MovieMetaData {
                 if (sceneLocationMap.containsKey(location.greaterTitle)){
                     group = sceneLocationMap.get(location.greaterTitle);
                 }else{
-                    group = new SceneLocation(location.greaterTitle, null);
+                    group = new SceneLocation(null, location.greaterTitle, null);
                     sceneLocations.add(group);
                     sceneLocationMap.put(location.greaterTitle, group);
                 }
 
                 if (!allSceneLocatioMap.containsKey(location.address)){
-                    SceneLocation finalSceneLocation = new SceneLocation(location.getTitle(), location);
+                    SceneLocation finalSceneLocation = new SceneLocation(group, location.getTitle(), location);
                     allSceneLocatioMap.put(location.address, finalSceneLocation);
                     group.childrenSceneLocations.add(finalSceneLocation);
                 } else {

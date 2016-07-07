@@ -33,6 +33,7 @@ import com.wb.nextgen.util.utils.F;
 import com.wb.nextgen.util.utils.ImageGetter;
 import com.wb.nextgen.util.utils.NextGenFragmentTransactionEngine;
 import com.wb.nextgen.util.utils.NextGenLogger;
+import com.wb.nextgen.util.utils.StringHelper;
 import com.wb.nextgen.widget.FixedAspectRatioFrameLayout;
 
 import java.util.ArrayList;
@@ -49,8 +50,12 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
     private RelativeLayout contentFrame;
 
     private RecyclerView locationECRecyclerView;
-    private TextView sliderTitleTextView;
+    //private TextView sliderTitleTextView;
+    private RecyclerView sliderTitleText;
+
+
     private LinearLayoutManager locationECLayoutManager;
+    private SliderTextAdapter sliderTextAdapter;
     private LocationECsAdapter locationECsAdapter;
     private NextGenFragmentTransactionEngine nextGenFragmentTransactionEngine;
     private View sliderFrame;
@@ -66,7 +71,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
         super.onCreate(savedInstanceState);
 
 
-        SceneLocation rootSceneLocation = new SceneLocation(getResources().getString(R.string.location_full_map), null);
+        SceneLocation rootSceneLocation = new SceneLocation(null, getResources().getString(R.string.location_full_map), null);
         rootSceneLocation.childrenSceneLocations.addAll(ecGroupData.getSceneLocations());
         sliderFrame = findViewById(R.id.scene_location_slider_frame);
 
@@ -84,15 +89,18 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
 
 
 
-        sliderTitleTextView = (TextView) findViewById(R.id.scene_location_bottom_slider_text);
-        if (sliderTitleTextView != null){
-            sliderTitleTextView.setText(ecGroupData.title.toUpperCase());
+        sliderTitleText = (RecyclerView) findViewById(R.id.scene_location_bottom_text_slider);
+        if (sliderTitleText != null){
+            sliderTitleText.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+            sliderTextAdapter = new SliderTextAdapter();
+            sliderTextAdapter.setSceneLocation(rootSceneLocations.get(0));
+            sliderTitleText.setAdapter(sliderTextAdapter);
+            //sliderTitleTextView.setText(ecGroupData.title.toUpperCase());
         }
         contentFrame = (RelativeLayout)findViewById(R.id.scene_location_content_frame);
         locationECRecyclerView = (RecyclerView)findViewById(R.id.scene_location_recycler_view);
 
         if (locationECRecyclerView != null){
-            locationECLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
             locationECLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
             locationECRecyclerView.setLayoutManager(locationECLayoutManager);
             locationECsAdapter = new LocationECsAdapter();
@@ -184,6 +192,102 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
         super.onRequestToggleFullscreen();
         if (currentFragment != null && currentFragment instanceof ECGalleryViewFragment)
             ((ECGalleryViewFragment)currentFragment).onRequestToggleFullscreen(isContentFullScreen);
+
+    }
+
+    public class SliderTextViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        CardView textCV;
+        TextView locationTxt;
+        String currentText;
+        SceneLocation sceneLocation;
+        int itemIndex;
+
+        SliderTextViewHolder(View itemView, String text, int index) {
+            super(itemView);
+            textCV = (CardView)itemView.findViewById(R.id.text_cv);
+            locationTxt = (TextView)itemView.findViewById(R.id.slider_text);
+            this.currentText = text;
+            itemIndex = index;
+            itemView.setOnClickListener(this);
+        }
+
+        public void setStringItem(String text, int position){
+            currentText = text;
+            itemIndex = position;
+            locationTxt.setText(text);
+        }
+
+        public void setSceneLocation(SceneLocation sceneLocation, int position){
+            this.sceneLocation = sceneLocation;
+            itemIndex = position;
+            locationTxt.setText("> " +sceneLocation.name);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (sceneLocation != null){
+                mapViewFragment.setLocationItem(sceneLocation.name, sceneLocation);
+                locationECsAdapter.setSceneLocation(sceneLocation);
+                locationECsAdapter.notifyDataSetChanged();
+            }else{
+                mapViewFragment.setLocationItem(ecGroupData.title, rootSceneLocations.get(0));
+                locationECsAdapter.setSceneLocation(rootSceneLocations.get(0));
+                locationECsAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+    public class SliderTextAdapter extends RecyclerView.Adapter<SliderTextViewHolder>{
+
+
+        int lastloadingIndex = -1;
+        static final int PAGEITEMCOUNT = 6;
+
+        SceneLocation sceneLocation;
+        List<SceneLocation> sceneLocations = new ArrayList<SceneLocation>();
+
+        public void setSceneLocation(SceneLocation sceneLocation){
+            this.sceneLocation = sceneLocation;
+            sceneLocations = new ArrayList<SceneLocation>();
+            SceneLocation thisSL = sceneLocation;
+            if (thisSL != null){
+                while (thisSL != null){
+                    sceneLocations.add(0, thisSL);
+                    thisSL = thisSL.parentSceneLocation;
+                }
+            }
+
+
+        }
+
+        public void reset(){
+            lastloadingIndex = -1;
+        }
+
+        @Override
+        public SliderTextViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.text_card_view, viewGroup, false);
+            SliderTextViewHolder pvh = new SliderTextViewHolder(v, "", i);
+            return pvh;
+        }
+
+        public void onBindViewHolder(SliderTextViewHolder holder, int position){
+            if (position == 0)
+                holder.setStringItem(ecGroupData.title, position);
+            else
+                holder.setSceneLocation(sceneLocations.get(position - 1), position);
+
+            //holder.personPhoto.setImageResource(persons.get(i).photoId);
+        }
+
+        @Override
+        public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+            super.onAttachedToRecyclerView(recyclerView);
+        }
+
+        public int getItemCount(){
+            return sceneLocations.size() + 1;
+        }
 
     }
 
@@ -288,6 +392,11 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
 
         public void setSceneLocation(SceneLocation sceneLocation){
             this.sceneLocation = sceneLocation;
+
+            if (sliderTextAdapter != null) {
+                sliderTextAdapter.setSceneLocation(sceneLocation);
+                sliderTextAdapter.notifyDataSetChanged();
+            }
         }
 
         public void reset(){

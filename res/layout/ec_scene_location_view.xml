@@ -29,7 +29,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp">
-        <TextView
+        <!--<TextView
             android:id="@+id/scene_location_bottom_slider_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,8 +37,13 @@
             android:gravity="left"
             android:textColor="@android:color/darker_gray"
             android:fontFamily="sans-serif-condensed"
-            android:textSize="@dimen/textMedium" />
-
+            android:textSize="@dimen/textMedium" />-->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/scene_location_bottom_text_slider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+        </android.support.v7.widget.RecyclerView>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/scene_location_recycler_view"
             android:layout_width="match_parent"
