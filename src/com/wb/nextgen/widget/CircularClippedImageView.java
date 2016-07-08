@@ -85,7 +85,7 @@ public class CircularClippedImageView extends ImageView{
         canvas.drawCircle(centerX, centerY, insideRaius, paint);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(bm, rect, rect, paint);
-        if (isActivated()) {
+        /*if (isActivated() || isSelected() || isPressed()) {
 
             //create another bitmap for selected overlay
             Bitmap overlay = Bitmap.createBitmap(getWidth(),
@@ -104,7 +104,7 @@ public class CircularClippedImageView extends ImageView{
             // draw on top of normal state image
             selectedPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.ADD));
             canvas.drawBitmap(overlay, rect, rect, selectedPaint);
-        }
+        }*/
         return output;
     }
 

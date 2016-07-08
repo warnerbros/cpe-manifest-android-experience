@@ -127,10 +127,6 @@ public class NextGenActivity extends FragmentActivity implements View.OnClickLis
                             ((LinearLayout.LayoutParams)params).weight = TOP_RATIO;
                             topPadding.setLayoutParams(params);
 
-
-                            //rightPortion.setLayoutParams(new TableLayout.LayoutParams(0, TableLayout.LayoutParams.MATCH_PARENT, 100 - realLeftRatio));
-                            //topPadding.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, 0, TOP_RATIO));
-                            //buttonsLayout.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, 0, 100 - TOP_RATIO));
                         }
                     });
 
