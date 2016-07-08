@@ -245,6 +245,13 @@ public class MovieMetaData {
                                     if (cast.isActor())
                                         result.actorsList.add(cast);
                                 }
+                                Collections.sort(result.actorsList, new Comparator<CastData>() {
+                                    @Override
+                                    public int compare(CastData lhs, CastData rhs) {
+
+                                        return (int)(lhs.order - rhs.order);
+                                    }
+                                });
                             }
 
                             presentationId = audioVisual.getPresentationID();
@@ -694,7 +701,7 @@ public class MovieMetaData {
         public String imageId;
         @SerializedName("PERSON_ID")//Integer	3388348
         public String personId;
-        @SerializedName("PERSON_NAME")//String	Laurence Fishburne
+        @SerializedName(value="PERSON_NAME", alternate={"CAPTION"})//String	Laurence Fishburne
         public String name;
         @SerializedName("FULL_URL")//String	http://media.baselineresearch.com/images/933554/933554_full.jpg
         public String fullSizeUrl;
@@ -728,6 +735,7 @@ public class MovieMetaData {
         final public String secondGivenName;
         final public String lastName;
         final public String gender;
+        final public int order;
         private String baselineApiActorId;
         private String peopleOtherId;
         final public String job;
@@ -741,8 +749,12 @@ public class MovieMetaData {
                     charactorName = castInfo.getJob().get(0).getCharacter().get(0);
                 else
                     charactorName = "";
-
+                if (castInfo.getJob().get(0).getBillingBlockOrder() != null)
+                    order = castInfo.getJob().get(0).getBillingBlockOrder();
+                else
+                    order = 0;
             }else{
+                order = 0;
                 job = "";
                 charactorName = "";
             }

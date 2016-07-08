@@ -55,6 +55,8 @@ public class BaselineApiDAO {
         static final String GetSocialMedia = "/ParticipantSocialMedia";
         static final String GetFilmography = "/ParticipantFilmCredit";
         static final String GetFilmPoster = "/ProjectFilmPoster";
+
+        static final String GetProfileImages = "/ParticipantProfileImages";
     }
 
     private static class Keys {
@@ -107,6 +109,38 @@ public class BaselineApiDAO {
                 NextGenLogger.e("ss", ex.getLocalizedMessage());
             }
         }
+    }
+
+    public static void getCastActorsPhotos(final List<String> castsIDs, ResultListener<HashMap<String, BaselineCastData>> l) {
+        Worker.execute(new Callable<HashMap<String, BaselineCastData>>() {
+            @Override
+            public HashMap<String, BaselineCastData> call() throws Exception {
+                HashMap<String, BaselineCastData> castsInfoMap = new HashMap<String, BaselineCastData>();
+                for (String castId : castsIDs) {
+                    BaselineCastData thisData = new BaselineCastData();
+
+                    List<NameValuePair> params = new ArrayList<NameValuePair>();
+                    params.add(new BasicNameValuePair("id", castId));
+                    params.add(new BasicNameValuePair("apikey", baselineAPIKey));
+
+                    //String bio = getActorBio(params);
+                    //List<Filmography> films = getActorFilmnography(params);
+                    CastHeadShot headShot = getHeadShot(params);
+                    List<CastSocialMedia> socialMedias = getCastSocialMedia(params);
+                    thisData.setSocialMedium(socialMedias);
+
+                    // thisData.biography = bio;
+                    //thisData.filmogrphies = films;
+                    thisData.headShot = headShot;
+
+                    castsInfoMap.put(castId, thisData);
+
+                }
+
+
+                return castsInfoMap;
+            }
+        }, l);
     }
 
     public static void getCastActorsData(final List<String> castsIDs, ResultListener<HashMap<String, BaselineCastData>> l) {
@@ -254,7 +288,7 @@ public class BaselineApiDAO {
 
     private static CastHeadShot getHeadShot(List<NameValuePair> params) throws JSONException, IOException {
 
-        String result = HttpHelper.getFromUrl(BASELINE_DOMAIN + Endpoints.GetHeadshot, params);
+        String result = HttpHelper.getFromUrl(BASELINE_DOMAIN + Endpoints.GetProfileImages, params);
         //JSONObject json = new JSONObject(result);
         JSONArray jsonArray = new JSONArray(result);
         if (jsonArray != null) {
