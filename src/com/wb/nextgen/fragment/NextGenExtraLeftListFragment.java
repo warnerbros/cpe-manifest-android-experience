@@ -72,6 +72,7 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
         listAdaptor.selectedIndex = position - listView.getHeaderViewsCount();;
         listView.setSelection(position);
+        listView.setItemChecked(position, true);
         onListItemClick(listAdaptor.getItem(listAdaptor.selectedIndex));
         listAdaptor.notifyDataSetChanged();
     }

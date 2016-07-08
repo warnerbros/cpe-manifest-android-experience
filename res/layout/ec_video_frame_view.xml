@@ -35,6 +35,14 @@
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:layout_centerInParent="true" />
+                    <TextView
+                        android:id="@+id/count_down_text_view"
+                        android:padding="@dimen/spacing_normal"
+                        android:textColor="@android:color/white"
+                        android:visibility="invisible"
+                        android:textSize="@dimen/textMedium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
                 </RelativeLayout>
                 <RelativeLayout
                     android:id="@+id/ec_video_preview_image_frame"

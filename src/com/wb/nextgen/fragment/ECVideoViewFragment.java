@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +40,7 @@ public class ECVideoViewFragment extends Fragment{
     ECMediaController mediaController;
     protected TextView selectedECNameTextView;
     protected TextView ecDurationTextView;
+    protected TextView countDownTextView;
 
     ImageView previewImageView = null;
     RelativeLayout previewFrame = null;
@@ -50,14 +52,16 @@ public class ECVideoViewFragment extends Fragment{
     ImageView bgImageView;
 
     String bgImageUrl = null;
+    boolean bCountDown = false;
 
-    boolean shouldAutoPlay = false;
+    boolean shouldAutoPlay = true;
     FixedAspectRatioFrameLayout.Priority aspectFramePriority = FixedAspectRatioFrameLayout.Priority.WIDTH_PRIORITY;
 
     ECVideoListAdaptor ecsAdaptor = null;
 
     public static interface ECVideoListAdaptor{
         void playbackFinished();
+        boolean shouldStartCountDownForNext();
     }
 
     public void setBGImageUrl(String url){
@@ -81,6 +85,7 @@ public class ECVideoViewFragment extends Fragment{
         previewFrame = (RelativeLayout)view.findViewById(R.id.ec_video_preview_image_frame);
         previewPlayBtn = (ImageButton)view.findViewById(R.id.ec_video_preview_playButton);
         aspectRatioFrame = (FixedAspectRatioFrameLayout) view.findViewById(R.id.ec_video_aspect_ratio_frame);
+        countDownTextView = (TextView) view.findViewById(R.id.count_down_text_view);
 
         if (aspectRatioFrame != null){
             aspectRatioFrame.setAspectRatioPriority(aspectFramePriority);
@@ -100,10 +105,64 @@ public class ECVideoViewFragment extends Fragment{
         //videoView.setMediaController(mediaController);
         videoView.setCustomMediaController(mediaController);
         videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            private Handler mHandler = new Handler();
+            int counter = 5;
             @Override
             public void onCompletion(MediaPlayer mp) {
-                if (ecsAdaptor != null)
-                    ecsAdaptor.playbackFinished();
+                if (ecsAdaptor != null) {
+                    if (ecsAdaptor.shouldStartCountDownForNext()){
+                        //new
+                        startRepeatingTask();
+                    }
+                }
+            }
+            Runnable mStatusChecker = new Runnable() {
+                @Override
+                public void run() {
+                    boolean shouldFinish = false;
+
+                    try {
+
+                        if (getActivity() != null) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (countDownTextView != null) {
+                                        if (counter >= 0) {
+                                            countDownTextView.setVisibility(View.VISIBLE);
+                                            countDownTextView.setText("In " + counter + " seconds");
+                                        }else {
+                                            countDownTextView.setText("");
+                                            countDownTextView.setVisibility(View.GONE);
+                                        }
+                                    }
+
+                                }
+                            });
+                        }
+
+                        if (counter < 0){
+                            ecsAdaptor.playbackFinished();
+                            stopRepeatingTask();
+                            shouldFinish = true;
+                        }
+                        counter = counter - 1;
+                    } finally {
+                        // 100% guarantee that this always happens, even if
+                        // your update method throws an exception
+                        if (!shouldFinish)
+                            mHandler.postDelayed(mStatusChecker, 1000);
+                    }
+                }
+            };
+
+            void startRepeatingTask() {
+                counter = 5;
+                mStatusChecker.run();
+            }
+
+            void stopRepeatingTask() {
+                mHandler.removeCallbacks(mStatusChecker);
             }
         });
 
@@ -133,6 +192,7 @@ public class ECVideoViewFragment extends Fragment{
                 if (previewPlayBtn != null){
                     previewPlayBtn.setVisibility(View.VISIBLE);
                 }
+                shouldAutoPlay = true;
             }
         }
     }
@@ -156,6 +216,10 @@ public class ECVideoViewFragment extends Fragment{
         mediaController.onPlayerDestroy();
         mediaController = null;
         super.onDestroyView();
+    }
+
+    public void setEnableCountDown(boolean bCountDown){
+        this.bCountDown = bCountDown;
     }
 
 

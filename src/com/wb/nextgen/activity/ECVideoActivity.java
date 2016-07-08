@@ -23,7 +23,7 @@ public class ECVideoActivity extends AbstractECView implements ECVideoViewFragme
         super.onCreate(savedInstanceState);
 
         rightVideoFrame = (ECVideoViewFragment) getSupportFragmentManager().findFragmentById(R.id.ec_video_view_fragment);
-
+        rightVideoFrame.setShouldAutoPlay(false);
         rightVideoFrame.setEcsAdaptor(this);
     }
 
@@ -59,7 +59,13 @@ public class ECVideoActivity extends AbstractECView implements ECVideoViewFragme
         rightVideoFrame.onFullScreenChange(bFullscreen);
     }
 
+    @Override
     public void playbackFinished(){
         listFragment.selectNextItem();
+    }
+
+    @Override
+    public boolean shouldStartCountDownForNext(){
+        return listFragment.hasReachedLastItem();
     }
 }

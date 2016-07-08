@@ -108,4 +108,11 @@ public class ECViewLeftListFragment extends NextGenExtraLeftListFragment{
             }
         }
     }
+
+    public boolean hasReachedLastItem(){
+        if (listAdaptor != null){
+            return listAdaptor.selectedIndex < listAdaptor.getCount() - 1 ;
+        }
+        return true;
+    }
 }
