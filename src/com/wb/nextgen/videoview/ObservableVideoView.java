@@ -1,6 +1,7 @@
 package com.wb.nextgen.videoview;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -35,7 +36,12 @@ public final class ObservableVideoView extends VideoView implements NextGenPlaye
 		if (v != null)
 			customMediaController.setAnchorView((ViewGroup)v);
 	}
-	
+
+	@Override
+	public void setVideoURI(Uri uri){
+		super.setVideoURI(uri);
+	}
+
 	@Override
 	public void pause() {
 		super.pause();
@@ -54,7 +60,8 @@ public final class ObservableVideoView extends VideoView implements NextGenPlaye
 	@Override
 	public void start() {
 		super.start();
-		
+
+		customMediaController.reset();
 		if (mIsOnPauseMode) {
 			if (mVideoViewListener != null) {
 				mVideoViewListener.onResume();

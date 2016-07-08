@@ -1,5 +1,6 @@
 package com.wb.nextgen.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -44,6 +45,8 @@ public class NextGenActivity extends FragmentActivity implements View.OnClickLis
     private TimerTask startUpTimerTask;
     private Timer startUpTimer;
 
+    private boolean isStartUp = true;
+
     @Override
     public void onCreate(Bundle savedState) {
         super.onCreate(savedState);
@@ -87,7 +90,14 @@ public class NextGenActivity extends FragmentActivity implements View.OnClickLis
     @Override
     public void onStart(){
         super.onStart();
+        getWindow().getDecorView().setSystemUiVisibility(getWindow().getDecorView().getSystemUiVisibility() | View.SYSTEM_UI_FLAG_FULLSCREEN);
         if (startupVideoView != null ){
+            if (!isStartUp){
+                startupVideoView.seekTo(LOOPING_POINT);
+                startupVideoView.start();
+                return;
+            }
+            isStartUp = false;
             startupVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(final MediaPlayer mp) {

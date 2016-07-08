@@ -116,6 +116,8 @@ public abstract class AbstractNextGenActivity extends AppCompatActivity implemen
     @Override
     protected void onStart(){
         super.onStart();
+
+        getWindow().getDecorView().setSystemUiVisibility(getWindow().getDecorView().getSystemUiVisibility() | View.SYSTEM_UI_FLAG_FULLSCREEN);
         //int spacerPost = 0;
 
         if (backgroundImageView == null){

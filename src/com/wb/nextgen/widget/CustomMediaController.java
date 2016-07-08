@@ -433,6 +433,10 @@ public class CustomMediaController extends FrameLayout {
         }
     }
 
+    public void reset(){
+        setProgress();
+    }
+
     public void updateFullScreen() {
         if (mRoot == null || mFullscreenButton == null || mPlayer == null) {
             return;

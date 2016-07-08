@@ -33,50 +33,14 @@ import com.wb.nextgen.interfaces.NextGenPlayerInterface;
 public class ECMediaController extends NextGenMediaController {
     //private VideoView videoView;
 
+    int statupSystemUIView = 0;
 
     ImageButton maxminButton;
     public ECMediaController(Context context, NextGenPlayerInterface player) {
         super(context, player);
+        statupSystemUIView = mBaseSystemUIView.getSystemUiVisibility();
     }
-/*
-    @Override
-    public void setAnchorView(View view) {
-        super.setAnchorView(view);
-        LayoutInflater inflater2 = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        LinearLayout wrapperLayout2 = new LinearLayout(mContext);
 
-        inflater2.inflate(R.layout.media_player_maxmin_button, wrapperLayout2, true);
-        maxminButton = (ImageButton)wrapperLayout2.findViewById(R.id.mc_expand_shrink);
-        if (mContext != null){
-
-
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-            params.setMargins(view.getWidth(), 0, 5, 20);
-            FrameLayout.LayoutParams wrapperParams2 = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
-                    FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.RIGHT);
-
-            addView(wrapperLayout2, wrapperParams2);
-
-            maxminButton.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    // TODO Auto-generated method stub
-                    //Log.e("media controller", "full screen onclick");
-
-                    //Intent i = new Intent("xyxyxyxhx");
-
-                    //ECMediaController.this.hide();
-
-                    if (mContext instanceof ContentViewFullscreenRequestInterface) {
-                        ((ContentViewFullscreenRequestInterface) mContext).onRequestToggleFullscreen();
-                    }
-
-
-                }
-            });
-        }
-    }*/
 
     @Override
     public void requestTogggleFullScreen(){
@@ -87,8 +51,7 @@ public class ECMediaController extends NextGenMediaController {
 
     public void onToggledFullScreen(boolean isFullScreen){
         if (!isFullScreen){
-            mBaseSystemUIView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    | View.SYSTEM_UI_FLAG_VISIBLE );
+            mBaseSystemUIView.setSystemUiVisibility(statupSystemUIView );
         }else{
             mBaseSystemUIView.setSystemUiVisibility(mBaseSystemUIView.getSystemUiVisibility() | View.SYSTEM_UI_FLAG_FULLSCREEN);
         }

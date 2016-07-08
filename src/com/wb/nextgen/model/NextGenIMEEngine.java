@@ -21,6 +21,7 @@ public abstract class NextGenIMEEngine <T>{
     protected List<T> imeElements = new ArrayList<T>();
     protected int currentIndex = -1;
     protected T currentIMEItem = null;
+    protected List<T> currentIMEItems = new ArrayList<T>();
 
     protected long lastSearchedTime = 0L;
 
@@ -41,8 +42,12 @@ public abstract class NextGenIMEEngine <T>{
             return null;
     }
 
-    // returns true if there is an update of the current item
     public boolean computeCurrentIMEElement(long timecode){
+        return binarySearch(timecode);
+    }
+
+    // returns true if there is an update of the current item
+    public boolean binarySearch(long timecode){
         T computedIMEItem = null;
         if (currentIMEItem != null && compareCurrentTimeWithItemAtIndex(timecode, currentIndex) == 0) {
            return false;
@@ -120,6 +125,32 @@ public abstract class NextGenIMEEngine <T>{
             return false;
     }
 
+    // returns true if there is an update of the current item
+    public boolean linearSearch(long timecode){
+        int startIndex = currentIndex;
+
+        if (startIndex != 0 && compareCurrentTimeWithItemAtIndex(timecode, startIndex) < 0){
+            startIndex = 0;
+        }
+        currentIMEItems = new ArrayList<T>();
+        for (int i = 0; i < imeElements.size(); i++){
+            if (compareCurrentTimeWithItemAtIndex(timecode, i) == 0){  //within
+                for (int j = i; j< imeElements.size(); j++){
+                    if (compareCurrentTimeWithItemAtIndex(timecode, j) == 0) {  //within
+                        currentIMEItems.add(imeElements.get(j));
+                    }else if ( compareCurrentTimeWithItemAtIndex(timecode, j) > 0)
+                        break;
+                }
+
+                break;
+            } else if ( compareCurrentTimeWithItemAtIndex(timecode, i) > 0)
+                break;
+        }
+
+
+        return true;
+    }
+
 
 
     public MovieMetaData.IMEElement<T> createNextGenIMEElement(long startTimeCode, long endTimeCode, T object){
@@ -127,6 +158,12 @@ public abstract class NextGenIMEEngine <T>{
     }
 
 
+    /*
+    Returns: 0 = timecode within the element time range
+            >0 = timecode after the element time range
+            <0 = timecode before the element time range
+
+     */
     public abstract int compareCurrentTimeWithItemAtIndex(long timecode, int index);
 
 

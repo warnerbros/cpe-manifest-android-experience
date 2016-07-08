@@ -82,7 +82,7 @@ public class MainFeatureMediaController extends  NextGenMediaController implemen
         if (mContext instanceof Activity) {
             if (bShow) {
                 ((AppCompatActivity)mContext).getSupportActionBar().show();
-            } else if (mContext.getResources().getConfiguration().equals(Configuration.ORIENTATION_LANDSCAPE)){
+            } else {
                 ((AppCompatActivity)mContext).getSupportActionBar().hide();
             }
         }

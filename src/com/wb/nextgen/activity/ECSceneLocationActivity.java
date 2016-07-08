@@ -329,7 +329,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
                     if (locationCount == 0){
                         locationsCountText.setText("");
                     }else {
-                        locationsCountText.setText(String.format(getResources().getString(R.string.locationsCountText), locationCount));
+                        locationsCountText.setText(String.format(getResources().getString(R.string.locations_count_text), locationCount));
                     }
                     //PicassoTrustAll.loadImageIntoView(ECSceneLocationActivity.this, locationItem.locationThumbnail.url, holder.personPhoto);
                     NextGenLogger.d(F.TAG, "Position: " + itemIndex + " loaded: " + locationItem.locationThumbnail.url);

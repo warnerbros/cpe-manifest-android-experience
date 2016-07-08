@@ -173,7 +173,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     }
 
     private void hideShowNextGenView(){
-        if (TabletUtils.isTablet()) {
+        //if (TabletUtils.isTablet()) {
             View nextGenView = findViewById(R.id.next_gen_ime_bottom_view);
             if (nextGenView == null)
                 return;
@@ -190,7 +190,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                     if (mediaController != null)
                         mediaController.hideShowControls(false);
             }
-        }
+        //}
     }
 
     private class ErrorListener implements MediaPlayer.OnErrorListener {
@@ -279,7 +279,15 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
             videoView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    playMainMovie();
+
+                    if (INTERSTITIAL_VIDEO_URI.equals(currentUri)) {
+                        playMainMovie();
+                    }else{
+                        if (mediaController.isShowing())
+                            mediaController.hide();
+                        else
+                            mediaController.show();
+                    }
                     return true;
                 }
             });
