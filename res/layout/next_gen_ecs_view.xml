@@ -21,12 +21,10 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-       <fragment
-           android:layout_width="fill_parent"
-           android:layout_height="fill_parent"
-           android:name="com.wb.nextgen.fragment.ECVideoViewFragment"
-           android:id="@+id/ec_video_view_fragment"
-           />
+        <fragment
+            android:id="@+id/ec_video_view_fragment"
+            android:name="com.wb.nextgen.fragment.ECVideoViewFragment"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"/>
     </LinearLayout>
 </LinearLayout>

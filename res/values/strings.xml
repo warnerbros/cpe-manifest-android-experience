@@ -51,5 +51,6 @@
 	<string name="location_full_map">Location: Full Map</string>
 	<string name="map_string">Map</string>
 	<string name="satellite_string">Satellite</string>
-	<string name="locationsCountText">%s locations</string>
+	<string name="locations_count_text">%s locations</string>
+	<string name="count_down_text">%s\nsec</string>
 </resources>
