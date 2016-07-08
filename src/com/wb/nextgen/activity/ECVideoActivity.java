@@ -51,11 +51,15 @@ public class ECVideoActivity extends AbstractECView implements ECVideoViewFragme
     @Override
     public void onRequestToggleFullscreen() {
         super.onRequestToggleFullscreen();
-        rightVideoFrame.onRequestToggleFullscreen(isContentFullScreen);
+        //rightVideoFrame.onRequestToggleFullscreen(isContentFullScreen);
     }
 
     @Override
     public void onFullScreenChange(boolean bFullscreen){
+        if (!bFullscreen && getSupportActionBar() != null) {
+
+            getSupportActionBar().hide();
+        }
         rightVideoFrame.onFullScreenChange(bFullscreen);
     }
 

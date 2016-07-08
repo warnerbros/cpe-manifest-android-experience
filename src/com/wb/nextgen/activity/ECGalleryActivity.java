@@ -12,11 +12,8 @@ import com.wb.nextgen.fragment.ECGalleryViewFragment;
  * Created by gzcheng on 3/7/16.
  */
 public class ECGalleryActivity extends AbstractECView {
+
     ECGalleryViewFragment galleryFrame;
-    /*private ViewPager galleryViewPager;
-    private MovieMetaData.ExperienceData currentGallery;
-    private GalleryPagerAdapter adapter;
-    private ImageButton fullscreenToggleBtn;*/
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,12 +42,7 @@ public class ECGalleryActivity extends AbstractECView {
     }
     @Override
     public void onRequestToggleFullscreen(){
-/*
-        if (!isContentFullScreen){    // make it full screen
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-        } else {                     // shrink it
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
-        }*/
+
         super.onRequestToggleFullscreen();
         galleryFrame.onRequestToggleFullscreen(isContentFullScreen);
 

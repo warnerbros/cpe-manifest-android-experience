@@ -9,10 +9,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -41,6 +43,9 @@ public class ECVideoViewFragment extends Fragment{
     protected TextView selectedECNameTextView;
     protected TextView ecDurationTextView;
     protected TextView countDownTextView;
+    protected View countDownCountainer;
+    protected View contentMetaFrame;
+    protected ProgressBar countDownProgressBar;
 
     ImageView previewImageView = null;
     RelativeLayout previewFrame = null;
@@ -56,6 +61,8 @@ public class ECVideoViewFragment extends Fragment{
 
     boolean shouldAutoPlay = true;
     FixedAspectRatioFrameLayout.Priority aspectFramePriority = FixedAspectRatioFrameLayout.Priority.WIDTH_PRIORITY;
+
+    private static int COUNT_DOWN_SECONDS = 5;
 
     ECVideoListAdaptor ecsAdaptor = null;
 
@@ -85,7 +92,15 @@ public class ECVideoViewFragment extends Fragment{
         previewFrame = (RelativeLayout)view.findViewById(R.id.ec_video_preview_image_frame);
         previewPlayBtn = (ImageButton)view.findViewById(R.id.ec_video_preview_playButton);
         aspectRatioFrame = (FixedAspectRatioFrameLayout) view.findViewById(R.id.ec_video_aspect_ratio_frame);
+        countDownCountainer = view.findViewById(R.id.count_down_container);
         countDownTextView = (TextView) view.findViewById(R.id.count_down_text_view);
+        countDownProgressBar = (ProgressBar) view.findViewById(R.id.count_down_progressBar);
+        contentMetaFrame = view.findViewById(R.id.ec_content_meta_frame);
+        if (countDownCountainer != null)
+            countDownCountainer.setVisibility(View.INVISIBLE);
+        if (countDownProgressBar != null){
+            countDownProgressBar.setMax(COUNT_DOWN_SECONDS);
+        }
 
         if (aspectRatioFrame != null){
             aspectRatioFrame.setAspectRatioPriority(aspectFramePriority);
@@ -106,7 +121,7 @@ public class ECVideoViewFragment extends Fragment{
         videoView.setCustomMediaController(mediaController);
         videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             private Handler mHandler = new Handler();
-            int counter = 5;
+            int counter = COUNT_DOWN_SECONDS;
             @Override
             public void onCompletion(MediaPlayer mp) {
                 if (ecsAdaptor != null) {
@@ -127,13 +142,14 @@ public class ECVideoViewFragment extends Fragment{
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (countDownTextView != null) {
+                                    if (countDownCountainer != null) {
                                         if (counter >= 0) {
-                                            countDownTextView.setVisibility(View.VISIBLE);
-                                            countDownTextView.setText("In " + counter + " seconds");
+                                            countDownCountainer.setVisibility(View.VISIBLE);
+                                            countDownTextView.setText(String.format(getResources().getString(R.string.count_down_text), counter) );
+                                            countDownProgressBar.setProgress(COUNT_DOWN_SECONDS - counter);
                                         }else {
                                             countDownTextView.setText("");
-                                            countDownTextView.setVisibility(View.GONE);
+                                            countDownCountainer.setVisibility(View.GONE);
                                         }
                                     }
 
@@ -203,6 +219,19 @@ public class ECVideoViewFragment extends Fragment{
         /*Intent intent = getIntent();
         Uri uri = intent.getData();*/
         videoView.setVisibility(View.VISIBLE);
+        videoView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+
+                    if (mediaController.isShowing())
+                        mediaController.hide();
+                    else
+                        mediaController.show();
+
+                return true;
+            }
+        });
         if (bSetOnResume){
             bSetOnResume = false;
             setAudioVisualItem(selectedAVItem);
@@ -249,6 +278,9 @@ public class ECVideoViewFragment extends Fragment{
     public void setAudioVisualItem(MovieMetaData.AudioVisualItem avItem){
         if (avItem != null) {
             selectedAVItem = avItem;
+            if (countDownCountainer != null)
+                countDownCountainer.setVisibility(View.INVISIBLE);
+
             if (selectedECNameTextView != null && videoView != null) {
                 selectedECNameTextView.setText(avItem.getTitle());
                 if (ecDurationTextView != null) {
@@ -266,8 +298,16 @@ public class ECVideoViewFragment extends Fragment{
                         Picasso.with(getActivity()).load(selectedAVItem.getPreviewImageUrl()).fit().into(previewImageView);
 
                     }
+                }else{
+                    if (previewFrame != null) {
+                        previewFrame.setVisibility(View.GONE);
+                        previewPlayBtn.setVisibility(View.GONE);
+                    }
                 }
                 videoView.setVideoURI(Uri.parse(avItem.videoUrl));
+                if (mediaController != null) {
+                    mediaController.reset();
+                }
             }else{
                 bSetOnResume = true;
             }
@@ -276,7 +316,7 @@ public class ECVideoViewFragment extends Fragment{
 
 
     public void onFullScreenChange(boolean bFullscreen){
-        selectedECNameTextView.setVisibility(bFullscreen ? View.GONE : View.VISIBLE);
+        contentMetaFrame.setVisibility(bFullscreen ? View.GONE : View.VISIBLE);
     }
 
     public void onRequestToggleFullscreen(boolean bFullscreen) {
