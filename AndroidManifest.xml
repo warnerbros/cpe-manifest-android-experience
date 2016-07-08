@@ -12,8 +12,8 @@
 		android:requiresSmallestWidthDp="600"/>
 	<!-- Minimum Ice-cream Sandwich 4.0; target Ice-cream Sandwich 4.0 -->
 	<uses-sdk
-		android:minSdkVersion="14"
-		android:targetSdkVersion="14" />
+		android:minSdkVersion="21"
+		android:targetSdkVersion="21" />
 
 	<!-- Support all screens -->
 	<supports-screens

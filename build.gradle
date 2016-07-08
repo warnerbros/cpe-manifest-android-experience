@@ -20,8 +20,8 @@ android {
 	useLibrary 'org.apache.http.legacy'
 
 	defaultConfig {
-		minSdkVersion 19
-		targetSdkVersion 19
+		minSdkVersion 21
+		targetSdkVersion 21
 		// Enabling multidex support.
 		multiDexEnabled true
 		manifestPlaceholders = [HOCKEYAPP_APP_ID: "38d269d0079144528e95c04cdc386452"]
