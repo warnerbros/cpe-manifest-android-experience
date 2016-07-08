@@ -40,7 +40,7 @@
                         android:padding="@dimen/spacing_normal"
                         android:layout_width="@dimen/video_view_count_down_box_width"
                         android:layout_height="@dimen/video_view_count_down_box_width">
-                        <ProgressBar
+                        <com.wb.nextgen.widget.FlipProgressBar
                             android:id="@+id/count_down_progressBar"
                             style="?android:attr/progressBarStyleHorizontal"
                             android:progressDrawable="@drawable/pie_progress"

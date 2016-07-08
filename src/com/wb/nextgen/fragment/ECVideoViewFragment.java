@@ -146,7 +146,7 @@ public class ECVideoViewFragment extends Fragment{
                                         if (counter >= 0) {
                                             countDownCountainer.setVisibility(View.VISIBLE);
                                             countDownTextView.setText(String.format(getResources().getString(R.string.count_down_text), counter) );
-                                            countDownProgressBar.setProgress(COUNT_DOWN_SECONDS - counter);
+                                            countDownProgressBar.setProgress(counter);
                                         }else {
                                             countDownTextView.setText("");
                                             countDownCountainer.setVisibility(View.GONE);
