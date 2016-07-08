@@ -112,7 +112,10 @@ public final class ObservableVideoView extends VideoView implements NextGenPlaye
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		if (customMediaController != null) {
-			customMediaController.show();
+			if (customMediaController.isShowing())
+				customMediaController.hide();
+			else
+				customMediaController.show();
 			return false;
 		}else{
 			return super.onTouchEvent(event);

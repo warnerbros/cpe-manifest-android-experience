@@ -219,19 +219,7 @@ public class ECVideoViewFragment extends Fragment{
         /*Intent intent = getIntent();
         Uri uri = intent.getData();*/
         videoView.setVisibility(View.VISIBLE);
-        videoView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
 
-
-                    if (mediaController.isShowing())
-                        mediaController.hide();
-                    else
-                        mediaController.show();
-
-                return true;
-            }
-        });
         if (bSetOnResume){
             bSetOnResume = false;
             setAudioVisualItem(selectedAVItem);

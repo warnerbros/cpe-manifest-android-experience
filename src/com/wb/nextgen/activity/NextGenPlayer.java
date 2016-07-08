@@ -282,11 +282,6 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
                     if (INTERSTITIAL_VIDEO_URI.equals(currentUri)) {
                         playMainMovie();
-                    }else{
-                        if (mediaController.isShowing())
-                            mediaController.hide();
-                        else
-                            mediaController.show();
                     }
                     return true;
                 }

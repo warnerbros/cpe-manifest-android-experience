@@ -347,7 +347,7 @@ public class CustomMediaController extends FrameLayout {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         show(sDefaultTimeout);
-        return true;
+        return false;
     }
 
     @Override
