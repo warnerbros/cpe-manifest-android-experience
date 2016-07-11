@@ -12,7 +12,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="4"
+            android:layout_weight="3"
             android:orientation="vertical">
 
             <LinearLayout
@@ -29,7 +29,7 @@
                     android:layout_width="0dp"
                     android:paddingLeft="@dimen/spacing_xsmall"
                     android:layout_height="match_parent"
-                    android:layout_weight="3"
+                    android:layout_weight="4"
                     android:orientation="vertical">
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -101,6 +101,24 @@
 
         </LinearLayout>
         <LinearLayout
+            android:layout_weight="2"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:fontFamily="sans-serif-condensed"
+                android:text="@string/actor_gallery"
+                android:textSize="@dimen/textMedium" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/actor_gallery_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent">
+            </android.support.v7.widget.RecyclerView>
+        </LinearLayout>
+        <LinearLayout
             android:layout_weight="3"
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -108,15 +126,14 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="@android:color/white"
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/filmography"
                 android:textSize="@dimen/textMedium" />
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/actor_detail_filmography"
                 android:layout_width="match_parent"
-                android:layout_height="fill_parent"
-                android:orientation="horizontal">
+                android:layout_height="fill_parent">
             </android.support.v7.widget.RecyclerView>
         </LinearLayout>
 

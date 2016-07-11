@@ -16,8 +16,8 @@
             android:layout_height="match_parent"
             android:layout_width="wrap_content"
             android:layout_gravity="center"
-            nextgen:aspectRatioHeight="4"
-            nextgen:aspectRatioWidth="3"
+            nextgen:aspectRatioHeight="1"
+            nextgen:aspectRatioWidth="1"
             nextgen:priority="HEIGHT_PRIORITY">
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -30,7 +30,7 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="fill_parent"
-                        android:id="@+id/person_photo"
+                        android:id="@+id/gallery_photo"
                         android:layout_alignParentTop="true"
                         android:layout_marginRight="5dp"/>
                 </RelativeLayout>

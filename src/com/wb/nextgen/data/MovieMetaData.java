@@ -617,31 +617,36 @@ public class MovieMetaData {
             }
         }
 
-        public CastHeadShot headShot;
+        public List<CastHeadShot> headShots;
         public String biography;
         public List<Filmography> filmogrphies;
         private List<CastSocialMedia> socialMedium;
 
         public String getThumbnailImageUrl(){
-            if (headShot != null){
-                return headShot.largeUrl;
+            if (headShots != null && headShots.size() > 0){
+                return headShots.get(0).largeUrl;
             }else
                 return null;
         }
 
         public String getIconImageUrl(){
-            if (headShot != null){
-                return headShot.iconUrl;
+            if (headShots != null && headShots.size() > 0){
+                return headShots.get(0).iconUrl;
             }else
                 return null;
         }
 
         public String getFullImageUrl(){
-            if (headShot != null){
-                return headShot.fullSizeUrl;
+            if (headShots != null && headShots.size() > 0){
+                return headShots.get(0).fullSizeUrl;
             }else
                 return null;
         }
+
+        public List<CastHeadShot> getGallery(){
+            return headShots;
+        }
+
         public void setSocialMedium(List<CastSocialMedia> socialMedium){
             this.socialMedium = socialMedium;
         }
@@ -658,6 +663,16 @@ public class MovieMetaData {
             }
             return null;
 
+        }
+
+        public boolean hasGotAllFilmPictures(){
+            if (filmogrphies != null && filmogrphies.size() > 0){
+                for(Filmography film : filmogrphies){
+                    if (!film.isFilmPosterRequest())
+                        return false;
+                }
+            }
+            return true;
         }
     }
 

@@ -125,13 +125,13 @@ public class BaselineApiDAO {
 
                     //String bio = getActorBio(params);
                     //List<Filmography> films = getActorFilmnography(params);
-                    CastHeadShot headShot = getHeadShot(params);
+                    List<CastHeadShot> headShots = getHeadShot(params);
                     List<CastSocialMedia> socialMedias = getCastSocialMedia(params);
                     thisData.setSocialMedium(socialMedias);
 
                     // thisData.biography = bio;
                     //thisData.filmogrphies = films;
-                    thisData.headShot = headShot;
+                    thisData.headShots = headShots;
 
                     castsInfoMap.put(castId, thisData);
 
@@ -158,13 +158,13 @@ public class BaselineApiDAO {
 
                     //String bio = getActorBio(params);
                     //List<Filmography> films = getActorFilmnography(params);
-                    CastHeadShot headShot = getHeadShot(params);
+                    List<CastHeadShot> headShots = getHeadShot(params);
                     List<CastSocialMedia> socialMedias = getCastSocialMedia(params);
                     thisData.setSocialMedium(socialMedias);
 
                    // thisData.biography = bio;
                     //thisData.filmogrphies = films;
-                    thisData.headShot = headShot;
+                    thisData.headShots = headShots;
 
                     castsInfoMap.put(castId, thisData);
 
@@ -262,7 +262,11 @@ public class BaselineApiDAO {
         return result;
     }
 
-    public static void getFilmographyPosters(final List<Filmography> sourceFilms, int startIndex, int count, ResultListener<List<FilmPoster>> l){
+    public static void getFilmographyPosters(final List<Filmography> sourceFilms, ResultListener<List<FilmPoster>> l){
+        getFilmographyPosters(sourceFilms, 0, 10, l);
+    }
+
+    private static void getFilmographyPosters(final List<Filmography> sourceFilms, int startIndex, int count, ResultListener<List<FilmPoster>> l){
         final List<Filmography> films = sourceFilms.subList(startIndex, (startIndex + count)< sourceFilms.size() ? startIndex + count : sourceFilms.size());
         Worker.execute(new Callable<List<FilmPoster>>() {
             @Override
@@ -270,14 +274,16 @@ public class BaselineApiDAO {
                 List<FilmPoster> resultList = new ArrayList<FilmPoster>();
                 for (Filmography film: films) {
                     FilmPoster poster = null;
-
-                    try {
-                        poster = getFilmDetail(film.projectId);
-                    }catch (Exception ex){}
-                    if (poster != null && !StringHelper.isEmpty(poster.imageId)) {
-                        film.setFilmPoster(poster);
-                    }else{
-                        poster = FilmPoster.getDefaultEmptyPoster();
+                    if (!film.isFilmPosterRequest()) {
+                        try {
+                            poster = getFilmDetail(film.projectId);
+                        } catch (Exception ex) {
+                        }
+                        if (poster != null && !StringHelper.isEmpty(poster.imageId)) {
+                            film.setFilmPoster(poster);
+                        } else {
+                            poster = FilmPoster.getDefaultEmptyPoster();
+                        }
                     }
                     resultList.add(poster);
                 }
@@ -286,15 +292,21 @@ public class BaselineApiDAO {
         }, l);
     }
 
-    private static CastHeadShot getHeadShot(List<NameValuePair> params) throws JSONException, IOException {
+    private static List<CastHeadShot> getHeadShot(List<NameValuePair> params) throws JSONException, IOException {
 
         String result = HttpHelper.getFromUrl(BASELINE_DOMAIN + Endpoints.GetProfileImages, params);
         //JSONObject json = new JSONObject(result);
         JSONArray jsonArray = new JSONArray(result);
         if (jsonArray != null) {
-            JSONObject object = (JSONObject) jsonArray.get(0);
+
+            Type listType = new TypeToken<ArrayList<CastHeadShot>>() {
+            }.getType();
+
             Gson gson = new GsonBuilder().create();
-            return gson.fromJson(object.toString(), CastHeadShot.class);
+
+            List<CastHeadShot> headShots = gson.fromJson(result, listType);
+
+            return headShots;
 
         }
 
