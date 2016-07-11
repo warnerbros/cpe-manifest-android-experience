@@ -349,7 +349,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
         public void onClick(View v) {
             if (currentItem != null){
                 if (currentItem instanceof SceneLocation){
-                    mapViewFragment.setSelectionFromSlider(itemIndex);
+                    mapViewFragment.setSelectionFromSlider((SceneLocation)currentItem);
                     locationECsAdapter.setSceneLocation((SceneLocation)currentItem);
                     locationECsAdapter.notifyDataSetChanged();
                 }else if (currentItem instanceof MovieMetaData.AudioVisualItem){

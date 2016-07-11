@@ -42,7 +42,7 @@ import java.util.List;
 /**
  * Created by gzcheng on 3/31/16.
  */
-public class ECSceneLocationMapFragment extends Fragment implements AdapterView.OnItemSelectedListener, View.OnClickListener, GoogleMap.OnMarkerClickListener{
+public class ECSceneLocationMapFragment extends Fragment implements /*AdapterView.OnItemSelectedListener,*/ View.OnClickListener, GoogleMap.OnMarkerClickListener{
 
     public static interface OnSceneLocationSelectedListener{
         void onSceneLocationIndexSelected(int selectedIndex);
@@ -51,12 +51,12 @@ public class ECSceneLocationMapFragment extends Fragment implements AdapterView.
 
     protected MapView mapView;
 
-    private Spinner locationSpinner;
+    //private Spinner locationSpinner;
     private Button mapButton;
     private Button satelliteButton;
 
     private List<SceneLocation> sceneLocations;
-    private ArrayAdapter<String> spinnerAdaptor;
+    //private ArrayAdapter<String> spinnerAdaptor;
     private OnSceneLocationSelectedListener onSceneLocationSelectedListener;
     private HashMap<LatLng, SceneLocation> markerLocationMap = new HashMap<LatLng, SceneLocation>();
 
@@ -78,19 +78,19 @@ public class ECSceneLocationMapFragment extends Fragment implements AdapterView.
             //mapView.setOn
         }
 
-        locationSpinner = (Spinner) view.findViewById(R.id.scene_locations_spinner);
+        //locationSpinner = (Spinner) view.findViewById(R.id.scene_locations_spinner);
 
-        locationSpinner.setOnItemSelectedListener(this);
+        //locationSpinner.setOnItemSelectedListener(this);
 
         if (sceneLocations != null) {
             List<String> list = new ArrayList<String>();
             for (SceneLocation scLoc : sceneLocations) {
                 list.add(scLoc.name);
             }
-            spinnerAdaptor = new ArrayAdapter<String>(getActivity(), R.layout.location_spinner_item, list);
+            /*spinnerAdaptor = new ArrayAdapter<String>(getActivity(), R.layout.location_spinner_item, list);
             spinnerAdaptor.setDropDownViewResource(R.layout.location_spinner_dropdown_item);
             if (locationSpinner != null)
-                locationSpinner.setAdapter(spinnerAdaptor);
+                locationSpinner.setAdapter(spinnerAdaptor);*/
             setupPins();
         }
 
@@ -124,8 +124,7 @@ public class ECSceneLocationMapFragment extends Fragment implements AdapterView.
         if (mapView != null) {
             mapView.onPause();
         }
-        locationSpinner.setOnItemSelectedListener(null);
-        //locationSpinner.setAdapter(null);
+        //locationSpinner.setOnItemSelectedListener(null);
 
     }
 
@@ -134,8 +133,7 @@ public class ECSceneLocationMapFragment extends Fragment implements AdapterView.
         super.onResume();
         if(mapView != null)
             mapView.onResume();
-        locationSpinner.setOnItemSelectedListener(this);
-        //locationSpinner.setAdapter(spinnerAdaptor);
+        //locationSpinner.setOnItemSelectedListener(this);
     }
 
     @Override
@@ -170,7 +168,7 @@ public class ECSceneLocationMapFragment extends Fragment implements AdapterView.
     public void setOnSceneLocationSelectedListener(OnSceneLocationSelectedListener listener){
         onSceneLocationSelectedListener = listener;
     }
-
+    /*
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 
         if (view != null && view.getParent() != null && view.getParent() == locationSpinner) {
@@ -181,14 +179,17 @@ public class ECSceneLocationMapFragment extends Fragment implements AdapterView.
                 onSceneLocationSelectedListener.onSceneLocationIndexSelected(pos);
             }
         }
-    }
+    }*/
 
     public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback
     }
 
-    public void setSelectionFromSlider(int index){
-        if (locationSpinner != null){
+    public void setSelectionFromSlider(SceneLocation location){
+        //SceneLocation selectedSL = sceneLocations.get(parentIndex).childrenSceneLocations.get(index);
+
+        setLocationItem(location.name, location);
+    /*    if (locationSpinner != null){
             int parentIndex = locationSpinner.getSelectedItemPosition();
             if (parentIndex == 0) {
                 locationSpinner.setSelection(index + 1);
@@ -196,7 +197,7 @@ public class ECSceneLocationMapFragment extends Fragment implements AdapterView.
             SceneLocation selectedSL = sceneLocations.get(parentIndex).childrenSceneLocations.get(index);
 
             setLocationItem(selectedSL.name, selectedSL);
-        }
+        }*/
     }
 
     public void setSceneLocations(List<SceneLocation> locations){
@@ -270,7 +271,7 @@ public class ECSceneLocationMapFragment extends Fragment implements AdapterView.
                 onSceneLocationSelectedListener.onSceneLocationSelected(sl);
             }
             setLocationItem(sl.name, sl);
-            if (locationSpinner != null){
+            /*if (locationSpinner != null){
                 SceneLocation outMostParent = sl.getOuterMostParent();
                 for(int i = 0; i < sceneLocations.size(); i++){
                     if (outMostParent.equals(sceneLocations.get(i))){
@@ -278,7 +279,7 @@ public class ECSceneLocationMapFragment extends Fragment implements AdapterView.
                         break;
                     }
                 }
-            }
+            }*/
         }
         return false;
     }
