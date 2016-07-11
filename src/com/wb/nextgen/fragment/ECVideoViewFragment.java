@@ -305,6 +305,7 @@ public class ECVideoViewFragment extends Fragment{
 
     public void onFullScreenChange(boolean bFullscreen){
         contentMetaFrame.setVisibility(bFullscreen ? View.GONE : View.VISIBLE);
+
     }
 
     public void onRequestToggleFullscreen(boolean bFullscreen) {

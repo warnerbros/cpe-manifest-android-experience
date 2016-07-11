@@ -143,7 +143,11 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
 
 
     public void onFullScreenChange(boolean bFullscreen){
-
+        if (currentFragment instanceof ECVideoViewFragment){
+            ((ECVideoViewFragment)currentFragment).onFullScreenChange(bFullscreen);
+        } else if (currentFragment instanceof ECGalleryViewFragment){
+            ((ECGalleryViewFragment)currentFragment).onRequestToggleFullscreen(bFullscreen);
+        }
     }
 
     public void onSceneLocationIndexSelected(int selectedIndex){

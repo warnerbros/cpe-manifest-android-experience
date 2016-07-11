@@ -67,6 +67,8 @@ public class CustomMediaController extends FrameLayout {
     private ImageButton         mFullscreenButton;
     private Handler             mHandler = new MessageHandler(this);
 
+    private boolean             mIsFullScreen = false;
+
     public CustomMediaController(Context context, AttributeSet attrs) {
         super(context, attrs);
         mRoot = null;
@@ -102,6 +104,10 @@ public class CustomMediaController extends FrameLayout {
         mPlayer = player;
         updatePausePlay();
         updateFullScreen();
+    }
+
+    public void setIsFullScreen(boolean bFullScreen){
+        mIsFullScreen = bFullScreen;
     }
 
     /**
@@ -417,6 +423,7 @@ public class CustomMediaController extends FrameLayout {
     private View.OnClickListener mFullscreenListener = new View.OnClickListener() {
         public void onClick(View v) {
             doToggleFullscreen();
+            mIsFullScreen = !mIsFullScreen;
             show(sDefaultTimeout);
         }
     };
@@ -442,7 +449,7 @@ public class CustomMediaController extends FrameLayout {
             return;
         }
 
-        if (mPlayer.isFullScreen()) {
+        if (mIsFullScreen) {
             mFullscreenButton.setImageResource(R.drawable.icon_player_minimize);
         }
         else {

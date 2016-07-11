@@ -13,36 +13,43 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical">
-        <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
-            xmlns:nextgen="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/gallery_aspect_ratio_frame"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:layout_gravity="center"
-            nextgen:aspectRatioHeight="9"
-            nextgen:aspectRatioWidth="16"
-            nextgen:priority="WIDTH_PRIORITY">
-            <android.support.v4.view.ViewPager
-                android:id="@+id/next_gen_gallery_view_pager"
-                android:background="@android:color/transparent"
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4">
+            <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
+                xmlns:nextgen="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/gallery_aspect_ratio_frame"
+                android:layout_centerInParent="true"
+                android:layout_height="fill_parent"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent" >
-            </android.support.v4.view.ViewPager>
-            <ImageButton
-                android:id="@+id/gallery_fullscreen_toggle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|right"
-                android:src="@drawable/expand_shrink"
-                android:background="@android:color/transparent"
-                android:text="TEST"/>
-        </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
+                android:layout_gravity="center"
+                nextgen:aspectRatioHeight="9"
+                nextgen:aspectRatioWidth="16"
+                nextgen:priority="HEIGHT_PRIORITY">
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/next_gen_gallery_view_pager"
+                    android:background="@android:color/transparent"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" >
+                </android.support.v4.view.ViewPager>
+                <ImageButton
+                    android:id="@+id/gallery_fullscreen_toggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|right"
+                    android:src="@drawable/expand_shrink"
+                    android:background="@android:color/transparent"
+                    android:text="TEST"/>
+            </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/ec_content_name"
             android:textColor="@android:color/white"
             android:textSize="@dimen/textLarge"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="0dp"
+            android:layout_weight="1" />
     </LinearLayout>
 </RelativeLayout>

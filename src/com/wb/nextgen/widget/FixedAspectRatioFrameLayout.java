@@ -78,6 +78,7 @@ public class FixedAspectRatioFrameLayout extends FrameLayout
 
         int finalWidth, finalHeight;
 
+
         if (!bKeepRatioWhenFullScreen &&
                 priority == Priority.WIDTH_PRIORITY && originalWidth == NextGenApplication.getScreenWidth(NextGenApplication.getContext()) &&
                 NextGenApplication.getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)  {       // this is full screen when width priority
@@ -105,14 +106,28 @@ public class FixedAspectRatioFrameLayout extends FrameLayout
                         MeasureSpec.makeMeasureSpec(originalHeight, MeasureSpec.EXACTLY));
             }
         }else {
+            WindowManager wm = (WindowManager) NextGenApplication.getContext().getSystemService(Context.WINDOW_SERVICE);
+            Display display = wm.getDefaultDisplay();
+            DisplayMetrics metrics = new DisplayMetrics();
+            display.getMetrics(metrics);
 
             if (priority == Priority.WIDTH_PRIORITY) {
                 finalHeight = originalWidth * mAspectRatioHeight / mAspectRatioWidth;
                 finalWidth = originalWidth;
+                if (finalHeight > metrics.heightPixels){
+                    finalWidth = originalHeight * mAspectRatioWidth / mAspectRatioHeight;
+                    finalHeight = originalHeight;
+
+                }
 
             } else {
                 finalWidth = originalHeight * mAspectRatioWidth / mAspectRatioHeight;
                 finalHeight = originalHeight;
+                if (finalWidth > metrics.widthPixels){
+                    finalHeight = originalWidth * mAspectRatioHeight / mAspectRatioWidth;
+                    finalWidth = originalWidth;
+
+                }
             }
 
             super.onMeasure(

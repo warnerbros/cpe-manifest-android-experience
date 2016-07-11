@@ -124,6 +124,7 @@ public class ECGalleryViewFragment extends AbstractNextGenFragment {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
         }*/
         fullscreenToggleBtn.setImageDrawable(getResources().getDrawable(isContentFullScreen ? R.drawable.controller_shrink : R.drawable.controller_expand));
+        galleryNameTextView.setVisibility(isContentFullScreen ? View.GONE : View.VISIBLE);
         adapter.notifyDataSetChanged();
 
     }
