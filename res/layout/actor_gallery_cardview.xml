@@ -10,7 +10,8 @@
         android:layout_height="match_parent"
         android:background="@android:color/transparent"
         cardview:cardBackgroundColor="@android:color/transparent"
-        android:id="@+id/cv">
+        android:id="@+id/cv"
+        android:duplicateParentState="true">
         <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
             xmlns:nextgen="http://schemas.android.com/apk/res-auto"
             android:layout_height="match_parent"
@@ -18,25 +19,23 @@
             android:layout_gravity="center"
             nextgen:aspectRatioHeight="1"
             nextgen:aspectRatioWidth="1"
-            nextgen:priority="HEIGHT_PRIORITY">
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:paddingLeft="@dimen/spacing_small"
-                android:paddingRight="@dimen/spacing_small">
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent">
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="fill_parent"
-                        android:id="@+id/gallery_photo"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginRight="5dp"/>
-                </RelativeLayout>
+            nextgen:priority="HEIGHT_PRIORITY"
+            android:duplicateParentState="true">
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/gallery_photo"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="5dp"/>
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@drawable/selected_frame"
+                android:duplicateParentState="true"
+                android:layout_marginRight="5dp"/>
 
 
-            </RelativeLayout>
         </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
     </android.support.v7.widget.CardView>
 

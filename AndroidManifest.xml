@@ -167,6 +167,12 @@
 			android:exported="false"
 			android:theme="@style/ExtraActionBar" >
 		</activity>
+		<activity android:name=".activity.ActorGalleryActivity"
+			android:screenOrientation="sensorLandscape"
+			android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+			android:exported="false"
+			android:theme="@style/ExtraActionBar" >
+		</activity>
 		<activity android:name=".activity.TheTakeShopCategoryActivity"
 			android:screenOrientation="sensorLandscape"
 			android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"

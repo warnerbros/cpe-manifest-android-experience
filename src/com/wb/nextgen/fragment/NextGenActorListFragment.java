@@ -92,7 +92,7 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment imple
 
         if (getActivity() instanceof NextGenFragmentTransactionInterface){
             NextGenActorDetailFragment target = new NextGenActorDetailFragment();
-
+            target.setbEnableActorGallery(true);
             target.setDetailObject((CastData) selectedObject);
             ((NextGenFragmentTransactionInterface)getActivity()).transitRightFragment(target);
             ((NextGenFragmentTransactionInterface)getActivity()).resetUI(false);

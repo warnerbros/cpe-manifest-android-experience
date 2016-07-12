@@ -19,10 +19,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 
+import com.wb.nextgen.activity.ActorGalleryActivity;
+import com.wb.nextgen.adapter.ActorDetailGalleryRecyclerAdapter;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.data.MovieMetaData.Filmography;
 import com.wb.nextgen.data.MovieMetaData.CastData;
@@ -43,7 +46,7 @@ import java.util.List;
 /**
  * Created by gzcheng on 1/13/16.
  */
-public class NextGenActorDetailFragment extends Fragment implements View.OnClickListener{
+public class NextGenActorDetailFragment extends Fragment implements View.OnClickListener, ActorDetailGalleryRecyclerAdapter.ActorGalleryRecyclerSelectionListener{
 
     CastData actorOjbect;
     ImageView fullImageView;
@@ -56,17 +59,21 @@ public class NextGenActorDetailFragment extends Fragment implements View.OnClick
 
     RecyclerView actorGalleryRecyclerView;
     LinearLayoutManager actorGalleryLayoutManager;
-    ActorDetailGalleryAdapter actorGalleryAdaptor;
+    ActorDetailGalleryRecyclerAdapter actorGalleryAdaptor;
 
 
     ImageButton facebookBtn;
     ImageButton twitterBtn;
     ImageButton instagramBtn;
 
+    boolean bEnableActorGallery = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        if (bEnableActorGallery){
+
+        }
         return inflater.inflate(R.layout.next_gen_actor_detail_view, container, false);
     }
 
@@ -78,6 +85,7 @@ public class NextGenActorDetailFragment extends Fragment implements View.OnClick
         actorNameTextView = (TextView)view.findViewById(R.id.actor_real_name_text);
         filmographyRecyclerView = (RecyclerView)view.findViewById(R.id.actor_detail_filmography);
         actorGalleryRecyclerView = (RecyclerView) view.findViewById(R.id.actor_gallery_recycler);
+        View actorGalleryFrame = view.findViewById(R.id.actor_gallery_recycler_frame);
 
         facebookBtn = (ImageButton)view.findViewById(R.id.actor_page_facebook_button);
         twitterBtn = (ImageButton)view.findViewById(R.id.actor_page_twitter_button);
@@ -99,17 +107,23 @@ public class NextGenActorDetailFragment extends Fragment implements View.OnClick
             filmographyRecyclerView.setAdapter(filmographyAdaptor);
         }
 
-        if (actorGalleryRecyclerView != null){
+        if (actorGalleryRecyclerView != null && bEnableActorGallery){
             actorGalleryLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
             actorGalleryRecyclerView.setLayoutManager(actorGalleryLayoutManager);
-            actorGalleryAdaptor = new ActorDetailGalleryAdapter();
+            actorGalleryAdaptor = new ActorDetailGalleryRecyclerAdapter(getActivity(), this);
             actorGalleryRecyclerView.setAdapter(actorGalleryAdaptor);
+        } else if (actorGalleryFrame != null){
+            actorGalleryFrame.setVisibility(View.GONE);
         }
         reloadDetail(actorOjbect);
     }
 
     public void setDetailObject(CastData object){
         actorOjbect = object;
+    }
+
+    public void setbEnableActorGallery(boolean enable){
+        bEnableActorGallery = enable;
     }
 
     public void reloadDetail(CastData object){
@@ -161,8 +175,13 @@ public class NextGenActorDetailFragment extends Fragment implements View.OnClick
             }else
                 twitterBtn.setVisibility(View.GONE);
 
-            if (actorOjbect.getBaselineCastData().getGallery() != null){
-                actorGalleryAdaptor.setCastHeadShots(actorOjbect.getBaselineCastData().getGallery());
+            if (actorOjbect.getBaselineCastData().getGallery() != null && bEnableActorGallery){
+                List<MovieMetaData.CastHeadShot> headShots = actorOjbect.getBaselineCastData().getGallery();
+                if (headShots != null && headShots.size() > 1)
+                    actorGalleryAdaptor.setCastHeadShots(headShots.subList(1, headShots.size()-1));
+                else{
+                    actorGalleryAdaptor.setCastHeadShots(null);
+                }
                 actorGalleryAdaptor.notifyDataSetChanged();
             }
 
@@ -294,68 +313,19 @@ public class NextGenActorDetailFragment extends Fragment implements View.OnClick
 
     }
 
-
-
-    public class ActorGalleryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        CardView cv;
-        ImageView personPhoto;
-        MovieMetaData.CastHeadShot headShot;
-
-        ActorGalleryViewHolder(View itemView) {
-            super(itemView);
-            cv = (CardView)itemView.findViewById(R.id.cv);
-            personPhoto = (ImageView)itemView.findViewById(R.id.gallery_photo);
-            itemView.setOnClickListener(this);
-        }
-
-        public void setCastHeadShot(MovieMetaData.CastHeadShot headShot, int position){
-            this.headShot = headShot;
-            Glide.with(getActivity()).load(headShot.mediumUrl).centerCrop().into(personPhoto);
-
-        }
-
-        @Override
-        public void onClick(View v) {
-
-        }
-    }
-
-    public class ActorDetailGalleryAdapter extends RecyclerView.Adapter<ActorGalleryViewHolder>{
-
-        List<MovieMetaData.CastHeadShot> headShots = null;
-
-        public void setCastHeadShots(List<MovieMetaData.CastHeadShot> headShots){
-            this.headShots = headShots;
-        }
-
-        @Override
-        public ActorGalleryViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.actor_gallery_cardview, viewGroup, false);
-            ActorGalleryViewHolder pvh = new ActorGalleryViewHolder(v);
-            return pvh;
-        }
-
-        public void onBindViewHolder(ActorGalleryViewHolder holder, int position){
-
-
-            if (headShots != null && headShots.size() > position) {
-                MovieMetaData.CastHeadShot headShot = headShots.get(position);
-                holder.setCastHeadShot(headShot, position);
-
-            }
-
-        }
-
-        public int getItemCount(){
-            if (headShots != null )
-                return headShots.size();
-            else
-                return 0;
-        }
-
-    }
     public CastData getDetailObject(){
         return actorOjbect;
+    }
+
+
+    @Override
+    public void onItemSelected(MovieMetaData.CastHeadShot headShot, int index){
+        Intent actorGalleryIntent = new Intent(getActivity(), ActorGalleryActivity.class);
+        String actorGallery = (new Gson()).toJson(actorOjbect.getBaselineCastData().getGallery());
+        actorGalleryIntent.putExtra(ActorGalleryActivity.HEAD_SHOTS_KEY, actorGallery);
+        actorGalleryIntent.putExtra(ActorGalleryActivity.CURRENT_INDEX_KEY, index + 1);
+
+        startActivity(actorGalleryIntent);
     }
 
     @Override

@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
     <ImageView
         android:id="@+id/actor_detail_bg_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
     <LinearLayout
-        android:orientation="vertical" android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
         android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
@@ -101,9 +102,10 @@
 
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/actor_gallery_recycler_frame"
             android:layout_weight="2"
             android:orientation="vertical"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="0dp">
             <TextView
                 android:layout_width="match_parent"
@@ -121,7 +123,7 @@
         <LinearLayout
             android:layout_weight="3"
             android:orientation="vertical"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="0dp">
             <TextView
                 android:layout_width="match_parent"
