@@ -233,18 +233,22 @@ public class BaselineApiDAO {
 
         List<Filmography> result = new ArrayList<Filmography>();
 
+        HashMap<String, String> projectIdHash = new HashMap<String, String>();
         String response = HttpHelper.getFromUrl(BASELINE_DOMAIN + Endpoints.GetFilmography, params);
 
         JSONArray jsonArray = new JSONArray(response);
         if (jsonArray != null) {
-            for (int i = jsonArray.length() - 1; i >= Math.max(0, jsonArray.length()-10); i--) {
+            for (int i = jsonArray.length() - 1; i >= 0 && result.size() <= 10; i--) {
                 try {
                     JSONObject object = (JSONObject) jsonArray.get(i);
                     Gson gson = new GsonBuilder().create();
                     Filmography film = gson.fromJson(object.toString(), Filmography.class);
                     if (film == null)
                         continue;
-                    result.add(film);
+                    if (!projectIdHash.containsKey(film.projectId)) {
+                        result.add(film);
+                        projectIdHash.put(film.projectId, film.projectId);
+                    }
                 } catch (JsonSyntaxException jex){
                     NextGenLogger.e(F.TAG_API, jex.getLocalizedMessage());
                 } catch (JSONException jex2){
@@ -258,17 +262,6 @@ public class BaselineApiDAO {
         return result;
     }
 
-
-    public static void getFilmographyPosters(final List<Filmography> films, ResultListener<List<FilmPoster>> l){
-
-        Worker.execute(new Callable<List<FilmPoster>>() {
-            @Override
-            public List<FilmPoster> call() throws Exception {
-
-                return getFilmographyPostesSync(films);
-            }
-        }, l);
-    }
 
     private static List<FilmPoster> getFilmographyPostesSync(final List<Filmography> films){
         List<FilmPoster> resultList = new ArrayList<FilmPoster>();

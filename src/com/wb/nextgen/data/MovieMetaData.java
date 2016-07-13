@@ -199,6 +199,7 @@ public class MovieMetaData {
                 List<ECGalleryItem> galleryItems = new ArrayList<ECGalleryItem>();
                 List<AudioVisualItem> avItems = new ArrayList<AudioVisualItem>();
                 List<LocationItem> locationItems = new ArrayList<LocationItem>();
+                String subtype = null;
                 InventoryMetadataType experienceMetaData = metaDataAssetsMap.get(experience.getContentID());
 
                 if (experience.getGallery() != null && experience.getGallery().size() > 0) {
@@ -215,8 +216,14 @@ public class MovieMetaData {
                                 pictureItems.add(pictureItem);
                             }
                         }
-                        ECGalleryItem thisItem = new ECGalleryItem(experience.getExperienceID(), galleryMataData, pictureItems);
+
+                        if (gallery.getSubType() != null && gallery.getSubType().size() > 0){
+                            subtype = gallery.getSubType().get(0);
+                        }
+
+                        ECGalleryItem thisItem = new ECGalleryItem(experience.getExperienceID(), galleryMataData, pictureItems, subtype);
                         galleryItems.add(thisItem);
+
                         galleryIdToGalleryItemMap.put(gallery.getGalleryID(), thisItem);
                     }
                 }
@@ -1011,9 +1018,11 @@ public class MovieMetaData {
 
     static public class ECGalleryItem extends PresentationDataItem{
         final public List<PictureItem> galleryImages = new ArrayList<PictureItem>();
-        public ECGalleryItem(String parentExperienceId, InventoryMetadataType metaData, List<PictureItem> galleryImages){
+        final public String subType;
+        public ECGalleryItem(String parentExperienceId, InventoryMetadataType metaData, List<PictureItem> galleryImages, String subType){
             super(metaData, parentExperienceId);
             this.galleryImages.addAll(galleryImages);
+            this.subType = subType;
             if (metaData != null) {
                 BasicMetadataInfoType localizedInfo = metaData != null ? metaData.getBasicMetadata().getLocalizedInfo().get(0) : null;
                 if (localizedInfo != null && localizedInfo.getArtReference() != null && localizedInfo.getArtReference().size() > 0) {
@@ -1030,6 +1039,10 @@ public class MovieMetaData {
                 }
             }
             return posterImgUrl;
+        }
+
+        public boolean isTurnTable(){
+            return "Turntable".equalsIgnoreCase(subType);
         }
 
     }

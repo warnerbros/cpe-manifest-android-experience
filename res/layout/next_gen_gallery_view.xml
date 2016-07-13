@@ -22,10 +22,10 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <fragment
+        <!--<fragment
             android:id="@+id/ec_gallery_left_frame"
             android:name="com.wb.nextgen.fragment.ECGalleryViewFragment"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"/>
+            android:layout_height="fill_parent"/>-->
     </LinearLayout>
 </LinearLayout>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/black">
+
+    <ImageView
+        android:id="@+id/ec_gallery_frame_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <LinearLayout
+        android:id="@+id/next_gen_gallery_content_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4">
+            <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
+                xmlns:nextgen="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/gallery_aspect_ratio_frame"
+                android:layout_centerInParent="true"
+                android:layout_height="fill_parent"
+                android:layout_width="fill_parent"
+                android:layout_gravity="center"
+                nextgen:aspectRatioHeight="9"
+                nextgen:aspectRatioWidth="16"
+                nextgen:priority="HEIGHT_PRIORITY">
+                <ImageView
+                    android:id="@+id/turn_table_image_view"
+                    android:scaleType="fitXY"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <!--<android.support.v4.view.ViewPager
+                    android:id="@+id/next_gen_gallery_view_pager"
+                    android:background="@android:color/transparent"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" >
+                </android.support.v4.view.ViewPager>
+                <ImageButton
+                    android:id="@+id/gallery_fullscreen_toggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|right"
+                    android:src="@drawable/expand_shrink"
+                    android:background="@android:color/transparent"
+                    android:text="TEST"/>-->
+
+            </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
+            <RelativeLayout
+                android:layout_alignParentBottom="true"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+                <SeekBar
+                    android:id="@+id/turn_table_seekbar"
+                    android:padding="@dimen/spacing_normal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@+id/gallery_fullscreen_toggle"/>
+                <ImageButton
+                    android:id="@+id/gallery_fullscreen_toggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/expand_shrink"
+                    android:background="@android:color/transparent"
+                    android:text="TEST"/>
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/ec_content_name"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/textLarge"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+    </LinearLayout>
+</RelativeLayout>

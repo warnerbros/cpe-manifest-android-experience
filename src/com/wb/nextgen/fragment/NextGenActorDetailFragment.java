@@ -259,6 +259,9 @@ public class NextGenActorDetailFragment extends Fragment implements View.OnClick
         @Override
         public void onClick(View v) {
             final String url = filmInfo.movieInfoUrl;
+            if (!StringHelper.isEmpty(url)){
+                return;
+            }
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
             alertDialogBuilder.setTitle(getResources().getString(R.string.dialog_leave_app));
             alertDialogBuilder.setMessage(getResources().getString(R.string.dialog_follow_link));

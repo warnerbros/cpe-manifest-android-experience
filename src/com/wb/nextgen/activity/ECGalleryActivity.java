@@ -4,21 +4,29 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.widget.LinearLayout;
+
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.MovieMetaData;
+import com.wb.nextgen.fragment.AbstractECGalleryViewFragment;
 import com.wb.nextgen.fragment.ECGalleryViewFragment;
+import com.wb.nextgen.fragment.ECTurnTableViewFragment;
+import com.wb.nextgen.util.utils.NextGenFragmentTransactionEngine;
 
 /**
  * Created by gzcheng on 3/7/16.
  */
 public class ECGalleryActivity extends AbstractECView {
 
-    ECGalleryViewFragment galleryFrame;
+    AbstractECGalleryViewFragment galleryFragment;
+    NextGenFragmentTransactionEngine nextGenFragmentTransactionEngine;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        galleryFrame = (ECGalleryViewFragment) getSupportFragmentManager().findFragmentById(R.id.ec_gallery_left_frame);
+        nextGenFragmentTransactionEngine = new NextGenFragmentTransactionEngine(this);
+        //galleryFrame = (ECGalleryViewFragment) getSupportFragmentManager().findFragmentById(R.id.ec_gallery_left_frame);
 
     }
 
@@ -44,7 +52,7 @@ public class ECGalleryActivity extends AbstractECView {
     public void onRequestToggleFullscreen(){
 
         super.onRequestToggleFullscreen();
-        galleryFrame.onRequestToggleFullscreen(isContentFullScreen);
+        galleryFragment.onRequestToggleFullscreen(isContentFullScreen);
 
     }
 
@@ -56,8 +64,36 @@ public class ECGalleryActivity extends AbstractECView {
     @Override
     public void onLeftListItemSelected(MovieMetaData.ExperienceData ec){
         if (ec != null){
-           galleryFrame.setCurrentGallery(ec.galleryItems.get(0));
+            MovieMetaData.ECGalleryItem galleryItem = ec.galleryItems.get(0);
+            if (galleryItem.isTurnTable()){
+                if (galleryFragment != null && galleryFragment instanceof ECGalleryViewFragment){
+                    galleryFragment = new ECTurnTableViewFragment();
+                    super.onBackPressed();
+                    nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.next_gen_gallery_content_view, galleryFragment);
+                } else if (galleryFragment == null){
+                    galleryFragment = new ECTurnTableViewFragment();
+                    nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.next_gen_gallery_content_view, galleryFragment);
+                }
+            } else {
+                if (galleryFragment != null && galleryFragment instanceof ECTurnTableViewFragment){
+                    galleryFragment = new ECGalleryViewFragment();
+                    super.onBackPressed();
+                    nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.next_gen_gallery_content_view, galleryFragment);
+                } else if (galleryFragment == null){
+                    galleryFragment = new ECGalleryViewFragment();
+                    nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.next_gen_gallery_content_view, galleryFragment);
+                }
+            }
+            galleryFragment.setCurrentGallery(galleryItem);
+
+
+           //galleryFrame.setCurrentGallery(ec.galleryItems.get(0));
 
         }
+    }
+
+    @Override
+    public void onBackPressed(){
+        finish();
     }
 }

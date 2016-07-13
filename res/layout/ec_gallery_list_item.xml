@@ -4,18 +4,28 @@
     xmlns:nextgen="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.wb.nextgen.widget.SelectedOverlayImageView
-        android:id="@+id/ec_list_image"
-        android:layout_width="fill_parent"
-        android:layout_height="130dp"
-        android:layout_centerHorizontal="true"
-        nextgen:inActiveOverlayColor="@color/inactive_mask_color"
-        android:scaleType="fitCenter"
-        android:duplicateParentState="true"
-        android:src="@drawable/ec_sample_thumbnail"/>
+    <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
+        xmlns:nextgen="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/ec_list_fixed_frame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        nextgen:aspectRatioHeight="3"
+        nextgen:aspectRatioWidth="4"
+        nextgen:priority="WIDTH_PRIORITY">
+        <com.wb.nextgen.widget.SelectedOverlayImageView
+            android:id="@+id/ec_list_image"
+            android:layout_width="fill_parent"
+            android:layout_height="130dp"
+            android:layout_centerHorizontal="true"
+            nextgen:inActiveOverlayColor="@color/inactive_mask_color"
+            android:scaleType="fitCenter"
+            android:duplicateParentState="true"
+            android:src="@drawable/ec_sample_thumbnail"/>
+    </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
+
     <TextView
         android:id="@+id/ec_list_name_text"
-        android:layout_below="@+id/ec_list_image"
+        android:layout_below="@+id/ec_list_fixed_frame"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/white"

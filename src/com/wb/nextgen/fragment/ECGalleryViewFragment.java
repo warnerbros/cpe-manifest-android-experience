@@ -32,12 +32,9 @@ import java.util.List;
 /**
  * Created by gzcheng on 3/31/16.
  */
-public class ECGalleryViewFragment extends AbstractNextGenFragment {
+public class ECGalleryViewFragment extends AbstractECGalleryViewFragment {
     private ViewPager galleryViewPager;
-    private MovieMetaData.ECGalleryItem currentGallery;
     private GalleryPagerAdapter adapter;
-    private ImageButton fullscreenToggleBtn;
-    private TextView galleryNameTextView;
     FixedAspectRatioFrameLayout aspectRatioFrame = null;
     ImageView bgImageView;
 
@@ -45,7 +42,6 @@ public class ECGalleryViewFragment extends AbstractNextGenFragment {
     FixedAspectRatioFrameLayout.Priority aspectFramePriority = FixedAspectRatioFrameLayout.Priority.WIDTH_PRIORITY;
 
     boolean bSetOnResume= false;
-    boolean shouldHideMetaData = false;
     //private List<MovieMetaData.ECGalleryImageItem>
 
     public void setBGImageUrl(String url){
@@ -59,25 +55,10 @@ public class ECGalleryViewFragment extends AbstractNextGenFragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        //currentGallery = ecGroupData.getChildrenContents().get(0);
+        super.onViewCreated(view, savedInstanceState);
         galleryViewPager = (ViewPager) view.findViewById(R.id.next_gen_gallery_view_pager);
         adapter = new GalleryPagerAdapter(getActivity());
-        fullscreenToggleBtn = (ImageButton)view.findViewById(R.id.gallery_fullscreen_toggle);
-        galleryNameTextView = (TextView)view.findViewById(R.id.ec_content_name);
 
-        if (galleryNameTextView != null){
-            galleryNameTextView.setVisibility(shouldHideMetaData ? View.GONE : View.VISIBLE);
-        }
-        if (fullscreenToggleBtn != null){
-            fullscreenToggleBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (getActivity() instanceof AbstractECView) {
-                        ((AbstractECView) getActivity()).onRequestToggleFullscreen();
-                    }
-                }
-            });
-        }
         galleryViewPager.setAdapter(adapter);
 
         aspectRatioFrame = (FixedAspectRatioFrameLayout) view.findViewById(R.id.gallery_aspect_ratio_frame);
@@ -93,14 +74,12 @@ public class ECGalleryViewFragment extends AbstractNextGenFragment {
     }
 
     public void setCurrentGallery(MovieMetaData.ECGalleryItem gallery){
-        currentGallery = gallery;
+        super.setCurrentGallery(gallery);
         if (adapter != null) {
 
             adapter.notifyDataSetChanged();
             galleryViewPager.setCurrentItem(0);
-            if (galleryNameTextView != null){
-                galleryNameTextView.setText(gallery.getTitle());
-            }
+
         }else{
             bSetOnResume = true;
         }
@@ -112,9 +91,6 @@ public class ECGalleryViewFragment extends AbstractNextGenFragment {
         aspectFramePriority = priority;
     }
 
-    public void setShouldHideMetaData(boolean bHide){
-        shouldHideMetaData = bHide;
-    }
 
     @Override
     public void onResume(){
@@ -126,14 +102,7 @@ public class ECGalleryViewFragment extends AbstractNextGenFragment {
     }
 
     public void onRequestToggleFullscreen(boolean isContentFullScreen){
-/*
-        if (!isContentFullScreen){    // make it full screen
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-        } else {                     // shrink it
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
-        }*/
-        fullscreenToggleBtn.setImageDrawable(getResources().getDrawable(isContentFullScreen ? R.drawable.controller_shrink : R.drawable.controller_expand));
-        galleryNameTextView.setVisibility(isContentFullScreen && !shouldHideMetaData? View.GONE : View.VISIBLE);
+        super.onRequestToggleFullscreen(isContentFullScreen);
         adapter.notifyDataSetChanged();
 
     }

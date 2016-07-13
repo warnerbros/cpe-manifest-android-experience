@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.wb.nextgen.R;
+import com.wb.nextgen.util.utils.F;
+import com.wb.nextgen.util.utils.NextGenLogger;
 
 /**
  * Created by gzcheng on 4/11/16.
@@ -25,7 +27,7 @@ public abstract class AbstractNextGenFragment extends Fragment {
         try {
             view = inflater.inflate(getContentViewId(), container, false);
         } catch (InflateException e) {
-        /* map is already there, just return view as it is */
+            NextGenLogger.e(F.TAG, e.getLocalizedMessage());
         }
         return view;
 
