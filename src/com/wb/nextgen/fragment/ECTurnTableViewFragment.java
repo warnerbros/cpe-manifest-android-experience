@@ -21,7 +21,6 @@ import com.wb.nextgen.util.concurrent.ResultListener;
 import com.wb.nextgen.util.concurrent.Worker;
 import com.wb.nextgen.util.utils.F;
 import com.wb.nextgen.util.utils.NextGenLogger;
-import com.wb.nextgen.widget.NextGenProgressBar;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
