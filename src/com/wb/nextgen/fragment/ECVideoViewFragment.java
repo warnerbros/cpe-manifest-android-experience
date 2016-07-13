@@ -60,6 +60,8 @@ public class ECVideoViewFragment extends Fragment{
     boolean bCountDown = false;
 
     boolean shouldAutoPlay = true;
+    boolean shouldHideMetaData = false;
+
     FixedAspectRatioFrameLayout.Priority aspectFramePriority = FixedAspectRatioFrameLayout.Priority.WIDTH_PRIORITY;
 
     private static int COUNT_DOWN_SECONDS = 5;
@@ -96,6 +98,11 @@ public class ECVideoViewFragment extends Fragment{
         countDownTextView = (TextView) view.findViewById(R.id.count_down_text_view);
         countDownProgressBar = (ProgressBar) view.findViewById(R.id.count_down_progressBar);
         contentMetaFrame = view.findViewById(R.id.ec_content_meta_frame);
+
+        if (contentMetaFrame != null){
+            contentMetaFrame.setVisibility(shouldHideMetaData ? View.GONE : View.VISIBLE);
+        }
+
         if (countDownCountainer != null)
             countDownCountainer.setVisibility(View.INVISIBLE);
         if (countDownProgressBar != null){
@@ -239,6 +246,9 @@ public class ECVideoViewFragment extends Fragment{
         this.bCountDown = bCountDown;
     }
 
+    public void setShouldHideMetaData(boolean bHide){
+        shouldHideMetaData = bHide;
+    }
 
     Target target = new Target() {
         @Override
@@ -304,7 +314,7 @@ public class ECVideoViewFragment extends Fragment{
 
 
     public void onFullScreenChange(boolean bFullscreen){
-        contentMetaFrame.setVisibility(bFullscreen ? View.GONE : View.VISIBLE);
+        contentMetaFrame.setVisibility(bFullscreen && !shouldHideMetaData? View.GONE : View.VISIBLE);
 
     }
 

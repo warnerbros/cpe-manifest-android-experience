@@ -363,6 +363,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
                     } else{
                         videoViewFragment = new ECVideoViewFragment();
                         videoViewFragment.setShouldAutoPlay(true);
+                        videoViewFragment.setShouldHideMetaData(true);
                         videoViewFragment.setAspectRatioFramePriority(FixedAspectRatioFrameLayout.Priority.HEIGHT_PRIORITY);
 
                     }
@@ -377,6 +378,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
                         galleryViewFragment = (ECGalleryViewFragment) currentFragment;
                     } else{
                         galleryViewFragment = new ECGalleryViewFragment();
+                        galleryViewFragment.setShouldHideMetaData(true);
                         galleryViewFragment.setAspectRatioFramePriority(FixedAspectRatioFrameLayout.Priority.HEIGHT_PRIORITY);
                     }
                     galleryViewFragment.setCurrentGallery((MovieMetaData.ECGalleryItem)currentItem);

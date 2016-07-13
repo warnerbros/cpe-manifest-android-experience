@@ -205,13 +205,9 @@ public class BaselineApiDAO {
                 thisData.biography = getActorBio(params);
 
                 List<Filmography> films = getActorFilmnography(params);
-                if (films != null && films.size() > 0) {
-                    for (Filmography film : films) {
-                        if (!StringHelper.isEmpty(film.projectId)) {
+                List<FilmPoster> posters = getFilmographyPostesSync(films);
 
-                        }
-                    }
-                }
+
 
                 thisData.filmogrphies = films;
                 return thisData;
@@ -262,34 +258,36 @@ public class BaselineApiDAO {
         return result;
     }
 
-    public static void getFilmographyPosters(final List<Filmography> sourceFilms, ResultListener<List<FilmPoster>> l){
-        getFilmographyPosters(sourceFilms, 0, 10, l);
-    }
 
-    private static void getFilmographyPosters(final List<Filmography> sourceFilms, int startIndex, int count, ResultListener<List<FilmPoster>> l){
-        final List<Filmography> films = sourceFilms.subList(startIndex, (startIndex + count)< sourceFilms.size() ? startIndex + count : sourceFilms.size());
+    public static void getFilmographyPosters(final List<Filmography> films, ResultListener<List<FilmPoster>> l){
+
         Worker.execute(new Callable<List<FilmPoster>>() {
             @Override
             public List<FilmPoster> call() throws Exception {
-                List<FilmPoster> resultList = new ArrayList<FilmPoster>();
-                for (Filmography film: films) {
-                    FilmPoster poster = null;
-                    if (!film.isFilmPosterRequest()) {
-                        try {
-                            poster = getFilmDetail(film.projectId);
-                        } catch (Exception ex) {
-                        }
-                        if (poster != null && !StringHelper.isEmpty(poster.imageId)) {
-                            film.setFilmPoster(poster);
-                        } else {
-                            poster = FilmPoster.getDefaultEmptyPoster();
-                        }
-                    }
-                    resultList.add(poster);
-                }
-                return resultList;
+
+                return getFilmographyPostesSync(films);
             }
         }, l);
+    }
+
+    private static List<FilmPoster> getFilmographyPostesSync(final List<Filmography> films){
+        List<FilmPoster> resultList = new ArrayList<FilmPoster>();
+        for (Filmography film: films) {
+            FilmPoster poster = null;
+            if (!film.isFilmPosterRequest()) {
+                try {
+                    poster = getFilmDetail(film.projectId);
+                } catch (Exception ex) {
+                }
+                if (poster != null && !StringHelper.isEmpty(poster.imageId)) {
+                    film.setFilmPoster(poster);
+                } else {
+                    poster = FilmPoster.getDefaultEmptyPoster();
+                }
+            }
+            resultList.add(poster);
+        }
+        return resultList;
     }
 
     private static List<CastHeadShot> getHeadShot(List<NameValuePair> params) throws JSONException, IOException {

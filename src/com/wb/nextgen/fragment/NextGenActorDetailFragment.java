@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -34,8 +35,6 @@ import com.wb.nextgen.util.DialogUtils;
 import com.wb.nextgen.util.NextGenUtils;
 import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.concurrent.ResultListener;
-import com.wb.nextgen.util.utils.F;
-import com.wb.nextgen.util.utils.NextGenLogger;
 import com.wb.nextgen.util.utils.StringHelper;
 
 import org.w3c.dom.Text;
@@ -101,14 +100,14 @@ public class NextGenActorDetailFragment extends Fragment implements View.OnClick
         }
 
         if (filmographyRecyclerView != null){
-            filmographyLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+            filmographyLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false);
             filmographyRecyclerView.setLayoutManager(filmographyLayoutManager);
             filmographyAdaptor = new ActorDetailFimograpyAdapter();
             filmographyRecyclerView.setAdapter(filmographyAdaptor);
         }
 
         if (actorGalleryRecyclerView != null && bEnableActorGallery){
-            actorGalleryLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+            actorGalleryLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false);
             actorGalleryRecyclerView.setLayoutManager(actorGalleryLayoutManager);
             actorGalleryAdaptor = new ActorDetailGalleryRecyclerAdapter(getActivity(), this);
             actorGalleryRecyclerView.setAdapter(actorGalleryAdaptor);
@@ -139,13 +138,17 @@ public class NextGenActorDetailFragment extends Fragment implements View.OnClick
                     public void onResult(MovieMetaData.BaselineCastData result) {
                         actorOjbect.getBaselineCastData().filmogrphies = result.filmogrphies;
                         actorOjbect.getBaselineCastData().biography = result.biography;
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                detailTextView.setText(actorOjbect.getBaselineCastData().biography);
-                                updateFilmographyList();
+                        if (getActivity() != null) {
+                            synchronized (getActivity()) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        detailTextView.setText(actorOjbect.getBaselineCastData().biography);
+                                        updateFilmographyList();
+                                    }
+                                });
                             }
-                        });
+                        }
                     }
 
                     @Override
@@ -178,7 +181,7 @@ public class NextGenActorDetailFragment extends Fragment implements View.OnClick
             if (actorOjbect.getBaselineCastData().getGallery() != null && bEnableActorGallery){
                 List<MovieMetaData.CastHeadShot> headShots = actorOjbect.getBaselineCastData().getGallery();
                 if (headShots != null && headShots.size() > 1)
-                    actorGalleryAdaptor.setCastHeadShots(headShots.subList(1, headShots.size()-1));
+                    actorGalleryAdaptor.setCastHeadShots(headShots.subList(1, headShots.size()));
                 else{
                     actorGalleryAdaptor.setCastHeadShots(null);
                 }
@@ -187,7 +190,6 @@ public class NextGenActorDetailFragment extends Fragment implements View.OnClick
 
             detailTextView.setText(actorOjbect.getBaselineCastData().biography);
             actorNameTextView.setText(actorOjbect.displayName);
-            //updateFilmographyList();
         }
     }
 
@@ -195,42 +197,42 @@ public class NextGenActorDetailFragment extends Fragment implements View.OnClick
         final List<Filmography> updateList;
         if (actorOjbect.getBaselineCastData() == null) {
             updateList = null;
-        }else if ( actorOjbect.getBaselineCastData().hasGotAllFilmPictures()) {
+        }else if ( actorOjbect.getBaselineCastData().filmogrphies != null && actorOjbect.getBaselineCastData().filmogrphies.size() > 0) {
             updateList = actorOjbect.getBaselineCastData().filmogrphies;
         }else {
             updateList = null;      //clear the list
-
+            /*
             BaselineApiDAO.getFilmographyPosters(actorOjbect.getBaselineCastData().filmogrphies, new ResultListener<List<MovieMetaData.FilmPoster>>() {
                 @Override
                 public void onResult(List<MovieMetaData.FilmPoster> result) {
-                    if (getActivity() == null)
-                        return;
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            filmographyAdaptor.setFilmographies(actorOjbect.getBaselineCastData().filmogrphies);
-                            filmographyAdaptor.notifyDataSetChanged();
+                    if (getActivity() != null) {
+                        synchronized (getActivity()) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    synchronized (filmographyRecyclerView) {
+                                        filmographyAdaptor.setFilmographies(actorOjbect.getBaselineCastData().filmogrphies);
+                                        filmographyAdaptor.notifyDataSetChanged();
+                                    }
+                                }
+                            });
                         }
-                    });
+                    }
                 }
 
                 @Override
                 public <E extends Exception> void onException(E e) {
 
                 }
-            });
+            });*/
         }
 
-        if (getActivity() == null)
-            return;
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+        if (getActivity() != null) {
+            filmographyAdaptor.setFilmographies(updateList);
+            filmographyAdaptor.notifyItemRangeChanged(0,10);
 
-                filmographyAdaptor.setFilmographies(updateList);
-                filmographyAdaptor.notifyDataSetChanged();
-            }
-        });
+        }
+
 
     }
 
@@ -250,7 +252,7 @@ public class NextGenActorDetailFragment extends Fragment implements View.OnClick
             this.filmInfo = filmInfo;
             if (filmInfo.isFilmPosterRequest()) {
                 Glide.with(getActivity()).load(filmInfo.getFilmPosterImageUrl()).into(personPhoto);
-                NextGenLogger.d(F.TAG, "Position: " + position  +" loaded: " + filmInfo.getFilmPosterImageUrl());
+                //NextGenLogger.d(F.TAG, "Position: " + position  +" loaded: " + filmInfo.getFilmPosterImageUrl());
             }
         }
 
@@ -299,7 +301,6 @@ public class NextGenActorDetailFragment extends Fragment implements View.OnClick
             if (filmographies != null && filmographies.size() > position) {
                 Filmography film = filmographies.get(position);
                 holder.setFilmInfo(film, position);
-
             }
 
         }

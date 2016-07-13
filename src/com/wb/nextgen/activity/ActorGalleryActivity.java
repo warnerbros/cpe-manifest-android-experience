@@ -124,6 +124,7 @@ public class ActorGalleryActivity extends AbstractNextGenActivity implements Act
             galleryRecyclerAdapter.setCastHeadShots(actorGalleryItems);
             galleryRecyclerAdapter.setSelectedIndex(startUpSelectedIndex);
             actorGalleryRecycler.setAdapter(galleryRecyclerAdapter);
+            actorGalleryRecycler.scrollToPosition(startUpSelectedIndex);
         }
     }
 

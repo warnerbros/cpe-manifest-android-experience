@@ -45,6 +45,7 @@ public class ECGalleryViewFragment extends AbstractNextGenFragment {
     FixedAspectRatioFrameLayout.Priority aspectFramePriority = FixedAspectRatioFrameLayout.Priority.WIDTH_PRIORITY;
 
     boolean bSetOnResume= false;
+    boolean shouldHideMetaData = false;
     //private List<MovieMetaData.ECGalleryImageItem>
 
     public void setBGImageUrl(String url){
@@ -63,6 +64,10 @@ public class ECGalleryViewFragment extends AbstractNextGenFragment {
         adapter = new GalleryPagerAdapter(getActivity());
         fullscreenToggleBtn = (ImageButton)view.findViewById(R.id.gallery_fullscreen_toggle);
         galleryNameTextView = (TextView)view.findViewById(R.id.ec_content_name);
+
+        if (galleryNameTextView != null){
+            galleryNameTextView.setVisibility(shouldHideMetaData ? View.GONE : View.VISIBLE);
+        }
         if (fullscreenToggleBtn != null){
             fullscreenToggleBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -107,6 +112,10 @@ public class ECGalleryViewFragment extends AbstractNextGenFragment {
         aspectFramePriority = priority;
     }
 
+    public void setShouldHideMetaData(boolean bHide){
+        shouldHideMetaData = bHide;
+    }
+
     @Override
     public void onResume(){
         super.onResume();
@@ -124,7 +133,7 @@ public class ECGalleryViewFragment extends AbstractNextGenFragment {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
         }*/
         fullscreenToggleBtn.setImageDrawable(getResources().getDrawable(isContentFullScreen ? R.drawable.controller_shrink : R.drawable.controller_expand));
-        galleryNameTextView.setVisibility(isContentFullScreen ? View.GONE : View.VISIBLE);
+        galleryNameTextView.setVisibility(isContentFullScreen && !shouldHideMetaData? View.GONE : View.VISIBLE);
         adapter.notifyDataSetChanged();
 
     }
