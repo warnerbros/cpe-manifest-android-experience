@@ -94,6 +94,9 @@ public class ECGalleryActivity extends AbstractECView {
 
     @Override
     public void onBackPressed(){
-        finish();
+        if (isContentFullScreen){   // exit full screen if it's full screen
+            onRequestToggleFullscreen();
+        }else
+            finish();
     }
 }

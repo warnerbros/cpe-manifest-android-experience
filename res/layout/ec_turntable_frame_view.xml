@@ -50,6 +50,7 @@
             </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
             <RelativeLayout
                 android:layout_alignParentBottom="true"
+                android:background="@color/transparent_gray"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content">
                 <SeekBar
