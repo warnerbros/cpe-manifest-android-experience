@@ -54,4 +54,6 @@
 	<string name="satellite_string">Satellite</string>
 	<string name="locations_count_text">%s locations</string>
 	<string name="count_down_text">%s\nsec</string>
+	<string name="show_more_text">Show More</string>
+	<string name="show_less_text">Show Less</string>
 </resources>

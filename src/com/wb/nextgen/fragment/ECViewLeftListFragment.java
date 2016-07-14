@@ -38,7 +38,8 @@ public class ECViewLeftListFragment extends NextGenExtraLeftListFragment{
         }
     }
 
-    public void onListItemClick(Object selectedObject){
+    @Override
+    public void onListItemClick(int index, Object selectedObject){
         ecViewActivity.onLeftListItemSelected((MovieMetaData.ExperienceData) selectedObject);
     }
 

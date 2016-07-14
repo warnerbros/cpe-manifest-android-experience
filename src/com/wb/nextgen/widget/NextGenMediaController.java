@@ -45,7 +45,7 @@ public class NextGenMediaController extends CustomMediaController {
     NextGenPlayerInterface player;
 
     public NextGenMediaController(Context context, NextGenPlayerInterface nextGenPlayer) {
-        super(new ContextThemeWrapper(context, R.style.MediaControllerStyle), false);
+        super(new ContextThemeWrapper(context, R.style.MediaControllerStyle), false, false);
         player = nextGenPlayer;
 
         init(context);

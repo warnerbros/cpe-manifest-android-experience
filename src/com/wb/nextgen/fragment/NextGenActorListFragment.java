@@ -88,7 +88,7 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment imple
 
 
     @Override
-    protected void onListItemClick(Object selectedObject){
+    protected void onListItemClick(int index, Object selectedObject){
 
         if (getActivity() instanceof NextGenFragmentTransactionInterface){
             NextGenActorDetailFragment target = new NextGenActorDetailFragment();
@@ -152,13 +152,6 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment imple
         return getResources().getString(R.string.actors);
     }
 
-    protected int getHeaderChildenCount(int header){
-        return getListItemCount();
-    }
-
-    protected int getHeaderCount(){
-        return 1;
-    }
 
     public void notifyCurrentSensitiveFragment(Fragment fragment){
         if (!(fragment instanceof NextGenActorDetailFragment) ){

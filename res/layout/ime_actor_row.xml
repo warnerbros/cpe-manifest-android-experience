@@ -13,20 +13,20 @@
         android:id="@+id/next_gen_actor_avatar"/>
 
 
-        <TextView
-            android:id="@+id/next_gen_actor_real_name"
-            android:layout_width="wrap_content"
-            android:textColor="@color/selectable_text_color"
-            android:fontFamily="sans-serif-condensed"
-            android:textSize="@dimen/textMedium"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/next_gen_actor_character_name"
-            android:layout_width="wrap_content"
-            android:textColor="@color/selectable_sub_text_color"
-            android:fontFamily="sans-serif-condensed"
-            android:textSize="@dimen/textMSmall"
-            android:textStyle="italic"
-            android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/next_gen_actor_real_name"
+        android:layout_width="wrap_content"
+        android:textColor="@android:color/white"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="@dimen/textMedium"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/next_gen_actor_character_name"
+        android:layout_width="wrap_content"
+        android:textColor="@android:color/darker_gray"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="@dimen/textMSmall"
+        android:textStyle="italic"
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

@@ -73,17 +73,21 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
         listAdaptor.selectedIndex = position - listView.getHeaderViewsCount();;
         listView.setSelection(position);
         listView.setItemChecked(position, true);
-        onListItemClick(listAdaptor.getItem(listAdaptor.selectedIndex));
+        onListItemClick(position, listAdaptor.getItem(listAdaptor.selectedIndex));
         listAdaptor.notifyDataSetChanged();
     }
 
-    protected abstract void onListItemClick(Object selectedObject);
+    protected abstract void onListItemClick(int index, Object selectedObject);
 
     protected abstract int getListItemCount();
 
     protected abstract Object getListItemAtPosition(int i);
 
     protected abstract int getListItemViewId();
+
+    protected int getListItemViewId(int row){
+        return getListItemViewId();
+    }
 
     protected abstract void fillListRowWithObjectInfo(View rowView, Object item);
 
@@ -95,7 +99,7 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
         listAdaptor.selectedIndex = getStartupSelectedIndex();
         listView.setItemChecked(getStartupSelectedIndex() + listView.getHeaderViewsCount(), true);
         if (listAdaptor.selectedIndex != -1)
-            onListItemClick(listAdaptor.getItem(listAdaptor.selectedIndex));
+            onListItemClick(listAdaptor.selectedIndex, listAdaptor.getItem(listAdaptor.selectedIndex));
         listAdaptor.notifyDataSetChanged();
     }
 
@@ -115,11 +119,11 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
             if (position >= getCount() || position < 0){
                 return null;
             }
+            int targetViewId = getListItemViewId(position);
 
+            if (convertView == null   || targetViewId != convertView.getId()) {
 
-            if (convertView == null  ) {
-
-                convertView = mInflater.inflate(getListItemViewId(), parent, false);
+                convertView = mInflater.inflate(getListItemViewId(position), parent, false);
 
             } else {
 

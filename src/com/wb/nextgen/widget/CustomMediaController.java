@@ -53,6 +53,7 @@ public class CustomMediaController extends FrameLayout {
     private static final int    sDefaultTimeout = 3000;
     private static final int    FADE_OUT = 1;
     private static final int    SHOW_PROGRESS = 2;
+    private boolean             mUseFullscreenToggle;
     private boolean             mUseFastForward;
     private boolean             mFromXml;
     private boolean             mListenersSet;
@@ -74,21 +75,22 @@ public class CustomMediaController extends FrameLayout {
         mRoot = null;
         mContext = context;
         mUseFastForward = true;
+        mUseFullscreenToggle = true;
         mFromXml = true;
 
         Log.i(TAG, TAG);
     }
 
-    public CustomMediaController(Context context, boolean useFastForward) {
+    public CustomMediaController(Context context, boolean useFastForward, boolean useFullscreenToggle) {
         super(context);
         mContext = context;
         mUseFastForward = useFastForward;
-
+        mUseFullscreenToggle = useFullscreenToggle;
         Log.i(TAG, TAG);
     }
 
     public CustomMediaController(Context context) {
-        this(context, true);
+        this(context, true, true);
 
         Log.i(TAG, TAG);
     }
@@ -171,6 +173,9 @@ public class CustomMediaController extends FrameLayout {
         if (mFullscreenButton != null) {
             mFullscreenButton.requestFocus();
             mFullscreenButton.setOnClickListener(mFullscreenListener);
+            if (!mFromXml){
+                mFullscreenButton.setVisibility(mUseFullscreenToggle ? VISIBLE: GONE);
+            }
         }
 
         mFfwdButton = (ImageButton) v.findViewById(R.id.ffwd);
