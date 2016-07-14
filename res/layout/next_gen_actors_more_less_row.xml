@@ -7,8 +7,10 @@
 
 
     <TextView
+        android:paddingTop="@dimen/spacing_normal"
         android:id="@+id/show_more_less_text"
         android:layout_width="fill_parent"
+        android:gravity="center"
         android:textColor="@color/white"
         android:fontFamily="sans-serif-condensed"
         android:textSize="@dimen/textMedium"

@@ -36,39 +36,6 @@ public class MainFeatureMediaController extends  NextGenMediaController implemen
     public MainFeatureMediaController(Context context, NextGenPlayerInterface player) {
         super(context, player);
     }
-/*
-    @Override
-    public void setAnchorView(View view) {
-        super.setAnchorView(view);
-        LayoutInflater inflater2 = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        LinearLayout wrapperLayout2 = new LinearLayout(mContext);
-
-        inflater2.inflate(R.layout.media_player_shareclip_button, wrapperLayout2, true);
-        shareClipButton = (ImageButton)wrapperLayout2.findViewById(R.id.mc_shareclip_button);
-        if (mContext != null){
-
-
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-            params.setMargins(view.getWidth(), 0, 5, 20);
-            FrameLayout.LayoutParams wrapperParams2 = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
-                    FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.RIGHT);
-
-            addView(wrapperLayout2, wrapperParams2);
-
-            shareClipButton.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    if (shareClipIMEEngine != null) {
-                        MovieMetaData.IMEElement item = shareClipIMEEngine.getCurrentIMEElement();
-                        if (mContext instanceof NextGenPlayer) {
-                            ((NextGenPlayer) mContext).handleSelectedShareClip(item);
-                        }
-                    }
-                }
-            });
-        }
-    }*/
 
     public void setShareClipIMEGroup(IMEElementsGroup shareClipGroup){
         if (shareClipGroup != null) {

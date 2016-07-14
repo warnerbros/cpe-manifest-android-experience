@@ -11,11 +11,24 @@ android:id="@+id/next_gen_ime_bottom_view">
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="horizontal">
-        <fragment android:name="com.wb.nextgen.fragment.NextGenIMEActorFragment"
+        <LinearLayout
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:id="@+id/ime_actor_fragment" />
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="fill_parent"
+                android:gravity="center"
+                android:text="@string/actors"
+                android:textColor="@color/white"
+                android:fontFamily="sans-serif-condensed"
+                android:textSize="@dimen/textMedium"
+                android:layout_height="wrap_content"/>
+            <fragment android:name="com.wb.nextgen.fragment.NextGenIMEActorFragment"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/ime_actor_fragment" />
+        </LinearLayout>
        <fragment
             android:id="@+id/ime_grid_fragment"
             android:name="com.wb.nextgen.fragment.IMEElementsGridFragment"
