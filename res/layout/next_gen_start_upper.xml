@@ -34,7 +34,7 @@
                     android:id="@+id/next_gen_startup_play_button"
                     android:layout_width="wrap_content"
                     android:layout_height="80dp"
-                    android:scaleType="fitCenter"
+                    android:scaleType="fitXY"
                     android:layout_centerInParent="true"
                     nextgen:selectedOverlayColor="@color/transparent_black"
                     android:background="@android:color/transparent" />
@@ -44,7 +44,7 @@
                     android:layout_height="80dp"
                     android:layout_below="@+id/next_gen_startup_play_button"
                     android:layout_centerInParent="true"
-                    android:scaleType="fitCenter"
+                    android:scaleType="fitXY"
                     nextgen:selectedOverlayColor="@color/transparent_black"
                     android:background="@android:color/transparent"/>
 

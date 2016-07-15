@@ -2,7 +2,6 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:nextgen="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@android:color/black"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -12,8 +11,41 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
 
+    <RelativeLayout
+        android:id="@+id/startup_buttons_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="left">
+        <!--<ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:scaleType="fitCenter"
+        android:id="@+id/next_gen_startup_movie_logo"
+        android:layout_above="@+id/next_gen_startup_play_button"/>-->
+        <com.wb.nextgen.widget.SelectedMaskImageButton
+            android:id="@+id/next_gen_startup_play_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/cast_ic_notification_on"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:scaleType="fitXY"
+            nextgen:selectedOverlayColor="@color/transparent_black"
+            android:background="@android:color/transparent" />
+        <com.wb.nextgen.widget.SelectedMaskImageButton
+            android:id="@+id/next_gen_startup_extra_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/cast_ic_notification_on"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:scaleType="fitXY"
+            nextgen:selectedOverlayColor="@color/transparent_black"
+            android:background="@android:color/transparent"/>
+    </RelativeLayout>
 
-    <LinearLayout
+
+    <!--<LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
@@ -52,34 +84,11 @@
                     android:layout_width="fill_parent"
                     android:layout_height="match_parent"
                     android:gravity="left">
-                    <!--<ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
-                        android:scaleType="fitCenter"
-                        android:id="@+id/next_gen_startup_movie_logo"
-                        android:layout_above="@+id/next_gen_startup_play_button"/>-->
-                    <com.wb.nextgen.widget.SelectedMaskImageButton
-                        android:id="@+id/next_gen_startup_play_button"
-                        android:layout_width="fill_parent"
-                        android:layout_height="80dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/front_page_paly_button"
-                        nextgen:selectedOverlayColor="@color/transparent_black"
-                        android:background="@android:color/transparent" />
-                    <com.wb.nextgen.widget.SelectedMaskImageButton
-                        android:id="@+id/next_gen_startup_extra_button"
-                        android:layout_width="fill_parent"
-                        android:layout_height="80dp"
-                        android:layout_below="@+id/next_gen_startup_play_button"
-                        android:src="@drawable/front_page_extra_button"
-                        android:scaleType="fitCenter"
-                        nextgen:selectedOverlayColor="@color/transparent_black"
-                        android:background="@android:color/transparent"/>
 
                 </RelativeLayout>
             </LinearLayout>
 
         </LinearLayout>
-    </LinearLayout>
+    </LinearLayout>-->
 
 </RelativeLayout>

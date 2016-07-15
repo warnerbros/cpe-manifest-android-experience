@@ -1,20 +1,27 @@
 package com.wb.nextgen.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.DisplayMetrics;
+import android.util.Size;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.VideoView;
 
+import com.bumptech.glide.Glide;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
+import com.wb.nextgen.data.NextGenStyle;
 import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.utils.NextGenLogger;
 
@@ -33,13 +40,13 @@ public class NextGenActivity extends FragmentActivity implements View.OnClickLis
 
     ImageButton playMovieButton;
     ImageButton extraButton;
-    LinearLayout buttonsLayout;
+    View buttonsLayout;
 
-    final static int LOOPING_POINT = 14 *1000;
-    final static int BUTTON_ANIM_START = 8500;
-    final static int TOP_RATIO = 52;
-    final static int LEFT_RATIO = 31;
-    LinearLayout leftPadding, topPadding, rightPortion;
+    private int videoLoopPoint = 0;
+    private int buttonAnimationStartTime = 0;
+    //final static int TOP_RATIO = 52;
+    //final static int LEFT_RATIO = 31;
+    //LinearLayout leftPadding, topPadding, rightPortion;
     //RelativeLayout startUpVideoViewFrame;
 
     private TimerTask startUpTimerTask;
@@ -56,11 +63,11 @@ public class NextGenActivity extends FragmentActivity implements View.OnClickLis
         //startUpVideoViewFrame = (RelativeLayout)findViewById(R.id.startuo_video_view_frame);
 
 
-        leftPadding = (LinearLayout)findViewById(R.id.startup_left_padding);
+        /*leftPadding = (LinearLayout)findViewById(R.id.startup_left_padding);
         topPadding = (LinearLayout)findViewById(R.id.startup_top_padding);
-        rightPortion = (LinearLayout)findViewById(R.id.startup_right_portion);
+        rightPortion = (LinearLayout)findViewById(R.id.startup_right_portion);*/
 
-        buttonsLayout = (LinearLayout) findViewById(R.id.startup_buttons_layout);
+        buttonsLayout = findViewById(R.id.startup_buttons_layout);
         if (buttonsLayout != null){
             buttonsLayout.setVisibility(View.GONE);
         }
@@ -77,14 +84,18 @@ public class NextGenActivity extends FragmentActivity implements View.OnClickLis
         NextGenLogger.d("GrantTest", "hide buttons");
         playMovieButton = (ImageButton) findViewById(R.id.next_gen_startup_play_button);
         if (playMovieButton != null){
-            playMovieButton.setImageResource(R.drawable.front_page_paly_button);
+            Glide.with(this).load(NextGenApplication.getMovieMetaData().getStyle().getButtonImageURL(NextGenStyle.NextGenAppearanceType.InMovie)).into(playMovieButton);
+            //playMovieButton.setImageResource(R.drawable.front_page_paly_button);
             playMovieButton.setOnClickListener(this);
         }
         extraButton = (ImageButton) findViewById(R.id.next_gen_startup_extra_button);
         if (extraButton != null){
-            extraButton.setImageResource(R.drawable.front_page_extra_button);
+            Glide.with(this).load(NextGenApplication.getMovieMetaData().getStyle().getButtonImageURL(NextGenStyle.NextGenAppearanceType.OutOfMovie)).into(extraButton);
+            //extraButton.setImageResource(R.drawable.front_page_extra_button);
             extraButton.setOnClickListener(this);
         }
+        videoLoopPoint = (int)(NextGenApplication.getMovieMetaData().getStyle().getBackgroundVideoLoopTime() * 1000);
+        buttonAnimationStartTime = (int)(NextGenApplication.getMovieMetaData().getStyle().getBackgroundVideoFadeTime() * 1000);
     }
 
     @Override
@@ -93,7 +104,7 @@ public class NextGenActivity extends FragmentActivity implements View.OnClickLis
         getWindow().getDecorView().setSystemUiVisibility(getWindow().getDecorView().getSystemUiVisibility() | View.SYSTEM_UI_FLAG_FULLSCREEN);
         if (startupVideoView != null ){
             if (!isStartUp){
-                startupVideoView.seekTo(LOOPING_POINT);
+                startupVideoView.seekTo(videoLoopPoint);
                 startupVideoView.start();
                 return;
             }
@@ -102,30 +113,50 @@ public class NextGenActivity extends FragmentActivity implements View.OnClickLis
                 @Override
                 public void onPrepared(final MediaPlayer mp) {
                     /**************/
-                    int width = mp.getVideoWidth();
-                    int height = mp.getVideoHeight();
-                    int screenHeight = NextGenApplication.getScreenHeight(NextGenActivity.this);
-                    int screenWidth = NextGenApplication.getScreenWidth(NextGenActivity.this);
-                    int videoEffectiveWidth = screenHeight * width / height;
+                    Size videoSize = new Size(mp.getVideoWidth(), mp.getVideoHeight());
+                    Size screenSize = new Size(NextGenApplication.getScreenWidth(NextGenActivity.this) - getSoftButtonsBarHeight(), NextGenApplication.getScreenHeight(NextGenActivity.this));
 
-                    int pillowWidth = screenWidth - videoEffectiveWidth;
-                    int totalLeft = pillowWidth/2 + videoEffectiveWidth * LEFT_RATIO / 100 - buttonsLayout.getLayoutParams().width/2;
-                    final int realLeftRatio = totalLeft * 100 / screenWidth;
+
+
+                    NextGenStyle movieStyle = NextGenApplication.getMovieMetaData().getStyle();
+
+
+                    final ButtonParams mainMoiveParams = computeButtonParams(movieStyle.getButtonCenterOffset(NextGenStyle.NextGenAppearanceType.InMovie),
+                            movieStyle.getButtonSizeOffset(NextGenStyle.NextGenAppearanceType.InMovie),
+                            videoSize, screenSize);
+
+                    final ButtonParams extraParams = computeButtonParams(movieStyle.getButtonCenterOffset(NextGenStyle.NextGenAppearanceType.OutOfMovie),
+                            movieStyle.getButtonSizeOffset(NextGenStyle.NextGenAppearanceType.OutOfMovie),
+                            videoSize, screenSize);
+
 
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            ViewGroup.LayoutParams params = leftPadding.getLayoutParams();
-                            ((LinearLayout.LayoutParams)params).weight = realLeftRatio;
-                            leftPadding.setLayoutParams(params);
 
-                            params = rightPortion.getLayoutParams();
-                            ((LinearLayout.LayoutParams)params).weight = 100 - realLeftRatio;
-                            rightPortion.setLayoutParams(params);
+                            ViewGroup.LayoutParams mainMoiveBtnLayoutParams = playMovieButton.getLayoutParams();
+                            if (mainMoiveBtnLayoutParams instanceof  LinearLayout.LayoutParams) {
+                                ((LinearLayout.LayoutParams) mainMoiveBtnLayoutParams).setMargins(mainMoiveParams.x, mainMoiveParams.y, 0, 0);
+                            }else if (mainMoiveBtnLayoutParams instanceof  RelativeLayout.LayoutParams) {
+                                ((RelativeLayout.LayoutParams) mainMoiveBtnLayoutParams).setMargins(mainMoiveParams.x, mainMoiveParams.y, 0, 0);
+                            }
 
-                            params = topPadding.getLayoutParams();
-                            ((LinearLayout.LayoutParams)params).weight = TOP_RATIO;
-                            topPadding.setLayoutParams(params);
+                            mainMoiveBtnLayoutParams.height = mainMoiveParams.height;
+                            mainMoiveBtnLayoutParams.width = mainMoiveParams.width;
+
+                            playMovieButton.setLayoutParams(mainMoiveBtnLayoutParams);
+
+                            ViewGroup.LayoutParams extraBtnLayoutParams = extraButton.getLayoutParams();
+                            if (mainMoiveBtnLayoutParams instanceof  LinearLayout.LayoutParams) {
+                                ((LinearLayout.LayoutParams) extraBtnLayoutParams).setMargins(extraParams.x, extraParams.y, 0, 0);
+                            }else if (mainMoiveBtnLayoutParams instanceof  RelativeLayout.LayoutParams) {
+                                ((RelativeLayout.LayoutParams) extraBtnLayoutParams).setMargins(extraParams.x, extraParams.y, 0, 0);
+                            }
+
+                            extraBtnLayoutParams.height = extraParams.height;
+                            extraBtnLayoutParams.width = extraParams.width;
+
+                            extraButton.setLayoutParams(extraBtnLayoutParams);
 
                         }
                     });
@@ -162,14 +193,14 @@ public class NextGenActivity extends FragmentActivity implements View.OnClickLis
 
                             }
                         };
-                        startUpTimer.schedule(startUpTimerTask, BUTTON_ANIM_START);
+                        startUpTimer.schedule(startUpTimerTask, buttonAnimationStartTime);
                     }
                 }
             });
             startupVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    startupVideoView.seekTo(LOOPING_POINT);
+                    startupVideoView.seekTo(videoLoopPoint);
                     startupVideoView.start();
                     //startUpVideoViewFrame.setVisibility(View.GONE);
                 }
@@ -182,7 +213,7 @@ public class NextGenActivity extends FragmentActivity implements View.OnClickLis
                 }
             });
             startupVideoView.requestFocus();
-            startupVideoView.setVideoURI(Uri.parse("android.resource://com.wb.nextgen/" + R.raw.mos_nextgen_background));
+            startupVideoView.setVideoURI(Uri.parse(NextGenApplication.getMovieMetaData().getStyle().getBackgroundVideoURL()));
         }
     }
 
@@ -205,5 +236,58 @@ public class NextGenActivity extends FragmentActivity implements View.OnClickLis
         super.onResume();
         if (NextGenApplication.isDebugBuild())
             CrashManager.register(this);
+    }
+
+    class ButtonParams {
+        int x, y, height, width;
+    }
+
+    private ButtonParams computeButtonParams(NextGenStyle.NGScreenOffSetRatio centerRatio, NextGenStyle.NGScreenOffSetRatio sizeRatio, Size videoSize, Size screenSize){
+        ButtonParams resultParams = new ButtonParams();
+
+        double videoAspecRatio = (double)videoSize.getWidth() / (double)videoSize.getHeight();
+        double screenAspecRatio = (double)screenSize.getWidth() / (double)screenSize.getHeight();
+
+        int effectiveVideoWidth, effectiveVideoHeight;
+
+        if (videoAspecRatio > screenAspecRatio){        // video is wider
+            effectiveVideoWidth = screenSize.getWidth();
+            effectiveVideoHeight = (int)((double)screenSize.getWidth() / (double)videoSize.getWidth() * (double)videoSize.getHeight());
+
+        }else{              // screen is wider
+            effectiveVideoHeight = screenSize.getHeight();
+            effectiveVideoWidth = (int)((double)screenSize.getHeight() / (double)videoSize.getHeight() * (double)videoSize.getWidth());
+        }
+
+
+        resultParams.width = (int)(effectiveVideoWidth * sizeRatio.horizontalRatio);
+        resultParams.height = (int)(effectiveVideoHeight * sizeRatio.verticalRatio);
+
+        resultParams.x = (screenSize.getWidth() - effectiveVideoWidth) / 2  // the side pillow width
+                + (int)(centerRatio.horizontalRatio * effectiveVideoWidth )  // ratio of the center
+                - resultParams.width / 2;                // half the width
+
+        resultParams.y = (screenSize.getHeight() - effectiveVideoHeight) / 2  // the side pillow width
+                + (int)(centerRatio.verticalRatio * effectiveVideoHeight )  // ratio of the center
+                - resultParams.height / 2;                // half the width
+
+        return resultParams;
+    }
+
+    @SuppressLint("NewApi")
+    private int getSoftButtonsBarHeight() {
+        // getRealMetrics is only available with API 17 and +
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            DisplayMetrics metrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(metrics);
+            int usableHeight = metrics.widthPixels;
+            getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
+            int realHeight = metrics.widthPixels;
+            if (realHeight > usableHeight)
+                return realHeight - usableHeight;
+            else
+                return 0;
+        }
+        return 0;
     }
 }

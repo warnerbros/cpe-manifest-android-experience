@@ -1,11 +1,6 @@
 package com.wb.nextgen.data;
 
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.provider.MediaStore;
-
 import com.google.gson.annotations.SerializedName;
-import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 import com.wb.nextgen.model.SceneLocation;
 import com.wb.nextgen.parser.ManifestXMLParser;
@@ -83,6 +78,7 @@ public class MovieMetaData {
     private ExperienceData rootExperience;
     private boolean hasCalledBaselineAPI = false;
     private IMEElementsGroup shareClipIMEGroup;
+    private NextGenStyle style;
 
     private List<List<IMEElement<CastData>>> castIMEElements = new ArrayList<List<IMEElement<CastData>>>() ;
 
@@ -93,6 +89,17 @@ public class MovieMetaData {
             return rootExperience.audioVisualItems.get(0).videoUrl;
         }
         return "";
+    }
+
+    public String getMoiveId(){
+        if (rootExperience != null)
+            return rootExperience.experienceId;
+        else
+            return "";
+    }
+
+    public NextGenStyle getStyle(){
+        return style;
     }
 
     public boolean isHasCalledBaselineAPI(){
@@ -463,7 +470,7 @@ public class MovieMetaData {
 
         /*****************End of Time Sequence Events****************************/
 
-      //  result.computeExtraECGroups();
+        result.style = new NextGenStyle(result.getMoiveId());
 
         return result;
     }
