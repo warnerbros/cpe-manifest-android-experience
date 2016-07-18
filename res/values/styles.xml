@@ -28,7 +28,7 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:textAppearance">@style/TextNormalBold</item>
         <item name="android:windowNoTitle">true</item>
-        
+        <item name="windowActionBarOverlay">true</item>
         <item name="android:icon">@android:color/transparent</item>
         <item name="android:gravity">center_horizontal</item>
         
@@ -388,17 +388,21 @@
 	</style>
     <style name="ExtraActionBar" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <item name="android:tabWidgetStyle">@style/CustomTabStyle</item>
+        <item name="windowActionBarOverlay">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:textAppearance">@style/TextNormalBold</item>
         <item name="logo">@android:color/transparent</item>
 
-        <!-- flxabv44 generated action bar
-        <item name="android:actionBarItemBackground">@drawable/selectable_background_flxabv44</item>
-        <item name="android:actionBarTabStyle">@style/flxabv44_ActionBarTabStyle</item>
-        <item name="android:actionBarStyle">@style/flxabv44_solid_ActionBar</item>
-        <item name="android:selectableItemBackground">@drawable/selectable_background_flxabv44</item>-->
+    </style>
+
+    <style name="PlayerActionBar" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:tabWidgetStyle">@style/CustomTabStyle</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:textAppearance">@style/TextNormalBold</item>
+        <item name="logo">@android:color/transparent</item>
 
     </style>
+
     <style name="MediaControllerStyle">
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:progressBackgroundTint">@android:color/white</item>

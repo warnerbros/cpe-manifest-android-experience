@@ -2,6 +2,7 @@ package com.wb.nextgen.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -10,8 +11,10 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
 import android.util.Size;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -114,7 +117,6 @@ public class NextGenActivity extends FragmentActivity implements View.OnClickLis
                 public void onPrepared(final MediaPlayer mp) {
                     /**************/
                     Size videoSize = new Size(mp.getVideoWidth(), mp.getVideoHeight());
-                    Size screenSize = new Size(NextGenApplication.getScreenWidth(NextGenActivity.this) - getSoftButtonsBarHeight(), NextGenApplication.getScreenHeight(NextGenActivity.this));
 
 
 
@@ -123,11 +125,11 @@ public class NextGenActivity extends FragmentActivity implements View.OnClickLis
 
                     final ButtonParams mainMoiveParams = computeButtonParams(movieStyle.getButtonCenterOffset(NextGenStyle.NextGenAppearanceType.InMovie),
                             movieStyle.getButtonSizeOffset(NextGenStyle.NextGenAppearanceType.InMovie),
-                            videoSize, screenSize);
+                            videoSize);
 
                     final ButtonParams extraParams = computeButtonParams(movieStyle.getButtonCenterOffset(NextGenStyle.NextGenAppearanceType.OutOfMovie),
                             movieStyle.getButtonSizeOffset(NextGenStyle.NextGenAppearanceType.OutOfMovie),
-                            videoSize, screenSize);
+                            videoSize);
 
 
                     runOnUiThread(new Runnable() {
@@ -177,7 +179,6 @@ public class NextGenActivity extends FragmentActivity implements View.OnClickLis
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            NextGenLogger.d("GrantTest", "show buttons");
                                             if (buttonsLayout != null){
                                                 buttonsLayout.setVisibility(View.VISIBLE);
                                                 buttonsLayout.setAlpha(0.0f);
@@ -242,8 +243,16 @@ public class NextGenActivity extends FragmentActivity implements View.OnClickLis
         int x, y, height, width;
     }
 
-    private ButtonParams computeButtonParams(NextGenStyle.NGScreenOffSetRatio centerRatio, NextGenStyle.NGScreenOffSetRatio sizeRatio, Size videoSize, Size screenSize){
+    private ButtonParams computeButtonParams(NextGenStyle.NGScreenOffSetRatio centerRatio, NextGenStyle.NGScreenOffSetRatio sizeRatio, Size videoSize){
         ButtonParams resultParams = new ButtonParams();
+
+        WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        DisplayMetrics screenMetrics = new DisplayMetrics();
+        display.getMetrics(screenMetrics);
+
+        Size screenSize = new Size(screenMetrics.widthPixels, screenMetrics.heightPixels);
+
 
         double videoAspecRatio = (double)videoSize.getWidth() / (double)videoSize.getHeight();
         double screenAspecRatio = (double)screenSize.getWidth() / (double)screenSize.getHeight();

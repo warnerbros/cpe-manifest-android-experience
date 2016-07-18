@@ -12,7 +12,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -46,8 +45,9 @@ public abstract class AbstractNextGenActivity extends AppCompatActivity implemen
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        requestWindowFeature(Window.FEATURE_ACTION_BAR);
-        getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
+        //requestWindowFeature(Window.FEATURE_ACTION_BAR);
+
+        //getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         final ActionBar actionBar = getSupportActionBar();
         TypedValue tv = new TypedValue();
         if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true))
@@ -59,6 +59,7 @@ public abstract class AbstractNextGenActivity extends AppCompatActivity implemen
 
         actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
         actionBar.setStackedBackgroundDrawable(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
+
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setLogo(null);
@@ -131,8 +132,8 @@ public abstract class AbstractNextGenActivity extends AppCompatActivity implemen
 
         if (!StringHelper.isEmpty(getBackgroundImgUri()))
             loadBGImage();
-        /*
-        if (topUnderlayActionbarSpacer == null){
+
+        if (topUnderlayActionbarSpacer == null && shouldUseActionBarSpacer()){
             topUnderlayActionbarSpacer = new LinearLayout(this);
             //int actionBarHeight = 0;
 
@@ -143,7 +144,8 @@ public abstract class AbstractNextGenActivity extends AppCompatActivity implemen
             if (layout != null){
                 layout.addView(topUnderlayActionbarSpacer, 0);
             }
-        }*/
+            //topUnderlayActionbarSpacer.setVisibility(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? View.GONE : View.VISIBLE);
+        }
     }
 
     protected void loadBGImage(){
@@ -188,5 +190,9 @@ public abstract class AbstractNextGenActivity extends AppCompatActivity implemen
 
     protected void onLeftTopActionBarButtonPressed(){
         onBackPressed();
+    }
+
+    protected boolean shouldUseActionBarSpacer(){
+        return true;
     }
 }

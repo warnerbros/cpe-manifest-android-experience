@@ -76,7 +76,6 @@ public class NextGenIMEActorFragment extends NextGenActorListFragment implements
             return currentActiveActorList;
 
     }
-
     @Override
     public void playbackStatusUpdate(NextGenPlaybackStatus playbackStatus, long timecode){
 

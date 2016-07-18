@@ -15,6 +15,7 @@ import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.DemoData;
 import com.wb.nextgen.data.MovieMetaData;
+import com.wb.nextgen.data.NextGenStyle;
 import com.wb.nextgen.fragment.ECGalleryViewFragment;
 import com.wb.nextgen.fragment.NextGenPlayerBottomFragment;
 import com.wb.nextgen.fragment.ShareClipFragment;
@@ -128,6 +129,11 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     protected void onStart() {
         super.onStart();
         hideShowNextGenView();
+    }
+
+    @Override
+    protected boolean shouldUseActionBarSpacer(){
+        return false;
     }
 
     protected void updateImeFragment(final NextGenPlaybackStatusListener.NextGenPlaybackStatus playbackStatus, final long timecode){
@@ -367,7 +373,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
     @Override
     public String getBackgroundImgUri(){
-        return DemoData.getExtraBackgroundUrl();
+        return NextGenApplication.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie);
     }
 
     @Override
@@ -386,7 +392,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
             if (dataObj instanceof MovieMetaData.PresentationDataItem) {
                 if (dataObj instanceof MovieMetaData.ECGalleryItem) {
                     ECGalleryViewFragment fragment = new ECGalleryViewFragment();
-                    fragment.setBGImageUrl(DemoData.getExtraBackgroundUrl());
+                    fragment.setBGImageUrl(getBackgroundImgUri());
                     fragment.setCurrentGallery((MovieMetaData.ECGalleryItem) dataObj);
                     transitMainFragment(fragment);
                     pausMovieForImeECPiece();
@@ -394,7 +400,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
                 } else if (dataObj instanceof MovieMetaData.AudioVisualItem) {
                     ShareClipFragment fragment = new ShareClipFragment();
-                    fragment.setBGImageUrl(DemoData.getExtraBackgroundUrl());
+                    fragment.setBGImageUrl(getBackgroundImgUri());
                     fragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) dataObj);
                     transitMainFragment(fragment);
                     pausMovieForImeECPiece();

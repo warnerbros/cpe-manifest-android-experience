@@ -109,11 +109,13 @@ public class  DemoData {
     }
 
     public static String getMovieLogoUrl(){
-        return "android.resource://com.wb.nextgen/" + R.drawable.man_of_sett_top_logo;
+        return "";
+        //return "android.resource://com.wb.nextgen/" + R.drawable.man_of_sett_top_logo;
     }
 
     public static String getExtraBackgroundUrl(){
-        return "android.resource://com.wb.nextgen/" + R.drawable.extras_bg;
+        return "";
+        //return "android.resource://com.wb.nextgen/" + R.drawable.extras_bg;
     }
 
     public static String getExtraRightTitleImageUrl(){

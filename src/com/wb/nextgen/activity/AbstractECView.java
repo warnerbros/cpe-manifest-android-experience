@@ -10,6 +10,7 @@ import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.DemoData;
 import com.wb.nextgen.data.MovieMetaData;
+import com.wb.nextgen.data.NextGenStyle;
 import com.wb.nextgen.fragment.ECViewLeftListFragment;
 import com.wb.nextgen.util.utils.F;
 
@@ -67,7 +68,7 @@ public abstract class AbstractECView extends AbstractNextGenActivity {
 
     @Override
     public String getBackgroundImgUri(){
-        return DemoData.getExtraBackgroundUrl();
+        return NextGenApplication.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.OutOfMovie);
     }
 
     @Override

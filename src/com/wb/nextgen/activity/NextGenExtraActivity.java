@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.DemoData;
+import com.wb.nextgen.data.NextGenStyle;
 import com.wb.nextgen.fragment.NextGenActorListFragment;
 import com.wb.nextgen.fragment.NextGenExtraMainTableFragment;
 import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
@@ -105,7 +106,7 @@ public class NextGenExtraActivity extends AbstractNextGenActivity implements Nex
 
     @Override
     public String getBackgroundImgUri(){
-        return DemoData.getExtraBackgroundUrl();
+        return NextGenApplication.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.OutOfMovie);
     }
 
     @Override
