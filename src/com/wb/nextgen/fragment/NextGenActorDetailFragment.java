@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -337,6 +338,15 @@ public class NextGenActorDetailFragment extends Fragment implements View.OnClick
         String socialUrl = null;
         if (v.equals(facebookBtn)){
             socialUrl = actorOjbect.getBaselineCastData().getSocialMediaUrl(MovieMetaData.BaselineCastData.SOCIAL_MEDIA_KEY.FACEBOOK_KEY);
+
+            try {
+                getActivity().getPackageManager().getPackageInfo("com.facebook.katana", 0);
+                // http://stackoverflow.com/a/24547437/1048340
+                socialUrl = "fb://facewebmodal/f?href=" + socialUrl;
+            } catch (PackageManager.NameNotFoundException e) {
+
+            }
+
         }else if (v.equals(twitterBtn)){
             socialUrl = actorOjbect.getBaselineCastData().getSocialMediaUrl(MovieMetaData.BaselineCastData.SOCIAL_MEDIA_KEY.TWITTER_KEY);
         }else if (v.equals(instagramBtn)){
