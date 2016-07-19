@@ -40,7 +40,7 @@ public class MainFeatureMediaController extends  NextGenMediaController implemen
     public void setShareClipIMEGroup(IMEElementsGroup shareClipGroup){
         if (shareClipGroup != null) {
             shareClipIMEGroup = shareClipGroup;
-            shareClipIMEEngine = new AVGalleryIMEEngine(shareClipIMEGroup.getIMEElementesList());
+            //shareClipIMEEngine = new AVGalleryIMEEngine(shareClipIMEGroup.getIMEElementesList());
         }
     }
 
@@ -58,7 +58,8 @@ public class MainFeatureMediaController extends  NextGenMediaController implemen
     public void playbackStatusUpdate(NextGenPlaybackStatus playbackStatus, long timecode){
         if (shareClipIMEEngine != null){
             shareClipIMEEngine.computeCurrentIMEElement(timecode);
-            MovieMetaData.IMEElement item = shareClipIMEEngine.getCurrentIMEElement();
+
+            MovieMetaData.IMEElement item = null;;//shareClipIMEEngine.getCurrentIMEElement();
             if (item != null){
                 shareClipButton.setActivated(true);
                 shareClipButton.setColorFilter(null);

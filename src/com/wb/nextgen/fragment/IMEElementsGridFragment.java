@@ -346,9 +346,12 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
         for(int i = 0 ; i< imeEngines.size(); i++){
             NextGenIMEEngine engine = imeEngines.get(i);
             boolean hasChanged =  engine.computeCurrentIMEElement(currentTimeCode);
-            Object element = engine.getCurrentIMEElement();
-            if (element != null){
-                objList.add(new IMEDisplayObject(imeGroups.get(i).linkedExperience.title, element));
+            List<Object> elements = engine.getCurrentIMEItems();
+
+
+            if (elements != null && elements.size() > 0){
+                for (Object element : elements)
+                    objList.add(new IMEDisplayObject(imeGroups.get(i).linkedExperience.title, element));
             }
         }
         activeIMEs = objList;

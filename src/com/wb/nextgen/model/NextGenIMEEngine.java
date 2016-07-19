@@ -20,7 +20,6 @@ public abstract class NextGenIMEEngine <T>{
 
     protected List<T> imeElements = new ArrayList<T>();
     protected int currentIndex = -1;
-    protected T currentIMEItem = null;
     protected List<T> currentIMEItems = new ArrayList<T>();
 
     protected long lastSearchedTime = 0L;
@@ -35,26 +34,31 @@ public abstract class NextGenIMEEngine <T>{
         imeElements = elements;
     }
 
-    public T getCurrentIMEElement(){
-        if (currentIMEItem != null)
-            return currentIMEItem;
-        else
-            return null;
+
+    public List<T> getCurrentIMEItems(){
+        return currentIMEItems;
     }
 
     public boolean computeCurrentIMEElement(long timecode){
-        return binarySearch(timecode);
+        return linearSearch(timecode);
     }
 
     // returns true if there is an update of the current item
-    public boolean binarySearch(long timecode){
+    public boolean binarySearch(long movieTimecode){
         T computedIMEItem = null;
-        if (currentIMEItem != null && compareCurrentTimeWithItemAtIndex(timecode, currentIndex) == 0) {
+
+        double dTimeCode = (double)movieTimecode * 23.98/24;            // frame adjustment
+        long timecode = (long)dTimeCode;
+
+        if (currentIMEItems != null && currentIndex != -1 && compareCurrentTimeWithItemAtIndex(timecode, currentIndex) == 0) {
            return false;
+        }else{
+            currentIMEItems = new ArrayList<T>();
         }
 
+
         if (timecode < 0 || imeElements.size() == 0) {
-            currentIMEItem = null;
+            currentIMEItems = new ArrayList<T>();
             return false;
         }
         //Implementation #1: Binary Search o(log n)
@@ -117,8 +121,12 @@ public abstract class NextGenIMEEngine <T>{
                 break;
             }
         }
-        if (computedIMEItem == null || !computedIMEItem.equals(currentIMEItem) ) {
-            currentIMEItem = computedIMEItem;
+        if (computedIMEItem != null) {
+            if (currentIMEItems.size()> 0 && currentIMEItems.get(0).equals(computedIMEItem))
+                return false;
+            else
+                currentIMEItems = new ArrayList<T>();
+            currentIMEItems.add(computedIMEItem);
             lastSearchedTime = timecode;
             return true;
         }else
@@ -126,24 +134,28 @@ public abstract class NextGenIMEEngine <T>{
     }
 
     // returns true if there is an update of the current item
-    public boolean linearSearch(long timecode){
+    public boolean linearSearch(long movieTimecode){
+        double dTimeCode = (double)movieTimecode * 23.98/24;            // frame adjustment
+        long timecode = (long)dTimeCode;
+
         int startIndex = currentIndex;
 
-        if (startIndex != 0 && compareCurrentTimeWithItemAtIndex(timecode, startIndex) < 0){
+        if (startIndex == -1 || (startIndex != 0  && compareCurrentTimeWithItemAtIndex(timecode, startIndex) < 0)){
             startIndex = 0;
         }
+
         currentIMEItems = new ArrayList<T>();
-        for (int i = 0; i < imeElements.size(); i++){
+        for (int i = startIndex; i < imeElements.size(); i++){
             if (compareCurrentTimeWithItemAtIndex(timecode, i) == 0){  //within
                 for (int j = i; j< imeElements.size(); j++){
                     if (compareCurrentTimeWithItemAtIndex(timecode, j) == 0) {  //within
                         currentIMEItems.add(imeElements.get(j));
-                    }else if ( compareCurrentTimeWithItemAtIndex(timecode, j) > 0)
+                    }else if ( compareCurrentTimeWithItemAtIndex(timecode, j) < 0)      // timecode is before the this event
                         break;
                 }
 
                 break;
-            } else if ( compareCurrentTimeWithItemAtIndex(timecode, i) > 0)
+            } else if ( compareCurrentTimeWithItemAtIndex(timecode, i) < 0)     // timecode is before the this event
                 break;
         }
 

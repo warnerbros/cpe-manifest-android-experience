@@ -43,6 +43,8 @@ public class TheTakeApiDAO {
     private static String theTakeMediaId;
     private static String API_KEY_KEY = "thetake_api_key";
 
+    final static int FRAME_GROUP_ITEM_LIMIT = 400;
+
     private static class Endpoints {
         static final String PrefetchProductFrames = "/frames/listFrames";
         static final String PrefetchProductCategories = "/categories/listProductCategories";

@@ -23,11 +23,15 @@ public class AVGalleryIMEEngine extends NextGenIMEEngine<IMEElement<Presentation
 
 
     // returns true if there is an update of the current item
+    /*
     private IMEElement<PresentationDataItem> computeMultipleCurrentIMEElements(){
         List<PresentationDataItem> listOfItems = new ArrayList<PresentationDataItem>();
 
-        if (currentIMEItem != null){
-            listOfItems.add(currentIMEItem.imeObject);
+        if (currentIMEItems.size() > 0){
+            for (IMEElement<PresentationDataItem> imeElement : currentIMEItems){
+                listOfItems.add(imeElement.imeObject);
+
+            }
             if (currentIndex != imeElements.size()-1 ) {
                 for (int i = currentIndex + 1; i < imeElements.size(); i++) { //look ahead
                     if (compareCurrentTimeWithItemAtIndex(lastSearchedTime, i) == 0) {
@@ -59,7 +63,7 @@ public class AVGalleryIMEEngine extends NextGenIMEEngine<IMEElement<Presentation
 
     public IMEElement<PresentationDataItem> getCurrentIMEElement(){
         return computeMultipleCurrentIMEElements();
-    }
+    }*/
 
     public static class IMECombineItem extends PresentationDataItem{
         List<PresentationDataItem> items;

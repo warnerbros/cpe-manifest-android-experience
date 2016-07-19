@@ -43,7 +43,7 @@ public class TheTakeIMEEngine extends NextGenIMEEngine<TheTakeProductFrame>{
         }
     }
 
-    private void requestNextGroupOfData(){
+    private void requestNextGroupOfData(final long timecode){
         if (currentStart == imeElements.size()){
             return;
         }else{
@@ -60,8 +60,8 @@ public class TheTakeIMEEngine extends NextGenIMEEngine<TheTakeProductFrame>{
                         imeElements.addAll(result);
                     }
                 }
-                if (hasMore){
-                    //geta
+                if (timecode + 3000 > lastTimecode && hasMore){
+                    requestNextGroupOfData(timecode);
                 }
             }
 
@@ -78,7 +78,7 @@ public class TheTakeIMEEngine extends NextGenIMEEngine<TheTakeProductFrame>{
     @Override
     public boolean computeCurrentIMEElement(long timecode) {
         if (timecode + 3000 > lastTimecode && hasMore){
-            requestNextGroupOfData();
+            requestNextGroupOfData(timecode);
         }
         if (lastGetTimecode + 15000 > timecode && lastGetTimecode < timecode ){
 
@@ -88,7 +88,7 @@ public class TheTakeIMEEngine extends NextGenIMEEngine<TheTakeProductFrame>{
             lastGetTimecode = timecode;
             synchronized (imeElements) {
 
-                boolean result = super.computeCurrentIMEElement(timecode);
+                boolean result = super.binarySearch(timecode);
                 return result;
             }
         }
