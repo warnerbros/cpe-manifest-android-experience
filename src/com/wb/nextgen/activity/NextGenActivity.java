@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Size;
 import android.view.Display;
@@ -36,7 +37,7 @@ import java.util.TimerTask;
 /**
  * Created by gzcheng on 1/7/16.
  */
-public class NextGenActivity extends FragmentActivity implements View.OnClickListener {
+public class NextGenActivity extends NextGenHideStatusBarActivity implements View.OnClickListener {
     // wrapper of ProfileViewFragment
 
     VideoView startupVideoView;
@@ -104,7 +105,6 @@ public class NextGenActivity extends FragmentActivity implements View.OnClickLis
     @Override
     public void onStart(){
         super.onStart();
-        getWindow().getDecorView().setSystemUiVisibility(getWindow().getDecorView().getSystemUiVisibility() | View.SYSTEM_UI_FLAG_FULLSCREEN);
         if (startupVideoView != null ){
             if (!isStartUp){
                 startupVideoView.seekTo(videoLoopPoint);

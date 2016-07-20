@@ -27,7 +27,7 @@ import com.wb.nextgen.util.utils.StringHelper;
 /**
  * Created by gzcheng on 3/9/16.
  */
-public abstract class AbstractNextGenActivity extends AppCompatActivity implements ContentViewFullscreenRequestInterface {
+public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivity implements ContentViewFullscreenRequestInterface {
 
     public abstract String getBackgroundImgUri();
     public abstract String getLeftButtonText();
@@ -118,7 +118,6 @@ public abstract class AbstractNextGenActivity extends AppCompatActivity implemen
     protected void onStart(){
         super.onStart();
 
-        getWindow().getDecorView().setSystemUiVisibility(getWindow().getDecorView().getSystemUiVisibility() | View.SYSTEM_UI_FLAG_FULLSCREEN);
         //int spacerPost = 0;
 
         if (backgroundImageView == null){

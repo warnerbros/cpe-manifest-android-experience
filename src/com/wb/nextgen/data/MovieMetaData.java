@@ -624,7 +624,7 @@ public class MovieMetaData {
         private static final String FACEBOOK_KEY = "facebook.com";
 
         public static enum SOCIAL_MEDIA_KEY{
-            FACEBOOK_KEY("www.facebook.com"), INSTAGRAM_KEY("www.instagram.com"), TWITTER_KEY("www.twitter.com");
+            FACEBOOK_KEY("facebook.com"), INSTAGRAM_KEY("instagram.com"), TWITTER_KEY("twitter.com");
             String keyValue;
             SOCIAL_MEDIA_KEY(String keyValue){
                 this.keyValue = keyValue;
