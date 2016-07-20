@@ -202,30 +202,7 @@ public class NextGenActorDetailFragment extends Fragment implements View.OnClick
             updateList = actorOjbect.getBaselineCastData().filmogrphies;
         }else {
             updateList = null;      //clear the list
-            /*
-            BaselineApiDAO.getFilmographyPosters(actorOjbect.getBaselineCastData().filmogrphies, new ResultListener<List<MovieMetaData.FilmPoster>>() {
-                @Override
-                public void onResult(List<MovieMetaData.FilmPoster> result) {
-                    if (getActivity() != null) {
-                        synchronized (getActivity()) {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    synchronized (filmographyRecyclerView) {
-                                        filmographyAdaptor.setFilmographies(actorOjbect.getBaselineCastData().filmogrphies);
-                                        filmographyAdaptor.notifyDataSetChanged();
-                                    }
-                                }
-                            });
-                        }
-                    }
-                }
 
-                @Override
-                public <E extends Exception> void onException(E e) {
-
-                }
-            });*/
         }
 
         if (getActivity() != null) {
