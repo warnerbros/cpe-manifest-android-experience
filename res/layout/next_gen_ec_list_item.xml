@@ -23,50 +23,37 @@
                 android:scaleType="fitCenter"
                 android:duplicateParentState="true"
                 android:src="@drawable/ec_sample_thumbnail"/>
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
+
                 <LinearLayout
-                    android:layout_weight="4"
-                    android:layout_width="fill_parent"
-                    android:layout_height="0dp"/>
-                <LinearLayout
-                    android:layout_weight="1"
-                    android:layout_width="fill_parent"
-                    android:layout_height="0dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="@dimen/selected_thumbnail_border_size"
+                    android:layout_marginRight="@dimen/selected_thumbnail_border_size"
                     android:orientation="horizontal">
                     <LinearLayout
+                        android:layout_weight="3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:id="@+id/ec_duration_text"
                         android:layout_weight="2"
                         android:layout_width="0dp"
-                        android:layout_height="match_parent"/>
-                    <RelativeLayout
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent">
-                        <!--<com.wb.nextgen.widget.SelectedOverlayImageView
-                            android:layout_width="fill_parent"
-                            android:layout_height="fill_parent"
-                            android:layout_centerHorizontal="true"
-                            android:background="@color/transparent_black"
-                            nextgen:inActiveOverlayColor="@color/inactive_mask_color"
-                            android:duplicateParentState="true"/>-->
-                        <TextView
-                            android:id="@+id/ec_duration_text"
-                            android:layout_width="fill_parent"
-                            android:layout_height="fill_parent"
-                            android:textColor="@android:color/white"
-                            android:textSize="@dimen/textNormal"
-                            android:textStyle="italic"
-                            android:fontFamily="sans-serif-condensed"
-                            android:background="@drawable/selectable_rectangle_border"
-                            android:gravity="center"
-                            android:text="Play time"/>
-                    </RelativeLayout>
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/textMSmall"
+                        android:textStyle="italic"
+                        android:fontFamily="sans-serif-condensed"
+                        android:background="@color/transparent_gray"
+                        android:gravity="center"/>
 
                 </LinearLayout>
+            </RelativeLayout>
 
-            </LinearLayout>
         </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
 
     </RelativeLayout>

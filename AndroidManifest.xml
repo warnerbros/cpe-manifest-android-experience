@@ -10,7 +10,7 @@
 		android:xlargeScreens="true"
 		android:anyDensity="true"
 		android:requiresSmallestWidthDp="600"/>
-	<!-- Minimum Ice-cream Sandwich 4.0; target Ice-cream Sandwich 4.0 -->
+	<!-- Minimum Lollipop 5.0; target Lollipop 5.0 -->
 	<uses-sdk
 		android:minSdkVersion="21"
 		android:targetSdkVersion="21" />

@@ -74,17 +74,16 @@ public class ECViewLeftListFragment extends NextGenExtraLeftListFragment{
         }
 
         TextView ecDurationText = (TextView)rowView.findViewById(R.id.ec_duration_text);
-        if (ecDurationText != null && thisEC.getDuration() != null){
-            ecDurationText.setText(thisEC.getDuration());
+        if (ecDurationText != null){
+            if (rowView.isActivated() && thisEC.audioVisualItems != null && thisEC.audioVisualItems.size() > 0){
+                ecDurationText.setText(getResources().getString(R.string.playing));
+                thisEC.setWatched();
+            }else if (thisEC.getIsWatched()){
+                ecDurationText.setText(getResources().getString(R.string.watched));
+            }else if (thisEC.getDuration() != null)
+                ecDurationText.setText(thisEC.getDuration());
         }
-        /*
-        ImageView mask = (ImageView)rowView.findViewById(R.id.ec_inactive_mask);
-        if (mask != null){
-            if (mask.isActivated()){
-                mask.setVisibility(View.INVISIBLE);
-            }else
-                mask.setVisibility(View.VISIBLE);
-        }*/
+
     }
 
     protected String getHeaderText(){

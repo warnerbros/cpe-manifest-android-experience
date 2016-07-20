@@ -1069,6 +1069,9 @@ public class MovieMetaData {
         final public List<ExternalApiData> externalApiDataList = new ArrayList<ExternalApiData>();
         final PresentationImageData[] images;
         final Duration durationObject;
+
+        boolean isWatched = false;
+
         public AudioVisualItem(String parentExperienceId, InventoryMetadataType metaData, InventoryVideoType videoData){
             super(metaData, parentExperienceId);
             BasicMetadataInfoType localizedInfo = metaData!= null ? metaData.getBasicMetadata().getLocalizedInfo().get(0): null;
@@ -1159,6 +1162,14 @@ public class MovieMetaData {
 
             return posterImgUrl;
         }
+
+        public boolean getIsWatched(){
+            return isWatched;
+        }
+
+        public void setWatched(){
+            isWatched = true;
+        }
     }
 
     static public class ExperienceData {
@@ -1226,6 +1237,19 @@ public class MovieMetaData {
                 return audioVisualItems.get(0).duration;
             }
             return null;
+        }
+
+        public boolean getIsWatched(){
+            if (audioVisualItems.size() > 0){
+                return audioVisualItems.get(0).isWatched;
+            }
+            return false;
+        }
+
+        public void setWatched(){
+            if (audioVisualItems.size() > 0){
+                audioVisualItems.get(0).setWatched();
+            }
         }
 
         public ExternalApiData getExternalApp(){

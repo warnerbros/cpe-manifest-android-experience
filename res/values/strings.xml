@@ -56,4 +56,7 @@
 	<string name="count_down_text">%s\nsec</string>
 	<string name="show_more_text">Show More</string>
 	<string name="show_less_text">Show Less</string>
+
+	<string name="watched">WATCHED</string>
+	<string name="playing">PLAYING</string>
 </resources>
