@@ -84,6 +84,7 @@ public class NextGenApplication extends Application {
     public void onCreate() {
         super.onCreate();
         try {
+
             sSettings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             sDay = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
             sApplicationContext = this.getApplicationContext();
@@ -101,6 +102,8 @@ public class NextGenApplication extends Application {
             sUserAgent = "Android/" + sVersionName + " (Linux; U; Android " + Build.VERSION.RELEASE + "; " + locale
                     + "; " + Build.MODEL + ")";
             DemoData.parseDemoJSONData();
+
+            NextGenLogger.d("TIME_THIS", "---------------Next Test--------------");
 
             long systime = SystemClock.currentThreadTimeMillis();
             ManifestXMLParser.NextGenManifestData manifest = new ManifestXMLParser().startParsing();

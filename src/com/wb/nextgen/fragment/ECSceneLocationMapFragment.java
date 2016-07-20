@@ -55,7 +55,8 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
     private Button mapButton;
     private Button satelliteButton;
 
-    private List<SceneLocation> sceneLocations;
+    private List<SceneLocation> defaultSceneLocations;
+    //private List<SceneLocation> sceneLocations;
     //private ArrayAdapter<String> spinnerAdaptor;
     private OnSceneLocationSelectedListener onSceneLocationSelectedListener;
     private HashMap<LatLng, SceneLocation> markerLocationMap = new HashMap<LatLng, SceneLocation>();
@@ -78,19 +79,11 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
             //mapView.setOn
         }
 
-        //locationSpinner = (Spinner) view.findViewById(R.id.scene_locations_spinner);
-
-        //locationSpinner.setOnItemSelectedListener(this);
-
-        if (sceneLocations != null) {
+        if (defaultSceneLocations != null) {
             List<String> list = new ArrayList<String>();
-            for (SceneLocation scLoc : sceneLocations) {
+            for (SceneLocation scLoc : defaultSceneLocations) {
                 list.add(scLoc.name);
             }
-            /*spinnerAdaptor = new ArrayAdapter<String>(getActivity(), R.layout.location_spinner_item, list);
-            spinnerAdaptor.setDropDownViewResource(R.layout.location_spinner_dropdown_item);
-            if (locationSpinner != null)
-                locationSpinner.setAdapter(spinnerAdaptor);*/
             setupPins();
         }
 
@@ -168,55 +161,29 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
     public void setOnSceneLocationSelectedListener(OnSceneLocationSelectedListener listener){
         onSceneLocationSelectedListener = listener;
     }
-    /*
-    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 
-        if (view != null && view.getParent() != null && view.getParent() == locationSpinner) {
-
-            SceneLocation locationItem = sceneLocations.get(pos);
-            setLocationItem(locationItem.name, locationItem);
-            if (onSceneLocationSelectedListener != null) {
-                onSceneLocationSelectedListener.onSceneLocationIndexSelected(pos);
-            }
-        }
-    }*/
 
     public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback
     }
 
     public void setSelectionFromSlider(SceneLocation location){
-        //SceneLocation selectedSL = sceneLocations.get(parentIndex).childrenSceneLocations.get(index);
 
         setLocationItem(location.name, location);
-    /*    if (locationSpinner != null){
-            int parentIndex = locationSpinner.getSelectedItemPosition();
-            if (parentIndex == 0) {
-                locationSpinner.setSelection(index + 1);
-            }
-            SceneLocation selectedSL = sceneLocations.get(parentIndex).childrenSceneLocations.get(index);
 
-            setLocationItem(selectedSL.name, selectedSL);
-        }*/
     }
 
-    public void setSceneLocations(List<SceneLocation> locations){
-        if (locations != null && locations.size() > 0) {
-            sceneLocations = locations;
-            setLocationItem(sceneLocations.get(0).name, sceneLocations.get(0));
+    public void setDefaultSceneLocations(List<SceneLocation> locations){
+        defaultSceneLocations = new ArrayList<SceneLocation>();
+        for (int i = 0; i < locations.size(); i++) {
+            defaultSceneLocations.addAll(locations.get(i).getAllSubLocationItems());
         }
     }
 
     private void setupPins(){
-        final List<SceneLocation> allLocations = new ArrayList<SceneLocation>();
-        if (sceneLocations != null && sceneLocations.size() > 1) {
-            for (int i = 1; i < sceneLocations.size(); i++) {
-                allLocations.addAll(sceneLocations.get(i).getAllSubLocationItems());
 
-            }
-        }
 
-        HttpImageHelper.getAllMapPinsBySceneLocation(allLocations, new ResultListener<Boolean>() {
+        HttpImageHelper.getAllMapPinsBySceneLocation(defaultSceneLocations, new ResultListener<Boolean>() {
             @Override
             public void onResult(Boolean result) {
                 getActivity().runOnUiThread(new Runnable() {
@@ -234,7 +201,7 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
                                     googleMap.setOnMarkerClickListener(ECSceneLocationMapFragment.this);
 
 
-                                    for (SceneLocation sceneLocation : allLocations) {
+                                    for (SceneLocation sceneLocation : defaultSceneLocations) {
                                         LatLng latlng = new LatLng(sceneLocation.location.latitude, sceneLocation.location.longitude);
 
                                         markerLocationMap.put(latlng, sceneLocation);
@@ -244,7 +211,7 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
                                                 .position(latlng).title(sceneLocation.location.getTitle()).snippet(sceneLocation.location.address)
                                                 .icon(bmDes);
 
-                                        googleMap.addMarker(markerOpt).showInfoWindow();
+                                        googleMap.addMarker(markerOpt);
                                     }
                                 }
                             });
@@ -271,22 +238,20 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
                 onSceneLocationSelectedListener.onSceneLocationSelected(sl);
             }
             setLocationItem(sl.name, sl);
-            /*if (locationSpinner != null){
-                SceneLocation outMostParent = sl.getOuterMostParent();
-                for(int i = 0; i < sceneLocations.size(); i++){
-                    if (outMostParent.equals(sceneLocations.get(i))){
-                        locationSpinner.setSelection(i);
-                        break;
-                    }
-                }
-            }*/
+
         }
         return false;
     }
 
+    public void setLocationItem(String textTitle, SceneLocation sceneLocationObj){
+        if (sceneLocationObj != null)
+            setLocationItems(textTitle, sceneLocationObj.getAllSubLocationItems(), sceneLocationObj.location);
+        else
+            setLocationItems(textTitle, defaultSceneLocations, null);
+    }
 
-    public void setLocationItem(String textTitle, final SceneLocation sceneLocation){
-        if (sceneLocation != null) {
+    private void setLocationItems(String textTitle, final List<SceneLocation> sceneLocations, final LocationItem locationItem){
+        if (sceneLocations != null) {
             title = textTitle;
 
 
@@ -295,11 +260,10 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
                     @Override
                     public void onMapReady(final GoogleMap googleMap) {
 
-                        List<SceneLocation> sceneLocations = sceneLocation.getAllSubLocationItems();
 
                         LatLngBounds.Builder boundsBuilder = LatLngBounds.builder();
-                         for (SceneLocation sceneLocation : sceneLocations){
-                             boundsBuilder.include(new LatLng(sceneLocation.location.latitude, sceneLocation.location.longitude));
+                        for (SceneLocation sceneLocation : sceneLocations){
+                            boundsBuilder.include(new LatLng(sceneLocation.location.latitude, sceneLocation.location.longitude));
                         }
                         googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 100));
 
@@ -311,25 +275,27 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
 
                         googleMap.setOnMapClickListener(null);
 
-                        final LocationItem locationItem = sceneLocation.getRepresentativeLocationItem();
-                        final LatLng location = new LatLng(locationItem.latitude, locationItem.longitude);
                         if (locationItem != null) {
-                            googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-                                @Override
-                                public void onCameraChange(CameraPosition camPos) {
-                                    if (camPos.zoom > locationItem.zoom && location != null) {
-                                        // set zoom 17 and disable zoom gestures so map can't be zoomed out
-                                        // all the way
-                                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, locationItem.zoom));
-                                        googleMap.getUiSettings().setZoomGesturesEnabled(false);
-                                    }
-                                    if (camPos.zoom <= 17) {
-                                        googleMap.getUiSettings().setZoomGesturesEnabled(true);
-                                    }
+
+                            final LatLng location = new LatLng(locationItem.latitude, locationItem.longitude);
+                            if (locationItem != null) {
+                                googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+                                    @Override
+                                    public void onCameraChange(CameraPosition camPos) {
+                                        if (camPos.zoom > locationItem.zoom && location != null) {
+                                            // set zoom 17 and disable zoom gestures so map can't be zoomed out
+                                            // all the way
+                                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, locationItem.zoom));
+                                            googleMap.getUiSettings().setZoomGesturesEnabled(false);
+                                        }
+                                        if (camPos.zoom <= 17) {
+                                            googleMap.getUiSettings().setZoomGesturesEnabled(true);
+                                        }
 
 
-                                }
-                            });
+                                    }
+                                });
+                            }
                         }
                         //googleMap.addMarker(new MarkerOptions().position(new LatLng(locationItem.latitude, locationItem.longitude)).title("Marker"));
                     }

@@ -75,15 +75,12 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
         rootSceneLocation.childrenSceneLocations.addAll(ecGroupData.getSceneLocations());
         sliderFrame = findViewById(R.id.scene_location_slider_frame);
 
-        rootSceneLocations = new ArrayList<SceneLocation>();
-        rootSceneLocations.add(rootSceneLocation);
-        rootSceneLocations.addAll(ecGroupData.getSceneLocations());
-
+        rootSceneLocations = ecGroupData.getSceneLocations();
 
         nextGenFragmentTransactionEngine = new NextGenFragmentTransactionEngine(this);
         if (mapViewFragment == null){
             mapViewFragment = new ECSceneLocationMapFragment();
-            mapViewFragment.setSceneLocations(rootSceneLocations);
+            mapViewFragment.setDefaultSceneLocations(rootSceneLocations);
             mapViewFragment.setOnSceneLocationSelectedListener(this);
         }
 
@@ -93,7 +90,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
         if (sliderTitleText != null){
             sliderTitleText.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
             sliderTextAdapter = new SliderTextAdapter();
-            sliderTextAdapter.setSceneLocation(rootSceneLocations.get(0));
+            sliderTextAdapter.setSceneLocation(null);
             sliderTitleText.setAdapter(sliderTextAdapter);
             //sliderTitleTextView.setText(ecGroupData.title.toUpperCase());
         }
@@ -104,7 +101,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
             locationECLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
             locationECRecyclerView.setLayoutManager(locationECLayoutManager);
             locationECsAdapter = new LocationECsAdapter();
-            locationECsAdapter.setSceneLocation(rootSceneLocations.get(0));
+            locationECsAdapter.setSceneLocation(null);
             locationECRecyclerView.setAdapter(locationECsAdapter);
         }
 
@@ -202,6 +199,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
     public class SliderTextViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         CardView textCV;
         TextView locationTxt;
+        TextView arrowTxt;
         String currentText;
         SceneLocation sceneLocation;
         int itemIndex;
@@ -209,6 +207,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
         SliderTextViewHolder(View itemView, String text, int index) {
             super(itemView);
             textCV = (CardView)itemView.findViewById(R.id.text_cv);
+            arrowTxt = (TextView)itemView.findViewById(R.id.slider_arrow);
             locationTxt = (TextView)itemView.findViewById(R.id.slider_text);
             this.currentText = text;
             itemIndex = index;
@@ -219,12 +218,16 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
             currentText = text;
             itemIndex = position;
             locationTxt.setText(text);
+            locationTxt.setActivated(false);
+            arrowTxt.setVisibility(View.GONE);
         }
 
-        public void setSceneLocation(SceneLocation sceneLocation, int position){
+        public void setSceneLocation(SceneLocation sceneLocation, int position, boolean isLast){
             this.sceneLocation = sceneLocation;
             itemIndex = position;
-            locationTxt.setText("> " +sceneLocation.name);
+            arrowTxt.setVisibility(View.VISIBLE);
+            locationTxt.setText(sceneLocation.name);
+            locationTxt.setActivated(isLast);
         }
 
         @Override
@@ -234,8 +237,9 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
                 locationECsAdapter.setSceneLocation(sceneLocation);
                 locationECsAdapter.notifyDataSetChanged();
             }else{
-                mapViewFragment.setLocationItem(ecGroupData.title, rootSceneLocations.get(0));
-                locationECsAdapter.setSceneLocation(rootSceneLocations.get(0));
+
+                mapViewFragment.setLocationItem(ecGroupData.title, null);
+                locationECsAdapter.setSceneLocation(null);
                 locationECsAdapter.notifyDataSetChanged();
             }
         }
@@ -279,9 +283,8 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
             if (position == 0)
                 holder.setStringItem(ecGroupData.title, position);
             else
-                holder.setSceneLocation(sceneLocations.get(position - 1), position);
+                holder.setSceneLocation(sceneLocations.get(position - 1), position, position == getItemCount() - 1);
 
-            //holder.personPhoto.setImageResource(persons.get(i).photoId);
         }
 
         @Override
@@ -424,9 +427,10 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
                 }else if (sceneLocation.presentationItems.size() > 0){
                     holder.setItem(sceneLocation.presentationItems.get(position), position);
                 }
+            }else if (rootSceneLocations != null) {
+                holder.setItem(rootSceneLocations.get(position), position);
             }
 
-            //holder.personPhoto.setImageResource(persons.get(i).photoId);
         }
 
         @Override
@@ -443,6 +447,8 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
                 } else
                     return 0;
 
+            }else if (rootSceneLocations != null) {
+                return rootSceneLocations.size();
             }else
                 return 0;
         }
