@@ -36,6 +36,7 @@ public class ECTurnTableViewFragment extends AbstractECGalleryViewFragment{
 
     SeekBar turnTableSeekBar;
     ImageView turnTableImageView;
+    ProgressBar loadingProgressBar;
 
     private static int RESTRICTED_IMAGE_HEIGHT = 540;
     private static int RESTRICTED_IMAGE_WIDTH = 960;
@@ -53,7 +54,8 @@ public class ECTurnTableViewFragment extends AbstractECGalleryViewFragment{
 
         turnTableSeekBar = (SeekBar) view.findViewById(R.id.turn_table_seekbar);
         turnTableSeekBar.setOnSeekBarChangeListener(seekBarListener);
-        //turnTableProgressBar.setListener(this);
+        loadingProgressBar = (ProgressBar)view.findViewById(R.id.loading_progress_bar);
+
         turnTableImageView = (ImageView) view.findViewById(R.id.turn_table_image_view);
         if (currentGallery != null){
             setCurrentGallery(currentGallery);
@@ -103,6 +105,9 @@ public class ECTurnTableViewFragment extends AbstractECGalleryViewFragment{
                 turnTableImageView.setImageBitmap(null);
 
             turntableBitmaps = null;
+            if (loadingProgressBar != null)
+                loadingProgressBar.setVisibility(View.VISIBLE);
+
             getImages(new ResultListener<List<Bitmap>>() {
                 @Override
                 public void onResult(List<Bitmap> result) {
@@ -112,6 +117,7 @@ public class ECTurnTableViewFragment extends AbstractECGalleryViewFragment{
                         public void run() {
                             seekBarListener.onProgressChanged(turnTableSeekBar, 0, false);
                             turnTableSeekBar.setMax(turntableBitmaps.size());
+                            loadingProgressBar.setVisibility(View.GONE);
 
                         }
                     });
