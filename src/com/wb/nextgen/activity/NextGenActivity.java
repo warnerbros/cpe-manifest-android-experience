@@ -249,7 +249,7 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
         WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         DisplayMetrics screenMetrics = new DisplayMetrics();
-        display.getMetrics(screenMetrics);
+        display.getRealMetrics(screenMetrics);
 
         Size screenSize = new Size(screenMetrics.widthPixels, screenMetrics.heightPixels);
 
@@ -283,20 +283,4 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
         return resultParams;
     }
 
-    @SuppressLint("NewApi")
-    private int getSoftButtonsBarHeight() {
-        // getRealMetrics is only available with API 17 and +
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            DisplayMetrics metrics = new DisplayMetrics();
-            getWindowManager().getDefaultDisplay().getMetrics(metrics);
-            int usableHeight = metrics.widthPixels;
-            getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
-            int realHeight = metrics.widthPixels;
-            if (realHeight > usableHeight)
-                return realHeight - usableHeight;
-            else
-                return 0;
-        }
-        return 0;
-    }
 }
