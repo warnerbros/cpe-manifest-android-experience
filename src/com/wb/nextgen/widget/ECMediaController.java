@@ -37,7 +37,7 @@ public class ECMediaController extends NextGenMediaController {
 
     ImageButton maxminButton;
     public ECMediaController(Context context, NextGenPlayerInterface player) {
-        super(context, player);
+        super(context, player, true);
         statupSystemUIView = mBaseSystemUIView.getSystemUiVisibility();
     }
 

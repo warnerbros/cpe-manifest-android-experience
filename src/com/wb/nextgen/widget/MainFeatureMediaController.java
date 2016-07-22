@@ -29,19 +29,10 @@ import com.wb.nextgen.model.NextGenIMEEngine;
 /**
  * Created by gzcheng on 3/28/16.
  */
-public class MainFeatureMediaController extends  NextGenMediaController implements NextGenPlaybackStatusListener {
+public class MainFeatureMediaController extends  NextGenMediaController {
     ImageButton shareClipButton;
-    IMEElementsGroup shareClipIMEGroup;
-    AVGalleryIMEEngine shareClipIMEEngine;
     public MainFeatureMediaController(Context context, NextGenPlayerInterface player) {
-        super(context, player);
-    }
-
-    public void setShareClipIMEGroup(IMEElementsGroup shareClipGroup){
-        if (shareClipGroup != null) {
-            shareClipIMEGroup = shareClipGroup;
-            //shareClipIMEEngine = new AVGalleryIMEEngine(shareClipIMEGroup.getIMEElementesList());
-        }
+        super(context, player, false);
     }
 
     public void hideShowControls(boolean bShow){
@@ -51,21 +42,6 @@ public class MainFeatureMediaController extends  NextGenMediaController implemen
                 ((AppCompatActivity)mContext).getSupportActionBar().show();
             } else {
                 ((AppCompatActivity)mContext).getSupportActionBar().hide();
-            }
-        }
-    }
-
-    public void playbackStatusUpdate(NextGenPlaybackStatus playbackStatus, long timecode){
-        if (shareClipIMEEngine != null){
-            shareClipIMEEngine.computeCurrentIMEElement(timecode);
-
-            MovieMetaData.IMEElement item = null;;//shareClipIMEEngine.getCurrentIMEElement();
-            if (item != null){
-                shareClipButton.setActivated(true);
-                shareClipButton.setColorFilter(null);
-            }else {
-                shareClipButton.setActivated(false);
-                shareClipButton.setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_IN);
             }
         }
     }

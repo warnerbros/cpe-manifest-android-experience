@@ -39,7 +39,7 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment {
     ImageView bgImageView;
 
     String bgImageUrl = null;
-    FixedAspectRatioFrameLayout.Priority aspectFramePriority = FixedAspectRatioFrameLayout.Priority.WIDTH_PRIORITY;
+    FixedAspectRatioFrameLayout.Priority aspectFramePriority = null;
 
     boolean bSetOnResume= false;
     //private List<MovieMetaData.ECGalleryImageItem>

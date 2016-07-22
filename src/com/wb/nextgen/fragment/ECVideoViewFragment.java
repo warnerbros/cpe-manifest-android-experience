@@ -62,7 +62,7 @@ public class ECVideoViewFragment extends Fragment{
     boolean shouldAutoPlay = true;
     boolean shouldHideMetaData = false;
 
-    FixedAspectRatioFrameLayout.Priority aspectFramePriority = FixedAspectRatioFrameLayout.Priority.WIDTH_PRIORITY;
+    FixedAspectRatioFrameLayout.Priority aspectFramePriority = null;
 
     private static int COUNT_DOWN_SECONDS = 5;
 
@@ -135,6 +135,23 @@ public class ECVideoViewFragment extends Fragment{
                     if (ecsAdaptor.shouldStartCountDownForNext()){
                         //new
                         startRepeatingTask();
+                    }else {
+                        if (getActivity() != null) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    videoView.seekTo(0);
+                                    if (previewFrame != null) {
+                                        if (!StringHelper.isEmpty(selectedAVItem.getPosterImgUrl())) {
+                                            Picasso.with(getActivity()).load(selectedAVItem.getPreviewImageUrl()).fit().into(previewImageView);
+                                        }
+                                        previewFrame.setVisibility(View.VISIBLE);
+                                    }
+                                    if (previewPlayBtn != null)
+                                        previewPlayBtn.setVisibility(View.VISIBLE);
+                                }
+                            });
+                        }
                     }
                 }
             }

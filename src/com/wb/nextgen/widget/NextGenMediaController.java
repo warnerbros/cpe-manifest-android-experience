@@ -44,8 +44,8 @@ public class NextGenMediaController extends CustomMediaController {
     protected View mBaseSystemUIView;
     NextGenPlayerInterface player;
 
-    public NextGenMediaController(Context context, NextGenPlayerInterface nextGenPlayer) {
-        super(new ContextThemeWrapper(context, R.style.MediaControllerStyle), false, false);
+    public NextGenMediaController(Context context, NextGenPlayerInterface nextGenPlayer, boolean useFullScreenToggle) {
+        super(new ContextThemeWrapper(context, R.style.MediaControllerStyle), false, useFullScreenToggle);
         player = nextGenPlayer;
 
         init(context);

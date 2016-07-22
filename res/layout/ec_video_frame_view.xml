@@ -23,7 +23,7 @@
                 android:padding="@dimen/spacing_large"
                 android:layout_gravity="center"
                 android:layout_height="fill_parent"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 nextgen:aspectRatioHeight="9"
                 nextgen:aspectRatioWidth="16"
                 nextgen:priority="HEIGHT_PRIORITY">
