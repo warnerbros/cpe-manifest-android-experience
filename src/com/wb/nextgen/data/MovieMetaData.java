@@ -77,7 +77,6 @@ public class MovieMetaData {
 
     private ExperienceData rootExperience;
     private boolean hasCalledBaselineAPI = false;
-    private IMEElementsGroup shareClipIMEGroup;
     private NextGenStyle style;
 
     private List<List<IMEElement<CastData>>> castIMEElements = new ArrayList<List<IMEElement<CastData>>>() ;
@@ -277,9 +276,9 @@ public class MovieMetaData {
                             }
                             if (video != null) {
                                 //ExperienceData ecData = new ExperienceData(experience, metaData, video, null);
-
-
-                                AudioVisualItem item = new AudioVisualItem(experience.getExperienceID(), avMetaData, video, externalApiDatas);
+                                if (audioVisual.getSubType() != null && audioVisual.getSubType().size() > 0)
+                                    subtype = audioVisual.getSubType().get(0);
+                                AudioVisualItem item = new AudioVisualItem(experience.getExperienceID(), avMetaData, video, externalApiDatas, subtype);
                                 avItems.add(item);
                                 presentationIdToAVItemMap.put(presentationId, item);
                             } else {
@@ -375,7 +374,8 @@ public class MovieMetaData {
                 IMEElementsGroup imeGroup = new IMEElementsGroup(timedECGroup);     // need to figure out the type of this group
                 String presentationId = timedEventSequence.getPresentationID(); // this should be the main movie presentation ID
                 if (timedEventSequence.getTimedEvent() != null && timedEventSequence.getTimedEvent().size() > 0){
-                    for (TimedEventType timedEvent : timedEventSequence.getTimedEvent()){
+                    for (int i = 0; i < timedEventSequence.getTimedEvent().size(); i++){
+                        TimedEventType timedEvent = timedEventSequence.getTimedEvent().get(i);
 
                         TimecodeType startTimeCode = timedEvent.getStartTimecode();
                         TimecodeType endTimeCode = timedEvent.getEndTimecode();
@@ -440,7 +440,7 @@ public class MovieMetaData {
                         }
 
                         if (presentationData != null){
-                            IMEElement<PresentationDataItem> element = new IMEElement((long)startTime, (long)endTime, presentationData);
+                            IMEElement<PresentationDataItem> element = new IMEElement((long)startTime, (long)endTime, presentationData, i);
                             imeGroup.addElement(element);
                         }
 
@@ -456,9 +456,7 @@ public class MovieMetaData {
 
 
 
-                if (imeGroup.linkedExperience != null && imeGroup.linkedExperience.experienceId.endsWith(SHARE_CLIP_KEY)){
-                    result.shareClipIMEGroup = imeGroup;
-                }else if (isCast){
+                if (isCast){
                     result.reGroupCastIMEEventGroup(imeGroup);
                 } else
                     result.imeElementGroups.add(imeGroup);
@@ -522,7 +520,7 @@ public class MovieMetaData {
                         if (presentationType.getTrackMetadata() != null && presentationType.getTrackMetadata().size() > 0) {
                             if (presentationType.getTrackMetadata().get(0).getVideoTrackReference() != null && presentationType.getTrackMetadata().get(0).getVideoTrackReference().size() > 0) {
                                 String avItemId = presentationType.getTrackMetadata().get(0).getVideoTrackReference().get(0).getVideoTrackID().get(0);
-                                avItem = new AudioVisualItem(videoAssetsMap.get(avItemId));
+                                avItem = new AudioVisualItem(videoAssetsMap.get(avItemId), null);
                             }
                         }
                     }
@@ -568,9 +566,6 @@ public class MovieMetaData {
         return null;
     }
 
-    public IMEElementsGroup getShareClipIMEGroup(){
-        return shareClipIMEGroup;
-    }
 
     public List<List<IMEElement<CastData>>> getCastIMEElements(){
         return castIMEElements;
@@ -1069,11 +1064,13 @@ public class MovieMetaData {
         final public List<ExternalApiData> externalApiDataList = new ArrayList<ExternalApiData>();
         final PresentationImageData[] images;
         final Duration durationObject;
+        final String subtype;
 
         boolean isWatched = false;
 
-        public AudioVisualItem(String parentExperienceId, InventoryMetadataType metaData, InventoryVideoType videoData){
+        public AudioVisualItem(String parentExperienceId, InventoryMetadataType metaData, InventoryVideoType videoData, String subtype){
             super(metaData, parentExperienceId);
+            this.subtype = subtype;
             BasicMetadataInfoType localizedInfo = metaData!= null ? metaData.getBasicMetadata().getLocalizedInfo().get(0): null;
             if (videoData != null) {
                 videoUrl = videoData.getContainerReference().getContainerLocation();
@@ -1109,8 +1106,9 @@ public class MovieMetaData {
             }
         }
 
-        public AudioVisualItem(InventoryVideoType videoData){
+        public AudioVisualItem(InventoryVideoType videoData, String subtype){
             super(null, null);
+            this.subtype = subtype;
             if (videoData != null) {
                 videoUrl = videoData.getContainerReference().getContainerLocation();
 
@@ -1144,8 +1142,8 @@ public class MovieMetaData {
             return  retString;
         }
 
-        public AudioVisualItem(String parentExperienceId, InventoryMetadataType metaData, InventoryVideoType videoData, List<ExternalApiData> apiDataList){
-            this(parentExperienceId, metaData, videoData);
+        public AudioVisualItem(String parentExperienceId, InventoryMetadataType metaData, InventoryVideoType videoData, List<ExternalApiData> apiDataList, String subtype){
+            this(parentExperienceId, metaData, videoData, subtype);
             if (apiDataList != null)
                 externalApiDataList.addAll(apiDataList);
         }
@@ -1169,6 +1167,10 @@ public class MovieMetaData {
 
         public void setWatched(){
             isWatched = true;
+        }
+
+        public boolean isShareClip(){
+            return "clip share".equalsIgnoreCase(subtype);
         }
     }
 
@@ -1388,10 +1390,12 @@ public class MovieMetaData {
         public final long startTimecode;
         public final long endTimecode;
         public final T imeObject;
-        public IMEElement(long startTimecode, long endTimeCode, T imeObject){   // in millisecond
+        public final int itemIndex;
+        public IMEElement(long startTimecode, long endTimeCode, T imeObject, int itemIndex){   // in millisecond
             this.startTimecode = startTimecode;
             this.endTimecode = endTimeCode;
             this.imeObject = imeObject;
+            this.itemIndex = itemIndex;
         }
 
         /*

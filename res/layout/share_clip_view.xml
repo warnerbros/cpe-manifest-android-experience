@@ -9,47 +9,117 @@
     <LinearLayout
         android:id="@+id/next_gen_ec_content_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
-
-        <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
-            xmlns:nextgen="http://schemas.android.com/apk/res-auto"
+        <TextView
+            android:id="@+id/share_clip_title_txt"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/textMedium"
+            android:fontFamily="sans-serif-condensed"
+            android:background="@color/transparent_black2"/>
+        <LinearLayout
             android:layout_width="match_parent"
-            nextgen:aspectRatioHeight="9"
-            nextgen:aspectRatioWidth="16"
-            nextgen:priority="WIDTH_PRIORITY">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/transparent_black"
+            android:layout_margin="@dimen/spacing_normal">
+            <TextView
+                android:layout_margin="@dimen/spacing_normal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/choose_share_clip"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="@dimen/textMedium"
+                android:fontFamily="sans-serif-condensed" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-                <com.wb.nextgen.videoview.ObservableVideoView
-                    android:id="@+id/ec_video_view"
+                <ImageButton
+                    android:layout_alignParentLeft="true"
+                    android:id="@+id/prev_clip_btn"
+                    android:layout_width="@dimen/social_icon_dimen"
+                    android:layout_height="@dimen/social_icon_dimen"
+                    android:layout_centerVertical="true"
+                    android:scaleType="fitCenter"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/back_logo"/>
+
+
+                <LinearLayout
+                    android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:layout_centerInParent="true" />
+                    android:layout_toRightOf="@+id/prev_clip_btn"
+                    android:layout_toLeftOf="@+id/next_clip_btn"
+                    android:orientation="vertical">
+                    <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
+                        xmlns:nextgen="http://schemas.android.com/apk/res-auto"
+                        android:layout_height="wrap_content"
+                        android:layout_width="fill_parent"
+                        nextgen:aspectRatioHeight="9"
+                        nextgen:aspectRatioWidth="16"
+                        nextgen:priority="WIDTH_PRIORITY">
 
-        </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_alignParentLeft="true"
-                android:id="@+id/ec_content_name"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/textMedium"
-                android:fontFamily="sans-serif-condensed"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:layout_alignParentRight="true"
-                android:id="@+id/share_clip_duration"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/textMedium"
-                android:fontFamily="sans-serif-condensed"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                        <com.wb.nextgen.videoview.ObservableVideoView
+                            android:id="@+id/ec_video_view"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_centerInParent="true" />
+                        <RelativeLayout
+                            android:id="@+id/ec_video_preview_image_frame"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:visibility="gone">
+                            <ImageView
+                                android:id="@+id/ec_video_preview_image"
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"/>
+                            <ImageButton
+                                android:id="@+id/ec_video_preview_playButton"
+                                android:background="@android:color/transparent"
+                                android:layout_width="@dimen/ime_actor_thumbnail_dimen"
+                                android:layout_height="@dimen/ime_actor_thumbnail_dimen"
+                                android:scaleType="fitCenter"
+                                android:layout_centerInParent="true"
+                                android:src="@drawable/play_button"
+                                android:visibility="gone"/>
 
-        </RelativeLayout>
+                        </RelativeLayout>
+
+                    </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
+                    <TextView
+                        android:layout_alignParentLeft="true"
+                        android:id="@+id/ec_content_name"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/textMedium"
+                        android:fontFamily="sans-serif-condensed"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+
+
+                <ImageButton
+                    android:layout_alignParentRight="true"
+                    android:id="@+id/next_clip_btn"
+                    android:layout_width="@dimen/social_icon_dimen"
+                    android:layout_height="@dimen/social_icon_dimen"
+                    android:layout_centerVertical="true"
+                    android:scaleType="fitCenter"
+                    android:rotation="180"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/back_logo"/>
+
+
+            </RelativeLayout>
+        </LinearLayout>
+
+
         <Button
-            android:padding="@dimen/spacing_xsmall"
+            android:padding="@dimen/spacing_normal"
             android:layout_gravity="center_horizontal"
             android:id="@+id/share_clip_button"
             android:text="@string/share_this_clip"

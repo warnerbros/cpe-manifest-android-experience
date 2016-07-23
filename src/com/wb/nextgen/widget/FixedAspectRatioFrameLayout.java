@@ -106,15 +106,20 @@ public class FixedAspectRatioFrameLayout extends FrameLayout
                         MeasureSpec.makeMeasureSpec(originalHeight, MeasureSpec.EXACTLY));
             }
         }else {
-            WindowManager wm = (WindowManager) NextGenApplication.getContext().getSystemService(Context.WINDOW_SERVICE);
-            Display display = wm.getDefaultDisplay();
-            DisplayMetrics metrics = new DisplayMetrics();
-            display.getMetrics(metrics);
+            DisplayMetrics metrics = null;
+            try {
+                WindowManager wm = (WindowManager) NextGenApplication.getContext().getSystemService(Context.WINDOW_SERVICE);
+                Display display = wm.getDefaultDisplay();
+                metrics = new DisplayMetrics();
+                display.getMetrics(metrics);
+            }catch (Exception ex){
+
+            }
 
             if (priority == Priority.WIDTH_PRIORITY) {
                 finalHeight = originalWidth * mAspectRatioHeight / mAspectRatioWidth;
                 finalWidth = originalWidth;
-                if (finalHeight > metrics.heightPixels){
+                if (metrics != null && finalHeight > metrics.heightPixels){
                     finalWidth = originalHeight * mAspectRatioWidth / mAspectRatioHeight;
                     finalHeight = originalHeight;
 
@@ -123,7 +128,7 @@ public class FixedAspectRatioFrameLayout extends FrameLayout
             } else {
                 finalWidth = originalHeight * mAspectRatioWidth / mAspectRatioHeight;
                 finalHeight = originalHeight;
-                if (finalWidth > metrics.widthPixels){
+                if (metrics != null && finalWidth > metrics.widthPixels){
                     finalHeight = originalWidth * mAspectRatioHeight / mAspectRatioWidth;
                     finalWidth = originalWidth;
 

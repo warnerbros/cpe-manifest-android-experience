@@ -163,13 +163,6 @@ public abstract class NextGenIMEEngine <T>{
         return true;
     }
 
-
-
-    public MovieMetaData.IMEElement<T> createNextGenIMEElement(long startTimeCode, long endTimeCode, T object){
-        return new MovieMetaData.IMEElement<T>(startTimeCode, endTimeCode, object);
-    }
-
-
     /*
     Returns: 0 = timecode within the element time range
             >0 = timecode after the element time range

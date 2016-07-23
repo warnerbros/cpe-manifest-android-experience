@@ -17,9 +17,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 import com.wb.nextgen.activity.NextGenPlayer;
-import com.wb.nextgen.data.DemoData;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.data.MovieMetaData.IMEElementsGroup;
+import com.wb.nextgen.data.NextGenStyle;
 import com.wb.nextgen.data.TheTakeData;
 import com.wb.nextgen.data.TheTakeData.TheTakeProductFrame;
 import com.wb.nextgen.interfaces.NextGenPlaybackStatusListener;
@@ -46,12 +46,14 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
     List<IMEDisplayObject> activeIMEs = new ArrayList<IMEDisplayObject>();
 
     private class IMEDisplayObject{
+        final MovieMetaData.ExperienceData imeExperience;
         final Object imeObject;
         final String title;
 
-        public IMEDisplayObject(String title, Object imeObject){
-            this.title = title;
+        public IMEDisplayObject(MovieMetaData.ExperienceData experienceData, Object imeObject){
+            this.title = experienceData.title;
             this.imeObject = imeObject;
+            this.imeExperience = experienceData;
         }
     }
 
@@ -85,8 +87,6 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
         if (position < 0 || position >= activeIMEs.size())
             return;
         IMEDisplayObject activeObj = activeIMEs.get(position);
-        //NextGenIMEEngine engine = imeEngines.get(position);
-        //Object imeObject = engine.getCurrentIMEElement();
         NextGenPlayer playerActivity = null;
         if (getActivity() instanceof NextGenPlayer) {
             playerActivity = (NextGenPlayer) getActivity();
@@ -104,18 +104,32 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                 if (playerActivity != null) {
                     if (headElement instanceof MovieMetaData.ECGalleryItem) {
                         ECGalleryViewFragment fragment = new ECGalleryViewFragment();
-                        fragment.setBGImageUrl(DemoData.getExtraBackgroundUrl());
+                        fragment.setBGImageUrl(NextGenApplication.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie));
                         fragment.setCurrentGallery((MovieMetaData.ECGalleryItem) headElement);
                         playerActivity.transitMainFragment(fragment);
                         playerActivity.pausMovieForImeECPiece();
 
 
                     } else if (headElement instanceof MovieMetaData.AudioVisualItem) {
-                        ECVideoViewFragment fragment = new ECVideoViewFragment();
-                        fragment.setBGImageUrl(DemoData.getExtraBackgroundUrl());
-                        fragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) headElement);
-                        playerActivity.transitMainFragment(fragment);
-                        playerActivity.pausMovieForImeECPiece();
+
+                        if (((MovieMetaData.AudioVisualItem) headElement).isShareClip()){
+                            ShareClipFragment fragment = new ShareClipFragment();
+                            fragment.setShouldAutoPlay(false);
+                            fragment.setExperienceAndIndex(activeObj.imeExperience, ((MovieMetaData.IMEElement) activeObj.imeObject).itemIndex);
+                            fragment.setBGImageUrl(NextGenApplication.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie));
+                            /*
+                            fragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) dataObj);*/
+                            playerActivity.transitMainFragment(fragment);
+                            playerActivity.pausMovieForImeECPiece();
+                        }else {
+
+                            ECVideoViewFragment fragment = new ECVideoViewFragment();
+                            fragment.setShouldAutoPlay(false);
+                            fragment.setBGImageUrl(NextGenApplication.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie));
+                            fragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) headElement);
+                            playerActivity.transitMainFragment(fragment);
+                            playerActivity.pausMovieForImeECPiece();
+                        }
                     } else if (headElement instanceof MovieMetaData.LocationItem ||
                             (headElement instanceof AVGalleryIMEEngine.IMECombineItem && ((AVGalleryIMEEngine.IMECombineItem)headElement).isLocation() ) ){
 
@@ -184,6 +198,9 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
         TextView subText2= (TextView)rowView.findViewById(R.id.ime_desc_text2);
         final ImageView poster = (ImageView)rowView.findViewById(R.id.ime_image_poster);
         final MapView mapView = (MapView)rowView.findViewById(R.id.ime_map_view);
+
+        ImageView playIcon = (ImageView)rowView.findViewById(R.id.ime_item_play_logo);
+        playIcon.setVisibility(View.INVISIBLE);
 
 
         //if (titleText != null && group.linkedExperience != null){
@@ -283,6 +300,10 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                    // }
                 }
 
+                if (dataObj instanceof MovieMetaData.AudioVisualItem)
+                    playIcon.setVisibility(View.VISIBLE);
+
+
                 if (subText1 != null && !subText1.getText().equals(((MovieMetaData.PresentationDataItem) dataObj).getTitle())) {
                     subText1.setText(((MovieMetaData.PresentationDataItem) dataObj).getTitle());
                     subText1.setTag(R.id.ime_title, "");
@@ -351,7 +372,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
 
             if (elements != null && elements.size() > 0){
                 for (Object element : elements)
-                    objList.add(new IMEDisplayObject(imeGroups.get(i).linkedExperience.title, element));
+                    objList.add(new IMEDisplayObject(imeGroups.get(i).linkedExperience, element));
             }
         }
         activeIMEs = objList;

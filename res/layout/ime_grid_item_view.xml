@@ -9,6 +9,7 @@
         android:id="@+id/ime_title"
         android:layout_width="wrap_content"
         android:text="Title"
+        android:maxLines="1"
         android:textColor="@android:color/white"
         android:textSize="@dimen/textMedium"
         android:fontFamily="sans-serif-condensed"
@@ -25,6 +26,14 @@
                 android:id="@+id/ime_image_poster"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent" />
+            <ImageView
+                android:id="@+id/ime_item_play_logo"
+                android:layout_centerInParent="true"
+                android:layout_width="@dimen/ime_play_icon_dimen"
+                android:layout_height="@dimen/ime_play_icon_dimen"
+                android:src="@drawable/play_button">
+
+            </ImageView>
             <com.google.android.gms.maps.MapView
                 xmlns:map="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/ime_map_view"

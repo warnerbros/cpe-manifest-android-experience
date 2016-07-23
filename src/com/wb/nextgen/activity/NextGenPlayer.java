@@ -151,8 +151,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
             public void run() {
                 if (imeBottomFragment != null)
                     imeBottomFragment.playbackStatusUpdate(playbackStatus, timecode);
-                if (mediaController != null)
-                    mediaController.playbackStatusUpdate(playbackStatus, timecode);
+
             }
         });
 
@@ -263,7 +262,6 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
             videoView.setVideoURI(uri);
             if (mediaController == null) {
                 mediaController = new MainFeatureMediaController(this, videoView);
-                mediaController.setShareClipIMEGroup(NextGenApplication.getMovieMetaData().getShareClipIMEGroup());
 
                 //mediaController.setMediaPlayer(videoView);
                 //mediaController.setAnchorView(containerView);
@@ -384,29 +382,6 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     public String getRightTitleImageUri(){
         return "";
 
-    }
-
-    public void handleSelectedShareClip(MovieMetaData.IMEElement element){
-        if (element != null) {
-            Object dataObj = element.imeObject ;
-            if (dataObj instanceof MovieMetaData.PresentationDataItem) {
-                if (dataObj instanceof MovieMetaData.ECGalleryItem) {
-                    ECGalleryViewFragment fragment = new ECGalleryViewFragment();
-                    fragment.setBGImageUrl(getBackgroundImgUri());
-                    fragment.setCurrentGallery((MovieMetaData.ECGalleryItem) dataObj);
-                    transitMainFragment(fragment);
-                    pausMovieForImeECPiece();
-
-
-                } else if (dataObj instanceof MovieMetaData.AudioVisualItem) {
-                    ShareClipFragment fragment = new ShareClipFragment();
-                    fragment.setBGImageUrl(getBackgroundImgUri());
-                    fragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) dataObj);
-                    transitMainFragment(fragment);
-                    pausMovieForImeECPiece();
-                }
-            }
-        }
     }
 
     @Override
