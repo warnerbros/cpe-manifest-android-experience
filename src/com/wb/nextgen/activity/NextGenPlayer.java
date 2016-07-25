@@ -50,7 +50,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
     NextGenPlayerBottomFragment imeBottomFragment;
 
-    public static final Uri INTERSTITIAL_VIDEO_URI = Uri.parse("android.resource://com.wb.nextgen/" + R.raw.mos_nextgen_interstitial);
+    public static final Uri INTERSTITIAL_VIDEO_URI = Uri.parse(NextGenApplication.getMovieMetaData().getStyle().getInterstitialVideoURL());//Uri.parse("android.resource://com.wb.nextgen/" + R.raw.mos_nextgen_interstitial);
 
     private Uri currentUri = null;
 

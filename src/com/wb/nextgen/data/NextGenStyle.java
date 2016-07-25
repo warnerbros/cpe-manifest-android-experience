@@ -78,6 +78,10 @@ public class NextGenStyle {
 
     }
 
+    public String getInterstitialVideoURL(){
+        return "http://wb-extras.warnerbros.com/extrasplus/staging/Manifest/MOS/artwork/backgrounds/MOS_INTERSTITIAL_v2.mp4";
+    }
+
     public String getTitleImageURL(NextGenAppearanceType type) {
         if (movieId.equals(NGDMAppearanceTitle.ManOfSteel)) {
             switch (type) {
