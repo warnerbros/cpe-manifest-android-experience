@@ -117,6 +117,7 @@ public class ShareClipFragment extends ECVideoViewFragment implements View.OnCli
         }
         prevClipButton.setVisibility(prevBtnVisibility);
         nextClipButton.setVisibility(nextBtnVisibility);
+        mediaController.hide();
     }
 
     // Method to share either text or URL.

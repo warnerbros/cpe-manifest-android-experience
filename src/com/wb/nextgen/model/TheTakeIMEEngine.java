@@ -17,7 +17,7 @@ public class TheTakeIMEEngine extends NextGenIMEEngine<TheTakeProductFrame>{
     private boolean hasMore = true;
 
     //private List<TheTakeData.TheTakeProductFrame> productFrames = new ArrayList<TheTakeData.TheTakeProductFrame>();
-    final static int FRAME_GROUP_ITEM_LIMIT = 400;
+    final static int FRAME_GROUP_ITEM_LIMIT = 4000;
 
     public TheTakeIMEEngine(){
         //requestNextGroupOfData();
@@ -49,7 +49,7 @@ public class TheTakeIMEEngine extends NextGenIMEEngine<TheTakeProductFrame>{
         }else{
             currentStart = imeElements.size();
         }
-        TheTakeApiDAO.fetchProductFrames(imeElements.size(), FRAME_GROUP_ITEM_LIMIT, new ResultListener<List<TheTakeProductFrame>>() {
+        TheTakeApiDAO.fetchProductFrames(timecode + 3000, imeElements.size(), FRAME_GROUP_ITEM_LIMIT, new ResultListener<List<TheTakeProductFrame>>() {
             @Override
             public void onResult(List<TheTakeProductFrame> result) {
                 synchronized (imeElements){
@@ -59,10 +59,10 @@ public class TheTakeIMEEngine extends NextGenIMEEngine<TheTakeProductFrame>{
                         lastTimecode = result.get(result.size() - 1).frameTime;
                         imeElements.addAll(result);
                     }
-                }
+                }/*
                 if (timecode + 3000 > lastTimecode && hasMore){
                     requestNextGroupOfData(timecode);
-                }
+                }*/
             }
 
             @Override

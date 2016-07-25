@@ -43,8 +43,6 @@ public class TheTakeApiDAO {
     private static String theTakeMediaId;
     private static String API_KEY_KEY = "thetake_api_key";
 
-    final static int FRAME_GROUP_ITEM_LIMIT = 400;
-
     private static class Endpoints {
         static final String PrefetchProductFrames = "/frames/listFrames";
         static final String PrefetchProductCategories = "/categories/listProductCategories";
@@ -108,7 +106,7 @@ public class TheTakeApiDAO {
         return HttpHelper.getFromUrl(url, params, headerValues);
     }
 
-    public static void fetchProductFrames(final int start, final int count, ResultListener<List<TheTakeProductFrame>> l) {
+    public static void fetchProductFrames(final long targetTimeCode, final int start, final int count, ResultListener<List<TheTakeProductFrame>> l) {
         Worker.execute(new Callable<List<TheTakeProductFrame>>() {
             @Override
             public List<TheTakeProductFrame> call() throws Exception {
@@ -117,29 +115,42 @@ public class TheTakeApiDAO {
                     return categories;*/
 
                 try {
-                    List<NameValuePair> params = new ArrayList<NameValuePair>();
-                    params.add(new BasicNameValuePair(Keys.Media, theTakeMediaId));
-                    params.add(new BasicNameValuePair(Keys.Limit, Integer.toString(count)));
-                    params.add(new BasicNameValuePair(Keys.Start, Integer.toString(start)));
-                    //params.add(new BasicNameValuePair(Keys.StartTime, Long.toString(startMilliSecond)));
-                    //params.add(new BasicNameValuePair(Keys.EndTime, Long.toString(endMilliSecond)));
 
-                    String result = getFromUrl(THETAKE_DOMAIN + Endpoints.PrefetchProductFrames, params);
+                    long lastTimeCode = 0L;
+                    boolean hasMore = true;
+                    List<TheTakeProductFrame> resultList = new ArrayList<TheTakeProductFrame>();
+                    int modStart = start;
 
-                    Type listType = new TypeToken<ArrayList<TheTakeProductFrame>>() {
-                    }.getType();
+                    while (lastTimeCode < targetTimeCode && hasMore) {
 
-                    Gson gson = new GsonBuilder().create();
+                        List<NameValuePair> params = new ArrayList<NameValuePair>();
+                        params.add(new BasicNameValuePair(Keys.Media, theTakeMediaId));
+                        params.add(new BasicNameValuePair(Keys.Limit, Integer.toString(count)));
+                        params.add(new BasicNameValuePair(Keys.Start, Integer.toString(modStart)));
+                        //params.add(new BasicNameValuePair(Keys.StartTime, Long.toString(startMilliSecond)));
+                        //params.add(new BasicNameValuePair(Keys.EndTime, Long.toString(endMilliSecond)));
 
-                    List<TheTakeProductFrame> productFrames = gson.fromJson(result, listType);
-                    //TheTakeProductFrame
-                    /*JSONArray jsonArray = new JSONArray(result);
-                    if (jsonArray != null && jsonArray.length() > 0){
-                        for (int i = 0; i < jsonArray.length(); i++){
-                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        String result = getFromUrl(THETAKE_DOMAIN + Endpoints.PrefetchProductFrames, params);
+
+                        Type listType = new TypeToken<ArrayList<TheTakeProductFrame>>() {
+                        }.getType();
+
+                        Gson gson = new GsonBuilder().create();
+
+                        List<TheTakeProductFrame> productFrames = gson.fromJson(result, listType);
+
+                        if (productFrames == null || productFrames.size() == 0){
+                            hasMore = false;
+                        }else{
+                            if (productFrames.size() < count)
+                                hasMore = false;
+                            resultList.addAll(productFrames);
+                            lastTimeCode = productFrames.get(productFrames.size() -1).frameTime;
                         }
-                    }*/
-                    return productFrames;
+
+                    }
+
+                    return resultList;
 
                 } catch (Exception ex) {
 
@@ -263,90 +274,5 @@ public class TheTakeApiDAO {
         }, l);
 
     }
-/*
 
-    getJSONWithPath("/frames/listFrames", parameters: ["media": mediaId, "limit": "9999"], successBlock: { (result) -> Void in
-            if let frames = result["result"] as? [NSDictionary] {
-                for frameInfo in frames {
-                    if let frameTime = frameInfo["frameTime"] as? Double {
-                        self._frameTimes[frameTime] = frameInfo
-                    }
-                }
-            }
-        }, errorBlock: nil)
-    }
-
-
-    func prefetchProductCategories() {
-        productCategories.removeAll()
-
-        getJSONWithPath("/categories/listProductCategories", parameters: ["media": mediaId], successBlock: { (result) in
-            if let categories = result["result"] as? [NSDictionary] {
-                for categoryInfo in categories {
-                    self.productCategories.append(TheTakeCategory(info: categoryInfo))
-                }
-            }
-        }, errorBlock: nil)
-    }
-
-    func closestFrameTime(timeInSeconds: Double) -> Double {
-        let timeInMilliseconds = timeInSeconds * 1000
-        var closestFrameTime = -1.0
-
-        if _frameTimes.count > 0 && _frameTimes[timeInMilliseconds] == nil {
-            let frameTimeKeys = _frameTimes.keys.sort()
-            let frameIndex = frameTimeKeys.indexOfFirstObjectPassingTest({ $0 > timeInMilliseconds })
-            closestFrameTime = frameTimeKeys[max(frameIndex - 1, 0)]
-        } else {
-            closestFrameTime = timeInMilliseconds
-        }
-
-        return closestFrameTime
-    }
-
-    func getFrameProducts(frameTime: Double, successBlock: (products: [TheTakeProduct]) -> Void) -> NSURLSessionDataTask? {
-        if frameTime >= 0 && _frameTimes[frameTime] != nil {
-            return getJSONWithPath("/frameProducts/listFrameProducts", parameters: ["media": mediaId, "time": String(frameTime)], successBlock: { (result) -> Void in
-                if let productList = result["result"] as? NSArray {
-                    var products = [TheTakeProduct]()
-                    for productInfo in productList {
-                        if let productData = productInfo as? NSDictionary {
-                            products.append(TheTakeProduct(data: productData))
-                        }
-                    }
-
-                    successBlock(products: products)
-                }
-            }) { (error) -> Void in
-
-            }
-        }
-
-        return nil
-    }
-
-    func getCategoryProducts(categoryId: String, successBlock: (products: [TheTakeProduct]) -> Void) -> NSURLSessionDataTask? {
-        return getJSONWithPath("/products/listProducts", parameters: ["category": categoryId, "media": mediaId], successBlock: { (result) -> Void in
-            if let productList = result["result"] as? NSArray {
-                var products = [TheTakeProduct]()
-                for productInfo in productList {
-                    if let productData = productInfo as? NSDictionary {
-                        products.append(TheTakeProduct(data: productData))
-                    }
-                }
-
-                successBlock(products: products)
-            }
-        }) { (error) -> Void in
-
-        }
-    }
-
-    func getProductDetails(productId: String, successBlock: (product: TheTakeProduct) -> Void) -> NSURLSessionDataTask {
-        return getJSONWithPath("/products/productDetails", parameters: ["product": productId], successBlock: { (result) -> Void in
-            successBlock(product: TheTakeProduct(data: result))
-        }) { (error) -> Void in
-
-        }
-    }*/
 }

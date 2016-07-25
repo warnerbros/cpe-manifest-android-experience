@@ -56,6 +56,7 @@ public class TheTakeFrameProductsFragment extends AbstractNextGenFragment {
             frameProductsRecyclerView.setLayoutManager(frameProductsLayoutManager);
             frameProductsAdaptor = new FrameProductsAdapter();
             frameProductsRecyclerView.setAdapter(frameProductsAdaptor);
+            frameProductsAdaptor.setSelectedIndex(0);
         }
     }
 
@@ -75,7 +76,9 @@ public class TheTakeFrameProductsFragment extends AbstractNextGenFragment {
                     @Override
                     public void run() {
                         productList = result;
-                        loadProductIntoDetailFragment(productList.get(0));
+                        if (productList != null && productList.size() > 0) {
+                            loadProductIntoDetailFragment(productList.get(0));
+                        }
                         frameProductsAdaptor.notifyDataSetChanged();
                     }
                 });
@@ -101,6 +104,7 @@ public class TheTakeFrameProductsFragment extends AbstractNextGenFragment {
         TextView productName;
         ImageView personPhoto;
         TheTakeProduct product;
+        int position;
 
         FrameProductViewHolder(View itemView, TheTakeProduct product) {
             super(itemView);
@@ -112,13 +116,16 @@ public class TheTakeFrameProductsFragment extends AbstractNextGenFragment {
             itemView.setOnClickListener(this);
         }
 
-        public void setTheTakeProduct(TheTakeProduct product){
+        public void setTheTakeProduct(TheTakeProduct product, int position){
+            this.position = position;
             this.product = product;
         }
 
         @Override
         public void onClick(View v) {
             loadProductIntoDetailFragment(product);
+            frameProductsAdaptor.setSelectedIndex(position);
+            frameProductsAdaptor.notifyDataSetChanged();
         }
     }
 
@@ -126,6 +133,7 @@ public class TheTakeFrameProductsFragment extends AbstractNextGenFragment {
 
 
         int lastloadingIndex = -1;
+        int selectedIndex = 0;
         static final int PAGEITEMCOUNT = 6;
 
         public void reset(){
@@ -145,7 +153,7 @@ public class TheTakeFrameProductsFragment extends AbstractNextGenFragment {
 
             if (productList != null && productList.size() > position) {
                 TheTakeProduct thisProduct = productList.get(position);
-                holder.setTheTakeProduct(thisProduct);
+                holder.setTheTakeProduct(thisProduct, position);
                 if (!StringHelper.isEmpty(thisProduct.getProductThumbnailUrl())) {
                     PicassoTrustAll.loadImageIntoView(getActivity(), thisProduct.getProductThumbnailUrl(), holder.personPhoto);
                     holder.productBrand.setText(thisProduct.productBrand);
@@ -165,7 +173,13 @@ public class TheTakeFrameProductsFragment extends AbstractNextGenFragment {
 
                 }
             }
+            holder.itemView.setSelected(position == selectedIndex);
             //holder.personPhoto.setImageResource(persons.get(i).photoId);
+        }
+
+
+        public void setSelectedIndex(int index){
+            selectedIndex = index;
         }
 
         @Override
