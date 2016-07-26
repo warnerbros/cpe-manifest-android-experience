@@ -143,7 +143,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
         if (currentFragment instanceof ECVideoViewFragment){
             ((ECVideoViewFragment)currentFragment).onFullScreenChange(bFullscreen);
         } else if (currentFragment instanceof ECGalleryViewFragment){
-            ((ECGalleryViewFragment)currentFragment).onRequestToggleFullscreen(bFullscreen);
+            ((ECGalleryViewFragment)currentFragment).onFullScreenChange(bFullscreen);
         }
     }
 
@@ -192,7 +192,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
         }*/
         super.onRequestToggleFullscreen();
         if (currentFragment != null && currentFragment instanceof ECGalleryViewFragment)
-            ((ECGalleryViewFragment)currentFragment).onRequestToggleFullscreen(isContentFullScreen);
+            ((ECGalleryViewFragment)currentFragment).onFullScreenChange(isContentFullScreen);
 
     }
 
@@ -367,6 +367,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
                         videoViewFragment = new ECVideoViewFragment();
                         videoViewFragment.setShouldAutoPlay(true);
                         videoViewFragment.setShouldHideMetaData(true);
+                        videoViewFragment.setShouldShowCloseBtn(true);
                         videoViewFragment.setAspectRatioFramePriority(FixedAspectRatioFrameLayout.Priority.HEIGHT_PRIORITY);
 
                     }
@@ -382,6 +383,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
                     } else{
                         galleryViewFragment = new ECGalleryViewFragment();
                         galleryViewFragment.setShouldHideMetaData(true);
+                        galleryViewFragment.setShouldShowCloseBtn(true);
                         galleryViewFragment.setAspectRatioFramePriority(FixedAspectRatioFrameLayout.Priority.HEIGHT_PRIORITY);
                     }
                     galleryViewFragment.setCurrentGallery((MovieMetaData.ECGalleryItem)currentItem);

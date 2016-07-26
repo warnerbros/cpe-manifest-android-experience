@@ -105,6 +105,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                 if (playerActivity != null) {
                     if (headElement instanceof MovieMetaData.ECGalleryItem) {
                         ECGalleryViewFragment fragment = new ECGalleryViewFragment();
+                        fragment.setShouldShowCloseBtn(true);
                         fragment.setBGImageUrl(NextGenApplication.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie));
                         fragment.setCurrentGallery((MovieMetaData.ECGalleryItem) headElement);
                         playerActivity.transitMainFragment(fragment);
@@ -116,6 +117,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                         if (((MovieMetaData.AudioVisualItem) headElement).isShareClip()){
                             ShareClipFragment fragment = new ShareClipFragment();
                             fragment.setShouldAutoPlay(false);
+                            fragment.setShouldShowCloseBtn(true);
                             fragment.setExperienceAndIndex(activeObj.imeExperience, ((MovieMetaData.IMEElement) activeObj.imeObject).itemIndex);
                             fragment.setBGImageUrl(NextGenApplication.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie));
                             /*
@@ -125,6 +127,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                         }else {
 
                             ECVideoViewFragment fragment = new ECVideoViewFragment();
+                            fragment.setShouldShowCloseBtn(true);
                             fragment.setShouldAutoPlay(false);
                             fragment.setBGImageUrl(NextGenApplication.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie));
                             fragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) headElement);
@@ -139,6 +142,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                             headElement = ((AVGalleryIMEEngine.IMECombineItem)headElement).getAllPresentationItems().get(0);
                         }
                         ECMapViewFragment fragment = new ECMapViewFragment();
+                        fragment.setShouldShowCloseBtn(true);
                         fragment.setLocationItem(activeObj.title, (MovieMetaData.LocationItem)headElement);
                         playerActivity.transitMainFragment(fragment);
                         playerActivity.pausMovieForImeECPiece();
@@ -149,6 +153,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                         playerActivity.pausMovieForImeECPiece();*/
                     } else if (dataObj instanceof MovieMetaData.TriviaItem){
                         ECTrviaViewFragment fragment = new ECTrviaViewFragment();
+                        fragment.setShouldShowCloseBtn(true);
                         fragment.setTriviaItem(activeObj.title, (MovieMetaData.TriviaItem)dataObj);
                         playerActivity.transitMainFragment(fragment);
                         playerActivity.pausMovieForImeECPiece();
@@ -159,6 +164,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
         } else if (activeObj.imeObject instanceof TheTakeProductFrame){
             if (playerActivity != null){
                 TheTakeFrameProductsFragment fragment = new TheTakeFrameProductsFragment();
+                fragment.setShouldShowCloseBtn(true);
                 fragment.setFrameProductTime(((TheTakeProductFrame)activeObj.imeObject).frameTime);
                 playerActivity.transitMainFragment(fragment);
                 playerActivity.pausMovieForImeECPiece();
@@ -345,6 +351,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                                             playerActivity = (NextGenPlayer) getActivity();
                                         }
                                         ECMapViewFragment fragment = new ECMapViewFragment();
+                                        fragment.setShouldShowCloseBtn(true);
                                         fragment.setLocationItem(title, locationItem);
                                         playerActivity.transitMainFragment(fragment);
                                         playerActivity.pausMovieForImeECPiece();

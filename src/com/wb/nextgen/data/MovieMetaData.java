@@ -999,7 +999,7 @@ public class MovieMetaData {
         }
 
         public String getPosterImgUrl(){
-            return NextGenUtils.getPacakageImageUrl(R.drawable.mos_grid_default_logo);
+            return "";
         }
     }
 

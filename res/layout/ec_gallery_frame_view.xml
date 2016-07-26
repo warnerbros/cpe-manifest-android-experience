@@ -41,9 +41,19 @@
                     android:background="@android:color/transparent"
                     android:text="TEST"/>
             </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
+
+            <ImageButton
+                android:id="@+id/close_button"
+                android:layout_width="@dimen/close_icon_dimen"
+                android:layout_height="@dimen/close_icon_dimen"
+                android:src="@drawable/close_x_circle"
+                android:scaleType="centerInside"
+                android:layout_alignParentRight="true"
+                android:background="@android:color/transparent"/>
         </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/ec_content_meta_frame"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"

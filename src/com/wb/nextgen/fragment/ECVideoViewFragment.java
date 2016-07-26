@@ -36,7 +36,7 @@ import com.wb.nextgen.widget.FixedAspectRatioFrameLayout;
 /**
  * Created by gzcheng on 3/31/16.
  */
-public class ECVideoViewFragment extends Fragment{
+public class ECVideoViewFragment extends ECViewFragment{
     protected ObservableVideoView videoView;
 
     ECMediaController mediaController;
@@ -44,7 +44,6 @@ public class ECVideoViewFragment extends Fragment{
     protected TextView ecDurationTextView;
     protected TextView countDownTextView;
     protected View countDownCountainer;
-    protected View contentMetaFrame;
     protected ProgressBar countDownProgressBar;
 
     ImageView previewImageView = null;
@@ -60,7 +59,6 @@ public class ECVideoViewFragment extends Fragment{
     boolean bCountDown = false;
 
     boolean shouldAutoPlay = true;
-    boolean shouldHideMetaData = false;
 
     FixedAspectRatioFrameLayout.Priority aspectFramePriority = null;
 
@@ -78,9 +76,8 @@ public class ECVideoViewFragment extends Fragment{
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.ec_video_frame_view, container, false);
+    public int getContentViewId(){
+        return R.layout.ec_video_frame_view;
     }
 
     @Override
@@ -97,11 +94,6 @@ public class ECVideoViewFragment extends Fragment{
         countDownCountainer = view.findViewById(R.id.count_down_container);
         countDownTextView = (TextView) view.findViewById(R.id.count_down_text_view);
         countDownProgressBar = (ProgressBar) view.findViewById(R.id.count_down_progressBar);
-        contentMetaFrame = view.findViewById(R.id.ec_content_meta_frame);
-
-        if (contentMetaFrame != null){
-            contentMetaFrame.setVisibility(shouldHideMetaData ? View.GONE : View.VISIBLE);
-        }
 
         if (countDownCountainer != null)
             countDownCountainer.setVisibility(View.INVISIBLE);
@@ -263,10 +255,6 @@ public class ECVideoViewFragment extends Fragment{
         this.bCountDown = bCountDown;
     }
 
-    public void setShouldHideMetaData(boolean bHide){
-        shouldHideMetaData = bHide;
-    }
-
     Target target = new Target() {
         @Override
         public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -327,12 +315,6 @@ public class ECVideoViewFragment extends Fragment{
                 bSetOnResume = true;
             }
         }
-    }
-
-
-    public void onFullScreenChange(boolean bFullscreen){
-        contentMetaFrame.setVisibility(bFullscreen && !shouldHideMetaData? View.GONE : View.VISIBLE);
-
     }
 
     public void onRequestToggleFullscreen(boolean bFullscreen) {

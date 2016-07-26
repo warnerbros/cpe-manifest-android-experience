@@ -6,6 +6,7 @@ import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.wb.nextgen.R;
 import com.wb.nextgen.util.utils.F;
@@ -16,6 +17,8 @@ import com.wb.nextgen.util.utils.NextGenLogger;
  */
 public abstract class AbstractNextGenFragment extends Fragment {
     View view;
+    ImageButton closeBtn;
+    boolean shouldShowCloseBtn = false;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -31,6 +34,31 @@ public abstract class AbstractNextGenFragment extends Fragment {
         }
         return view;
 
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        closeBtn = (ImageButton) view.findViewById(R.id.close_button);
+        if (closeBtn != null) {
+            if (shouldShowCloseBtn) {
+                closeBtn.setVisibility(View.VISIBLE);
+
+            }else {
+                closeBtn.setVisibility(View.GONE);
+            }
+            closeBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (getActivity() != null)
+                        getActivity().onBackPressed();
+                }
+            });
+        }
+    }
+
+    public void setShouldShowCloseBtn(boolean bShow){
+        shouldShowCloseBtn = bShow;
     }
 
     abstract int getContentViewId();

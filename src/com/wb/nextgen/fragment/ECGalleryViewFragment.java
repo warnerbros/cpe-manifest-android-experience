@@ -45,7 +45,6 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment {
     FixedAspectRatioFrameLayout.Priority aspectFramePriority = null;
 
     boolean bSetOnResume= false;
-    //private List<MovieMetaData.ECGalleryImageItem>
 
     public void setBGImageUrl(String url){
         bgImageUrl = url;
@@ -127,8 +126,9 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment {
         }
     }
 
-    public void onRequestToggleFullscreen(boolean isContentFullScreen){
-        super.onRequestToggleFullscreen(isContentFullScreen);
+    @Override
+    public void onFullScreenChange(boolean isContentFullScreen){
+        super.onFullScreenChange(isContentFullScreen);
         adapter.notifyDataSetChanged();
 
     }

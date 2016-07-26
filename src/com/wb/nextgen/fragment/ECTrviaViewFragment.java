@@ -17,7 +17,7 @@ import com.wb.nextgen.util.PicassoTrustAll;
 /**
  * Created by gzcheng on 3/31/16.
  */
-public class ECTrviaViewFragment extends Fragment {
+public class ECTrviaViewFragment extends AbstractNextGenFragment {
     protected ImageView posterImageView;
 
     protected TextView triviaTitle;
@@ -28,9 +28,8 @@ public class ECTrviaViewFragment extends Fragment {
     MovieMetaData.TriviaItem selectedTriviaItem = null;
     String title = null;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.ec_trivia_view, container, false);
+    public int getContentViewId(){
+        return R.layout.ec_trivia_view;
     }
 
     @Override

@@ -52,7 +52,7 @@ public class ECGalleryActivity extends AbstractECView {
     public void onRequestToggleFullscreen(){
 
         super.onRequestToggleFullscreen();
-        galleryFragment.onRequestToggleFullscreen(isContentFullScreen);
+        galleryFragment.onFullScreenChange(isContentFullScreen);
 
     }
 

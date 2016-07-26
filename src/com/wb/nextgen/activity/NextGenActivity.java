@@ -76,15 +76,6 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
             buttonsLayout.setVisibility(View.GONE);
         }
 
-        ImageView bg = (ImageView)findViewById(R.id.next_gen_startup_layout);
-        if (bg != null){
-            String bgImageUri = "android.resource://com.wb.nextgen/" + R.drawable.front_page_bg;
-            PicassoTrustAll.loadImageIntoView(NextGenApplication.getContext(), bgImageUri, bg);
-        }
-        /*movieLogo = (ImageView) findViewById(R.id.next_gen_startup_movie_logo);
-        if (movieLogo != null){
-            movieLogo.setImageResource(R.drawable.man_of_sett_top_logo);
-        }*/
         NextGenLogger.d("GrantTest", "hide buttons");
         playMovieButton = (ImageButton) findViewById(R.id.next_gen_startup_play_button);
         if (playMovieButton != null){

@@ -108,14 +108,14 @@ public class HttpImageHelper {
         if (pinHash.containsKey(imageUrl))
             theBitmap = pinHash.get(imageUrl);
         else{
-            if (theBitmap == null){
+            /*if (theBitmap == null){
                 try{
                     String uri = NextGenUtils.getPacakageImageUrl(R.drawable.mos_map_pin);
                     theBitmap = MediaStore.Images.Media.getBitmap(NextGenApplication.getContext().getContentResolver(), Uri.parse(uri));
                 }catch (Exception ex){
                     NextGenLogger.e(F.TAG, ex.getLocalizedMessage());
                 }
-            }
+            }*/
         }
 
 

@@ -37,7 +37,7 @@ import java.util.Map;
 /**
  * Created by gzcheng on 3/31/16.
  */
-public class ECMapViewFragment extends Fragment {
+public class ECMapViewFragment extends AbstractNextGenFragment {
     protected MapView mapView;
 
     protected TextView triviaTitle;
@@ -47,9 +47,8 @@ public class ECMapViewFragment extends Fragment {
     MovieMetaData.LocationItem selectedLocationItem = null;
     String title = null;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.ec_map_view, container, false);
+    public int getContentViewId(){
+        return R.layout.ec_map_view;
     }
 
     @Override

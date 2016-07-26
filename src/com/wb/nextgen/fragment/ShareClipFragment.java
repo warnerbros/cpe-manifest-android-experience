@@ -71,7 +71,6 @@ public class ShareClipFragment extends ECVideoViewFragment implements View.OnCli
         switch (v.getId()){
             case R.id.share_clip_button:
                 videoView.pause();
-                String imageUrl = selectedAVItem.getPosterImgUrl();
                 String videoUrl = selectedAVItem.videoUrl;
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
