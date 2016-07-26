@@ -66,6 +66,11 @@ public abstract class NextGenGridViewFragment extends Fragment implements Adapte
 
     protected abstract int getListItemViewId();
 
+
+    protected int getListItemViewId(int position){
+        return getListItemViewId();
+    }
+
     protected abstract void fillListRowWithObjectInfo(int position, View rowView, Object item, boolean isSelected);
 
     protected abstract String getHeaderText();
@@ -103,11 +108,14 @@ public abstract class NextGenGridViewFragment extends Fragment implements Adapte
             if (position >= getCount() || position < 0){
                 return null;
             }
+            int id = getListItemViewId(position);
 
 
-            if (convertView == null  ) {
+
+            if (convertView == null || (convertView.getTag() instanceof Integer && !((Integer)convertView.getTag()).equals(id)) ) {
                 LayoutInflater inflater = getActivity().getLayoutInflater();
-                convertView = inflater.inflate(getListItemViewId(), parent, false);
+                convertView = inflater.inflate(id, parent, false);
+                convertView.setTag(new Integer(id));
                 setupNewContentView(convertView);
 
             } else {
@@ -132,28 +140,6 @@ public abstract class NextGenGridViewFragment extends Fragment implements Adapte
         public long getItemId(int position) {
             return position;
         }
-/*
-        @Override
-        public View getHeaderView(int position, View convertView, ViewGroup parent) {
-            if (headerTextView == null){
-                headerTextView = new TextView(getActivity());
-            }
-            headerTextView.setText(getHeaderText());
-            headerTextView.setTextSize(20);
-            return headerTextView;
-        }
-
-        @Override
-        public int getCountForHeader(int header) {
-            // TODO Auto-generated method stub
-            return getHeaderChildenCount(header);
-        }
-
-        @Override
-        public int getNumHeaders() {
-            // TODO Auto-generated method stub
-            return getHeaderCount();
-        }*/
 
     }
 }

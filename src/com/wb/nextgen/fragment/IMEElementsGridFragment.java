@@ -2,6 +2,7 @@ package com.wb.nextgen.fragment;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -176,39 +177,50 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
     protected Object getListItemAtPosition(int i){
         return activeIMEs.get(i);
     }
-
-    protected int getListItemViewId(){
-        return R.layout.ime_grid_item_view;
-    }
-
-    protected void fillListRowWithObjectInfo(int position, View rowView, Object item, boolean isSelected){
-
-        localFill((IMEDisplayObject)item, rowView);
+    protected int getListItemViewId(){      // not using this
+        return 0;
     }
 
     protected void setupNewContentView(View view){
         MapView mapView = (MapView)view.findViewById(R.id.ime_map_view);
-        mapView.onCreate(savedInstanceState);
+        if (mapView != null)
+            mapView.onCreate(savedInstanceState);
 
     }
 
-    private void localFill(final IMEDisplayObject activeObj, View rowView){
+    protected int getListItemViewId(int position){
+        IMEDisplayObject activeObj = activeIMEs.get(position);
+
+        int retId = R.layout.ime_grid_presentation_item;
+
+        if (activeObj.imeObject instanceof MovieMetaData.IMEElement) {
+            Object dataObj = ((MovieMetaData.IMEElement) activeObj.imeObject).imeObject;
+            if (dataObj instanceof MovieMetaData.PresentationDataItem) {
+                if (dataObj instanceof MovieMetaData.LocationItem ||
+                        (dataObj instanceof AVGalleryIMEEngine.IMECombineItem && ((AVGalleryIMEEngine.IMECombineItem)dataObj).isLocation() ) )
+                    retId = R.layout.ime_grid_map_item;
+                else if (dataObj instanceof MovieMetaData.AudioVisualItem &&
+                        ((MovieMetaData.AudioVisualItem)dataObj).isShareClip()) {
+                    retId = R.layout.ime_grid_share_item;
+                }
+            }
+        }else if (activeObj.imeObject instanceof TheTakeProductFrame){
+            retId = R.layout.ime_grid_shop_item;
+        }
+
+        return retId;
+    }
+
+
+    protected void fillListRowWithObjectInfo(int position, View rowView, Object item, boolean isSelected){
+        IMEDisplayObject activeObj = (IMEDisplayObject)item;
+
         TextView titleText= (TextView)rowView.findViewById(R.id.ime_title);
         final TextView subText1= (TextView)rowView.findViewById(R.id.ime_desc_text1);
-        TextView subText2= (TextView)rowView.findViewById(R.id.ime_desc_text2);
         final ImageView poster = (ImageView)rowView.findViewById(R.id.ime_image_poster);
-        final MapView mapView = (MapView)rowView.findViewById(R.id.ime_map_view);
 
-        ImageView playIcon = (ImageView)rowView.findViewById(R.id.ime_item_play_logo);
-        playIcon.setVisibility(View.INVISIBLE);
+        titleText.setText(activeObj.title.toUpperCase());      // set a tag with the linked Experience Id
 
-
-        //if (titleText != null && group.linkedExperience != null){
-            titleText.setText(activeObj.title.toUpperCase());      // set a tag with the linked Experience Id
-        //}
-
-       // boolean hasChanged =  engine.computeCurrentIMEElement(currentTimeCode);
-        //Object element = engine.getCurrentIMEElement();
         if (activeObj.imeObject instanceof MovieMetaData.IMEElement) {
             Object dataObj = ((MovieMetaData.IMEElement) activeObj.imeObject).imeObject;
             if (dataObj instanceof MovieMetaData.PresentationDataItem) {
@@ -217,91 +229,28 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                 if (dataObj instanceof MovieMetaData.LocationItem ||
                         (dataObj instanceof AVGalleryIMEEngine.IMECombineItem && ((AVGalleryIMEEngine.IMECombineItem)dataObj).isLocation() ) ){
 
-                    // TODO: deal with multiple locations at the same timecode later on.
+
                     if (dataObj instanceof AVGalleryIMEEngine.IMECombineItem){
                         dataObj = ((AVGalleryIMEEngine.IMECombineItem)dataObj).getAllPresentationItems().get(0);
                     }
 
-                    mapView.setVisibility(View.VISIBLE);
-                    poster.setVisibility(View.GONE);
-                    final MovieMetaData.LocationItem locationItem = (MovieMetaData.LocationItem)dataObj;
-
-                    List<MovieMetaData.LocationItem> locList = new ArrayList<MovieMetaData.LocationItem>();
-                    locList.add(locationItem);
-                    HttpImageHelper.getAllMapPins(locList, new ResultListener<Boolean>() {
-                        @Override
-                        public void onResult(Boolean result) {
-                            //mapView.getMaps
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    final LatLng location = new LatLng(locationItem.latitude, locationItem.longitude);
-
-                                    mapView.getMapAsync(new OnMapReadyCallback() {
-                                        @Override
-                                        public void onMapReady(GoogleMap googleMap) {
-
-                                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, locationItem.zoom));   // set location
-
-                                            BitmapDescriptor bmDes =
-                                                    BitmapDescriptorFactory.fromBitmap(HttpImageHelper.getMapPinBitmap(locationItem.pinImage.url));
-                                            googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-                                            googleMap.addMarker(new MarkerOptions()
-                                                    .position(location)
-                                                    .icon(bmDes));
-                                            googleMap.getUiSettings().setMapToolbarEnabled(false);
-                                            final String ecGroupTitle = activeObj.title;
-                                            googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                                                @Override
-                                                public void onMapClick(LatLng latLng) {
-                                                    NextGenPlayer playerActivity = null;
-                                                    if (getActivity() instanceof NextGenPlayer) {
-                                                        playerActivity = (NextGenPlayer) getActivity();
-                                                    }
-                                                    ECMapViewFragment fragment = new ECMapViewFragment();
-                                                    fragment.setLocationItem(ecGroupTitle, locationItem);
-                                                    playerActivity.transitMainFragment(fragment);
-                                                    playerActivity.pausMovieForImeECPiece();
-                                                }
-                                            });
-                                            //googleMap.addMarker(new MarkerOptions().position(new LatLng(locationItem.latitude, locationItem.longitude)).title("Marker"));
-                                        }
-                                    });
-                                }
-                            });
-                        }
-
-                        @Override
-                        public <E extends Exception> void onException(E e) {
-
-                        }
-                    });
-
-
-
-                    /*Criteria criteria = new Criteria();
-                    LocationManager locationManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
-                    String bestProvider = locationManager.getBestProvider(criteria, true);
-                    Location location = locationManager.getLastKnownLocation(bestProvider);*/
+                    fillMapItem(activeObj.title, (MovieMetaData.LocationItem)dataObj, rowView);
 
 
 
                 }else if (poster != null) {
-                    poster.setVisibility(View.VISIBLE);
-                    mapView.setVisibility(View.GONE);
                     String imageUrl = ((MovieMetaData.PresentationDataItem) dataObj).getPosterImgUrl();
-                    //if (poster.getTag() == null || !poster.getTag().equals(imageUrl)) {
-                      //  poster.setTag(imageUrl);
 
-                        Glide.with(getContext())
-                                .load(imageUrl).centerCrop()
-                                .into(poster);
-                        //PicassoTrustAll.loadImageIntoView(getContext(), imageUrl, poster);
-                   // }
+                    Glide.with(getContext())
+                            .load(imageUrl).centerCrop()
+                            .into(poster);
                 }
 
-                if (dataObj instanceof MovieMetaData.AudioVisualItem)
-                    playIcon.setVisibility(View.VISIBLE);
+                ImageView playbutton = (ImageView)rowView.findViewById(R.id.ime_item_play_logo);
+                if (playbutton != null){
+                    playbutton.setVisibility((dataObj instanceof MovieMetaData.AudioVisualItem) ? View.VISIBLE : View.INVISIBLE);
+                }
+
 
 
                 if (subText1 != null && !subText1.getText().equals(((MovieMetaData.PresentationDataItem) dataObj).getTitle())) {
@@ -310,20 +259,17 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                 }
             }
         }else if (activeObj.imeObject instanceof TheTakeProductFrame){
-            poster.setVisibility(View.VISIBLE);
-            mapView.setVisibility(View.GONE);
             final int frameTime = ((TheTakeProductFrame) activeObj.imeObject).frameTime;
-            if  (rowView.getTag(R.id.ime_title) != null && !rowView.getTag(R.id.ime_title).equals(frameTime))
+            if  (rowView.getTag(R.id.ime_title) == null || !rowView.getTag(R.id.ime_title).equals(frameTime))
             {
                 rowView.setTag(R.id.ime_title, ((TheTakeProductFrame) activeObj.imeObject).frameTime);
                 if (poster != null) {
 
                     poster.setImageDrawable(null);
 
-                    //Glide.with(getContext()).load(imageUrl).centerCrop().into(poster);
                 }
 
-                if (subText1 != null && subText1.getTag(R.id.ime_title) != null && !subText1.getTag(R.id.ime_title).equals(frameTime)) {
+                if (subText1 != null && (subText1.getTag(R.id.ime_title) == null || !subText1.getTag(R.id.ime_title).equals(frameTime))) {
                     subText1.setText("");
                     subText1.setTag(R.id.ime_title, frameTime);
                 }
@@ -358,6 +304,64 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
 
         }
 
+    }
+
+    private void fillMapItem(final String title, MovieMetaData.LocationItem dataObj, View rowView){
+
+        final MapView mapView = (MapView)rowView.findViewById(R.id.ime_map_view);
+
+        mapView.setVisibility(View.VISIBLE);
+        final MovieMetaData.LocationItem locationItem = (MovieMetaData.LocationItem)dataObj;
+
+        List<MovieMetaData.LocationItem> locList = new ArrayList<MovieMetaData.LocationItem>();
+        locList.add(locationItem);
+        HttpImageHelper.getAllMapPins(locList, new ResultListener<Boolean>() {
+            @Override
+            public void onResult(Boolean result) {
+                //mapView.getMaps
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final LatLng location = new LatLng(locationItem.latitude, locationItem.longitude);
+
+                        mapView.getMapAsync(new OnMapReadyCallback() {
+                            @Override
+                            public void onMapReady(GoogleMap googleMap) {
+
+                                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, locationItem.zoom));   // set location
+
+                                BitmapDescriptor bmDes =
+                                        BitmapDescriptorFactory.fromBitmap(HttpImageHelper.getMapPinBitmap(locationItem.pinImage.url));
+                                googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                                googleMap.addMarker(new MarkerOptions()
+                                        .position(location)
+                                        .icon(bmDes));
+                                googleMap.getUiSettings().setMapToolbarEnabled(false);
+                                googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                                    @Override
+                                    public void onMapClick(LatLng latLng) {
+                                        NextGenPlayer playerActivity = null;
+                                        if (getActivity() instanceof NextGenPlayer) {
+                                            playerActivity = (NextGenPlayer) getActivity();
+                                        }
+                                        ECMapViewFragment fragment = new ECMapViewFragment();
+                                        fragment.setLocationItem(title, locationItem);
+                                        playerActivity.transitMainFragment(fragment);
+                                        playerActivity.pausMovieForImeECPiece();
+                                    }
+                                });
+                                //googleMap.addMarker(new MarkerOptions().position(new LatLng(locationItem.latitude, locationItem.longitude)).title("Marker"));
+                            }
+                        });
+                    }
+                });
+            }
+
+            @Override
+            public <E extends Exception> void onException(E e) {
+
+            }
+        });
     }
 
     public void playbackStatusUpdate(final NextGenPlaybackStatus playbackStatus, final long timecode){
