@@ -43,12 +43,31 @@
             </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/ec_content_name"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/textLarge"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="left">
+
+            <TextView
+                android:id="@+id/ec_content_name"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/textLarge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:padding="@dimen/spacing_normal"
+                android:layout_gravity="left"
+                android:id="@+id/share_image_button"
+                android:text="@string/share_this_image"
+                android:textColor="@color/selectable_text_white_grey_color"
+                android:fontFamily="sans-serif-condensed"
+                android:textSize="@dimen/textMedium"
+                android:background="@drawable/red_rounded_corner_drawable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

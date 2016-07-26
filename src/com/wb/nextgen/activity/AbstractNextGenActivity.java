@@ -127,10 +127,11 @@ public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivi
             if (contentView != null){
                 contentView.addView(backgroundImageView, 0);
             }
+
+            if (!StringHelper.isEmpty(getBackgroundImgUri()))
+                loadBGImage();
         }
 
-        if (!StringHelper.isEmpty(getBackgroundImgUri()))
-            loadBGImage();
 
         if (topUnderlayActionbarSpacer == null && shouldUseActionBarSpacer()){
             topUnderlayActionbarSpacer = new LinearLayout(this);

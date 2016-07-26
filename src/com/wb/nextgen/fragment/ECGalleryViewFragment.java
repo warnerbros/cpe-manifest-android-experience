@@ -1,6 +1,7 @@
 package com.wb.nextgen.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -37,6 +39,7 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment {
     private GalleryPagerAdapter adapter;
     FixedAspectRatioFrameLayout aspectRatioFrame = null;
     ImageView bgImageView;
+    Button shareImageButton;
 
     String bgImageUrl = null;
     FixedAspectRatioFrameLayout.Priority aspectFramePriority = null;
@@ -70,6 +73,29 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment {
 
         if (bgImageView != null && !StringHelper.isEmpty(bgImageUrl)){
             PicassoTrustAll.loadImageIntoView(getActivity(), bgImageUrl, bgImageView);
+        }
+
+        shareImageButton = (Button) view.findViewById(R.id.share_image_button);
+        if (shareImageButton != null){
+            shareImageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int currentPos = galleryViewPager.getCurrentItem();
+
+                    if (currentPos > currentGallery.galleryImages.size()){
+                        return;
+                    }
+
+                    String imageUrl = currentGallery.galleryImages.get(currentPos).fullImage.url;
+                    Intent share = new Intent(Intent.ACTION_SEND);
+                    share.setType("text/plain");
+                    share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+                    share.putExtra(Intent.EXTRA_SUBJECT, "Next Gen Share");
+                    share.putExtra(Intent.EXTRA_TEXT, imageUrl);
+
+                    startActivity(Intent.createChooser(share, ""));
+                }
+            });
         }
     }
 

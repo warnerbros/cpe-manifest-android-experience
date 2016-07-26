@@ -44,6 +44,7 @@
 	<string name="shop_at_the_take">SHOP ON THE TAKE.COM</string>
 	<string name="send_the_link">SEND THE LINK</string>
 	<string name="share_this_clip">SHARE THIS CLIP</string>
+	<string name="share_this_image">SHARE THIS IMAGE</string>
 
 	<string name="leave_app_dialogbox_title">Leaving App</string>
 	<string name="leave_app_dialogbox_text">Following this link will exit the app and launch your browser. Would you like to continue?</string>

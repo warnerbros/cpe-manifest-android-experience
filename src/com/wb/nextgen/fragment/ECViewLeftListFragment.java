@@ -115,4 +115,11 @@ public class ECViewLeftListFragment extends NextGenExtraLeftListFragment{
         }
         return true;
     }
+
+    public int getSelectedIndex(){
+        if (listAdaptor != null)
+            return listAdaptor.selectedIndex;
+        else
+            return -1;
+    }
 }

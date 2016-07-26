@@ -53,7 +53,7 @@ public abstract class AbstractECView extends AbstractNextGenActivity {
 
     public void onStart() {
         super.onStart();
-        if (listFragment != null){
+        if (listFragment != null && listFragment.getSelectedIndex() <= 0){
             listFragment.onListItemClick(0, ecGroupData.getChildrenContents().get(0));
             listFragment.scrollToTop();
         }
