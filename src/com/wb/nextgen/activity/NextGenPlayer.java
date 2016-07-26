@@ -36,6 +36,8 @@ import java.util.TimerTask;
  */
 public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFragmentTransactionInterface {
 
+    private final static String IS_PLAYER_PLAYING = "IS PLAYING";
+    private final static String RESUME_PLAYBACK_TIME = "RESUME_PLAYBACK_TIME";
 
     protected ObservableVideoView videoView;
     protected RelativeLayout containerView;
@@ -216,7 +218,14 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         @Override
         public void onPrepared(MediaPlayer mp) {
 
-            videoView.start();
+            if (shouldStartAfterResume)
+                videoView.start();
+            else
+                videoView.pause();
+
+            mediaController.hide();
+            mediaController.show();
+
             if (imeUpdateTimer == null){
                 imeUpdateTimer = new Timer();
             }
@@ -274,6 +283,16 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         return new CompletionListener();
     }
 
+    int resumePlayTime = 0;
+    boolean shouldStartAfterResume = true;
+
+    @Override
+    public void onPause() {
+        shouldStartAfterResume = videoView.isPlaying();
+        resumePlayTime = videoView.getCurrentPosition();
+        super.onPause();
+    }
+
     public void onResume() {
         super.onResume();
         videoView.setVisibility(View.VISIBLE);
@@ -292,19 +311,12 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
             });
         } else{
             videoView.seekTo(resumePlayTime);
-            /*Intent intent = getIntent();
-            Uri uri = intent.getData();
-            videoView.setVideoURI(uri);*/
+            if (!shouldStartAfterResume)
+                videoView.pause();
         }
         hideShowNextGenView();
     }
 
-    int resumePlayTime = 0;
-    @Override
-    public void onPause(){
-        resumePlayTime = videoView.getCurrentPosition();
-        super.onPause();
-    }
 
     @Override
     protected void onDestroy() {
