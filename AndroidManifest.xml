@@ -91,9 +91,9 @@
 
 		<!-- Activities -->
 		<activity
-			android:name=".activity.NextGenActivity"
+			android:name=".activity.StartupActivity"
 			android:launchMode="singleTop"
-			android:screenOrientation="sensorLandscape"
+			android:screenOrientation="sensorPortrait"
 			android:configChanges="orientation|screenSize"
 			android:theme="@style/Theme.AppCompat.NoActionBar">
 			<!--android:theme="@style/NextGenActionBar">-->
@@ -103,13 +103,20 @@
 			</intent-filter>
 
 
-			
+
 			<intent-filter> <!-- app link -->
 				<action android:name="android.intent.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />
 				<category android:name="android.intent.category.BROWSABLE" />
 				<data android:scheme="flxvid" />
 			</intent-filter>
+		</activity>
+		<activity
+			android:name=".activity.NextGenActivity"
+			android:screenOrientation="sensorLandscape"
+			android:configChanges="orientation|screenSize"
+			android:theme="@style/Theme.AppCompat.NoActionBar">
+
 		</activity>
 
 		<activity

@@ -15,6 +15,7 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
 
+import com.wb.nextgen.activity.StartupActivity;
 import com.wb.nextgen.data.DemoData;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.network.BaselineApiDAO;
@@ -105,12 +106,22 @@ public class NextGenApplication extends Application {
 
             NextGenLogger.d("TIME_THIS", "---------------Next Test--------------");
 
+           //startNextGenExperience();
+
+        }catch (Exception ex){
+            NextGenLogger.e(F.TAG, ex.getLocalizedMessage());
+            NextGenLogger.e(F.TAG, ex.getStackTrace().toString());
+        }
+    }
+
+    public static boolean startNextGenExperience(StartupActivity.ManifestItem manifestItem){
+        try{
+            NextGenLogger.d("TIME_THIS", "---------------Next Test--------------");
+
             long systime = SystemClock.currentThreadTimeMillis();
-            ManifestXMLParser.NextGenManifestData manifest = new ManifestXMLParser().startParsing();
+            ManifestXMLParser.NextGenManifestData manifest = new ManifestXMLParser().startParsing(manifestItem.manifestFileUrl, manifestItem.appDataFileUrl);
             long currentTime = SystemClock.currentThreadTimeMillis() - systime;
             NextGenLogger.d("TIME_THIS", "Time to finish parsing: " + currentTime);
-
-
             movieMetaData = MovieMetaData.process(manifest);
 
 
@@ -119,10 +130,11 @@ public class NextGenApplication extends Application {
 
             BaselineApiDAO.init();
             TheTakeApiDAO.init();
-
+            return true;
         }catch (Exception ex){
             NextGenLogger.e(F.TAG, ex.getLocalizedMessage());
             NextGenLogger.e(F.TAG, ex.getStackTrace().toString());
+            return false;
         }
     }
 

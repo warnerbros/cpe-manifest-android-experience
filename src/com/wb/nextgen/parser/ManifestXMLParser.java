@@ -6,6 +6,8 @@ import android.util.Xml;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.parser.appdata.ManifestAppDataSetType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.MediaManifestType;
+import com.wb.nextgen.util.utils.F;
+import com.wb.nextgen.util.utils.NextGenLogger;
 import com.wb.nextgen.util.utils.StringHelper;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -50,29 +52,28 @@ public class ManifestXMLParser {
         }
     }
 
-    public NextGenManifestData startParsing(){
+    public NextGenManifestData startParsing(String manifestUrl, String appDataUrl){
         NextGenManifestData manifest = null;
         try{
 
-            XmlPullParser parser2 = Xml.newPullParser();
-            parser2.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+            XmlPullParser appDataParser = Xml.newPullParser();
+            appDataParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
             AssetManager am2 = NextGenApplication.getContext().getAssets();
-            //parser2.setInput(am2.open("mos_appdata_locations_r60_v0.3.xml"), null);
-            parser2.setInput(am2.open("mos_appdata_locations_r60-v0.5.xml"), null);
-            parser2.nextTag();
+            appDataParser.setInput(am2.open(appDataUrl), null);
+            appDataParser.nextTag();
 
-            ManifestAppDataSetType appData = parseAppData(parser2);
+            ManifestAppDataSetType appData = parseAppData(appDataParser);
 
-            XmlPullParser parser = Xml.newPullParser();
-            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+            XmlPullParser manifestParser = Xml.newPullParser();
+            manifestParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
             AssetManager am = NextGenApplication.getContext().getAssets();
             //parser.setInput(am.open("mos_hls_manifest_v3.xml"), null);
             //parser.setInput(am.open("mos_hls_manifest_r60_v0.4.xml"), null);
-            parser.setInput(am.open("mos_hls_manifest_r60-v0.5.xml"), null);
-            parser.nextTag();
+            manifestParser.setInput(am.open(manifestUrl), null);
+            manifestParser.nextTag();
 
 
-            MediaManifestType mainManifest = parseManifest(parser);
+            MediaManifestType mainManifest = parseManifest(manifestParser);
             manifest = new NextGenManifestData(mainManifest, appData);
 
         }catch (Exception ex){
@@ -209,15 +210,7 @@ public class ManifestXMLParser {
 
                         if (thisFieldClass.field.getType().isAnnotationPresent(XmlType.class)) {
                             Object fieldObj = parseElement(parser, thisFieldClass.field.getType(), parser.getName());
-                            //thisField.set(thisField.getType(), fieldObj);
                             Method setter = thisFieldClass.fieldClass.getDeclaredMethod("set" + xmlElementName, thisFieldClass.field.getType());
-                            /*Method setter;
-                            if (canSkipAddToHashTable ){
-                                setter = thisClassMap.setterMap.get(xmlElementName);
-                            }else{
-                                setter = thisFieldClass.fieldClass.getDeclaredMethod("set" + xmlElementName, thisFieldClass.field.getType());
-                                thisClassMap.setterMap.put(xmlElementName, setter);
-                            }*/
 
                             setter.invoke(retObj, fieldObj);
                         } else if (thisFieldClass.field.getType().equals(List.class)) {             // no setter for list, should use getter and add
@@ -227,13 +220,7 @@ public class ManifestXMLParser {
                                 Type elementType = ((ParameterizedType) thisFieldClass.field.getGenericType()).getActualTypeArguments()[0];        // get the List <Type>
                                 Object listItmeObj = null;
                                 Method getter = thisFieldClass.fieldClass.getDeclaredMethod("get" + xmlElementName);
-                                /*Method getter;
-                                if (canSkipAddToHashTable ){
-                                    getter = thisClassMap.getterMap.get(xmlElementName);
-                                }else{
-                                    getter = thisFieldClass.fieldClass.getDeclaredMethod("get" + xmlElementName);
-                                    thisClassMap.getterMap.put(xmlElementName, getter);
-                                }*/
+
                                 List listObj = (List) getter.invoke(retObj);
 
                                 if (((Class) elementType).isAnnotationPresent(XmlType.class)) {
@@ -249,18 +236,10 @@ public class ManifestXMLParser {
                             }
 
 
-                            //setter.invoke(retObj, listObj);
                         } else {
-                            //String stringValue = readText(parser, parser.getName());
                             Object obj = toObject(thisFieldClass.field.getType(), readText(parser));
                             Method setter = thisFieldClass.fieldClass.getDeclaredMethod("set" + xmlElementName, thisFieldClass.field.getType());
-                            /*Method setter;
-                            if (canSkipAddToHashTable ){
-                                setter = thisClassMap.setterMap.get(xmlElementName);
-                            }else{
-                                setter = thisFieldClass.fieldClass.getDeclaredMethod("set" + xmlElementName, thisFieldClass.field.getType());
-                                thisClassMap.setterMap.put(xmlElementName, setter);
-                            }*/
+
                             setter.invoke(retObj, obj);
                         }
                     }catch (IllegalArgumentException iex){

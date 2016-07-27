@@ -173,9 +173,9 @@ public class NextGenStyle {
         }else if (movieId.equals(NGDMAppearanceTitle.BvS)){
             switch (type) {
                 case InMovie:
-                    return new NGScreenOffSetRatio(260 / 1024, 515 / 768);
+                    return new NGScreenOffSetRatio(260.0 / 1024.0, 515.0 / 768.0);
                 case OutOfMovie:
-                    return new NGScreenOffSetRatio(260 / 1024, 570 / 768);
+                    return new NGScreenOffSetRatio(260.0 / 1024.0, 570.0 / 768.0);
             }
 
         } else if (type == NextGenAppearanceType.InMovie) {
@@ -201,9 +201,9 @@ public class NextGenStyle {
         }else if (movieId.equals(NGDMAppearanceTitle.BvS)){
             switch (type) {
                 case InMovie:
-                    return new NGScreenOffSetRatio(274 / 1024, 58 / 768);
+                    return new NGScreenOffSetRatio(274.0 / 1024.0, 58 / 768.0);
                 case OutOfMovie:
-                    return new NGScreenOffSetRatio(174 / 1024, 48 / 768);
+                    return new NGScreenOffSetRatio(174.0 / 1024.0, 48 / 768.0);
             }
 
         } else if (type == NextGenAppearanceType.InMovie) {

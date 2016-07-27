@@ -48,10 +48,6 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
     private int videoLoopPoint = 0;
     private int buttonAnimationStartTime = 0;
-    //final static int TOP_RATIO = 52;
-    //final static int LEFT_RATIO = 31;
-    //LinearLayout leftPadding, topPadding, rightPortion;
-    //RelativeLayout startUpVideoViewFrame;
 
     private TimerTask startUpTimerTask;
     private Timer startUpTimer;
@@ -64,29 +60,20 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
         setContentView(R.layout.next_gen_startup_view);
 
         startupVideoView = (VideoView)findViewById(R.id.startup_video_view);
-        //startUpVideoViewFrame = (RelativeLayout)findViewById(R.id.startuo_video_view_frame);
-
-
-        /*leftPadding = (LinearLayout)findViewById(R.id.startup_left_padding);
-        topPadding = (LinearLayout)findViewById(R.id.startup_top_padding);
-        rightPortion = (LinearLayout)findViewById(R.id.startup_right_portion);*/
 
         buttonsLayout = findViewById(R.id.startup_buttons_layout);
         if (buttonsLayout != null){
             buttonsLayout.setVisibility(View.GONE);
         }
 
-        NextGenLogger.d("GrantTest", "hide buttons");
         playMovieButton = (ImageButton) findViewById(R.id.next_gen_startup_play_button);
         if (playMovieButton != null){
             Glide.with(this).load(NextGenApplication.getMovieMetaData().getStyle().getButtonImageURL(NextGenStyle.NextGenAppearanceType.InMovie)).into(playMovieButton);
-            //playMovieButton.setImageResource(R.drawable.front_page_paly_button);
             playMovieButton.setOnClickListener(this);
         }
         extraButton = (ImageButton) findViewById(R.id.next_gen_startup_extra_button);
         if (extraButton != null){
             Glide.with(this).load(NextGenApplication.getMovieMetaData().getStyle().getButtonImageURL(NextGenStyle.NextGenAppearanceType.OutOfMovie)).into(extraButton);
-            //extraButton.setImageResource(R.drawable.front_page_extra_button);
             extraButton.setOnClickListener(this);
         }
         videoLoopPoint = (int)(NextGenApplication.getMovieMetaData().getStyle().getBackgroundVideoLoopTime() * 1000);

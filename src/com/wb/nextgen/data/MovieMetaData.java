@@ -999,6 +999,8 @@ public class MovieMetaData {
         }
 
         public String getPosterImgUrl(){
+            if (locationThumbnail != null)
+                return locationThumbnail.url;
             return "";
         }
     }
@@ -1311,8 +1313,10 @@ public class MovieMetaData {
                 return posterImgUrl;
             else if (galleryItems.size() > 0) {
                 posterImgUrl = galleryItems.get(0).getPosterImgUrl();
-            }else if (audioVisualItems.size() > 0){
+            }else if (audioVisualItems.size() > 0) {
                 posterImgUrl = audioVisualItems.get(0).getPosterImgUrl();
+            }else if (locationItems.size() > 0){
+                posterImgUrl = locationItems.get(0).getPosterImgUrl();
             }else if (StringHelper.isEmpty(posterImgUrl) && childrenExperience.size() > 0) {
                 for (ExperienceData ec : childrenExperience) {
                     if (!StringHelper.isEmpty(ec.getPosterImgUrl())) {
