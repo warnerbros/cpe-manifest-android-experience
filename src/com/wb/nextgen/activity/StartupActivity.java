@@ -17,10 +17,14 @@ import com.wb.nextgen.Manifest;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 import com.wb.nextgen.util.DialogUtils;
+import com.wb.nextgen.util.ExceptionHandler;
 import com.wb.nextgen.util.PicassoTrustAll;
+import com.wb.nextgen.util.concurrent.ResultListener;
+import com.wb.nextgen.util.concurrent.Worker;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 /**
  * Created by gzcheng on 7/26/16.
@@ -111,14 +115,33 @@ public class StartupActivity extends NextGenHideStatusBarActivity {
 
         @Override
         public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-            ManifestItem item = getItem(position);
+            final ManifestItem item = getItem(position);
             mDialog.setMessage("Loading");
+            mDialog.setCancelable(false);
             mDialog.show();
-            if (NextGenApplication.startNextGenExperience(item)){
-                Intent intent = new Intent(StartupActivity.this, NextGenActivity.class);
-                startActivity(intent);
-            }
-            mDialog.hide();
+            Worker.execute(new Callable<Boolean>() {
+                public Boolean call() throws Exception{
+                    return NextGenApplication.startNextGenExperience(item);
+                }
+            }, new ResultListener<Boolean>(){
+                public void onResult(Boolean result){
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mDialog.hide();
+                            Intent intent = new Intent(StartupActivity.this, NextGenActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+
+                }
+
+                public  void onException(Exception e){
+
+                    mDialog.hide();
+                }
+            });
+
 
         }
 

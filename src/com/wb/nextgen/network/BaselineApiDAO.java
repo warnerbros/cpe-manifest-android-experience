@@ -91,13 +91,11 @@ public class BaselineApiDAO {
                     read = br.readLine();
                 }
             } catch (IOException e) {
-                // NextGenLogger.e(F.TAG, "ResourceUtils.getStringFromAssets: " + e.getMessage(), e);
             } finally {
                 try {
                     if (in != null)
                         in.close();
                 } catch (IOException e) {
-                    // NextGenLogger.e(F.TAG, "ResourceUtils.getStringFromAssets: " + e.getMessage(), e);
                 }
             }
             try {

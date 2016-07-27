@@ -951,6 +951,7 @@ public class MovieMetaData {
         public final String experienceId;
         private ExperienceData experienceData;
         private List<PresentationDataItem> presentationDataItems = new ArrayList<PresentationDataItem>();
+        private LocationItem parentSceneLocation;
 
         public LocationItem(int displayOrder, String type, AppDataLocationType appDataLocation, int zoom, String text,
                             PictureImageData locationThumbnail, PictureImageData pinImage, String experienceId){
@@ -974,20 +975,6 @@ public class MovieMetaData {
                 return locationThumbnail.url;
             return "";
         }
-        /*
-        public List<ECGalleryItem> getGalleryItems(){
-            if (galleryItem != null) {
-                List<ECGalleryItem> resultList = new ArrayList<ECGalleryItem>();
-                resultList.add(galleryItem);
-                return resultList;
-            }else {
-                computeFromExperience();
-                if (experienceData != null){
-                    return experienceData.galleryItems;
-                }else
-                    return null;
-            }
-        }*/
 
         public List<PresentationDataItem> getPresentationDataItems(){
             computeFromExperience();
