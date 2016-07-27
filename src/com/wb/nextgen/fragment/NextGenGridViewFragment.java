@@ -53,10 +53,10 @@ public abstract class NextGenGridViewFragment extends Fragment implements Adapte
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
         listAdaptor.selectedIndex = position;
         gridView.setItemChecked(position, true);
-        onListItmeClick(v, position, id);
+        onListItemClick(v, position, id);
     }
 
-    protected abstract void onListItmeClick(View v, int position, long id);
+    protected abstract void onListItemClick(View v, int position, long id);
 
     protected abstract int getNumberOfColumns();
 

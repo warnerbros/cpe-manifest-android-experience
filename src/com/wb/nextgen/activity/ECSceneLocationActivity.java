@@ -329,8 +329,8 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
                     locationItem = ((SceneLocation)item).getRepresentativeLocationItem();
 
                 }
-                if (locationItem != null && locationItem.locationThumbnail != null) {
-                    Glide.with(ECSceneLocationActivity.this).load(locationItem.locationThumbnail.url).into(locationPhoto);
+                if (locationItem != null && !StringHelper.isEmpty(locationItem.getLocationThumbnailUrl())) {
+                    Glide.with(ECSceneLocationActivity.this).load(locationItem.getLocationThumbnailUrl()).into(locationPhoto);
                     locationName.setText(((SceneLocation)item).name);
                     int locationCount = ((SceneLocation)item).childrenSceneLocations.size();
                     if (locationCount == 0){
@@ -339,7 +339,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
                         locationsCountText.setText(String.format(getResources().getString(R.string.locations_count_text), locationCount));
                     }
                     //PicassoTrustAll.loadImageIntoView(ECSceneLocationActivity.this, locationItem.locationThumbnail.url, holder.personPhoto);
-                    NextGenLogger.d(F.TAG, "Position: " + itemIndex + " loaded: " + locationItem.locationThumbnail.url);
+                    NextGenLogger.d(F.TAG, "Position: " + itemIndex + " loaded: " + locationItem.getLocationThumbnailUrl());
                 }
             } else if (item instanceof PresentationDataItem){
                 if (item instanceof MovieMetaData.AudioVisualItem)
@@ -426,8 +426,8 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
             if (sceneLocation != null){
                 if (sceneLocation.childrenSceneLocations.size() > 0){
                     holder.setItem(sceneLocation.childrenSceneLocations.get(position), position);
-                }else if (sceneLocation.presentationItems.size() > 0){
-                    holder.setItem(sceneLocation.presentationItems.get(position), position);
+                }else if (sceneLocation.getPresentationItems().size() > 0){
+                    holder.setItem(sceneLocation.getPresentationItems().get(position), position);
                 }
             }else if (rootSceneLocations != null) {
                 holder.setItem(rootSceneLocations.get(position), position);
@@ -444,8 +444,8 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
             if (sceneLocation != null){
                 if (sceneLocation.childrenSceneLocations.size() > 0){
                     return sceneLocation.childrenSceneLocations.size();
-                }else if (sceneLocation.presentationItems.size() > 0){
-                    return sceneLocation.presentationItems.size();
+                }else if (sceneLocation.getPresentationItems().size() > 0){
+                    return sceneLocation.getPresentationItems().size();
                 } else
                     return 0;
 

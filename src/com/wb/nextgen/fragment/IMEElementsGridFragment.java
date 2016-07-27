@@ -84,7 +84,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
 
 
 
-    protected void onListItmeClick(View v, int position, long id){
+    protected void onListItemClick(View v, int position, long id){
         if (position < 0 || position >= activeIMEs.size())
             return;
         IMEDisplayObject activeObj = activeIMEs.get(position);
