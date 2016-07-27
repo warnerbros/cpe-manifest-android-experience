@@ -10,7 +10,7 @@ import java.util.List;
  * Created by gzcheng on 1/29/16.
  */
 public class SceneLocation{
-    public final List<PresentationDataItem> presentationItems = new ArrayList<PresentationDataItem>();
+    private List<PresentationDataItem> presentationItems = null;
     public final List<SceneLocation> childrenSceneLocations = new ArrayList<SceneLocation>();
     public final LocationItem location;
     public final String name;
@@ -20,12 +20,7 @@ public class SceneLocation{
         this.parentSceneLocation = parentSceneLocation;
         this.name = name;
         this.location = location;
-        if (location != null){
-            if (location.avItem != null)
-                presentationItems.add(location.avItem);
-            if (location.galleryItem != null)
-                presentationItems.add(location.galleryItem);
-        }
+
     }
 
     public LocationItem getRepresentativeLocationItem(){
@@ -55,5 +50,16 @@ public class SceneLocation{
             outerMost = outerMost.parentSceneLocation;
         }
         return outerMost;
+    }
+
+    public List<PresentationDataItem> getPresentationItems(){
+        if (presentationItems == null){
+            if (location.getPresentationDataItems() != null)
+                presentationItems = location.getPresentationDataItems();
+            else
+                presentationItems = new ArrayList<PresentationDataItem>();
+        }
+
+        return presentationItems;
     }
 }

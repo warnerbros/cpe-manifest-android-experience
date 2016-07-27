@@ -228,6 +228,8 @@ public class AppNVPairType {
     protected AppDataAcquireAssetType acquireAsset;
     @XmlElement(name = "KML")
     protected AppDataKMLType kml;
+    @XmlElement(name = "ExperienceID")
+    protected String experienceId;
     @XmlAnyElement(lax = true)
     protected Object any;
     @XmlAttribute(name = "Name", required = true)
@@ -246,6 +248,18 @@ public class AppNVPairType {
     }
 
     /**
+     * Gets the value of the experienceId.
+     *
+     * @return
+     *     possible object is
+     *     {@link String }
+     *
+     */
+    public String getExperienceID() {
+        return experienceId;
+    }
+
+    /**
      * Sets the value of the text property.
      * 
      * @param value
@@ -258,12 +272,24 @@ public class AppNVPairType {
     }
 
     /**
+     * Sets the value of the experiendId property.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *
+     */
+    public void setExperienceID(String value) {
+        this.experienceId = value;
+    }
+
+    /**
      * Gets the value of the integer property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link BigInteger }
-     *     
+     *
      */
     public BigInteger getInteger() {
         return integer;

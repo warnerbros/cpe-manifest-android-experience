@@ -1,6 +1,7 @@
 package com.wb.nextgen.data;
 
 import com.google.gson.annotations.SerializedName;
+import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 import com.wb.nextgen.model.SceneLocation;
 import com.wb.nextgen.parser.ManifestXMLParser;
@@ -65,6 +66,7 @@ public class MovieMetaData {
     private static String ITEM_LOCATION_THUMBNAIL = "location_thumbnail";
     private static String ITEM_GALLERY_ID = "gallery_id";
     private static String ITEM_GALLERY_THUMBNAIL = "gallery_thumbnail";
+    private static String ITEM_EXPERIENCE_ID = "experience_id";
 
 
     //final private List<ECGroupData> movieExperiences = new ArrayList<ECGroupData>();
@@ -295,7 +297,7 @@ public class MovieMetaData {
                         String appGroupId = appType.getAppGroupID();
 
 
-                        LocationItem locationItem = getLocationItemfromMap(appDataIdTpAppDataMap, presentationIdToAVItemMap, presentationAssetMap, videoAssetsMap, galleryIdToGalleryItemMap, imageAssetsMap, appId);
+                        LocationItem locationItem = getLocationItemfromMap(appDataIdTpAppDataMap, imageAssetsMap, appId);
                         if (locationItem != null)
                             locationItems.add(locationItem);
                     }
@@ -422,7 +424,7 @@ public class MovieMetaData {
                             if (OTHER_APP_DATA_ID.equals(otherID.getNamespace())){
                                 String locationId = otherID.getIdentifier();
 
-                                presentationData = getLocationItemfromMap(appDataIdTpAppDataMap, presentationIdToAVItemMap, presentationAssetMap, videoAssetsMap, galleryIdToGalleryItemMap, imageAssetsMap, locationId);
+                                presentationData = getLocationItemfromMap(appDataIdTpAppDataMap, imageAssetsMap, locationId);
 
                             } else if (OTHER_PEOPLE_ID.equals(otherID.getNamespace())){
                                 isCast = true;
@@ -474,11 +476,8 @@ public class MovieMetaData {
     }
 
     private static LocationItem getLocationItemfromMap(HashMap<String, AppDataType> appDataMap,
-                                                       HashMap<String, AudioVisualItem> presentationIdToAVItemMap,
-                                                       HashMap<String, PresentationType> presentationAssetMap,
-                                                       HashMap<String, InventoryVideoType> videoAssetsMap,
-                                                       HashMap<String, ECGalleryItem> galleryIdToGalleryItemMap,
-                                                       HashMap<String, InventoryImageType> imageAssetsMap, String appId){
+                                                       HashMap<String, InventoryImageType> imageAssetsMap,
+                                                       String appId){
         AppDataType appData = appDataMap.get(appId);
         if(appData == null)
             return null;
@@ -491,8 +490,9 @@ public class MovieMetaData {
 
         ECGalleryItem galleryItem = null;
         AudioVisualItem avItem = null;
+        String experienceId = null;
 
-        PictureImageData videoThumbnail = null, galleryThumbnail = null, locationThumbnail = null, pinImage = null;
+        PictureImageData videoThumbnail = null, locationThumbnail = null, pinImage = null;
 
         if (appData.getNVPair() != null && appData.getNVPair().size() > 0){
             for (AppNVPairType pair : appData.getNVPair()){
@@ -513,37 +513,18 @@ public class MovieMetaData {
                     displayOrder = pair.getInteger().intValue();
                 } else if (ITEM_TEXT.equals(pair.getName())){
                     text = pair.getText();
-                } else if (ITEM_VIDEO_ID.equals(pair.getName())){
-                    avItem = presentationIdToAVItemMap.get(pair.getPresentationID());
-                    if (avItem == null) {
-                        PresentationType presentationType = presentationAssetMap.get(pair.getPresentationID());
-                        if (presentationType.getTrackMetadata() != null && presentationType.getTrackMetadata().size() > 0) {
-                            if (presentationType.getTrackMetadata().get(0).getVideoTrackReference() != null && presentationType.getTrackMetadata().get(0).getVideoTrackReference().size() > 0) {
-                                String avItemId = presentationType.getTrackMetadata().get(0).getVideoTrackReference().get(0).getVideoTrackID().get(0);
-                                avItem = new AudioVisualItem(videoAssetsMap.get(avItemId), null);
-                            }
-                        }
-                    }
-                } else if (ITEM_VIDEO_THUMBNAIL.equals(pair.getName())){
-                    String imageId = pair.getPictureID();
-                    InventoryImageType imageType = imageAssetsMap.get(imageId);
-                    videoThumbnail = new PictureImageData(imageType.getContainerReference().getContainerLocation(), imageType.getWidth(), imageType.getHeight());
-                } else if (ITEM_GALLERY_ID.equals(pair.getName())){
-                    galleryItem = galleryIdToGalleryItemMap.get(pair.getGallery().getGalleryID());
-                } else if (ITEM_GALLERY_THUMBNAIL.equals(pair.getName())){
-                    String imageId = pair.getPictureID();
-                    InventoryImageType imageType = imageAssetsMap.get(imageId);
-                    galleryThumbnail = new PictureImageData(imageType.getContainerReference().getContainerLocation(), imageType.getWidth(), imageType.getHeight());
                 } else if (ITEM_LOCATION_THUMBNAIL.equals(pair.getName())){
                     String imageId = pair.getPictureID();
                     InventoryImageType imageType = imageAssetsMap.get(imageId);
                     locationThumbnail = new PictureImageData(imageType.getContainerReference().getContainerLocation(), imageType.getWidth(), imageType.getHeight());
 
+                } else if (ITEM_EXPERIENCE_ID.equals(pair.getName())){
+                    experienceId = pair.getExperienceID();
                 }
             }
         }
 
-        return new LocationItem(displayOrder, type, location, zoom, text, avItem, galleryItem, videoThumbnail, galleryThumbnail, locationThumbnail, pinImage);
+        return new LocationItem(displayOrder, type, location, zoom, text, locationThumbnail, pinImage, experienceId);
     }
 
     public List<ExperienceData> getExtraECGroups(){
@@ -964,16 +945,15 @@ public class MovieMetaData {
         public final float latitude;
         public final String description;
         public final int zoom;
-        public final AudioVisualItem avItem;
-        public final ECGalleryItem galleryItem;
-        public final PictureImageData videoThumbnail;
-        public final PictureImageData galleryThumbnail;
-        public final PictureImageData locationThumbnail;
+        private PictureImageData locationThumbnail;
         public final String greaterTitle;
         public final PictureImageData pinImage;
+        public final String experienceId;
+        private ExperienceData experienceData;
+        private List<PresentationDataItem> presentationDataItems = new ArrayList<PresentationDataItem>();
 
         public LocationItem(int displayOrder, String type, AppDataLocationType appDataLocation, int zoom, String text,
-                            AudioVisualItem avItem, ECGalleryItem galleryItem, PictureImageData videoThumbnail, PictureImageData galleryThumbnail, PictureImageData locationThumbnail, PictureImageData pinImage){
+                            PictureImageData locationThumbnail, PictureImageData pinImage, String experienceId){
             super("", "", null);
             description = text;
             this.zoom = zoom;
@@ -983,25 +963,78 @@ public class MovieMetaData {
             this.latitude = location.getEarthCoordinate().getLatitude().floatValue();
             this.longitude = location.getEarthCoordinate().getLongitude().floatValue();
             this.title = location.getName();
-            this.avItem = avItem;
-            this.galleryItem = galleryItem;
-            this.videoThumbnail = videoThumbnail;
-            this.galleryThumbnail = galleryThumbnail;
             this.locationThumbnail = locationThumbnail;
             this.pinImage = pinImage;
+            this.experienceId = experienceId;
 
-            if (this.avItem != null && this.videoThumbnail != null && !StringHelper.isEmpty(this.title) ){
-                this.avItem.setLocationMetaData(description, this.videoThumbnail.url);
-            }
-
-            if (this.galleryItem != null && galleryThumbnail != null){
-            }
         }
 
         public String getPosterImgUrl(){
             if (locationThumbnail != null)
                 return locationThumbnail.url;
             return "";
+        }
+        /*
+        public List<ECGalleryItem> getGalleryItems(){
+            if (galleryItem != null) {
+                List<ECGalleryItem> resultList = new ArrayList<ECGalleryItem>();
+                resultList.add(galleryItem);
+                return resultList;
+            }else {
+                computeFromExperience();
+                if (experienceData != null){
+                    return experienceData.galleryItems;
+                }else
+                    return null;
+            }
+        }*/
+
+        public List<PresentationDataItem> getPresentationDataItems(){
+            computeFromExperience();
+            return presentationDataItems;
+        }
+
+        private void computeFromExperience(){
+            if (!StringHelper.isEmpty(experienceId) && experienceData == null){
+                MovieMetaData metaData = NextGenApplication.getMovieMetaData();
+                if (metaData != null) {
+                    experienceData = metaData.experienceIdToExperienceMap.get(experienceId);
+                    presentationDataItems = new ArrayList<PresentationDataItem>();
+
+                    if (experienceData.childIdToSequenceNumber.size() > 0){
+
+                        for (String childExpId : experienceData.childIdToSequenceNumber.keySet()){
+                            ExperienceData child = metaData.experienceIdToExperienceMap.get(childExpId);
+                            experienceData.addChild(child);
+                        }
+
+                        for (ExperienceData child : experienceData.getChildrenContents()){
+                            if (child.audioVisualItems != null && child.audioVisualItems.size() > 0){
+                                presentationDataItems.addAll(child.audioVisualItems);
+                            }
+                            if (child.galleryItems != null && child.galleryItems.size() > 0){
+                                presentationDataItems.addAll(child.galleryItems);
+                            }/*
+                            if (child.locationItems != null && child.locationItems.size() > 0){
+                                child.addAll(child.audioVisualItems);
+                            }*/
+                        }
+                    }
+                }
+            }
+        }
+
+        public String getLocationThumbnailUrl(){
+            computeFromExperience();
+            if (locationThumbnail != null){
+                return locationThumbnail.url;
+            }else {
+                computeFromExperience();
+                if (experienceData != null) {
+                    return experienceData.getPosterImgUrl();
+                }else
+                    return "";
+            }
         }
     }
 
@@ -1182,10 +1215,9 @@ public class MovieMetaData {
         //final public String ecVideoUrl;
         private ECGroupType type = ECGroupType.UNKNOWN;
         final private List<ExperienceData> childrenExperience = new ArrayList<ExperienceData>();
-        //final public List<ECGalleryImageItem> galleryItems = new ArrayList<ECGalleryImageItem>();
         final public List<ECGalleryItem> galleryItems = new ArrayList<ECGalleryItem>();
         final public List<AudioVisualItem> audioVisualItems = new ArrayList<AudioVisualItem>();
-        final public List<LocationItem> locationItems = new ArrayList<LocationItem>();
+        final private List<LocationItem> locationItems = new ArrayList<LocationItem>();
         final public String experienceId;
         final private HashMap<String, Integer> childIdToSequenceNumber = new HashMap<String, Integer>();
         private ExternalApiData externalApp;
@@ -1271,10 +1303,6 @@ public class MovieMetaData {
                 else if (externalApp != null)
                     type = ECGroupType.EXTERNAL_APP;
                 else if (childrenExperience.size() > 0)
-
-
-
-
                     type = childrenExperience.get(0).getECGroupType();
 
             }
@@ -1349,12 +1377,8 @@ public class MovieMetaData {
                     group.childrenSceneLocations.add(finalSceneLocation);
                 } else {
                     SceneLocation thisLocation = allSceneLocatioMap.get(location.address);
-                    if (location.avItem != null){
-                        thisLocation.presentationItems.add(location.avItem);
-                    }
-                    if (location.galleryItem != null){
-                        thisLocation.presentationItems.add(location.galleryItem);
-                    }
+                    //thisLocation.presentationItems.addAll(location.getPresentationDataItems());
+
                 }
             }
         }
