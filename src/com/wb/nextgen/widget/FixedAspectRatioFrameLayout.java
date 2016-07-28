@@ -1,6 +1,7 @@
 package com.wb.nextgen.widget;
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
@@ -13,6 +14,7 @@ import android.widget.FrameLayout;
 
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
+import com.wb.nextgen.activity.NextGenHideStatusBarActivity;
 
 /**
  * Created by gzcheng on 3/10/16.
@@ -22,7 +24,11 @@ public class FixedAspectRatioFrameLayout extends FrameLayout
     private int mAspectRatioWidth;
     private int mAspectRatioHeight;
     private Priority priority;
-    private boolean bKeepRatioWhenFullScreen = false;
+    private int mOrientationFlag = 3;
+    private ViewGroup.LayoutParams mDefaultLatouParams;
+
+    private final static int PORTRAIT_ONLY = 2;
+    private final static int LANDSCAPE_ONLY = 1;
 
     public static enum Priority{
         WIDTH_PRIORITY(1), HEIGHT_PRIORITY(2);
@@ -66,6 +72,9 @@ public class FixedAspectRatioFrameLayout extends FrameLayout
         mAspectRatioWidth = a.getInt(R.styleable.FixedAspectRatioFrameLayout_aspectRatioWidth, NextGenApplication.getScreenWidth(context));
         mAspectRatioHeight = a.getInt(R.styleable.FixedAspectRatioFrameLayout_aspectRatioHeight, NextGenApplication.getScreenHeight(context));
         priority = Priority.valueFromInt(a.getInt(R.styleable.FixedAspectRatioFrameLayout_priority, Priority.WIDTH_PRIORITY.intValue));
+        mOrientationFlag = a.getInt(R.styleable.FixedAspectRatioFrameLayout_whenOrientation, 3);
+
+        mDefaultLatouParams = getLayoutParams();
         a.recycle();
     }
     // **overrides**
@@ -78,9 +87,14 @@ public class FixedAspectRatioFrameLayout extends FrameLayout
 
         int finalWidth, finalHeight;
 
+        int orientation = NextGenHideStatusBarActivity.getCurrentScreenOrientation();
+        if ((mOrientationFlag == PORTRAIT_ONLY && orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) ||
+            (mOrientationFlag == LANDSCAPE_ONLY && orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) ){
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            return;
+        }
 
-        if (!bKeepRatioWhenFullScreen &&
-                priority == Priority.WIDTH_PRIORITY && originalWidth == NextGenApplication.getScreenWidth(NextGenApplication.getContext()) &&
+        if (priority == Priority.WIDTH_PRIORITY && originalWidth == NextGenApplication.getScreenWidth(NextGenApplication.getContext()) &&
                 NextGenApplication.getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)  {       // this is full screen when width priority
 
             /*WindowManager wm = (WindowManager) NextGenApplication.getContext().getSystemService(Context.WINDOW_SERVICE);

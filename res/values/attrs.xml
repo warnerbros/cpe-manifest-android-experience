@@ -77,6 +77,10 @@
             <enum name="WIDTH_PRIORITY" value="1" />
             <enum name="HEIGHT_PRIORITY" value="2" />
         </attr>
+        <attr name="whenOrientation" format="integer">
+            <enum name="LANSCAPE" value="1" />
+            <enum name="PORTRAIT" value="2" />
+        </attr>
     </declare-styleable>
 
     <declare-styleable name="DotIndicatorImageView">

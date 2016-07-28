@@ -8,7 +8,8 @@
         nextgen:aspectRatioWidth="16"
         nextgen:aspectRatioHeight="9"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
+        nextgen:whenOrientation="PORTRAIT"
         android:background="@color/black">
         <RelativeLayout
             android:id="@+id/video_view_container"
