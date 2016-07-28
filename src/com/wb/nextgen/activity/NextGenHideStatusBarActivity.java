@@ -8,6 +8,8 @@ import android.util.DisplayMetrics;
 import android.view.Surface;
 import android.view.View;
 
+import com.bumptech.glide.Glide;
+
 /**
  * Created by gzcheng on 7/20/16.
  */
@@ -34,6 +36,19 @@ public class NextGenHideStatusBarActivity extends AppCompatActivity {
         if (hasFocus)
             getWindow().getDecorView().setSystemUiVisibility(getWindow().getDecorView().getSystemUiVisibility() | DESIRE_VISIBILITY);
     }
+
+    @Override
+    public void onLowMemory(){
+        super.onLowMemory();
+        Glide.get(this).clearMemory();
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+        Glide.get(this).trimMemory(level);
+    }
+
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
