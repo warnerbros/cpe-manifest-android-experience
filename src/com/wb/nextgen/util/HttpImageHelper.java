@@ -10,7 +10,6 @@ import com.bumptech.glide.Glide;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.MovieMetaData;
-import com.wb.nextgen.model.SceneLocation;
 import com.wb.nextgen.util.concurrent.ResultListener;
 import com.wb.nextgen.util.concurrent.Worker;
 import com.wb.nextgen.util.utils.F;
@@ -77,20 +76,20 @@ public class HttpImageHelper {
             }
         }, l);
     }
-    public static void getAllMapPinsBySceneLocation(final List<SceneLocation> sceneLocations, ResultListener<Boolean> l){
+    public static void getAllMapPinsBySceneLocation(final List<MovieMetaData.LocationItem> sceneLocations, ResultListener<Boolean> l){
         Worker.execute(new Callable<Boolean>() {
             @Override
             public Boolean call() throws Exception {
 
-                for (SceneLocation sceneLocation : sceneLocations) {
-                    if (!pinHash.containsKey(sceneLocation.location.pinImage.url)) {
+                for (MovieMetaData.LocationItem sceneLocation : sceneLocations) {
+                    if (!pinHash.containsKey(sceneLocation.pinImage.url)) {
                         try {
                             Bitmap theBitmap = Glide.
                                     with(NextGenApplication.getContext()).
-                                    load(sceneLocation.location.pinImage.url).asBitmap().
-                                    into(sceneLocation.location.pinImage.width, sceneLocation.location.pinImage.height). // Width and height
+                                    load(sceneLocation.pinImage.url).asBitmap().
+                                    into(sceneLocation.pinImage.width, sceneLocation.pinImage.height). // Width and height
                                     get();
-                            pinHash.put(sceneLocation.location.pinImage.url, theBitmap);
+                            pinHash.put(sceneLocation.pinImage.url, theBitmap);
                         } catch (Exception ex) {
                             NextGenLogger.e(F.TAG, ex.getLocalizedMessage());
                         }

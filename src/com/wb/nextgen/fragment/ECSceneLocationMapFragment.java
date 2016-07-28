@@ -6,12 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
-import android.widget.TabHost;
-import android.widget.TabWidget;
-import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -24,14 +19,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.MovieMetaData.LocationItem;
-import com.wb.nextgen.model.SceneLocation;
 import com.wb.nextgen.util.HttpImageHelper;
 import com.wb.nextgen.util.concurrent.ResultListener;
 import com.wb.nextgen.util.utils.F;
-import com.wb.nextgen.util.utils.ImageGetter;
 import com.wb.nextgen.util.utils.NextGenLogger;
 
 import java.util.ArrayList;
@@ -46,7 +38,7 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
 
     public static interface OnSceneLocationSelectedListener{
         void onSceneLocationIndexSelected(int selectedIndex);
-        void onSceneLocationSelected(SceneLocation location);
+        void onSceneLocationSelected(LocationItem location);
     }
 
     protected MapView mapView;
@@ -55,11 +47,11 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
     private Button mapButton;
     private Button satelliteButton;
 
-    private List<SceneLocation> defaultSceneLocations;
+    private List<LocationItem> defaultSceneLocations;
     //private List<SceneLocation> sceneLocations;
     //private ArrayAdapter<String> spinnerAdaptor;
     private OnSceneLocationSelectedListener onSceneLocationSelectedListener;
-    private HashMap<LatLng, SceneLocation> markerLocationMap = new HashMap<LatLng, SceneLocation>();
+    private HashMap<LatLng, LocationItem> markerLocationMap = new HashMap<LatLng, LocationItem>();
 
 
     //LocationItem selectedLocationItem = null;
@@ -81,8 +73,8 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
 
         if (defaultSceneLocations != null) {
             List<String> list = new ArrayList<String>();
-            for (SceneLocation scLoc : defaultSceneLocations) {
-                list.add(scLoc.name);
+            for (LocationItem scLoc : defaultSceneLocations) {
+                list.add(scLoc.getTitle());
             }
             setupPins();
         }
@@ -167,17 +159,14 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
         // Another interface callback
     }
 
-    public void setSelectionFromSlider(SceneLocation location){
+    public void setSelectionFromSlider(LocationItem location){
 
-        setLocationItem(location.name, location);
+        setLocationItem(location.getTitle(), location);
 
     }
 
-    public void setDefaultSceneLocations(List<SceneLocation> locations){
-        defaultSceneLocations = new ArrayList<SceneLocation>();
-        for (int i = 0; i < locations.size(); i++) {
-            defaultSceneLocations.addAll(locations.get(i).getAllSubLocationItems());
-        }
+    public void setDefaultSceneLocations(List<LocationItem> locations){
+        defaultSceneLocations = locations;
     }
 
     private void setupPins(){
@@ -200,19 +189,31 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
                                     googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
                                     googleMap.setOnMarkerClickListener(ECSceneLocationMapFragment.this);
 
+                                    googleMap.getMaxZoomLevel();
 
-                                    for (SceneLocation sceneLocation : defaultSceneLocations) {
-                                        LatLng latlng = new LatLng(sceneLocation.location.latitude, sceneLocation.location.longitude);
+                                    googleMap.getUiSettings().setMapToolbarEnabled(true);
+                                    googleMap.getUiSettings().setCompassEnabled(true);
+                                    googleMap.getUiSettings().setZoomControlsEnabled(true);
 
+                                    googleMap.setOnMapClickListener(null);
+
+                                    LatLngBounds.Builder boundsBuilder = LatLngBounds.builder();
+
+                                    for (LocationItem sceneLocation : defaultSceneLocations) {
+                                        LatLng latlng = new LatLng(sceneLocation.latitude, sceneLocation.longitude);
+
+                                        boundsBuilder.include(latlng);
                                         markerLocationMap.put(latlng, sceneLocation);
                                         BitmapDescriptor bmDes =
-                                                BitmapDescriptorFactory.fromBitmap(HttpImageHelper.getMapPinBitmap(sceneLocation.location.pinImage.url));
+                                                BitmapDescriptorFactory.fromBitmap(HttpImageHelper.getMapPinBitmap(sceneLocation.pinImage.url));
                                         MarkerOptions markerOpt = new MarkerOptions()
-                                                .position(latlng).title(sceneLocation.location.getTitle()).snippet(sceneLocation.location.address)
+                                                .position(latlng).title(sceneLocation.getTitle()).snippet(sceneLocation.address)
                                                 .icon(bmDes);
 
                                         googleMap.addMarker(markerOpt);
                                     }
+
+                                    googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 100));
                                 }
                             });
                         }
@@ -232,27 +233,29 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
     public boolean onMarkerClick(Marker marker){
         marker.getTitle();
         LatLng position = marker.getPosition();
-        SceneLocation sl = markerLocationMap.get(position);
+        LocationItem sl = markerLocationMap.get(position);
         if (sl != null) {
             if (onSceneLocationSelectedListener != null && sl != null) {
                 onSceneLocationSelectedListener.onSceneLocationSelected(sl);
             }
-            setLocationItem(sl.name, sl);
+            setLocationItem(marker.getTitle(), sl);
 
         }
         return false;
     }
 
-    public void setLocationItem(String textTitle, SceneLocation sceneLocationObj){
-        if (sceneLocationObj != null)
-            setLocationItems(textTitle, sceneLocationObj.getAllSubLocationItems(), sceneLocationObj.location);
-        else
-            setLocationItems(textTitle, defaultSceneLocations, null);
+    public void setLocationItem(String title, LocationItem locationItem){
+        if (locationItem != null){
+            List<LocationItem> locationItems = new ArrayList<LocationItem>();
+            locationItems.add(locationItem);
+            setLocationItems(locationItem.getTitle(), locationItems);
+        }else
+            setLocationItems(title, defaultSceneLocations);
     }
 
-    private void setLocationItems(String textTitle, final List<SceneLocation> sceneLocations, final LocationItem locationItem){
+    private void setLocationItems(String name, final List<LocationItem> sceneLocations){
         if (sceneLocations != null) {
-            title = textTitle;
+            title = name;
 
 
             if (mapView != null) {
@@ -262,18 +265,16 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
 
 
                         LatLngBounds.Builder boundsBuilder = LatLngBounds.builder();
-                        for (SceneLocation sceneLocation : sceneLocations){
-                            boundsBuilder.include(new LatLng(sceneLocation.location.latitude, sceneLocation.location.longitude));
+                        for (LocationItem sceneLocation : sceneLocations){
+                            boundsBuilder.include(new LatLng(sceneLocation.latitude, sceneLocation.longitude));
                         }
                         googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 100));
 
-                        googleMap.getMaxZoomLevel();
 
-                        googleMap.getUiSettings().setMapToolbarEnabled(true);
-                        googleMap.getUiSettings().setCompassEnabled(true);
-                        googleMap.getUiSettings().setZoomControlsEnabled(true);
+                        if (sceneLocations == null || sceneLocations.size() == 0)
+                            return;
 
-                        googleMap.setOnMapClickListener(null);
+                        final LocationItem locationItem = sceneLocations.get(0);
 
                         if (locationItem != null) {
 

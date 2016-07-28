@@ -2,8 +2,6 @@ package com.wb.nextgen.data;
 
 import com.google.gson.annotations.SerializedName;
 import com.wb.nextgen.NextGenApplication;
-import com.wb.nextgen.R;
-import com.wb.nextgen.model.SceneLocation;
 import com.wb.nextgen.parser.ManifestXMLParser;
 import com.wb.nextgen.parser.appdata.AppDataLocationType;
 import com.wb.nextgen.parser.appdata.AppDataType;
@@ -524,7 +522,7 @@ public class MovieMetaData {
             }
         }
 
-        return new LocationItem(displayOrder, type, location, zoom, text, locationThumbnail, pinImage, experienceId);
+        return new LocationItem(appId, displayOrder, type, location, zoom, text, locationThumbnail, pinImage, experienceId);
     }
 
     public List<ExperienceData> getExtraECGroups(){
@@ -953,9 +951,9 @@ public class MovieMetaData {
         private List<PresentationDataItem> presentationDataItems = new ArrayList<PresentationDataItem>();
         private LocationItem parentSceneLocation;
 
-        public LocationItem(int displayOrder, String type, AppDataLocationType appDataLocation, int zoom, String text,
+        public LocationItem(String id, int displayOrder, String type, AppDataLocationType appDataLocation, int zoom, String text,
                             PictureImageData locationThumbnail, PictureImageData pinImage, String experienceId){
-            super("", "", null);
+            super(id, "", null);
             description = text;
             this.zoom = zoom;
             greaterTitle = type;
@@ -1343,34 +1341,19 @@ public class MovieMetaData {
             return posterImgUrl;
         }
 
-        private final List<SceneLocation> sceneLocations = new ArrayList<SceneLocation>();
+        private final List<LocationItem> sceneLocations = new ArrayList<LocationItem>();
         public void computeSceneLocationFeature(){
-            HashMap<String, SceneLocation> sceneLocationMap = new HashMap<String, SceneLocation>();
-            HashMap<String, SceneLocation> allSceneLocatioMap = new HashMap<String, SceneLocation>();
+            HashMap<String, LocationItem> sceneLocationMap = new HashMap<String, LocationItem>();
             for (ExperienceData child : childrenExperience){
                 LocationItem location = child.locationItems.get(0);
-                SceneLocation group;
-                if (sceneLocationMap.containsKey(location.greaterTitle)){
-                    group = sceneLocationMap.get(location.greaterTitle);
-                }else{
-                    group = new SceneLocation(null, location.greaterTitle, null);
-                    sceneLocations.add(group);
-                    sceneLocationMap.put(location.greaterTitle, group);
-                }
-
-                if (!allSceneLocatioMap.containsKey(location.address)){
-                    SceneLocation finalSceneLocation = new SceneLocation(group, location.getTitle(), location);
-                    allSceneLocatioMap.put(location.address, finalSceneLocation);
-                    group.childrenSceneLocations.add(finalSceneLocation);
-                } else {
-                    SceneLocation thisLocation = allSceneLocatioMap.get(location.address);
-                    //thisLocation.presentationItems.addAll(location.getPresentationDataItems());
-
+                if (!sceneLocationMap.containsKey(location.getId())){
+                    sceneLocations.add(location);
+                    sceneLocationMap.put(location.getId(), location);
                 }
             }
         }
 
-        public List<SceneLocation> getSceneLocations(){
+        public List<LocationItem> getSceneLocations(){
             return  sceneLocations;
         }
     }
