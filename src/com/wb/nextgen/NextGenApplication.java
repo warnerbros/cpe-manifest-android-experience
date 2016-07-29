@@ -16,7 +16,6 @@ import android.view.Display;
 import android.view.WindowManager;
 
 import com.wb.nextgen.activity.StartupActivity;
-import com.wb.nextgen.data.DemoData;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.network.BaselineApiDAO;
 import com.wb.nextgen.network.FlixsterCacheManager;
@@ -102,7 +101,6 @@ public class NextGenApplication extends Application {
             sVersionCode = sNextGenInfo.versionCode;
             sUserAgent = "Android/" + sVersionName + " (Linux; U; Android " + Build.VERSION.RELEASE + "; " + locale
                     + "; " + Build.MODEL + ")";
-            DemoData.parseDemoJSONData();
 
             NextGenLogger.d("TIME_THIS", "---------------Next Test--------------");
 

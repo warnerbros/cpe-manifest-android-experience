@@ -1,20 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/actor_gallery_viewpager"
-        android:background="@android:color/transparent"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2">
-    </android.support.v4.view.ViewPager>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/actor_gallery_view_recycler"
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="horizontal">
-    </android.support.v7.widget.RecyclerView>
-</LinearLayout>
+        <android.support.v4.view.ViewPager
+            android:id="@+id/actor_gallery_viewpager"
+            android:background="@android:color/transparent"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2">
+        </android.support.v4.view.ViewPager>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/actor_gallery_view_recycler"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal">
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+    <ImageButton
+        android:id="@+id/close_button"
+        android:layout_width="@dimen/close_icon_dimen"
+        android:layout_height="@dimen/close_icon_dimen"
+        android:src="@drawable/close_x_circle"
+        android:scaleType="centerInside"
+        android:layout_alignParentRight="true"
+        android:background="@android:color/transparent"/>
+</RelativeLayout>

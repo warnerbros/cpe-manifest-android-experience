@@ -6,6 +6,7 @@ import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.MovieMetaData;

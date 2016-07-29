@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -49,6 +50,7 @@ public class ActorGalleryActivity extends AbstractNextGenActivity implements Act
     RecyclerView actorGalleryRecycler;
     ViewPager actorGalleryViewPager;
     List<CastHeadShot> actorGalleryItems;
+    ImageButton closeBtn;
 
     ActorDetailGalleryRecyclerAdapter galleryRecyclerAdapter;
     ActorGalleryPagerAdapter galleryPagerAdapter;
@@ -74,6 +76,19 @@ public class ActorGalleryActivity extends AbstractNextGenActivity implements Act
             Gson gson = new GsonBuilder().create();
 
             actorGalleryItems = gson.fromJson(headShots, listType);
+        }
+
+        closeBtn = (ImageButton) findViewById(R.id.close_button);
+        if (closeBtn != null) {
+
+            closeBtn.setVisibility(View.VISIBLE);
+
+            closeBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBackPressed();
+                }
+            });
         }
 
         if (actorGalleryViewPager != null){

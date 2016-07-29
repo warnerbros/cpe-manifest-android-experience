@@ -10,8 +10,9 @@ import android.widget.ExpandableListView;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
-import com.wb.nextgen.data.DemoData;
+import com.wb.nextgen.data.NextGenStyle;
 import com.wb.nextgen.data.TheTakeData.TheTakeCategory;
 import com.wb.nextgen.fragment.TheTakeCategoryGridFragment;
 import com.wb.nextgen.fragment.TheTakeProductDetailFragment;
@@ -288,7 +289,7 @@ public class TheTakeShopCategoryActivity extends AbstractNextGenActivity impleme
 
     @Override
     public String getBackgroundImgUri(){
-        return DemoData.getExtraBackgroundUrl();
+        return NextGenApplication.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.OutOfMovie);
     }
 
     @Override

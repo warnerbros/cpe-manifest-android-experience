@@ -7,12 +7,10 @@ import android.widget.TextView;
 
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
-import com.wb.nextgen.data.DemoJSONData;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgen.interfaces.NextGenPlaybackStatusListener;
 import com.wb.nextgen.model.NextGenIMEEngine;
-import com.wb.nextgen.data.DemoJSONData.ActorInfo;
 
 import java.util.ArrayList;
 import java.util.Arrays;

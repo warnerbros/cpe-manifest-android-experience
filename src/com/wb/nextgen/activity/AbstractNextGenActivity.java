@@ -7,7 +7,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,8 +17,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
-import com.wb.nextgen.data.DemoData;
+import com.wb.nextgen.data.NextGenStyle;
 import com.wb.nextgen.interfaces.ContentViewFullscreenRequestInterface;
 import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.utils.StringHelper;
@@ -83,8 +83,9 @@ public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivi
                 }
             });
         }
-        if (centerBanner != null && !StringHelper.isEmpty(DemoData.getMovieLogoUrl()))
-            PicassoTrustAll.loadImageIntoView(this, DemoData.getMovieLogoUrl(), centerBanner);
+
+        if (centerBanner != null && !StringHelper.isEmpty(getTitleImageUrl()))
+            PicassoTrustAll.loadImageIntoView(this, getTitleImageUrl(), centerBanner);
 
         if (rightLogo != null && !StringHelper.isEmpty(getRightTitleImageUri())) {
             PicassoTrustAll.loadImageIntoView(this, getRightTitleImageUri(), rightLogo);
@@ -194,5 +195,9 @@ public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivi
 
     protected boolean shouldUseActionBarSpacer(){
         return true;
+    }
+
+    String getTitleImageUrl(){
+        return "";
     }
 }

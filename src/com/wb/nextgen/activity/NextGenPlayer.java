@@ -13,15 +13,11 @@ import android.widget.RelativeLayout;
 
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
-import com.wb.nextgen.data.DemoData;
-import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.data.NextGenStyle;
-import com.wb.nextgen.fragment.ECGalleryViewFragment;
 import com.wb.nextgen.fragment.NextGenPlayerBottomFragment;
-import com.wb.nextgen.fragment.ShareClipFragment;
 import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgen.interfaces.NextGenPlaybackStatusListener;
-import com.wb.nextgen.util.TabletUtils;
+import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.utils.NextGenFragmentTransactionEngine;
 import com.wb.nextgen.videoview.IVideoViewActionListener;
 import com.wb.nextgen.videoview.ObservableVideoView;
@@ -69,6 +65,9 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         setContentView(R.layout.next_gen_videoview);
 
         backgroundImageView = (ImageView)findViewById(R.id.ime_background_image_view);
+        if (backgroundImageView != null){
+            PicassoTrustAll.loadImageIntoView(this, NextGenApplication.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie), backgroundImageView);
+        }
 
         containerView = (RelativeLayout)findViewById(R.id.video_view_container);
 
@@ -136,6 +135,11 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     @Override
     protected boolean shouldUseActionBarSpacer(){
         return false;
+    }
+
+    @Override
+    String getTitleImageUrl(){
+        return NextGenApplication.getMovieMetaData().getStyle().getTitleImageURL(NextGenStyle.NextGenAppearanceType.InMovie);
     }
 
     protected void updateImeFragment(final NextGenPlaybackStatusListener.NextGenPlaybackStatus playbackStatus, final long timecode){
