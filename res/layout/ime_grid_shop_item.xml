@@ -4,7 +4,8 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="@color/transparent_black">
+    android:background="@drawable/ime_grid_item_bg"
+    android:padding="@dimen/spacing_small">
     <TextView
         android:id="@+id/ime_title"
         android:layout_width="wrap_content"
