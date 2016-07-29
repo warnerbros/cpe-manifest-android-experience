@@ -198,6 +198,6 @@ public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivi
     }
 
     String getTitleImageUrl(){
-        return "";
+        return NextGenApplication.getMovieMetaData().getStyle().getTitleImageURL(NextGenStyle.NextGenAppearanceType.InMovie);
     }
 }
