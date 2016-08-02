@@ -1,5 +1,6 @@
 package com.wb.nextgen.activity;
 
+import android.animation.AnimatorSet;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.media.MediaPlayer;
@@ -8,7 +9,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.wb.nextgen.NextGenApplication;
@@ -17,10 +21,12 @@ import com.wb.nextgen.data.NextGenStyle;
 import com.wb.nextgen.fragment.NextGenPlayerBottomFragment;
 import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgen.interfaces.NextGenPlaybackStatusListener;
+import com.wb.nextgen.util.NextGenUtils;
 import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.utils.NextGenFragmentTransactionEngine;
 import com.wb.nextgen.videoview.IVideoViewActionListener;
 import com.wb.nextgen.videoview.ObservableVideoView;
+import com.wb.nextgen.widget.CustomMediaController;
 import com.wb.nextgen.widget.MainFeatureMediaController;
 
 import java.util.Timer;
@@ -37,6 +43,8 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
     protected ObservableVideoView videoView;
     protected RelativeLayout containerView;
+    protected View skipThisView;
+    protected ProgressBar skipThisCounter;
 
     private TimerTask imeUpdateTask;
 
@@ -71,10 +79,23 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
         containerView = (RelativeLayout)findViewById(R.id.video_view_container);
 
+        skipThisView = findViewById(R.id.skip_this_layout);
+        skipThisCounter = (ProgressBar) findViewById(R.id.skip_this_countdown);
+
         videoView = (ObservableVideoView) findViewById(R.id.surface_view);
         //videoView.setMediaController(mediaController);
         mediaController = new MainFeatureMediaController(this, videoView);
-        videoView.setCustomMediaController(mediaController);
+        mediaController.setVisibilityChangeListener(new CustomMediaController.MediaControllerVisibilityChangeListener(){
+            public void onVisibilityChange(boolean bShow){
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    if (bShow)
+                        getSupportActionBar().show();
+                    else
+                        getSupportActionBar().hide();
+                }
+            }
+        });
+
         videoView.setOnErrorListener(getOnErrorListener());
         videoView.setOnPreparedListener(getOnPreparedListener());
         videoView.setOnCompletionListener(getOnCompletionListener());
@@ -201,7 +222,11 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                     if (mediaController != null)
                         mediaController.hideShowControls(false);
             }
-        //}
+    }
+
+    @Override
+    boolean shouldHideActionBar(){
+        return (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
     }
 
     private class ErrorListener implements MediaPlayer.OnErrorListener {
@@ -218,14 +243,45 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         return new ErrorListener();
     }
 
+    private class ProgressBarAnimation extends Animation{
+        private ProgressBar progressBar;
+
+        public ProgressBarAnimation(ProgressBar progressBar) {
+            super();
+            this.progressBar = progressBar;
+        }
+
+        @Override
+        protected void applyTransformation(float interpolatedTime, Transformation t) {
+            super.applyTransformation(interpolatedTime, t);
+            float value = 0 + (100) * interpolatedTime;
+            progressBar.setProgress((int) value);
+        }
+
+    }
+
     private class PreparedListener implements MediaPlayer.OnPreparedListener {
         @Override
         public void onPrepared(MediaPlayer mp) {
-
             if (shouldStartAfterResume)
                 videoView.start();
             else
                 videoView.pause();
+
+            if (currentUri.equals(INTERSTITIAL_VIDEO_URI)) {
+                skipThisView.setVisibility(View.VISIBLE);
+                skipThisCounter.setProgress(0);
+                skipThisCounter.setProgress(100);
+
+                ProgressBarAnimation skipProgressBarAnim = new ProgressBarAnimation(skipThisCounter);
+                skipProgressBarAnim.setDuration(mp.getDuration());
+                skipThisCounter.startAnimation(skipProgressBarAnim);
+
+                return;
+            }else{
+
+            }
+
 
             mediaController.hide();
             mediaController.show();
@@ -267,6 +323,9 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     }
 
     private void playMainMovie(){
+        if (skipThisView != null)
+            skipThisView.setVisibility(View.GONE);
+        videoView.setCustomMediaController(mediaController);
         if (INTERSTITIAL_VIDEO_URI.equals(currentUri)) {
             videoView.setOnTouchListener(null);
             Intent intent = getIntent();
@@ -302,7 +361,9 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         videoView.setVisibility(View.VISIBLE);
         if (currentUri == null) {
             currentUri = INTERSTITIAL_VIDEO_URI;
+            videoView.setCustomMediaController(null);
             videoView.setVideoURI(currentUri);
+            //skipThisView.setVisibility(View.VISIBLE);
             videoView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -314,6 +375,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                 }
             });
         } else{
+            skipThisView.setVisibility(View.GONE);
             videoView.seekTo(resumePlayTime);
             if (!shouldStartAfterResume)
                 videoView.pause();

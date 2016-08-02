@@ -60,6 +60,7 @@
 
 	<string name="watched">WATCHED</string>
 	<string name="playing">PLAYING</string>
+	<string name="skip_this">SKIP THIS</string>
 
 	<string name="choose_share_clip">CHOOSE A CLIP TO SHARE</string>
 </resources>

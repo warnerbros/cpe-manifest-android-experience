@@ -46,10 +46,10 @@ public class StartupActivity extends NextGenHideStatusBarActivity {
     static List<ManifestItem> manifestItems;
     static {
         manifestItems = new ArrayList<ManifestItem>();
-        manifestItems.add(new ManifestItem("Man of Steel v0.5",
+        /*manifestItems.add(new ManifestItem("Man of Steel v0.5",
                 "https://d19p213wjrwt85.cloudfront.net/uvvu-images/EB180713D3536025E0405B0A07341ECE",
                 "mos_hls_manifest_r60-v0.5.xml",
-                "mos_appdata_locations_r60-v0.5.xml"));
+                "mos_appdata_locations_r60-v0.5.xml"));*/
         manifestItems.add(new ManifestItem("Man of Steel v0.6",
                 "https://d19p213wjrwt85.cloudfront.net/uvvu-images/EB180713D3536025E0405B0A07341ECE",
                 "mos_hls_manifest_r60-v0.6.xml",

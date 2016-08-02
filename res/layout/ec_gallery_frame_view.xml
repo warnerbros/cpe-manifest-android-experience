@@ -64,6 +64,7 @@
                 android:id="@+id/ec_content_name"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/textLarge"
+                android:fontFamily="sans-serif-condensed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <Button

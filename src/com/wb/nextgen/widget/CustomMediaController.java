@@ -70,6 +70,12 @@ public class CustomMediaController extends FrameLayout {
 
     private boolean             mIsFullScreen = false;
 
+    private MediaControllerVisibilityChangeListener mVisibilityListenter;
+
+    public static interface MediaControllerVisibilityChangeListener{
+        void onVisibilityChange(boolean bShow);
+    }
+
     public CustomMediaController(Context context, AttributeSet attrs) {
         super(context, attrs);
         mRoot = null;
@@ -93,6 +99,10 @@ public class CustomMediaController extends FrameLayout {
         this(context, true, true);
 
         Log.i(TAG, TAG);
+    }
+
+    public void setVisibilityChangeListener(MediaControllerVisibilityChangeListener listener){
+        mVisibilityListenter = listener;
     }
 
     @Override
@@ -264,6 +274,8 @@ public class CustomMediaController extends FrameLayout {
      */
     public void show(int timeout) {
         if (!mShowing && mAnchor != null) {
+            if (mVisibilityListenter != null)
+                mVisibilityListenter.onVisibilityChange(true);
             setProgress();
             if (mPauseButton != null) {
                 mPauseButton.requestFocus();
@@ -305,6 +317,8 @@ public class CustomMediaController extends FrameLayout {
         if (mAnchor == null) {
             return;
         }
+        if (mVisibilityListenter != null)
+            mVisibilityListenter.onVisibilityChange(false);
 
         try {
             mAnchor.removeView(this);
@@ -314,6 +328,7 @@ public class CustomMediaController extends FrameLayout {
         }
         mShowing = false;
     }
+
 
     private String stringForTime(int timeMs) {
         int totalSeconds = timeMs / 1000;

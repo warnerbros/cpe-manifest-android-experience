@@ -31,7 +31,7 @@ public class NextGenStyle {
                 case InMovie:
                     return "http://wb-extras.warnerbros.com/extrasplus/staging/Manifest/MOS/artwork/backgrounds/MOS_IME_bg.jpg";
                 case OutOfMovie:
-                    return "http://wb-extras.warnerbros.com/extrasplus/staging/Manifest/MOS/artwork/backgrounds/MOS_Extras_bg.jpg";
+                    return "http://wb-extras.warnerbros.com/extrasplus/staging/Manifest/MOS/artwork/backgrounds/MOS_Extras_bg_notitle.jpg";
             }
 
         }else if (movieId.equals(NGDMAppearanceTitle.BvS)){

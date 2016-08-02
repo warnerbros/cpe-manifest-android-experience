@@ -28,7 +28,10 @@ public class NextGenHideStatusBarActivity extends AppCompatActivity {
         currentScreenOrientation = getScreenOrientation();
         getWindow().getDecorView().setSystemUiVisibility(getWindow().getDecorView().getSystemUiVisibility() | DESIRE_VISIBILITY);
 
+    }
 
+    boolean shouldHideActionBar(){
+        return false;
     }
 
     @Override

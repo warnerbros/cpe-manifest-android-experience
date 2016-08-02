@@ -25,6 +25,8 @@ public final class ObservableVideoView extends VideoView implements NextGenPlaye
 	}
 
 	public void setCustomMediaController(CustomMediaController customMC){
+		if (customMC == null)
+			return;
 		customMediaController = customMC;
 		customMediaController.setMediaPlayer(this);
 
@@ -61,7 +63,9 @@ public final class ObservableVideoView extends VideoView implements NextGenPlaye
 	public void start() {
 		super.start();
 
-		customMediaController.reset();
+		if (customMediaController != null)
+			customMediaController.reset();
+
 		if (mIsOnPauseMode) {
 			if (mVideoViewListener != null) {
 				mVideoViewListener.onResume();

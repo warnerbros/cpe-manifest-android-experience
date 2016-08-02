@@ -866,12 +866,20 @@ public class MovieMetaData {
         protected String title;
         protected String parentExperienceId;
         protected String posterImgUrl;
+        protected String summary = "";
 
         public PresentationDataItem(InventoryMetadataType metaData, String parentExperienceId){
             BasicMetadataInfoType localizedInfo = null;
             if (metaData != null && metaData.getBasicMetadata().getLocalizedInfo() != null && metaData.getBasicMetadata().getLocalizedInfo().size() > 0) {
                 localizedInfo = metaData.getBasicMetadata().getLocalizedInfo().get(0);
                 title = localizedInfo.getTitleDisplayUnlimited();
+                if (localizedInfo.getSummary190() != null && !StringHelper.isEmpty(localizedInfo.getSummary190().getValue())){
+                    summary = localizedInfo.getSummary190().getValue();
+                } else if (localizedInfo.getSummary400() != null && !StringHelper.isEmpty(localizedInfo.getSummary400().getValue())){
+                    summary = localizedInfo.getSummary400().getValue();
+                } else if (localizedInfo.getSummary4000() != null && !StringHelper.isEmpty(localizedInfo.getSummary4000().getValue())){
+                    summary = localizedInfo.getSummary4000().getValue();
+                }
                 this.id = metaData.getContentID();
             } else{
                 title = "";
@@ -899,6 +907,10 @@ public class MovieMetaData {
         }
 
         public abstract String getPosterImgUrl();
+
+        public String getSummary(){
+            return  summary;
+        }
     }
 
     static public class TextItem extends PresentationDataItem{

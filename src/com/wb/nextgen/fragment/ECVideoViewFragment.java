@@ -7,18 +7,13 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.wb.nextgen.R;
@@ -28,7 +23,6 @@ import com.wb.nextgen.util.utils.F;
 import com.wb.nextgen.util.utils.NextGenLogger;
 import com.wb.nextgen.util.utils.StringHelper;
 import com.wb.nextgen.videoview.ObservableVideoView;
-import com.wb.nextgen.widget.CustomMediaController;
 import com.wb.nextgen.widget.ECMediaController;
 import com.wb.nextgen.widget.FixedAspectRatioFrameLayout;
 
@@ -41,7 +35,7 @@ public class ECVideoViewFragment extends ECViewFragment{
 
     ECMediaController mediaController;
     protected TextView selectedECNameTextView;
-    protected TextView ecDurationTextView;
+    protected TextView descriptionTextView;
     protected TextView countDownTextView;
     protected View countDownCountainer;
     protected ProgressBar countDownProgressBar;
@@ -86,7 +80,7 @@ public class ECVideoViewFragment extends ECViewFragment{
         videoView = (ObservableVideoView) view.findViewById(R.id.ec_video_view);
         mediaController = new ECMediaController(getActivity(), videoView);
         selectedECNameTextView = (TextView)view.findViewById(R.id.ec_content_name);
-        ecDurationTextView = (TextView)view.findViewById(R.id.ec_content_runtime);
+        descriptionTextView = (TextView)view.findViewById(R.id.ec_content_runtime);
         previewImageView = (ImageView)view.findViewById(R.id.ec_video_preview_image);
         previewFrame = (RelativeLayout)view.findViewById(R.id.ec_video_preview_image_frame);
         previewPlayBtn = (ImageButton)view.findViewById(R.id.ec_video_preview_playButton);
@@ -286,8 +280,8 @@ public class ECVideoViewFragment extends ECViewFragment{
 
             if (selectedECNameTextView != null && videoView != null) {
                 selectedECNameTextView.setText(avItem.getTitle());
-                if (ecDurationTextView != null) {
-                    ecDurationTextView.setText(avItem.getFullDurationString());
+                if (descriptionTextView != null) {
+                    descriptionTextView.setText(avItem.getSummary());
                 }
                 if (!shouldAutoPlay) {
                     if(videoView.isPlaying())
