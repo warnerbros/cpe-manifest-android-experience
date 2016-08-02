@@ -363,7 +363,6 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
             currentUri = INTERSTITIAL_VIDEO_URI;
             videoView.setCustomMediaController(null);
             videoView.setVideoURI(currentUri);
-            //skipThisView.setVisibility(View.VISIBLE);
             videoView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -386,7 +385,6 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
     @Override
     protected void onDestroy() {
-        //ContentLocker content = FlixsterApplication.getCurrentPlayableContent();
         super.onDestroy();
         if (mediaController != null){
             mediaController.onPlayerDestroy();
@@ -399,7 +397,6 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
             imeUpdateTimer.cancel();
             imeUpdateTimer = null;
         }
-        //FlixsterApplication.setCurrentPlayableContent(content);
 
     }
 
@@ -409,7 +406,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     }
 
     public int getMainFrameId(){
-        return R.id.next_gen_ime_bottom_view;//next_gen_ime_main_frame;
+        return R.id.next_gen_ime_bottom_view;
     }
 
     public int getLeftFrameId(){

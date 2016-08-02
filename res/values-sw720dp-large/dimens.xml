@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <dimen name="episode_row_download_in_progress_width">400dp</dimen>
-	<dimen name="tablet_modal_width">700dp</dimen>
-</resources>
