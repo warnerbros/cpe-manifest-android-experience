@@ -39,7 +39,7 @@ public class NextGenIMEActorFragment extends NextGenActorListFragment implements
             // do this trick here
         } else if (getActivity() instanceof NextGenFragmentTransactionInterface){
             NextGenActorDetailFragment target = new NextGenActorDetailFragment();
-
+            target.setShouldShowCloseBtn(true);
             target.setDetailObject((MovieMetaData.CastData) selectedObject);
             ((NextGenFragmentTransactionInterface)getActivity()).transitMainFragment( target);
             ((NextGenFragmentTransactionInterface)getActivity()).resetUI(false);

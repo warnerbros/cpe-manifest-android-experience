@@ -46,7 +46,7 @@ import java.util.List;
 /**
  * Created by gzcheng on 1/13/16.
  */
-public class NextGenActorDetailFragment extends Fragment implements View.OnClickListener, ActorDetailGalleryRecyclerAdapter.ActorGalleryRecyclerSelectionListener{
+public class NextGenActorDetailFragment extends AbstractNextGenFragment implements View.OnClickListener, ActorDetailGalleryRecyclerAdapter.ActorGalleryRecyclerSelectionListener{
 
     CastData actorOjbect;
     ImageView fullImageView;
@@ -67,6 +67,10 @@ public class NextGenActorDetailFragment extends Fragment implements View.OnClick
     ImageButton instagramBtn;
 
     boolean bEnableActorGallery = false;
+
+    int getContentViewId(){
+        return 0;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
