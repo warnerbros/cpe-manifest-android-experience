@@ -51,7 +51,8 @@ abstract public class AbstractECGalleryViewFragment extends ECViewFragment  {
             closeBtn.setVisibility(View.VISIBLE);
         } else {
             fullscreenToggleBtn.setVisibility(View.VISIBLE);
-            closeBtn.setVisibility(View.GONE);
+            if (!shouldShowCloseBtn)
+                closeBtn.setVisibility(View.GONE);
         }
 
     }

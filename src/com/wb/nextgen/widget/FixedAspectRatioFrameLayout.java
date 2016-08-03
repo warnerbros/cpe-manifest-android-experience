@@ -133,7 +133,7 @@ public class FixedAspectRatioFrameLayout extends FrameLayout
             if (priority == Priority.WIDTH_PRIORITY) {
                 finalHeight = originalWidth * mAspectRatioHeight / mAspectRatioWidth;
                 finalWidth = originalWidth;
-                if (metrics != null && finalHeight > metrics.heightPixels){
+                if (originalHeight != 0 && finalHeight > originalHeight){
                     finalWidth = originalHeight * mAspectRatioWidth / mAspectRatioHeight;
                     finalHeight = originalHeight;
 
@@ -142,7 +142,7 @@ public class FixedAspectRatioFrameLayout extends FrameLayout
             } else {
                 finalWidth = originalHeight * mAspectRatioWidth / mAspectRatioHeight;
                 finalHeight = originalHeight;
-                if (metrics != null && finalWidth > metrics.widthPixels){
+                if (originalWidth != 0 && finalWidth > originalWidth){
                     finalHeight = originalWidth * mAspectRatioHeight / mAspectRatioWidth;
                     finalWidth = originalWidth;
 

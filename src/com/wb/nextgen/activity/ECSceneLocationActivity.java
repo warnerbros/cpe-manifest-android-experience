@@ -162,10 +162,16 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
     public void onBackPressed(){
         super.onBackPressed();
 
-        if (getSupportFragmentManager().getBackStackEntryCount() == 0 )
-            finish();
-        else
-            currentFragment = mapViewFragment;
+        switch (getSupportFragmentManager().getBackStackEntryCount()){
+            case 0:
+                finish();
+                break;
+            case 1:
+                currentFragment = mapViewFragment;
+                break;
+            default:
+                break;
+        }
 
     }
 
