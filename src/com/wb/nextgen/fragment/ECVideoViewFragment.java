@@ -14,8 +14,10 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.util.PicassoTrustAll;
@@ -198,7 +200,8 @@ public class ECVideoViewFragment extends ECViewFragment{
         bgImageView = (ImageView)view.findViewById(R.id.ec_video_frame_bg);
 
         if (bgImageView != null && !StringHelper.isEmpty(bgImageUrl)){
-            PicassoTrustAll.loadImageIntoView(getActivity(), bgImageUrl, bgImageView);
+            Glide.with(NextGenApplication.getContext()).load(bgImageUrl).fitCenter().into(bgImageView);
+            //PicassoTrustAll.loadImageIntoView(getActivity(), bgImageUrl, bgImageView);
         }
     }
 

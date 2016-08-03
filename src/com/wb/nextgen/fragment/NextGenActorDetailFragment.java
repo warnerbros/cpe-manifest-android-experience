@@ -130,7 +130,8 @@ public class NextGenActorDetailFragment extends Fragment implements View.OnClick
         actorOjbect = object;
 
         if (actorOjbect != null && actorOjbect.getBaselineCastData() != null){
-            Picasso.with(getActivity()).load(actorOjbect.getBaselineCastData().getFullImageUrl()).fit().centerCrop().into(fullImageView);
+            Glide.with(getActivity()).load(actorOjbect.getBaselineCastData().getFullImageUrl()).fitCenter().centerCrop().into(fullImageView);
+            //Picasso.with(getActivity()).load(actorOjbect.getBaselineCastData().getFullImageUrl()).fit().centerCrop().into(fullImageView);
             //PicassoTrustAll.loadImageIntoView(getActivity(), actorOjbect.getBaselineCastData().getFullImageUrl(), fullImageView);
 
             if (actorOjbect.getBaselineCastData().filmogrphies == null){

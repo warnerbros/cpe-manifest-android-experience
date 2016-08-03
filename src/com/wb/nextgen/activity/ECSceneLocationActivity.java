@@ -71,15 +71,12 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
             mapViewFragment.setOnSceneLocationSelectedListener(this);
         }
 
-
-
         sliderTitleText = (RecyclerView) findViewById(R.id.scene_location_bottom_text_slider);
         if (sliderTitleText != null){
             sliderTitleText.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
             sliderTextAdapter = new SliderTextAdapter();
             sliderTextAdapter.setSceneLocation(null);
             sliderTitleText.setAdapter(sliderTextAdapter);
-            //sliderTitleTextView.setText(ecGroupData.title.toUpperCase());
         }
         contentFrame = (RelativeLayout)findViewById(R.id.scene_location_content_frame);
         locationECRecyclerView = (RecyclerView)findViewById(R.id.scene_location_recycler_view);
@@ -93,7 +90,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
         }
 
         nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.map_frame, mapViewFragment);
-        //transitToFragment(mapViewFragment);
+
 
     }
     protected View getFullScreenDisappearView(){
@@ -135,7 +132,6 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
     }
 
     public void onSceneLocationIndexSelected(int selectedIndex){
-        //currentSelectedIndex = selectedIndex;
         if (locationECsAdapter != null) {
             locationECsAdapter.setSceneLocation(rootSceneLocations.get(selectedIndex));
             locationECsAdapter.notifyDataSetChanged();
@@ -143,7 +139,6 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
     }
 
     public void onSceneLocationSelected(MovieMetaData.LocationItem location){
-        //currentSelectedIndex = selectedIndex;
         if (locationECsAdapter != null) {
             locationECsAdapter.setSceneLocation(location);
             locationECsAdapter.notifyDataSetChanged();
@@ -163,13 +158,13 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
         super.onBackPressed();
 
         switch (getSupportFragmentManager().getBackStackEntryCount()){
-            case 0:
+            case 0:                     // after map fragment being popped from fragment stack
                 finish();
                 break;
-            case 1:
+            case 1:                     // after either EC Gallery or EC Video Fragment being popped
                 currentFragment = mapViewFragment;
                 break;
-            default:
+            default:                    // do nothing if it's just a back from full screen toggling
                 break;
         }
 
@@ -177,12 +172,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
 
     @Override
     public void onRequestToggleFullscreen(){
-/*
-        if (!isContentFullScreen){    // make it full screen
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-        } else {                     // shrink it
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
-        }*/
+
         super.onRequestToggleFullscreen();
         if (currentFragment != null && currentFragment instanceof ECGalleryViewFragment)
             ((ECGalleryViewFragment)currentFragment).onFullScreenChange(isContentFullScreen);
@@ -253,10 +243,6 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
             MovieMetaData.LocationItem thisSL = sceneLocation;
             if (thisSL != null){
                 sceneLocations.add(0, thisSL);
-                /*while (thisSL != null){
-                    sceneLocations.add(0, thisSL);
-                    thisSL = thisSL.parentSceneLocation;
-                }*/
             }
 
 
@@ -332,7 +318,6 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
                     }else {
                         locationsCountText.setText(String.format(getResources().getString(R.string.locations_count_text), locationCount));
                     }
-                    //PicassoTrustAll.loadImageIntoView(ECSceneLocationActivity.this, locationItem.locationThumbnail.url, holder.personPhoto);
                     NextGenLogger.d(F.TAG, "Position: " + itemIndex + " loaded: " + locationItem.getLocationThumbnailUrl());
                 }
             } else if (item instanceof PresentationDataItem){
@@ -436,9 +421,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
 
         public int getItemCount(){
             if (sceneLocation != null){
-                /*if (sceneLocation.childrenSceneLocations.size() > 0){
-                    return sceneLocation.childrenSceneLocations.size();
-                }else*/ if (sceneLocation.getPresentationDataItems().size() > 0){
+                if (sceneLocation.getPresentationDataItems().size() > 0){
                     return sceneLocation.getPresentationDataItems().size();
                 } else
                     return 0;

@@ -16,8 +16,8 @@
             android:layout_height="match_parent"
             android:layout_width="wrap_content"
             android:layout_gravity="center"
-            nextgen:aspectRatioHeight="4"
-            nextgen:aspectRatioWidth="3"
+            nextgen:aspectRatioHeight="16"
+            nextgen:aspectRatioWidth="9"
             nextgen:priority="HEIGHT_PRIORITY">
             <RelativeLayout
                 android:layout_width="wrap_content"

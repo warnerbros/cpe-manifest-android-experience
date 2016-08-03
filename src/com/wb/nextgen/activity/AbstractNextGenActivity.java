@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
@@ -85,10 +86,12 @@ public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivi
         }
 
         if (centerBanner != null && !StringHelper.isEmpty(getTitleImageUrl()))
-            PicassoTrustAll.loadImageIntoView(this, getTitleImageUrl(), centerBanner);
+            Glide.with(getApplicationContext()).load(getTitleImageUrl()).fitCenter().into(centerBanner);
+            //PicassoTrustAll.loadImageIntoView(this, getTitleImageUrl(), centerBanner);
 
         if (rightLogo != null && !StringHelper.isEmpty(getRightTitleImageUri())) {
-            PicassoTrustAll.loadImageIntoView(this, getRightTitleImageUri(), rightLogo);
+            Glide.with(getApplicationContext()).load(getRightTitleImageUri()).fitCenter().into(rightLogo);
+            //PicassoTrustAll.loadImageIntoView(this, getRightTitleImageUri(), rightLogo);
             actionBarRightTextView.setVisibility(View.INVISIBLE);
         }else if (!StringHelper.isEmpty(getRightTitleText())){
             actionBarRightTextView.setVisibility(View.VISIBLE);

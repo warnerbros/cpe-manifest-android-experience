@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 import com.wb.nextgen.activity.ECGalleryActivity;
@@ -82,7 +83,8 @@ public class NextGenExtraMainTableFragment extends NextGenGridViewFragment {
         ExperienceData thisExtra = (ExperienceData)item;
         if(!thisExtra.title.equals(titleTxt.getText())){
             titleTxt.setText(thisExtra.title);
-            PicassoTrustAll.loadImageIntoView(getActivity(), thisExtra.getPosterImgUrl(), thumbnailImg);
+            Glide.with(getActivity()).load(thisExtra.getPosterImgUrl()).fitCenter().into(thumbnailImg);
+            //PicassoTrustAll.loadImageIntoView(getActivity(), thisExtra.getPosterImgUrl(), thumbnailImg);
         }
     }
 

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.data.TheTakeData.TheTakeProduct;
@@ -155,7 +156,8 @@ public class TheTakeFrameProductsFragment extends AbstractNextGenFragment {
                 TheTakeProduct thisProduct = productList.get(position);
                 holder.setTheTakeProduct(thisProduct, position);
                 if (!StringHelper.isEmpty(thisProduct.getProductThumbnailUrl())) {
-                    PicassoTrustAll.loadImageIntoView(getActivity(), thisProduct.getProductThumbnailUrl(), holder.personPhoto);
+                    Glide.with(getActivity()).load(thisProduct.getProductThumbnailUrl()).into(holder.personPhoto);
+                    //PicassoTrustAll.loadImageIntoView(getActivity(), thisProduct.getProductThumbnailUrl(), holder.personPhoto);
                     holder.productBrand.setText(thisProduct.productBrand);
                     holder.productName.setText(thisProduct.productName);
 

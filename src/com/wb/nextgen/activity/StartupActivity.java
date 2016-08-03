@@ -12,10 +12,12 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 import com.wb.nextgen.Manifest;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
+import com.wb.nextgen.data.NextGenStyle;
 import com.wb.nextgen.util.DialogUtils;
 import com.wb.nextgen.util.ExceptionHandler;
 import com.wb.nextgen.util.PicassoTrustAll;
@@ -96,7 +98,9 @@ public class StartupActivity extends NextGenHideStatusBarActivity {
             ManifestItem item = getItem(position);
             ImageView posterView = (ImageView)convertView.findViewById(R.id.movie_poster);
             TextView textView = (TextView)convertView.findViewById(R.id.movie_title);
-            PicassoTrustAll.loadImageIntoView(StartupActivity.this, item.imageUrl, posterView);
+
+            Glide.with(StartupActivity.this).load(item.imageUrl).fitCenter().into(posterView);
+            //PicassoTrustAll.loadImageIntoView(StartupActivity.this, item.imageUrl, posterView);
             textView.setText(item.movieName);
             return convertView;
         }

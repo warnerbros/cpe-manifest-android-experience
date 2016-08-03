@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 import com.wb.nextgen.activity.AbstractECView;
 import com.wb.nextgen.data.MovieMetaData;
@@ -64,8 +66,9 @@ public class ECViewLeftListFragment extends NextGenExtraLeftListFragment{
         SelectedOverlayImageView imageView = (SelectedOverlayImageView)rowView.findViewById(R.id.ec_list_image);
         if (imageView != null){
             //ViewGroup.LayoutParams imageLayoutParams = imageView.getLayoutParams();
-            imageView.setTag(thisEC.title);
-            PicassoTrustAll.loadImageIntoView(getActivity(), thisEC.getPosterImgUrl(), imageView);
+            //imageView.setTag(thisEC.title);
+            Glide.with(NextGenApplication.getContext()).load(thisEC.getPosterImgUrl()).fitCenter().into(imageView);
+            //PicassoTrustAll.loadImageIntoView(getActivity(), thisEC.getPosterImgUrl(), imageView);
         }
 
         TextView ecNameText = (TextView)rowView.findViewById(R.id.ec_list_name_text);

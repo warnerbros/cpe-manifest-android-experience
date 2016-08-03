@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
+import com.bumptech.glide.Glide;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.NextGenStyle;
@@ -74,7 +75,8 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
         backgroundImageView = (ImageView)findViewById(R.id.ime_background_image_view);
         if (backgroundImageView != null){
-            PicassoTrustAll.loadImageIntoView(this, NextGenApplication.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie), backgroundImageView);
+            Glide.with(this).load(NextGenApplication.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie)).into(backgroundImageView);
+            //PicassoTrustAll.loadImageIntoView(this, NextGenApplication.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie), backgroundImageView);
         }
 
         containerView = (RelativeLayout)findViewById(R.id.video_view_container);

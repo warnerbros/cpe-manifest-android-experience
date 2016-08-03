@@ -15,6 +15,7 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
+import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.wb.nextgen.R;
 
 /**
@@ -44,9 +45,17 @@ public class CircularClippedImageView extends ImageView{
     public void setImageDrawable(Drawable drawable){
         Drawable d = drawable;
         if (drawable != null) {
-            Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-            Bitmap clipped = circularClipBitmap(bitmap);
-            d = new BitmapDrawable(getResources(), clipped);
+            Bitmap bitmap;
+            if (drawable instanceof GlideBitmapDrawable)
+                bitmap = ((GlideBitmapDrawable) drawable).getBitmap();
+            else if (drawable instanceof BitmapDrawable)
+                bitmap = ((BitmapDrawable) drawable).getBitmap();
+            else
+                bitmap = null;
+            if (bitmap != null) {
+                Bitmap clipped = circularClipBitmap(bitmap);
+                d = new BitmapDrawable(getResources(), clipped);
+            }
         }
         super.setImageDrawable(d);
     }

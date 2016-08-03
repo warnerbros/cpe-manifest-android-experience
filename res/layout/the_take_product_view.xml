@@ -61,7 +61,7 @@
                 android:layout_margin="@dimen/spacing_xsmall"
                 android:id="@+id/shop_at_the_take_button"
                 android:text="@string/shop_at_the_take"
-                android:textColor="@color/selectable_text_white_grey_color"
+                android:textColor="@color/white"
                 android:fontFamily="sans-serif-condensed"
                 android:textSize="@dimen/textMedium"
                 android:background="@drawable/red_rounded_corner_drawable"

@@ -22,6 +22,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
+import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 import com.wb.nextgen.activity.AbstractECView;
 import com.wb.nextgen.data.MovieMetaData;
@@ -71,7 +72,8 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment {
         bgImageView = (ImageView)view.findViewById(R.id.ec_gallery_frame_bg);
 
         if (bgImageView != null && !StringHelper.isEmpty(bgImageUrl)){
-            PicassoTrustAll.loadImageIntoView(getActivity(), bgImageUrl, bgImageView);
+            Glide.with(NextGenApplication.getContext()).load(bgImageUrl).fitCenter().into(bgImageView);
+            //PicassoTrustAll.loadImageIntoView(getActivity(), bgImageUrl, bgImageView);
         }
 
         shareImageButton = (Button) view.findViewById(R.id.share_image_button);

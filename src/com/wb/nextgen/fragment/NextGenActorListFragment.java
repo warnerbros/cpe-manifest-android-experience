@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
@@ -132,15 +133,13 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment imple
             realNameTxt.setText(thisActor.displayName.toUpperCase());
             characterNameTxt.setText(thisActor.charactorName);
 
-            avatarImg.setTag(thisActor.displayName);
+
         }
 
 
         if (thisActor.getBaselineCastData() != null){
-            int imageWidth = getResources().getDimensionPixelSize(R.dimen.next_gen_actor_thumbnail_dimen);
             Picasso.with(getActivity()).load(thisActor.getBaselineCastData().getThumbnailImageUrl()).fit().centerCrop().into(avatarImg);
-            //PicassoTrustAll.loadImageIntoView(getActivity(), thisActor.getBaselineCastData().getThumbnailImageUrl(), avatarImg);
-
+            // have to use picasso in this case because Glide won't do return any bitmap for centerCrop images.
         }
 
 

@@ -10,6 +10,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
@@ -115,7 +116,8 @@ public class TheTakeCategoryGridFragment extends AbstractNextGenFragment{
             if (product != null){
                 if (productThumbnail != null){
                     productThumbnail.setKeyCropXY(product.keyCropProductX, product.keyCropProductY);
-                    PicassoTrustAll.loadImageIntoView(getActivity(), product.getThumbnailUrl(), productThumbnail);
+                    Glide.with(getActivity()).load(product.getThumbnailUrl()).into(productThumbnail);
+                    //PicassoTrustAll.loadImageIntoView(getActivity(), product.getThumbnailUrl(), productThumbnail);
                 }
                 if (brandName != null)
                     brandName.setText(product.productBrand);
