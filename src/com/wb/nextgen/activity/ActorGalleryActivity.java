@@ -144,6 +144,17 @@ public class ActorGalleryActivity extends AbstractNextGenActivity implements Act
     }
 
     @Override
+    public void onDestroy(){
+        galleryRecyclerAdapter = null;
+        galleryPagerAdapter = null;
+        if (actorGalleryRecycler != null)
+            actorGalleryRecycler.setAdapter(null);
+        if (actorGalleryRecycler != null)
+            actorGalleryViewPager.setAdapter(null);
+        super.onDestroy();
+    }
+
+    @Override
     public String getBackgroundImgUri(){
         return "";
     }
@@ -207,7 +218,7 @@ public class ActorGalleryActivity extends AbstractNextGenActivity implements Act
                     (SubsamplingScaleImageView) itemView.findViewById(R.id.image);
 
             // Asynchronously load the image and set the thumbnail and pager view
-            Glide.with(mContext)
+            Glide.with(ActorGalleryActivity.this)
                     .load(useUrl)
                     .asBitmap()
                     .into(new SimpleTarget<Bitmap>() {

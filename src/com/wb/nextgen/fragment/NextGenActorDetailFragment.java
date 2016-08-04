@@ -122,6 +122,15 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
         reloadDetail(actorOjbect);
     }
 
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        if (filmographyRecyclerView != null)
+            filmographyRecyclerView.setAdapter(null);
+        if (actorGalleryRecyclerView != null)
+            actorGalleryRecyclerView.setAdapter(null);
+    }
+
     public void setDetailObject(CastData object){
         actorOjbect = object;
     }

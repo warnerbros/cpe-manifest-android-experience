@@ -80,6 +80,8 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
         buttonAnimationStartTime = (int)(NextGenApplication.getMovieMetaData().getStyle().getBackgroundVideoFadeTime() * 1000);
     }
 
+
+
     @Override
     public void onStart(){
         super.onStart();

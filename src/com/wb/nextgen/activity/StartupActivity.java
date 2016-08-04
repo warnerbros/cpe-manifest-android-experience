@@ -79,6 +79,14 @@ public class StartupActivity extends NextGenHideStatusBarActivity {
 
     }
 
+    @Override
+    public void onDestroy(){
+        gridAdapter = null;
+        if (manifestGrid != null)
+            manifestGrid.setAdapter(null);
+        super.onDestroy();
+    }
+
     class ManifestGridViewAdapter extends BaseAdapter implements AdapterView.OnItemClickListener{
 
 

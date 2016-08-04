@@ -72,7 +72,7 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment {
         bgImageView = (ImageView)view.findViewById(R.id.ec_gallery_frame_bg);
 
         if (bgImageView != null && !StringHelper.isEmpty(bgImageUrl)){
-            Glide.with(NextGenApplication.getContext()).load(bgImageUrl).fitCenter().into(bgImageView);
+            Glide.with(getActivity()).load(bgImageUrl).fitCenter().into(bgImageView);
             //PicassoTrustAll.loadImageIntoView(getActivity(), bgImageUrl, bgImageView);
         }
 
@@ -98,6 +98,14 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment {
                 }
             });
         }
+    }
+
+    @Override
+    public void onDestroy(){
+        adapter = null;
+        if (galleryViewPager != null)
+            galleryViewPager.setAdapter(null);
+        super.onDestroy();
     }
 
     public void setCurrentGallery(MovieMetaData.ECGalleryItem gallery){
@@ -137,12 +145,10 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment {
 
     class GalleryPagerAdapter extends PagerAdapter {
 
-        Context mContext;
         LayoutInflater mInflater;
 
         public GalleryPagerAdapter(Context context) {
-            mContext = context;
-            mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            mInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
         @Override
@@ -182,7 +188,7 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment {
                     (SubsamplingScaleImageView) itemView.findViewById(R.id.image);
 
             // Asynchronously load the image and set the thumbnail and pager view
-            Glide.with(mContext)
+            Glide.with(getActivity())
                     .load(currentItem.galleryImages.get(position).fullImage.url)
                     .asBitmap()
                     .into(new SimpleTarget<Bitmap>() {

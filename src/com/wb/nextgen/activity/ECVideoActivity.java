@@ -27,6 +27,12 @@ public class ECVideoActivity extends AbstractECView implements ECVideoViewFragme
         rightVideoFrame.setEcsAdaptor(this);
     }
 
+    @Override
+    public void onDestroy() {
+        if (rightVideoFrame != null)
+            rightVideoFrame.setEcsAdaptor(null);
+        super.onDestroy();
+    }
 
     @Override
     public int getListItemViewLayoutId(){

@@ -65,6 +65,12 @@ public class TheTakeShopCategoryActivity extends AbstractNextGenActivity impleme
         transitLeftFragment(gridFrament);
     }
 
+    @Override
+    public void onDestroy(){
+        categoryListAdaptor = null;
+        super.onDestroy();
+    }
+
     private void requestCategoryList(){
         TheTakeApiDAO.prefetchProductCategories(new ResultListener<List<TheTakeCategory>>() {
             @Override

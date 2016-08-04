@@ -386,8 +386,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void onDestroy() {
         if (mediaController != null){
             mediaController.onPlayerDestroy();
         }
@@ -399,6 +398,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
             imeUpdateTimer.cancel();
             imeUpdateTimer = null;
         }
+        super.onDestroy();
 
     }
 

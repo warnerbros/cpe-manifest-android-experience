@@ -57,16 +57,20 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
             listView.setAdapter(listAdaptor);
             listView.setOnItemClickListener(this);
 
-            /*
-            titleTextView = new TextView(getActivity());
-            titleTextView.setText(getHeaderText());
-            titleTextView.setTextSize(getResources().getDimension(R.dimen.textMedium));
-            titleTextView.setTextColor(getResources().getColor(R.color.list_title_text_color));
-            listView.addHeaderView(titleTextView, null, false);*/
             listView.setItemChecked(getStartupSelectedIndex() + listView.getHeaderViewsCount(), true);
         }
 
     }
+
+    @Override
+    public void onDestroy(){
+        listAdaptor = null;
+        if (listView != null){
+            listView.setAdapter(null);
+        }
+        super.onDestroy();
+    }
+
 
     @Override
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {

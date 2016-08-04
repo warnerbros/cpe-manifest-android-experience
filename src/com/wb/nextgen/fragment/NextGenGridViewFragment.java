@@ -14,6 +14,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.wb.nextgen.NextGenApplication;
 import com.wb.nextgen.R;
 
@@ -49,6 +50,15 @@ public abstract class NextGenGridViewFragment extends Fragment implements Adapte
         }
 
     }
+
+    @Override
+    public void onDestroy(){
+        listAdaptor = null;
+        if (gridView != null)
+            gridView.setAdapter(null);
+        super.onDestroy();
+    }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
         listAdaptor.selectedIndex = position;
@@ -85,6 +95,8 @@ public abstract class NextGenGridViewFragment extends Fragment implements Adapte
 
     }
 
+    protected void invalidateOldContentView(View view){}
+
     public void resetSelectedItem(){
         listAdaptor.selectedIndex = getStartupSelectedIndex();
     }
@@ -113,6 +125,11 @@ public abstract class NextGenGridViewFragment extends Fragment implements Adapte
 
 
             if (convertView == null || (convertView.getTag() instanceof Integer && !((Integer)convertView.getTag()).equals(id)) ) {
+
+                if (convertView != null){
+                    invalidateOldContentView(convertView);
+                }
+
                 LayoutInflater inflater = getActivity().getLayoutInflater();
                 convertView = inflater.inflate(id, parent, false);
                 convertView.setTag(new Integer(id));

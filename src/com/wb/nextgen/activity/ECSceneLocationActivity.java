@@ -93,6 +93,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
 
 
     }
+
     protected View getFullScreenDisappearView(){
         return sliderFrame;
     }
@@ -147,10 +148,16 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
 
     @Override
     public void onDestroy(){
-        super.onDestroy();
+        sliderTextAdapter = null;
+        locationECsAdapter = null;
+        if (sliderTitleText != null)
+            sliderTitleText.setAdapter(null);
+        if (locationECRecyclerView != null)
+            locationECRecyclerView.setAdapter(null);
         currentFragment = null;
         currentFragment = null;
         mapViewFragment = null;
+        super.onDestroy();
     }
 
     @Override

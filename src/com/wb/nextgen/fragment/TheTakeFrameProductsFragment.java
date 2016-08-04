@@ -61,6 +61,14 @@ public class TheTakeFrameProductsFragment extends AbstractNextGenFragment {
         }
     }
 
+    @Override
+    public void onDestroy(){
+        frameProductsAdaptor = null;
+        if (frameProductsRecyclerView != null)
+            frameProductsRecyclerView.setAdapter(null);
+        super.onDestroy();
+    }
+
     public void setFrameProductTime(long frameTimestamp){
         frameTime = frameTimestamp;
 

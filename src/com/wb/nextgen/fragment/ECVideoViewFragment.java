@@ -200,7 +200,7 @@ public class ECVideoViewFragment extends ECViewFragment{
         bgImageView = (ImageView)view.findViewById(R.id.ec_video_frame_bg);
 
         if (bgImageView != null && !StringHelper.isEmpty(bgImageUrl)){
-            Glide.with(NextGenApplication.getContext()).load(bgImageUrl).fitCenter().into(bgImageView);
+            Glide.with(getActivity()).load(bgImageUrl).fitCenter().into(bgImageView);
             //PicassoTrustAll.loadImageIntoView(getActivity(), bgImageUrl, bgImageView);
         }
     }

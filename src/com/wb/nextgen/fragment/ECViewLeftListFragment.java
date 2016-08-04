@@ -67,7 +67,7 @@ public class ECViewLeftListFragment extends NextGenExtraLeftListFragment{
         if (imageView != null){
             //ViewGroup.LayoutParams imageLayoutParams = imageView.getLayoutParams();
             //imageView.setTag(thisEC.title);
-            Glide.with(NextGenApplication.getContext()).load(thisEC.getPosterImgUrl()).fitCenter().into(imageView);
+            Glide.with(getActivity()).load(thisEC.getPosterImgUrl()).fitCenter().into(imageView);
             //PicassoTrustAll.loadImageIntoView(getActivity(), thisEC.getPosterImgUrl(), imageView);
         }
 

@@ -43,6 +43,7 @@ public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivi
     protected LinearLayout topUnderlayActionbarSpacer;
     private TextView actionBarRightTextView;
     private int actionBarHeight=0;
+    ImageView centerBanner, rightLogo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +69,8 @@ public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivi
 
         actionBarLeftButton = (Button) actionBarCustomView.findViewById(R.id.action_bar_left_button);
         actionBarRightTextView = (TextView) actionBarCustomView.findViewById(R.id.action_bar_right_text);
-        ImageView centerBanner = (ImageView) actionBarCustomView.findViewById(R.id.action_bar_center_banner);
-        ImageView rightLogo = (ImageView) actionBarCustomView.findViewById(R.id.action_bar_right_logo);
+        centerBanner = (ImageView) actionBarCustomView.findViewById(R.id.action_bar_center_banner);
+        rightLogo = (ImageView) actionBarCustomView.findViewById(R.id.action_bar_right_logo);
         actionBar.setCustomView(actionBarCustomView);
 
 
@@ -85,12 +86,20 @@ public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivi
             });
         }
 
+
+
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void onPostCreate( Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
         if (centerBanner != null && !StringHelper.isEmpty(getTitleImageUrl()))
-            Glide.with(getApplicationContext()).load(getTitleImageUrl()).fitCenter().into(centerBanner);
-            //PicassoTrustAll.loadImageIntoView(this, getTitleImageUrl(), centerBanner);
+            Glide.with(this).load(getTitleImageUrl()).fitCenter().into(centerBanner);
+        //PicassoTrustAll.loadImageIntoView(this, getTitleImageUrl(), centerBanner);
 
         if (rightLogo != null && !StringHelper.isEmpty(getRightTitleImageUri())) {
-            Glide.with(getApplicationContext()).load(getRightTitleImageUri()).fitCenter().into(rightLogo);
+            Glide.with(this).load(getRightTitleImageUri()).fitCenter().into(rightLogo);
             //PicassoTrustAll.loadImageIntoView(this, getRightTitleImageUri(), rightLogo);
             actionBarRightTextView.setVisibility(View.INVISIBLE);
         }else if (!StringHelper.isEmpty(getRightTitleText())){
@@ -98,7 +107,6 @@ public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivi
             actionBarRightTextView.setText(getRightTitleText().toUpperCase());
         }
 
-        super.onCreate(savedInstanceState);
     }
 
     @Override

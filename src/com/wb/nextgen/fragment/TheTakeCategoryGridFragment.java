@@ -89,6 +89,15 @@ public class TheTakeCategoryGridFragment extends AbstractNextGenFragment{
         }
     }
 
+    @Override
+    public void onDestroy(){
+        itemsGridViewAdaptor = null;
+        if (itemsGridView != null){
+            itemsGridView.setAdapter(null);
+        }
+        super.onDestroy();
+    }
+
     public class TheTakeProductsGridViewAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
 
         //protected NextGenExtraActivity activity;

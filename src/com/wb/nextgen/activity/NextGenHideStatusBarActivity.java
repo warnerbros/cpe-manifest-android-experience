@@ -9,6 +9,7 @@ import android.view.Surface;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by gzcheng on 7/20/16.
@@ -52,6 +53,11 @@ public class NextGenHideStatusBarActivity extends AppCompatActivity {
         Glide.get(this).trimMemory(level);
     }
 
+    @Override
+    public void onDestroy(){
+        Glide.get(this).clearMemory();
+        super.onDestroy();
+    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {

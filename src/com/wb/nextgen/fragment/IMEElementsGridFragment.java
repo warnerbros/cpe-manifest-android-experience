@@ -30,6 +30,8 @@ import com.wb.nextgen.model.TheTakeIMEEngine;
 import com.wb.nextgen.network.TheTakeApiDAO;
 import com.wb.nextgen.util.HttpImageHelper;
 import com.wb.nextgen.util.concurrent.ResultListener;
+import com.wb.nextgen.util.utils.F;
+import com.wb.nextgen.util.utils.NextGenLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -194,6 +196,17 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
 
     }
 
+    protected void invalidateOldContentView(View view){
+        MapView mapView = (MapView)view.findViewById(R.id.ime_map_view);
+        if (mapView != null) {
+            try {
+                mapView.onDestroy();
+            }catch (Exception ex){
+                NextGenLogger.e(F.TAG, ex.getLocalizedMessage());
+            }
+        }
+    }
+
     protected int getListItemViewId(int position){
         IMEDisplayObject activeObj = activeIMEs.get(position);
 
@@ -247,7 +260,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                 }else if (poster != null) {
                     String imageUrl = ((MovieMetaData.PresentationDataItem) dataObj).getPosterImgUrl();
 
-                    Glide.with(getContext())
+                    Glide.with(getActivity())
                             .load(imageUrl).centerCrop()
                             .into(poster);
                 }
@@ -290,7 +303,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                                     public void run() {
                                         subText1.setText(result.get(0).productName);
                                         poster.setBackgroundColor(getResources().getColor(android.R.color.white));
-                                        Glide.with(getContext()).load(result.get(0).getProductThumbnailUrl()).into(poster);
+                                        Glide.with(getActivity()).load(result.get(0).getProductThumbnailUrl()).into(poster);
 
                                     }
                                 });
