@@ -153,7 +153,8 @@ public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivi
     }
 
     protected void loadBGImage(){
-        Picasso.with(this).load(getBackgroundImgUri()).fit().into(backgroundImageView);
+        if (!StringHelper.isEmpty(getBackgroundImgUri()))
+            Picasso.with(this).load(getBackgroundImgUri()).fit().into(backgroundImageView);
     }
 
     protected void setBackButtonText(String backText){

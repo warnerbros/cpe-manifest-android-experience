@@ -448,7 +448,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
     @Override
     public String getBackgroundImgUri(){
-        return NextGenApplication.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie);
+        return "";//NextGenApplication.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie);
     }
 
     @Override
