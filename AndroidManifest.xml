@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.wb.nextgen"
 	android:installLocation="auto"
-	android:versionCode="4"
+	android:versionCode="5"
 	android:versionName="v1.0.0" >
 	<supports-screens android:smallScreens="false"
 		android:normalScreens="false"
