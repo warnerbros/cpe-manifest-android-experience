@@ -25,6 +25,7 @@ import com.wb.nextgen.util.HttpImageHelper;
 import com.wb.nextgen.util.concurrent.ResultListener;
 import com.wb.nextgen.util.utils.F;
 import com.wb.nextgen.util.utils.NextGenLogger;
+import com.wb.nextgen.util.utils.StringHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -186,7 +187,8 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
 
                                     //googleMap.getUiSettings().setMapToolbarEnabled(true);
                                     googleMap.getUiSettings().setCompassEnabled(true);
-                                    googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                                    googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                                    //googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
                                     googleMap.setOnMarkerClickListener(ECSceneLocationMapFragment.this);
 
                                     googleMap.getMaxZoomLevel();
@@ -204,8 +206,12 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
 
                                         boundsBuilder.include(latlng);
                                         markerLocationMap.put(latlng, sceneLocation);
-                                        BitmapDescriptor bmDes =
-                                                BitmapDescriptorFactory.fromBitmap(HttpImageHelper.getMapPinBitmap(sceneLocation.pinImage.url));
+                                        BitmapDescriptor bmDes ;
+                                        if (sceneLocation.pinImage != null && !StringHelper.isEmpty(sceneLocation.pinImage.url)) {
+                                            bmDes = BitmapDescriptorFactory.fromBitmap(HttpImageHelper.getMapPinBitmap(sceneLocation.pinImage.url));
+                                        }else {
+                                            bmDes = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
+                                        }
                                         MarkerOptions markerOpt = new MarkerOptions()
                                                 .position(latlng).title(sceneLocation.getTitle()).snippet(sceneLocation.address)
                                                 .icon(bmDes);

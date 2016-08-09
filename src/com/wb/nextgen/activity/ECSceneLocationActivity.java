@@ -136,6 +136,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
         if (locationECsAdapter != null) {
             locationECsAdapter.setSceneLocation(rootSceneLocations.get(selectedIndex));
             locationECsAdapter.notifyDataSetChanged();
+            locationECRecyclerView.smoothScrollToPosition(0);
         }
     }
 
@@ -143,6 +144,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
         if (locationECsAdapter != null) {
             locationECsAdapter.setSceneLocation(location);
             locationECsAdapter.notifyDataSetChanged();
+            locationECRecyclerView.smoothScrollToPosition(0);
         }
     }
 
@@ -232,6 +234,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
                 locationECsAdapter.setSceneLocation(null);
                 locationECsAdapter.notifyDataSetChanged();
             }
+            locationECRecyclerView.smoothScrollToPosition(0);
         }
     }
 
@@ -345,6 +348,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
                     mapViewFragment.setSelectionFromSlider((MovieMetaData.LocationItem)currentItem);
                     locationECsAdapter.setSceneLocation((MovieMetaData.LocationItem)currentItem);
                     locationECsAdapter.notifyDataSetChanged();
+                    locationECRecyclerView.smoothScrollToPosition(0);
                 }else if (currentItem instanceof MovieMetaData.AudioVisualItem){
                     ECVideoViewFragment videoViewFragment;
                     if (currentFragment instanceof ECVideoViewFragment){

@@ -14,6 +14,7 @@ import com.wb.nextgen.util.concurrent.ResultListener;
 import com.wb.nextgen.util.concurrent.Worker;
 import com.wb.nextgen.util.utils.F;
 import com.wb.nextgen.util.utils.NextGenLogger;
+import com.wb.nextgen.util.utils.StringHelper;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -82,14 +83,16 @@ public class HttpImageHelper {
             public Boolean call() throws Exception {
 
                 for (MovieMetaData.LocationItem sceneLocation : sceneLocations) {
-                    if (!pinHash.containsKey(sceneLocation.pinImage.url)) {
+                    if (sceneLocation.pinImage != null && !pinHash.containsKey(sceneLocation.pinImage.url)) {
                         try {
-                            Bitmap theBitmap = Glide.
-                                    with(NextGenApplication.getContext()).
-                                    load(sceneLocation.pinImage.url).asBitmap().
-                                    into(sceneLocation.pinImage.width, sceneLocation.pinImage.height). // Width and height
-                                    get();
-                            pinHash.put(sceneLocation.pinImage.url, theBitmap);
+                            if (!StringHelper.isEmpty(sceneLocation.pinImage.url)) {
+                                Bitmap theBitmap = Glide.
+                                        with(NextGenApplication.getContext()).
+                                        load(sceneLocation.pinImage.url).asBitmap().
+                                        into(sceneLocation.pinImage.width, sceneLocation.pinImage.height). // Width and height
+                                        get();
+                                pinHash.put(sceneLocation.pinImage.url, theBitmap);
+                            }
                         } catch (Exception ex) {
                             NextGenLogger.e(F.TAG, ex.getLocalizedMessage());
                         }
