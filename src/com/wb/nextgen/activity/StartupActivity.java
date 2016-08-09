@@ -23,6 +23,8 @@ import com.wb.nextgen.util.ExceptionHandler;
 import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.concurrent.ResultListener;
 import com.wb.nextgen.util.concurrent.Worker;
+import com.wb.nextgen.util.utils.F;
+import com.wb.nextgen.util.utils.StringHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,14 +54,24 @@ public class StartupActivity extends NextGenHideStatusBarActivity {
                 "https://d19p213wjrwt85.cloudfront.net/uvvu-images/EB180713D3536025E0405B0A07341ECE",
                 "mos_hls_manifest_r60-v0.5.xml",
                 "mos_appdata_locations_r60-v0.5.xml"));*/
-        manifestItems.add(new ManifestItem("Man of Steel v0.6",
+        manifestItems.add(new ManifestItem("Man of Steel v0.7",
                 "https://d19p213wjrwt85.cloudfront.net/uvvu-images/EB180713D3536025E0405B0A07341ECE",
-                "mos_hls_manifest_r60-v0.6.xml",
-                "mos_appdata_locations_r60-v0.6.xml"));
+                "mos_hls_manifest_r60-v0.7.xml",
+                "mos_appdata_locations_r60-v0.7.xml"));
         manifestItems.add(new ManifestItem("Batman vs Superman",
                 "https://d19p213wjrwt85.cloudfront.net/uvvu-images/2C89FE061219D322E05314345B0AFE72",
-                "bvs_manifest_r60-v1.0.xml",
-                "bvs_appdata_locations_r60-v1.0.xml"));
+                "bvs_manifest_r60-v1.2.xml",
+                "bvs_appdata_locations_r60-v1.2.xml"));
+        manifestItems.add(new ManifestItem("Batman vs Superman w/360",
+                "https://d19p213wjrwt85.cloudfront.net/uvvu-images/2C89FE061219D322E05314345B0AFE72",
+                "bvs_manifest_r60-v1.2_POC.xml",
+                "bvs_appdata_locations_r60-v1.2.xml"));
+
+        manifestItems.add(new ManifestItem("3D demo",
+                "https://image.winudf.com/45/355ed98c07e2d1/screen-0.jpeg",
+                "http://cpe-manifest.s3-website-us-west-2.amazonaws.com/microhtml_360video_poc/#/krpano-view",
+                ""));
+
     }
 
     GridView manifestGrid;
@@ -131,28 +143,36 @@ public class StartupActivity extends NextGenHideStatusBarActivity {
             mDialog.setMessage("Loading");
             mDialog.setCancelable(false);
             mDialog.show();
-            Worker.execute(new Callable<Boolean>() {
-                public Boolean call() throws Exception{
-                    return NextGenApplication.startNextGenExperience(item);
-                }
-            }, new ResultListener<Boolean>(){
-                public void onResult(Boolean result){
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mDialog.hide();
-                            Intent intent = new Intent(StartupActivity.this, NextGenActivity.class);
-                            startActivity(intent);
-                        }
-                    });
 
-                }
+            if (!StringHelper.isEmpty(item.appDataFileUrl) && !StringHelper.isEmpty(item.manifestFileUrl)) {
+                Worker.execute(new Callable<Boolean>() {
+                    public Boolean call() throws Exception {
+                        return NextGenApplication.startNextGenExperience(item);
+                    }
+                }, new ResultListener<Boolean>() {
+                    public void onResult(Boolean result) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mDialog.hide();
+                                Intent intent = new Intent(StartupActivity.this, NextGenActivity.class);
+                                startActivity(intent);
+                            }
+                        });
 
-                public  void onException(Exception e){
+                    }
 
-                    mDialog.hide();
-                }
-            });
+                    public void onException(Exception e) {
+
+                        mDialog.hide();
+                    }
+                });
+            }else {
+                Intent webViewIntent = new Intent(StartupActivity.this, WebViewActivity.class);
+                webViewIntent.putExtra(F.URL, item.manifestFileUrl);
+                startActivity(webViewIntent);
+                mDialog.hide();
+            }
 
 
         }

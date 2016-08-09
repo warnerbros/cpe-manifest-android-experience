@@ -148,11 +148,13 @@ public class ManifestXMLParser {
                             } else if (annotation instanceof XmlValue) {
                                 thisClassMap.isValue = true;
                             } else if (annotation instanceof XmlAttribute) {
+
+                                Method setter = currentClass.getDeclaredMethod("set" + StringHelper.capitalize(((XmlAttribute) annotation).name()), field.getType());
+                                thisClassMap.setterMap.put(((XmlAttribute) annotation).name(), setter);
+
                                 String attributValue = parser.getAttributeValue("", ((XmlAttribute) annotation).name());
                                 if (!StringHelper.isEmpty(attributValue)) {
                                     Object obj = toObject(field.getType(), attributValue);
-                                    Method setter = currentClass.getDeclaredMethod("set" + StringHelper.capitalize(((XmlAttribute) annotation).name()), field.getType());
-                                    thisClassMap.setterMap.put(((XmlAttribute) annotation).name(), setter);
                                     setter.invoke(retObj, obj);
                                 }
                             }
@@ -164,8 +166,10 @@ public class ManifestXMLParser {
                 for (String key : thisClassMap.setterMap.keySet()){
                     Method setter = thisClassMap.setterMap.get(key);
                     String attributValue = parser.getAttributeValue("", key);
-                    Object obj = toObject(setter.getParameterTypes()[0], attributValue);
-                    setter.invoke(retObj, obj);
+                    if (attributValue != null) {
+                        Object obj = toObject(setter.getParameterTypes()[0], attributValue);
+                        setter.invoke(retObj, obj);
+                    }
 
                 }
             }
@@ -207,7 +211,6 @@ public class ManifestXMLParser {
                     FieldClassObject thisFieldClass = thisClassMap.classXmlNameToFieldMap.get(xmlElementName);
 
                     try {
-
                         if (thisFieldClass.field.getType().isAnnotationPresent(XmlType.class)) {
                             Object fieldObj = parseElement(parser, thisFieldClass.field.getType(), parser.getName());
                             Method setter = thisFieldClass.fieldClass.getDeclaredMethod("set" + xmlElementName, thisFieldClass.field.getType());

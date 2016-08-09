@@ -12,6 +12,7 @@ import com.wb.nextgen.activity.ECGalleryActivity;
 import com.wb.nextgen.activity.ECSceneLocationActivity;
 import com.wb.nextgen.activity.ECVideoActivity;
 import com.wb.nextgen.activity.TheTakeShopCategoryActivity;
+import com.wb.nextgen.activity.WebViewActivity;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.data.MovieMetaData.ExperienceData;
 import com.wb.nextgen.util.PicassoTrustAll;
@@ -44,6 +45,9 @@ public class NextGenExtraMainTableFragment extends NextGenGridViewFragment {
             }
         }else if (selectedGroup.getECGroupType() == MovieMetaData.ECGroupType.GALLERY){
             intent = new Intent(getActivity(), ECGalleryActivity.class);
+        }else if (selectedGroup.getECGroupType() == MovieMetaData.ECGroupType.INTERACTIVE){
+            intent = new Intent(getActivity(), WebViewActivity.class);
+            intent.putExtra(F.URL, selectedGroup.interactiveItems.get(0).assetLocation);
         }
 
         if (intent != null) {

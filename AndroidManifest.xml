@@ -118,6 +118,13 @@
 			android:theme="@style/Theme.AppCompat.NoActionBar">
 
 		</activity>
+		<activity
+			android:name=".activity.WebViewActivity"
+			android:screenOrientation="sensorLandscape"
+			android:configChanges="orientation|screenSize"
+			android:theme="@style/Theme.AppCompat.NoActionBar">
+
+		</activity>
 
 		<activity
 			android:name=".activity.InterStitialVideoPlayerActivity"

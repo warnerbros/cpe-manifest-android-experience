@@ -7,12 +7,14 @@ import com.wb.nextgen.parser.appdata.AppDataLocationType;
 import com.wb.nextgen.parser.appdata.AppDataType;
 import com.wb.nextgen.parser.appdata.AppNVPairType;
 import com.wb.nextgen.parser.appdata.ManifestAppDataSetType;
+import com.wb.nextgen.parser.manifest.schema.v1_4.AppGroupType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.AudiovisualType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.ExperienceAppType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.ExperienceChildType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.ExperienceType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.GalleryType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.InventoryImageType;
+import com.wb.nextgen.parser.manifest.schema.v1_4.InventoryInteractiveType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.InventoryMetadataType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.InventoryTextObjectType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.InventoryVideoType;
@@ -121,11 +123,14 @@ public class MovieMetaData {
         HashMap<String, InventoryVideoType> videoAssetsMap = new HashMap<String, InventoryVideoType>();
         HashMap<String, PresentationType> presentationAssetMap = new HashMap<String, PresentationType>();
         HashMap<String, InventoryImageType> imageAssetsMap = new HashMap<String, InventoryImageType>();
+        HashMap<String, InventoryInteractiveType> inventoryAssetsMap = new HashMap<String, InventoryInteractiveType>();
         HashMap<String, PictureGroupType> pictureGroupAssetsMap = new HashMap<String, PictureGroupType>();
         HashMap<String, PictureType> pictureTypeAssetsMap = new HashMap<String, PictureType>();
         HashMap<String, AudioVisualItem> presentationIdToAVItemMap = new HashMap<String, AudioVisualItem>();
         HashMap<String, ECGalleryItem> galleryIdToGalleryItemMap = new HashMap<String, ECGalleryItem>();
         HashMap<BigInteger, String> indexToTextMap = new HashMap<BigInteger, String>();
+
+        HashMap<String, AppGroupType> appGroupIdToAppGroupMap = new HashMap<String, AppGroupType>();
 
         HashMap<String, ExperienceData> timeSequenceIdToECGroup = new HashMap<String, ExperienceData>();
 
@@ -155,6 +160,18 @@ public class MovieMetaData {
                 for (InventoryImageType imageData : mediaManifest.getInventory().getImage()){
                     imageAssetsMap.put(imageData.getImageID(), imageData);
                 }
+            }
+
+            if (mediaManifest.getInventory().getInteractive() != null && mediaManifest.getInventory().getInteractive().size() > 0){
+                for (InventoryInteractiveType interactiveData : mediaManifest.getInventory().getInteractive()){
+                    inventoryAssetsMap.put(interactiveData.getInteractiveTrackID(), interactiveData);
+                }
+            }
+        }
+
+        if (mediaManifest.getAppGroups().getAppGroup().size() > 0){
+            for(AppGroupType appGroup : mediaManifest.getAppGroups().getAppGroup()){
+                appGroupIdToAppGroupMap.put(appGroup.getAppGroupID(), appGroup);
             }
         }
 
@@ -205,6 +222,7 @@ public class MovieMetaData {
                 List<ECGalleryItem> galleryItems = new ArrayList<ECGalleryItem>();
                 List<AudioVisualItem> avItems = new ArrayList<AudioVisualItem>();
                 List<LocationItem> locationItems = new ArrayList<LocationItem>();
+                List<InteractiveItem> interactiveItems = new ArrayList<InteractiveItem>();
                 String subtype = null;
                 InventoryMetadataType experienceMetaData = metaDataAssetsMap.get(experience.getContentID());
 
@@ -281,8 +299,6 @@ public class MovieMetaData {
                                 AudioVisualItem item = new AudioVisualItem(experience.getExperienceID(), avMetaData, video, externalApiDatas, subtype);
                                 avItems.add(item);
                                 presentationIdToAVItemMap.put(presentationId, item);
-                            } else {
-
                             }
                         }
                     }
@@ -294,10 +310,15 @@ public class MovieMetaData {
                         String appId = appType.getAppID();
                         String appGroupId = appType.getAppGroupID();
 
-
-                        LocationItem locationItem = getLocationItemfromMap(appDataIdTpAppDataMap, imageAssetsMap, appId);
-                        if (locationItem != null)
-                            locationItems.add(locationItem);
+                        if (!StringHelper.isEmpty(appId)) {     // appData
+                            LocationItem locationItem = getLocationItemfromMap(appDataIdTpAppDataMap, imageAssetsMap, appId);
+                            if (locationItem != null)
+                                locationItems.add(locationItem);
+                        } else if (!StringHelper.isEmpty(appGroupId)){      // interactive
+                            AppGroupType appGroupType = appGroupIdToAppGroupMap.get(appGroupId);
+                            InteractiveItem interactiveItem = new InteractiveItem(appGroupType, inventoryAssetsMap);
+                            interactiveItems.add(interactiveItem);
+                        }
                     }
 
                 }
@@ -306,7 +327,7 @@ public class MovieMetaData {
 
                 }
 
-                ExperienceData thisExperience = new ExperienceData(experience, experienceMetaData, avItems, galleryItems, locationItems);
+                ExperienceData thisExperience = new ExperienceData(experience, experienceMetaData, avItems, galleryItems, locationItems, interactiveItems);
 
                 result.experienceIdToExperienceMap.put(experience.getExperienceID(), thisExperience);
                 List<ExperienceData> parentGroups = experienceChildrenToParentMap.get(experience.getExperienceID());
@@ -822,7 +843,7 @@ public class MovieMetaData {
     }
 
     public static enum ECGroupType{
-        FEATURETTES, VISUAL_EFFECT, GALLERY, MIX, EXTERNAL_APP, LOCATIONS, UNKNOWN
+        FEATURETTES, VISUAL_EFFECT, GALLERY, MIX, EXTERNAL_APP, LOCATIONS, INTERACTIVE, UNKNOWN
     }
 
     static public class PictureImageData{
@@ -983,6 +1004,11 @@ public class MovieMetaData {
         public String getPosterImgUrl(){
             if (locationThumbnail != null)
                 return locationThumbnail.url;
+            else if (experienceId != null){
+                computeFromExperience();
+                if (experienceData != null)
+                    return experienceData.getPosterImgUrl();
+            }
             return "";
         }
 
@@ -1021,6 +1047,15 @@ public class MovieMetaData {
             }
         }
 
+        public String getTitle(){
+            if (!StringHelper.isEmpty(experienceId)){
+                computeFromExperience();
+                if (experienceData != null && !StringHelper.isEmpty(experienceData.title))
+                    return experienceData.title;
+            }
+            return title;
+        }
+
         public String getLocationThumbnailUrl(){
             computeFromExperience();
             if (locationThumbnail != null){
@@ -1032,6 +1067,40 @@ public class MovieMetaData {
                 }else
                     return "";
             }
+        }
+    }
+
+    static public class InteractiveItem {
+        final public String type;
+        final public String encoding;
+        final public String assetLocation;
+        final public String runtimeEnvironment;
+
+        public InteractiveItem(AppGroupType appGroupType, HashMap<String, InventoryInteractiveType> inventoryAssetsMap) {
+            if (appGroupType.getInteractiveTrackReference() != null &&
+                    appGroupType.getInteractiveTrackReference().size() > 0) {
+                String interactiveId = appGroupType.getInteractiveTrackReference().get(0).getInteractiveTrackID();
+
+                InventoryInteractiveType inventoryType = inventoryAssetsMap.get(interactiveId);
+
+                type = inventoryType.getType();
+                encoding = (inventoryType.getEncoding() != null && inventoryType.getEncoding().size() > 0) ? inventoryType.getEncoding().get(0).getRuntimeEnvironment() : "";
+                assetLocation = inventoryType.getContainerReference() != null ? inventoryType.getContainerReference().getContainerLocation() : "";
+
+                if (appGroupType.getInteractiveTrackReference().get(0).getCompatibility().size() > 0) {
+                    runtimeEnvironment = appGroupType.getInteractiveTrackReference().get(0).getCompatibility().get(0).getRuntimeEnvironment();
+                } else
+                    runtimeEnvironment = "";
+            } else {
+                type = "";
+                encoding = "";
+                assetLocation = "";
+                runtimeEnvironment = "";
+            }
+        }
+
+        public boolean isAppDataItem(){
+            return "other".equals(type);
         }
     }
 
@@ -1215,12 +1284,14 @@ public class MovieMetaData {
         final public List<ECGalleryItem> galleryItems = new ArrayList<ECGalleryItem>();
         final public List<AudioVisualItem> audioVisualItems = new ArrayList<AudioVisualItem>();
         final private List<LocationItem> locationItems = new ArrayList<LocationItem>();
+        final public List<InteractiveItem> interactiveItems = new ArrayList<InteractiveItem>();
         final public String experienceId;
         final private HashMap<String, Integer> childIdToSequenceNumber = new HashMap<String, Integer>();
         private ExternalApiData externalApp;
         final public String timeSequenceId;
 
-        public ExperienceData(ExperienceType experience, InventoryMetadataType metaData, List<AudioVisualItem> avItems, List<ECGalleryItem> galleryItems, List<LocationItem> locationItems){
+        public ExperienceData(ExperienceType experience, InventoryMetadataType metaData, List<AudioVisualItem> avItems,
+                              List<ECGalleryItem> galleryItems, List<LocationItem> locationItems, List<InteractiveItem> interactiveItems){
             experienceId = experience.getExperienceID();     // or experience Id
             if (metaData == null){
                 title = null;
@@ -1263,6 +1334,10 @@ public class MovieMetaData {
             if (locationItems != null && locationItems.size() > 0) {
                 this.locationItems.addAll(locationItems);
             }
+
+            if (interactiveItems != null && interactiveItems.size() > 0){
+                this.interactiveItems.addAll(interactiveItems);
+            }
         }
 
         public String getDuration(){
@@ -1297,6 +1372,8 @@ public class MovieMetaData {
                     type = ECGroupType.FEATURETTES;
                 else if (locationItems.size() > 0)
                     type = ECGroupType.LOCATIONS;
+                else if (interactiveItems.size() > 0)
+                    type = ECGroupType.INTERACTIVE;
                 else if (externalApp != null)
                     type = ECGroupType.EXTERNAL_APP;
                 else if (childrenExperience.size() > 0)
