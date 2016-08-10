@@ -4,7 +4,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.widget.LinearLayout;
 
-import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.NextGenExperience;
+import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.NextGenStyle;
 import com.wb.nextgen.fragment.NextGenActorListFragment;
@@ -35,7 +36,7 @@ public class NextGenExtraActivity extends AbstractNextGenActivity implements Nex
         super.onCreate(savedState);
 
         setContentView(R.layout.next_gen_extra);
-        float density = NextGenApplication.getScreenDensity(this);
+        float density = NextGenExperience.getScreenDensity(this);
         int spacing = (int)(10 *density);
 
         leftPanelFrame = (LinearLayout)findViewById(R.id.next_gen_extra_left_view);
@@ -105,7 +106,7 @@ public class NextGenExtraActivity extends AbstractNextGenActivity implements Nex
 
     @Override
     public String getBackgroundImgUri(){
-        return NextGenApplication.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.OutOfMovie);
+        return NextGenExperience.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.OutOfMovie);
     }
 
     @Override
@@ -115,7 +116,7 @@ public class NextGenExtraActivity extends AbstractNextGenActivity implements Nex
 
     @Override
     public String getRightTitleImageUri(){
-        return NextGenApplication.getMovieMetaData().getStyle().getTitleImageURL(NextGenStyle.NextGenAppearanceType.OutOfMovie);
+        return NextGenExperience.getMovieMetaData().getStyle().getTitleImageURL(NextGenStyle.NextGenAppearanceType.OutOfMovie);
     }
 
     @Override

@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
-import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.TheTakeData;
 import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
@@ -75,7 +75,7 @@ public class TheTakeCategoryGridFragment extends AbstractNextGenFragment{
         itemsGridView = (GridView)view.findViewById(R.id.the_take_items_grid);
 
         if (itemsGridView != null){
-            float density = NextGenApplication.getScreenDensity(getActivity());
+            float density = NextGenExperience.getScreenDensity(getActivity());
             int spacing = (int)(10 *density);
             itemsGridView.setNumColumns(2);
             itemsGridView.setHorizontalSpacing(spacing);

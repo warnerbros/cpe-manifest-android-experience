@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
-import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.NextGenStyle;
 import com.wb.nextgen.interfaces.ContentViewFullscreenRequestInterface;
@@ -210,6 +210,6 @@ public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivi
     }
 
     String getTitleImageUrl(){
-        return NextGenApplication.getMovieMetaData().getStyle().getTitleImageURL(NextGenStyle.NextGenAppearanceType.InMovie);
+        return NextGenExperience.getMovieMetaData().getStyle().getTitleImageURL(NextGenStyle.NextGenAppearanceType.InMovie);
     }
 }

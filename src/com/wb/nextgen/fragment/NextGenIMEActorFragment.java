@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
-import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
@@ -112,7 +112,7 @@ public class NextGenIMEActorFragment extends NextGenActorListFragment implements
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setCastIMEElementLists(NextGenApplication.getMovieMetaData().getCastIMEElements());
+        setCastIMEElementLists(NextGenExperience.getMovieMetaData().getCastIMEElements());
 
     }
 

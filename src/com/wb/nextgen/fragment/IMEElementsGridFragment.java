@@ -15,7 +15,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.R;
 import com.wb.nextgen.activity.NextGenPlayer;
 import com.wb.nextgen.data.MovieMetaData;
@@ -63,7 +63,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
     Bundle savedInstanceState = null;
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        imeGroups = NextGenApplication.getMovieMetaData().getImeElementGroups();
+        imeGroups = NextGenExperience.getMovieMetaData().getImeElementGroups();
         this.savedInstanceState = savedInstanceState;
         for (IMEElementsGroup group : imeGroups){
 
@@ -108,7 +108,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                     if (headElement instanceof MovieMetaData.ECGalleryItem) {
                         ECGalleryViewFragment fragment = new ECGalleryViewFragment();
                         fragment.setShouldShowCloseBtn(true);
-                        fragment.setBGImageUrl(NextGenApplication.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie));
+                        fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie));
                         fragment.setCurrentGallery((MovieMetaData.ECGalleryItem) headElement);
                         playerActivity.transitMainFragment(fragment);
                         playerActivity.pausMovieForImeECPiece();
@@ -121,7 +121,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                             fragment.setShouldAutoPlay(false);
                             fragment.setShouldShowCloseBtn(true);
                             fragment.setExperienceAndIndex(activeObj.imeExperience, ((MovieMetaData.IMEElement) activeObj.imeObject).itemIndex);
-                            fragment.setBGImageUrl(NextGenApplication.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie));
+                            fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie));
                             /*
                             fragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) dataObj);*/
                             playerActivity.transitMainFragment(fragment);
@@ -131,7 +131,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                             ECVideoViewFragment fragment = new ECVideoViewFragment();
                             fragment.setShouldShowCloseBtn(true);
                             fragment.setShouldAutoPlay(false);
-                            fragment.setBGImageUrl(NextGenApplication.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie));
+                            fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie));
                             fragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) headElement);
                             playerActivity.transitMainFragment(fragment);
                             playerActivity.pausMovieForImeECPiece();

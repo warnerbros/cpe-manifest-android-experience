@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
-import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.R;
 import com.wb.nextgen.activity.NextGenHideStatusBarActivity;
 
@@ -69,8 +69,8 @@ public class FixedAspectRatioFrameLayout extends FrameLayout
     {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.FixedAspectRatioFrameLayout);
 
-        mAspectRatioWidth = a.getInt(R.styleable.FixedAspectRatioFrameLayout_aspectRatioWidth, NextGenApplication.getScreenWidth(context));
-        mAspectRatioHeight = a.getInt(R.styleable.FixedAspectRatioFrameLayout_aspectRatioHeight, NextGenApplication.getScreenHeight(context));
+        mAspectRatioWidth = a.getInt(R.styleable.FixedAspectRatioFrameLayout_aspectRatioWidth, NextGenExperience.getScreenWidth(context));
+        mAspectRatioHeight = a.getInt(R.styleable.FixedAspectRatioFrameLayout_aspectRatioHeight, NextGenExperience.getScreenHeight(context));
         priority = Priority.valueFromInt(a.getInt(R.styleable.FixedAspectRatioFrameLayout_priority, Priority.WIDTH_PRIORITY.intValue));
         mOrientationFlag = a.getInt(R.styleable.FixedAspectRatioFrameLayout_whenOrientation, 3);
 
@@ -94,16 +94,16 @@ public class FixedAspectRatioFrameLayout extends FrameLayout
             return;
         }
 
-        if (priority == Priority.WIDTH_PRIORITY && originalWidth == NextGenApplication.getScreenWidth(NextGenApplication.getContext()) &&
-                NextGenApplication.getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)  {       // this is full screen when width priority
+        if (priority == Priority.WIDTH_PRIORITY && originalWidth == NextGenExperience.getScreenWidth(NextGenExperience.getApplicationContext()) &&
+                NextGenExperience.getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)  {       // this is full screen when width priority
 
-            /*WindowManager wm = (WindowManager) NextGenApplication.getContext().getSystemService(Context.WINDOW_SERVICE);
+            /*WindowManager wm = (WindowManager) NextGenExperience.getContext().getSystemService(Context.WINDOW_SERVICE);
             Display display = wm.getDefaultDisplay();
             DisplayMetrics metrics = new DisplayMetrics();
             display.getMetrics(metrics);*/
             int visible = getSystemUiVisibility();
             if ( (visible & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) != View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) { // this is full screen
-                WindowManager wm = (WindowManager) NextGenApplication.getContext().getSystemService(Context.WINDOW_SERVICE);
+                WindowManager wm = (WindowManager) NextGenExperience.getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
                 Display display = wm.getDefaultDisplay();
                 DisplayMetrics metrics = new DisplayMetrics();
                 display.getRealMetrics(metrics);
@@ -122,7 +122,7 @@ public class FixedAspectRatioFrameLayout extends FrameLayout
         }else {
             DisplayMetrics metrics = null;
             try {
-                WindowManager wm = (WindowManager) NextGenApplication.getContext().getSystemService(Context.WINDOW_SERVICE);
+                WindowManager wm = (WindowManager) NextGenExperience.getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
                 Display display = wm.getDefaultDisplay();
                 metrics = new DisplayMetrics();
                 display.getMetrics(metrics);

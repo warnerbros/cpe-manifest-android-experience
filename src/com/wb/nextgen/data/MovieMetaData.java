@@ -1,7 +1,7 @@
 package com.wb.nextgen.data;
 
 import com.google.gson.annotations.SerializedName;
-import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.parser.ManifestXMLParser;
 import com.wb.nextgen.parser.appdata.AppDataLocationType;
 import com.wb.nextgen.parser.appdata.AppDataType;
@@ -1019,7 +1019,7 @@ public class MovieMetaData {
 
         private void computeFromExperience(){
             if (!StringHelper.isEmpty(experienceId) && experienceData == null){
-                MovieMetaData metaData = NextGenApplication.getMovieMetaData();
+                MovieMetaData metaData = NextGenExperience.getMovieMetaData();
                 if (metaData != null) {
                     experienceData = metaData.experienceIdToExperienceMap.get(experienceId);
                     presentationDataItems = new ArrayList<PresentationDataItem>();

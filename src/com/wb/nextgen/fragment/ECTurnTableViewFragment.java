@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
-import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.util.concurrent.ResultListener;
@@ -172,7 +172,7 @@ public class ECTurnTableViewFragment extends AbstractECGalleryViewFragment{
                     MovieMetaData.PictureItem item = currentGallery.galleryImages.get((int)(i * fractionNumber));
 
                     Bitmap theBitmap = Glide.
-                            with(NextGenApplication.getContext()).
+                            with(NextGenExperience.getApplicationContext()).
                             load(item.fullImage.url).asBitmap().
                             into(RESTRICTED_IMAGE_WIDTH, RESTRICTED_IMAGE_HEIGHT). // Width and height
                             get();

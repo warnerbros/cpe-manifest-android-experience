@@ -23,7 +23,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
-import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.R;
 
 import com.wb.nextgen.activity.ActorGalleryActivity;
@@ -349,7 +349,7 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
             DialogUtils.showLeavingAppDialog(getActivity(), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    NextGenApplication.launchChromeWithUrl(targetUrl);
+                    NextGenExperience.launchChromeWithUrl(targetUrl);
                 }
             });
         }

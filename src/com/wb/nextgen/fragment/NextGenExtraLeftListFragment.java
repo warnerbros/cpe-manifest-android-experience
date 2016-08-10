@@ -11,7 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.R;
 
 
@@ -41,7 +41,7 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
 
     }
     protected int getPadding(){
-        float density = NextGenApplication.getScreenDensity(getActivity());
+        float density = NextGenExperience.getScreenDensity(getActivity());
         int spacing = (int)(10 *density);
         return spacing;
     }

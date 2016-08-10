@@ -6,7 +6,7 @@ import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.data.NextGenStyle;
@@ -37,13 +37,13 @@ public abstract class AbstractECView extends AbstractNextGenActivity {
 
         Intent intent = getIntent();
         String groupId = intent.getStringExtra(F.ID);
-        ecGroupData = NextGenApplication.getMovieMetaData().findExperienceDataById(groupId);
+        ecGroupData = NextGenExperience.getMovieMetaData().findExperienceDataById(groupId);
 
         setContentView(getContentViewId());
 
         leftListFrame = (FrameLayout)findViewById(R.id.ec_list_frame);
 
-        float density = NextGenApplication.getScreenDensity(this);
+        float density = NextGenExperience.getScreenDensity(this);
         int spacing = (int)(10 *density);
 
         listFragment = (ECViewLeftListFragment) getSupportFragmentManager().findFragmentById(R.id.ec_fragment_list);
@@ -67,7 +67,7 @@ public abstract class AbstractECView extends AbstractNextGenActivity {
 
     @Override
     public String getBackgroundImgUri(){
-        return NextGenApplication.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.OutOfMovie);
+        return NextGenExperience.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.OutOfMovie);
     }
 
     @Override

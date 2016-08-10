@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
-import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.data.TheTakeData.TheTakeProduct;
 import com.wb.nextgen.data.TheTakeData.TheTakeProductDetail;
@@ -63,9 +63,9 @@ public class TheTakeApiDAO {
     private static final List<TheTakeCategory> categories = new ArrayList<TheTakeCategory>();
 
     public static void init(){
-        theTakeMediaId = NextGenApplication.getMovieMetaData().getIdentifierForExternalAPI(MovieMetaData.THE_TAKE_MANIFEST_IDENTIFIER);
+        theTakeMediaId = NextGenExperience.getMovieMetaData().getIdentifierForExternalAPI(MovieMetaData.THE_TAKE_MANIFEST_IDENTIFIER);
         if (StringHelper.isEmpty(theTakeAPIKey)) {
-            AssetManager am = NextGenApplication.getContext().getAssets();
+            AssetManager am = NextGenExperience.getApplicationContext().getAssets();
             StringBuilder sb = new StringBuilder();
             InputStream in = null;
             try {

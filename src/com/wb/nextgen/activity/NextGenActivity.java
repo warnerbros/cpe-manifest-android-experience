@@ -1,15 +1,10 @@
 package com.wb.nextgen.activity;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Size;
 import android.view.Display;
@@ -17,19 +12,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
-import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.NextGenStyle;
-import com.wb.nextgen.util.PicassoTrustAll;
-import com.wb.nextgen.util.utils.NextGenLogger;
-
-import net.hockeyapp.android.CrashManager;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -68,16 +58,16 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
         playMovieButton = (ImageButton) findViewById(R.id.next_gen_startup_play_button);
         if (playMovieButton != null){
-            Glide.with(this).load(NextGenApplication.getMovieMetaData().getStyle().getButtonImageURL(NextGenStyle.NextGenAppearanceType.InMovie)).into(playMovieButton);
+            Glide.with(this).load(NextGenExperience.getMovieMetaData().getStyle().getButtonImageURL(NextGenStyle.NextGenAppearanceType.InMovie)).into(playMovieButton);
             playMovieButton.setOnClickListener(this);
         }
         extraButton = (ImageButton) findViewById(R.id.next_gen_startup_extra_button);
         if (extraButton != null){
-            Glide.with(this).load(NextGenApplication.getMovieMetaData().getStyle().getButtonImageURL(NextGenStyle.NextGenAppearanceType.OutOfMovie)).into(extraButton);
+            Glide.with(this).load(NextGenExperience.getMovieMetaData().getStyle().getButtonImageURL(NextGenStyle.NextGenAppearanceType.OutOfMovie)).into(extraButton);
             extraButton.setOnClickListener(this);
         }
-        videoLoopPoint = (int)(NextGenApplication.getMovieMetaData().getStyle().getBackgroundVideoLoopTime() * 1000);
-        buttonAnimationStartTime = (int)(NextGenApplication.getMovieMetaData().getStyle().getBackgroundVideoFadeTime() * 1000);
+        videoLoopPoint = (int)(NextGenExperience.getMovieMetaData().getStyle().getBackgroundVideoLoopTime() * 1000);
+        buttonAnimationStartTime = (int)(NextGenExperience.getMovieMetaData().getStyle().getBackgroundVideoFadeTime() * 1000);
     }
 
 
@@ -100,7 +90,7 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
 
 
-                    NextGenStyle movieStyle = NextGenApplication.getMovieMetaData().getStyle();
+                    NextGenStyle movieStyle = NextGenExperience.getMovieMetaData().getStyle();
 
 
                     final ButtonParams mainMoiveParams = computeButtonParams(movieStyle.getButtonCenterOffset(NextGenStyle.NextGenAppearanceType.InMovie),
@@ -194,7 +184,7 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
                 }
             });
             startupVideoView.requestFocus();
-            startupVideoView.setVideoURI(Uri.parse(NextGenApplication.getMovieMetaData().getStyle().getBackgroundVideoURL()));
+            startupVideoView.setVideoURI(Uri.parse(NextGenExperience.getMovieMetaData().getStyle().getBackgroundVideoURL()));
         }
     }
 
@@ -203,7 +193,7 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
         if (v.getId() == R.id.next_gen_startup_play_button) {
 
             Intent intent = new Intent(this, NextGenPlayer.class);
-            intent.setDataAndType(Uri.parse(NextGenApplication.getMovieMetaData().getMainMovieUrl()), "video/*");
+            intent.setDataAndType(Uri.parse(NextGenExperience.getMovieMetaData().getMainMovieUrl()), "video/*");
             startActivity(intent);
 
         } else if (v.getId() == R.id.next_gen_startup_extra_button) {
@@ -215,8 +205,8 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
     @Override
     public void onResume(){
         super.onResume();
-        if (NextGenApplication.isDebugBuild())
-            CrashManager.register(this);
+        /*if (NextGenExperience.isDebugBuild())
+            CrashManager.register(this);*/
     }
 
     class ButtonParams {

@@ -10,7 +10,7 @@ import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 import android.view.ContextThemeWrapper;
 
-import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.R;
 
 
@@ -36,7 +36,7 @@ public class DialogUtils {
         CharSequence[] locations = new CharSequence[3];
         locations[0] = "Near me";
         locations[1] = "( change postal code )";
-        //locations[2] = "" + NextGenApplication.getUserLocation();
+        //locations[2] = "" + NextGenExperience.getUserLocation();
         return locations;
     }
 

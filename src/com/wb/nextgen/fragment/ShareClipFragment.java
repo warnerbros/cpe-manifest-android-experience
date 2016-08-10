@@ -15,7 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.util.NextGenUtils;
@@ -68,32 +68,29 @@ public class ShareClipFragment extends ECVideoViewFragment implements View.OnCli
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.share_clip_button:
-                videoView.pause();
-                String videoUrl = selectedAVItem.videoUrl;
-                Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType("text/plain");
-                share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-                share.putExtra(Intent.EXTRA_SUBJECT, "Next Gen Share");
-                share.putExtra(Intent.EXTRA_TEXT, videoUrl);
+        if (v.getId() == R.id.share_clip_button) {
+            videoView.pause();
+            String videoUrl = selectedAVItem.videoUrl;
+            Intent share = new Intent(Intent.ACTION_SEND);
+            share.setType("text/plain");
+            share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+            share.putExtra(Intent.EXTRA_SUBJECT, "Next Gen Share");
+            share.putExtra(Intent.EXTRA_TEXT, videoUrl);
 
-                startActivity(Intent.createChooser(share, ""));
-                break;
-            case R.id.prev_clip_btn:
+            startActivity(Intent.createChooser(share, ""));
+        } else if (v.getId() == R.id.prev_clip_btn){
                 if (itemIndex >= 0){
                     setShouldAutoPlay(false);
                     setExperienceAndIndex(shareClipExperience, itemIndex - 1);
                     updateUI();
                 }
-                break;
-            case R.id.next_clip_btn:
+        } else if (v.getId() == R.id.next_clip_btn){
                 if (itemIndex < shareClipExperience.getChildrenContents().size()){
                     setShouldAutoPlay(false);
                     setExperienceAndIndex(shareClipExperience, itemIndex + 1);
                     updateUI();
                 }
-                break;
+
 
         }
     }

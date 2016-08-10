@@ -26,7 +26,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.VideoView;
 
-import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.R;
 import com.wb.nextgen.interfaces.ContentViewFullscreenRequestInterface;
 import com.wb.nextgen.interfaces.NextGenPlayerInterface;
@@ -62,7 +62,7 @@ public class NextGenMediaController extends CustomMediaController {
     }
 
     public boolean isFullScreen(){
-        return this.getWidth() == NextGenApplication.getScreenWidth(NextGenApplication.getContext());
+        return this.getWidth() == NextGenExperience.getScreenWidth(NextGenExperience.getApplicationContext());
     }
 
     @Override

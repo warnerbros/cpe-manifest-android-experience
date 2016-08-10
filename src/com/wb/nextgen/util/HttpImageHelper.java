@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import com.bumptech.glide.Glide;
-import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.util.concurrent.ResultListener;
@@ -61,7 +61,7 @@ public class HttpImageHelper {
                     if (!pinHash.containsKey(item.pinImage.url)) {
                         try {
                             Bitmap theBitmap = Glide.
-                                    with(NextGenApplication.getContext()).
+                                    with(NextGenExperience.getApplicationContext()).
                                     load(item.pinImage.url).asBitmap().
                                     into(item.pinImage.width, item.pinImage.height). // Width and height
                                     get();
@@ -87,7 +87,7 @@ public class HttpImageHelper {
                         try {
                             if (!StringHelper.isEmpty(sceneLocation.pinImage.url)) {
                                 Bitmap theBitmap = Glide.
-                                        with(NextGenApplication.getContext()).
+                                        with(NextGenExperience.getApplicationContext()).
                                         load(sceneLocation.pinImage.url).asBitmap().
                                         into(sceneLocation.pinImage.width, sceneLocation.pinImage.height). // Width and height
                                         get();
@@ -113,7 +113,7 @@ public class HttpImageHelper {
             /*if (theBitmap == null){
                 try{
                     String uri = NextGenUtils.getPacakageImageUrl(R.drawable.mos_map_pin);
-                    theBitmap = MediaStore.Images.Media.getBitmap(NextGenApplication.getContext().getContentResolver(), Uri.parse(uri));
+                    theBitmap = MediaStore.Images.Media.getBitmap(NextGenExperience.getContext().getContentResolver(), Uri.parse(uri));
                 }catch (Exception ex){
                     NextGenLogger.e(F.TAG, ex.getLocalizedMessage());
                 }

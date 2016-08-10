@@ -14,7 +14,7 @@ import java.util.logging.SimpleFormatter;
 import java.util.regex.Pattern;
 
 import com.crashlytics.android.Crashlytics;
-import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.NextGenExperience;
 
 import android.content.Context;
 import android.content.Intent;
@@ -151,13 +151,13 @@ public class NextGenLogger {
 	
 	/* @return If the app is in diagnostic mode which supports logging of all default levels */
 	private static boolean isDiagnosticMode() {
-		return NextGenApplication.isDiagnosticMode();
+		return NextGenExperience.isDiagnosticMode();
 	}
 	
 	/** A sensitive verbose msg is only logged on dev builds or in diagnostic mode */
 	@SuppressWarnings("unused")
 	public static void sv(String tag, String msg) {
-		if (NextGenApplication.isDebugBuild())
+		if (NextGenExperience.isDebugBuild())
 			Log.v(tag, msg);
 		else
 			Crashlytics.log(Log.VERBOSE, tag, msg);
@@ -168,7 +168,7 @@ public class NextGenLogger {
 	/** A sensitive debug msg is only logged on dev builds or in diagnostic mode */
 	@SuppressWarnings("unused")
 	public static void sd(String tag, String msg) {
-		if (NextGenApplication.isDebugBuild())
+		if (NextGenExperience.isDebugBuild())
 			Log.d(tag, msg);
 		else
 			Crashlytics.log(Log.DEBUG, tag, msg);
@@ -177,7 +177,7 @@ public class NextGenLogger {
 	/** A sensitive info msg is only logged on dev builds or in diagnostic mode */
 	@SuppressWarnings("unused")
 	public static void si(String tag, String msg) {
-		if (NextGenApplication.isDebugBuild())
+		if (NextGenExperience.isDebugBuild())
 			Log.i(tag, msg);
 		else
 			Crashlytics.log(Log.INFO, tag, msg);
@@ -185,7 +185,7 @@ public class NextGenLogger {
 	
 	/** Forced logging */
 	public static void fd(String tag, String msg) {
-		if (NextGenApplication.isDebugBuild())
+		if (NextGenExperience.isDebugBuild())
 			Log.d(tag, msg);
 		else
 			Crashlytics.log(Log.DEBUG, tag, msg);
@@ -193,7 +193,7 @@ public class NextGenLogger {
 	
 	@SuppressWarnings("unused")
 	public static void v(String tag, String msg) {
-		if (NextGenApplication.isDebugBuild())
+		if (NextGenExperience.isDebugBuild())
 			Log.v(tag, msg);
 		else
 			Crashlytics.log(Log.VERBOSE, tag, msg);
@@ -203,7 +203,7 @@ public class NextGenLogger {
 	
 	@SuppressWarnings("unused")
 	public static void v(String tag, String msg, Throwable tr) {
-		if (NextGenApplication.isDebugBuild())
+		if (NextGenExperience.isDebugBuild())
 			Log.v(tag, msg, tr);
 		else
 			Crashlytics.log(Log.VERBOSE, tag, msg);
@@ -213,7 +213,7 @@ public class NextGenLogger {
 	
 	@SuppressWarnings("unused")
 	public static void d(String tag, String msg) {
-		if (NextGenApplication.isDebugBuild())
+		if (NextGenExperience.isDebugBuild())
 			Log.d(tag, msg);
 		else 
         	Crashlytics.log(Log.DEBUG, tag, msg);
@@ -223,7 +223,7 @@ public class NextGenLogger {
 	
 	@SuppressWarnings("unused")
 	public static void d(String tag, String msg, Throwable tr) {
-		if (NextGenApplication.isDebugBuild())
+		if (NextGenExperience.isDebugBuild())
 			Log.d(tag, msg, tr);
 		else
 			Crashlytics.log(Log.DEBUG, tag, msg);
@@ -232,7 +232,7 @@ public class NextGenLogger {
 	}
 	
 	public static void i(String tag, String msg) {
-		if (NextGenApplication.isDebugBuild())
+		if (NextGenExperience.isDebugBuild())
 			Log.i(tag, msg);
 		else
 			Crashlytics.log(Log.INFO, tag, msg);
@@ -241,7 +241,7 @@ public class NextGenLogger {
 	}
 	
 	public static void i(String tag, String msg, Throwable tr) {
-		if (NextGenApplication.isDebugBuild())
+		if (NextGenExperience.isDebugBuild())
 			Log.i(tag, msg, tr);
 		else
 			Crashlytics.log(Log.INFO, tag, msg);
@@ -250,7 +250,7 @@ public class NextGenLogger {
 	}
 	
 	public static void w(String tag, String msg) {
-		if (NextGenApplication.isDebugBuild())
+		if (NextGenExperience.isDebugBuild())
 			Log.w(tag, msg);
 		else
 			Crashlytics.log(Log.WARN, tag, msg);
@@ -259,7 +259,7 @@ public class NextGenLogger {
 	}
 	
 	public static void w(String tag, String msg, Throwable tr) {
-		if (NextGenApplication.isDebugBuild())
+		if (NextGenExperience.isDebugBuild())
 			Log.w(tag, msg, tr);
 		else
 			Crashlytics.log(Log.WARN, tag, msg);
@@ -269,7 +269,7 @@ public class NextGenLogger {
 
     /** A sensitive warning msg is only logged on dev builds or in diagnostic + admin mode */
     public static void sw(String tag, String msg) {
-		if (NextGenApplication.isDebugBuild())
+		if (NextGenExperience.isDebugBuild())
 			Log.w(tag, msg);
 		else
 			Crashlytics.log(Log.WARN, tag, msg);
@@ -279,7 +279,7 @@ public class NextGenLogger {
     }
 	
 	public static void w(String tag, Throwable tr) {
-		if (NextGenApplication.isDebugBuild())
+		if (NextGenExperience.isDebugBuild())
 			Log.w(tag, tr);
 		else
 			Crashlytics.log(Log.WARN, tag, tr != null ? tr.getMessage() : "");
@@ -288,7 +288,7 @@ public class NextGenLogger {
 	}
 	
 	public static void e(String tag, String msg) {
-		if (NextGenApplication.isDebugBuild())
+		if (NextGenExperience.isDebugBuild())
 			Log.e(tag, msg);
 		else
 			Crashlytics.log(Log.ERROR, tag, msg);
@@ -297,7 +297,7 @@ public class NextGenLogger {
 	}
 	
 	public static void e(String tag, String msg, Throwable tr) {
-		if (NextGenApplication.isDebugBuild())
+		if (NextGenExperience.isDebugBuild())
 			Log.e(tag, msg, tr);
 		else
 			Crashlytics.log(Log.ERROR, tag, msg);
@@ -307,7 +307,7 @@ public class NextGenLogger {
 	
 	public static void logButtonClick(Object context, String buttonDescp){
 		String msg = "Button clicked: " + buttonDescp + " in Activity: " + context.getClass().toString();
-		if (NextGenApplication.isDebugBuild())
+		if (NextGenExperience.isDebugBuild())
 			Log.i(F.TAG_USER_ACTION, msg);
 		else
 			Crashlytics.log(Log.INFO, F.TAG_USER_ACTION, msg);
@@ -317,7 +317,7 @@ public class NextGenLogger {
 	
 	public static void logScreensView(Context context, String viewDescp, String action){
 		String msg = "View : " + viewDescp + " in Activity: " + context.getClass().toString() + " Action: " + action;
-		if (NextGenApplication.isDebugBuild())
+		if (NextGenExperience.isDebugBuild())
 			Log.i(F.TAG_USER_ACTION, msg);
 		else
 			Crashlytics.log(Log.INFO, F.TAG_USER_ACTION, msg);

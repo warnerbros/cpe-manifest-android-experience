@@ -15,7 +15,7 @@ import android.widget.GridView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.R;
 
 
@@ -35,7 +35,7 @@ public abstract class NextGenGridViewFragment extends Fragment implements Adapte
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        float density = NextGenApplication.getScreenDensity(getActivity());
+        float density = NextGenExperience.getScreenDensity(getActivity());
         int spacing = (int)(10 *density);
         gridView = (GridView)view.findViewById(R.id.next_gen_grid);
         if (gridView != null){

@@ -3,7 +3,7 @@ package com.wb.nextgen.parser;
 import android.content.res.AssetManager;
 import android.util.Xml;
 
-import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.parser.appdata.ManifestAppDataSetType;
 import com.wb.nextgen.parser.manifest.schema.v1_4.MediaManifestType;
 import com.wb.nextgen.util.utils.F;
@@ -14,6 +14,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -21,6 +22,8 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -54,30 +57,59 @@ public class ManifestXMLParser {
 
     public NextGenManifestData startParsing(String manifestUrl, String appDataUrl){
         NextGenManifestData manifest = null;
+        HttpURLConnection conn = null;
         try{
+
+            // App Data Parsing
+            URL appDataURL = new URL(appDataUrl);
+            conn = (HttpURLConnection)appDataURL.openConnection();
+            conn.setReadTimeout(10000);
+            conn.setConnectTimeout(20000);
+            conn.setRequestMethod("GET");
+            conn.setDoInput(true);
+            conn.connect();
+            InputStream appDataIS = conn.getInputStream();
 
             XmlPullParser appDataParser = Xml.newPullParser();
             appDataParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-            AssetManager am2 = NextGenApplication.getContext().getAssets();
-            appDataParser.setInput(am2.open(appDataUrl), null);
+            //AssetManager am2 = NextGenExperience.getContext().getAssets();
+            appDataParser.setInput(appDataIS, null);
+            //appDataParser.setInput(am2.open(appDataUrl), null);
             appDataParser.nextTag();
 
             ManifestAppDataSetType appData = parseAppData(appDataParser);
+            conn.disconnect();
+            conn = null;
+            //************ End of AppData Parsing
+
+            // Manifest parsing
+            URL manifestURL = new URL(manifestUrl);
+            conn = (HttpURLConnection)manifestURL.openConnection();
+            conn.setReadTimeout(10000);
+            conn.setConnectTimeout(20000);
+            conn.setRequestMethod("GET");
+            conn.setDoInput(true);
+            conn.connect();
+            InputStream manifestIS = conn.getInputStream();
 
             XmlPullParser manifestParser = Xml.newPullParser();
             manifestParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-            AssetManager am = NextGenApplication.getContext().getAssets();
+            //AssetManager am = NextGenExperience.getContext().getAssets();
             //parser.setInput(am.open("mos_hls_manifest_v3.xml"), null);
             //parser.setInput(am.open("mos_hls_manifest_r60_v0.4.xml"), null);
-            manifestParser.setInput(am.open(manifestUrl), null);
+            manifestParser.setInput(manifestIS, null);
             manifestParser.nextTag();
 
 
             MediaManifestType mainManifest = parseManifest(manifestParser);
+            conn.disconnect();
+            conn = null;
             manifest = new NextGenManifestData(mainManifest, appData);
 
         }catch (Exception ex){
             System.out.println(ex.getMessage());
+            if (conn != null)
+                conn.disconnect();
         }
         return manifest;
     }

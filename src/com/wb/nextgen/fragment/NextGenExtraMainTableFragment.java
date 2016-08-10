@@ -6,7 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.R;
 import com.wb.nextgen.activity.ECGalleryActivity;
 import com.wb.nextgen.activity.ECSceneLocationActivity;
@@ -27,7 +27,7 @@ public class NextGenExtraMainTableFragment extends NextGenGridViewFragment {
 
 
     public final static int GRID_SPACING_DP = 10;
-    private List<ExperienceData> ecGroups = NextGenApplication.getMovieMetaData().getExtraECGroups();
+    private List<ExperienceData> ecGroups = NextGenExperience.getMovieMetaData().getExtraECGroups();
 
     protected void onListItemClick(View v, int position, long id){
         ExperienceData selectedGroup = ecGroups.get(position);

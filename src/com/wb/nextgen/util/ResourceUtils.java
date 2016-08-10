@@ -6,10 +6,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 
-import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.util.utils.F;
 import com.wb.nextgen.util.utils.NextGenLogger;
 
+import android.content.Context;
 import android.content.res.AssetManager;
 
 
@@ -18,8 +19,8 @@ final public class ResourceUtils {
 	private ResourceUtils() {
 	};
 	
-	public static String getStringFromAssets(String fileName) {
-		AssetManager am = NextGenApplication.getContext().getAssets();
+	public static String getStringFromAssets(Context context, String fileName) {
+		AssetManager am = context.getAssets();
 		StringBuilder sb = new StringBuilder();
 		InputStream in = null;
 		try {

@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
-import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.R;
 
 import com.wb.nextgen.data.MovieMetaData;
@@ -37,16 +37,16 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment imple
         super.onViewCreated(view, savedInstanceState);
 
         List<String> castIds = new ArrayList<String>();
-        for (CastData cast : NextGenApplication.getMovieMetaData().getActorsList()){
+        for (CastData cast : NextGenExperience.getMovieMetaData().getActorsList()){
             if (!StringHelper.isEmpty(cast.getBaselineActorId()))
                 castIds.add(cast.getBaselineActorId());
         }
-        if (!NextGenApplication.getMovieMetaData().isHasCalledBaselineAPI()) {
+        if (!NextGenExperience.getMovieMetaData().isHasCalledBaselineAPI()) {
             BaselineApiDAO.getCastActorsData(castIds, new ResultListener<HashMap<String, MovieMetaData.BaselineCastData>>() {
                 @Override
                 public void onResult(HashMap<String, MovieMetaData.BaselineCastData> resultMap) {
-                    NextGenApplication.getMovieMetaData().setHasCalledBaselineAPI(true);
-                    for (CastData cast : NextGenApplication.getMovieMetaData().getActorsList()) {
+                    NextGenExperience.getMovieMetaData().setHasCalledBaselineAPI(true);
+                    for (CastData cast : NextGenExperience.getMovieMetaData().getActorsList()) {
                         if (!StringHelper.isEmpty(cast.getBaselineActorId())) {
                             MovieMetaData.BaselineCastData baselineData = resultMap.get(cast.getBaselineActorId());
                             if (baselineData != null)
@@ -74,15 +74,15 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment imple
 
     @Override
     protected int getPadding(){
-        float density = NextGenApplication.getScreenDensity(getActivity());
+        float density = NextGenExperience.getScreenDensity(getActivity());
         int spacing = (int)(5 *density);
         return 0;
     }
 
 
     public List<CastData> getActorInfos(){
-        if (NextGenApplication.getMovieMetaData().getActorsList() != null)
-            return NextGenApplication.getMovieMetaData().getActorsList();
+        if (NextGenExperience.getMovieMetaData().getActorsList() != null)
+            return NextGenExperience.getMovieMetaData().getActorsList();
         else
             return new ArrayList<CastData>();
     }

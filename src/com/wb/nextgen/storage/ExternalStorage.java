@@ -2,7 +2,7 @@ package com.wb.nextgen.storage;
 
 import android.os.Environment;
 
-import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.util.HttpHelper;
 import com.wb.nextgen.util.utils.F;
 import com.wb.nextgen.util.utils.NextGenLogger;
@@ -23,7 +23,7 @@ import java.util.Collection;
  * Access methods to shared external storage
  */
 public class ExternalStorage {
-    private static final String EXTERNAL_STORAGE_PATH = "/Android/data/" + NextGenApplication.getContext().getPackageName() + "/files/";
+    private static final String EXTERNAL_STORAGE_PATH = "/Android/data/" + NextGenExperience.getApplicationContext().getPackageName() + "/files/";
 
     /** @since API Level 1 */
     public static File getExternalFilesDir(String subDir) {

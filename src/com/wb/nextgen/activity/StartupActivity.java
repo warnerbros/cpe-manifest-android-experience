@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 import com.wb.nextgen.Manifest;
-import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.NextGenStyle;
 import com.wb.nextgen.util.DialogUtils;
@@ -40,38 +40,48 @@ public class StartupActivity extends NextGenHideStatusBarActivity {
         public final String movieName;
         public final String manifestFileUrl;
         public final String appDataFileUrl;
-        ManifestItem(String movieName, String imageUrl, String manifestFileUrl, String appDataFileUrl){
+        public final String contentId;
+        ManifestItem(String movieName, String cid, String imageUrl, String manifestFileUrl, String appDataFileUrl){
             this.imageUrl = imageUrl;
+            contentId = cid;
             this.manifestFileUrl = manifestFileUrl;
             this.movieName = movieName;
             this.appDataFileUrl = appDataFileUrl;
         }
     }
-    static List<ManifestItem> manifestItems;
+    static public List<ManifestItem> manifestItems;
     static {
         manifestItems = new ArrayList<ManifestItem>();
         /*manifestItems.add(new ManifestItem("Man of Steel v0.5",
                 "https://d19p213wjrwt85.cloudfront.net/uvvu-images/EB180713D3536025E0405B0A07341ECE",
                 "mos_hls_manifest_r60-v0.5.xml",
                 "mos_appdata_locations_r60-v0.5.xml"));*/
-        manifestItems.add(new ManifestItem("Man of Steel v0.7",
+        manifestItems.add(new ManifestItem("Man of Steel v0.7", "urn:dece:cid:eidr-s:DAFF-8AB8-3AF0-FD3A-29EF-Q",
                 "https://d19p213wjrwt85.cloudfront.net/uvvu-images/EB180713D3536025E0405B0A07341ECE",
-                "mos_hls_manifest_r60-v0.7.xml",
-                "mos_appdata_locations_r60-v0.7.xml"));
-        manifestItems.add(new ManifestItem("Batman vs Superman",
+                "https://d3hu292hohbyvv.cloudfront.net/xml/mos_hls_manifest_r60-v0.7.xml",
+                "https://d3hu292hohbyvv.cloudfront.net/xml/mos_appdata_locations_r60-v0.7.xml"));
+       /* manifestItems.add(new ManifestItem("Batman vs Superman", "urn:dece:cid:eidr-s:B257-8696-871C-A12B-B8C1-S",
                 "https://d19p213wjrwt85.cloudfront.net/uvvu-images/2C89FE061219D322E05314345B0AFE72",
                 "bvs_manifest_r60-v1.2.xml",
-                "bvs_appdata_locations_r60-v1.2.xml"));
-        manifestItems.add(new ManifestItem("Batman vs Superman w/360",
+                "bvs_appdata_locations_r60-v1.2.xml"));*/
+        manifestItems.add(new ManifestItem("Batman vs Superman w/360", "urn:dece:cid:eidr-s:B257-8696-871C-A12B-B8C1-S",
                 "https://d19p213wjrwt85.cloudfront.net/uvvu-images/2C89FE061219D322E05314345B0AFE72",
-                "bvs_manifest_r60-v1.2_POC.xml",
-                "bvs_appdata_locations_r60-v1.2.xml"));
-
+                "https://d3hu292hohbyvv.cloudfront.net/xml/bvs_manifest_r60-v1.2.xml",
+                "https://d3hu292hohbyvv.cloudfront.net/xml/bvs_appdata_locations_r60-v1.2.xml"));
+/*
         manifestItems.add(new ManifestItem("3D demo",
                 "https://image.winudf.com/45/355ed98c07e2d1/screen-0.jpeg",
                 "http://cpe-manifest.s3-website-us-west-2.amazonaws.com/microhtml_360video_poc/#/krpano-view",
-                ""));
+                ""));*/
 
+    }
+
+    public static ManifestItem findManifestItemByCID(String cid){
+        for (ManifestItem item : manifestItems){
+            if (cid.equals(item.contentId))
+                return item;
+        }
+        return null;
     }
 
     GridView manifestGrid;
@@ -140,39 +150,9 @@ public class StartupActivity extends NextGenHideStatusBarActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
             final ManifestItem item = getItem(position);
-            mDialog.setMessage("Loading");
-            mDialog.setCancelable(false);
-            mDialog.show();
+           //NextGenExperience.startNextGenExperience(item);
 
-            if (!StringHelper.isEmpty(item.appDataFileUrl) && !StringHelper.isEmpty(item.manifestFileUrl)) {
-                Worker.execute(new Callable<Boolean>() {
-                    public Boolean call() throws Exception {
-                        return NextGenApplication.startNextGenExperience(item);
-                    }
-                }, new ResultListener<Boolean>() {
-                    public void onResult(Boolean result) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                mDialog.hide();
-                                Intent intent = new Intent(StartupActivity.this, NextGenActivity.class);
-                                startActivity(intent);
-                            }
-                        });
 
-                    }
-
-                    public void onException(Exception e) {
-
-                        mDialog.hide();
-                    }
-                });
-            }else {
-                Intent webViewIntent = new Intent(StartupActivity.this, WebViewActivity.class);
-                webViewIntent.putExtra(F.URL, item.manifestFileUrl);
-                startActivity(webViewIntent);
-                mDialog.hide();
-            }
 
 
         }

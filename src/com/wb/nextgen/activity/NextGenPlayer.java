@@ -1,6 +1,5 @@
 package com.wb.nextgen.activity;
 
-import android.animation.AnimatorSet;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.media.MediaPlayer;
@@ -16,14 +15,12 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
-import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.NextGenStyle;
 import com.wb.nextgen.fragment.NextGenPlayerBottomFragment;
 import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgen.interfaces.NextGenPlaybackStatusListener;
-import com.wb.nextgen.util.NextGenUtils;
-import com.wb.nextgen.util.PicassoTrustAll;
 import com.wb.nextgen.util.utils.NextGenFragmentTransactionEngine;
 import com.wb.nextgen.videoview.IVideoViewActionListener;
 import com.wb.nextgen.videoview.ObservableVideoView;
@@ -57,7 +54,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
     NextGenPlayerBottomFragment imeBottomFragment;
 
-    public static final Uri INTERSTITIAL_VIDEO_URI = Uri.parse(NextGenApplication.getMovieMetaData().getStyle().getInterstitialVideoURL());//Uri.parse("android.resource://com.wb.nextgen/" + R.raw.mos_nextgen_interstitial);
+    public static final Uri INTERSTITIAL_VIDEO_URI = Uri.parse(NextGenExperience.getMovieMetaData().getStyle().getInterstitialVideoURL());//Uri.parse("android.resource://com.wb.nextgen/" + R.raw.mos_nextgen_interstitial);
 
     private Uri currentUri = null;
 
@@ -75,8 +72,8 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
         backgroundImageView = (ImageView)findViewById(R.id.ime_background_image_view);
         if (backgroundImageView != null){
-            Glide.with(this).load(NextGenApplication.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie)).into(backgroundImageView);
-            //PicassoTrustAll.loadImageIntoView(this, NextGenApplication.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie), backgroundImageView);
+            Glide.with(this).load(NextGenExperience.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie)).into(backgroundImageView);
+            //PicassoTrustAll.loadImageIntoView(this, NextGenExperience.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie), backgroundImageView);
         }
 
         containerView = (RelativeLayout)findViewById(R.id.video_view_container);
@@ -162,7 +159,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
     @Override
     String getTitleImageUrl(){
-        return NextGenApplication.getMovieMetaData().getStyle().getTitleImageURL(NextGenStyle.NextGenAppearanceType.InMovie);
+        return NextGenExperience.getMovieMetaData().getStyle().getTitleImageURL(NextGenStyle.NextGenAppearanceType.InMovie);
     }
 
     protected void updateImeFragment(final NextGenPlaybackStatusListener.NextGenPlaybackStatus playbackStatus, final long timecode){
@@ -448,7 +445,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
     @Override
     public String getBackgroundImgUri(){
-        return "";//NextGenApplication.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie);
+        return "";//NextGenExperience.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie);
     }
 
     @Override

@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.data.MovieMetaData.FilmPoster;
 import com.wb.nextgen.data.MovieMetaData.CastHeadShot;
@@ -77,7 +77,7 @@ public class BaselineApiDAO {
 
     public static void init() {
         if (StringHelper.isEmpty(baselineAPIKey)) {
-            AssetManager am = NextGenApplication.getContext().getAssets();
+            AssetManager am = NextGenExperience.getApplicationContext().getAssets();
             StringBuilder sb = new StringBuilder();
             InputStream in = null;
             try {

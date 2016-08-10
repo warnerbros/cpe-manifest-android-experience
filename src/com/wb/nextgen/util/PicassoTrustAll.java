@@ -77,7 +77,7 @@ public class PicassoTrustAll {
                         //NextGenLogger.e("PICASSO", exception.getLocalizedMessage());
                         if (!cannotResetUris.contains(uri.toString())) {
                             cannotResetUris.add(uri.toString());
-                            /*PicassoCannotResetDataSource picassoDS = new PicassoCannotResetDataSource(NextGenApplication.getContext());
+                            /*PicassoCannotResetDataSource picassoDS = new PicassoCannotResetDataSource(NextGenExperience.getContext());
                             picassoDS.open();
                             picassoDS.addToDB(uri.toString());
                             picassoDS.close();*/

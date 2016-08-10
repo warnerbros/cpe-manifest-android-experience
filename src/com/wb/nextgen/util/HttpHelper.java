@@ -21,7 +21,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 
-import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.network.SecureFlxHttpClient;
 import com.wb.nextgen.util.utils.F;
 import com.wb.nextgen.util.utils.NextGenLogger;
@@ -93,7 +93,7 @@ public class HttpHelper {
 				+ (shouldCache ? "shouldCache " : "") + url);
 		byte[] result;
 		if (checkCache) {
-			result = NextGenApplication.sFlixsterCacheManager.get(url.hashCode());
+			result = NextGenExperience.sCacheManager.get(url.hashCode());
 			if (result != null && result.length > 0) {
 				//Logger.v(F.TAG_API, "HttpHelper.fetchUrlBytes cache hit");
 				return result;
@@ -118,7 +118,7 @@ public class HttpHelper {
 			connection.disconnect();
 		}
 		if (shouldCache) {
-			NextGenApplication.sFlixsterCacheManager.put(url.hashCode(), result);
+			NextGenExperience.sCacheManager.put(url.hashCode(), result);
 		}
 		
 		return result;
@@ -173,7 +173,7 @@ public class HttpHelper {
 	}
 	
 	private static byte[] fetchUrlBytes(HttpURLConnection connection, boolean useFlixsterUa) throws IOException {
-		String userAgent = NextGenApplication.getUserAgent();
+		String userAgent = NextGenExperience.getUserAgent();
 		connection.setRequestProperty(HTTP.USER_AGENT, userAgent);
 		//connection.setRequestProperty("Accept", "application/vnd.dc2-v2.3.0+json");
 		connection.setConnectTimeout(TIMEOUT_CONNECTION);
@@ -186,7 +186,7 @@ public class HttpHelper {
 		} catch (IOException ioe) {
 			int responseCode = connection.getResponseCode();
 			if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
-				//NextGenApplication.logout(true);
+				//NextGenExperience.logout(true);
 //				throw new HttpUnauthorizedException(connection.getResponseMessage(), ioe);
 				
 			} else {
@@ -271,17 +271,17 @@ public class HttpHelper {
 			if (shouldAuth)
 				post.setHeader(F.AUTHORIZATION, getAuthHeader());
 			post.setHeader(HTTP.CONTENT_TYPE, "application/json");
-			post.setHeader(HTTP.USER_AGENT, NextGenApplication.getUserAgent());
+			post.setHeader(HTTP.USER_AGENT, NextGenExperience.getUserAgent());
 			post.setHeader(F.ACCEPT, ACCEPT_HEADER_VALUE);
 			//post.setHeader("Accept", "application/json");
 			//post.setHeader(FlixsterApplication.PREFS_FLIX_USER_COUNTRY, FlixsterApplication.getUserCountry());
 			//post.setHeader(F.X_FORWARDED_FOR, "23.72.0.0");		// default US ip
 			//post.setHeader(F.X_FORWARDED_FOR, "0.0.0.0");		// default GB ip
-			if (!StringHelper.isEmpty(NextGenApplication.getClientCountryCode())){
-				post.setHeader(F.CLIENT_COUNTRY, NextGenApplication.getClientCountryCode());
+			/*if (!StringHelper.isEmpty(NextGenExperience.getClientCountryCode())){
+				post.setHeader(F.CLIENT_COUNTRY, NextGenExperience.getClientCountryCode());
 			}
 
-			post.setHeader(F.CLIENT_LANGUAGE, NextGenApplication.getLocale().getLanguage());
+			post.setHeader(F.CLIENT_LANGUAGE, NextGenExperience.getLocale().getLanguage());*/
 			
 			post.setEntity(entityJson);
 			
@@ -300,7 +300,7 @@ public class HttpHelper {
 			NextGenLogger.d(F.TAG_API, "HttpHelper.postToUrl response body:" + responseBuilder.toString().trim());
 			
 			if (response.getStatusLine().getStatusCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
-				//NextGenApplication.logout(true);
+				//NextGenExperience.logout(true);
 	//			throw new HttpUnauthorizedException(responseBuilder.toString().trim());
 			}
 			return responseBuilder.toString().trim();
@@ -339,7 +339,7 @@ public class HttpHelper {
 			/*if (shouldAuth)
 				get.setHeader(F.AUTHORIZATION, getAuthHeader());*/
 					get.setHeader(HTTP.CONTENT_TYPE, "application/json");
-			get.setHeader(HTTP.USER_AGENT, NextGenApplication.getUserAgent());
+			get.setHeader(HTTP.USER_AGENT, NextGenExperience.getUserAgent());
 			get.setHeader(F.ACCEPT, ACCEPT_HEADER_VALUE);
 
 			if (headerValues != null && headerValues.size() > 0){
@@ -363,7 +363,7 @@ public class HttpHelper {
 			//NextGenLogger.d(F.TAG_API, "HttpHelper.getFromUrl response body:" + responseBuilder.toString().trim());
 			
 			if (response.getStatusLine().getStatusCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
-				//NextGenApplication.logout(true);
+				//NextGenExperience.logout(true);
 	//			throw new HttpUnauthorizedException(responseBuilder.toString().trim());
 			}
 			return responseBuilder.toString().trim();
@@ -411,7 +411,7 @@ public class HttpHelper {
 			NextGenLogger.d(F.TAG_API, "HttpHelper.deleteFromUrl response code:" + response.getStatusLine().getStatusCode());
 			
 			if (response.getStatusLine().getStatusCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
-				//NextGenApplication.logout(true);
+				//NextGenExperience.logout(true);
 				//throw new HttpUnauthorizedException(responseBuilder.toString().trim());
 				
 			}
@@ -442,7 +442,7 @@ public class HttpHelper {
 			if (shouldAuth)
 				put.setHeader(F.AUTHORIZATION, getAuthHeader());
 			put.setHeader(HTTP.CONTENT_TYPE, "application/json");
-			put.setHeader(HTTP.USER_AGENT, NextGenApplication.getUserAgent());
+			put.setHeader(HTTP.USER_AGENT, NextGenExperience.getUserAgent());
 			put.setHeader(F.ACCEPT, ACCEPT_HEADER_VALUE);
 			//put.setHeader(FlixsterApplication.PREFS_FLIX_USER_COUNTRY, FlixsterApplication.getUserCountry());
 			//put.setHeader("X-Forwarded-For", "62.143.129.19");
@@ -463,7 +463,7 @@ public class HttpHelper {
 			NextGenLogger.d(F.TAG_API, "HttpHelper.putToUrl response body:" + responseBuilder.toString().trim());
 			
 			if (response.getStatusLine().getStatusCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
-				//NextGenApplication.logout(true);
+				//NextGenExperience.logout(true);
 	//			throw new HttpUnauthorizedException(responseBuilder.toString().trim());
 			}
 			return responseBuilder.toString().trim();
@@ -479,7 +479,7 @@ public class HttpHelper {
 	}
 	
 	private static String getAuthHeader() {
-		return "";//NextGenApplication.getAuthToken() + ":" + NextGenApplication.getDeviceID();
+		return "";//NextGenExperience.getAuthToken() + ":" + NextGenExperience.getDeviceID();
 	}
 	
 	public static long getRemoteFileSize(URL url) throws IOException {
@@ -544,6 +544,6 @@ public class HttpHelper {
 	    return url.startsWith(SECURE_BASE_URL) || url.startsWith(getSecureBaseUrl());
 	}
     private static String getSecureBaseUrl() {
-        return "";//https://" + sAdminBaseUrlArray[NextGenApplication.getAdminApiSource()] + "/android/api/v1/";
+        return "";//https://" + sAdminBaseUrlArray[NextGenExperience.getAdminApiSource()] + "/android/api/v1/";
     }
 }

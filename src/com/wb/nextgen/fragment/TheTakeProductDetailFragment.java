@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-import com.wb.nextgen.NextGenApplication;
+import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.TheTakeData.TheTakeProduct;
 import com.wb.nextgen.data.TheTakeData.TheTakeProductDetail;
@@ -69,11 +69,11 @@ public class TheTakeProductDetailFragment extends AbstractNextGenFragment implem
             DialogUtils.showLeavingAppDialog(getActivity(), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    NextGenApplication.launchChromeWithUrl(product.getProductDetail().purchaseLink);
+                    NextGenExperience.launchChromeWithUrl(product.getProductDetail().purchaseLink);
                 }
             });
         }else if (v.getId() == R.id.send_link_button){
-            NextGenApplication.launchChromeWithUrl(product.getProductDetail().shareUrl);
+            NextGenExperience.launchChromeWithUrl(product.getProductDetail().shareUrl);
         }
     }
 
