@@ -58,28 +58,31 @@ public class ManifestXMLParser {
     public NextGenManifestData startParsing(String manifestUrl, String appDataUrl){
         NextGenManifestData manifest = null;
         HttpURLConnection conn = null;
+        ManifestAppDataSetType appData = null;
         try{
 
             // App Data Parsing
-            URL appDataURL = new URL(appDataUrl);
-            conn = (HttpURLConnection)appDataURL.openConnection();
-            conn.setReadTimeout(10000);
-            conn.setConnectTimeout(20000);
-            conn.setRequestMethod("GET");
-            conn.setDoInput(true);
-            conn.connect();
-            InputStream appDataIS = conn.getInputStream();
+            if (appDataUrl != null) {
+                URL appDataURL = new URL(appDataUrl);
+                conn = (HttpURLConnection) appDataURL.openConnection();
+                conn.setReadTimeout(10000);
+                conn.setConnectTimeout(20000);
+                conn.setRequestMethod("GET");
+                conn.setDoInput(true);
+                conn.connect();
+                InputStream appDataIS = conn.getInputStream();
 
-            XmlPullParser appDataParser = Xml.newPullParser();
-            appDataParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-            //AssetManager am2 = NextGenExperience.getContext().getAssets();
-            appDataParser.setInput(appDataIS, null);
-            //appDataParser.setInput(am2.open(appDataUrl), null);
-            appDataParser.nextTag();
+                XmlPullParser appDataParser = Xml.newPullParser();
+                appDataParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+                //AssetManager am2 = NextGenExperience.getContext().getAssets();
+                appDataParser.setInput(appDataIS, null);
+                //appDataParser.setInput(am2.open(appDataUrl), null);
+                appDataParser.nextTag();
 
-            ManifestAppDataSetType appData = parseAppData(appDataParser);
-            conn.disconnect();
-            conn = null;
+                appData = parseAppData(appDataParser);
+                conn.disconnect();
+                conn = null;
+            }
             //************ End of AppData Parsing
 
             // Manifest parsing

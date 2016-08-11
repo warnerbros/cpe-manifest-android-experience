@@ -1,5 +1,6 @@
 package com.wb.nextgen.activity;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
@@ -13,6 +14,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.data.MovieMetaData.ExperienceData;
@@ -53,6 +57,11 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
     private List<MovieMetaData.LocationItem> rootSceneLocations;
 
     private Fragment currentFragment;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     //private int currentSelectedIndex = 0;
 
@@ -65,23 +74,23 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
         rootSceneLocations = ecGroupData.getSceneLocations();
 
         nextGenFragmentTransactionEngine = new NextGenFragmentTransactionEngine(this);
-        if (mapViewFragment == null){
+        if (mapViewFragment == null) {
             mapViewFragment = new ECSceneLocationMapFragment();
             mapViewFragment.setDefaultSceneLocations(rootSceneLocations);
             mapViewFragment.setOnSceneLocationSelectedListener(this);
         }
 
         sliderTitleText = (RecyclerView) findViewById(R.id.scene_location_bottom_text_slider);
-        if (sliderTitleText != null){
+        if (sliderTitleText != null) {
             sliderTitleText.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
             sliderTextAdapter = new SliderTextAdapter();
             sliderTextAdapter.setSceneLocation(null);
             sliderTitleText.setAdapter(sliderTextAdapter);
         }
-        contentFrame = (RelativeLayout)findViewById(R.id.scene_location_content_frame);
-        locationECRecyclerView = (RecyclerView)findViewById(R.id.scene_location_recycler_view);
+        contentFrame = (RelativeLayout) findViewById(R.id.scene_location_content_frame);
+        locationECRecyclerView = (RecyclerView) findViewById(R.id.scene_location_recycler_view);
 
-        if (locationECRecyclerView != null){
+        if (locationECRecyclerView != null) {
             locationECLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
             locationECRecyclerView.setLayoutManager(locationECLayoutManager);
             locationECsAdapter = new LocationECsAdapter();
@@ -92,16 +101,19 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
         nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.map_frame, mapViewFragment);
 
 
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
-    protected View getFullScreenDisappearView(){
+    protected View getFullScreenDisappearView() {
         return sliderFrame;
     }
 
-    private void transitToFragment(Fragment fragment){
-        if (fragment != currentFragment){
+    private void transitToFragment(Fragment fragment) {
+        if (fragment != currentFragment) {
 
-            if (currentFragment!= null && currentFragment != mapViewFragment){
+            if (currentFragment != null && currentFragment != mapViewFragment) {
                 onBackPressed();
             }
             nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), contentFrame.getId(), fragment);
@@ -110,29 +122,29 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
         }
     }
 
-    public void onLeftListItemSelected(ExperienceData ecContentData){
+    public void onLeftListItemSelected(ExperienceData ecContentData) {
 
     }
 
-    public int getContentViewId(){
+    public int getContentViewId() {
         return R.layout.ec_scene_location_view;
     }
 
 
-    public int getListItemViewLayoutId(){
+    public int getListItemViewLayoutId() {
         return 0;
     }
 
 
-    public void onFullScreenChange(boolean bFullscreen){
-        if (currentFragment instanceof ECVideoViewFragment){
-            ((ECVideoViewFragment)currentFragment).onFullScreenChange(bFullscreen);
-        } else if (currentFragment instanceof ECGalleryViewFragment){
-            ((ECGalleryViewFragment)currentFragment).onFullScreenChange(bFullscreen);
+    public void onFullScreenChange(boolean bFullscreen) {
+        if (currentFragment instanceof ECVideoViewFragment) {
+            ((ECVideoViewFragment) currentFragment).onFullScreenChange(bFullscreen);
+        } else if (currentFragment instanceof ECGalleryViewFragment) {
+            ((ECGalleryViewFragment) currentFragment).onFullScreenChange(bFullscreen);
         }
     }
 
-    public void onSceneLocationIndexSelected(int selectedIndex){
+    public void onSceneLocationIndexSelected(int selectedIndex) {
         if (locationECsAdapter != null) {
             locationECsAdapter.setSceneLocation(rootSceneLocations.get(selectedIndex));
             locationECsAdapter.notifyDataSetChanged();
@@ -140,7 +152,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
         }
     }
 
-    public void onSceneLocationSelected(MovieMetaData.LocationItem location){
+    public void onSceneLocationSelected(MovieMetaData.LocationItem location) {
         if (locationECsAdapter != null) {
             locationECsAdapter.setSceneLocation(location);
             locationECsAdapter.notifyDataSetChanged();
@@ -149,7 +161,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
     }
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         sliderTextAdapter = null;
         locationECsAdapter = null;
         if (sliderTitleText != null)
@@ -163,10 +175,10 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         super.onBackPressed();
 
-        switch (getSupportFragmentManager().getBackStackEntryCount()){
+        switch (getSupportFragmentManager().getBackStackEntryCount()) {
             case 0:                     // after map fragment being popped from fragment stack
                 finish();
                 break;
@@ -180,15 +192,55 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
     }
 
     @Override
-    public void onRequestToggleFullscreen(){
+    public void onRequestToggleFullscreen() {
 
         super.onRequestToggleFullscreen();
         if (currentFragment != null && currentFragment instanceof ECGalleryViewFragment)
-            ((ECGalleryViewFragment)currentFragment).onFullScreenChange(isContentFullScreen);
+            ((ECGalleryViewFragment) currentFragment).onFullScreenChange(isContentFullScreen);
 
     }
 
-    public class SliderTextViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "ECSceneLocation Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://com.wb.nextgen.activity/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "ECSceneLocation Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://com.wb.nextgen.activity/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
+    }
+
+    public class SliderTextViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         CardView textCV;
         TextView locationTxt;
         TextView arrowTxt;
@@ -198,15 +250,15 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
 
         SliderTextViewHolder(View itemView, String text, int index) {
             super(itemView);
-            textCV = (CardView)itemView.findViewById(R.id.text_cv);
-            arrowTxt = (TextView)itemView.findViewById(R.id.slider_arrow);
-            locationTxt = (TextView)itemView.findViewById(R.id.slider_text);
+            textCV = (CardView) itemView.findViewById(R.id.text_cv);
+            arrowTxt = (TextView) itemView.findViewById(R.id.slider_arrow);
+            locationTxt = (TextView) itemView.findViewById(R.id.slider_text);
             this.currentText = text;
             itemIndex = index;
             itemView.setOnClickListener(this);
         }
 
-        public void setStringItem(String text, int position){
+        public void setStringItem(String text, int position) {
             currentText = text;
             itemIndex = position;
             locationTxt.setText(text);
@@ -214,7 +266,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
             arrowTxt.setVisibility(View.GONE);
         }
 
-        public void setSceneLocation(MovieMetaData.LocationItem sceneLocation, int position, boolean isLast){
+        public void setSceneLocation(MovieMetaData.LocationItem sceneLocation, int position, boolean isLast) {
             this.sceneLocation = sceneLocation;
             itemIndex = position;
             arrowTxt.setVisibility(View.VISIBLE);
@@ -224,11 +276,11 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
 
         @Override
         public void onClick(View v) {
-            if (sceneLocation != null){
+            if (sceneLocation != null) {
                 mapViewFragment.setLocationItem(sceneLocation.getTitle(), sceneLocation);
                 locationECsAdapter.setSceneLocation(sceneLocation);
                 locationECsAdapter.notifyDataSetChanged();
-            }else{
+            } else {
 
                 mapViewFragment.setLocationItem(ecGroupData.title, null);
                 locationECsAdapter.setSceneLocation(null);
@@ -238,7 +290,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
         }
     }
 
-    public class SliderTextAdapter extends RecyclerView.Adapter<SliderTextViewHolder>{
+    public class SliderTextAdapter extends RecyclerView.Adapter<SliderTextViewHolder> {
 
 
         int lastloadingIndex = -1;
@@ -247,18 +299,18 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
         MovieMetaData.LocationItem sceneLocation;
         List<MovieMetaData.LocationItem> sceneLocations = new ArrayList<MovieMetaData.LocationItem>();
 
-        public void setSceneLocation(MovieMetaData.LocationItem sceneLocation){
+        public void setSceneLocation(MovieMetaData.LocationItem sceneLocation) {
             this.sceneLocation = sceneLocation;
             sceneLocations = new ArrayList<MovieMetaData.LocationItem>();
             MovieMetaData.LocationItem thisSL = sceneLocation;
-            if (thisSL != null){
+            if (thisSL != null) {
                 sceneLocations.add(0, thisSL);
             }
 
 
         }
 
-        public void reset(){
+        public void reset() {
             lastloadingIndex = -1;
         }
 
@@ -269,7 +321,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
             return pvh;
         }
 
-        public void onBindViewHolder(SliderTextViewHolder holder, int position){
+        public void onBindViewHolder(SliderTextViewHolder holder, int position) {
             if (position == 0)
                 holder.setStringItem(ecGroupData.title, position);
             else
@@ -282,13 +334,13 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
             super.onAttachedToRecyclerView(recyclerView);
         }
 
-        public int getItemCount(){
+        public int getItemCount() {
             return sceneLocations.size() + 1;
         }
 
     }
 
-    public class LocationECViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class LocationECViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         CardView cv;
         TextView locationsCountText;
         TextView locationName;
@@ -299,38 +351,38 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
 
         LocationECViewHolder(View itemView, Object item, int index) {
             super(itemView);
-            cv = (CardView)itemView.findViewById(R.id.cv);
-            locationName = (TextView)itemView.findViewById(R.id.location_name);
-            locationsCountText = (TextView)itemView.findViewById(R.id.location_count_text);
-            locationPhoto = (ImageView)itemView.findViewById(R.id.location_photo);
-            locationPlayIcon = (ImageView)itemView.findViewById(R.id.location_play_image);
+            cv = (CardView) itemView.findViewById(R.id.cv);
+            locationName = (TextView) itemView.findViewById(R.id.location_name);
+            locationsCountText = (TextView) itemView.findViewById(R.id.location_count_text);
+            locationPhoto = (ImageView) itemView.findViewById(R.id.location_photo);
+            locationPlayIcon = (ImageView) itemView.findViewById(R.id.location_play_image);
             this.currentItem = item;
             itemIndex = index;
             itemView.setOnClickListener(this);
         }
 
-        public void setItem(Object item, int position){
+        public void setItem(Object item, int position) {
             currentItem = item;
             itemIndex = position;
             if (item instanceof MovieMetaData.LocationItem) {
-                MovieMetaData.LocationItem locationItem = ((MovieMetaData.LocationItem)item);
+                MovieMetaData.LocationItem locationItem = ((MovieMetaData.LocationItem) item);
                 locationPlayIcon.setVisibility(View.INVISIBLE);
                 if (locationItem == null) { // TODO: CHECK
-                    locationItem = ((MovieMetaData.LocationItem)item);
+                    locationItem = ((MovieMetaData.LocationItem) item);
 
                 }
                 if (locationItem != null && !StringHelper.isEmpty(locationItem.getLocationThumbnailUrl())) {
                     Glide.with(ECSceneLocationActivity.this).load(locationItem.getLocationThumbnailUrl()).into(locationPhoto);
-                    locationName.setText(((MovieMetaData.LocationItem)item).getTitle());
+                    locationName.setText(((MovieMetaData.LocationItem) item).getTitle());
                     int locationCount = 0;//((MovieMetaData.LocationItem)item).childrenSceneLocations.size();
-                    if (locationCount == 0){
+                    if (locationCount == 0) {
                         locationsCountText.setText("");
-                    }else {
+                    } else {
                         locationsCountText.setText(String.format(getResources().getString(R.string.locations_count_text), locationCount));
                     }
                     NextGenLogger.d(F.TAG, "Position: " + itemIndex + " loaded: " + locationItem.getLocationThumbnailUrl());
                 }
-            } else if (item instanceof PresentationDataItem){
+            } else if (item instanceof PresentationDataItem) {
                 if (item instanceof MovieMetaData.AudioVisualItem)
                     locationPlayIcon.setVisibility(View.VISIBLE);
                 else
@@ -343,17 +395,17 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
 
         @Override
         public void onClick(View v) {
-            if (currentItem != null){
-                if (currentItem instanceof MovieMetaData.LocationItem){
-                    mapViewFragment.setSelectionFromSlider((MovieMetaData.LocationItem)currentItem);
-                    locationECsAdapter.setSceneLocation((MovieMetaData.LocationItem)currentItem);
+            if (currentItem != null) {
+                if (currentItem instanceof MovieMetaData.LocationItem) {
+                    mapViewFragment.setSelectionFromSlider((MovieMetaData.LocationItem) currentItem);
+                    locationECsAdapter.setSceneLocation((MovieMetaData.LocationItem) currentItem);
                     locationECsAdapter.notifyDataSetChanged();
                     locationECRecyclerView.smoothScrollToPosition(0);
-                }else if (currentItem instanceof MovieMetaData.AudioVisualItem){
+                } else if (currentItem instanceof MovieMetaData.AudioVisualItem) {
                     ECVideoViewFragment videoViewFragment;
-                    if (currentFragment instanceof ECVideoViewFragment){
+                    if (currentFragment instanceof ECVideoViewFragment) {
                         videoViewFragment = (ECVideoViewFragment) currentFragment;
-                    } else{
+                    } else {
                         videoViewFragment = new ECVideoViewFragment();
                         videoViewFragment.setShouldAutoPlay(true);
                         videoViewFragment.setShouldHideMetaData(true);
@@ -362,28 +414,28 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
 
                     }
 
-                    videoViewFragment.setAudioVisualItem((MovieMetaData.AudioVisualItem)currentItem);
+                    videoViewFragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) currentItem);
 
                     transitToFragment(videoViewFragment);
 
-                }else if (currentItem instanceof MovieMetaData.ECGalleryItem){
+                } else if (currentItem instanceof MovieMetaData.ECGalleryItem) {
                     ECGalleryViewFragment galleryViewFragment;
-                    if (currentFragment instanceof ECGalleryViewFragment){
+                    if (currentFragment instanceof ECGalleryViewFragment) {
                         galleryViewFragment = (ECGalleryViewFragment) currentFragment;
-                    } else{
+                    } else {
                         galleryViewFragment = new ECGalleryViewFragment();
                         galleryViewFragment.setShouldHideMetaData(true);
                         galleryViewFragment.setShouldShowCloseBtn(true);
                         galleryViewFragment.setAspectRatioFramePriority(FixedAspectRatioFrameLayout.Priority.HEIGHT_PRIORITY);
                     }
-                    galleryViewFragment.setCurrentGallery((MovieMetaData.ECGalleryItem)currentItem);
+                    galleryViewFragment.setCurrentGallery((MovieMetaData.ECGalleryItem) currentItem);
                     transitToFragment(galleryViewFragment);
                 }
             }
         }
     }
 
-    public class LocationECsAdapter extends RecyclerView.Adapter<LocationECViewHolder>{
+    public class LocationECsAdapter extends RecyclerView.Adapter<LocationECViewHolder> {
 
 
         int lastloadingIndex = -1;
@@ -391,7 +443,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
 
         MovieMetaData.LocationItem sceneLocation;
 
-        public void setSceneLocation(MovieMetaData.LocationItem sceneLocation){
+        public void setSceneLocation(MovieMetaData.LocationItem sceneLocation) {
             this.sceneLocation = sceneLocation;
 
             if (sliderTextAdapter != null) {
@@ -400,7 +452,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
             }
         }
 
-        public void reset(){
+        public void reset() {
             lastloadingIndex = -1;
         }
 
@@ -411,15 +463,16 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
             return pvh;
         }
 
-        public void onBindViewHolder(LocationECViewHolder holder, int position){
+        public void onBindViewHolder(LocationECViewHolder holder, int position) {
 
-            if (sceneLocation != null){
+            if (sceneLocation != null) {
                 /*if (sceneLocation.childrenSceneLocations.size() > 0){
                     holder.setItem(sceneLocation.childrenSceneLocations.get(position), position);
-                }else*/ if (sceneLocation.getPresentationDataItems().size() > 0){
+                }else*/
+                if (sceneLocation.getPresentationDataItems().size() > 0) {
                     holder.setItem(sceneLocation.getPresentationDataItems().get(position), position);
                 }
-            }else if (rootSceneLocations != null) {
+            } else if (rootSceneLocations != null) {
                 holder.setItem(rootSceneLocations.get(position), position);
             }
 
@@ -430,16 +483,16 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
             super.onAttachedToRecyclerView(recyclerView);
         }
 
-        public int getItemCount(){
-            if (sceneLocation != null){
-                if (sceneLocation.getPresentationDataItems().size() > 0){
+        public int getItemCount() {
+            if (sceneLocation != null) {
+                if (sceneLocation.getPresentationDataItems().size() > 0) {
                     return sceneLocation.getPresentationDataItems().size();
                 } else
                     return 0;
 
-            }else if (rootSceneLocations != null) {
+            } else if (rootSceneLocations != null) {
                 return rootSceneLocations.size();
-            }else
+            } else
                 return 0;
         }
 

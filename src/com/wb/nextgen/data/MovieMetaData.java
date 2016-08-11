@@ -205,7 +205,7 @@ public class MovieMetaData {
             }
         }
 
-        if (appDataManifest.getManifestAppData() != null && appDataManifest.getManifestAppData().size() > 0){
+        if (appDataManifest != null && appDataManifest.getManifestAppData() != null && appDataManifest.getManifestAppData().size() > 0){
             for (AppDataType appData : appDataManifest.getManifestAppData()){
                 appDataIdTpAppDataMap.put(appData.getAppID(), appData);
 

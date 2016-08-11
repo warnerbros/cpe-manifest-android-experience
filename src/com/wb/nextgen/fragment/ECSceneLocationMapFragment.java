@@ -83,9 +83,9 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
         mapButton = (Button) view.findViewById(R.id.map_button);
         satelliteButton = (Button) view.findViewById(R.id.satellite_button);
         if (satelliteButton != null && mapButton != null) {
-            satelliteButton.setOnClickListener(this);
             mapButton.setOnClickListener(this);
-            onClick(satelliteButton);
+            satelliteButton.setOnClickListener(this);
+            onClick(mapButton);
         }
 
     }
@@ -133,12 +133,14 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
                     @Override
                     public void onMapReady(final GoogleMap googleMap) {
 
-                        if (v.equals(mapButton) && googleMap.getMapType() != GoogleMap.MAP_TYPE_NORMAL) {
-                            googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                        if (v.equals(mapButton)) {
+                            if (googleMap.getMapType() != GoogleMap.MAP_TYPE_NORMAL)
+                                googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                             mapButton.setSelected(true);
                             satelliteButton.setSelected(false);
-                        } else if (v.equals(satelliteButton) && googleMap.getMapType() != GoogleMap.MAP_TYPE_SATELLITE) {
-                            googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                        } else if (v.equals(satelliteButton) ) {
+                            if (googleMap.getMapType() != GoogleMap.MAP_TYPE_SATELLITE)
+                                googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
                             mapButton.setSelected(false);
                             satelliteButton.setSelected(true);
 

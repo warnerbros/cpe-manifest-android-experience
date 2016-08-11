@@ -125,7 +125,7 @@ public class TheTakeCategoryGridFragment extends AbstractNextGenFragment{
             if (product != null){
                 if (productThumbnail != null){
                     productThumbnail.setKeyCropXY(product.keyCropProductX, product.keyCropProductY);
-                    Glide.with(getActivity()).load(product.getThumbnailUrl()).into(productThumbnail);
+                    Glide.with(getActivity()).load(product.getThumbnailUrl()).asBitmap().fitCenter().into(productThumbnail);
                     //PicassoTrustAll.loadImageIntoView(getActivity(), product.getThumbnailUrl(), productThumbnail);
                 }
                 if (brandName != null)

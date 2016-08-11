@@ -20,7 +20,7 @@
 
     </LinearLayout>
 	<LinearLayout
-	    android:background="@color/flixster_blue_button_color"
+	    android:background="@color/nextgen_blue_button_color"
 	    android:layout_width="fill_parent"
     	android:layout_height="2dp"
     	android:layout_marginLeft="@dimen/spacing_normal"

@@ -50,38 +50,17 @@
     <color name="login_phone_bg">#e1e2e9</color>
     <color name="header_flix_bg_start">#2973b5</color>
     <color name="header_flix_bg_end">#1d5281</color>
-    
-    <color name="flixster_grey">#eaedee</color>
-    <color name="flixster_text_grey">#919191</color>
-    <color name="flixster_footer">#dce3e9</color>
-    <color name="flixster_blue">#8cbada</color>
-    <color name="flixster_text_blue">#2aa3e1</color>
-    <color name="flixster_grey_alpha">#f0eaedee</color>
-    
-    <color name="flixster_button_top">#4da1ce</color>
-    <color name="flixster_button_bottom">#1a5c94</color>
-    <color name="flixster_textbox_deselected_stroke">#b8bcc2</color>
-    <color name="flixster_textbox_selected_stroke">#00b9e6</color>
-    <color name="flixster_tab_divider_color">#3f6a8e</color>
-    <color name="flixster_header_bg_color">#2e72b0</color>
-    
-    <color name="flixster_tab_focused_color">#073251</color>
-    <color name="flixster_tab_normal_color">#083f6e</color> 
-    <color name="flixster_tab_selected_color">#00b9e6</color>
-    
-    <color name="flixster_tab_text_focused_color">#d5d5d5</color>
-    <color name="flixster_tab_text_normal_color">#d5d5d5</color>
-    <color name="flixster_tab_text_selected_color">#ffffff</color>
-    
-    <color name="flixster_fb_connect_color_light">#647caa</color>
-    <color name="flixster_fb_connect_color">#3b589e</color>
-    <color name="flixster_login_button_color">#8d9199</color>
-    <color name="flixster_login_highlight_button_color">#a4a7ad</color>
-    <color name="flixster_lightblue_button_color">#25a2d9</color>
-    <color name="flixster_blue_button_color">#2c76b6</color>
-    <color name="flixster_signup_button_color">#78c26b</color>
-    <color name="flixster_login_page_button_text_color">#72747f</color>
-    
+
+
+    <color name="nextgen_tab_normal_color">#083f6e</color>
+    <color name="nextgen_tab_selected_color">#00b9e6</color>
+    <color name="nextgen_light_blue">#8cbada</color>
+    <color name="nextgen_blue">#189aca</color>
+    <color name="nextgen_blue_button_color">#2c76b6</color>
+    <color name="nextgen_lightblue_button_color">#25a2d9</color>
+    <color name="nextgen_tab_text_normal_color">#d5d5d5</color>
+    <color name="nextgen_tab_text_selected_color">#ffffff</color>
+
     <color name="google_signin_red">#dd4b39</color>
     <color name="google_signin_red_pressed">#be3e2e</color>
     
@@ -103,8 +82,7 @@
     
     <color name="stackbar_accent">#33b5e5</color>
     <color name="subheader_text">#33b5e5</color>
-    
-    <color name="flixster_video_blue">#189aca</color>
+
     <color name="light_yellow">#feeba1</color>
     <color name="expire_text_color">#fc6620</color>
     

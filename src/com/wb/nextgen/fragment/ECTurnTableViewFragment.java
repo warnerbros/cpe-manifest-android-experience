@@ -1,5 +1,6 @@
 package com.wb.nextgen.fragment;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -116,14 +117,20 @@ public class ECTurnTableViewFragment extends AbstractECGalleryViewFragment{
 
 
     public void setCurrentGallery(MovieMetaData.ECGalleryItem gallery){
-        boolean bNeedReloadBitmaps = gallery == null || currentGallery == null || !gallery.equals(currentGallery) || turntableBitmaps == null;
+        boolean bNeedReloadBitmaps = gallery == null || currentGallery == null || !gallery.equals(currentGallery) || turntableBitmaps == null || turntableBitmaps.size() == 0;
 
         super.setCurrentGallery(gallery);
+        if (getActivity() == null)
+            return;
         if (bNeedReloadBitmaps){
             if (turnTableSeekBar != null)
                 turnTableSeekBar.setMax(0);
             if (turnTableImageView != null)
                 turnTableImageView.setImageBitmap(null);
+
+            if (turntableBitmaps != null){
+                turntableBitmaps.clear();
+            }
 
             turntableBitmaps = null;
             if (loadingProgressBar != null)
@@ -164,7 +171,28 @@ public class ECTurnTableViewFragment extends AbstractECGalleryViewFragment{
             @Override
             public List<Bitmap> call() throws Exception {
 
+                if (getActivity() == null)
+                    return null;
+
                 double fractionNumber = currentGallery.galleryImages.size() > 50 ? (double)currentGallery.galleryImages.size() / 50.0 : currentGallery.galleryImages.size();
+
+                ActivityManager actManager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+                ActivityManager.MemoryInfo memInfo = new ActivityManager.MemoryInfo();
+                actManager.getMemoryInfo(memInfo);
+                long availMemory = memInfo.availMem / 2 ;
+
+                long perPageSize = availMemory / 1024 / 50 ;
+                long perUnitSize = perPageSize / (16 * 9);
+
+
+                int targetWidth = (int)perUnitSize * 16;
+
+                if (targetWidth > RESTRICTED_IMAGE_WIDTH)
+                    targetWidth = RESTRICTED_IMAGE_WIDTH;
+
+                int targetHeight = targetWidth * 9 / 16;
+
+                NextGenLogger.d("TurnTable", "Image width " + targetWidth + " Image Height " + targetHeight);
 
                 List<Bitmap> result = new ArrayList<Bitmap>();
 
@@ -174,7 +202,7 @@ public class ECTurnTableViewFragment extends AbstractECGalleryViewFragment{
                     Bitmap theBitmap = Glide.
                             with(NextGenExperience.getApplicationContext()).
                             load(item.fullImage.url).asBitmap().
-                            into(RESTRICTED_IMAGE_WIDTH, RESTRICTED_IMAGE_HEIGHT). // Width and height
+                            into(targetWidth, targetHeight). // Width and height
                             get();
                     result.add(theBitmap);
                     final int progress = i*2;

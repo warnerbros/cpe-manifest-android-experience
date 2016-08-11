@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
             android:background="@drawable/map_tab_bg"
-            android:textColor="@color/tab_textcolor"
+            android:textColor="@color/nextgen_tab_textcolor"
             android:text="@string/map_string"
             android:layout_weight="1"/>
         <Button
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
             android:background="@drawable/satellit_tab_bg"
-            android:textColor="@color/tab_textcolor"
+            android:textColor="@color/nextgen_tab_textcolor"
             android:text="@string/satellite_string"
             android:layout_weight="1"/>
 

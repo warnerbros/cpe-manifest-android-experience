@@ -243,7 +243,7 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
         public void setFilmInfo(Filmography filmInfo, int position){
             this.filmInfo = filmInfo;
             if (filmInfo.isFilmPosterRequest()) {
-                Glide.with(getActivity()).load(filmInfo.getFilmPosterImageUrl()).into(personPhoto);
+                Glide.with(getActivity()).load(filmInfo.getFilmPosterImageUrl()).asBitmap().fitCenter().into(personPhoto);
                 //NextGenLogger.d(F.TAG, "Position: " + position  +" loaded: " + filmInfo.getFilmPosterImageUrl());
             }
         }

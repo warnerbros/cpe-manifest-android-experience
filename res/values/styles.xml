@@ -151,7 +151,7 @@
     <style name="tab_text" parent="@style/TextNormal">
         <item name="android:textSize">10sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/tab_textcolor</item>
+        <item name="android:textColor">@color/nextgen_tab_textcolor</item>
     </style>
 
     <style name="movie_poster_item_text" parent="@style/TextNormal">
@@ -243,8 +243,8 @@
     </style>
 
     <style name="MainMenuStyle">
-        <item name="android:background">@color/flixster_tab_normal_color</item>
-        <item name="android:textColor">@color/flixster_tab_text_normal_color</item>
+        <item name="android:background">@color/nextgen_tab_normal_color</item>
+        <item name="android:textColor">@color/nextgen_tab_text_normal_color</item>
         <item name="android:textSize">@dimen/textSmall</item>
     </style>
     
@@ -284,7 +284,7 @@
 	<style name="SlidingTabStrip" parent="@style/navbar_text">
         <item name="android:background">@color/bg_inactive</item>
         <item name="pstsDividerColor">#909090</item>
-        <item name="pstsIndicatorColor">@color/flixster_video_blue</item>
+        <item name="pstsIndicatorColor">@color/nextgen_blue</item>
         <item name="pstsIndicatorHeight">8dp</item>
         <item name="pstsTextAllCaps">false</item>
         <item name="pstsUnderlineColor">#2a97cc</item>

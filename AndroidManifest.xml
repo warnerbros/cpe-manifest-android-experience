@@ -23,7 +23,7 @@
 		android:smallScreens="true"
 		android:xlargeScreens="true" />
 
-	<!-- Permissions -->
+	<!-- Permissions
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -48,31 +48,14 @@
 	<uses-permission android:name="com.wb.nextgen.permission.MAPS_RECEIVE"/>
 	<uses-feature
 		android:glEsVersion="0x00020000"
-		android:required="true"/>
+		android:required="true"/>-->
 
 
-	<!-- Widevine DRM -->
-    <uses-feature
-        android:name="com.google.widevine.software.drm"
-        android:required="false" />
-    
-	<!-- GTV Market inclusion -->
-	<uses-feature
-		android:name="android.hardware.touchscreen"
-		android:required="false" />
 
-	<!-- GTV unsupported feature -->
-	<uses-feature
-		android:name="android.hardware.location.gps"
-		android:required="false" />
-
-	<!-- Tablets unsupported feature -->
-	<uses-feature
-		android:name="android.hardware.telephony"
-		android:required="false" />
 
 	<!-- Flixster -->
 	<application>
+
 	<!--android:name="com.wb.nextgen.NextGenExperience"
     android:icon="@drawable/appicon_152"
     android:allowClearUserData="true"
@@ -178,11 +161,12 @@
         android:theme="@style/ExtraActionBar" >
     </activity>-->
 
-		
 
-				
-
-						
+		<!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+         App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+		<meta-data
+			android:name="com.google.android.gms.version"
+			android:value="@integer/google_play_services_version" />
 	</application>
 
 </manifest>
