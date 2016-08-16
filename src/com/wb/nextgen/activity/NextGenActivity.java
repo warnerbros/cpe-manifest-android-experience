@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.NextGenStyle;
+import com.wb.nextgen.util.utils.StringHelper;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -66,8 +67,13 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
             Glide.with(this).load(NextGenExperience.getMovieMetaData().getStyle().getButtonImageURL(NextGenStyle.NextGenAppearanceType.OutOfMovie)).into(extraButton);
             extraButton.setOnClickListener(this);
         }
-        videoLoopPoint = (int)(NextGenExperience.getMovieMetaData().getStyle().getBackgroundVideoLoopTime() * 1000);
-        buttonAnimationStartTime = (int)(NextGenExperience.getMovieMetaData().getStyle().getBackgroundVideoFadeTime() * 1000);
+        if (!StringHelper.isEmpty(NextGenExperience.getMovieMetaData().getStyle().getBackgroundVideoURL())) {
+            videoLoopPoint = (int) (NextGenExperience.getMovieMetaData().getStyle().getBackgroundVideoLoopTime() * 1000);
+            buttonAnimationStartTime = (int) (NextGenExperience.getMovieMetaData().getStyle().getBackgroundVideoFadeTime() * 1000);
+        } else{
+            playMovieButton.setVisibility(View.VISIBLE);
+            extraButton.setVisibility(View.VISIBLE);
+        }
     }
 
 
@@ -75,7 +81,11 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
     @Override
     public void onStart(){
         super.onStart();
-        if (startupVideoView != null ){
+        if (StringHelper.isEmpty(NextGenExperience.getMovieMetaData().getStyle().getBackgroundVideoURL())) {
+            if (startupVideoView != null ){
+                startupVideoView.setVisibility(View.GONE);
+            }
+        } else if (startupVideoView != null ){
             if (!isStartUp){
                 startupVideoView.seekTo(videoLoopPoint);
                 startupVideoView.start();

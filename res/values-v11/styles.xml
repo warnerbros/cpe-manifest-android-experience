@@ -15,7 +15,7 @@
 	</style>
 
 	<style name="ExtraActionBar" parent="@style/Theme.AppCompat.Light.DarkActionBar">
-		<item name="android:tabWidgetStyle">@style/CustomTabStyle</item>
+		<item name="android:tabWidgetStyle">@style/NextGenTabStyle</item>
 		<item name="windowActionBarOverlay">true</item>
 		<item name="android:windowBackground">@android:color/transparent</item>
 		<item name="android:textAppearance">@style/TextNormalBold</item>
@@ -23,7 +23,7 @@
 	</style>
 
 	<style name="PlayerActionBar" parent="@style/Theme.AppCompat.Light.DarkActionBar">
-		<item name="android:tabWidgetStyle">@style/CustomTabStyle</item>
+		<item name="android:tabWidgetStyle">@style/NextGenTabStyle</item>
 		<item name="android:windowBackground">@android:color/transparent</item>
 		<item name="android:textAppearance">@style/TextNormalBold</item>
 		<item name="android:logo">@android:color/transparent</item>

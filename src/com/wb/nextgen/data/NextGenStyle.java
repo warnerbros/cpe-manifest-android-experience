@@ -153,8 +153,11 @@ public class NextGenStyle {
         }
 
         // FIXME: This appears to be the way Comcast defines background images
-        if (type == NextGenAppearanceType.Main) {
-            return "";//NGDMManifest.sharedInstance.outOfMovieExperience?.metadata?.imageURL
+        switch (type) {
+            case InMovie:
+                return "http://wb-extras.warnerbros.com/extrasplus/prod/Manifest/BatmanvSuperman/artwork/buttons/BVS_BTN_PLAYMOVIE.png";
+            case OutOfMovie:
+                return "http://wb-extras.warnerbros.com/extrasplus/prod/Manifest/BatmanvSuperman/artwork/buttons/BVS_BTN_EXTRAS.png";
         }
 
         return null;

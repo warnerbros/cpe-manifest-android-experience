@@ -5,6 +5,7 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
     <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
+        android:id="@+id/video_view_frame"
         nextgen:aspectRatioWidth="16"
         nextgen:aspectRatioHeight="9"
         android:layout_width="fill_parent"
@@ -12,13 +13,13 @@
         nextgen:whenOrientation="PORTRAIT"
         android:background="@color/black">
         <RelativeLayout
-            android:id="@+id/video_view_container"
+            android:id="@+id/interstitial_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <com.wb.nextgen.videoview.ObservableVideoView
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:id="@+id/surface_view"
+                android:id="@+id/interstitial_video_view"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_centerInParent="true" />

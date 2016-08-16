@@ -9,13 +9,13 @@
         android:id="@+id/ec_list_fixed_frame"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        nextgen:aspectRatioHeight="3"
-        nextgen:aspectRatioWidth="4"
+        nextgen:aspectRatioHeight="9"
+        nextgen:aspectRatioWidth="16"
         nextgen:priority="WIDTH_PRIORITY">
         <com.wb.nextgen.widget.SelectedOverlayImageView
             android:id="@+id/ec_list_image"
             android:layout_width="fill_parent"
-            android:layout_height="130dp"
+            android:layout_height="fill_parent"
             android:layout_centerHorizontal="true"
             nextgen:inActiveOverlayColor="@color/inactive_mask_color"
             android:scaleType="fitCenter"
@@ -33,13 +33,5 @@
         android:ellipsize="end"
         android:text="goes here"/>
 
-    <!--<ImageView
-        android:id="@+id/ec_inactive_mask"
-        android:background="@color/transparent_gray"
-        android:layout_centerInParent="true"
-        android:layout_width="fill_parent"
-        android:layout_height="150dp"
-        android:scaleType="center"
-        android:src="@android:drawable/ic_media_play"/>-->
 
 </RelativeLayout>

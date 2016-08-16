@@ -15,6 +15,7 @@ import android.view.WindowManager;
 
 import com.wb.nextgen.activity.NextGenActivity;
 import com.wb.nextgen.data.MovieMetaData;
+import com.wb.nextgen.fragment.AbstractNextGenMainMovieFragment;
 import com.wb.nextgen.network.BaselineApiDAO;
 import com.wb.nextgen.network.NextGenCacheManager;
 import com.wb.nextgen.network.TheTakeApiDAO;
@@ -68,6 +69,8 @@ public class NextGenExperience {
     private static String sClientLanguageCode = null;
     private static PackageInfo sNextGenInfo = null;
     private static boolean isDiagnosticMode = true;
+    private static Class<? extends AbstractNextGenMainMovieFragment> mainMovieFragmentClass;
+    private static Object nextgenPlaybackObject;
 
     private static String sUserAgent;
 
@@ -95,14 +98,14 @@ public class NextGenExperience {
 
 
 
-    public static void startNextGenExperience(Context appContext, final Activity launcherActivity, final ManifestItem item){
+    public static void startNextGenExperience(Context appContext, final Activity launcherActivity, final ManifestItem item, Object playbackObject, Class<? extends AbstractNextGenMainMovieFragment> fragmentClass){
         final ProgressDialog mDialog = ProgressDialog.show(launcherActivity, "", "Loading", false, false);
 
+        nextgenPlaybackObject = playbackObject;
 
         applicationContext = appContext;
         sCacheManager = new NextGenCacheManager(applicationContext);
-        /*sSettings = applicationContext.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        sDay = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);*/
+        mainMovieFragmentClass = fragmentClass;
 
         sUserAgent = "Android/" + sVersionName + " (Linux; U; Android " + Build.VERSION.RELEASE + "; " + Build.MODEL + ")";
 
@@ -173,6 +176,13 @@ public class NextGenExperience {
         return movieMetaData;
     }
 
+    public static Class<? extends AbstractNextGenMainMovieFragment> getMainMovieFragmentClass(){
+        return mainMovieFragmentClass;
+    }
+
+    public static Object getNextgenPlaybackObject(){
+        return nextgenPlaybackObject;
+    }
 
     public static float getScreenDensity(Context ctx) {
         if (deviceScreenDensity == 0.0f && ctx != null)

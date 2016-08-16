@@ -45,7 +45,7 @@ public class NextGenMediaController extends CustomMediaController {
     NextGenPlayerInterface player;
 
     public NextGenMediaController(Context context, NextGenPlayerInterface nextGenPlayer, boolean useFullScreenToggle) {
-        super(new ContextThemeWrapper(context, R.style.MediaControllerStyle), false, useFullScreenToggle);
+        super(new ContextThemeWrapper(context, R.style.NextGenMediaControllerStyle), false, useFullScreenToggle);
         player = nextGenPlayer;
 
         init(context);

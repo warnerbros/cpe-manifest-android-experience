@@ -203,7 +203,7 @@ public class BaselineApiDAO {
                 thisData.biography = getActorBio(params);
 
                 List<Filmography> films = getActorFilmnography(params);
-                List<FilmPoster> posters = getFilmographyPostesSync(films);
+                //List<FilmPoster> posters = getFilmographyPostesSync(films);
 
 
 
@@ -243,7 +243,18 @@ public class BaselineApiDAO {
                     Filmography film = gson.fromJson(object.toString(), Filmography.class);
                     if (film == null)
                         continue;
-                    if (!projectIdHash.containsKey(film.projectId)) {
+
+                    FilmPoster poster = null;
+                    if (!film.isFilmPosterRequest()) {
+                        try {
+                            poster = getFilmDetail(film.projectId);
+                            if (poster != null)
+                                film.setFilmPoster(poster);
+                        } catch (Exception ex) {
+                        }
+                    }
+
+                    if (!projectIdHash.containsKey(film.projectId) && poster != null) {
                         result.add(film);
                         projectIdHash.put(film.projectId, film.projectId);
                     }

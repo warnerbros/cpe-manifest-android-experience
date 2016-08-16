@@ -18,9 +18,11 @@ import com.bumptech.glide.Glide;
 import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.R;
 import com.wb.nextgen.data.NextGenStyle;
+import com.wb.nextgen.fragment.AbstractNextGenMainMovieFragment;
 import com.wb.nextgen.fragment.NextGenPlayerBottomFragment;
 import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgen.interfaces.NextGenPlaybackStatusListener;
+import com.wb.nextgen.util.concurrent.ResultListener;
 import com.wb.nextgen.util.utils.NextGenFragmentTransactionEngine;
 import com.wb.nextgen.videoview.IVideoViewActionListener;
 import com.wb.nextgen.videoview.ObservableVideoView;
@@ -39,7 +41,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     private final static String IS_PLAYER_PLAYING = "IS PLAYING";
     private final static String RESUME_PLAYBACK_TIME = "RESUME_PLAYBACK_TIME";
 
-    protected ObservableVideoView videoView;
+    protected ObservableVideoView interstitialVideoView;
     protected RelativeLayout containerView;
     protected View skipThisView;
     protected ProgressBar skipThisCounter;
@@ -62,6 +64,8 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     //IMEElementsGridFragment imeGridFragment;
     private long lastTimeCode = -1;
 
+    AbstractNextGenMainMovieFragment mainMovieFragment;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,63 +80,70 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
             //PicassoTrustAll.loadImageIntoView(this, NextGenExperience.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie), backgroundImageView);
         }
 
-        containerView = (RelativeLayout)findViewById(R.id.video_view_container);
+        containerView = (RelativeLayout)findViewById(R.id.interstitial_container);
 
         skipThisView = findViewById(R.id.skip_this_layout);
         skipThisCounter = (ProgressBar) findViewById(R.id.skip_this_countdown);
 
-        videoView = (ObservableVideoView) findViewById(R.id.surface_view);
+        interstitialVideoView = (ObservableVideoView) findViewById(R.id.interstitial_video_view);
         //videoView.setMediaController(mediaController);
-        mediaController = new MainFeatureMediaController(this, videoView);
-        mediaController.setVisibilityChangeListener(new CustomMediaController.MediaControllerVisibilityChangeListener(){
-            public void onVisibilityChange(boolean bShow){
-                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                    if (bShow)
-                        getSupportActionBar().show();
-                    else
-                        getSupportActionBar().hide();
-                }
-            }
-        });
 
-        videoView.setOnErrorListener(getOnErrorListener());
-        videoView.setOnPreparedListener(getOnPreparedListener());
-        videoView.setOnCompletionListener(getOnCompletionListener());
-        videoView.requestFocus();
-        videoView.setVideoViewListener(new IVideoViewActionListener() {
 
-            @Override
-            public void onTimeBarSeekChanged(int currentTime) {
-                updateImeFragment(NextGenPlaybackStatusListener.NextGenPlaybackStatus.SEEK, currentTime);
-            }
-
-            @Override
-            public void onResume() {
-                updateImeFragment(NextGenPlaybackStatusListener.NextGenPlaybackStatus.PAUSE, videoView.getCurrentPosition());
-            }
-
-            @Override
-            public void onPause() {
-                updateImeFragment(NextGenPlaybackStatusListener.NextGenPlaybackStatus.RESUME, videoView.getCurrentPosition());
-            }
-        });
+        interstitialVideoView.setOnErrorListener(getOnErrorListener());
+        interstitialVideoView.setOnPreparedListener(getOnPreparedListener());
+        interstitialVideoView.setOnCompletionListener(getOnCompletionListener());
+        interstitialVideoView.requestFocus();
 
         imeBottomFragment = new NextGenPlayerBottomFragment();
 
 
         //transitLeftFragment(new NextGenIMEActorFragment());
         transitMainFragment(imeBottomFragment);
+        try {
+            mainMovieFragment = NextGenExperience.getMainMovieFragmentClass().newInstance();
+            mediaController = new MainFeatureMediaController(this, mainMovieFragment);
+            mediaController.setVisibilityChangeListener(new CustomMediaController.MediaControllerVisibilityChangeListener(){
+                public void onVisibilityChange(boolean bShow){
+                    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                        if (bShow)
+                            getSupportActionBar().show();
+                        else
+                            getSupportActionBar().hide();
+                    }
+                }
+            });
+            mainMovieFragment.setCustomMediaController(mediaController);
+            mainMovieFragment.setPlaybackObject(NextGenExperience.getNextgenPlaybackObject());
+            mainMovieFragment.setNextGenVideoViewListener(new IVideoViewActionListener() {
 
-        //imeBottomFragment.setFragmentTransactionInterface(this);
+                @Override
+                public void onTimeBarSeekChanged(int currentTime) {
+                    updateImeFragment(NextGenPlaybackStatusListener.NextGenPlaybackStatus.SEEK, currentTime);
+                }
 
+                @Override
+                public void onResume() {
+                    updateImeFragment(NextGenPlaybackStatusListener.NextGenPlaybackStatus.PAUSE, mainMovieFragment.getCurrentPosition());
+                }
 
-                //imeText = (TextView)findViewById(R.id.next_gen_ime_text);
-        /*NextGenIMEActorFragment imeActorFragment = (NextGenIMEActorFragment)getSupportFragmentManager().findFragmentById(R.id.ime_actor_fragment);
+                @Override
+                public void onPause() {
+                    updateImeFragment(NextGenPlaybackStatusListener.NextGenPlaybackStatus.RESUME, mainMovieFragment.getCurrentPosition());
+                }
+            });
+        }catch (InstantiationException ex){
 
-        imeGridFragment = (IMEElementsGridFragment)getSupportFragmentManager().findFragmentById(R.id.ime_grid_fragment);
-        imeGridFragment.setFragmentTransactionInterface(this);*/
+        }catch (IllegalAccessException iex){
 
+        }
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        hideShowNextGenView();
+    }
+
 
     @Override
     public void onBackPressed(){
@@ -142,15 +153,10 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
             finish();
         else if (getSupportFragmentManager().getBackStackEntryCount() == 1 && isPausedByIME){
             isPausedByIME = false;
-            videoView.start();
+            interstitialVideoView.start();
         }
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        hideShowNextGenView();
-    }
 
     @Override
     protected boolean shouldUseActionBarSpacer(){
@@ -263,9 +269,9 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         @Override
         public void onPrepared(MediaPlayer mp) {
             if (shouldStartAfterResume)
-                videoView.start();
+                interstitialVideoView.start();
             else
-                videoView.pause();
+                interstitialVideoView.pause();
 
             if (currentUri.equals(INTERSTITIAL_VIDEO_URI)) {
                 skipThisView.setVisibility(View.VISIBLE);
@@ -285,21 +291,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
             mediaController.hide();
             mediaController.show();
 
-            if (imeUpdateTimer == null){
-                imeUpdateTimer = new Timer();
-            }
-            if (imeUpdateTask == null){
-                imeUpdateTask = new TimerTask() {
-                    @Override
-                    public void run() {
-                        updateImeFragment(NextGenPlaybackStatusListener.NextGenPlaybackStatus.TIMESTAMP_UPDATE, videoView.getCurrentPosition());
-                    }
-                };
-                imeUpdateTimer.scheduleAtFixedRate(imeUpdateTask, 0, 1000);
-            }
 
-
-            updateImeFragment(NextGenPlaybackStatusListener.NextGenPlaybackStatus.PREPARED, -1L);
 
         }
     }
@@ -324,7 +316,29 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     private void playMainMovie(){
         if (skipThisView != null)
             skipThisView.setVisibility(View.GONE);
-        videoView.setCustomMediaController(mediaController);
+        currentUri = Uri.parse("");
+        interstitialVideoView.stopPlayback();
+        interstitialVideoView.setVisibility(View.GONE);
+
+
+        nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.video_view_frame, mainMovieFragment);
+        if (imeUpdateTimer == null){
+            imeUpdateTimer = new Timer();
+        }
+        if (imeUpdateTask == null){
+            imeUpdateTask = new TimerTask() {
+                @Override
+                public void run() {
+                    updateImeFragment(NextGenPlaybackStatusListener.NextGenPlaybackStatus.TIMESTAMP_UPDATE, mainMovieFragment.getCurrentPosition());
+                }
+            };
+            imeUpdateTimer.scheduleAtFixedRate(imeUpdateTask, 0, 1000);
+        }
+
+
+        updateImeFragment(NextGenPlaybackStatusListener.NextGenPlaybackStatus.PREPARED, -1L);
+        //mainMovieFragment
+        /*videoView.setCustomMediaController(mediaController);
         if (INTERSTITIAL_VIDEO_URI.equals(currentUri)) {
             videoView.setOnTouchListener(null);
             Intent intent = getIntent();
@@ -334,11 +348,8 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
             if (mediaController == null) {
                 mediaController = new MainFeatureMediaController(this, videoView);
 
-                //mediaController.setMediaPlayer(videoView);
-                //mediaController.setAnchorView(containerView);
-                //videoView.setCustomMediaController(mediaController);
             }
-        }
+        }*/
     }
 
     protected MediaPlayer.OnCompletionListener getOnCompletionListener(){
@@ -350,33 +361,51 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
     @Override
     public void onPause() {
-        shouldStartAfterResume = videoView.isPlaying();
-        resumePlayTime = videoView.getCurrentPosition();
+        shouldStartAfterResume = mainMovieFragment.isPlaying();
+        resumePlayTime = mainMovieFragment.getCurrentPosition();
         super.onPause();
     }
 
     public void onResume() {
         super.onResume();
-        videoView.setVisibility(View.VISIBLE);
-        if (currentUri == null) {
-            currentUri = INTERSTITIAL_VIDEO_URI;
-            videoView.setCustomMediaController(null);
-            videoView.setVideoURI(currentUri);
-            videoView.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
 
-                    if (INTERSTITIAL_VIDEO_URI.equals(currentUri)) {
-                        playMainMovie();
-                    }
-                    return true;
+        if (currentUri == null) {
+            mainMovieFragment. streamStartPreparations(new ResultListener<Boolean>() {
+                @Override
+                public void onResult(Boolean result) {
+                    currentUri = INTERSTITIAL_VIDEO_URI;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            interstitialVideoView.setVisibility(View.VISIBLE);
+                            interstitialVideoView.setVideoURI(currentUri);
+                            interstitialVideoView.setOnTouchListener(new View.OnTouchListener() {
+                                @Override
+                                public boolean onTouch(View v, MotionEvent event) {
+
+                                    if (INTERSTITIAL_VIDEO_URI.equals(currentUri)) {
+                                        playMainMovie();
+                                    }
+                                    return true;
+                                }
+                            });
+                        }
+                    });
+
+                }
+
+                @Override
+                public <E extends Exception> void onException(E e) {
+
                 }
             });
+
         } else{
             skipThisView.setVisibility(View.GONE);
-            videoView.seekTo(resumePlayTime);
+            currentUri = Uri.parse("");
+            /*(videoView.seekTo(resumePlayTime);
             if (!shouldStartAfterResume)
-                videoView.pause();
+                videoView.pause();*/
         }
         hideShowNextGenView();
     }
@@ -419,7 +448,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
     boolean isPausedByIME = false;
     public void pausMovieForImeECPiece(){
-        videoView.pause();
+        mainMovieFragment.pause();
         isPausedByIME = true;
     }
 

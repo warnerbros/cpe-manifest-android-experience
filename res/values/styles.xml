@@ -1,24 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="CustomTabStyle">
+    <style name="NextGenTabStyle">
         <item name="android:textSize">10dp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="CustomTabBG" parent="@android:style/Widget.TabWidget"></style>
 
-
-
-    <style name="SearchListItem"  parent="@android:style/Widget.ListView">
-        <item name="android:background">@color/whitegray</item>
-        <item name="android:divider">@color/divider2</item>
-        <item name="android:dividerHeight">2px</item>
-    </style>
-
-    
     <style name="NextGenActionBar" parent="@style/Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:tabWidgetStyle">@style/CustomTabStyle</item>
+        <item name="android:tabWidgetStyle">@style/NextGenTabStyle</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:textAppearance">@style/TextNormalBold</item>
         <item name="windowNoTitle">true</item>
@@ -28,8 +18,6 @@
         
         <!-- flxabv44 generated action bar -->
         <item name="android:actionBarItemBackground">@android:color/transparent</item>
-        <!--  <item name="android:actionBarTabStyle">@style/flxabv44_ActionBarTabStyle</item>
-         <item name="android:actionBarStyle">@style/flxabv44_solid_ActionBar</item>-->
          <item name="android:selectableItemBackground">@android:color/transparent</item>
 
      </style>
@@ -43,38 +31,6 @@
          <item name="windowNoTitle">true</item>
          <item name="android:windowBackground">@color/transparent_black</item>
          <!--<item name="windowBackground">@android:color/transparent</item>  -->
-    </style>
-
-
-    <!-- End of Flixster Action Bar v4.4 -->
-    
-    <style name="FullscreenNoTitle" parent="@android:style/Theme.Holo.Light">
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowBackground">@null</item>
-    </style>
-    
-    <style name="Theme.Flx.BaseSelector" parent="@android:style/Theme.Holo.Light" />
-    <style name="Theme.Flx.NoTitle" parent="@style/Theme.Flx.BaseSelector">
-        <item name="windowNoTitle">true</item>
-    </style>
-    
-	<!-- Theme for fullscreen video activities -->
-    <style name="Theme.Flx.FullscreenVideo" parent="@style/Theme.Flx.NoTitle">
-        <item name="android:windowFullscreen">true</item>
-    </style>
-    
-    <!-- Widget -->
-
-    <style name="widgetMovieTitle" parent="@android:style/TextAppearance">
-        <item name="android:textSize">13sp</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="widgetMovieSubtitle" parent="@android:style/TextAppearance">
-        <item name="android:textSize">12sp</item>
-        <item name="android:textColor">@color/white</item>
     </style>
 
     <!-- New Unified Text styles -->
@@ -147,39 +103,6 @@
     </style>
 
     <!-- Custom font styles -->
-
-    <style name="tab_text" parent="@style/TextNormal">
-        <item name="android:textSize">10sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/nextgen_tab_textcolor</item>
-    </style>
-
-    <style name="movie_poster_item_text" parent="@style/TextNormal">
-        <item name="android:textSize">13sp</item>
-        <item name="android:textColor">@color/subtitle_grey</item>
-    </style>
-
-    <style name="movie_poster_unfulfillable_text" parent="@style/TextNormal">
-        <item name="android:textSize">8sp</item>
-        <item name="android:textColor">@color/subtitle_grey</item>
-    </style>
-
-    <style name="movie_poster_unavailable_text" parent="@style/TextNormal">
-        <item name="android:textSize">8sp</item>
-        <item name="android:textColor">@color/white</item>
-    </style>
-    
-    <style name="hyperlink" parent="@style/TextNormalBold">
-        <item name="android:textColor">@color/hyperlink</item>
-    </style>
-
-    <style name="small_hyperlink" parent="@style/TextSmall">
-        <item name="android:textColor">@color/hyperlink</item>
-    </style>
-    
-    <style name="subtitle" parent="@style/TextSmall">
-        <item name="android:textColor">@color/subtitle_grey</item>
-    </style>
 
     <style name="legend_text" parent="@style/TextNormal">
         <item name="android:textSize">11sp</item>
@@ -295,15 +218,9 @@
         <item name="android:textSize">15sp</item>
         <item name="android:textColor">@color/subheader_text</item>
     </style>
-    
-	<style name="Theme.AppCompat.Light.NoActionBar.FullScreen" parent="@style/Theme.AppCompat.Light">
-	    <item name="windowNoTitle">true</item>
-	    <item name="windowActionBar">false</item>
-	    <item name="android:windowFullscreen">true</item>
-	    <item name="android:windowContentOverlay">@null</item>
-	</style>
+
     <style name="ExtraActionBar" parent="@style/Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:tabWidgetStyle">@style/CustomTabStyle</item>
+        <item name="android:tabWidgetStyle">@style/NextGenTabStyle</item>
         <item name="windowActionBarOverlay">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:textAppearance">@style/TextNormalBold</item>
@@ -311,15 +228,15 @@
 
     </style>
 
-    <style name="PlayerActionBar" parent="@style/Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:tabWidgetStyle">@style/CustomTabStyle</item>
+    <style name="NextGenPlayerActionBar" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:tabWidgetStyle">@style/NextGenTabStyle</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:textAppearance">@style/TextNormalBold</item>
         <item name="logo">@android:color/transparent</item>
 
     </style>
 
-    <style name="MediaControllerStyle">
+    <style name="NextGenMediaControllerStyle">
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:progressBackgroundTint">@android:color/white</item>
         <item name="android:progressBackgroundTintMode">src_over</item>
