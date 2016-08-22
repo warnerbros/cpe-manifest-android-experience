@@ -595,20 +595,18 @@ public class MovieMetaData {
         @SerializedName("ROLE_GROUP")
         public String roleGroup;
 
-        private FilmPoster filmPoster;
-        public void setFilmPoster(FilmPoster poster){
-            filmPoster = poster;
-        }
+        @SerializedName("POSTERS")
+        public List<FilmPoster> filmPosters;
 
         public String getFilmPosterImageUrl(){
-            if (filmPoster !=  null)
-                return filmPoster.mediumUrl;
+            if (filmPosters !=  null && filmPosters.size() > 0)
+                return filmPosters.get(0).mediumUrl;
             else
                 return "";
         }
 
         public boolean isFilmPosterRequest(){
-            return filmPoster != null;
+            return filmPosters != null;
         }
 
         public String movieInfoUrl;
@@ -627,8 +625,11 @@ public class MovieMetaData {
         }
 
         public List<CastHeadShot> headShots;
+        @SerializedName("SHORT_BIO")
         public String biography;
+        @SerializedName("FILMOGRAPHY")
         public List<Filmography> filmogrphies;
+        @SerializedName("SOCIAL_ACCOUNTS")
         private List<CastSocialMedia> socialMedium;
 
         public String getThumbnailImageUrl(){

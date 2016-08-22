@@ -43,10 +43,13 @@ import java.util.concurrent.Callable;
 public class BaselineApiDAO {
 
     private static String baselineAPIKey;
+    private static String xAPIKey;
 
     private static String API_KEY_KEY = "baseline_api_key";
+    private static String X_API_KEY_KEY = "x-api-key";
 
     private static final String BASELINE_DOMAIN = "http://baselineapi.com/api";
+    private static final String X_API_DOMAIN = "https://vic57ayytg.execute-api.us-west-2.amazonaws.com/prod";
 
     private static class Endpoints {
         static final String GetCredits = "/ProjectAllCredits";
@@ -57,6 +60,13 @@ public class BaselineApiDAO {
         static final String GetFilmPoster = "/ProjectFilmPoster";
 
         static final String GetProfileImages = "/ParticipantProfileImages";
+    }
+
+    private static class XEndpoints {
+        static final String GetFilmCredits = "/film/credits";
+        static final String GetTalentDetail = "/talent";
+        static final String GetTalentImages = "/talent/images";
+
     }
 
     private static class Keys {
@@ -102,43 +112,12 @@ public class BaselineApiDAO {
 
                 JSONObject jsonObject = new JSONObject(sb.toString());
                 baselineAPIKey = jsonObject.getString(API_KEY_KEY);
+                xAPIKey = jsonObject.getString(X_API_KEY_KEY);
 
             } catch (Exception ex) {
                 NextGenLogger.e("ss", ex.getLocalizedMessage());
             }
         }
-    }
-
-    public static void getCastActorsPhotos(final List<String> castsIDs, ResultListener<HashMap<String, BaselineCastData>> l) {
-        Worker.execute(new Callable<HashMap<String, BaselineCastData>>() {
-            @Override
-            public HashMap<String, BaselineCastData> call() throws Exception {
-                HashMap<String, BaselineCastData> castsInfoMap = new HashMap<String, BaselineCastData>();
-                for (String castId : castsIDs) {
-                    BaselineCastData thisData = new BaselineCastData();
-
-                    List<NameValuePair> params = new ArrayList<NameValuePair>();
-                    params.add(new BasicNameValuePair("id", castId));
-                    params.add(new BasicNameValuePair("apikey", baselineAPIKey));
-
-                    //String bio = getActorBio(params);
-                    //List<Filmography> films = getActorFilmnography(params);
-                    List<CastHeadShot> headShots = getHeadShot(params);
-                    List<CastSocialMedia> socialMedias = getCastSocialMedia(params);
-                    thisData.setSocialMedium(socialMedias);
-
-                    // thisData.biography = bio;
-                    //thisData.filmogrphies = films;
-                    thisData.headShots = headShots;
-
-                    castsInfoMap.put(castId, thisData);
-
-                }
-
-
-                return castsInfoMap;
-            }
-        }, l);
     }
 
     public static void getCastActorsData(final List<String> castsIDs, ResultListener<HashMap<String, BaselineCastData>> l) {
@@ -148,23 +127,14 @@ public class BaselineApiDAO {
             public HashMap<String, BaselineCastData> call() throws Exception {
                 HashMap<String, BaselineCastData> castsInfoMap = new HashMap<String, BaselineCastData>();
                 for (String castId : castsIDs) {
-                    BaselineCastData thisData = new BaselineCastData();
+                    try {
 
-                    List<NameValuePair> params = new ArrayList<NameValuePair>();
-                    params.add(new BasicNameValuePair("id", castId));
-                    params.add(new BasicNameValuePair("apikey", baselineAPIKey));
+                        castsInfoMap.put(castId, getFilmographyAndBioOfPersonSync(castId));
 
-                    //String bio = getActorBio(params);
-                    //List<Filmography> films = getActorFilmnography(params);
-                    List<CastHeadShot> headShots = getHeadShot(params);
-                    List<CastSocialMedia> socialMedias = getCastSocialMedia(params);
-                    thisData.setSocialMedium(socialMedias);
 
-                   // thisData.biography = bio;
-                    //thisData.filmogrphies = films;
-                    thisData.headShots = headShots;
-
-                    castsInfoMap.put(castId, thisData);
+                    } catch (Exception ex){
+                        NextGenLogger.e(F.TAG_API, ex.getLocalizedMessage());
+                    }
 
                 }
 
@@ -175,162 +145,43 @@ public class BaselineApiDAO {
     }
 
 
-    private static List<CastSocialMedia> getCastSocialMedia(List<NameValuePair> params) throws JSONException, IOException {
-
-        String result = HttpHelper.getFromUrl(BASELINE_DOMAIN + Endpoints.GetSocialMedia, params);
-
-
-        Type listType = new TypeToken<ArrayList<CastSocialMedia>>() {
-        }.getType();
-
-        Gson gson = new GsonBuilder().create();
-
-        List<CastSocialMedia> socialMedium = gson.fromJson(result, listType);
-
-
-        return socialMedium;
-    }
-
     public static void getFilmographyAndBioOfPerson(final String castId, ResultListener<BaselineCastData> l) {
         Worker.execute(new Callable<BaselineCastData>() {
             @Override
             public BaselineCastData call() throws Exception {
-                List<NameValuePair> params = new ArrayList<NameValuePair>();
-                params.add(new BasicNameValuePair("id", castId));
-                params.add(new BasicNameValuePair("apikey", baselineAPIKey));
-                BaselineCastData thisData = new BaselineCastData();
-
-                thisData.biography = getActorBio(params);
-
-                List<Filmography> films = getActorFilmnography(params);
-                //List<FilmPoster> posters = getFilmographyPostesSync(films);
-
-
-
-                thisData.filmogrphies = films;
-                return thisData;
+                return getFilmographyAndBioOfPersonSync(castId);
             }
         }, l);
     }
 
-
-    private static String getActorBio(List<NameValuePair> params) throws JSONException, IOException {
-
-        String result = HttpHelper.getFromUrl(BASELINE_DOMAIN + Endpoints.GetBio, params);
-        JSONArray jsonArray = new JSONArray(result);
-        if (jsonArray != null) {
-            JSONObject object = (JSONObject) jsonArray.get(0);
-            return object.getString(Keys.ShortBio);
-        }
-
-
-        return null;
-    }
-
-    private static List<Filmography> getActorFilmnography(List<NameValuePair> params) throws JSONException, IOException {
-
-        List<Filmography> result = new ArrayList<Filmography>();
-
-        HashMap<String, String> projectIdHash = new HashMap<String, String>();
-        String response = HttpHelper.getFromUrl(BASELINE_DOMAIN + Endpoints.GetFilmography, params);
-
-        JSONArray jsonArray = new JSONArray(response);
-        if (jsonArray != null) {
-            for (int i = jsonArray.length() - 1; i >= 0 && result.size() <= 10; i--) {
-                try {
-                    JSONObject object = (JSONObject) jsonArray.get(i);
-                    Gson gson = new GsonBuilder().create();
-                    Filmography film = gson.fromJson(object.toString(), Filmography.class);
-                    if (film == null)
-                        continue;
-
-                    FilmPoster poster = null;
-                    if (!film.isFilmPosterRequest()) {
-                        try {
-                            poster = getFilmDetail(film.projectId);
-                            if (poster != null)
-                                film.setFilmPoster(poster);
-                        } catch (Exception ex) {
-                        }
-                    }
-
-                    if (!projectIdHash.containsKey(film.projectId) && poster != null) {
-                        result.add(film);
-                        projectIdHash.put(film.projectId, film.projectId);
-                    }
-                } catch (JsonSyntaxException jex){
-                    NextGenLogger.e(F.TAG_API, jex.getLocalizedMessage());
-                } catch (JSONException jex2){
-                    NextGenLogger.e(F.TAG_API, jex2.getLocalizedMessage());
-                }
-            }
-            //DemoJSONData data = gson.fromJson(object, MovieMetaData..class);
-        }
-
-
-        return result;
-    }
-
-
-    private static List<FilmPoster> getFilmographyPostesSync(final List<Filmography> films){
-        List<FilmPoster> resultList = new ArrayList<FilmPoster>();
-        for (Filmography film: films) {
-            FilmPoster poster = null;
-            if (!film.isFilmPosterRequest()) {
-                try {
-                    poster = getFilmDetail(film.projectId);
-                } catch (Exception ex) {
-                }
-                if (poster != null && !StringHelper.isEmpty(poster.imageId)) {
-                    film.setFilmPoster(poster);
-                } else {
-                    poster = FilmPoster.getDefaultEmptyPoster();
-                }
-            }
-            resultList.add(poster);
-        }
-        return resultList;
-    }
-
-    private static List<CastHeadShot> getHeadShot(List<NameValuePair> params) throws JSONException, IOException {
-
-        String result = HttpHelper.getFromUrl(BASELINE_DOMAIN + Endpoints.GetProfileImages, params);
-        //JSONObject json = new JSONObject(result);
-        JSONArray jsonArray = new JSONArray(result);
-        if (jsonArray != null) {
-
-            Type listType = new TypeToken<ArrayList<CastHeadShot>>() {
-            }.getType();
-
-            Gson gson = new GsonBuilder().create();
-
-            List<CastHeadShot> headShots = gson.fromJson(result, listType);
-
-            return headShots;
-
-        }
-
-        return null;
-    }
-
-    private static MovieMetaData.FilmPoster getFilmDetail(String projectId) throws JSONException, IOException {
+    private static BaselineCastData getFilmographyAndBioOfPersonSync(String castId) throws IOException{
+        BaselineCastData castData;
         List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("id", projectId));
-        params.add(new BasicNameValuePair("apikey", baselineAPIKey));
+        params.add(new BasicNameValuePair("id", castId));
 
-        String result = HttpHelper.getFromUrl(BASELINE_DOMAIN + Endpoints.GetFilmPoster, params);
-        JSONArray jsonArray = new JSONArray(result);
-        if (jsonArray != null && jsonArray.length() > 0) {
-            JSONObject object = (JSONObject) jsonArray.get(0);
-            try {
-                Gson gson = new GsonBuilder().create();
-                return gson.fromJson(object.toString(), MovieMetaData.FilmPoster.class);
-            }catch (Exception ex){
-                return null;
-            }
 
-        }
+        List<NameValuePair> headers = new ArrayList<NameValuePair>();
+        headers.add(new BasicNameValuePair(X_API_KEY_KEY, xAPIKey));
 
-        return null;
+        String userdataResult = HttpHelper.getFromUrl(X_API_DOMAIN + XEndpoints.GetTalentDetail, params, headers);
+        //JSONObject json = new JSONObject(result);
+
+        Gson gson = new GsonBuilder().create();
+        castData = gson.fromJson(userdataResult, BaselineCastData.class);
+
+        //castsInfoMap.put(castId, thisData);
+
+        String talentImageResult = HttpHelper.getFromUrl(X_API_DOMAIN + XEndpoints.GetTalentImages, params, headers);
+        Type listType = new TypeToken<ArrayList<CastHeadShot>>() {
+        }.getType();
+
+
+        List<CastHeadShot> headShots = gson.fromJson(talentImageResult, listType);
+
+        castData.headShots = headShots;
+
+        return castData;
     }
+
+
 }

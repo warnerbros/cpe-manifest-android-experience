@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import com.wb.nextgen.activity.NextGenActivity;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.fragment.AbstractNextGenMainMovieFragment;
+import com.wb.nextgen.interfaces.NextGenEventHandler;
 import com.wb.nextgen.network.BaselineApiDAO;
 import com.wb.nextgen.network.NextGenCacheManager;
 import com.wb.nextgen.network.TheTakeApiDAO;
@@ -71,6 +72,7 @@ public class NextGenExperience {
     private static boolean isDiagnosticMode = true;
     private static Class<? extends AbstractNextGenMainMovieFragment> mainMovieFragmentClass;
     private static Object nextgenPlaybackObject;
+    private static NextGenEventHandler nextGenEventHandler;
 
     private static String sUserAgent;
 
@@ -97,8 +99,9 @@ public class NextGenExperience {
     }
 
 
-
-    public static void startNextGenExperience(Context appContext, final Activity launcherActivity, final ManifestItem item, Object playbackObject, Class<? extends AbstractNextGenMainMovieFragment> fragmentClass){
+    public static void startNextGenExperience(Context appContext, final Activity launcherActivity, final ManifestItem item,
+                                              Object playbackObject, Class<? extends AbstractNextGenMainMovieFragment> fragmentClass,
+                                              NextGenEventHandler eventHandler){
         final ProgressDialog mDialog = ProgressDialog.show(launcherActivity, "", "Loading", false, false);
 
         nextgenPlaybackObject = playbackObject;
@@ -106,6 +109,7 @@ public class NextGenExperience {
         applicationContext = appContext;
         sCacheManager = new NextGenCacheManager(applicationContext);
         mainMovieFragmentClass = fragmentClass;
+        nextGenEventHandler = eventHandler;
 
         sUserAgent = "Android/" + sVersionName + " (Linux; U; Android " + Build.VERSION.RELEASE + "; " + Build.MODEL + ")";
 
@@ -182,6 +186,10 @@ public class NextGenExperience {
 
     public static Object getNextgenPlaybackObject(){
         return nextgenPlaybackObject;
+    }
+
+    public static NextGenEventHandler getNextGenEventHandler() {
+        return nextGenEventHandler;
     }
 
     public static float getScreenDensity(Context ctx) {

@@ -221,8 +221,7 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
 
         if (getActivity() != null) {
             filmographyAdaptor.setFilmographies(updateList);
-            filmographyAdaptor.notifyItemRangeChanged(0,10);
-
+            filmographyAdaptor.notifyDataSetChanged();
         }
 
 
@@ -250,6 +249,11 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
 
         @Override
         public void onClick(View v) {
+            if (NextGenExperience.getNextGenEventHandler() != null){
+                NextGenExperience.getNextGenEventHandler().handleMovieTitleSelection(getActivity(), filmInfo.title);
+            }
+            //NextGenExperience.getMainMovieFragmentClass()
+            /*
             final String url = filmInfo.movieInfoUrl;
             if (!StringHelper.isEmpty(url)){
                 return;
@@ -271,7 +275,7 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
                     dialog.dismiss();
                 }
             });
-            alertDialogBuilder.show();
+            alertDialogBuilder.show();*/
         }
     }
 
