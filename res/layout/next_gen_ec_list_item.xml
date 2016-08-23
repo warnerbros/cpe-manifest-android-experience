@@ -21,8 +21,7 @@
                 nextgen:inActiveOverlayDrawable="@drawable/play_button"
                 nextgen:inActiveOverlayColor="@color/inactive_mask_color"
                 android:scaleType="fitCenter"
-                android:duplicateParentState="true"
-                android:src="@drawable/ec_sample_thumbnail"/>
+                android:duplicateParentState="true"/>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">

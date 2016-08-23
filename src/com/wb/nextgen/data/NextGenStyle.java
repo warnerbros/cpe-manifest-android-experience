@@ -181,10 +181,18 @@ public class NextGenStyle {
                     return new NGScreenOffSetRatio(260.0 / 1024.0, 570.0 / 768.0);
             }
 
-        } else if (type == NextGenAppearanceType.InMovie) {
-            return new NGScreenOffSetRatio(0.5, 0.2);
-        }else if (type == NextGenAppearanceType.OutOfMovie) {
-            return new NGScreenOffSetRatio(0.5, 0.28);
+        } else {
+            switch (type) {
+                case InMovie:
+                    return new NGScreenOffSetRatio(260.0 / 1024.0, 515.0 / 768.0);
+                case OutOfMovie:
+                    return new NGScreenOffSetRatio(260.0 / 1024.0, 570.0 / 768.0);
+            }/*
+            if (type == NextGenAppearanceType.InMovie) {
+                return new NGScreenOffSetRatio(0.5, 0.2);
+            }else if (type == NextGenAppearanceType.OutOfMovie) {
+                return new NGScreenOffSetRatio(0.5, 0.28);
+            }*/
         }
 
         return null;
@@ -210,13 +218,28 @@ public class NextGenStyle {
             }
 
         } else if (type == NextGenAppearanceType.InMovie) {
-            return new NGScreenOffSetRatio(0.36, 0.08);
+            return new NGScreenOffSetRatio(274.0 / 1024.0, 58 / 768.0);
         }else if (type == NextGenAppearanceType.OutOfMovie) {
-            return new NGScreenOffSetRatio(0.2, 0.06);
+            return new NGScreenOffSetRatio(174.0 / 1024.0, 48 / 768.0);
         }
 
         return null;
 
     }
+
+    public String getStartupImageURL(){
+        if (movieId.equals(NGDMAppearanceTitle.ManOfSteel)) {
+            return "http://wb-extras.warnerbros.com/extrasplus/staging/Manifest/MOS/artwork/buttons/MOS_Extras_button.png";
+        }else if (movieId.equals(NGDMAppearanceTitle.BvS)){
+            return "http://wb-extras.warnerbros.com/extrasplus/prod/Manifest/BatmanvSuperman/artwork/buttons/BVS_BTN_EXTRAS.png";
+        }else if (movieId.equals(NGDMAppearanceTitle.Minions)){
+            return "http://www.moviesonline.ca/wp-content/uploads/2015/07/minions.jpeg";
+        }else if (movieId.equals(NGDMAppearanceTitle.SistersUnrated) || movieId.equals(NGDMAppearanceTitle.Sisters)){
+            return "http://static.srcdn.com/wp-content/uploads/sisters-movie-2015-reviews-fey-poehler.jpg";
+        }else
+            return null;
+    }
+
+
 
 }

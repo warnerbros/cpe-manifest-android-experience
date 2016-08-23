@@ -19,8 +19,7 @@
             android:layout_centerHorizontal="true"
             nextgen:inActiveOverlayColor="@color/inactive_mask_color"
             android:scaleType="fitCenter"
-            android:duplicateParentState="true"
-            android:src="@drawable/ec_sample_thumbnail"/>
+            android:duplicateParentState="true"/>
     </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
 
     <TextView

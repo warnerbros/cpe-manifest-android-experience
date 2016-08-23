@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
+import android.util.Size;
 import android.view.Display;
 import android.view.WindowManager;
 
@@ -60,6 +61,7 @@ public class NextGenExperience {
     private static float deviceScreenDensity = 0.0f;
     private static int deviceScreenWidth = -1;
     private static int deviceScreenHeight = -1;
+    private static Size deviceScreenSize = null;
     public static int sCachePolicy;
     public static NextGenCacheManager sCacheManager;
     private static String sVersionName = null;
@@ -200,24 +202,29 @@ public class NextGenExperience {
 
     public static int getScreenWidth(Context ctx){
         if (deviceScreenWidth == -1 && ctx != null){
-            WindowManager wm = (WindowManager) ctx.getSystemService(Context.WINDOW_SERVICE);
-            Display display = wm.getDefaultDisplay();
-            DisplayMetrics metrics = new DisplayMetrics();
-            display.getRealMetrics(metrics);
-            deviceScreenWidth = metrics.widthPixels;
+            getScreenSize(ctx);
         }
         return deviceScreenWidth;
     }
 
     public static int getScreenHeight(Context ctx){
         if (deviceScreenHeight == -1 && ctx != null){
+            getScreenSize(ctx);
+        }
+        return deviceScreenHeight;
+    }
+
+    public static Size getScreenSize(Context ctx){
+        if (deviceScreenSize == null && ctx != null){
             WindowManager wm = (WindowManager) ctx.getSystemService(Context.WINDOW_SERVICE);
             Display display = wm.getDefaultDisplay();
             DisplayMetrics metrics = new DisplayMetrics();
             display.getRealMetrics(metrics);
             deviceScreenHeight = metrics.heightPixels;
+            deviceScreenWidth = metrics.widthPixels;
+            deviceScreenSize = new Size(metrics.widthPixels, metrics.heightPixels);
         }
-        return deviceScreenHeight;
+        return deviceScreenSize;
     }
 
     public static int getCachePolicy() {
