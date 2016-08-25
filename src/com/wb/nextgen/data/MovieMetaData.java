@@ -844,7 +844,7 @@ public class MovieMetaData {
     }
 
     public static enum ECGroupType{
-        FEATURETTES, VISUAL_EFFECT, GALLERY, MIX, EXTERNAL_APP, LOCATIONS, INTERACTIVE, UNKNOWN
+        FEATURETTES, VISUAL_EFFECT, GALLERY, MIX, EXTERNAL_APP, LOCATIONS, INTERACTIVE, UNKNOWN, ACTORS
     }
 
     static public class PictureImageData{
@@ -1278,18 +1278,24 @@ public class MovieMetaData {
 
     static public class ExperienceData {
         final public String title;
-        private String posterImgUrl;
+        protected String posterImgUrl;
         //final public String ecVideoUrl;
-        private ECGroupType type = ECGroupType.UNKNOWN;
-        final private List<ExperienceData> childrenExperience = new ArrayList<ExperienceData>();
+        protected ECGroupType type = ECGroupType.UNKNOWN;
+        final protected List<ExperienceData> childrenExperience = new ArrayList<ExperienceData>();
         final public List<ECGalleryItem> galleryItems = new ArrayList<ECGalleryItem>();
         final public List<AudioVisualItem> audioVisualItems = new ArrayList<AudioVisualItem>();
-        final private List<LocationItem> locationItems = new ArrayList<LocationItem>();
+        final protected List<LocationItem> locationItems = new ArrayList<LocationItem>();
         final public List<InteractiveItem> interactiveItems = new ArrayList<InteractiveItem>();
         final public String experienceId;
-        final private HashMap<String, Integer> childIdToSequenceNumber = new HashMap<String, Integer>();
-        private ExternalApiData externalApp;
+        final protected HashMap<String, Integer> childIdToSequenceNumber = new HashMap<String, Integer>();
+        protected ExternalApiData externalApp;
         final public String timeSequenceId;
+
+        public ExperienceData(String title, String experienceId, String timeSequenceId){
+            this.title = title;
+            this.experienceId = experienceId;
+            this.timeSequenceId = timeSequenceId;
+        }
 
         public ExperienceData(ExperienceType experience, InventoryMetadataType metaData, List<AudioVisualItem> avItems,
                               List<ECGalleryItem> galleryItems, List<LocationItem> locationItems, List<InteractiveItem> interactiveItems){

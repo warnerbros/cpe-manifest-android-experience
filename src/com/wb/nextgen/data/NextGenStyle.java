@@ -93,7 +93,14 @@ public class NextGenStyle {
                     return null;
             }
         } else if (movieId.equals(NGDMAppearanceTitle.BvS)) {
-            return null;
+            switch (type) {
+                case InMovie:
+                    return "http://wb-extras.warnerbros.com/extrasplus/staging/Manifest/MOS/artwork/backgrounds/MOS_title_treatment.png";
+                case OutOfMovie:
+                    return "http://wb-extras.warnerbros.com/extrasplus/staging/Manifest/MOS/artwork/backgrounds/MOS_Extras_title.png";
+                default:
+                    return null;
+            }
 
         } else
             return null;
@@ -163,7 +170,7 @@ public class NextGenStyle {
         return null;
     }
 
-    public NGScreenOffSetRatio getButtonCenterOffset(NextGenAppearanceType type) {
+    public NGScreenOffSetRatio getButtonCenterOffset(NextGenAppearanceType type, int orientation) {
 
         if (movieId.equals(NGDMAppearanceTitle.ManOfSteel)) {
             switch (type) {
@@ -199,7 +206,7 @@ public class NextGenStyle {
 
     }
 
-    public NGScreenOffSetRatio getButtonSizeOffset(NextGenAppearanceType type) {
+    public NGScreenOffSetRatio getButtonSizeOffset(NextGenAppearanceType type, int orientation) {
 
         if (movieId.equals(NGDMAppearanceTitle.ManOfSteel)) {
             switch (type) {

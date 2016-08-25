@@ -27,7 +27,6 @@ public class NextGenExtraActivity extends AbstractNextGenActivity implements Nex
 
     protected LinearLayout leftPanelFrame;
     protected LinearLayout rightMainFrame;
-    protected LinearLayout fullFrame;
 
     private int startupStackCount = 2;
 
@@ -43,7 +42,10 @@ public class NextGenExtraActivity extends AbstractNextGenActivity implements Nex
         rightMainFrame = (LinearLayout)findViewById(R.id.next_gen_extra_right_view);
 
         nextGenFragmentTransactionEngine = new NextGenFragmentTransactionEngine(this);
+        initFragments();
+    }
 
+    protected void initFragments(){
         transitLeftFragment(new NextGenActorListFragment());
         transitRightFragment(new NextGenExtraMainTableFragment());
     }
@@ -69,7 +71,7 @@ public class NextGenExtraActivity extends AbstractNextGenActivity implements Nex
 
     @Override
     public void transitMainFragment(Fragment nextFragment){
-        nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.next_gen_extra_main_frame, nextFragment);
+        //nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.next_gen_extra_main_frame, nextFragment);
     }
 
     @Override

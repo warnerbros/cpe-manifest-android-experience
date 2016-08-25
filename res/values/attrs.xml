@@ -81,6 +81,7 @@
             <enum name="LANSCAPE" value="1" />
             <enum name="PORTRAIT" value="2" />
         </attr>
+        <attr name="allowLargerThanParent" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="DotIndicatorImageView">

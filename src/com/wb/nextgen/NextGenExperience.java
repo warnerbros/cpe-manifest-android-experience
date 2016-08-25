@@ -30,6 +30,7 @@ import com.wb.nextgen.util.utils.StringHelper;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Callable;
@@ -43,8 +44,8 @@ public class NextGenExperience {
     public static class ManifestItem{
         public final String imageUrl;
         public final String movieName;
-        public final String manifestFileUrl;
-        public final String appDataFileUrl;
+        private final String manifestFileUrl;
+        private final String appDataFileUrl;
         public final String contentId;
         ManifestItem(String movieName, String cid, String imageUrl, String manifestFileUrl, String appDataFileUrl){
             this.imageUrl = imageUrl;
@@ -52,6 +53,17 @@ public class NextGenExperience {
             this.manifestFileUrl = manifestFileUrl;
             this.movieName = movieName;
             this.appDataFileUrl = appDataFileUrl;
+        }
+
+        final static String REALEASE_HOST = "https://cpe-manifest.s3.amazonaws.com";
+        final static String DEBUG_HOST = "https://d3hu292hohbyvv.cloudfront.net";
+
+        public String getManifestFileUrl(){
+            return (isDebugBuild() ? DEBUG_HOST : REALEASE_HOST) + manifestFileUrl;
+        }
+
+        public String getAppDataFileUrl(){
+            return (isDebugBuild() ? DEBUG_HOST : REALEASE_HOST) + appDataFileUrl;
         }
     }
 
@@ -82,24 +94,23 @@ public class NextGenExperience {
         manifestItems = new ArrayList<ManifestItem>();
         manifestItems.add(new ManifestItem("Man of Steel v0.7", "urn:dece:cid:eidr-s:DAFF-8AB8-3AF0-FD3A-29EF-Q",
                 "https://d19p213wjrwt85.cloudfront.net/uvvu-images/EB180713D3536025E0405B0A07341ECE",
-                "https://d3hu292hohbyvv.cloudfront.net/xml/mos_hls_manifest_r60-v0.7.xml",
-                "https://d3hu292hohbyvv.cloudfront.net/xml/mos_appdata_locations_r60-v0.7.xml"));
+                "/xml/mos_hls_manifest_r60-v0.7.xml",
+                "/xml/mos_appdata_locations_r60-v0.7.xml"));
         manifestItems.add(new ManifestItem("Batman vs Superman w/360", "urn:dece:cid:eidr-s:B257-8696-871C-A12B-B8C1-S",
                 "https://d19p213wjrwt85.cloudfront.net/uvvu-images/2C89FE061219D322E05314345B0AFE72",
-                "https://d3hu292hohbyvv.cloudfront.net/xml/bvs_manifest_r60-v1.2-360.xml",
-                "https://d3hu292hohbyvv.cloudfront.net/xml/bvs_appdata_locations_r60-v1.2.xml"));
+                "/xml/bvs_manifest_r60-v1.4.xml",
+                "/xml/bvs_appdata_locations_r60-v1.4.xml"));
         manifestItems.add(new ManifestItem("Sister", "urn:dece:cid:eidr-s:D2E8-4520-9446-BFAD-B106-4",
                 "https://d19p213wjrwt85.cloudfront.net/uvvu-images/2C89FE061219D322E05314345B0AFE72",
-                "https://d3hu292hohbyvv.cloudfront.net/xml/sisters_extended_hls_manifest_v3-generated-spec1.5.xml",
+                "/xml/sisters_extended_hls_manifest_v3-generated-spec1.5.xml",
                 null));
         manifestItems.add(new ManifestItem("Minions", "urn:dece:cid:eidr-s:F1F8-3CDA-0844-0D78-E520-Q",
                 "https://d19p213wjrwt85.cloudfront.net/uvvu-images/2C89FE061219D322E05314345B0AFE72",
-                "https://d3hu292hohbyvv.cloudfront.net/xml/minions_hls_manifest_v6-R60-generated-spec1.5.xml",
+                "/xml/minions_hls_manifest_v6-R60-generated-spec1.5.xml",
                 null));
 
 
     }
-
 
     public static void startNextGenExperience(Context appContext, final Activity launcherActivity, final ManifestItem item,
                                               Object playbackObject, Class<? extends AbstractNextGenMainMovieFragment> fragmentClass,
@@ -115,7 +126,7 @@ public class NextGenExperience {
 
         sUserAgent = "Android/" + sVersionName + " (Linux; U; Android " + Build.VERSION.RELEASE + "; " + Build.MODEL + ")";
 
-        if (!StringHelper.isEmpty(item.manifestFileUrl)) {
+        if (!StringHelper.isEmpty(item.getManifestFileUrl())) {
             Worker.execute(new Callable<Boolean>() {
                 public Boolean call() throws Exception {
                     return startNextGenParsing(item);
@@ -154,7 +165,7 @@ public class NextGenExperience {
             NextGenLogger.d("TIME_THIS", "---------------Next Test--------------");
 
             long systime = SystemClock.currentThreadTimeMillis();
-            ManifestXMLParser.NextGenManifestData manifest = new ManifestXMLParser().startParsing(manifestItem.manifestFileUrl, manifestItem.appDataFileUrl);
+            ManifestXMLParser.NextGenManifestData manifest = new ManifestXMLParser().startParsing(manifestItem.getManifestFileUrl(), manifestItem.getAppDataFileUrl());
             long currentTime = SystemClock.currentThreadTimeMillis() - systime;
             NextGenLogger.d("TIME_THIS", "Time to finish parsing: " + currentTime);
             movieMetaData = MovieMetaData.process(manifest);
@@ -164,6 +175,18 @@ public class NextGenExperience {
             NextGenLogger.d("TIME_THIS", "Time to finish processing: " + currentTime);
 
             BaselineApiDAO.init();
+            BaselineApiDAO.getCastActorsData(movieMetaData.getActorsList(), new ResultListener<Boolean>() {
+                @Override
+                public void onResult(Boolean result) {
+                    movieMetaData.setHasCalledBaselineAPI(true);
+                }
+
+                @Override
+                public <E extends Exception> void onException(E e) {
+
+                }
+            });
+
             TheTakeApiDAO.init();
             return true;
         }catch (Exception ex){

@@ -5,45 +5,11 @@
     android:background="@android:color/transparent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.NextGenExtraActivity">
-    <RelativeLayout
+    android:id="@+id/next_gen_extra_right_view"
+    tools:context=".activity.phone.NextGenExtraActivity_Phone">
+
+    <fragment android:name="com.wb.nextgen.fragment.phone.NextGenExtraMainTableFragment_Phone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent">
-            <LinearLayout
-                android:id="@+id/next_gen_extra_left_view"
-                android:layout_weight="3"
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"
-                android:orientation="vertical">
+        android:layout_height="match_parent" />
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="7"
-                android:id="@+id/next_gen_extra_right_view"
-                android:layout_height="fill_parent"
-                android:orientation="vertical">
-
-            </LinearLayout>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:orientation="horizontal"
-            android:gravity="right">
-
-
-            <LinearLayout
-                android:layout_width="500dp"
-                android:id="@+id/next_gen_extra_main_frame"
-                android:layout_height="fill_parent"
-                android:orientation="vertical">
-            </LinearLayout>
-        </LinearLayout>
-    </RelativeLayout>
 </LinearLayout>

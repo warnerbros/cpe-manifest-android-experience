@@ -2,6 +2,8 @@ package com.wb.nextgen.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,7 +22,9 @@ import android.widget.VideoView;
 import com.bumptech.glide.Glide;
 import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.R;
+import com.wb.nextgen.activity.phone.NextGenExtraActivity_Phone;
 import com.wb.nextgen.data.NextGenStyle;
+import com.wb.nextgen.util.TabletUtils;
 import com.wb.nextgen.util.utils.StringHelper;
 
 import java.util.Timer;
@@ -106,24 +110,7 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
             startupVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(final MediaPlayer mp) {
-                    /**************
 
-
-
-
-
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                           adjustButtonSizesAndPosition();
-
-                        }
-                    });
-
-
-                    **************/
 
 
                     startupVideoView.start();
@@ -162,13 +149,11 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
                 public void onCompletion(MediaPlayer mp) {
                     startupVideoView.seekTo(videoLoopPoint);
                     startupVideoView.start();
-                    //startUpVideoViewFrame.setVisibility(View.GONE);
                 }
             });
             startupVideoView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //startUpVideoViewFrame.setVisibility(View.GONE);
                     startupVideoView.stopPlayback();
                 }
             });
@@ -177,11 +162,19 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
         }
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        adjustButtonSizesAndPosition();
+    }
+
     private void adjustButtonSizesAndPosition(){
+
+        int orientation = NextGenHideStatusBarActivity.getCurrentScreenOrientation();
+
 
         Size screenSize = NextGenExperience.getScreenSize(this);
         Size buttonFrameSize;
-        //Size videoSize = new Size(mp.getVideoWidth(), mp.getVideoHeight());
         double aspectRatio =  (double)screenSize.getHeight() / (double)screenSize.getWidth();
         if (aspectRatio < 0.75){    // use the height
             buttonFrameSize = new Size ( (int)((double)screenSize.getHeight() * 4.0 / 3.0), screenSize.getHeight());
@@ -193,12 +186,12 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
 
         NextGenStyle movieStyle = NextGenExperience.getMovieMetaData().getStyle();
-        final ButtonParams mainMoiveParams = computeButtonParams(movieStyle.getButtonCenterOffset(NextGenStyle.NextGenAppearanceType.InMovie),
-                movieStyle.getButtonSizeOffset(NextGenStyle.NextGenAppearanceType.InMovie),
+        final ButtonParams mainMoiveParams = computeButtonParams(movieStyle.getButtonCenterOffset(NextGenStyle.NextGenAppearanceType.InMovie, orientation),
+                movieStyle.getButtonSizeOffset(NextGenStyle.NextGenAppearanceType.InMovie, orientation),
                 buttonFrameSize);
 
-        final ButtonParams extraParams = computeButtonParams(movieStyle.getButtonCenterOffset(NextGenStyle.NextGenAppearanceType.OutOfMovie),
-                movieStyle.getButtonSizeOffset(NextGenStyle.NextGenAppearanceType.OutOfMovie),
+        final ButtonParams extraParams = computeButtonParams(movieStyle.getButtonCenterOffset(NextGenStyle.NextGenAppearanceType.OutOfMovie, orientation),
+                movieStyle.getButtonSizeOffset(NextGenStyle.NextGenAppearanceType.OutOfMovie, orientation),
                 buttonFrameSize);
         ViewGroup.LayoutParams mainMoiveBtnLayoutParams = playMovieButton.getLayoutParams();
         if (mainMoiveBtnLayoutParams instanceof  LinearLayout.LayoutParams) {
@@ -234,7 +227,7 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
             startActivity(intent);
 
         } else if (v.getId() == R.id.next_gen_startup_extra_button) {
-            Intent extraIntent = new Intent(this, NextGenExtraActivity.class);
+            Intent extraIntent = new Intent(this, TabletUtils.isTablet() ? NextGenExtraActivity.class : NextGenExtraActivity_Phone.class);
             startActivity(extraIntent);
         }
     }
@@ -242,8 +235,6 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
     @Override
     public void onResume(){
         super.onResume();
-        /*if (NextGenExperience.isDebugBuild())
-            CrashManager.register(this);*/
     }
 
     class ButtonParams {

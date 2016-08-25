@@ -36,23 +36,13 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment imple
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        List<String> castIds = new ArrayList<String>();
-        for (CastData cast : NextGenExperience.getMovieMetaData().getActorsList()){
-            if (!StringHelper.isEmpty(cast.getBaselineActorId()))
-                castIds.add(cast.getBaselineActorId());
-        }
         if (!NextGenExperience.getMovieMetaData().isHasCalledBaselineAPI()) {
-            BaselineApiDAO.getCastActorsData(castIds, new ResultListener<HashMap<String, MovieMetaData.BaselineCastData>>() {
+
+            BaselineApiDAO.getCastActorsData(NextGenExperience.getMovieMetaData().getActorsList(), new ResultListener<Boolean>() {
                 @Override
-                public void onResult(HashMap<String, MovieMetaData.BaselineCastData> resultMap) {
+                public void onResult(Boolean result) {
                     NextGenExperience.getMovieMetaData().setHasCalledBaselineAPI(true);
-                    for (CastData cast : NextGenExperience.getMovieMetaData().getActorsList()) {
-                        if (!StringHelper.isEmpty(cast.getBaselineActorId())) {
-                            MovieMetaData.BaselineCastData baselineData = resultMap.get(cast.getBaselineActorId());
-                            if (baselineData != null)
-                                cast.baselineCastData = baselineData;
-                        }
-                    }
+
                     if (getActivity() != null) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override

@@ -61,8 +61,8 @@ public class NextGenHideStatusBarActivity extends AppCompatActivity {
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
         currentScreenOrientation = getScreenOrientation();
+        super.onConfigurationChanged(newConfig);
     }
 
     public static int getCurrentScreenOrientation(){

@@ -27,7 +27,11 @@ public class NextGenExtraMainTableFragment extends NextGenGridViewFragment {
 
 
     public final static int GRID_SPACING_DP = 10;
-    private List<ExperienceData> ecGroups = NextGenExperience.getMovieMetaData().getExtraECGroups();
+    private List<ExperienceData> ecGroups = getSourceData();
+
+    protected List<ExperienceData> getSourceData(){
+        return NextGenExperience.getMovieMetaData().getExtraECGroups();
+    }
 
     protected void onListItemClick(View v, int position, long id){
         ExperienceData selectedGroup = ecGroups.get(position);

@@ -26,6 +26,7 @@ public class FixedAspectRatioFrameLayout extends FrameLayout
     private Priority priority;
     private int mOrientationFlag = 3;
     private ViewGroup.LayoutParams mDefaultLatouParams;
+    private boolean bAllowLargerThanParent = false;
 
     private final static int PORTRAIT_ONLY = 2;
     private final static int LANDSCAPE_ONLY = 1;
@@ -73,6 +74,7 @@ public class FixedAspectRatioFrameLayout extends FrameLayout
         mAspectRatioHeight = a.getInt(R.styleable.FixedAspectRatioFrameLayout_aspectRatioHeight, NextGenExperience.getScreenHeight(context));
         priority = Priority.valueFromInt(a.getInt(R.styleable.FixedAspectRatioFrameLayout_priority, Priority.WIDTH_PRIORITY.intValue));
         mOrientationFlag = a.getInt(R.styleable.FixedAspectRatioFrameLayout_whenOrientation, 3);
+        bAllowLargerThanParent = a.getBoolean(R.styleable.FixedAspectRatioFrameLayout_allowLargerThanParent, false);
 
         mDefaultLatouParams = getLayoutParams();
         a.recycle();
@@ -133,7 +135,7 @@ public class FixedAspectRatioFrameLayout extends FrameLayout
             if (priority == Priority.WIDTH_PRIORITY) {
                 finalHeight = originalWidth * mAspectRatioHeight / mAspectRatioWidth;
                 finalWidth = originalWidth;
-                if (originalHeight != 0 && finalHeight > originalHeight){
+                if (!bAllowLargerThanParent && originalHeight != 0 && finalHeight > originalHeight){
                     finalWidth = originalHeight * mAspectRatioWidth / mAspectRatioHeight;
                     finalHeight = originalHeight;
 
@@ -142,7 +144,7 @@ public class FixedAspectRatioFrameLayout extends FrameLayout
             } else {
                 finalWidth = originalHeight * mAspectRatioWidth / mAspectRatioHeight;
                 finalHeight = originalHeight;
-                if (originalWidth != 0 && finalWidth > originalWidth){
+                if (!bAllowLargerThanParent && originalWidth != 0 && finalWidth > originalWidth){
                     finalHeight = originalWidth * mAspectRatioHeight / mAspectRatioWidth;
                     finalWidth = originalWidth;
 

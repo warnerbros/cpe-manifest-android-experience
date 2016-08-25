@@ -120,16 +120,15 @@ public class BaselineApiDAO {
         }
     }
 
-    public static void getCastActorsData(final List<String> castsIDs, ResultListener<HashMap<String, BaselineCastData>> l) {
+    public static void getCastActorsData(final List<MovieMetaData.CastData> castsDatas, ResultListener<Boolean> l) {
 
-        Worker.execute(new Callable<HashMap<String, BaselineCastData>>() {
+        Worker.execute(new Callable<Boolean>() {
             @Override
-            public HashMap<String, BaselineCastData> call() throws Exception {
+            public Boolean call() throws Exception {
                 HashMap<String, BaselineCastData> castsInfoMap = new HashMap<String, BaselineCastData>();
-                for (String castId : castsIDs) {
+                for (MovieMetaData.CastData castData : castsDatas) {
                     try {
-
-                        castsInfoMap.put(castId, getFilmographyAndBioOfPersonSync(castId));
+                        castData.baselineCastData = getFilmographyAndBioOfPersonSync(castData.getBaselineActorId());
 
 
                     } catch (Exception ex){
@@ -139,7 +138,7 @@ public class BaselineApiDAO {
                 }
 
 
-                return castsInfoMap;
+                return true;
             }
         }, l);
     }

@@ -98,10 +98,9 @@ dependencies {
 	// android-support-v4.jar is included in flixster-android-closedcaptions
 	//compile fileTree(dir: 'libs', excludes: ['WidevineDRM-Debug-*.jar'], include: ['*.jar', '**/**/*.jar'])
 	compile fileTree(dir: 'kit-libs', include: '**/*.jar')
-	compile "com.android.support:recyclerview-v7:23.3.0"
-	compile "com.android.support:cardview-v7:23.3.0"
-	compile "com.android.support:support-v4:23.3.0"
-
+	compile 'com.android.support:recyclerview-v7:23.3.0'
+	compile 'com.android.support:cardview-v7:23.3.0'
+	compile 'com.android.support:support-v4:23.3.0'
 	//compile project(':flixster-android-closedcaptions')
 	compile 'net.hockeyapp.android:HockeySDK:4.0.0'
 	compile 'com.google.android.gms:play-services:8.4.0'
@@ -114,21 +113,15 @@ dependencies {
 	compile 'com.github.bumptech.glide:glide:3.6.0'
 	compile 'com.google.code.gson:gson:2.4'
 	/*compile('com.crashlytics.sdk.android:crashlytics:2.4.0@aar') {
-		transitive = true;
-	}*/
+            transitive = true;
+        }*/
 	compile 'com.android.support:multidex:1.0.0'
-
 	compile 'com.google.http-client:google-http-client-android:+'
-
 	compile 'com.google.api-client:google-api-client-android:+'
-
 	compile 'com.google.api-client:google-api-client-gson:+'
-
 	compile 'com.google.code.gson:gson:2.2.4'
-
 	compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
-
 	//compile group: 'com.ximpleware', name: 'vtd-xml', version: '2.11'
-
+	compile 'com.android.support:support-v4:24.2.0'
 }
 

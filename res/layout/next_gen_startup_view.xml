@@ -5,28 +5,32 @@
     android:background="@android:color/black"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ImageView
-        android:id="@+id/startup_image_view"
+    <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
+        xmlns:nextgen="http://schemas.android.com/apk/res-auto"
+        nextgen:aspectRatioHeight="9"
+        nextgen:aspectRatioWidth="16"
         android:layout_centerInParent="true"
+        nextgen:priority="HEIGHT_PRIORITY"
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent" />
-    <VideoView
-        android:id="@+id/startup_video_view"
-        android:layout_centerInParent="true"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent" />
+        android:layout_height="match_parent"
+        nextgen:allowLargerThanParent="true">
+        <ImageView
+            android:id="@+id/startup_image_view"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent" />
+        <VideoView
+            android:id="@+id/startup_video_view"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+    </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
 
     <RelativeLayout
         android:id="@+id/startup_buttons_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="left">
-        <!--<ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:scaleType="fitCenter"
-        android:id="@+id/next_gen_startup_movie_logo"
-        android:layout_above="@+id/next_gen_startup_play_button"/>-->
         <com.wb.nextgen.widget.SelectedMaskImageButton
             android:id="@+id/next_gen_startup_play_button"
             android:layout_width="wrap_content"
@@ -49,51 +53,5 @@
             android:background="@android:color/transparent"/>
     </RelativeLayout>
 
-
-    <!--<LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:gravity="left"
-        android:weightSum="100">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_weight="29"
-            android:id="@+id/startup_left_padding"/>
-        <LinearLayout
-            android:id="@+id/startup_right_portion"
-            android:layout_width="0dp"
-            android:layout_weight="71"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:weightSum="100">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="46"
-                android:id="@+id/startup_top_padding"
-                android:orientation="horizontal"
-                />
-            <LinearLayout
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:id="@+id/startup_buttons_layout"
-                android:gravity="left"
-                android:orientation="vertical">
-
-                <RelativeLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="left">
-
-                </RelativeLayout>
-            </LinearLayout>
-
-        </LinearLayout>
-    </LinearLayout>-->
 
 </RelativeLayout>
