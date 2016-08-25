@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ import com.wb.nextgen.data.MovieMetaData.PresentationDataItem;
 import com.wb.nextgen.fragment.ECGalleryViewFragment;
 import com.wb.nextgen.fragment.ECSceneLocationMapFragment;
 import com.wb.nextgen.fragment.ECVideoViewFragment;
+import com.wb.nextgen.util.TabletUtils;
 import com.wb.nextgen.util.utils.F;
 import com.wb.nextgen.util.utils.NextGenFragmentTransactionEngine;
 import com.wb.nextgen.util.utils.NextGenLogger;
@@ -86,7 +88,11 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
         locationECRecyclerView = (RecyclerView) findViewById(R.id.scene_location_recycler_view);
 
         if (locationECRecyclerView != null) {
-            locationECLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+            if (TabletUtils.isTablet()) {
+                locationECLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+            }else{
+                locationECLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
+            }
             locationECRecyclerView.setLayoutManager(locationECLayoutManager);
             locationECsAdapter = new LocationECsAdapter();
             locationECsAdapter.setSceneLocation(null);
@@ -295,7 +301,6 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
 
     public class LocationECViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         CardView cv;
-        TextView locationsCountText;
         TextView locationName;
         ImageView locationPhoto;
         ImageView locationPlayIcon;
@@ -306,7 +311,6 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
             super(itemView);
             cv = (CardView) itemView.findViewById(R.id.cv);
             locationName = (TextView) itemView.findViewById(R.id.location_name);
-            locationsCountText = (TextView) itemView.findViewById(R.id.location_count_text);
             locationPhoto = (ImageView) itemView.findViewById(R.id.location_photo);
             locationPlayIcon = (ImageView) itemView.findViewById(R.id.location_play_image);
             this.currentItem = item;
@@ -328,11 +332,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
                     Glide.with(ECSceneLocationActivity.this).load(locationItem.getLocationThumbnailUrl()).into(locationPhoto);
                     locationName.setText(((MovieMetaData.LocationItem) item).getTitle());
                     int locationCount = 0;//((MovieMetaData.LocationItem)item).childrenSceneLocations.size();
-                    if (locationCount == 0) {
-                        locationsCountText.setText("");
-                    } else {
-                        locationsCountText.setText(String.format(getResources().getString(R.string.locations_count_text), locationCount));
-                    }
+
                     NextGenLogger.d(F.TAG, "Position: " + itemIndex + " loaded: " + locationItem.getLocationThumbnailUrl());
                 }
             } else if (item instanceof PresentationDataItem) {
@@ -340,7 +340,6 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
                     locationPlayIcon.setVisibility(View.VISIBLE);
                 else
                     locationPlayIcon.setVisibility(View.INVISIBLE);
-                locationsCountText.setText("");
                 locationName.setText(((PresentationDataItem) item).getTitle());
                 Glide.with(ECSceneLocationActivity.this).load(((PresentationDataItem) item).getPosterImgUrl()).into(locationPhoto);
             }

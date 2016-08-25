@@ -12,6 +12,7 @@ import com.wb.nextgen.fragment.NextGenActorListFragment;
 import com.wb.nextgen.fragment.NextGenExtraMainTableFragment;
 import com.wb.nextgen.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgen.interfaces.SensitiveFragmentInterface;
+import com.wb.nextgen.util.TabletUtils;
 import com.wb.nextgen.util.utils.NextGenFragmentTransactionEngine;
 
 /**
@@ -25,8 +26,8 @@ public class NextGenExtraActivity extends AbstractNextGenActivity implements Nex
 
     NextGenFragmentTransactionEngine nextGenFragmentTransactionEngine;
 
-    protected LinearLayout leftPanelFrame;
-    protected LinearLayout rightMainFrame;
+    //protected LinearLayout leftPanelFrame;
+    //protected LinearLayout rightMainFrame;
 
     private int startupStackCount = 2;
 
@@ -38,16 +39,18 @@ public class NextGenExtraActivity extends AbstractNextGenActivity implements Nex
         float density = NextGenExperience.getScreenDensity(this);
         int spacing = (int)(10 *density);
 
-        leftPanelFrame = (LinearLayout)findViewById(R.id.next_gen_extra_left_view);
-        rightMainFrame = (LinearLayout)findViewById(R.id.next_gen_extra_right_view);
+        //leftPanelFrame = (LinearLayout)findViewById(R.id.next_gen_extra_left_view);
+        //rightMainFrame = (LinearLayout)findViewById(R.id.next_gen_extra_right_view);
 
         nextGenFragmentTransactionEngine = new NextGenFragmentTransactionEngine(this);
         initFragments();
     }
 
     protected void initFragments(){
-        transitLeftFragment(new NextGenActorListFragment());
-        transitRightFragment(new NextGenExtraMainTableFragment());
+        if (TabletUtils.isTablet()) {
+            transitLeftFragment(new NextGenActorListFragment());
+            transitRightFragment(new NextGenExtraMainTableFragment());
+        }
     }
 
     @Override
@@ -65,8 +68,9 @@ public class NextGenExtraActivity extends AbstractNextGenActivity implements Nex
 
     @Override
     public void transitLeftFragment(Fragment nextFragment){
-        nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.next_gen_extra_left_view, nextFragment);
-
+        try {
+            nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.next_gen_extra_left_view, nextFragment);
+        } catch (Exception ex){}
     }
 
     @Override

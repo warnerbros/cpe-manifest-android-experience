@@ -32,9 +32,10 @@ public class NextGenExtraMainTableFragment_Phone extends NextGenExtraMainTableFr
 
         public String getPosterImgUrl(){
             if (NextGenExperience.getMovieMetaData().getActorsList() != null && NextGenExperience.getMovieMetaData().getActorsList().size() > 0){
-                return NextGenExperience.getMovieMetaData().getActorsList().get(0).getBaselineCastData().getFullImageUrl();
-            }else
-                return null;
+                if (NextGenExperience.getMovieMetaData().getActorsList().get(0).getBaselineCastData() != null)
+                    return NextGenExperience.getMovieMetaData().getActorsList().get(0).getBaselineCastData().getFullImageUrl();
+            }
+            return null;
         }
     }
 

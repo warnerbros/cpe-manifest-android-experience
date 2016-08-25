@@ -2,35 +2,37 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:cardview="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <android.support.v7.widget.CardView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         cardview:cardBackgroundColor="@android:color/transparent"
         android:id="@+id/cv">
-        <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
-            xmlns:nextgen="http://schemas.android.com/apk/res-auto"
-            android:layout_height="match_parent"
-            android:layout_width="wrap_content"
-            android:layout_gravity="center"
-            nextgen:aspectRatioHeight="3"
-            nextgen:aspectRatioWidth="4"
-            nextgen:priority="HEIGHT_PRIORITY">
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:paddingLeft="@dimen/spacing_small"
-                android:paddingRight="@dimen/spacing_small">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/spacing_normal"
+            android:paddingLeft="@dimen/spacing_small"
+            android:paddingRight="@dimen/spacing_small">
+            <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
+                xmlns:nextgen="http://schemas.android.com/apk/res-auto"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_gravity="center"
+                nextgen:aspectRatioHeight="9"
+                nextgen:aspectRatioWidth="16"
+                nextgen:priority="WIDTH_PRIORITY">
                 <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_above="@+id/location_name"
-                    android:layout_height="fill_parent">
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
                     <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="fill_parent"
+                        android:layout_height="wrap_content"
                         android:id="@+id/location_photo"
                         android:layout_alignParentTop="true"
                         android:layout_marginRight="5dp"/>
@@ -41,34 +43,22 @@
                         android:layout_centerInParent="true"
                         android:src="@drawable/play_button"/>
                 </RelativeLayout>
-                <TextView
-                    android:id="@+id/location_name"
-                    android:paddingLeft="@dimen/spacing_small"
-                    android:paddingRight="@dimen/spacing_small"
-                    android:layout_above="@+id/location_count_text"
-                    android:layout_width="match_parent"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
-                    android:fontFamily="sans-serif-condensed"
-                    android:textSize="@dimen/textSmall"
-                    />
-                <TextView
-                    android:layout_alignParentBottom="true"
-                    android:paddingLeft="@dimen/spacing_small"
-                    android:paddingRight="@dimen/spacing_small"
-                    android:id="@+id/location_count_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@android:color/darker_gray"
-                    android:fontFamily="sans-serif-condensed"
-                    android:textSize="@dimen/textSmall"
-                    />
+            </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
+            <TextView
+                android:id="@+id/location_name"
+                android:paddingLeft="@dimen/spacing_small"
+                android:paddingRight="@dimen/spacing_small"
+                android:layout_width="match_parent"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:fontFamily="sans-serif-condensed"
+                android:textSize="@dimen/textSmall"
+                />
+        </LinearLayout>
 
 
-            </RelativeLayout>
-        </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
     </android.support.v7.widget.CardView>
 
 </LinearLayout>

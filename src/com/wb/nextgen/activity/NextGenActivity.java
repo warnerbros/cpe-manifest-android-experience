@@ -22,7 +22,6 @@ import android.widget.VideoView;
 import com.bumptech.glide.Glide;
 import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.R;
-import com.wb.nextgen.activity.phone.NextGenExtraActivity_Phone;
 import com.wb.nextgen.data.NextGenStyle;
 import com.wb.nextgen.util.TabletUtils;
 import com.wb.nextgen.util.utils.StringHelper;
@@ -227,7 +226,7 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
             startActivity(intent);
 
         } else if (v.getId() == R.id.next_gen_startup_extra_button) {
-            Intent extraIntent = new Intent(this, TabletUtils.isTablet() ? NextGenExtraActivity.class : NextGenExtraActivity_Phone.class);
+            Intent extraIntent = new Intent(this, NextGenExtraActivity.class);
             startActivity(extraIntent);
         }
     }

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/ec_list_frame"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent">
+        <fragment
+            android:name="com.wb.nextgen.fragment.ECViewLeftListFragment"
+            android:id="@+id/ec_fragment_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:stretchMode="columnWidth" />
+    </FrameLayout>
+    <LinearLayout
+        android:id="@+id/next_gen_gallery_content_view"
+        android:layout_weight="3"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <!--<fragment
+            android:id="@+id/ec_gallery_left_frame"
+            android:name="com.wb.nextgen.fragment.ECGalleryViewFragment"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"/>-->
+    </LinearLayout>
+</LinearLayout>

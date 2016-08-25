@@ -1,6 +1,7 @@
 package com.wb.nextgen.activity;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.View;
@@ -11,6 +12,7 @@ import com.wb.nextgen.R;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.data.NextGenStyle;
 import com.wb.nextgen.fragment.ECViewLeftListFragment;
+import com.wb.nextgen.util.TabletUtils;
 import com.wb.nextgen.util.utils.F;
 
 /**
@@ -52,10 +54,19 @@ public abstract class AbstractECView extends AbstractNextGenActivity {
 
     public void onStart() {
         super.onStart();
+        if (TabletUtils.isTablet())
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         if (listFragment != null && listFragment.getSelectedIndex() <= 0){
             listFragment.onListItemClick(0, ecGroupData.getChildrenContents().get(0));
             listFragment.scrollToTop();
         }
+    }
+
+    public void onStop(){
+        super.onStop();
+
+        if (TabletUtils.isTablet())
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
     }
 
     public abstract int getListItemViewLayoutId();

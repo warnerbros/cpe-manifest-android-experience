@@ -1,0 +1,41 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp">
+    <Button
+        android:layout_width="wrap_content"
+        android:id="@+id/action_bar_left_button"
+        android:text="Back"
+        android:textColor="@color/white"
+        android:textSize="@dimen/textLarge"
+        android:background="@android:color/transparent"
+        android:layout_alignParentLeft="true"
+        android:layout_height="match_parent" />
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:id="@+id/action_bar_center_banner"
+        android:background="@android:color/transparent"
+        android:layout_centerInParent="true"
+        android:layout_height="match_parent" />
+    <ImageView
+        android:layout_width="@dimen/top_right_title_icon_width"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:id="@+id/action_bar_right_logo"
+        android:textColor="@color/white"
+        android:textSize="@dimen/textLarge"
+        android:background="@android:color/transparent"
+        android:layout_alignParentRight="true" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:id="@+id/action_bar_right_text"
+        android:textColor="@color/white"
+        android:fontFamily="sans-serif-condensed"
+        android:textStyle="bold"
+        android:textSize="@dimen/textLarge"
+        android:background="@android:color/transparent"
+        android:layout_alignParentRight="true" />
+
+</RelativeLayout>

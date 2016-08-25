@@ -59,9 +59,11 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="left">
+
+
             <Button
                 android:padding="@dimen/spacing_normal"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="left"
                 android:id="@+id/share_image_button"
                 android:text="@string/share_this_image"
                 android:textColor="@color/white"
