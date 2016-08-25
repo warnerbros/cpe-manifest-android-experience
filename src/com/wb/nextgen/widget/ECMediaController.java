@@ -26,6 +26,7 @@ import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.R;
 import com.wb.nextgen.interfaces.ContentViewFullscreenRequestInterface;
 import com.wb.nextgen.interfaces.NextGenPlayerInterface;
+import com.wb.nextgen.util.TabletUtils;
 
 /**
  * Created by gzcheng on 3/9/16.
@@ -37,7 +38,7 @@ public class ECMediaController extends NextGenMediaController {
 
     ImageButton maxminButton;
     public ECMediaController(Context context, NextGenPlayerInterface player) {
-        super(context, player, true);
+        super(context, player, TabletUtils.isTablet());
         statupSystemUIView = mBaseSystemUIView.getSystemUiVisibility();
     }
 

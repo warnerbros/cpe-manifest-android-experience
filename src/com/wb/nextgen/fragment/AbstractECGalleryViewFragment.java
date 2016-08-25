@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.wb.nextgen.R;
 import com.wb.nextgen.activity.AbstractECView;
 import com.wb.nextgen.data.MovieMetaData;
+import com.wb.nextgen.util.TabletUtils;
 
 /**
  * Created by gzcheng on 7/13/16.
@@ -26,14 +27,18 @@ abstract public class AbstractECGalleryViewFragment extends ECViewFragment  {
         fullscreenToggleBtn = (ImageButton)view.findViewById(R.id.gallery_fullscreen_toggle);
 
         if (fullscreenToggleBtn != null){
-            fullscreenToggleBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (getActivity() instanceof AbstractECView) {
-                        ((AbstractECView) getActivity()).onRequestToggleFullscreen();
+            if (TabletUtils.isTablet()) {
+                fullscreenToggleBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (getActivity() instanceof AbstractECView) {
+                            ((AbstractECView) getActivity()).onRequestToggleFullscreen();
+                        }
                     }
-                }
-            });
+                });
+            }else{
+                fullscreenToggleBtn.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -48,7 +53,8 @@ abstract public class AbstractECGalleryViewFragment extends ECViewFragment  {
         super.onFullScreenChange(bFullscreen);
         if (bFullscreen) {
             fullscreenToggleBtn.setVisibility(View.GONE);
-            closeBtn.setVisibility(View.VISIBLE);
+            if (TabletUtils.isTablet())
+                closeBtn.setVisibility(View.VISIBLE);
         } else {
             fullscreenToggleBtn.setVisibility(View.VISIBLE);
             if (!shouldShowCloseBtn)
