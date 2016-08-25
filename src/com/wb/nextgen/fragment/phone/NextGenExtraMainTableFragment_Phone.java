@@ -1,13 +1,16 @@
 package com.wb.nextgen.fragment.phone;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.support.annotation.CallSuper;
+import android.view.View;
 
 import com.wb.nextgen.NextGenExperience;
 import com.wb.nextgen.R;
 import com.wb.nextgen.activity.NextGenActionBarFragmentActivity;
 import com.wb.nextgen.activity.NextGenHideStatusBarActivity;
+import com.wb.nextgen.activity.phone.NextGenActorsActivity_Phone;
 import com.wb.nextgen.data.MovieMetaData;
 import com.wb.nextgen.fragment.NextGenExtraMainTableFragment;
 
@@ -59,5 +62,17 @@ public class NextGenExtraMainTableFragment_Phone extends NextGenExtraMainTableFr
         }
         ecList.addAll(NextGenExperience.getMovieMetaData().getExtraECGroups());
         return ecList;
+    }
+
+    @Override
+    protected void onListItemClick(View v, int position, long id) {
+        MovieMetaData.ExperienceData selectedGroup = ecGroups.get(position);
+        if (selectedGroup instanceof ActorExperience){
+            Intent intent = new Intent(getActivity(), NextGenActorsActivity_Phone.class);
+            startActivity(intent);
+
+        }else{
+            super.onListItemClick(v, position, id);
+        }
     }
 }

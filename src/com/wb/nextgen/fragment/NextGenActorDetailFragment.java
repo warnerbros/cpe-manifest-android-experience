@@ -60,7 +60,7 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
     RecyclerView actorGalleryRecyclerView;
     LinearLayoutManager actorGalleryLayoutManager;
     ActorDetailGalleryRecyclerAdapter actorGalleryAdaptor;
-
+    View actorGalleryFrame;
 
     ImageButton facebookBtn;
     ImageButton twitterBtn;
@@ -89,7 +89,7 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
         actorNameTextView = (TextView)view.findViewById(R.id.actor_real_name_text);
         filmographyRecyclerView = (RecyclerView)view.findViewById(R.id.actor_detail_filmography);
         actorGalleryRecyclerView = (RecyclerView) view.findViewById(R.id.actor_gallery_recycler);
-        View actorGalleryFrame = view.findViewById(R.id.actor_gallery_recycler_frame);
+        actorGalleryFrame = view.findViewById(R.id.actor_gallery_recycler_frame);
 
         facebookBtn = (ImageButton)view.findViewById(R.id.actor_page_facebook_button);
         twitterBtn = (ImageButton)view.findViewById(R.id.actor_page_twitter_button);
@@ -112,10 +112,7 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
         }
 
         if (actorGalleryRecyclerView != null && bEnableActorGallery){
-            actorGalleryLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false);
-            actorGalleryRecyclerView.setLayoutManager(actorGalleryLayoutManager);
-            actorGalleryAdaptor = new ActorDetailGalleryRecyclerAdapter(getActivity(), this);
-            actorGalleryRecyclerView.setAdapter(actorGalleryAdaptor);
+            setbEnableActorGallery(bEnableActorGallery);
         } else if (actorGalleryFrame != null){
             actorGalleryFrame.setVisibility(View.GONE);
         }
@@ -137,6 +134,13 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
 
     public void setbEnableActorGallery(boolean enable){
         bEnableActorGallery = enable;
+        if (actorGalleryRecyclerView != null && bEnableActorGallery && actorGalleryAdaptor == null){
+            actorGalleryLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false);
+            actorGalleryRecyclerView.setLayoutManager(actorGalleryLayoutManager);
+            actorGalleryAdaptor = new ActorDetailGalleryRecyclerAdapter(getActivity(), this);
+            actorGalleryRecyclerView.setAdapter(actorGalleryAdaptor);
+            actorGalleryFrame.setVisibility(View.VISIBLE);
+        }
     }
 
     public void reloadDetail(CastData object){
@@ -193,7 +197,7 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
             }else
                 twitterBtn.setVisibility(View.GONE);
 
-            if (actorOjbect.getBaselineCastData().getGallery() != null && bEnableActorGallery){
+            if (actorOjbect.getBaselineCastData().getGallery() != null && bEnableActorGallery && actorGalleryAdaptor != null){
                 List<MovieMetaData.CastHeadShot> headShots = actorOjbect.getBaselineCastData().getGallery();
                 if (headShots != null && headShots.size() > 1)
                     actorGalleryAdaptor.setCastHeadShots(headShots.subList(1, headShots.size()));
