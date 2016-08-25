@@ -1,10 +1,13 @@
 package com.wb.nextgen.fragment;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
 import com.wb.nextgen.R;
+import com.wb.nextgen.util.TabletUtils;
 
 /**
  * Created by gzcheng on 7/26/16.

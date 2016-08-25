@@ -56,9 +56,14 @@ public class ECGalleryActivity extends AbstractECView {
 
     }
 
+    @Override
+    public void switchFullScreen(boolean bFullScreen){
+        super.switchFullScreen(bFullScreen);
+        galleryFragment.onFullScreenChange(bFullScreen);
+    }
+
 
     void onFullScreenChange(boolean bFullscreen){
-
     }
 
     @Override

@@ -194,10 +194,16 @@ public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivi
 
     public void onRequestToggleFullscreen(){
         if (topUnderlayActionbarSpacer != null) {
-            if (topUnderlayActionbarSpacer.getVisibility() == View.GONE) {
-                topUnderlayActionbarSpacer.setVisibility(View.VISIBLE);
-            } else
+            switchFullScreen(topUnderlayActionbarSpacer.getVisibility() != View.GONE);
+        }
+    }
+
+    public void switchFullScreen(boolean bFullScreen){
+        if (topUnderlayActionbarSpacer != null) {
+            if (bFullScreen) {
                 topUnderlayActionbarSpacer.setVisibility(View.GONE);
+            } else
+                topUnderlayActionbarSpacer.setVisibility(View.VISIBLE);
         }
     }
 

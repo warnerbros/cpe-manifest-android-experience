@@ -49,15 +49,12 @@ public class ECVideoActivity extends AbstractECView implements ECVideoViewFragme
     public void onLeftListItemSelected(MovieMetaData.ExperienceData ec){
         if (ec != null && ec.audioVisualItems.size() > 0) {
             rightVideoFrame.setAudioVisualItem(ec.audioVisualItems.get(0));
-            //selectedECNameTextView.setText(ec.audioVisualItems.get(0).title);
-            //videoView.setVideoURI(Uri.parse(ec.audioVisualItems.get(0).videoUrl));
         }
     }
 
     @Override
     public void onRequestToggleFullscreen() {
         super.onRequestToggleFullscreen();
-        //rightVideoFrame.onRequestToggleFullscreen(isContentFullScreen);
     }
 
     @Override

@@ -14,7 +14,8 @@
         android:orientation="vertical">
         <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="0dp"
+            android:layout_weight="4">
             <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
                 xmlns:nextgen="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/ec_video_aspect_ratio_frame"
@@ -104,14 +105,14 @@
             <TextView
                 android:id="@+id/ec_content_name"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/textMedium"
+                android:textSize="@dimen/textXLarge"
                 android:fontFamily="sans-serif-condensed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <TextView
                 android:id="@+id/ec_content_runtime"
                 android:textColor="@android:color/darker_gray"
-                android:textSize="@dimen/textMSmall"
+                android:textSize="@dimen/textLarge"
                 android:fontFamily="sans-serif-condensed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

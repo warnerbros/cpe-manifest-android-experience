@@ -2,6 +2,7 @@ package com.wb.nextgen.activity;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.View;
@@ -94,11 +95,18 @@ public abstract class AbstractECView extends AbstractNextGenActivity {
 
     @Override
     public void onRequestToggleFullscreen(){
-        super.onRequestToggleFullscreen();
+        switchFullScreen(!isContentFullScreen);
+        isContentFullScreen = !isContentFullScreen;
+
+    }
+
+    @Override
+    public void switchFullScreen(boolean bFullScreen){
+        super.switchFullScreen(bFullScreen);
         if (getFullScreenDisappearView() == null /*|| listFragment == null*/)
             return;
         ActionBar bar = getSupportActionBar();
-        if (!isContentFullScreen){    // make it full screen
+        if (bFullScreen){    // make it full screen
             getFullScreenDisappearView().setVisibility(View.GONE);
             onFullScreenChange(true);
 
@@ -113,7 +121,7 @@ public abstract class AbstractECView extends AbstractNextGenActivity {
                 bar.show();
 
         }
-        isContentFullScreen = !isContentFullScreen;
+
     }
 
     protected View getFullScreenDisappearView(){
@@ -138,5 +146,21 @@ public abstract class AbstractECView extends AbstractNextGenActivity {
                 titleText = "";
         }
         return titleText;
+    }
+
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (!TabletUtils.isTablet()) {
+            switch(newConfig.orientation){
+                case Configuration.ORIENTATION_LANDSCAPE:
+                    switchFullScreen(true);
+                    break;
+                case Configuration.ORIENTATION_PORTRAIT:
+                    switchFullScreen(false);
+                    break;
+            }
+        }
     }
 }
