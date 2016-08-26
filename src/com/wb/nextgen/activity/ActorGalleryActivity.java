@@ -3,6 +3,7 @@ package com.wb.nextgen.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -102,26 +103,7 @@ public class ActorGalleryActivity extends AbstractNextGenActivity implements Act
 
                 @Override
                 public void onPageSelected(int position) {
-                    if (actorGalleryRecycler != null && recyclerLayoutManager != null){
-                        int startIndex = recyclerLayoutManager.findFirstCompletelyVisibleItemPosition();
-                        int lastIndex = recyclerLayoutManager.findLastCompletelyVisibleItemPosition();
-                        int visibleCount = lastIndex - startIndex;
-
-                        if (position >= startIndex && position <= lastIndex){
-                            // do nothing
-                        } else if (position < startIndex) {
-                            int newPosition = Math.max(position - (visibleCount/2), 0);
-                            actorGalleryRecycler.smoothScrollToPosition(newPosition);
-                        } else if (position > lastIndex) {
-                            int newPosition = Math.min(position + (visibleCount/2), galleryPagerAdapter.getCount() -1 );
-                            actorGalleryRecycler.smoothScrollToPosition(newPosition);
-                        }
-
-                        if (galleryRecyclerAdapter != null) {
-                            galleryRecyclerAdapter.setSelectedIndex(position);
-                            galleryRecyclerAdapter.notifyDataSetChanged();
-                        }
-                    }
+                    scrollBottomPagerToShow(position);
                 }
 
                 @Override
@@ -141,6 +123,34 @@ public class ActorGalleryActivity extends AbstractNextGenActivity implements Act
             actorGalleryRecycler.setAdapter(galleryRecyclerAdapter);
             actorGalleryRecycler.scrollToPosition(startUpSelectedIndex);
         }
+    }
+
+    protected void scrollBottomPagerToShow(int position){
+        if (actorGalleryRecycler != null && recyclerLayoutManager != null){
+            int startIndex = recyclerLayoutManager.findFirstCompletelyVisibleItemPosition();
+            int lastIndex = recyclerLayoutManager.findLastCompletelyVisibleItemPosition();
+            int visibleCount = lastIndex - startIndex;
+
+            if (position >= startIndex && position <= lastIndex){
+                // do nothing
+            } else if (position < startIndex) {
+                int newPosition = Math.max(position - (visibleCount/2), 0);
+                actorGalleryRecycler.smoothScrollToPosition(newPosition);
+            } else if (position > lastIndex) {
+                int newPosition = Math.min(position + (visibleCount/2), galleryPagerAdapter.getCount() -1 );
+                actorGalleryRecycler.smoothScrollToPosition(newPosition);
+            }
+
+            if (galleryRecyclerAdapter != null) {
+                galleryRecyclerAdapter.setSelectedIndex(position);
+                galleryRecyclerAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -168,7 +178,7 @@ public class ActorGalleryActivity extends AbstractNextGenActivity implements Act
         return "ACTOR GALLERY";
     }
 
-    public void onItemSelected(MovieMetaData.CastHeadShot headShot, int index){
+    public void onItemSelected(int index){
         actorGalleryViewPager.setCurrentItem(index);
         //galleryRecyclerAdapter.setSelectedIndex(index);
         //galleryRecyclerAdapter.notifyDataSetChanged();

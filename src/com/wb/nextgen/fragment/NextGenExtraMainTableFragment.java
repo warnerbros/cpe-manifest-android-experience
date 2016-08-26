@@ -90,7 +90,7 @@ public class NextGenExtraMainTableFragment extends NextGenGridViewFragment {
 
         ExperienceData thisExtra = (ExperienceData)item;
         if(!thisExtra.title.equals(titleTxt.getText())){
-            titleTxt.setText(thisExtra.title);
+            titleTxt.setText(thisExtra.title.toUpperCase());
             Glide.with(getActivity()).load(thisExtra.getPosterImgUrl()).fitCenter().into(thumbnailImg);
             //PicassoTrustAll.loadImageIntoView(getActivity(), thisExtra.getPosterImgUrl(), thumbnailImg);
         }

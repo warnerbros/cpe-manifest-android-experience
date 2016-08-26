@@ -58,7 +58,7 @@ public class HttpImageHelper {
             public Boolean call() throws Exception {
 
                 for (MovieMetaData.LocationItem item : locationItems) {
-                    if (!pinHash.containsKey(item.pinImage.url)) {
+                    if (item.pinImage!= null && !pinHash.containsKey(item.pinImage.url)) {
                         try {
                             Bitmap theBitmap = Glide.
                                     with(NextGenExperience.getApplicationContext()).

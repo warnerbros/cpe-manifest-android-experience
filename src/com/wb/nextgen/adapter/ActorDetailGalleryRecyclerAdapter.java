@@ -89,7 +89,7 @@ public class ActorDetailGalleryRecyclerAdapter extends RecyclerView.Adapter<Acto
         @Override
         public void onClick(View v) {
             if (listener != null){
-                listener.onItemSelected(headShot, index);
+                listener.onItemSelected(index);
             }
         }
     }
@@ -97,7 +97,7 @@ public class ActorDetailGalleryRecyclerAdapter extends RecyclerView.Adapter<Acto
 
 
     public static interface ActorGalleryRecyclerSelectionListener{
-        void onItemSelected(MovieMetaData.CastHeadShot headShot, int index);
+        void onItemSelected(int index);
     }
 
 }

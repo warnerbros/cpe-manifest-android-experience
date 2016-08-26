@@ -2,12 +2,12 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@drawable/grid_item_bg"
     android:padding="@dimen/spacing_small">
     <RelativeLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:background="@android:color/transparent"
         android:layout_height="wrap_content">
         <TextView
@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:text="Title"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/textMSmall"
+            android:textSize="@dimen/textLarge"
             android:layout_height="wrap_content"/>
     </RelativeLayout>
 
@@ -23,13 +23,13 @@
         xmlns:nextgen="http://schemas.android.com/apk/res-auto"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        nextgen:aspectRatioHeight="9"
-        nextgen:aspectRatioWidth="16"
+        nextgen:aspectRatioHeight="198"
+        nextgen:aspectRatioWidth="352"
         nextgen:priority="WIDTH_PRIORITY">
         <ImageView
             android:id="@+id/next_gen_extra_thumbnail"
             android:scaleType="centerInside"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
     </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
 </LinearLayout>

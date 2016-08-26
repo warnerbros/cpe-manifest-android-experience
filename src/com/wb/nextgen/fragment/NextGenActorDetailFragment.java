@@ -143,7 +143,7 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
         }
     }
 
-    public void reloadDetail(CastData object){
+    public void reloadDetail(final CastData object){
         actorOjbect = object;
 
         if (actorOjbect != null && actorOjbect.getBaselineCastData() != null){
@@ -151,6 +151,13 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
             //Picasso.with(getActivity()).load(actorOjbect.getBaselineCastData().getFullImageUrl()).fit().centerCrop().into(fullImageView);
             //PicassoTrustAll.loadImageIntoView(getActivity(), actorOjbect.getBaselineCastData().getFullImageUrl(), fullImageView);
 
+            fullImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (object.getBaselineCastData() != null && object.getBaselineCastData().headShots != null && object.getBaselineCastData().headShots.size()> 0)
+                        onItemSelected(0);
+                }
+            });
             if (actorOjbect.getBaselineCastData().filmogrphies == null){
                 BaselineApiDAO.getFilmographyAndBioOfPerson(actorOjbect.getBaselineActorId(), new ResultListener<MovieMetaData.BaselineCastData>() {
                     @Override
@@ -323,7 +330,7 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
 
 
     @Override
-    public void onItemSelected(MovieMetaData.CastHeadShot headShot, int index){
+    public void onItemSelected(int index){
         Intent actorGalleryIntent = new Intent(getActivity(), ActorGalleryActivity.class);
         String actorGallery = (new Gson()).toJson(actorOjbect.getBaselineCastData().getGallery());
         actorGalleryIntent.putExtra(ActorGalleryActivity.HEAD_SHOTS_KEY, actorGallery);

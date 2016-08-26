@@ -1,5 +1,6 @@
 package com.wb.nextgen.activity;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.widget.LinearLayout;
@@ -53,10 +54,19 @@ public class NextGenExtraActivity extends AbstractNextGenActivity implements Nex
         }
     }
 
-    @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
+        if (TabletUtils.isTablet())
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        else
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    }
 
+    public void onStop(){
+        super.onStop();
+
+        //if (TabletUtils.isTablet())
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
     }
 
     //*************** NextGenFragmentTransactionInterface ***************

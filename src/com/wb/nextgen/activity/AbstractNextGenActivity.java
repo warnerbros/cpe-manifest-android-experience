@@ -134,7 +134,7 @@ public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivi
 
         if (backgroundImageView == null){
             backgroundImageView = new ImageView(this);
-            backgroundImageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            backgroundImageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
             ViewGroup contentView = (ViewGroup)this.getWindow().getDecorView().findViewById(android.R.id.content);
             if (contentView != null){
                 contentView.addView(backgroundImageView, 0);
