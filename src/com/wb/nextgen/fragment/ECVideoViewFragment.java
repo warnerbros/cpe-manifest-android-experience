@@ -113,7 +113,7 @@ public class ECVideoViewFragment extends ECViewFragment{
             });
         }
         //videoView.setMediaController(mediaController);
-        videoView.setCustomMediaController(mediaController);
+        videoView.setMediaController(mediaController);
         videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             private Handler mHandler = new Handler();
             int counter = COUNT_DOWN_SECONDS;

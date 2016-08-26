@@ -29,6 +29,7 @@ import com.wb.nextgen.model.NextGenIMEEngine;
 import com.wb.nextgen.model.TheTakeIMEEngine;
 import com.wb.nextgen.network.TheTakeApiDAO;
 import com.wb.nextgen.util.HttpImageHelper;
+import com.wb.nextgen.util.TabletUtils;
 import com.wb.nextgen.util.concurrent.ResultListener;
 import com.wb.nextgen.util.utils.F;
 import com.wb.nextgen.util.utils.NextGenLogger;
@@ -176,7 +177,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
     }
 
     protected int getNumberOfColumns(){
-        return 2;
+        return TabletUtils.isTablet() ? 2 : 1;
     }
 
     protected int getListItemCount(){
@@ -348,6 +349,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                             @Override
                             public void onMapReady(GoogleMap googleMap) {
 
+                                googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, locationItem.zoom));   // set location
 
                                 BitmapDescriptor bmDes = null;

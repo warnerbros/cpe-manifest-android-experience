@@ -18,6 +18,7 @@ public abstract class AbstractNextGenMainMovieFragment extends Fragment implemen
 
     public abstract void setPlaybackObject(Object playbackObject);
     public abstract void setCustomMediaController(CustomMediaController customMC);
+    public abstract void setResumeTime(int resumeTime);
     public abstract int getCurrentPosition();
 
     public void setNextGenVideoViewListener(IVideoViewActionListener listener) {

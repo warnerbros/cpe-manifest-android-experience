@@ -25,6 +25,7 @@ import android.view.accessibility.AccessibilityManager;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.MediaController;
+import android.widget.MediaController.MediaPlayerControl;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -39,12 +40,12 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.wb.nextgen.R;
 
-public class CustomMediaController extends FrameLayout {
+public class CustomMediaController extends MediaController {
     private static final String TAG = "CustomMediaController";
 
-    private MediaPlayerControl  mPlayer;
+    private MediaPlayerControl mPlayer;
     private Context             mContext;
-    private ViewGroup           mAnchor;
+    private View                mAnchor;
     private View                mRoot;
     private ProgressBar         mProgress;
     private TextView            mEndTime, mCurrentTime;
@@ -127,7 +128,8 @@ public class CustomMediaController extends FrameLayout {
      * This can for example be a VideoView, or your Activity's main view.
      * @param view The view to which to anchor the controller when it is visible.
      */
-    public void setAnchorView(ViewGroup view) {
+    @Override
+    public void setAnchorView(View view) {
         if (mAnchor != null) {
             mAnchor.removeOnLayoutChangeListener(mLayoutChangeListener);
         }
@@ -288,7 +290,11 @@ public class CustomMediaController extends FrameLayout {
                     Gravity.BOTTOM
             );
 
-            mAnchor.addView(this, tlp);
+            if (this.getParent() != null){
+                ((ViewGroup)this.getParent()).removeView(this);
+            }
+            if (this.getParent() == null)
+                ((ViewGroup)mAnchor.getParent()).addView(this, tlp);
             mShowing = true;
         }
         updatePausePlay();
@@ -321,7 +327,7 @@ public class CustomMediaController extends FrameLayout {
             mVisibilityListenter.onVisibilityChange(false);
 
         try {
-            mAnchor.removeView(this);
+            ((ViewGroup)(mAnchor.getParent())).removeView(this);
             mHandler.removeMessages(SHOW_PROGRESS);
         } catch (IllegalArgumentException ex) {
             Log.w("MediaController", "already removed");
@@ -637,19 +643,6 @@ public class CustomMediaController extends FrameLayout {
                 mPrevButton.setVisibility(View.VISIBLE);
             }
         }
-    }
-
-    public interface MediaPlayerControl {
-        void    start();
-        void    pause();
-        int     getDuration();
-        int     getCurrentPosition();
-        void    seekTo(int pos);
-        boolean isPlaying();
-        int     getBufferPercentage();
-        boolean canPause();
-        boolean canSeekBackward();
-        boolean canSeekForward();
     }
 
     private static class MessageHandler extends Handler {
