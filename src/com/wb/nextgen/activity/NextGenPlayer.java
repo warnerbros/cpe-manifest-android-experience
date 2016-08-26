@@ -1,5 +1,7 @@
 package com.wb.nextgen.activity;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.media.MediaPlayer;
@@ -36,7 +38,7 @@ import java.util.TimerTask;
 /**
  * Created by gzcheng on 1/5/16.
  */
-public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFragmentTransactionInterface {
+public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFragmentTransactionInterface, DialogInterface.OnCancelListener {
 
     private final static String IS_PLAYER_PLAYING = "IS PLAYING";
     private final static String RESUME_PLAYBACK_TIME = "RESUME_PLAYBACK_TIME";
@@ -52,6 +54,8 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
     private MainFeatureMediaController mediaController;
 
+    private ProgressDialog mDialog;
+
     NextGenFragmentTransactionEngine nextGenFragmentTransactionEngine;
 
     NextGenPlayerBottomFragment imeBottomFragment;
@@ -60,15 +64,26 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
     private Uri currentUri = null;
 
+    private DRMStatus drmStatus = DRMStatus.NOT_INITIATED;
+    private boolean bInterstitialVideoComplete = false;
     //TextView imeText;
     //IMEElementsGridFragment imeGridFragment;
     private long lastTimeCode = -1;
 
     AbstractNextGenMainMovieFragment mainMovieFragment;
 
+    static enum DRMStatus{
+        SUCCESS, FAILED, IN_PROGRESS, NOT_INITIATED
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mDialog = new ProgressDialog(this);
+        mDialog.setCancelable(true);
+        mDialog.setOnCancelListener(this);
+        mDialog.setCanceledOnTouchOutside(true);
 
         nextGenFragmentTransactionEngine = new NextGenFragmentTransactionEngine(this);
 
@@ -86,12 +101,17 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         skipThisCounter = (ProgressBar) findViewById(R.id.skip_this_countdown);
 
         interstitialVideoView = (ObservableVideoView) findViewById(R.id.interstitial_video_view);
-        //videoView.setMediaController(mediaController);
-
 
         interstitialVideoView.setOnErrorListener(getOnErrorListener());
         interstitialVideoView.setOnPreparedListener(getOnPreparedListener());
-        interstitialVideoView.setOnCompletionListener(getOnCompletionListener());
+        interstitialVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                updateImeFragment(NextGenPlaybackStatusListener.NextGenPlaybackStatus.STOP, -1L);
+                bInterstitialVideoComplete = true;
+                playMainMovie();
+            }
+        });
         interstitialVideoView.requestFocus();
 
         imeBottomFragment = new NextGenPlayerBottomFragment();
@@ -101,6 +121,17 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         transitMainFragment(imeBottomFragment);
         try {
             mainMovieFragment = NextGenExperience.getMainMovieFragmentClass().newInstance();
+            mainMovieFragment.setProgressDialog(mDialog);
+            mainMovieFragment.setOnCompletionLister(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    //launch extra
+                    Intent intent = new Intent(NextGenPlayer.this, NextGenExtraActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+
             mediaController = new MainFeatureMediaController(this, mainMovieFragment);
             mediaController.setVisibilityChangeListener(new CustomMediaController.MediaControllerVisibilityChangeListener(){
                 public void onVisibilityChange(boolean bShow){
@@ -114,6 +145,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
             });
             mainMovieFragment.setCustomMediaController(mediaController);
             mainMovieFragment.setPlaybackObject(NextGenExperience.getNextgenPlaybackObject());
+            //mainMovieFragment.setOnCompletionListener
             mainMovieFragment.setNextGenVideoViewListener(new IVideoViewActionListener() {
 
                 @Override
@@ -166,6 +198,12 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     @Override
     String getTitleImageUrl(){
         return NextGenExperience.getMovieMetaData().getStyle().getTitleImageURL(NextGenStyle.NextGenAppearanceType.InMovie);
+    }
+
+    @Override
+    public void onCancel(DialogInterface dialog) {
+        dialog.cancel();
+        //this.finish();
     }
 
     protected void updateImeFragment(final NextGenPlaybackStatusListener.NextGenPlaybackStatus playbackStatus, final long timecode){
@@ -268,28 +306,18 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     private class PreparedListener implements MediaPlayer.OnPreparedListener {
         @Override
         public void onPrepared(MediaPlayer mp) {
-            if (shouldStartAfterResume)
-                interstitialVideoView.start();
-            else
-                interstitialVideoView.pause();
+            interstitialVideoView.start();
 
-            if (currentUri.equals(INTERSTITIAL_VIDEO_URI)) {
-                skipThisView.setVisibility(View.VISIBLE);
-                skipThisCounter.setProgress(0);
-                skipThisCounter.setProgress(100);
+            skipThisView.setVisibility(View.VISIBLE);
+            skipThisCounter.setProgress(0);
+            skipThisCounter.setProgress(100);
 
-                ProgressBarAnimation skipProgressBarAnim = new ProgressBarAnimation(skipThisCounter);
-                skipProgressBarAnim.setDuration(mp.getDuration());
-                skipThisCounter.startAnimation(skipProgressBarAnim);
+            ProgressBarAnimation skipProgressBarAnim = new ProgressBarAnimation(skipThisCounter);
+            skipProgressBarAnim.setDuration(mp.getDuration());
+            skipThisCounter.startAnimation(skipProgressBarAnim);
 
-                return;
-            }else{
+            return;
 
-            }
-
-
-            mediaController.hide();
-            mediaController.show();
 
 
 
@@ -301,25 +329,28 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         return new PreparedListener();
     }
 
-    private class CompletionListener implements MediaPlayer.OnCompletionListener {
-        @Override
-        public void onCompletion(MediaPlayer mp) {
-            updateImeFragment(NextGenPlaybackStatusListener.NextGenPlaybackStatus.STOP, -1L);
-            if (currentUri.equals(INTERSTITIAL_VIDEO_URI)){
-                playMainMovie();
-            }else
-                finish();
-
-        }
-    }
-
     private void playMainMovie(){
         if (skipThisView != null)
             skipThisView.setVisibility(View.GONE);
         currentUri = Uri.parse("");
+
+        if (drmStatus == DRMStatus.IN_PROGRESS){    // show loading
+            mDialog.setCanceledOnTouchOutside(false);
+            mDialog.setMessage(getResources().getString(R.string.loading));
+            mDialog.show();
+            return;
+        }else if (drmStatus == DRMStatus.FAILED){
+            //Show error Message and exit
+
+            finish();
+            return;
+        } else if (!bInterstitialVideoComplete){
+            // wait for interstitial video to be finished
+            return;
+        }
         interstitialVideoView.stopPlayback();
         interstitialVideoView.setVisibility(View.GONE);
-
+        mDialog.hide();
 
         nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.video_view_frame, mainMovieFragment);
         if (imeUpdateTimer == null){
@@ -352,10 +383,6 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         }*/
     }
 
-    protected MediaPlayer.OnCompletionListener getOnCompletionListener(){
-        return new CompletionListener();
-    }
-
     int resumePlayTime = -1;
     boolean shouldStartAfterResume = true;
 
@@ -373,37 +400,37 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         super.onResume();
 
         if (currentUri == null) {
-            if (resumePlayTime == -1) {
-                mainMovieFragment.streamStartPreparations(new ResultListener<Boolean>() {
-                    @Override
-                    public void onResult(Boolean result) {
-                        currentUri = INTERSTITIAL_VIDEO_URI;
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                interstitialVideoView.setVisibility(View.VISIBLE);
-                                interstitialVideoView.setVideoURI(currentUri);
-                                interstitialVideoView.setOnTouchListener(new View.OnTouchListener() {
-                                    @Override
-                                    public boolean onTouch(View v, MotionEvent event) {
+            currentUri = INTERSTITIAL_VIDEO_URI;
+            interstitialVideoView.setVisibility(View.VISIBLE);
+            interstitialVideoView.setVideoURI(currentUri);
+            interstitialVideoView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    bInterstitialVideoComplete = true;
+                    playMainMovie();
+                    return true;
+                }
+            });
+            drmStatus = DRMStatus.IN_PROGRESS;
+            mainMovieFragment.streamStartPreparations(new ResultListener<Boolean>() {
+                @Override
+                public void onResult(Boolean result) {
 
-                                        if (INTERSTITIAL_VIDEO_URI.equals(currentUri)) {
-                                            playMainMovie();
-                                        }
-                                        return true;
-                                    }
-                                });
-                            }
-                        });
+                    drmStatus = DRMStatus.SUCCESS;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            playMainMovie();
+                        }
+                    });
 
-                    }
+                }
 
-                    @Override
-                    public <E extends Exception> void onException(E e) {
-
-                    }
-                });
-            }
+                @Override
+                public <E extends Exception> void onException(E e) {
+                    drmStatus = DRMStatus.FAILED;
+                }
+            });
 
         } else{
             skipThisView.setVisibility(View.GONE);
@@ -411,6 +438,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         }
         hideShowNextGenView();
     }
+
 
 
     @Override

@@ -1,5 +1,7 @@
 package com.wb.nextgen.fragment;
 
+import android.app.ProgressDialog;
+import android.media.MediaPlayer;
 import android.support.v4.app.Fragment;
 
 import com.wb.nextgen.interfaces.NextGenPlayerInterface;
@@ -15,6 +17,7 @@ import java.util.concurrent.Callable;
  */
 public abstract class AbstractNextGenMainMovieFragment extends Fragment implements NextGenPlayerInterface{
     protected IVideoViewActionListener nextGenVideoViewListener;
+    protected MediaPlayer.OnCompletionListener completionListener;
 
     public abstract void setPlaybackObject(Object playbackObject);
     public abstract void setCustomMediaController(CustomMediaController customMC);
@@ -24,6 +27,11 @@ public abstract class AbstractNextGenMainMovieFragment extends Fragment implemen
     public void setNextGenVideoViewListener(IVideoViewActionListener listener) {
         nextGenVideoViewListener = listener;
     }
+
+    public void setOnCompletionLister(MediaPlayer.OnCompletionListener completionListener){
+        this.completionListener = completionListener;
+    }
+
     public abstract boolean isPlaying();
 
     public abstract void pause();
@@ -43,4 +51,6 @@ public abstract class AbstractNextGenMainMovieFragment extends Fragment implemen
            }
        });
     }
+
+    public abstract void setProgressDialog(ProgressDialog dialog);   // do not use app's dialog, always use the NextGen Library one.
 }
