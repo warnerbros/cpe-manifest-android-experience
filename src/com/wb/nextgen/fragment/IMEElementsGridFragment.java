@@ -32,6 +32,7 @@ import com.wb.nextgen.util.HttpImageHelper;
 import com.wb.nextgen.util.concurrent.ResultListener;
 import com.wb.nextgen.util.utils.F;
 import com.wb.nextgen.util.utils.NextGenLogger;
+import com.wb.nextgen.util.utils.StringHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -349,8 +350,12 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
 
                                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, locationItem.zoom));   // set location
 
-                                BitmapDescriptor bmDes =
-                                        BitmapDescriptorFactory.fromBitmap(HttpImageHelper.getMapPinBitmap(locationItem.pinImage.url));
+                                BitmapDescriptor bmDes = null;
+                                if (locationItem.pinImage != null && !StringHelper.isEmpty(locationItem.pinImage.url)) {
+                                    bmDes = BitmapDescriptorFactory.fromBitmap(HttpImageHelper.getMapPinBitmap(locationItem.pinImage.url));
+                                }else {
+                                    bmDes = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
+                                }
                                 googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
                                 googleMap.addMarker(new MarkerOptions()
                                         .position(location)

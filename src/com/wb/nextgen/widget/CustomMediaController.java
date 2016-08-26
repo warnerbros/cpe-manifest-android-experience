@@ -650,7 +650,6 @@ public class CustomMediaController extends FrameLayout {
         boolean canPause();
         boolean canSeekBackward();
         boolean canSeekForward();
-        boolean isFullScreen();
     }
 
     private static class MessageHandler extends Handler {

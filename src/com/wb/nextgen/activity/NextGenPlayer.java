@@ -356,7 +356,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         return new CompletionListener();
     }
 
-    int resumePlayTime = 0;
+    int resumePlayTime = -1;
     boolean shouldStartAfterResume = true;
 
     @Override
@@ -367,45 +367,47 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     }
 
     public void onResume() {
+        if (resumePlayTime != -1){
+            mainMovieFragment.setResumeTime(resumePlayTime);
+        }
         super.onResume();
 
         if (currentUri == null) {
-            mainMovieFragment. streamStartPreparations(new ResultListener<Boolean>() {
-                @Override
-                public void onResult(Boolean result) {
-                    currentUri = INTERSTITIAL_VIDEO_URI;
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            interstitialVideoView.setVisibility(View.VISIBLE);
-                            interstitialVideoView.setVideoURI(currentUri);
-                            interstitialVideoView.setOnTouchListener(new View.OnTouchListener() {
-                                @Override
-                                public boolean onTouch(View v, MotionEvent event) {
+            if (resumePlayTime == -1) {
+                mainMovieFragment.streamStartPreparations(new ResultListener<Boolean>() {
+                    @Override
+                    public void onResult(Boolean result) {
+                        currentUri = INTERSTITIAL_VIDEO_URI;
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                interstitialVideoView.setVisibility(View.VISIBLE);
+                                interstitialVideoView.setVideoURI(currentUri);
+                                interstitialVideoView.setOnTouchListener(new View.OnTouchListener() {
+                                    @Override
+                                    public boolean onTouch(View v, MotionEvent event) {
 
-                                    if (INTERSTITIAL_VIDEO_URI.equals(currentUri)) {
-                                        playMainMovie();
+                                        if (INTERSTITIAL_VIDEO_URI.equals(currentUri)) {
+                                            playMainMovie();
+                                        }
+                                        return true;
                                     }
-                                    return true;
-                                }
-                            });
-                        }
-                    });
+                                });
+                            }
+                        });
 
-                }
+                    }
 
-                @Override
-                public <E extends Exception> void onException(E e) {
+                    @Override
+                    public <E extends Exception> void onException(E e) {
 
-                }
-            });
+                    }
+                });
+            }
 
         } else{
             skipThisView.setVisibility(View.GONE);
             currentUri = Uri.parse("");
-            /*(videoView.seekTo(resumePlayTime);
-            if (!shouldStartAfterResume)
-                videoView.pause();*/
         }
         hideShowNextGenView();
     }

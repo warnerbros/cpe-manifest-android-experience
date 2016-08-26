@@ -152,12 +152,6 @@ public final class ObservableVideoView extends VideoView implements NextGenPlaye
 	}
 
 
-	@Override
-	public boolean isFullScreen() {
-		return false;
-	}
-
-
 
 }
 
