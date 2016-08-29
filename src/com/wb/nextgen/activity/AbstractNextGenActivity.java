@@ -134,7 +134,7 @@ public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivi
 
         if (backgroundImageView == null){
             backgroundImageView = new ImageView(this);
-            backgroundImageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            backgroundImageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             ViewGroup contentView = (ViewGroup)this.getWindow().getDecorView().findViewById(android.R.id.content);
             if (contentView != null){
                 contentView.addView(backgroundImageView, 0);
@@ -161,8 +161,9 @@ public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivi
     }
 
     protected void loadBGImage(){
-        if (!StringHelper.isEmpty(getBackgroundImgUri()))
-            Picasso.with(this).load(getBackgroundImgUri()).fit().into(backgroundImageView);
+        if (!StringHelper.isEmpty(getBackgroundImgUri())){
+            Glide.with(this).load(getBackgroundImgUri()).centerCrop().into(backgroundImageView);
+        }
     }
 
     protected void setBackButtonText(String backText){
