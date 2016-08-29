@@ -36,15 +36,23 @@
                     android:paddingLeft="@dimen/textLarge"
                     android:visibility="invisible"
                     android:layout_gravity="center">
-                    <ProgressBar
-                        android:id="@+id/skip_this_countdown"
-                        style="?android:attr/progressBarStyleHorizontal"
-                        android:progressDrawable="@drawable/skip_progress"
-                        android:layout_width="@dimen/textLarge"
-                        android:layout_height="@dimen/textLarge"
-                        android:layout_gravity="center_vertical"
-                        android:visibility="visible"/>
-                    <TextView
+                    <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        nextgen:aspectRatioWidth="1"
+                        nextgen:aspectRatioHeight="1"
+                        nextgen:priority="HEIGHT_PRIORITY">
+                        <ProgressBar
+                            android:id="@+id/skip_this_countdown"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:progressDrawable="@drawable/skip_progress"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical"
+                            android:visibility="visible"/>
+                    </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
+
+                    <com.wb.nextgen.widget.FontFitTextView
                         android:paddingLeft="@dimen/spacing_normal"
                         android:paddingRight="@dimen/spacing_normal"
                         android:id="@+id/skip_this_text"
@@ -54,7 +62,7 @@
                         android:fontFamily="sans-serif-condensed"
                         android:layout_gravity="center_vertical"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="match_parent" />
                     <ImageView
                         android:src="@drawable/skip_arrow"
                         android:layout_width="@dimen/textLarge"
@@ -64,7 +72,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="7"/>
+                    android:layout_weight="11"/>
 
 
             </LinearLayout>
