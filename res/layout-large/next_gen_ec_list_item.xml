@@ -8,12 +8,12 @@
         android:id="@+id/ec_list_image_frame"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
+        <com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             nextgen:aspectRatioWidth="16"
             nextgen:aspectRatioHeight="9">
-            <com.wb.nextgen.widget.SelectedOverlayImageView
+            <com.wb.nextgenlibrary.widget.SelectedOverlayImageView
                 android:id="@+id/ec_list_image"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
@@ -53,7 +53,7 @@
                 </LinearLayout>
             </RelativeLayout>
 
-        </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
+        </com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout>
 
     </RelativeLayout>
     <TextView

@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
+        <com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout
             xmlns:nextgen="http://schemas.android.com/apk/res-auto"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
@@ -31,7 +31,7 @@
                 android:layout_centerInParent="true" />
 
 
-        </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
+        </com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout>
 
         <TextView
             android:id="@+id/ec_content_name"
@@ -52,7 +52,7 @@
             android:layout_height="0dp"
             android:layout_weight="4"
             android:id="@+id/frame_product_detail_fragment"
-            android:name="com.wb.nextgen.fragment.TheTakeProductDetailFragment"/>
+            android:name="com.wb.nextgenlibrary.fragment.TheTakeProductDetailFragment"/>
 
 
         <LinearLayout

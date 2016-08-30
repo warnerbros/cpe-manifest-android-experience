@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
-    <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
+    <com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout
         android:id="@+id/video_view_frame"
         nextgen:aspectRatioWidth="16"
         nextgen:aspectRatioHeight="9"
@@ -16,7 +16,7 @@
             android:id="@+id/interstitial_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <com.wb.nextgen.videoview.ObservableVideoView
+            <com.wb.nextgenlibrary.videoview.ObservableVideoView
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:id="@+id/interstitial_video_view"
@@ -36,7 +36,7 @@
                     android:paddingLeft="@dimen/textLarge"
                     android:visibility="invisible"
                     android:layout_gravity="center">
-                    <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
+                    <com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         nextgen:aspectRatioWidth="1"
@@ -50,9 +50,9 @@
                             android:layout_height="match_parent"
                             android:layout_gravity="center_vertical"
                             android:visibility="visible"/>
-                    </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
+                    </com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout>
 
-                    <com.wb.nextgen.widget.FontFitTextView
+                    <com.wb.nextgenlibrary.widget.FontFitTextView
                         android:paddingLeft="@dimen/spacing_normal"
                         android:paddingRight="@dimen/spacing_normal"
                         android:id="@+id/skip_this_text"
@@ -78,7 +78,7 @@
             </LinearLayout>
 
         </RelativeLayout>
-    </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
+    </com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout>
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

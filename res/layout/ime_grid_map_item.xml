@@ -15,7 +15,7 @@
         android:textSize="@dimen/textMedium"
         android:fontFamily="sans-serif-condensed"
         android:layout_height="wrap_content"/>
-    <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
+    <com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         nextgen:aspectRatioWidth="16"
@@ -31,7 +31,7 @@
             map:mapType="normal"
             map:liteMode="true"/>
 
-    </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
+    </com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout>
     <TextView
         android:id="@+id/ime_desc_text1"
         android:layout_width="wrap_content"

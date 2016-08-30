@@ -5,7 +5,7 @@
     android:background="@android:color/black"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
+    <com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout
         xmlns:nextgen="http://schemas.android.com/apk/res-auto"
         nextgen:aspectRatioHeight="9"
         nextgen:aspectRatioWidth="16"
@@ -24,14 +24,14 @@
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="match_parent" />
-    </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
+    </com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout>
 
     <RelativeLayout
         android:id="@+id/startup_buttons_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="left">
-        <com.wb.nextgen.widget.SelectedMaskImageButton
+        <com.wb.nextgenlibrary.widget.SelectedMaskImageButton
             android:id="@+id/next_gen_startup_play_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
             android:scaleType="fitXY"
             nextgen:selectedOverlayColor="@color/transparent_black"
             android:background="@android:color/transparent" />
-        <com.wb.nextgen.widget.SelectedMaskImageButton
+        <com.wb.nextgenlibrary.widget.SelectedMaskImageButton
             android:id="@+id/next_gen_startup_extra_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -30,7 +30,7 @@
                     android:scaleType="fitCenter"
                     android:id="@+id/next_gen_startup_movie_logo"
                     android:layout_above="@+id/next_gen_startup_play_button"/>-->
-                <com.wb.nextgen.widget.SelectedMaskImageButton
+                <com.wb.nextgenlibrary.widget.SelectedMaskImageButton
                     android:id="@+id/next_gen_startup_play_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
                     android:layout_centerInParent="true"
                     nextgen:selectedOverlayColor="@color/transparent_black"
                     android:background="@android:color/transparent" />
-                <com.wb.nextgen.widget.SelectedMaskImageButton
+                <com.wb.nextgenlibrary.widget.SelectedMaskImageButton
                     android:id="@+id/next_gen_startup_extra_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -16,7 +16,7 @@
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="4">
-            <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
+            <com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout
                 xmlns:nextgen="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/gallery_aspect_ratio_frame"
                 android:layout_centerInParent="true"
@@ -47,7 +47,7 @@
                     android:background="@android:color/transparent"
                     android:text="TEST"/>-->
 
-            </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
+            </com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout>
             <RelativeLayout
                 android:layout_alignParentBottom="true"
                 android:background="@color/transparent_gray"

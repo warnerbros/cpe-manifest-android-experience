@@ -5,20 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
+    <com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout
         xmlns:nextgen="http://schemas.android.com/apk/res-auto"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         nextgen:aspectRatioHeight="198"
         nextgen:aspectRatioWidth="352"
         nextgen:priority="WIDTH_PRIORITY">
-        <com.wb.nextgen.widget.DotIndicatorImageView
+        <com.wb.nextgenlibrary.widget.DotIndicatorImageView
             android:id="@+id/the_take_item_thumbnail"
             nextgen:indicatorDrawable="@drawable/shopping_bullseye"
             android:scaleType="centerInside"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" />
-    </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
+    </com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:background="@android:color/transparent"

@@ -4,7 +4,7 @@
     xmlns:nextgen="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
+    <com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout
         xmlns:nextgen="http://schemas.android.com/apk/res-auto"
         android:id="@+id/ec_list_fixed_frame"
         android:layout_width="match_parent"
@@ -12,7 +12,7 @@
         nextgen:aspectRatioHeight="9"
         nextgen:aspectRatioWidth="16"
         nextgen:priority="WIDTH_PRIORITY">
-        <com.wb.nextgen.widget.SelectedOverlayImageView
+        <com.wb.nextgenlibrary.widget.SelectedOverlayImageView
             android:id="@+id/ec_list_image"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
@@ -20,7 +20,7 @@
             nextgen:inActiveOverlayColor="@color/inactive_mask_color"
             android:scaleType="fitCenter"
             android:duplicateParentState="true"/>
-    </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
+    </com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout>
 
     <TextView
         android:id="@+id/ec_list_name_text"

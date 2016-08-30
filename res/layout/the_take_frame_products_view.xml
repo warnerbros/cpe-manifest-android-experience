@@ -13,7 +13,7 @@
             android:layout_height="0dp"
             android:layout_weight="4"
             android:id="@+id/frame_product_detail_fragment"
-            android:name="com.wb.nextgen.fragment.TheTakeProductDetailFragment"/>
+            android:name="com.wb.nextgenlibrary.fragment.TheTakeProductDetailFragment"/>
 
 
         <LinearLayout

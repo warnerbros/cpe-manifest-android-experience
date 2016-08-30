@@ -4,13 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <fragment
-        android:name="com.wb.nextgen.fragment.phone.NextGenActorListFragment_Phone"
+        android:name="com.wb.nextgenlibrary.fragment.phone.NextGenActorListFragment_Phone"
         android:id="@+id/actor_list_fragment"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="match_parent"/>
     <fragment
-        android:name="com.wb.nextgen.fragment.NextGenActorDetailFragment"
+        android:name="com.wb.nextgenlibrary.fragment.NextGenActorDetailFragment"
         android:id="@+id/actor_detail_fragment"
         android:layout_width="0dp"
         android:layout_weight="2"

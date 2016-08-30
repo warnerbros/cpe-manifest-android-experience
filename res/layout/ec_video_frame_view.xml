@@ -15,7 +15,7 @@
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
-            <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
+            <com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout
                 xmlns:nextgen="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/ec_video_aspect_ratio_frame"
                 android:layout_centerInParent="true"
@@ -34,7 +34,7 @@
                     <RelativeLayout
                         android:layout_width="fill_parent"
                         android:layout_height="match_parent">
-                        <com.wb.nextgen.videoview.ObservableVideoView
+                        <com.wb.nextgenlibrary.videoview.ObservableVideoView
                             android:id="@+id/ec_video_view"
                             android:layout_width="fill_parent"
                             android:layout_height="fill_parent"
@@ -44,7 +44,7 @@
                             android:padding="@dimen/spacing_normal"
                             android:layout_width="@dimen/video_view_count_down_box_width"
                             android:layout_height="@dimen/video_view_count_down_box_width">
-                            <com.wb.nextgen.widget.FlipProgressBar
+                            <com.wb.nextgenlibrary.widget.FlipProgressBar
                                 android:id="@+id/count_down_progressBar"
                                 style="?android:attr/progressBarStyleHorizontal"
                                 android:progressDrawable="@drawable/pie_progress"
@@ -84,7 +84,7 @@
 
                     </RelativeLayout>
                 </RelativeLayout>
-            </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
+            </com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout>
 
             <ImageButton
                 android:id="@+id/close_button"

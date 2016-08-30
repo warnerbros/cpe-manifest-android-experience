@@ -8,7 +8,7 @@
             android:layout_width="@dimen/next_gen_actor_thumbnail_dimen"
             android:layout_height="@dimen/next_gen_actor_thumbnail_dimen"
             android:duplicateParentState="true">
-            <com.wb.nextgen.widget.CircularClippedImageView
+            <com.wb.nextgenlibrary.widget.CircularClippedImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:duplicateParentState="true"

@@ -55,7 +55,7 @@
                     android:layout_toRightOf="@+id/prev_clip_btn"
                     android:layout_toLeftOf="@+id/next_clip_btn"
                     android:orientation="vertical">
-                    <com.wb.nextgen.widget.FixedAspectRatioFrameLayout
+                    <com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout
                         xmlns:nextgen="http://schemas.android.com/apk/res-auto"
                         android:layout_height="wrap_content"
                         android:layout_width="fill_parent"
@@ -63,7 +63,7 @@
                         nextgen:aspectRatioWidth="16"
                         nextgen:priority="WIDTH_PRIORITY">
 
-                        <com.wb.nextgen.videoview.ObservableVideoView
+                        <com.wb.nextgenlibrary.videoview.ObservableVideoView
                             android:id="@+id/ec_video_view"
                             android:layout_width="fill_parent"
                             android:layout_height="fill_parent"
@@ -89,7 +89,7 @@
 
                         </RelativeLayout>
 
-                    </com.wb.nextgen.widget.FixedAspectRatioFrameLayout>
+                    </com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout>
                     <TextView
                         android:layout_alignParentLeft="true"
                         android:id="@+id/ec_content_name"
