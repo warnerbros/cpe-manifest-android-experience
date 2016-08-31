@@ -2,6 +2,7 @@ package com.wb.nextgenlibrary.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -22,6 +23,7 @@ import com.bumptech.glide.Glide;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.data.NextGenStyle;
+import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 
 import java.util.Timer;
@@ -93,6 +95,10 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
     @Override
     public void onStart(){
         super.onStart();
+        if (TabletUtils.isTablet())
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        else
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
         if (StringHelper.isEmpty(NextGenExperience.getMovieMetaData().getStyle().getBackgroundVideoURL())) {
             if (startupVideoView != null ){
                 startupVideoView.setVisibility(View.GONE);
@@ -157,6 +163,12 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
             startupVideoView.requestFocus();
             startupVideoView.setVideoURI(Uri.parse(NextGenExperience.getMovieMetaData().getStyle().getBackgroundVideoURL()));
         }
+    }
+
+    public void onStop(){
+        super.onStop();
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
     }
 
     @Override
