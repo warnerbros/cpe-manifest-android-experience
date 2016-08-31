@@ -17,6 +17,7 @@ import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.util.HttpImageHelper;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
+import com.wb.nextgenlibrary.util.utils.StringHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,9 +96,12 @@ public class ECMapViewFragment extends AbstractNextGenFragment {
 
                                         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, locationItem.zoom));   // set location
                                         googleMap.getMaxZoomLevel();
-
-                                        BitmapDescriptor bmDes =
-                                                BitmapDescriptorFactory.fromBitmap(HttpImageHelper.getMapPinBitmap(selectedLocationItem.pinImage.url));
+                                        BitmapDescriptor bmDes ;
+                                        if (selectedLocationItem.pinImage != null && !StringHelper.isEmpty(selectedLocationItem.pinImage.url)) {
+                                            bmDes = BitmapDescriptorFactory.fromBitmap(HttpImageHelper.getMapPinBitmap(selectedLocationItem.pinImage.url));
+                                        }else {
+                                            bmDes = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
+                                        }
 
                                         googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
                                         MarkerOptions markerOpt = new MarkerOptions()

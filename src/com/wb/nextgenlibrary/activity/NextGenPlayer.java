@@ -72,6 +72,8 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
     AbstractNextGenMainMovieFragment mainMovieFragment;
 
+    int ecFragmentsCounter = 0;
+
     static enum DRMStatus{
         SUCCESS, FAILED, IN_PROGRESS, NOT_INITIATED
     }
@@ -180,12 +182,14 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     @Override
     public void onBackPressed(){
         super.onBackPressed();
-
-        if (getSupportFragmentManager().getBackStackEntryCount() == 0 )
+        if (ecFragmentsCounter == 0 )
             finish();
-        else if (getSupportFragmentManager().getBackStackEntryCount() == 1 && isPausedByIME){
-            isPausedByIME = false;
-            interstitialVideoView.start();
+        else {
+            ecFragmentsCounter = ecFragmentsCounter - 1;
+            if (isPausedByIME){
+                isPausedByIME = false;
+                mainMovieFragment.resumePlayback();
+            }
         }
     }
 
@@ -495,6 +499,11 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     @Override
     public void transitMainFragment(Fragment nextFragment){
         nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), getMainFrameId(), nextFragment);
+    }
+
+    public void loadIMEECFragment(Fragment nextFragment){
+        ecFragmentsCounter = ecFragmentsCounter + 1;
+        transitMainFragment(nextFragment);
     }
 
     @Override

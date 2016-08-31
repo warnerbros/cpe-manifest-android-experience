@@ -111,7 +111,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                         fragment.setShouldShowCloseBtn(true);
                         fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie));
                         fragment.setCurrentGallery((MovieMetaData.ECGalleryItem) headElement);
-                        playerActivity.transitMainFragment(fragment);
+                        playerActivity.loadIMEECFragment(fragment);
                         playerActivity.pausMovieForImeECPiece();
 
 
@@ -125,7 +125,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                             fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie));
                             /*
                             fragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) dataObj);*/
-                            playerActivity.transitMainFragment(fragment);
+                            playerActivity.loadIMEECFragment(fragment);
                             playerActivity.pausMovieForImeECPiece();
                         }else {
 
@@ -134,7 +134,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                             fragment.setShouldAutoPlay(false);
                             fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie));
                             fragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) headElement);
-                            playerActivity.transitMainFragment(fragment);
+                            playerActivity.loadIMEECFragment(fragment);
                             playerActivity.pausMovieForImeECPiece();
                         }
                     } else if (headElement instanceof MovieMetaData.LocationItem ||
@@ -147,18 +147,18 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                         ECMapViewFragment fragment = new ECMapViewFragment();
                         fragment.setShouldShowCloseBtn(true);
                         fragment.setLocationItem(activeObj.title, (MovieMetaData.LocationItem)headElement);
-                        playerActivity.transitMainFragment(fragment);
+                        playerActivity.loadIMEECFragment(fragment);
                         playerActivity.pausMovieForImeECPiece();
                     /*} else if (dataObj instanceof AVGalleryIMEEngine.IMECombineItem){
                         ECTrviaViewFragment fragment = new ECTrviaViewFragment();
                         fragment.setTextItem(activeObj.title, (AVGalleryIMEEngine.IMECombineItem)dataObj);
-                        playerActivity.transitMainFragment(fragment);
+                        playerActivity.loadIMEECFragment(fragment);
                         playerActivity.pausMovieForImeECPiece();*/
                     } else if (dataObj instanceof MovieMetaData.TriviaItem){
                         ECTrviaViewFragment fragment = new ECTrviaViewFragment();
                         fragment.setShouldShowCloseBtn(true);
                         fragment.setTriviaItem(activeObj.title, (MovieMetaData.TriviaItem)dataObj);
-                        playerActivity.transitMainFragment(fragment);
+                        playerActivity.loadIMEECFragment(fragment);
                         playerActivity.pausMovieForImeECPiece();
 
                     }
@@ -169,7 +169,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                 TheTakeFrameProductsFragment fragment = new TheTakeFrameProductsFragment();
                 fragment.setShouldShowCloseBtn(true);
                 fragment.setFrameProductTime(((TheTakeProductFrame)activeObj.imeObject).frameTime);
-                playerActivity.transitMainFragment(fragment);
+                playerActivity.loadIMEECFragment(fragment);
                 playerActivity.pausMovieForImeECPiece();
             }
         }
@@ -331,6 +331,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
         final MapView mapView = (MapView)rowView.findViewById(R.id.ime_map_view);
 
         mapView.setVisibility(View.VISIBLE);
+        mapView.setEnabled(false);
         final MovieMetaData.LocationItem locationItem = (MovieMetaData.LocationItem)dataObj;
 
         List<MovieMetaData.LocationItem> locList = new ArrayList<MovieMetaData.LocationItem>();
@@ -372,7 +373,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                                         ECMapViewFragment fragment = new ECMapViewFragment();
                                         fragment.setShouldShowCloseBtn(true);
                                         fragment.setLocationItem(title, locationItem);
-                                        playerActivity.transitMainFragment(fragment);
+                                        playerActivity.loadIMEECFragment(fragment);
                                         playerActivity.pausMovieForImeECPiece();
                                     }
                                 });

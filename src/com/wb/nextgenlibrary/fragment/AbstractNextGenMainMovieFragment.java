@@ -32,6 +32,7 @@ public abstract class AbstractNextGenMainMovieFragment extends Fragment implemen
     public abstract boolean isPlaying();
 
     public abstract void pause();
+    public abstract void resumePlayback();
 
     public abstract void streamStartPreparations(ResultListener<Boolean> resultLister);
 
@@ -48,6 +49,7 @@ public abstract class AbstractNextGenMainMovieFragment extends Fragment implemen
            }
        });
     }
+
 
     public abstract void setProgressDialog(ProgressDialog dialog);   // do not use app's dialog, always use the NextGen Library one.
 }
