@@ -15,21 +15,23 @@
         android:textSize="@dimen/textMedium"
         android:fontFamily="sans-serif-condensed"
         android:layout_height="wrap_content"/>
+
     <com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         nextgen:aspectRatioWidth="16"
         nextgen:aspectRatioHeight="9">
 
-        <com.google.android.gms.maps.MapView
-            xmlns:map="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/ime_map_view"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:clickable="false"
-            map:cameraZoom="13"
-            map:mapType="normal"
-            map:liteMode="true"/>
+            <com.google.android.gms.maps.MapView
+                xmlns:map="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/ime_map_view"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:clickable="false"
+                map:cameraZoom="13"
+                map:mapType="normal"
+                map:liteMode="true"/>
+
 
     </com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout>
     <TextView

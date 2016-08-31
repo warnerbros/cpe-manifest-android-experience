@@ -182,7 +182,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     @Override
     public void onBackPressed(){
         super.onBackPressed();
-        if (ecFragmentsCounter == 0 )
+        if (ecFragmentsCounter == 1)
             finish();
         else {
             ecFragmentsCounter = ecFragmentsCounter - 1;
@@ -498,12 +498,8 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
     @Override
     public void transitMainFragment(Fragment nextFragment){
-        nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), getMainFrameId(), nextFragment);
-    }
-
-    public void loadIMEECFragment(Fragment nextFragment){
         ecFragmentsCounter = ecFragmentsCounter + 1;
-        transitMainFragment(nextFragment);
+        nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), getMainFrameId(), nextFragment);
     }
 
     @Override

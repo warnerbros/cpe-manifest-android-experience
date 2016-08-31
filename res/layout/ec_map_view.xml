@@ -15,61 +15,63 @@
             android:fontFamily="sans-serif-condensed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
-        <com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout
-            xmlns:nextgen="http://schemas.android.com/apk/res-auto"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            nextgen:aspectRatioHeight="9"
-            nextgen:aspectRatioWidth="16"
-            nextgen:priority="WIDTH_PRIORITY">
-
-            <com.google.android.gms.maps.MapView
-                android:id="@+id/ec_mapview"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_centerInParent="true" />
-
-
-        </com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout>
-
-        <TextView
-            android:id="@+id/ec_content_name"
-            android:textColor="@color/drawer_yellow"
-            android:textSize="@dimen/textLarge"
-            android:fontFamily="sans-serif-condensed"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/transparent"
-        android:paddingTop="@dimen/spacing_normal">
-        <fragment
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="4"
-            android:id="@+id/frame_product_detail_fragment"
-            android:name="com.wb.nextgenlibrary.fragment.TheTakeProductDetailFragment"/>
-
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/frame_product_list"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+            <RelativeLayout
+                android:layout_weight="3"
                 android:layout_width="match_parent"
-                android:layout_height="fill_parent"
+                android:layout_height="0dp">
+                <com.google.android.gms.maps.MapView
+                    android:id="@+id/ec_mapview"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_centerInParent="true" />
+                <FrameLayout
+                    android:id="@+id/map_gallery_frame"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone">
+                    <fragment
+                        android:id="@+id/ime_secene_location_gallery"
+                        android:name="com.wb.nextgenlibrary.fragment.ECGalleryViewFragment"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_centerInParent="true"/>
+
+                </FrameLayout>
+                <FrameLayout
+                    android:id="@+id/map_video_frame"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone">
+                    <fragment
+                        android:id="@+id/ime_secene_location_video"
+                        android:name="com.wb.nextgenlibrary.fragment.ECVideoViewFragment"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_centerInParent="true" />
+                </FrameLayout>
+
+
+            </RelativeLayout>
+            <android.support.v7.widget.RecyclerView
+                android:layout_weight="2"
+                android:id="@+id/map_associate_ecs_list"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:orientation="horizontal">
             </android.support.v7.widget.RecyclerView>
-
         </LinearLayout>
+
+
+
+
     </LinearLayout>
+
     <ImageButton
-        android:id="@+id/close_button"
+        android:id="@+id/ime_map_close_button"
         android:layout_width="@dimen/close_icon_dimen"
         android:layout_height="@dimen/close_icon_dimen"
         android:src="@drawable/close_x_circle"

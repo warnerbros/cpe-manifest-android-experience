@@ -36,10 +36,14 @@ public abstract class AbstractNextGenFragment extends Fragment {
 
     }
 
+    protected int getCloseButtonId(){   // override this if for some reasons your close button's ID is different from this
+        return R.id.close_button;
+    }
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        closeBtn = (ImageButton) view.findViewById(R.id.close_button);
+        closeBtn = (ImageButton) view.findViewById(getCloseButtonId());
         if (closeBtn != null) {
             if (shouldShowCloseBtn) {
                 closeBtn.setVisibility(View.VISIBLE);
@@ -59,6 +63,9 @@ public abstract class AbstractNextGenFragment extends Fragment {
 
     public void setShouldShowCloseBtn(boolean bShow){
         shouldShowCloseBtn = bShow;
+        if (closeBtn != null){
+            closeBtn.setVisibility(bShow? View.VISIBLE : View.GONE);
+        }
     }
 
     abstract int getContentViewId();

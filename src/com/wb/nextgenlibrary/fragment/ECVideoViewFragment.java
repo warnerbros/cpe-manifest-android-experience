@@ -323,4 +323,8 @@ public class ECVideoViewFragment extends ECViewFragment{
     public void setShouldAutoPlay(boolean shouldAutoPlay){
         this.shouldAutoPlay = shouldAutoPlay;
     }
+
+    public void stopPlayback(){
+        videoView.stopPlayback();
+    }
 }
