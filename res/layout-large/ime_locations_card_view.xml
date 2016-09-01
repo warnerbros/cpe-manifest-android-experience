@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cardview="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        cardview:cardBackgroundColor="@android:color/transparent"
+        android:id="@+id/cv">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/spacing_normal"
+            android:paddingLeft="@dimen/spacing_small"
+            android:paddingRight="@dimen/spacing_small"
+            android:paddingBottom="@dimen/spacing_small">
+            <com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout
+                xmlns:nextgen="http://schemas.android.com/apk/res-auto"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                nextgen:aspectRatioHeight="9"
+                nextgen:aspectRatioWidth="16"
+                nextgen:priority="HEIGHT_PRIORITY">
+
+                <ImageView
+                    android:id="@+id/location_photo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:layout_alignParentTop="true"/>
+
+            </com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout>
+            <ImageView
+                android:id="@+id/location_play_image"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/play_button"/>
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

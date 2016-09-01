@@ -19,6 +19,7 @@ public abstract class AbstractNextGenFragment extends Fragment {
     View view;
     ImageButton closeBtn;
     boolean shouldShowCloseBtn = false;
+    boolean shouldShowFullScreenBtn = true;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -66,6 +67,10 @@ public abstract class AbstractNextGenFragment extends Fragment {
         if (closeBtn != null){
             closeBtn.setVisibility(bShow? View.VISIBLE : View.GONE);
         }
+    }
+
+    public void setShouldShowFullScreenBtn(boolean bShow){
+        shouldShowFullScreenBtn = bShow;
     }
 
     abstract int getContentViewId();

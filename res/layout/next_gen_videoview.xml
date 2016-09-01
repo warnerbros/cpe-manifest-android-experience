@@ -86,6 +86,7 @@
 
         <ImageView
             android:id="@+id/ime_background_image_view"
+            android:scaleType="centerCrop"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </RelativeLayout>

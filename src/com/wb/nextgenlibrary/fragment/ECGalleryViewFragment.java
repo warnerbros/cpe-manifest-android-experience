@@ -33,6 +33,7 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment {
     FixedAspectRatioFrameLayout aspectRatioFrame = null;
     ImageView bgImageView;
     Button shareImageButton;
+    boolean shouldShowShareBtn = true;
 
     String bgImageUrl = null;
     FixedAspectRatioFrameLayout.Priority aspectFramePriority = null;
@@ -70,6 +71,7 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment {
 
         shareImageButton = (Button) view.findViewById(R.id.share_image_button);
         if (shareImageButton != null){
+            shareImageButton.setVisibility(shouldShowShareBtn ? View.VISIBLE : View.GONE);
             shareImageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -89,6 +91,14 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment {
                     startActivity(Intent.createChooser(share, ""));
                 }
             });
+        }
+    }
+
+
+    public void setShouldShowShareBtn(boolean bShow){
+        shouldShowShareBtn = bShow;
+        if (shareImageButton != null){
+            shareImageButton.setVisibility(bShow ? View.VISIBLE : View.GONE);
         }
     }
 

@@ -29,6 +29,7 @@ import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.activity.NextGenPlayer;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.util.HttpImageHelper;
+import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.util.utils.F;
 import com.wb.nextgenlibrary.util.utils.NextGenLogger;
@@ -268,13 +269,13 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
                             @Override
                             public void onGlobalLayout() {
 
-                                 locationPhoto.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                                locationPhoto.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                                 ViewGroup viewParent =(ViewGroup)locationPhoto.getParent();
                                 int height = viewParent.getHeight();
                                 int width = viewParent.getWidth();
                                 final String mapImageUrl = locationItem.getGoogleMapImageUrl(width, height);
 
-                                Glide.with(getActivity()).load(mapImageUrl).centerCrop().into(locationPhoto);
+                                Glide.with(getActivity()).load(mapImageUrl).fitCenter().into(locationPhoto);
 
                             }
                         });
@@ -288,7 +289,11 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
                     locationPlayIcon.setVisibility(View.VISIBLE);
                 else
                     locationPlayIcon.setVisibility(View.INVISIBLE);
-                Glide.with(getActivity()).load(((MovieMetaData.PresentationDataItem) item).getPosterImgUrl()).centerCrop().into(locationPhoto);
+                if (TabletUtils.isTablet()){
+                    Glide.with(getActivity()).load(((MovieMetaData.PresentationDataItem) item).getPosterImgUrl()).fitCenter().into(locationPhoto);
+
+                }else
+                    Glide.with(getActivity()).load(((MovieMetaData.PresentationDataItem) item).getPosterImgUrl()).centerCrop().into(locationPhoto);
             }
         }
 
@@ -316,7 +321,6 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
                     videoViewFragment.setAspectRatioFramePriority(FixedAspectRatioFrameLayout.Priority.HEIGHT_PRIORITY);
                     videoViewFragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) currentItem);
 
-
                 } else if (currentItem instanceof MovieMetaData.ECGalleryItem) {
                     mapView.setVisibility(View.GONE);
                     videoFrame.setVisibility(View.GONE);
@@ -329,6 +333,8 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
                         galleryViewFragment = (ECGalleryViewFragment) getChildFragmentManager().findFragmentById(R.id.ime_secene_location_gallery);
                     galleryViewFragment.setShouldHideMetaData(true);
                     galleryViewFragment.setShouldShowCloseBtn(false);
+                    galleryViewFragment.setShouldShowFullScreenBtn(false);
+                    galleryViewFragment.setShouldShowShareBtn(false);
                     galleryViewFragment.setAspectRatioFramePriority(FixedAspectRatioFrameLayout.Priority.HEIGHT_PRIORITY);
 
                     galleryViewFragment.setCurrentGallery((MovieMetaData.ECGalleryItem) currentItem);
