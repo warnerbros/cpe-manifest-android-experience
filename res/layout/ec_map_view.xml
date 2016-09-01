@@ -23,11 +23,45 @@
                 android:layout_weight="3"
                 android:layout_width="match_parent"
                 android:layout_height="0dp">
-                <com.google.android.gms.maps.MapView
-                    android:id="@+id/ec_mapview"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:layout_centerInParent="true" />
+                <RelativeLayout
+                    android:id="@+id/map_map_frame"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <com.google.android.gms.maps.MapView
+                        android:id="@+id/ec_mapview"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_centerInParent="true" />
+                    <LinearLayout
+                        android:layout_margin="@dimen/spacing_small"
+                        android:padding="@dimen/spacing_small"
+                        android:layout_alignParentLeft="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <Button
+                            android:id="@+id/map_button"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-condensed"
+                            android:background="@drawable/map_tab_bg"
+                            android:textColor="@color/nextgen_tab_textcolor"
+                            android:text="@string/map_string"
+                            android:layout_weight="1"/>
+                        <Button
+                            android:id="@+id/satellite_button"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-condensed"
+                            android:background="@drawable/satellit_tab_bg"
+                            android:textColor="@color/nextgen_tab_textcolor"
+                            android:text="@string/satellite_string"
+                            android:layout_weight="1"/>
+
+
+                    </LinearLayout>
+
+                </RelativeLayout>
                 <FrameLayout
                     android:id="@+id/map_gallery_frame"
                     android:layout_width="match_parent"
@@ -53,7 +87,6 @@
                         android:layout_height="fill_parent"
                         android:layout_centerInParent="true" />
                 </FrameLayout>
-
 
             </RelativeLayout>
             <android.support.v7.widget.RecyclerView

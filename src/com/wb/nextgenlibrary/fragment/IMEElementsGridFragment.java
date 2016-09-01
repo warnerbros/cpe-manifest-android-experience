@@ -6,14 +6,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.activity.NextGenPlayer;
@@ -27,11 +19,8 @@ import com.wb.nextgenlibrary.model.AVGalleryIMEEngine;
 import com.wb.nextgenlibrary.model.NextGenIMEEngine;
 import com.wb.nextgenlibrary.model.TheTakeIMEEngine;
 import com.wb.nextgenlibrary.network.TheTakeApiDAO;
-import com.wb.nextgenlibrary.util.HttpImageHelper;
 import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
-import com.wb.nextgenlibrary.util.utils.F;
-import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 
 import java.util.ArrayList;
@@ -45,7 +34,6 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
     List<IMEElementsGroup> imeGroups;
     final List<NextGenIMEEngine> imeEngines = new ArrayList<NextGenIMEEngine>();
     long currentTimeCode = 0L;
-
 
     List<IMEDisplayObject> activeIMEs = new ArrayList<IMEDisplayObject>();
 
@@ -190,25 +178,6 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
         return 0;
     }
 
-    protected void setupNewContentView(View view){
-        MapView mapView = (MapView)view.findViewById(R.id.ime_map_view);
-        if (mapView != null) {
-            mapView.onCreate(savedInstanceState);
-            mapView.setClickable(false);
-        }
-    }
-
-    protected void invalidateOldContentView(View view){
-        MapView mapView = (MapView)view.findViewById(R.id.ime_map_view);
-        if (mapView != null) {
-            try {
-                mapView.onDestroy();
-            }catch (Exception ex){
-                NextGenLogger.e(F.TAG, ex.getLocalizedMessage());
-            }
-        }
-    }
-
     protected int getListItemViewId(int position){
         IMEDisplayObject activeObj = activeIMEs.get(position);
 
@@ -219,7 +188,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
             if (dataObj instanceof MovieMetaData.PresentationDataItem) {
                 if (dataObj instanceof MovieMetaData.LocationItem ||
                         (dataObj instanceof AVGalleryIMEEngine.IMECombineItem && ((AVGalleryIMEEngine.IMECombineItem)dataObj).isLocation() ) )
-                    retId = R.layout.ime_grid_map_item;
+                    retId = R.layout.ime_grid_presentation_item;
                 else if (dataObj instanceof MovieMetaData.AudioVisualItem &&
                         ((MovieMetaData.AudioVisualItem)dataObj).isShareClip()) {
                     retId = R.layout.ime_grid_share_item;
@@ -247,15 +216,23 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
             if (dataObj instanceof MovieMetaData.PresentationDataItem) {
 
                 rowView.setTag(R.id.ime_title, ((MovieMetaData.PresentationDataItem) dataObj).getId());
-                if (dataObj instanceof MovieMetaData.LocationItem ||
-                        (dataObj instanceof AVGalleryIMEEngine.IMECombineItem && ((AVGalleryIMEEngine.IMECombineItem)dataObj).isLocation() ) ){
+                if (dataObj instanceof MovieMetaData.LocationItem /*||
+                        (dataObj instanceof AVGalleryIMEEngine.IMECombineItem && ((AVGalleryIMEEngine.IMECombineItem)dataObj).isLocation() )*/ ){
 
-
+                    /*
                     if (dataObj instanceof AVGalleryIMEEngine.IMECombineItem){
                         dataObj = ((AVGalleryIMEEngine.IMECombineItem)dataObj).getAllPresentationItems().get(0);
-                    }
+                    }*/
+                    MovieMetaData.LocationItem locationItem = (MovieMetaData.LocationItem) dataObj;
+                    if (locationItem != null && poster.getHeight() > 0 && poster.getWidth() > 0){
 
-                    fillMapItem(activeObj.title, (MovieMetaData.LocationItem)dataObj, rowView);
+                        String imageUrl = locationItem.getGoogleMapImageUrl(poster.getWidth(), poster.getHeight());
+
+                        Glide.with(getActivity()).load(imageUrl).centerCrop().into(poster);
+
+
+
+                    }
 
 
 
@@ -325,71 +302,6 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
 
         }
 
-    }
-
-    private void fillMapItem(final String title, MovieMetaData.LocationItem dataObj, View rowView){
-
-        final MapView mapView = (MapView)rowView.findViewById(R.id.ime_map_view);
-
-        mapView.setVisibility(View.VISIBLE);
-        mapView.setEnabled(false);
-        final MovieMetaData.LocationItem locationItem = (MovieMetaData.LocationItem)dataObj;
-
-        List<MovieMetaData.LocationItem> locList = new ArrayList<MovieMetaData.LocationItem>();
-        locList.add(locationItem);
-        HttpImageHelper.getAllMapPins(locList, new ResultListener<Boolean>() {
-            @Override
-            public void onResult(Boolean result) {
-                //mapView.getMaps
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final LatLng location = new LatLng(locationItem.latitude, locationItem.longitude);
-
-                        mapView.getMapAsync(new OnMapReadyCallback() {
-                            @Override
-                            public void onMapReady(GoogleMap googleMap) {
-
-                                googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-                                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, locationItem.zoom));   // set location
-
-                                BitmapDescriptor bmDes = null;
-                                if (locationItem.pinImage != null && !StringHelper.isEmpty(locationItem.pinImage.url)) {
-                                    bmDes = BitmapDescriptorFactory.fromBitmap(HttpImageHelper.getMapPinBitmap(locationItem.pinImage.url));
-                                }else {
-                                    bmDes = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
-                                }
-                                googleMap.addMarker(new MarkerOptions()
-                                        .position(location)
-                                        .icon(bmDes));
-                                googleMap.getUiSettings().setMapToolbarEnabled(false);
-                                mapView.setClickable(true);
-                                googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                                    @Override
-                                    public void onMapClick(LatLng latLng) {
-                                        NextGenPlayer playerActivity = null;
-                                        if (getActivity() instanceof NextGenPlayer) {
-                                            playerActivity = (NextGenPlayer) getActivity();
-                                        }
-                                        IMEECMapViewFragment fragment = new IMEECMapViewFragment();
-                                        fragment.setShouldShowCloseBtn(true);
-                                        fragment.setLocationItem(title, locationItem);
-                                        playerActivity.transitMainFragment(fragment);
-                                        playerActivity.pausMovieForImeECPiece();
-                                    }
-                                });
-                                //googleMap.addMarker(new MarkerOptions().position(new LatLng(locationItem.latitude, locationItem.longitude)).title("Marker"));
-                            }
-                        });
-                    }
-                });
-            }
-
-            @Override
-            public <E extends Exception> void onException(E e) {
-
-            }
-        });
     }
 
     public void playbackStatusUpdate(final NextGenPlaybackStatus playbackStatus, final long timecode){

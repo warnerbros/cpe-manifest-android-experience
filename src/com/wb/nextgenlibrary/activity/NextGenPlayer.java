@@ -334,8 +334,6 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     }
 
     private void playMainMovie(){
-        if (skipThisView != null)
-            skipThisView.setVisibility(View.GONE);
         currentUri = Uri.parse("");
 
         if (drmStatus == DRMStatus.IN_PROGRESS){    // show loading
@@ -352,6 +350,8 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
             // wait for interstitial video to be finished
             return;
         }
+        if (skipThisView != null)
+            skipThisView.setVisibility(View.GONE);
         interstitialVideoView.stopPlayback();
         interstitialVideoView.setVisibility(View.GONE);
         mDialog.hide();

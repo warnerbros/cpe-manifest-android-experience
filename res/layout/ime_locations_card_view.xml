@@ -25,27 +25,13 @@
                 nextgen:aspectRatioHeight="16"
                 nextgen:aspectRatioWidth="9"
                 nextgen:priority="HEIGHT_PRIORITY">
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                    <ImageView
-                        android:id="@+id/location_photo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:layout_alignParentTop="true"/>
-                    <com.google.android.gms.maps.MapView
-                        xmlns:map="http://schemas.android.com/apk/res-auto"
-                        android:id="@+id/ime_location_map_item"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:clickable="false"
-                        map:mapType="normal"
-                        map:liteMode="true"
-                        android:visibility="gone"/>
 
-                </RelativeLayout>
-
+                <ImageView
+                    android:id="@+id/location_photo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:layout_alignParentTop="true"/>
 
             </com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout>
             <ImageView

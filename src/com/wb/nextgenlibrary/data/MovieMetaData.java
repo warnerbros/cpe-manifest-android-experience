@@ -1012,6 +1012,20 @@ public class MovieMetaData {
             return "";
         }
 
+        final static String GOOGLE_MAP_IMAGE_URL = "http://maps.google.com/maps/api/staticmap?center=%s,%s&zoom=%s&size=%sx%s&sensor=false";
+        final static String PIN_DEFAULT = "&markers=color:blue|%s,%s";
+        final static String PIN_CUSTOM = "&markers=icon:%s|%s,%s";
+        public String getGoogleMapImageUrl(int width, int height){
+            String pinPortion = "";
+            if (pinImage != null && !StringHelper.isEmpty(pinImage.url)){
+                pinPortion = String.format(PIN_CUSTOM, pinImage.url, latitude, longitude);
+
+            }else{
+                pinPortion = String.format(PIN_DEFAULT, latitude, longitude);
+            }
+            return String.format(GOOGLE_MAP_IMAGE_URL, latitude, longitude, zoom, width, height) + pinPortion;
+        }
+
         public List<PresentationDataItem> getPresentationDataItems(){
             computeFromExperience();
             return presentationDataItems;

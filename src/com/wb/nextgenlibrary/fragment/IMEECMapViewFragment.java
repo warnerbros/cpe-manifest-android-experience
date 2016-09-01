@@ -8,8 +8,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -39,7 +42,7 @@ import java.util.List;
 /**
  * Created by gzcheng on 3/31/16.
  */
-public class IMEECMapViewFragment extends AbstractNextGenFragment {
+public class IMEECMapViewFragment extends AbstractNextGenFragment implements View.OnClickListener {
     protected MapView mapView;
 
     protected TextView ecTitle;
@@ -49,6 +52,7 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment {
     private RecyclerView.LayoutManager recyclerViewLayoutManager;
 
     private FrameLayout videoFrame, galleryFrame;
+    private RelativeLayout mapFrame;
 
     MovieMetaData.LocationItem selectedLocationItem = null;
     String title = null;
@@ -57,6 +61,9 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment {
     public int getContentViewId(){
         return R.layout.ec_map_view;
     }
+    private Button mapButton;
+    private Button satelliteButton;
+
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -72,6 +79,7 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment {
 
         videoFrame = (FrameLayout) view.findViewById(R.id.map_video_frame);
         galleryFrame = (FrameLayout) view.findViewById(R.id.map_gallery_frame);
+        mapFrame = (RelativeLayout) view.findViewById(R.id.map_map_frame);
 
         recyclerViewLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         sceneLocationECRecyclerView = (RecyclerView) view.findViewById(R.id.map_associate_ecs_list);
@@ -80,6 +88,45 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment {
 
         videoViewFragment = (ECVideoViewFragment) getChildFragmentManager().findFragmentById(R.id.ime_secene_location_video);
         galleryViewFragment = (ECGalleryViewFragment) getChildFragmentManager().findFragmentById(R.id.ime_secene_location_gallery);
+
+        mapButton = (Button) view.findViewById(R.id.map_button);
+        satelliteButton = (Button) view.findViewById(R.id.satellite_button);
+        if (satelliteButton != null && mapButton != null) {
+            mapButton.setOnClickListener(this);
+            satelliteButton.setOnClickListener(this);
+            onClick(mapButton);
+        }
+    }
+
+    @Override
+    public void onClick(final View v){
+        if (mapButton != null && satelliteButton != null) {
+
+
+            if (mapView != null) {
+                //final LatLng location = new LatLng(selectedLocationItem.latitude, selectedLocationItem.longitude);
+                mapView.getMapAsync(new OnMapReadyCallback() {
+                    @Override
+                    public void onMapReady(final GoogleMap googleMap) {
+
+                        if (v.equals(mapButton)) {
+                            if (googleMap.getMapType() != GoogleMap.MAP_TYPE_NORMAL)
+                                googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                            mapButton.setSelected(true);
+                            satelliteButton.setSelected(false);
+                        } else if (v.equals(satelliteButton) ) {
+                            if (googleMap.getMapType() != GoogleMap.MAP_TYPE_SATELLITE)
+                                googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                            mapButton.setSelected(false);
+                            satelliteButton.setSelected(true);
+
+                        }
+
+
+                    }
+                });
+            }
+        }
     }
 
     @Override
@@ -120,7 +167,7 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                mapView.getMapAsync(new IMEOnMapReadyCallback(selectedLocationItem, true, null));
+                                mapView.getMapAsync(new IMEOnMapReadyCallback(selectedLocationItem));
                             }
                         });
                     }
@@ -138,7 +185,6 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment {
 
     class IMEOnMapReadyCallback implements OnMapReadyCallback{
         MovieMetaData.LocationItem locationItem;
-        boolean isInteractive;
         GoogleMap.OnMapClickListener onMapClickListener = new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
@@ -146,22 +192,16 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment {
             }
         };
 
-        public IMEOnMapReadyCallback(MovieMetaData.LocationItem locationItem, boolean isInteractive, GoogleMap.OnMapClickListener onMapClickListener){
+        public IMEOnMapReadyCallback(MovieMetaData.LocationItem locationItem){
             this.locationItem = locationItem;
-            this.isInteractive = isInteractive;
-            if (onMapClickListener != null){
-                this.onMapClickListener = onMapClickListener;
-            }
+
         }
         @Override
         public void onMapReady(final GoogleMap googleMap) {
 
             final LatLng location = new LatLng(locationItem.latitude, locationItem.longitude);
 
-            if (!isInteractive){
-                googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-            }else
-                googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+            googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
             googleMap.getUiSettings().setMapToolbarEnabled(false);
 
@@ -204,44 +244,46 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment {
         CardView cv;
         ImageView locationPhoto;
         ImageView locationPlayIcon;
-        MapView locationMapView;
         Object currentItem;
-        int itemIndex;
 
-        ECViewHolder(View itemView, Object item, int index) {
+        ECViewHolder(View itemView, Object item) {
             super(itemView);
             cv = (CardView) itemView.findViewById(R.id.cv);
             locationPhoto = (ImageView) itemView.findViewById(R.id.location_photo);
             locationPlayIcon = (ImageView) itemView.findViewById(R.id.location_play_image);
-            locationMapView = (MapView) itemView.findViewById(R.id.ime_location_map_item);
             this.currentItem = item;
-            itemIndex = index;
             itemView.setOnClickListener(this);
         }
 
-        public void setItem(Object item, int position) {
+        public void setItem(Object item) {
             currentItem = item;
-            itemIndex = position;
             if (item instanceof MovieMetaData.LocationItem) {
-                MovieMetaData.LocationItem locationItem = ((MovieMetaData.LocationItem) item);
+                final MovieMetaData.LocationItem locationItem = ((MovieMetaData.LocationItem) item);
                 locationPlayIcon.setVisibility(View.INVISIBLE);
-                if (locationItem == null) { // TODO: CHECK
-                    locationItem = ((MovieMetaData.LocationItem) item);
+                if (locationItem != null) { // TODO: CHECK
+
+                    ViewTreeObserver viewTreeObserver = locationPhoto.getViewTreeObserver();
+                    if (viewTreeObserver.isAlive()) {
+                        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                            @Override
+                            public void onGlobalLayout() {
+
+                                 locationPhoto.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                                ViewGroup viewParent =(ViewGroup)locationPhoto.getParent();
+                                int height = viewParent.getHeight();
+                                int width = viewParent.getWidth();
+                                final String mapImageUrl = locationItem.getGoogleMapImageUrl(width, height);
+
+                                Glide.with(getActivity()).load(mapImageUrl).centerCrop().into(locationPhoto);
+
+                            }
+                        });
+                    }
+
                 }
 
-                locationMapView.setVisibility(View.VISIBLE);
-                locationPhoto.setVisibility(View.GONE);
-                locationMapView.onCreate(savedInstanceState);
-                locationMapView.setOnClickListener(null);
-                locationMapView.getMapAsync(new IMEOnMapReadyCallback(locationItem, false, new GoogleMap.OnMapClickListener() {
-                    @Override
-                    public void onMapClick(LatLng latLng) {
-                        onClick(null);
-                    }
-                }));
+
             } else if (item instanceof MovieMetaData.PresentationDataItem) {
-                locationMapView.setVisibility(View.GONE);
-                locationPhoto.setVisibility(View.VISIBLE);
                 if (item instanceof MovieMetaData.AudioVisualItem)
                     locationPlayIcon.setVisibility(View.VISIBLE);
                 else
@@ -309,7 +351,7 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment {
         @Override
         public ECViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.ime_locations_card_view, viewGroup, false);
-            ECViewHolder pvh = new ECViewHolder(v, null, i);
+            ECViewHolder pvh = new ECViewHolder(v, null);
             return pvh;
         }
 
@@ -317,9 +359,9 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment {
 
             if (selectedLocationItem != null) {
                 if (position == 0){
-                    holder.setItem(selectedLocationItem, 0);
+                    holder.setItem(selectedLocationItem);
                 }else{
-                    holder.setItem(selectedLocationItem.getPresentationDataItems().get(position - 1), position);
+                    holder.setItem(selectedLocationItem.getPresentationDataItems().get(position - 1));
                 }
             }
 

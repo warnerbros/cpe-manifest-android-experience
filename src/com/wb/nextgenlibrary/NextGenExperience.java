@@ -5,7 +5,9 @@ import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.SystemClock;
@@ -85,6 +87,7 @@ public class NextGenExperience {
     private static Class<? extends AbstractNextGenMainMovieFragment> mainMovieFragmentClass;
     private static Object nextgenPlaybackObject;
     private static NextGenEventHandler nextGenEventHandler;
+    private static String googleMapAPIKey = null;
 
     private static String sUserAgent;
 
@@ -123,6 +126,16 @@ public class NextGenExperience {
         nextGenEventHandler = eventHandler;
 
         sUserAgent = "Android/" + sVersionName + " (Linux; U; Android " + Build.VERSION.RELEASE + "; " + Build.MODEL + ")";
+        try {
+            ApplicationInfo appInfo = appContext.getPackageManager().getApplicationInfo(
+                    appContext.getPackageName(), PackageManager.GET_META_DATA);
+            if (appInfo.metaData != null) {
+                googleMapAPIKey = appInfo.metaData.getString("com.google.android.geo.API_KEY");
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+        }
+
+
 
         if (!StringHelper.isEmpty(item.getManifestFileUrl())) {
             Worker.execute(new Callable<Boolean>() {
@@ -294,5 +307,9 @@ public class NextGenExperience {
                 return item;
         }
         return null;
+    }
+
+    public static String getGoogleMapAPIKey(){
+        return googleMapAPIKey;
     }
 }
