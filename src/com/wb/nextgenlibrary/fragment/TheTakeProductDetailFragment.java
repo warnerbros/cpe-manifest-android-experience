@@ -27,6 +27,8 @@ public class TheTakeProductDetailFragment extends AbstractNextGenFragment implem
     TextView matchStatus, brandText, nameText, priceText;
     Button shopAtTheTakeBtn, sendLinkBtn;
 
+    String titleText = "";
+
     int contentViewId = R.layout.the_take_product_view;
 
     public void setContentViewId(int viewId){
@@ -81,7 +83,10 @@ public class TheTakeProductDetailFragment extends AbstractNextGenFragment implem
         if(product.getProductDetail() != null){
             Picasso.with(getActivity()).load(product.getProductDetail().getProductImage()).fit().centerInside().into(productPoster);
 
-            matchStatus.setText("exact match");
+            if (product.verified)
+                matchStatus.setText(getActivity().getResources().getString(R.string.exact_match));
+            else
+                matchStatus.setText(getActivity().getResources().getString(R.string.close_match));
             brandText.setText(product.getProductDetail().productBrand);
             nameText.setText(product.getProductDetail().productName);
             priceText.setText(product.getProductDetail().productPrice);

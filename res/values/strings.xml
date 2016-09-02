@@ -65,4 +65,8 @@
 	<string name="skip_this">SKIP THIS</string>
 
 	<string name="choose_share_clip">CHOOSE A CLIP TO SHARE</string>
+
+	<string name="exact_match">Exact Match</string>
+	<string name="close_match">Close Match</string>
+	<string name="thetake_bottom_text">NO ENDORSEMENT OR SPONSORSHIP IMPLIED BY ANY ACTOR, STUDIO OR BRAND FEATURED ON THETAKE.COM</string>
 </resources>

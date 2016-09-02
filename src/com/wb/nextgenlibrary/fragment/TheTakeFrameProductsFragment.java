@@ -30,6 +30,10 @@ public class TheTakeFrameProductsFragment extends AbstractNextGenFragment {
     RecyclerView frameProductsRecyclerView;
     LinearLayoutManager frameProductsLayoutManager;
     FrameProductsAdapter frameProductsAdaptor;
+
+    TextView titleTextView;
+    String titleText = "";
+
     long frameTime = 0L;
     @Override
     public int getContentViewId(){
@@ -39,6 +43,9 @@ public class TheTakeFrameProductsFragment extends AbstractNextGenFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        titleTextView = (TextView)view.findViewById(R.id.ec_title_name);
+
+        setTitleText(titleText);
         productDetailFragment = (TheTakeProductDetailFragment)getChildFragmentManager().findFragmentById(R.id.frame_product_detail_fragment);
         productDetailFragment.setContentViewId(R.layout.the_take_product_view);
 
@@ -50,6 +57,12 @@ public class TheTakeFrameProductsFragment extends AbstractNextGenFragment {
             frameProductsRecyclerView.setAdapter(frameProductsAdaptor);
             frameProductsAdaptor.setSelectedIndex(0);
         }
+    }
+
+    public void setTitleText(String title){
+        titleText = title;
+        if (titleTextView != null)
+            titleTextView.setText(titleText);
     }
 
     @Override

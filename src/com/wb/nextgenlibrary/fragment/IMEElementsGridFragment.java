@@ -156,6 +156,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
             if (playerActivity != null){
                 TheTakeFrameProductsFragment fragment = new TheTakeFrameProductsFragment();
                 fragment.setShouldShowCloseBtn(true);
+                fragment.setTitleText(activeObj.title.toUpperCase());
                 fragment.setFrameProductTime(((TheTakeProductFrame)activeObj.imeObject).frameTime);
                 playerActivity.transitMainFragment(fragment);
                 playerActivity.pausMovieForImeECPiece();

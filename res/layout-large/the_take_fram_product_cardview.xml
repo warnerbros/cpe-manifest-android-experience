@@ -19,8 +19,8 @@
             android:layout_height="match_parent"
             android:layout_width="wrap_content"
             android:layout_gravity="center"
-            nextgen:aspectRatioHeight="9"
-            nextgen:aspectRatioWidth="16"
+            nextgen:aspectRatioHeight="2"
+            nextgen:aspectRatioWidth="5"
             android:duplicateParentState="true"
             nextgen:priority="HEIGHT_PRIORITY">
             <LinearLayout
@@ -50,7 +50,7 @@
                         android:textColor="@android:color/darker_gray"
                         android:gravity="left"
                         android:fontFamily="sans-serif-condensed"
-                        android:textSize="@dimen/textSmall"
+                        android:textSize="@dimen/textMedium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                     <TextView
@@ -58,7 +58,7 @@
                         android:textColor="@color/white"
                         android:gravity="left"
                         android:fontFamily="sans-serif-condensed"
-                        android:textSize="@dimen/textSmall"
+                        android:textSize="@dimen/textMedium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
