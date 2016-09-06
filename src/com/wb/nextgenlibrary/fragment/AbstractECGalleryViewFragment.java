@@ -27,7 +27,7 @@ abstract public class AbstractECGalleryViewFragment extends ECViewFragment  {
         if (fullscreenToggleBtn != null){
             if (TabletUtils.isTablet()) {
 
-                fullscreenToggleBtn.setVisibility(shouldShowCloseBtn ? View.VISIBLE : View.GONE);
+                fullscreenToggleBtn.setVisibility(shouldShowFullScreenBtn ? View.VISIBLE : View.GONE);
                 fullscreenToggleBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
