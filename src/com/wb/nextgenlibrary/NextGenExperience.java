@@ -95,12 +95,12 @@ public class NextGenExperience {
         manifestItems = new ArrayList<ManifestItem>();
         manifestItems.add(new ManifestItem("Man of Steel v0.7", "urn:dece:cid:eidr-s:DAFF-8AB8-3AF0-FD3A-29EF-Q",
                 "https://d19p213wjrwt85.cloudfront.net/uvvu-images/EB180713D3536025E0405B0A07341ECE",
-                "/xml/mos_hls_manifest_r60-v0.7.xml",
-                "/xml/mos_appdata_locations_r60-v0.7.xml"));
+                "/xml/mos_hls_manifest_r60-v2.0.xml",
+                "/xml/mos_appdata_locations_r60-v2.0.xml"));
         manifestItems.add(new ManifestItem("Batman vs Superman w/360", "urn:dece:cid:eidr-s:B257-8696-871C-A12B-B8C1-S",
                 "https://d19p213wjrwt85.cloudfront.net/uvvu-images/2C89FE061219D322E05314345B0AFE72",
-                "/xml/bvs_manifest_r60-v1.4.xml",
-                "/xml/bvs_appdata_locations_r60-v1.4.xml"));
+                "/xml/bvs_manifest_r60-v2.0.xml",
+                "/xml/bvs_appdata_locations_r60-v2.0.xml"));
         manifestItems.add(new ManifestItem("Sister", "urn:dece:cid:eidr-s:D2E8-4520-9446-BFAD-B106-4",
                 "https://d19p213wjrwt85.cloudfront.net/uvvu-images/2C89FE061219D322E05314345B0AFE72",
                 "/xml/sisters_extended_hls_manifest_v3-generated-spec1.5.xml",

@@ -40,8 +40,8 @@ public abstract class NextGenIMEEngine <T>{
     public boolean binarySearch(long movieTimecode){
         T computedIMEItem = null;
 
-        double dTimeCode = (double)movieTimecode * 23.98/24;            // frame adjustment
-        long timecode = (long)dTimeCode;
+        //double dTimeCode = (double)movieTimecode * 23.98/24;            // frame adjustment
+        long timecode = movieTimecode;//(long)dTimeCode;
 
         if (currentIMEItems != null && currentIndex != -1 && compareCurrentTimeWithItemAtIndex(timecode, currentIndex) == 0) {
            return false;

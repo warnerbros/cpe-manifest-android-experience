@@ -22,6 +22,8 @@ import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.MediaManifestType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.OtherIDType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.PictureGroupType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.PictureType;
+import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.PlayableSequenceListType;
+import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.PlayableSequenceType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.PresentationType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.TimecodeType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.TimedEventSequenceType;
@@ -135,6 +137,8 @@ public class MovieMetaData {
 
         HashMap<String, CastData> peopleIdToCastData = new HashMap<String, CastData>();
 
+        HashMap<String, PlayableSequenceType> playableSequenceTypeHashMap = new HashMap<String, PlayableSequenceType>();
+
 
         HashMap<String, List<ExperienceData>> experienceChildrenToParentMap = new HashMap<String, List<ExperienceData>>();
         HashMap<String, AppDataType> appDataIdTpAppDataMap = new HashMap<String, AppDataType>();
@@ -164,6 +168,12 @@ public class MovieMetaData {
             if (mediaManifest.getInventory().getInteractive() != null && mediaManifest.getInventory().getInteractive().size() > 0){
                 for (InventoryInteractiveType interactiveData : mediaManifest.getInventory().getInteractive()){
                     inventoryAssetsMap.put(interactiveData.getInteractiveTrackID(), interactiveData);
+                }
+            }
+
+            if (mediaManifest.getPlayableSequences() != null && mediaManifest.getPlayableSequences().getPlayableSequence() != null && mediaManifest.getPlayableSequences().getPlayableSequence().size() > 0){
+                for (PlayableSequenceListType.PlayableSequence playableSequence : mediaManifest.getPlayableSequences().getPlayableSequence()){
+                    playableSequenceTypeHashMap.put(playableSequence.getPlayableSequenceID(), playableSequence);
                 }
             }
         }
@@ -285,13 +295,23 @@ public class MovieMetaData {
                             }
 
                             presentationId = audioVisual.getPresentationID();
-                            PresentationType presentation = presentationAssetMap.get(presentationId);  // get Presentation by presentation id
-                            if (presentation.getTrackMetadata().size() > 0 &&
-                                    presentation.getTrackMetadata().get(0).getVideoTrackReference().size() > 0 &&
-                                    presentation.getTrackMetadata().get(0).getVideoTrackReference().get(0).getVideoTrackID().size() > 0) {                                           // get the video id from presentation
-                                video = videoAssetsMap.get(presentation.getTrackMetadata().get(0).getVideoTrackReference().get(0).getVideoTrackID().get(0));
+                            if (StringHelper.isEmpty(presentationId) && !StringHelper.isEmpty(audioVisual.getPlayableSequenceID())){
+                                PlayableSequenceType playableSequenceType = playableSequenceTypeHashMap.get(audioVisual.getPlayableSequenceID());
+                                if (playableSequenceType != null && playableSequenceType.getClip() != null && playableSequenceType.getClip().size() > 0){
+                                    presentationId = playableSequenceType.getClip().get(0).getPresentationID();
+                                }
                             }
-                            if (video != null) {
+
+                            if (!StringHelper.isEmpty(presentationId)) {
+                                PresentationType presentation = presentationAssetMap.get(presentationId);  // get Presentation by presentation id
+                                if (presentation.getTrackMetadata() != null && presentation.getTrackMetadata().size() > 0 &&
+                                        presentation.getTrackMetadata().get(0).getVideoTrackReference().size() > 0 &&
+                                        presentation.getTrackMetadata().get(0).getVideoTrackReference().get(0).getVideoTrackID().size() > 0) {                                           // get the video id from presentation
+                                    video = videoAssetsMap.get(presentation.getTrackMetadata().get(0).getVideoTrackReference().get(0).getVideoTrackID().get(0));
+                                }
+                            }
+
+                            if (!StringHelper.isEmpty(presentationId) && video != null) {
                                 //ExperienceData ecData = new ExperienceData(experience, metaData, video, null);
                                 if (audioVisual.getSubType() != null && audioVisual.getSubType().size() > 0)
                                     subtype = audioVisual.getSubType().get(0);
@@ -299,6 +319,7 @@ public class MovieMetaData {
                                 avItems.add(item);
                                 presentationIdToAVItemMap.put(presentationId, item);
                             }
+
                         }
                     }
                 }
@@ -374,6 +395,9 @@ public class MovieMetaData {
                 }
                 result.imeECGroups.addAll(rootData.childrenExperience.get(1).childrenExperience);
                 result.rootExperience = rootData;
+                if (rootData.audioVisualItems != null && rootData.audioVisualItems.size() > 0) {
+                    String inter = rootData.audioVisualItems.get(0).videoUrl;
+                }
             }
 
 
@@ -1552,8 +1576,14 @@ public class MovieMetaData {
             }
         }
 
-
-
         //castIMEGroups
+    }
+
+    public String getInterstitialVideoURL(){
+        if (rootExperience.audioVisualItems != null && rootExperience.audioVisualItems.size() > 0){
+            return rootExperience.audioVisualItems.get(0).videoUrl;
+        }else{
+            return getStyle().getInterstitialVideoURL();
+        }
     }
 }

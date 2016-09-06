@@ -16,13 +16,21 @@
             android:id="@+id/interstitial_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <com.wb.nextgenlibrary.videoview.ObservableVideoView
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:id="@+id/interstitial_video_view"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_centerInParent="true" />
+            <com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout
+                xmlns:nextgen="http://schemas.android.com/apk/res-auto"
+                nextgen:aspectRatioHeight="9"
+                nextgen:aspectRatioWidth="16"
+                android:layout_centerInParent="true"
+                nextgen:priority="HEIGHT_PRIORITY"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                nextgen:allowLargerThanParent="true">
+                <com.wb.nextgenlibrary.videoview.ObservableVideoView
+                    android:id="@+id/interstitial_video_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"/>
+            </com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
