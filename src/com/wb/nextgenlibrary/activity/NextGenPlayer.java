@@ -313,6 +313,13 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
             interstitialVideoView.start();
 
             skipThisView.setVisibility(View.VISIBLE);
+            skipThisView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    bInterstitialVideoComplete = true;
+                    playMainMovie();
+                }
+            });
             skipThisCounter.setProgress(0);
             skipThisCounter.setProgress(100);
 
@@ -350,8 +357,10 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
             // wait for interstitial video to be finished
             return;
         }
-        if (skipThisView != null)
+        if (skipThisView != null) {
             skipThisView.setVisibility(View.GONE);
+            skipThisView.setOnClickListener(null);
+        }
         interstitialVideoView.stopPlayback();
         interstitialVideoView.setVisibility(View.GONE);
         mDialog.hide();
@@ -407,14 +416,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
             currentUri = INTERSTITIAL_VIDEO_URI;
             interstitialVideoView.setVisibility(View.VISIBLE);
             interstitialVideoView.setVideoURI(currentUri);
-            interstitialVideoView.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    bInterstitialVideoComplete = true;
-                    playMainMovie();
-                    return true;
-                }
-            });
+
             drmStatus = DRMStatus.IN_PROGRESS;
             mainMovieFragment.streamStartPreparations(new ResultListener<Boolean>() {
                 @Override
@@ -438,6 +440,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
         } else{
             skipThisView.setVisibility(View.GONE);
+            skipThisView.setOnClickListener(null);
             currentUri = Uri.parse("");
         }
         hideShowNextGenView();
