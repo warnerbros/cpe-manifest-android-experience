@@ -17,11 +17,5 @@
   
   <!-- Enable Activity tracking -->
   <bool name="ga_autoActivityTracking">true</bool>
-  
-  <!-- The screen names that will appear in  reporting -->
-  <string name="net.flixster.android.view.LoginActivity">Login View</string>
-  <string name="net.flixster.android.view.CollectionActivity">Collection View</string>
-  <string name="net.flixster.android.view.MovieDetailsActivity">Title Details View</string>
-  <string name="net.flixster.android.view.tablet.MovieDetailsActivityTablet">Title Details View</string>
-  <string name="net.flixster.android.drm.WidevinePlayer">Video Player View</string>
+
 </resources>

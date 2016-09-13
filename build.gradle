@@ -23,14 +23,14 @@ android {
 		minSdkVersion 21
 		targetSdkVersion 21
 		// Enabling multidex support.
-		multiDexEnabled true
+		//multiDexEnabled true
 		//manifestPlaceholders = [HOCKEYAPP_APP_ID: "38d269d0079144528e95c04cdc386452"]
     }
-
+	/*
 	compileOptions {
 		sourceCompatibility JavaVersion.VERSION_1_6
 		targetCompatibility JavaVersion.VERSION_1_6
-	}
+	}*/
         
 	sourceSets {
 		main {
@@ -117,13 +117,12 @@ dependencies {
 	/*compile('com.crashlytics.sdk.android:crashlytics:2.4.0@aar') {
             transitive = true;
         }*/
-	compile 'com.android.support:multidex:1.0.0'
+	//compile 'com.android.support:multidex:1.0.0'
 	compile 'com.google.http-client:google-http-client-android:+'
 	compile 'com.google.api-client:google-api-client-android:+'
 	compile 'com.google.api-client:google-api-client-gson:+'
 	compile 'com.google.code.gson:gson:2.2.4'
 	compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
 	//compile group: 'com.ximpleware', name: 'vtd-xml', version: '2.11'
-	compile 'com.android.support:support-v4:24.2.0'
 }
 
