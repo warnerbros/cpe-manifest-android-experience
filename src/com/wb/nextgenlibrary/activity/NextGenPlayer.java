@@ -316,8 +316,13 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
             skipThisView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    bInterstitialVideoComplete = true;
-                    playMainMovie();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            bInterstitialVideoComplete = true;
+                            playMainMovie();
+                        }
+                    });
                 }
             });
             skipThisCounter.setProgress(0);
@@ -340,7 +345,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         return new PreparedListener();
     }
 
-    private void playMainMovie(){
+    private synchronized void playMainMovie(){
         currentUri = Uri.parse("");
 
         if (drmStatus == DRMStatus.IN_PROGRESS){    // show loading
