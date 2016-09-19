@@ -6,8 +6,10 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.Size;
 import android.view.Display;
 import android.view.View;
@@ -76,7 +78,8 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
         if (!StringHelper.isEmpty(NextGenExperience.getMovieMetaData().getStyle().getBackgroundVideoURL())) {
             if (startupImageView != null)
                 startupImageView.setVisibility(View.GONE);
-            videoLoopPoint = (int) (NextGenExperience.getMovieMetaData().getStyle().getBackgroundVideoLoopTime() * 1000);
+            videoLoopPoint = ((int) NextGenExperience.getMovieMetaData().getStyle().getBackgroundVideoLoopTime() * 1000);
+            Log.i("DEBUG", String.valueOf((int) NextGenExperience.getMovieMetaData().getStyle().getBackgroundVideoLoopTime() * 1000));
             buttonAnimationStartTime = (int) (NextGenExperience.getMovieMetaData().getStyle().getBackgroundVideoFadeTime() * 1000);
         } else{
             buttonsLayout.setVisibility(View.VISIBLE);
@@ -89,8 +92,6 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
         }
         adjustButtonSizesAndPosition();
     }
-
-
 
     @Override
     public void onStart(){
@@ -113,8 +114,6 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
             startupVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(final MediaPlayer mp) {
-
-
 
                     startupVideoView.start();
                     if (startUpTimer == null){
@@ -139,20 +138,29 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
                                         }
                                     });
-
-
                             }
                         };
                         startUpTimer.schedule(startUpTimerTask, buttonAnimationStartTime);
                     }
+
+                    //added: tr 9/19
+                    mp.setOnSeekCompleteListener(new MediaPlayer.OnSeekCompleteListener() {
+                        @Override
+                        public void onSeekComplete(MediaPlayer mp) {
+                            startupVideoView.start();
+                        }
+                    });
                 }
             });
             startupVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
                     startupVideoView.seekTo(videoLoopPoint);
-                    startupVideoView.start();
+                    //need to wait until the seekTo is complete before restarting.
+                    //startupVideoView.start();
                 }
+
+
             });
             startupVideoView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -160,6 +168,7 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
                     startupVideoView.stopPlayback();
                 }
             });
+
             startupVideoView.requestFocus();
             startupVideoView.setVideoURI(Uri.parse(NextGenExperience.getMovieMetaData().getStyle().getBackgroundVideoURL()));
         }
@@ -289,5 +298,5 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
         return resultParams;
     }
-
 }
+
