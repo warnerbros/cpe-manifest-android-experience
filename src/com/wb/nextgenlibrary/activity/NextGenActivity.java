@@ -66,8 +66,6 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
     private boolean isStartUp = true;
 
     StyleData.ExperienceStyle mainStyle = NextGenExperience.getMovieMetaData().getRootExperienceStyle();
-    StyleData.ExperienceStyle imeStyle = NextGenExperience.getMovieMetaData().getIMEExperienceStyle();
-    StyleData.ExperienceStyle extraStyle = NextGenExperience.getMovieMetaData().getExtraExperienceStyle();
     @Override
     public void onCreate(Bundle savedState) {
         super.onCreate(savedState);

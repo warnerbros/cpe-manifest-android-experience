@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.data.NextGenStyle;
 import com.wb.nextgenlibrary.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgenlibrary.interfaces.NextGenPlaybackStatusListener;
 /**
@@ -43,7 +42,7 @@ public class  NextGenPlayerBottomFragment extends Fragment implements NextGenPla
         super.onViewCreated(view, savedInstanceState);
         ImageView backgroundImgView = (ImageView)view.findViewById(R.id.next_gen_ime_bottom_background);
         if (backgroundImgView != null){
-            Picasso.with(getActivity()).load(NextGenExperience.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie)).fit().into(backgroundImgView);
+            Picasso.with(getActivity()).load(NextGenExperience.getMovieMetaData().getInMovieExperience().style.getBackground().getImage().url).fit().into(backgroundImgView);
             //Glide.with(getActivity()).load(NextGenExperience.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie)).into(backgroundImgView);
         }
         imeGridFragment = (IMEElementsGridFragment) getChildFragmentManager().findFragmentById(R.id.ime_grid_fragment);

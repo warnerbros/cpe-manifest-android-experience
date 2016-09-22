@@ -11,7 +11,6 @@ import android.widget.FrameLayout;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.data.MovieMetaData;
-import com.wb.nextgenlibrary.data.NextGenStyle;
 import com.wb.nextgenlibrary.fragment.ECViewLeftListFragment;
 import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.utils.F;
@@ -79,7 +78,7 @@ public abstract class AbstractECView extends AbstractNextGenActivity {
 
     @Override
     public String getBackgroundImgUri(){
-        return NextGenExperience.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.OutOfMovie);
+        return NextGenExperience.getMovieMetaData().getExtraExperience().style.getBackground().getImage().url;
     }
 
     @Override

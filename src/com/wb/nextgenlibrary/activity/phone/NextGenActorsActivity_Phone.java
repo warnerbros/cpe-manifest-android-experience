@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.activity.AbstractNextGenActivity;
-import com.wb.nextgenlibrary.data.NextGenStyle;
 import com.wb.nextgenlibrary.fragment.NextGenActorDetailFragment;
 import com.wb.nextgenlibrary.fragment.NextGenActorListFragment;
 import com.wb.nextgenlibrary.interfaces.NextGenFragmentTransactionInterface;
@@ -37,7 +36,7 @@ public class NextGenActorsActivity_Phone extends AbstractNextGenActivity impleme
 
     @Override
     public String getBackgroundImgUri(){
-        return NextGenExperience.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.OutOfMovie);
+        return NextGenExperience.getMovieMetaData().getExtraExperience().style.getBackground().getImage().url;
     }
 
     @Override

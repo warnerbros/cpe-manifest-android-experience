@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment;
 
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.data.NextGenStyle;
+import com.wb.nextgenlibrary.data.StyleData;
 import com.wb.nextgenlibrary.fragment.NextGenActorListFragment;
 import com.wb.nextgenlibrary.fragment.NextGenExtraMainTableFragment;
 import com.wb.nextgenlibrary.interfaces.NextGenFragmentTransactionInterface;
@@ -19,15 +19,10 @@ import com.wb.nextgenlibrary.util.utils.NextGenFragmentTransactionEngine;
  */
 public class NextGenExtraActivity extends AbstractNextGenActivity implements NextGenFragmentTransactionInterface {
 
-    //protected ImageView extraTitleView;
-    //protected ImageView extraLogoImageView;
-    //protected Button extraBackButton;
-
     NextGenFragmentTransactionEngine nextGenFragmentTransactionEngine;
 
-    //protected LinearLayout leftPanelFrame;
-    //protected LinearLayout rightMainFrame;
 
+    StyleData.ExperienceStyle extraStyle = null;
     private int startupStackCount = 2;
 
     @Override
@@ -40,6 +35,8 @@ public class NextGenExtraActivity extends AbstractNextGenActivity implements Nex
 
         //leftPanelFrame = (LinearLayout)findViewById(R.id.next_gen_extra_left_view);
         //rightMainFrame = (LinearLayout)findViewById(R.id.next_gen_extra_right_view);
+
+        extraStyle = NextGenExperience.getMovieMetaData().getExtraExperience().style;
 
         nextGenFragmentTransactionEngine = new NextGenFragmentTransactionEngine(this);
         initFragments();
@@ -120,7 +117,11 @@ public class NextGenExtraActivity extends AbstractNextGenActivity implements Nex
 
     @Override
     public String getBackgroundImgUri(){
-        return NextGenExperience.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.OutOfMovie);
+        if (extraStyle != null)
+            return extraStyle.getBackground().getImage().url;
+        else
+            return "";
+        //return NextGenExperience.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.OutOfMovie);
     }
 
     @Override
@@ -130,12 +131,18 @@ public class NextGenExtraActivity extends AbstractNextGenActivity implements Nex
 
     @Override
     public String getRightTitleImageUri(){
-        return NextGenExperience.getMovieMetaData().getStyle().getTitleImageURL(NextGenStyle.NextGenAppearanceType.OutOfMovie);
+        /*if (extraStyle != null) {
+            StyleData.NodeStyleData nodeStyleData = extraStyle.getNodeStyleData(NextGenHideStatusBarActivity.getCurrentScreenOrientation());
+            MovieMetaData.PictureImageData titleImageData = nodeStyleData.theme.getImageData();
+            return ;
+        }else
+            return "";*/
+        return "";
     }
 
     @Override
     public String getRightTitleText(){
-        return "";
+        return NextGenExperience.getMovieMetaData().getExtraExperience().title;
     }
 
 }

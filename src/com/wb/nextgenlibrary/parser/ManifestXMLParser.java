@@ -2,7 +2,6 @@ package com.wb.nextgenlibrary.parser;
 
 import android.util.Xml;
 
-import com.wb.nextgenlibrary.data.NextGenStyle;
 import com.wb.nextgenlibrary.parser.appdata.ManifestAppDataSetType;
 import com.wb.nextgenlibrary.parser.cpestyle.CPEStyleSetType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.MediaManifestType;
@@ -60,7 +59,6 @@ public class ManifestXMLParser {
         CPEStyleSetType styleData = null;
         HttpURLConnection conn = null;
         ManifestAppDataSetType appData = null;
-        NextGenStyle style = null;
         try{
 
             // App Data Parsing

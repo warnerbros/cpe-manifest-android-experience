@@ -19,7 +19,6 @@ import android.widget.RelativeLayout;
 import com.bumptech.glide.Glide;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.data.NextGenStyle;
 import com.wb.nextgenlibrary.fragment.AbstractNextGenMainMovieFragment;
 import com.wb.nextgenlibrary.fragment.NextGenPlayerBottomFragment;
 import com.wb.nextgenlibrary.interfaces.NextGenFragmentTransactionInterface;
@@ -93,7 +92,8 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
         backgroundImageView = (ImageView)findViewById(R.id.ime_background_image_view);
         if (backgroundImageView != null){
-            Glide.with(this).load(NextGenExperience.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie)).into(backgroundImageView);
+            String bgImgUrl = NextGenExperience.getMovieMetaData().getExtraExperience().style.getBackground().getImage().url;
+            Glide.with(this).load(bgImgUrl).into(backgroundImageView);
             //PicassoTrustAll.loadImageIntoView(this, NextGenExperience.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie), backgroundImageView);
         }
 
@@ -201,7 +201,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
     @Override
     String getTitleImageUrl(){
-        return NextGenExperience.getMovieMetaData().getStyle().getTitleImageURL(NextGenStyle.NextGenAppearanceType.InMovie);
+        return NextGenExperience.getMovieMetaData().getTitletreatmentImageUrl();
     }
 
     @Override

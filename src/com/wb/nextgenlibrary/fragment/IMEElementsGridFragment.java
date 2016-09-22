@@ -11,7 +11,6 @@ import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.activity.NextGenPlayer;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.data.MovieMetaData.IMEElementsGroup;
-import com.wb.nextgenlibrary.data.NextGenStyle;
 import com.wb.nextgenlibrary.data.TheTakeData;
 import com.wb.nextgenlibrary.data.TheTakeData.TheTakeProductFrame;
 import com.wb.nextgenlibrary.interfaces.NextGenPlaybackStatusListener;
@@ -21,7 +20,6 @@ import com.wb.nextgenlibrary.model.TheTakeIMEEngine;
 import com.wb.nextgenlibrary.network.TheTakeApiDAO;
 import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
-import com.wb.nextgenlibrary.util.utils.StringHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +95,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                     if (headElement instanceof MovieMetaData.ECGalleryItem) {
                         ECGalleryViewFragment fragment = new ECGalleryViewFragment();
                         fragment.setShouldShowCloseBtn(true);
-                        fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie));
+                        fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getInMovieExperience().style.getBackground().getImage().url);
                         fragment.setCurrentGallery((MovieMetaData.ECGalleryItem) headElement);
                         playerActivity.transitMainFragment(fragment);
                         playerActivity.pausMovieForImeECPiece();
@@ -110,7 +108,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                             fragment.setShouldAutoPlay(false);
                             fragment.setShouldShowCloseBtn(true);
                             fragment.setExperienceAndIndex(activeObj.imeExperience, ((MovieMetaData.IMEElement) activeObj.imeObject).itemIndex);
-                            fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie));
+                            fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getInMovieExperience().style.getBackground().getImage().url);
                             /*
                             fragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) dataObj);*/
                             playerActivity.transitMainFragment(fragment);
@@ -120,7 +118,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                             ECVideoViewFragment fragment = new ECVideoViewFragment();
                             fragment.setShouldShowCloseBtn(true);
                             fragment.setShouldAutoPlay(false);
-                            fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie));
+                            fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getInMovieExperience().style.getBackground().getImage().url);
                             fragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) headElement);
                             playerActivity.transitMainFragment(fragment);
                             playerActivity.pausMovieForImeECPiece();

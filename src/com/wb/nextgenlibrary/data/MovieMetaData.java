@@ -84,7 +84,6 @@ public class MovieMetaData {
 
     private ExperienceData rootExperience;
     private boolean hasCalledBaselineAPI = false;
-    private NextGenStyle style;
 
     private List<List<IMEElement<CastData>>> castIMEElements = new ArrayList<List<IMEElement<CastData>>>() ;
 
@@ -104,10 +103,6 @@ public class MovieMetaData {
             return rootExperience.experienceId;
         else
             return "";
-    }
-
-    public NextGenStyle getStyle(){
-        return style;
     }
 
     public boolean isHasCalledBaselineAPI(){
@@ -510,9 +505,7 @@ public class MovieMetaData {
                                 CastData cast = peopleIdToCastData.get(otherID.getIdentifier());
                                 presentationData = cast;
                             }
-                        }/*else if (timedEvent.getLocation() != null){
-                            presentationData = new LocationItem(timedEvent.getLocation());
-                        }*/
+                        }
 
 
                         if (timedEvent.getProductID() != null ){
@@ -545,11 +538,7 @@ public class MovieMetaData {
             }
         }
 
-
-
         /*****************End of Time Sequence Events****************************/
-
-        result.style = new NextGenStyle(result.getMoiveId());
 
         return result;
     }
@@ -1646,12 +1635,16 @@ public class MovieMetaData {
         if (rootExperience.audioVisualItems != null && rootExperience.audioVisualItems.size() > 0){
             return rootExperience.audioVisualItems.get(0).videoUrl;
         }else{
-            return getStyle().getInterstitialVideoURL();
+            return "http://wb-extras.warnerbros.com/extrasplus/staging/Manifest/MOS/artwork/backgrounds/MOS_INTERSTITIAL_v2.mp4";
         }
     }
 
     public StyleData.ExperienceStyle getRootExperienceStyle(){
         return rootExperience.style;
+    }
+
+    public String getTitletreatmentImageUrl(){
+        return rootExperience.childrenExperience.get(1).posterImgUrl;
     }
 
     public StyleData.ExperienceStyle getIMEExperienceStyle(){
@@ -1661,10 +1654,17 @@ public class MovieMetaData {
             return null;
     }
 
-    public StyleData.ExperienceStyle getExtraExperienceStyle(){
+    public ExperienceData getExtraExperience(){
 
         if (rootExperience.childrenExperience.size() > 0)
-            return rootExperience.childrenExperience.get(0).style;
+            return rootExperience.childrenExperience.get(0);
+        else return null;
+    }
+
+    public ExperienceData getInMovieExperience(){
+
+        if (rootExperience.childrenExperience.size() > 1)
+            return rootExperience.childrenExperience.get(1);
         else return null;
     }
 
