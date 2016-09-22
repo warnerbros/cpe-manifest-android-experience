@@ -7,4 +7,5 @@ import android.app.Activity;
  */
 public interface NextGenEventHandler {
     void handleMovieTitleSelection(Activity activity, String movieId);
+    boolean isDebugBuild();
 }

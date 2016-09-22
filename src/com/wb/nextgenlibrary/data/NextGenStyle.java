@@ -1,5 +1,12 @@
 package com.wb.nextgenlibrary.data;
 
+import com.wb.nextgenlibrary.parser.cpestyle.CPEStyleSetType;
+import com.wb.nextgenlibrary.parser.cpestyle.ExperienceMenuMapType;
+import com.wb.nextgenlibrary.parser.cpestyle.NodeStyleType;
+import com.wb.nextgenlibrary.parser.cpestyle.ThemeType;
+
+import java.util.HashMap;
+
 /**
  * Created by gzcheng on 7/14/16.
  */
@@ -20,6 +27,16 @@ public class NextGenStyle {
     private String movieId;
     public NextGenStyle(String movieId){
         this.movieId = movieId;
+    }
+
+    public NextGenStyle(CPEStyleSetType styleData){
+        HashMap<String, NodeStyleType> nodeStyleTypeHashMap = new HashMap<String, NodeStyleType>();
+        HashMap<String, ThemeType> themeTypeHashMap = new HashMap<String, ThemeType>();
+        for (NodeStyleType nodeStyleType : styleData.getNodeStyle()){
+            nodeStyleTypeHashMap.put(nodeStyleType.getNodeStyleID(), nodeStyleType);
+        }
+        //HashMap<String, ThemeType>
+
     }
 
     //private NextGenAppearanceType type = NextGenAppearanceType.Main;

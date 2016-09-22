@@ -2,7 +2,9 @@ package com.wb.nextgenlibrary.parser;
 
 import android.util.Xml;
 
+import com.wb.nextgenlibrary.data.NextGenStyle;
 import com.wb.nextgenlibrary.parser.appdata.ManifestAppDataSetType;
+import com.wb.nextgenlibrary.parser.cpestyle.CPEStyleSetType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.MediaManifestType;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 
@@ -44,17 +46,21 @@ public class ManifestXMLParser {
     public static class NextGenManifestData{
         public final MediaManifestType mainManifest;
         public final ManifestAppDataSetType appDataManifest;
+        public final CPEStyleSetType cpeStyle;
 
-        public NextGenManifestData(MediaManifestType mediaManifestType, ManifestAppDataSetType appDataFeedSetType){
+        public NextGenManifestData(MediaManifestType mediaManifestType, ManifestAppDataSetType appDataFeedSetType, CPEStyleSetType style){
             mainManifest = mediaManifestType;
             appDataManifest = appDataFeedSetType;
+            cpeStyle = style;
         }
     }
 
-    public NextGenManifestData startParsing(String manifestUrl, String appDataUrl){
+    public NextGenManifestData startParsing(String manifestUrl, String appDataUrl, String styleDataUrl){
         NextGenManifestData manifest = null;
+        CPEStyleSetType styleData = null;
         HttpURLConnection conn = null;
         ManifestAppDataSetType appData = null;
+        NextGenStyle style = null;
         try{
 
             // App Data Parsing
@@ -81,6 +87,29 @@ public class ManifestXMLParser {
             }
             //************ End of AppData Parsing
 
+            // CPE Style Parsing
+            if (styleDataUrl != null) {
+                URL appDataURL = new URL(styleDataUrl);
+                conn = (HttpURLConnection) appDataURL.openConnection();
+                conn.setReadTimeout(10000);
+                conn.setConnectTimeout(20000);
+                conn.setRequestMethod("GET");
+                conn.setDoInput(true);
+                conn.connect();
+                InputStream appDataIS = conn.getInputStream();
+
+                XmlPullParser styleDataParser = Xml.newPullParser();
+                styleDataParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+                styleDataParser.setInput(appDataIS, null);
+                styleDataParser.nextTag();
+
+                styleData = parseStyleData(styleDataParser);
+
+                conn.disconnect();
+                conn = null;
+            }
+            //************ End of CPE Style Parsing
+
             // Manifest parsing
             URL manifestURL = new URL(manifestUrl);
             conn = (HttpURLConnection)manifestURL.openConnection();
@@ -93,9 +122,6 @@ public class ManifestXMLParser {
 
             XmlPullParser manifestParser = Xml.newPullParser();
             manifestParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-            //AssetManager am = NextGenExperience.getContext().getAssets();
-            //parser.setInput(am.open("mos_hls_manifest_v3.xml"), null);
-            //parser.setInput(am.open("mos_hls_manifest_r60_v0.4.xml"), null);
             manifestParser.setInput(manifestIS, null);
             manifestParser.nextTag();
 
@@ -103,7 +129,9 @@ public class ManifestXMLParser {
             MediaManifestType mainManifest = parseManifest(manifestParser);
             conn.disconnect();
             conn = null;
-            manifest = new NextGenManifestData(mainManifest, appData);
+            manifest = new NextGenManifestData(mainManifest, appData, styleData);
+
+
 
         }catch (Exception ex){
             System.out.println(ex.getMessage());
@@ -272,7 +300,8 @@ public class ManifestXMLParser {
 
                         } else {
                             Object obj = toObject(thisFieldClass.field.getType(), readText(parser));
-                            Method setter = thisFieldClass.fieldClass.getDeclaredMethod("set" + xmlElementName, thisFieldClass.field.getType());
+                            String setterName = getSetterName(xmlElementName);
+                            Method setter = thisFieldClass.fieldClass.getDeclaredMethod(setterName, thisFieldClass.field.getType());
 
                             setter.invoke(retObj, obj);
                         }
@@ -293,6 +322,12 @@ public class ManifestXMLParser {
         }
 
         return retObj;
+    }
+
+    private static String getSetterName(String xmlElementName){  // to avoid calling setClass
+        if (xmlElementName.equalsIgnoreCase("class"))
+            xmlElementName = xmlElementName.replace("s", "z");
+        return "set" + xmlElementName;
     }
 
     private Object toObject(Class targetClass, String stringValue) throws IOException, XmlPullParserException{
@@ -424,6 +459,11 @@ public class ManifestXMLParser {
 
     private ManifestAppDataSetType parseAppData(XmlPullParser parser) throws XmlPullParserException, IOException {
         return parseElement(parser, ManifestAppDataSetType.class, "manifestdata:ManifestAppDataSet");
+
+    }
+
+    private CPEStyleSetType parseStyleData(XmlPullParser parser) throws XmlPullParserException, IOException {
+        return parseElement(parser, CPEStyleSetType.class, "cpestyle:CPEStyleSet");
 
     }
 

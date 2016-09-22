@@ -45,25 +45,31 @@ public class NextGenExperience {
         public final String imageUrl;
         public final String movieName;
         private final String manifestFileUrl;
+        private final String ngeStyleFileUrl;
         private final String appDataFileUrl;
         public final String contentId;
-        ManifestItem(String movieName, String cid, String imageUrl, String manifestFileUrl, String appDataFileUrl){
+        ManifestItem(String movieName, String cid, String imageUrl, String manifestFileUrl, String appDataFileUrl, String ngeStyleFileUrl){
             this.imageUrl = imageUrl;
             contentId = cid;
             this.manifestFileUrl = manifestFileUrl;
             this.movieName = movieName;
             this.appDataFileUrl = appDataFileUrl;
+            this.ngeStyleFileUrl = ngeStyleFileUrl;
         }
 
-        final static String REALEASE_HOST = "https://cpe-manifest.s3.amazonaws.com";
-        final static String DEBUG_HOST = "https://d3hu292hohbyvv.cloudfront.net";
+        final static String DEBUG_HOST = "https://cpe-manifest.s3.amazonaws.com";
+        final static String REALEASE_HOST = "https://d3hu292hohbyvv.cloudfront.net";
 
         public String getManifestFileUrl(){
-            return (isDebugBuild() ? DEBUG_HOST : REALEASE_HOST) + manifestFileUrl;
+            return (nextGenEventHandler.isDebugBuild() ? DEBUG_HOST : REALEASE_HOST) + manifestFileUrl;
         }
 
         public String getAppDataFileUrl(){
-            return (isDebugBuild() ? DEBUG_HOST : REALEASE_HOST) + appDataFileUrl;
+            return (nextGenEventHandler.isDebugBuild() ? DEBUG_HOST : REALEASE_HOST) + appDataFileUrl;
+        }
+
+        public String getNgeStyleFileUrl(){
+            return (nextGenEventHandler.isDebugBuild() ? DEBUG_HOST : REALEASE_HOST) + ngeStyleFileUrl;
         }
     }
 
@@ -95,20 +101,22 @@ public class NextGenExperience {
         manifestItems = new ArrayList<ManifestItem>();
         manifestItems.add(new ManifestItem("Man of Steel v0.7", "urn:dece:cid:eidr-s:DAFF-8AB8-3AF0-FD3A-29EF-Q",
                 "https://d19p213wjrwt85.cloudfront.net/uvvu-images/EB180713D3536025E0405B0A07341ECE",
-                "/xml/mos_hls_manifest_r60-v2.0.xml",
-                "/xml/mos_appdata_locations_r60-v2.0.xml"));
+                "/xml/urn:dece:cid:eidr-s:DAFF-8AB8-3AF0-FD3A-29EF-Q/mos_manifest-2.1.xml",
+                "/xml/urn:dece:cid:eidr-s:DAFF-8AB8-3AF0-FD3A-29EF-Q/mos_appdata_locations-2.1.xml",
+                "/xml/urn:dece:cid:eidr-s:DAFF-8AB8-3AF0-FD3A-29EF-Q/mos_cpestyle-2.1.xml"));
         manifestItems.add(new ManifestItem("Batman vs Superman w/360", "urn:dece:cid:eidr-s:B257-8696-871C-A12B-B8C1-S",
                 "https://d19p213wjrwt85.cloudfront.net/uvvu-images/2C89FE061219D322E05314345B0AFE72",
-                "/xml/bvs_manifest_r60-v2.0.xml",
-                "/xml/bvs_appdata_locations_r60-v2.0.xml"));
+                "/xml/urn:dece:cid:eidr-s:B257-8696-871C-A12B-B8C1-S/bvs_manifest-2.1.xml",
+                "/xml/urn:dece:cid:eidr-s:B257-8696-871C-A12B-B8C1-S/bvs_appdata_locations-2.1.xml",
+                "/xml/urn:dece:cid:eidr-s:B257-8696-871C-A12B-B8C1-S/bvs_cpestyle-2.1.xml"));
         manifestItems.add(new ManifestItem("Sister", "urn:dece:cid:eidr-s:D2E8-4520-9446-BFAD-B106-4",
                 "https://d19p213wjrwt85.cloudfront.net/uvvu-images/2C89FE061219D322E05314345B0AFE72",
                 "/xml/sisters_extended_hls_manifest_v3-generated-spec1.5.xml",
-                null));
+                null, null));
         manifestItems.add(new ManifestItem("Minions", "urn:dece:cid:eidr-s:F1F8-3CDA-0844-0D78-E520-Q",
                 "https://d19p213wjrwt85.cloudfront.net/uvvu-images/2C89FE061219D322E05314345B0AFE72",
                 "/xml/minions_hls_manifest_v6-R60-generated-spec1.5.xml",
-                null));
+                null, null));
 
 
     }
@@ -176,7 +184,8 @@ public class NextGenExperience {
             NextGenLogger.d("TIME_THIS", "---------------Next Test--------------");
 
             long systime = SystemClock.currentThreadTimeMillis();
-            ManifestXMLParser.NextGenManifestData manifest = new ManifestXMLParser().startParsing(manifestItem.getManifestFileUrl(), manifestItem.getAppDataFileUrl());
+            ManifestXMLParser.NextGenManifestData manifest = new ManifestXMLParser().startParsing(manifestItem.getManifestFileUrl(),
+                    manifestItem.getAppDataFileUrl(), manifestItem.getNgeStyleFileUrl());
             long currentTime = SystemClock.currentThreadTimeMillis() - systime;
             NextGenLogger.d("TIME_THIS", "Time to finish parsing: " + currentTime);
             movieMetaData = MovieMetaData.process(manifest);
@@ -311,5 +320,9 @@ public class NextGenExperience {
 
     public static String getGoogleMapAPIKey(){
         return googleMapAPIKey;
+    }
+
+    public static String getLanguage(){
+        return "en";
     }
 }

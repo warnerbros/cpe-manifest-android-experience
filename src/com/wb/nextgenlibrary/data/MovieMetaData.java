@@ -7,6 +7,10 @@ import com.wb.nextgenlibrary.parser.appdata.AppDataLocationType;
 import com.wb.nextgenlibrary.parser.appdata.AppDataType;
 import com.wb.nextgenlibrary.parser.appdata.AppNVPairType;
 import com.wb.nextgenlibrary.parser.appdata.ManifestAppDataSetType;
+import com.wb.nextgenlibrary.parser.cpestyle.CPEStyleSetType;
+import com.wb.nextgenlibrary.parser.cpestyle.ExperienceMenuMapType;
+import com.wb.nextgenlibrary.parser.cpestyle.NodeStyleType;
+import com.wb.nextgenlibrary.parser.cpestyle.ThemeType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.AppGroupType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.AudiovisualType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.ExperienceAppType;
@@ -84,6 +88,8 @@ public class MovieMetaData {
 
     private List<List<IMEElement<CastData>>> castIMEElements = new ArrayList<List<IMEElement<CastData>>>() ;
 
+    private HashMap<String, StyleData.ExperienceStyle> experienceStyleMap = new HashMap<String, StyleData.ExperienceStyle>();
+
     final static public String movieTitleText = "Man of Steel";
 
     public String getMainMovieUrl(){
@@ -116,14 +122,14 @@ public class MovieMetaData {
 
         MediaManifestType mediaManifest = manifest.mainManifest;
         ManifestAppDataSetType appDataManifest = manifest.appDataManifest;
-
+        CPEStyleSetType styleSetType = manifest.cpeStyle;
 
         MovieMetaData result = new MovieMetaData();
 
         HashMap<String, InventoryMetadataType> metaDataAssetsMap = new HashMap<String, InventoryMetadataType>();
         HashMap<String, InventoryVideoType> videoAssetsMap = new HashMap<String, InventoryVideoType>();
         HashMap<String, PresentationType> presentationAssetMap = new HashMap<String, PresentationType>();
-        HashMap<String, InventoryImageType> imageAssetsMap = new HashMap<String, InventoryImageType>();
+        HashMap<String, PictureImageData> pictureImageMap = new HashMap<String, PictureImageData>();
         HashMap<String, InventoryInteractiveType> inventoryAssetsMap = new HashMap<String, InventoryInteractiveType>();
         HashMap<String, PictureGroupType> pictureGroupAssetsMap = new HashMap<String, PictureGroupType>();
         HashMap<String, PictureType> pictureTypeAssetsMap = new HashMap<String, PictureType>();
@@ -161,7 +167,8 @@ public class MovieMetaData {
 
             if (mediaManifest.getInventory().getImage().size() > 0){
                 for (InventoryImageType imageData : mediaManifest.getInventory().getImage()){
-                    imageAssetsMap.put(imageData.getImageID(), imageData);
+                    PictureImageData pictureImageData = new PictureImageData(imageData);
+                    pictureImageMap.put(pictureImageData.imageId, pictureImageData);
                 }
             }
 
@@ -221,6 +228,33 @@ public class MovieMetaData {
             }
         }
 
+        if (styleSetType != null) {
+
+            HashMap<String, StyleData.ThemeData> themeDataHashMap = new HashMap<>();
+            if (styleSetType.getTheme() != null && styleSetType.getTheme().size() > 0){
+                for (ThemeType theme : styleSetType.getTheme()) {
+                    StyleData.ThemeData themeData = new StyleData.ThemeData(theme, pictureImageMap);
+                    themeDataHashMap.put(theme.getThemeID(), themeData);
+                }
+            }
+
+            HashMap<String, StyleData.NodeStyleData> nodeStyleTypeHashMap = new HashMap<>();
+            if (styleSetType.getNodeStyle() != null && styleSetType.getNodeStyle().size() > 0) {
+                for (NodeStyleType nodeStyle : styleSetType.getNodeStyle()){
+                    StyleData.NodeStyleData thisStyle = new StyleData.NodeStyleData(nodeStyle, themeDataHashMap,
+                            pictureGroupAssetsMap, pictureImageMap, presentationAssetMap, videoAssetsMap);
+                    nodeStyleTypeHashMap.put(thisStyle.nodeStyleId, thisStyle);
+                }
+            }
+
+            if (styleSetType.getExperienceStyleMap() != null && styleSetType.getExperienceStyleMap().size() > 0) {
+                for (ExperienceMenuMapType menuMapType : styleSetType.getExperienceStyleMap()) {
+                    StyleData.ExperienceStyle experienceStyle = new StyleData.ExperienceStyle(menuMapType, nodeStyleTypeHashMap);
+                    result.experienceStyleMap.put(experienceStyle.getExperienceId(), experienceStyle);
+                }
+            }
+        }
+
         /**************Experiences ***************/
         if (mediaManifest.getExperiences() != null && mediaManifest.getExperiences().getExperience() != null) {
 
@@ -243,8 +277,8 @@ public class MovieMetaData {
                         List<PictureItem> pictureItems = new ArrayList<PictureItem>();
                         if (pictureGroup != null) {
                             for (PictureType picture : pictureGroup.getPicture()) {
-                                InventoryImageType fullImageData = imageAssetsMap.get(picture.getImageID());
-                                InventoryImageType thumbNailImageData = imageAssetsMap.get(picture.getThumbnailImageID());
+                                PictureImageData fullImageData = pictureImageMap.get(picture.getImageID());
+                                PictureImageData thumbNailImageData = pictureImageMap.get(picture.getThumbnailImageID());
                                 PictureItem pictureItem = new PictureItem(experience.getExperienceID(), galleryMataData, fullImageData, thumbNailImageData);
                                 pictureItems.add(pictureItem);
                             }
@@ -331,7 +365,7 @@ public class MovieMetaData {
                         String appGroupId = appType.getAppGroupID();
 
                         if (!StringHelper.isEmpty(appId)) {     // appData
-                            LocationItem locationItem = getLocationItemfromMap(appDataIdTpAppDataMap, imageAssetsMap, appId);
+                            LocationItem locationItem = getLocationItemfromMap(appDataIdTpAppDataMap, pictureImageMap, appId);
                             if (locationItem != null)
                                 locationItems.add(locationItem);
                         } else if (!StringHelper.isEmpty(appGroupId)){      // interactive
@@ -347,7 +381,10 @@ public class MovieMetaData {
 
                 }
 
-                ExperienceData thisExperience = new ExperienceData(experience, experienceMetaData, avItems, galleryItems, locationItems, interactiveItems);
+                StyleData.ExperienceStyle expStyle = result.experienceStyleMap.containsKey(experience.getExperienceID()) ?
+                                                    result.experienceStyleMap.get(experience.getExperienceID()) : null;
+                ExperienceData thisExperience = new ExperienceData(experience, experienceMetaData, avItems, galleryItems, locationItems, interactiveItems, expStyle);
+
 
                 result.experienceIdToExperienceMap.put(experience.getExperienceID(), thisExperience);
                 List<ExperienceData> parentGroups = experienceChildrenToParentMap.get(experience.getExperienceID());
@@ -450,23 +487,23 @@ public class MovieMetaData {
                             String triviaText = indexToTextMap.get(index);
                             if (!StringHelper.isEmpty(initialization)){                 //this is trivia
                                 PictureType picture = pictureTypeAssetsMap.get(initialization);
-                                InventoryImageType fullImageData = imageAssetsMap.get(picture.getImageID());
-                                InventoryImageType thumbNailImageData = imageAssetsMap.get(picture.getThumbnailImageID());
+                                PictureImageData fullImageData = pictureImageMap.get(picture.getImageID());
+                                PictureImageData thumbNailImageData = pictureImageMap.get(picture.getThumbnailImageID());
 
                                 presentationData = new TriviaItem(index, triviaText, fullImageData, thumbNailImageData);
                             }else
                                 presentationData = new TextItem(index, triviaText);
                         } else if (!StringHelper.isEmpty(pictureID)){
                             PictureType picture = pictureTypeAssetsMap.get(pictureID);
-                            InventoryImageType fullImageData = imageAssetsMap.get(picture.getImageID());
-                            InventoryImageType thumbNailImageData = imageAssetsMap.get(picture.getThumbnailImageID());
+                            PictureImageData fullImageData = pictureImageMap.get(picture.getImageID());
+                            PictureImageData thumbNailImageData = pictureImageMap.get(picture.getThumbnailImageID());
                             //String imageText= picture.getAlternateText()
                             presentationData = new PictureItem(null, null, fullImageData, thumbNailImageData);
                         } else if (otherID != null) {
                             if (OTHER_APP_DATA_ID.equals(otherID.getNamespace())){
                                 String locationId = otherID.getIdentifier();
 
-                                presentationData = getLocationItemfromMap(appDataIdTpAppDataMap, imageAssetsMap, locationId);
+                                presentationData = getLocationItemfromMap(appDataIdTpAppDataMap, pictureImageMap, locationId);
 
                             } else if (OTHER_PEOPLE_ID.equals(otherID.getNamespace())){
                                 isCast = true;
@@ -518,7 +555,7 @@ public class MovieMetaData {
     }
 
     private static LocationItem getLocationItemfromMap(HashMap<String, AppDataType> appDataMap,
-                                                       HashMap<String, InventoryImageType> imageAssetsMap,
+                                                       HashMap<String, PictureImageData> imageAssetsMap,
                                                        String appId){
         AppDataType appData = appDataMap.get(appId);
         if(appData == null)
@@ -545,8 +582,7 @@ public class MovieMetaData {
                     if (location.getLocation() != null && location.getLocation().size() > 0){
                         String imageId = location.getLocation().get(0).getIcon();
                         if (!StringHelper.isEmpty(imageId)){
-                            InventoryImageType imageType = imageAssetsMap.get(imageId);
-                            pinImage = new PictureImageData(imageType.getContainerReference().getContainerLocation(), imageType.getWidth(), imageType.getHeight());
+                            pinImage = imageAssetsMap.get(imageId);
                         }
                     }
                 } else if (ITEM_ZOOM.equals(pair.getName())){
@@ -557,8 +593,7 @@ public class MovieMetaData {
                     text = pair.getText();
                 } else if (ITEM_LOCATION_THUMBNAIL.equals(pair.getName())){
                     String imageId = pair.getPictureID();
-                    InventoryImageType imageType = imageAssetsMap.get(imageId);
-                    locationThumbnail = new PictureImageData(imageType.getContainerReference().getContainerLocation(), imageType.getWidth(), imageType.getHeight());
+                    locationThumbnail = imageAssetsMap.get(imageId);
 
                 } else if (ITEM_EXPERIENCE_ID.equals(pair.getName())){
                     experienceId = pair.getExperienceID();
@@ -875,11 +910,20 @@ public class MovieMetaData {
         final public String url;
         final public int width;
         final public int height;
+        final public String imageId;
+
+        public PictureImageData(InventoryImageType inventoryImageType){
+            imageId = inventoryImageType.getImageID();
+            url = inventoryImageType.getContainerReference().getContainerLocation();
+            width = inventoryImageType.getWidth();
+            height = inventoryImageType.getHeight();
+        }
+        /*
         public PictureImageData(String url, int width, int height){
             this.url = url;
             this.width = width;
             this.height = height;
-        }
+        }*/
     }
 
     static public class PresentationImageData{
@@ -973,7 +1017,7 @@ public class MovieMetaData {
     static public class TriviaItem extends PresentationDataItem{
         public final PictureItem pictureItem;
         public final TextItem textItem;
-        public TriviaItem(BigInteger index, String text, InventoryImageType fullImg, InventoryImageType thumbnailImg){
+        public TriviaItem(BigInteger index, String text, PictureImageData fullImg, PictureImageData thumbnailImg){
             super("",text, null);
             textItem = new TextItem(index, text);
             pictureItem = new PictureItem(null, null, fullImg, thumbnailImg);
@@ -1146,10 +1190,10 @@ public class MovieMetaData {
         final public PictureImageData fullImage;
         final public PictureImageData thumbnail;
 
-        public PictureItem(String parentExperienceId, InventoryMetadataType metadata, InventoryImageType fullImage, InventoryImageType thumbnail){
+        public PictureItem(String parentExperienceId, InventoryMetadataType metadata, PictureImageData fullImage, PictureImageData thumbnail){
             super(metadata, parentExperienceId);
-            this.fullImage = new PictureImageData(fullImage.getContainerReference().getContainerLocation(), fullImage.getWidth(), fullImage.getHeight());
-            this.thumbnail = new PictureImageData(thumbnail.getContainerReference().getContainerLocation(), thumbnail.getWidth(), thumbnail.getHeight());
+            this.fullImage = fullImage;
+            this.thumbnail = thumbnail;
         }
 
         public String getPosterImgUrl(){
@@ -1327,16 +1371,21 @@ public class MovieMetaData {
         final protected HashMap<String, Integer> childIdToSequenceNumber = new HashMap<String, Integer>();
         protected ExternalApiData externalApp;
         final public String timeSequenceId;
+        final public StyleData.ExperienceStyle style;
+        private ExperienceData parent;
 
         public ExperienceData(String title, String experienceId, String timeSequenceId){
             this.title = title;
             this.experienceId = experienceId;
             this.timeSequenceId = timeSequenceId;
+            this.style = null;
         }
 
         public ExperienceData(ExperienceType experience, InventoryMetadataType metaData, List<AudioVisualItem> avItems,
-                              List<ECGalleryItem> galleryItems, List<LocationItem> locationItems, List<InteractiveItem> interactiveItems){
+                              List<ECGalleryItem> galleryItems, List<LocationItem> locationItems, List<InteractiveItem> interactiveItems,
+                              StyleData.ExperienceStyle style){
             experienceId = experience.getExperienceID();     // or experience Id
+            this.style = style;
             if (metaData == null){
                 title = null;
                 if (experience.getTimedSequenceID() != null && experience.getTimedSequenceID().size() > 0)
@@ -1446,6 +1495,7 @@ public class MovieMetaData {
             }else{
                 childrenExperience.add(ecContent);
             }
+            ecContent.parent = this;
 
         }
 
@@ -1488,6 +1538,19 @@ public class MovieMetaData {
 
         public List<LocationItem> getSceneLocations(){
             return  sceneLocations;
+        }
+
+        public StyleData.ExperienceStyle getStyle(){
+            if (style == null){
+                ExperienceData nextCheck = parent;
+                while (parent != null){
+                    if (parent.style != null)
+                        return style;
+                    else
+                        nextCheck = nextCheck.parent;
+                }
+            }
+            return style;
         }
     }
 
@@ -1585,5 +1648,27 @@ public class MovieMetaData {
         }else{
             return getStyle().getInterstitialVideoURL();
         }
+    }
+
+    public StyleData.ExperienceStyle getRootExperienceStyle(){
+        return rootExperience.style;
+    }
+
+    public StyleData.ExperienceStyle getIMEExperienceStyle(){
+        if (rootExperience.childrenExperience.size() > 1)
+            return rootExperience.childrenExperience.get(1).style;
+        else
+            return null;
+    }
+
+    public StyleData.ExperienceStyle getExtraExperienceStyle(){
+
+        if (rootExperience.childrenExperience.size() > 0)
+            return rootExperience.childrenExperience.get(0).style;
+        else return null;
+    }
+
+    public StyleData.ExperienceStyle getStyleData(String experienceId){
+        return experienceStyleMap.get(experienceId);
     }
 }

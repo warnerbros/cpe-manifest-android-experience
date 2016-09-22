@@ -160,4 +160,25 @@ public class FixedAspectRatioFrameLayout extends FrameLayout
     public void setAspectRatioPriority(Priority priority){
         this.priority = priority;
     }
+
+    public void setAspectRatio(int widthRatio, int heightRatio){
+        mAspectRatioWidth = widthRatio;
+        mAspectRatioHeight = heightRatio;
+        invalidate();
+    }
+
+    public Priority getAspectRatioPriority(){
+        return priority;
+    }
+
+    public void copyFrameParams(FixedAspectRatioFrameLayout otherFixedFrame){
+        if (otherFixedFrame != null){
+            mAspectRatioHeight = otherFixedFrame.mAspectRatioHeight;
+            mAspectRatioWidth = otherFixedFrame.mAspectRatioWidth;
+            setLayoutParams(otherFixedFrame.getLayoutParams());
+            //setScaleX(otherFixedFrame.getScaleX());
+            //setScaleY(otherFixedFrame.getScaleY());
+            //invalidate();
+        }
+    }
 }

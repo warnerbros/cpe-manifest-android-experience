@@ -8,13 +8,17 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Size;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,9 +28,12 @@ import android.widget.VideoView;
 import com.bumptech.glide.Glide;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.data.NextGenStyle;
+import com.wb.nextgenlibrary.data.MovieMetaData;
+import com.wb.nextgenlibrary.data.StyleData;
+import com.wb.nextgenlibrary.parser.cpestyle.BackgroundOverlayAreaType;
 import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
+import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -43,6 +50,12 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
     ImageButton playMovieButton;
     ImageButton extraButton;
     View buttonsLayout;
+    Size startupVideoSize = null;
+    Size bgImageSize = null;
+
+    FixedAspectRatioFrameLayout videoParentFrame;
+    FixedAspectRatioFrameLayout imageParentFrame;
+    FixedAspectRatioFrameLayout buttonParentFrame;
 
     private int videoLoopPoint = 0;
     private int buttonAnimationStartTime = 0;
@@ -52,10 +65,17 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
     private boolean isStartUp = true;
 
+    StyleData.ExperienceStyle mainStyle = NextGenExperience.getMovieMetaData().getRootExperienceStyle();
+    StyleData.ExperienceStyle imeStyle = NextGenExperience.getMovieMetaData().getIMEExperienceStyle();
+    StyleData.ExperienceStyle extraStyle = NextGenExperience.getMovieMetaData().getExtraExperienceStyle();
     @Override
     public void onCreate(Bundle savedState) {
         super.onCreate(savedState);
         setContentView(R.layout.next_gen_startup_view);
+
+        videoParentFrame = (FixedAspectRatioFrameLayout)findViewById(R.id.video_parent_aspect_ratio_frame);
+        buttonParentFrame = (FixedAspectRatioFrameLayout)findViewById(R.id.button_parent_aspect_ratio_frame);
+        imageParentFrame = (FixedAspectRatioFrameLayout)findViewById(R.id.image_background_aspect_ratio_frame);
 
         startupVideoView = (VideoView)findViewById(R.id.startup_video_view);
         startupImageView = (ImageView) findViewById(R.id.startup_image_view);
@@ -67,27 +87,28 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
         playMovieButton = (ImageButton) findViewById(R.id.next_gen_startup_play_button);
         if (playMovieButton != null){
-            Glide.with(this).load(NextGenExperience.getMovieMetaData().getStyle().getButtonImageURL(NextGenStyle.NextGenAppearanceType.InMovie)).into(playMovieButton);
             playMovieButton.setOnClickListener(this);
         }
         extraButton = (ImageButton) findViewById(R.id.next_gen_startup_extra_button);
         if (extraButton != null){
-            Glide.with(this).load(NextGenExperience.getMovieMetaData().getStyle().getButtonImageURL(NextGenStyle.NextGenAppearanceType.OutOfMovie)).into(extraButton);
             extraButton.setOnClickListener(this);
         }
-        if (!StringHelper.isEmpty(NextGenExperience.getMovieMetaData().getStyle().getBackgroundVideoURL())) {
-            if (startupImageView != null)
-                startupImageView.setVisibility(View.GONE);
-            videoLoopPoint = ((int) NextGenExperience.getMovieMetaData().getStyle().getBackgroundVideoLoopTime() * 1000);
-            Log.i("DEBUG", String.valueOf((int) NextGenExperience.getMovieMetaData().getStyle().getBackgroundVideoLoopTime() * 1000));
-            buttonAnimationStartTime = (int) (NextGenExperience.getMovieMetaData().getStyle().getBackgroundVideoFadeTime() * 1000);
-        } else{
-            buttonsLayout.setVisibility(View.VISIBLE);
-            startupVideoView.setVisibility(View.GONE);
-            String bgImageUrl = NextGenExperience.getMovieMetaData().getStyle().getStartupImageURL();
+
+        StyleData.NodeBackground nodeBackground = mainStyle.getBackground();
+
+        if (!StringHelper.isEmpty(nodeBackground.getVideoUrl())) {
+            videoLoopPoint = nodeBackground.getVideoLoopingPoint();
+            buttonAnimationStartTime = nodeBackground.getVideoLoopingPoint() - 500;
+        }
+        MovieMetaData.PictureImageData bgImageData = mainStyle.getBackgroundImage();
+        if (bgImageData != null && !StringHelper.isEmpty(bgImageData.url)){
+            //buttonsLayout.setVisibility(View.VISIBLE);
+            String bgImageUrl = bgImageData.url;
+            imageParentFrame.setAspectRatio(bgImageData.width, bgImageData.height);
+            bgImageSize = new Size(bgImageData.width, bgImageData.height);
             if (startupImageView != null && !StringHelper.isEmpty(bgImageUrl)){
                 startupImageView.setVisibility(View.VISIBLE);
-                Glide.with(this).load(bgImageUrl).fitCenter().into(startupImageView);
+                Glide.with(this).load(bgImageUrl).asBitmap().fitCenter().into(startupImageView);
             }
         }
         adjustButtonSizesAndPosition();
@@ -100,7 +121,7 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
         else
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
-        if (StringHelper.isEmpty(NextGenExperience.getMovieMetaData().getStyle().getBackgroundVideoURL())) {
+        if (StringHelper.isEmpty(mainStyle.getBackgroundVideoUrl())) {
             if (startupVideoView != null ){
                 startupVideoView.setVisibility(View.GONE);
             }
@@ -114,7 +135,15 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
             startupVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(final MediaPlayer mp) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            startupVideoSize = new Size(mp.getVideoWidth(), mp.getVideoHeight());
+                            videoParentFrame.setAspectRatio(startupVideoSize.getWidth(), startupVideoSize.getHeight());
+                            adjustButtonSizesAndPosition();
 
+                        }
+                    });
                     startupVideoView.start();
                     if (startUpTimer == null){
                         startUpTimer = new Timer();
@@ -170,7 +199,9 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
             });
 
             startupVideoView.requestFocus();
-            startupVideoView.setVideoURI(Uri.parse(NextGenExperience.getMovieMetaData().getStyle().getBackgroundVideoURL()));
+            startupVideoView.setVideoURI(Uri.parse(mainStyle.getBackgroundVideoUrl()) );
+
+
         }
     }
 
@@ -184,56 +215,122 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         adjustButtonSizesAndPosition();
+
     }
 
     private void adjustButtonSizesAndPosition(){
+        int orientation = NextGenHideStatusBarActivity.getCurrentScreenOrientation();       // adjust video frame aspect ration priority according to orientation
+        FixedAspectRatioFrameLayout.Priority newPriority = FixedAspectRatioFrameLayout.Priority.HEIGHT_PRIORITY;
+        switch(orientation){
+            case ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE:
+            case ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE:
+                newPriority = FixedAspectRatioFrameLayout.Priority.HEIGHT_PRIORITY;
+                buttonParentFrame.copyFrameParams(videoParentFrame);                        // copy the video frame's layout params to Button frame
+                break;
+            case ActivityInfo.SCREEN_ORIENTATION_PORTRAIT:
+            case ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT:
+                newPriority = FixedAspectRatioFrameLayout.Priority.WIDTH_PRIORITY;
+                buttonParentFrame.copyFrameParams(imageParentFrame);                        // copy the background image frame's layout params to Button frame
+                break;
+
+        }
+        if (newPriority == videoParentFrame.getAspectRatioPriority()){                      // just adjust the botton locations if there's no layout change
+            adjustButtonSizesAndPosition_priv();
+
+        }else {
+            videoParentFrame.setAspectRatioPriority(newPriority);
+            startupVideoView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                int counter = 0;
+                @Override
+                public void onGlobalLayout() {
+                    adjustButtonSizesAndPosition_priv();
+                    counter = counter +1;
+                    if (counter > 1) {
+                        startupVideoView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    }
+                }
+            });
+        }
+    }
+
+    private void adjustButtonSizesAndPosition_priv(){
 
         int orientation = NextGenHideStatusBarActivity.getCurrentScreenOrientation();
+        Size referenceFrameSize = new Size(buttonParentFrame.getWidth(), buttonParentFrame.getHeight());
+
+        Size targetSize = startupVideoSize;
+        switch(orientation){
+            case ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE:
+            case ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE:
+                targetSize = startupVideoSize;
+                break;
+            case ActivityInfo.SCREEN_ORIENTATION_PORTRAIT:
+            case ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT:
+                targetSize = bgImageSize;
+                break;
+
+        }
+        StyleData.NodeStyleData nodeStyleData = mainStyle.getNodeStyleData(orientation);
+        StyleData.ThemeData buttonTheme = nodeStyleData.theme;
+        BackgroundOverlayAreaType buttonLayoutArea = nodeStyleData.getBGOverlay();
+
+        if (startupVideoSize == null)
+            return;
 
 
-        Size screenSize = NextGenExperience.getScreenSize(this);
-        Size buttonFrameSize;
-        double aspectRatio =  (double)screenSize.getHeight() / (double)screenSize.getWidth();
-        if (aspectRatio < 0.75){    // use the height
-            buttonFrameSize = new Size ( (int)((double)screenSize.getHeight() * 4.0 / 3.0), screenSize.getHeight());
-        }else if (aspectRatio > 0.75){  // user the width
-            buttonFrameSize = new Size ( screenSize.getWidth(), (int)((double)screenSize.getWidth() * 3.0 / 4.0));
-        }else {
-            buttonFrameSize = screenSize;
+        double shrinkRatio = ((double)referenceFrameSize.getWidth()) / ((double)targetSize.getWidth());
+
+
+        int width = (int)(((double)buttonLayoutArea.getWidthPixels().intValue()) * shrinkRatio);
+        int height = (int)(((double)buttonLayoutArea.getHeightPixels().intValue()) * shrinkRatio);
+        int y = (int)(((double)targetSize.getHeight() - buttonLayoutArea.getPixelsFromBottom().intValue()) * shrinkRatio) - height;
+        int x = (int)(((double)buttonLayoutArea.getPixelsFromLeft().intValue()) * shrinkRatio);
+
+        ViewGroup.LayoutParams buttonsLayoutParams = buttonsLayout.getLayoutParams();
+        if (buttonsLayoutParams instanceof  LinearLayout.LayoutParams) {
+            ((LinearLayout.LayoutParams) buttonsLayoutParams).setMargins(x, y, 0, 0);
+        }else if (buttonsLayoutParams instanceof  RelativeLayout.LayoutParams) {
+            ((RelativeLayout.LayoutParams) buttonsLayoutParams).setMargins(x, y, 0, 0);
+        }else if (buttonsLayoutParams instanceof  FrameLayout.LayoutParams) {
+            ((FrameLayout.LayoutParams) buttonsLayoutParams).setMargins(x, y, 0, 0);
         }
 
+        buttonsLayoutParams.height = height;
+        buttonsLayoutParams.width = width;
 
-        NextGenStyle movieStyle = NextGenExperience.getMovieMetaData().getStyle();
-        final ButtonParams mainMoiveParams = computeButtonParams(movieStyle.getButtonCenterOffset(NextGenStyle.NextGenAppearanceType.InMovie, orientation),
-                movieStyle.getButtonSizeOffset(NextGenStyle.NextGenAppearanceType.InMovie, orientation),
-                buttonFrameSize);
+        buttonsLayout.setLayoutParams(buttonsLayoutParams);
 
-        final ButtonParams extraParams = computeButtonParams(movieStyle.getButtonCenterOffset(NextGenStyle.NextGenAppearanceType.OutOfMovie, orientation),
-                movieStyle.getButtonSizeOffset(NextGenStyle.NextGenAppearanceType.OutOfMovie, orientation),
-                buttonFrameSize);
-        ViewGroup.LayoutParams mainMoiveBtnLayoutParams = playMovieButton.getLayoutParams();
-        if (mainMoiveBtnLayoutParams instanceof  LinearLayout.LayoutParams) {
-            ((LinearLayout.LayoutParams) mainMoiveBtnLayoutParams).setMargins(mainMoiveParams.x, mainMoiveParams.y, 0, 0);
-        }else if (mainMoiveBtnLayoutParams instanceof  RelativeLayout.LayoutParams) {
-            ((RelativeLayout.LayoutParams) mainMoiveBtnLayoutParams).setMargins(mainMoiveParams.x, mainMoiveParams.y, 0, 0);
+
+        MovieMetaData.PictureImageData extraBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.EXTRA_BUTTON);
+        MovieMetaData.PictureImageData playBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.PLAY_BUTTON);
+
+        double buttonRatio = (double)width / (double)playBtnImageData.width;
+        if (playMovieButton != null) {
+            ViewGroup.LayoutParams buttonsParams = playMovieButton.getLayoutParams();
+
+            int newHeight = (int)((double)playBtnImageData.height * buttonRatio);
+            buttonsParams.height = newHeight;
+            playMovieButton.setLayoutParams(buttonsParams);
+
+            if (playBtnImageData != null)
+                Glide.with(this).load(playBtnImageData.url).into(playMovieButton);
         }
 
-        mainMoiveBtnLayoutParams.height = mainMoiveParams.height;
-        mainMoiveBtnLayoutParams.width = mainMoiveParams.width;
+        if (extraButton != null) {
+            ViewGroup.LayoutParams buttonsParams = extraButton.getLayoutParams();
 
-        playMovieButton.setLayoutParams(mainMoiveBtnLayoutParams);
+            int newWidth = (int)((double)extraBtnImageData.width * buttonRatio);
+            int newHeight = (int)((double)extraBtnImageData.height * buttonRatio);
+            buttonsParams.height = newHeight;
+            buttonsParams.width = newWidth;
+            extraButton.setLayoutParams(buttonsParams);
 
-        ViewGroup.LayoutParams extraBtnLayoutParams = extraButton.getLayoutParams();
-        if (mainMoiveBtnLayoutParams instanceof  LinearLayout.LayoutParams) {
-            ((LinearLayout.LayoutParams) extraBtnLayoutParams).setMargins(extraParams.x, extraParams.y, 0, 0);
-        }else if (mainMoiveBtnLayoutParams instanceof  RelativeLayout.LayoutParams) {
-            ((RelativeLayout.LayoutParams) extraBtnLayoutParams).setMargins(extraParams.x, extraParams.y, 0, 0);
+
+            if (extraBtnImageData != null)
+                Glide.with(this).load(extraBtnImageData.url).into(extraButton);
         }
+        buttonsLayout.invalidate();
 
-        extraBtnLayoutParams.height = extraParams.height;
-        extraBtnLayoutParams.width = extraParams.width;
-
-        extraButton.setLayoutParams(extraBtnLayoutParams);
     }
 
     @Override
@@ -255,48 +352,5 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
         super.onResume();
     }
 
-    class ButtonParams {
-        int x, y, height, width;
-    }
-
-    private ButtonParams computeButtonParams(NextGenStyle.NGScreenOffSetRatio centerRatio, NextGenStyle.NGScreenOffSetRatio sizeRatio, Size videoSize){
-        ButtonParams resultParams = new ButtonParams();
-
-        WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        DisplayMetrics screenMetrics = new DisplayMetrics();
-        display.getRealMetrics(screenMetrics);
-
-        Size screenSize = new Size(screenMetrics.widthPixels, screenMetrics.heightPixels);
-
-
-        double videoAspecRatio = (double)videoSize.getWidth() / (double)videoSize.getHeight();
-        double screenAspecRatio = (double)screenSize.getWidth() / (double)screenSize.getHeight();
-
-        int effectiveVideoWidth, effectiveVideoHeight;
-
-        if (videoAspecRatio > screenAspecRatio){        // video is wider
-            effectiveVideoWidth = screenSize.getWidth();
-            effectiveVideoHeight = (int)((double)screenSize.getWidth() / (double)videoSize.getWidth() * (double)videoSize.getHeight());
-
-        }else{              // screen is wider
-            effectiveVideoHeight = screenSize.getHeight();
-            effectiveVideoWidth = (int)((double)screenSize.getHeight() / (double)videoSize.getHeight() * (double)videoSize.getWidth());
-        }
-
-
-        resultParams.width = (int)(effectiveVideoWidth * sizeRatio.horizontalRatio);
-        resultParams.height = (int)(effectiveVideoHeight * sizeRatio.verticalRatio);
-
-        resultParams.x = (screenSize.getWidth() - effectiveVideoWidth) / 2  // the side pillow width
-                + (int)(centerRatio.horizontalRatio * effectiveVideoWidth )  // ratio of the center
-                - resultParams.width / 2;                // half the width
-
-        resultParams.y = (screenSize.getHeight() - effectiveVideoHeight) / 2  // the side pillow width
-                + (int)(centerRatio.verticalRatio * effectiveVideoHeight )  // ratio of the center
-                - resultParams.height / 2;                // half the width
-
-        return resultParams;
-    }
 }
 
