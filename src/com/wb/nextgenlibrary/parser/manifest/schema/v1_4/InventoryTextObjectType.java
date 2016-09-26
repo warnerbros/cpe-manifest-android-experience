@@ -11,6 +11,8 @@ package com.wb.nextgenlibrary.parser.manifest.schema.v1_4;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.wb.nextgenlibrary.parser.LocalizableMetaDataInterface;
 import com.wb.nextgenlibrary.parser.XmlAccessType;
 import com.wb.nextgenlibrary.parser.XmlAccessorType;
 import com.wb.nextgenlibrary.parser.XmlAttribute;
@@ -67,7 +69,7 @@ import com.wb.nextgenlibrary.parser.adapters.XmlJavaTypeAdapter;
     "subtitleID",
     "textString"
 })
-public class InventoryTextObjectType {
+public class InventoryTextObjectType implements LocalizableMetaDataInterface {
 
     @XmlElement(name = "ContainerReference")
     protected InventoryTextObjectType.ContainerReference containerReference;

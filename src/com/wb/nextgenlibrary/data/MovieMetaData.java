@@ -2,6 +2,7 @@ package com.wb.nextgenlibrary.data;
 
 import com.google.gson.annotations.SerializedName;
 import com.wb.nextgenlibrary.NextGenExperience;
+import com.wb.nextgenlibrary.parser.LocalizableMetaDataInterface;
 import com.wb.nextgenlibrary.parser.ManifestXMLParser;
 import com.wb.nextgenlibrary.parser.appdata.AppDataLocationType;
 import com.wb.nextgenlibrary.parser.appdata.AppDataType;
@@ -46,6 +47,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import javax.xml.datatype.Duration;
 
@@ -203,17 +205,25 @@ public class MovieMetaData {
             }
         }
 
-        if (mediaManifest.getInventory().getTextObject()!= null && mediaManifest.getInventory().getTextObject().size() > 0 &&
-                mediaManifest.getInventory().getTextObject().get(0).getTextString() != null){
-            for (int i = 0 ; i< mediaManifest.getInventory().getTextObject().get(0).getTextString().size(); i++){
-                InventoryTextObjectType.TextString textString = mediaManifest.getInventory().getTextObject().get(0).getTextString().get(i);
-                BigInteger index = textString.getIndex();
-                if (index != null) {
-                    indexToTextMap.put(textString.getIndex(), textString.getValue());
-                }else {
-                    indexToTextMap.put(BigInteger.valueOf(i+1), textString.getValue());
+        if (mediaManifest.getInventory().getTextObject()!= null && mediaManifest.getInventory().getTextObject().size() > 0){
+            InventoryTextObjectType textObjectType = getMatchingLocalizableObject(mediaManifest.getInventory().getTextObject());
+
+            if (NextGenExperience.matchesClientLocale(textObjectType.getLanguage())){
+                if (textObjectType.getTextString() != null){
+                    for (int i = 0 ; i< mediaManifest.getInventory().getTextObject().get(0).getTextString().size(); i++){
+                        InventoryTextObjectType.TextString textString = textObjectType.getTextString().get(i);
+                        BigInteger index = textString.getIndex();
+                        if (index != null) {
+                            indexToTextMap.put(textString.getIndex(), textString.getValue());
+                        }else {
+                            indexToTextMap.put(BigInteger.valueOf(i+1), textString.getValue());
+                        }
+                    }
                 }
+
             }
+
+
         }
 
         if (appDataManifest != null && appDataManifest.getManifestAppData() != null && appDataManifest.getManifestAppData().size() > 0){
@@ -541,6 +551,54 @@ public class MovieMetaData {
         /*****************End of Time Sequence Events****************************/
 
         return result;
+    }
+
+
+    public static <T extends LocalizableMetaDataInterface>T getMatchingLocalizableObject(List<T> localizableObjects){
+        if (localizableObjects != null && localizableObjects.size() > 0) {
+            Locale clientLocale = NextGenExperience.getClientLocale();
+            int matchingIndex = -1, secondaryMatch = -1, engLangIndex = -1, emptyLocaleIndex = -1;
+            for (int i = 0; i < localizableObjects.size() ; i++){
+                T localizableObject = localizableObjects.get(i);
+
+                String thisLang = localizableObject.getLanguage();
+                if (thisLang == null || !StringHelper.isEmpty(thisLang))
+                    emptyLocaleIndex = i;
+                else if (thisLang.contains("-")){           // this is a locale
+                    thisLang = thisLang.replace("-", "_");
+                    Locale thisLocale = new Locale(thisLang);
+
+                    if (clientLocale.equals(thisLocale)) {       // this is a perfect match
+                        matchingIndex = i;
+                        break;
+                    } else if (clientLocale.getLanguage().equals(thisLocale.getLanguage())){
+                        secondaryMatch = i;
+                    }else if (Locale.US.equals(thisLocale)) {
+                        engLangIndex = i;
+                    }
+                }else{
+                    if (clientLocale.getLanguage().equals(thisLang)){
+                        secondaryMatch = i;
+                    } else if (Locale.US.getLanguage().equals(thisLang)){
+                        engLangIndex = i;
+                    }
+                }
+
+            }
+
+            if (matchingIndex != -1)
+                return localizableObjects.get(matchingIndex);
+            else if (secondaryMatch != -1)
+                return localizableObjects.get(secondaryMatch);
+            else if (emptyLocaleIndex != -1)
+                return localizableObjects.get(emptyLocaleIndex);
+            else if (engLangIndex != -1)
+                return localizableObjects.get(engLangIndex);
+            else
+                return localizableObjects.get(0);
+
+        }
+        return null;
     }
 
     private static LocationItem getLocationItemfromMap(HashMap<String, AppDataType> appDataMap,
@@ -949,7 +1007,19 @@ public class MovieMetaData {
         public PresentationDataItem(InventoryMetadataType metaData, String parentExperienceId){
             BasicMetadataInfoType localizedInfo = null;
             if (metaData != null && metaData.getBasicMetadata().getLocalizedInfo() != null && metaData.getBasicMetadata().getLocalizedInfo().size() > 0) {
-                localizedInfo = metaData.getBasicMetadata().getLocalizedInfo().get(0);
+
+
+                localizedInfo = getMatchingLocalizableObject(metaData.getBasicMetadata().getLocalizedInfo());
+                /*for(BasicMetadataInfoType metadataInfoType : metaData.getBasicMetadata().getLocalizedInfo()){
+                    if (NextGenExperience.matchesClientLocale(metadataInfoType.getLanguage())) {
+                        localizedInfo = metadataInfoType;
+                        break;
+                    }
+                }*/
+
+                if (localizedInfo == null)
+                    localizedInfo = metaData.getBasicMetadata().getLocalizedInfo().get(0);
+
                 title = localizedInfo.getTitleDisplayUnlimited();
                 if (localizedInfo.getSummary190() != null && !StringHelper.isEmpty(localizedInfo.getSummary190().getValue())){
                     summary = localizedInfo.getSummary190().getValue();

@@ -129,7 +129,7 @@ public class StyleData {
             boolean bLocalizedFound = false;
             if (buttonType.getLocalized() != null && buttonType.getLocalized().size() > 0){
                 for(ButtonType.Localized localized : buttonType.getLocalized()){
-                    if (localized.getLanguage().equals(NextGenExperience.getLanguage())){
+                    if (NextGenExperience.matchesClientLocale(localized.getLanguage())){
 
                         buttomImageList[BASE] = pictureImageMap.get(localized.getBaseImage());
                         buttomImageList[HIGHLIGHT] = pictureImageMap.get(localized.getHighlightImage());

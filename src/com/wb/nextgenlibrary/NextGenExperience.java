@@ -48,6 +48,7 @@ public class NextGenExperience {
         private final String ngeStyleFileUrl;
         private final String appDataFileUrl;
         public final String contentId;
+
         ManifestItem(String movieName, String cid, String imageUrl, String manifestFileUrl, String appDataFileUrl, String ngeStyleFileUrl){
             this.imageUrl = imageUrl;
             contentId = cid;
@@ -83,12 +84,7 @@ public class NextGenExperience {
     public static int sCachePolicy;
     public static NextGenCacheManager sCacheManager;
     private static String sVersionName = null;
-    private static int sVersionCode = 0;
-    private static Locale locale;
-    private static String sCountryCode = null;
-    private static String sClientCountryCode = null;
-    private static String sClientLanguageCode = null;
-    private static PackageInfo sNextGenInfo = null;
+    private static Locale clientLocale = null;
     private static boolean isDiagnosticMode = true;
     private static Class<? extends AbstractNextGenMainMovieFragment> mainMovieFragmentClass;
     private static Object nextgenPlaybackObject;
@@ -123,7 +119,7 @@ public class NextGenExperience {
 
     public static void startNextGenExperience(Context appContext, final Activity launcherActivity, final ManifestItem item,
                                               Object playbackObject, Class<? extends AbstractNextGenMainMovieFragment> fragmentClass,
-                                              NextGenEventHandler eventHandler){
+                                              NextGenEventHandler eventHandler, Locale locale){
         final ProgressDialog mDialog = ProgressDialog.show(launcherActivity, "", "Loading", false, false);
 
         nextgenPlaybackObject = playbackObject;
@@ -132,6 +128,7 @@ public class NextGenExperience {
         sCacheManager = new NextGenCacheManager(applicationContext);
         mainMovieFragmentClass = fragmentClass;
         nextGenEventHandler = eventHandler;
+        clientLocale = locale == null? Locale.US : locale;
 
         sUserAgent = "Android/" + sVersionName + " (Linux; U; Android " + Build.VERSION.RELEASE + "; " + Build.MODEL + ")";
         try {
@@ -293,6 +290,9 @@ public class NextGenExperience {
         }
     }
 
+    public static Locale getClientLocale(){
+        return clientLocale;
+    }
 
     public static boolean isDebugBuild() {
         return true;
@@ -322,7 +322,15 @@ public class NextGenExperience {
         return googleMapAPIKey;
     }
 
-    public static String getLanguage(){
-        return "en";
+    public static boolean matchesClientLocale(String languageLocale){
+        if (languageLocale != null){
+            languageLocale = languageLocale.replace("-", "_");
+            if (languageLocale.contains("_")){  // this is locale
+                return clientLocale.toString().equals(languageLocale);
+            }else{      // this is language
+                return clientLocale.getLanguage().equals(languageLocale);
+            }
+        }
+        return false;
     }
 }

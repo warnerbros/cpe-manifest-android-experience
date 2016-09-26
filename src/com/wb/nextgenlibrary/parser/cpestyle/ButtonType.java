@@ -10,6 +10,8 @@ package com.wb.nextgenlibrary.parser.cpestyle;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.wb.nextgenlibrary.parser.LocalizableMetaDataInterface;
 import com.wb.nextgenlibrary.parser.XmlAccessType;
 import com.wb.nextgenlibrary.parser.XmlAccessorType;
 import com.wb.nextgenlibrary.parser.XmlAttribute;
@@ -224,7 +226,7 @@ public class ButtonType {
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "")
     public static class Localized
-        extends ButtonImagesType
+        extends ButtonImagesType implements LocalizableMetaDataInterface
     {
 
         @XmlAttribute(name = "language", required = true)

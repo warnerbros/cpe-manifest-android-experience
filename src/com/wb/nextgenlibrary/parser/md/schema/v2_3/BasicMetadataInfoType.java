@@ -11,6 +11,8 @@ package com.wb.nextgenlibrary.parser.md.schema.v2_3;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.wb.nextgenlibrary.parser.LocalizableMetaDataInterface;
 import com.wb.nextgenlibrary.parser.XmlAccessType;
 import com.wb.nextgenlibrary.parser.XmlAccessorType;
 import com.wb.nextgenlibrary.parser.XmlAttribute;
@@ -130,7 +132,7 @@ import com.wb.nextgenlibrary.parser.adapters.XmlJavaTypeAdapter;
     "peopleLocal",
     "titleAlternate"
 })
-public class BasicMetadataInfoType {
+public class BasicMetadataInfoType implements LocalizableMetaDataInterface {
 
     @XmlElement(name = "TitleDisplay19")
     protected String titleDisplay19;
