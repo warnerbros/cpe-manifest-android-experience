@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.ImageView;
@@ -79,6 +80,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        supportRequestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         super.onCreate(savedInstanceState);
 
         mDialog = new ProgressDialog(this);
@@ -87,7 +89,6 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         mDialog.setCanceledOnTouchOutside(true);
 
         nextGenFragmentTransactionEngine = new NextGenFragmentTransactionEngine(this);
-
         setContentView(R.layout.next_gen_videoview);
 
         backgroundImageView = (ImageView)findViewById(R.id.ime_background_image_view);
