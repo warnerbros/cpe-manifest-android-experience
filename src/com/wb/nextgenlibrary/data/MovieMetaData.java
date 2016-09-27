@@ -1702,10 +1702,10 @@ public class MovieMetaData {
     }
 
     public String getInterstitialVideoURL(){
-        if (rootExperience.audioVisualItems != null && rootExperience.audioVisualItems.size() > 0){
+        if (rootExperience.audioVisualItems != null && rootExperience.audioVisualItems.size() > 1){
             return rootExperience.audioVisualItems.get(0).videoUrl;
         }else{
-            return "http://wb-extras.warnerbros.com/extrasplus/staging/Manifest/MOS/artwork/backgrounds/MOS_INTERSTITIAL_v2.mp4";
+            return "http://wb-extras.warnerbros.com/extrasplus/prod/Manifest/BatmanvSuperman/streams/BVS_final_v2_H264_HDX_Stream_6750K_23976p.mp4";
         }
     }
 

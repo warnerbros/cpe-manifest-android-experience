@@ -70,4 +70,7 @@
 	<string name="close_match">Close Match</string>
 	<string name="powered_by">POWERED BY</string>
 	<string name="thetake_bottom_text">NO ENDORSEMENT OR SPONSORSHIP IMPLIED BY ANY ACTOR, STUDIO OR BRAND FEATURED ON THETAKE.COM</string>
+
+	<string name="play_movie">Play Movie</string>
+	<string name="extras">Extras</string>
 </resources>

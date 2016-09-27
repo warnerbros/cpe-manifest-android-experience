@@ -47,6 +47,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     protected RelativeLayout containerView;
     protected View skipThisView;
     protected ProgressBar skipThisCounter;
+    private View actionbarPlaceHolder;
 
     private TimerTask imeUpdateTask;
 
@@ -91,10 +92,14 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         nextGenFragmentTransactionEngine = new NextGenFragmentTransactionEngine(this);
         setContentView(R.layout.next_gen_videoview);
 
+        actionbarPlaceHolder = findViewById(R.id.next_gen_ime_actionbar_placeholder);
+
         backgroundImageView = (ImageView)findViewById(R.id.ime_background_image_view);
         if (backgroundImageView != null){
-            String bgImgUrl = NextGenExperience.getMovieMetaData().getExtraExperience().style.getBackground().getImage().url;
-            Glide.with(this).load(bgImgUrl).into(backgroundImageView);
+            if (NextGenExperience.getMovieMetaData().getExtraExperience().style != null) {
+                String bgImgUrl = NextGenExperience.getMovieMetaData().getExtraExperience().style.getBackground().getImage().url;
+                Glide.with(this).load(bgImgUrl).into(backgroundImageView);
+            }
             //PicassoTrustAll.loadImageIntoView(this, NextGenExperience.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie), backgroundImageView);
         }
 
@@ -261,11 +266,13 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                 case Configuration.ORIENTATION_PORTRAIT:
 
                     nextGenView.setVisibility(View.VISIBLE);
+                    actionbarPlaceHolder.setVisibility(View.VISIBLE);
                     if (mediaController != null)
                         mediaController.hideShowControls(true);
                     break;
                  case Configuration.ORIENTATION_LANDSCAPE:
                     nextGenView.setVisibility(View.GONE);
+                     actionbarPlaceHolder.setVisibility(View.GONE);
                      getSupportActionBar().hide();
                     if (mediaController != null)
                         mediaController.hideShowControls(false);
