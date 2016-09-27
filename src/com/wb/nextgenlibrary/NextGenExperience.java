@@ -66,10 +66,14 @@ public class NextGenExperience {
         }
 
         public String getAppDataFileUrl(){
+            if (appDataFileUrl == null)
+                return null;
             return (nextGenEventHandler.isDebugBuild() ? DEBUG_HOST : REALEASE_HOST) + appDataFileUrl;
         }
 
         public String getNgeStyleFileUrl(){
+            if (ngeStyleFileUrl == null)
+                return null;
             return (nextGenEventHandler.isDebugBuild() ? DEBUG_HOST : REALEASE_HOST) + ngeStyleFileUrl;
         }
     }
