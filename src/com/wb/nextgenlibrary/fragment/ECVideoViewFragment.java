@@ -53,6 +53,7 @@ public class ECVideoViewFragment extends ECViewFragment{
     boolean bCountDown = false;
 
     boolean shouldAutoPlay = true;
+    boolean shouldExitWhenComplete = false;
 
     FixedAspectRatioFrameLayout.Priority aspectFramePriority = null;
 
@@ -72,6 +73,10 @@ public class ECVideoViewFragment extends ECViewFragment{
     @Override
     public int getContentViewId(){
         return R.layout.ec_video_frame_view;
+    }
+
+    public void setShouldExitWhenComplete(boolean bTrue){
+        shouldExitWhenComplete = bTrue;
     }
 
     @Override
@@ -117,7 +122,9 @@ public class ECVideoViewFragment extends ECViewFragment{
             int counter = COUNT_DOWN_SECONDS;
             @Override
             public void onCompletion(MediaPlayer mp) {
-                if (ecsAdaptor != null) {
+                if (shouldExitWhenComplete){
+                    closeBtn.callOnClick();
+                }else if (ecsAdaptor != null) {
                     if (ecsAdaptor.shouldStartCountDownForNext()){
                         //new
                         startRepeatingTask();
@@ -155,7 +162,7 @@ public class ECVideoViewFragment extends ECViewFragment{
                                     if (countDownCountainer != null) {
                                         if (counter >= 0) {
                                             countDownCountainer.setVisibility(View.VISIBLE);
-                                            countDownTextView.setText(String.format(getResources().getString(R.string.count_down_text), counter) );
+                                            countDownTextView.setText(String.format(getResources().getString(R.string.count_down_text), Integer.toString(counter)) );
                                             countDownProgressBar.setProgress(counter);
                                         }else {
                                             countDownTextView.setText("");

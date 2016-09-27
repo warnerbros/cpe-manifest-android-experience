@@ -355,6 +355,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
                         videoViewFragment = (ECVideoViewFragment) currentFragment;
                     } else {
                         videoViewFragment = new ECVideoViewFragment();
+                        videoViewFragment.setShouldExitWhenComplete(true);
                         videoViewFragment.setShouldAutoPlay(true);
                         videoViewFragment.setShouldHideMetaData(true);
                         videoViewFragment.setShouldShowCloseBtn(true);
