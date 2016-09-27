@@ -60,6 +60,7 @@ public class ECVideoViewFragment extends ECViewFragment{
     private static int COUNT_DOWN_SECONDS = 5;
 
     ECVideoListAdaptor ecsAdaptor = null;
+    private int previousPlaybackTime = 0;
 
     public static interface ECVideoListAdaptor{
         void playbackFinished();
@@ -221,7 +222,17 @@ public class ECVideoViewFragment extends ECViewFragment{
         @Override
         public void onPrepared(MediaPlayer mp) {
             if (shouldAutoPlay) {
-                videoView.start();
+                if (previousPlaybackTime != 0){
+                    videoView.seekTo(previousPlaybackTime);
+                    //added: tr 9/19
+                    mp.setOnSeekCompleteListener(new MediaPlayer.OnSeekCompleteListener() {
+                        @Override
+                        public void onSeekComplete(MediaPlayer mp) {
+                            videoView.start();
+                        }
+                    });
+                }else
+                    videoView.start();
             }else {
                 if (previewPlayBtn != null){
                     previewPlayBtn.setVisibility(View.VISIBLE);
@@ -229,6 +240,12 @@ public class ECVideoViewFragment extends ECViewFragment{
                 shouldAutoPlay = true;
             }
         }
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        previousPlaybackTime = videoView.getCurrentPosition();
     }
 
     @Override
