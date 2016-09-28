@@ -197,6 +197,9 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
             if (isPausedByIME){
                 isPausedByIME = false;
                 mainMovieFragment.resumePlayback();
+                if (mediaController.isShowing()){
+                    mediaController.hide();
+                } //tr 9/28
             }
         }
     }
@@ -421,6 +424,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         shouldStartAfterResume = mainMovieFragment.isPlaying();
         resumePlayTime = mainMovieFragment.getCurrentPosition();
         super.onPause();
+
     }
 
     public void onResume() {
@@ -502,9 +506,13 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
     boolean isPausedByIME = false;
     public void pausMovieForImeECPiece(){
+        if (mediaController.isShowing()){
+            mediaController.hide();
+        }
         mainMovieFragment.pause();
         isPausedByIME = true;
-    }
+    } //tr 9/28
+
 
     @Override
     public void transitLeftFragment(Fragment nextFragment){
