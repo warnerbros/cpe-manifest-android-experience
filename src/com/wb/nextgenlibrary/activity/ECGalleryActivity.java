@@ -4,6 +4,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 
 import com.wb.nextgenlibrary.R;
+import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.fragment.AbstractECGalleryViewFragment;
 import com.wb.nextgenlibrary.fragment.ECGalleryViewFragment;
@@ -86,6 +87,7 @@ public class ECGalleryActivity extends AbstractECView {
                 }
             }
             galleryFragment.setCurrentGallery(galleryItem);
+            NextGenAnalyticData.reportEvent(this, null, "EC Gallery", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, ec.title);
 
 
            //galleryFrame.setCurrentGallery(ec.galleryItems.get(0));

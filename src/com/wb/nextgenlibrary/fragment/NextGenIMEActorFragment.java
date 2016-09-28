@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
+import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.data.MovieMetaData.CastData;
 import com.wb.nextgenlibrary.interfaces.NextGenFragmentTransactionInterface;
@@ -37,13 +38,14 @@ public class NextGenIMEActorFragment extends NextGenActorListFragment implements
 
         if (index >= getActorInfos().size() ){
             fullListEnabled = !fullListEnabled;
-            // do this trick here
+            NextGenAnalyticData.reportEvent(getActivity(), this, "Show Less/More", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, Boolean.toString(fullListEnabled));
         } else if (getActivity() instanceof NextGenFragmentTransactionInterface){
             NextGenActorDetailFragment target = new NextGenActorDetailFragment();
             target.setShouldShowCloseBtn(true);
             target.setDetailObject(selectedObject);
             ((NextGenFragmentTransactionInterface)getActivity()).transitMainFragment( target);
             ((NextGenFragmentTransactionInterface)getActivity()).resetUI(false);
+            NextGenAnalyticData.reportEvent(getActivity(), this, "Actor", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, selectedObject.getTitle());
 
         }
 

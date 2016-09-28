@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.activity.ActorGalleryActivity;
 import com.wb.nextgenlibrary.activity.ECGalleryActivity;
+import com.wb.nextgenlibrary.activity.ECSceneLocationActivity;
 import com.wb.nextgenlibrary.activity.ECVideoActivity;
 import com.wb.nextgenlibrary.activity.NextGenActivity;
 import com.wb.nextgenlibrary.activity.NextGenExtraActivity;
@@ -21,6 +22,7 @@ import com.wb.nextgenlibrary.fragment.NextGenActorDetailFragment;
 import com.wb.nextgenlibrary.fragment.TheTakeCategoryGridFragment;
 import com.wb.nextgenlibrary.fragment.TheTakeFrameProductsFragment;
 import com.wb.nextgenlibrary.fragment.TheTakeProductDetailFragment;
+import com.wb.nextgenlibrary.util.utils.StringHelper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +46,7 @@ public class NextGenAnalyticData {
         // ec fragments
         classObjectToReportNameMap.put(ECVideoViewFragment.class, "EC Video");
         classObjectToReportNameMap.put(ECGalleryViewFragment.class, "EC Gallery");
-        classObjectToReportNameMap.put(ECSceneLocationMapFragment.class, "EC Scene Location");
+        classObjectToReportNameMap.put(ECSceneLocationMapFragment.class, "EC Scene Location Map");
         classObjectToReportNameMap.put(ECTurnTableViewFragment.class, "EC Turntable Gallery");
         classObjectToReportNameMap.put(NextGenActorDetailFragment.class, "Actor Detail");
         classObjectToReportNameMap.put(IMEECMapViewFragment.class, "IME Map");
@@ -59,6 +61,7 @@ public class NextGenAnalyticData {
         classObjectToReportNameMap.put(NextGenActivity.class, "Start Screen");
         classObjectToReportNameMap.put(ECVideoActivity.class, "EC Video Group Screen");
         classObjectToReportNameMap.put(ECGalleryActivity.class, "EC Gallery Group Screen");
+        classObjectToReportNameMap.put(ECSceneLocationActivity.class, "EC Scene Location");
         classObjectToReportNameMap.put(ActorGalleryActivity.class, "Actor Gallery");
         classObjectToReportNameMap.put(NextGenPlayer.class, "Main Movie Screen");
         classObjectToReportNameMap.put(NextGenExtraActivity.class, "Extras Screen");
@@ -67,7 +70,13 @@ public class NextGenAnalyticData {
 
     public static void reportEvent(Activity activity, Fragment fragment, String button, AnalyticAction action, String value){
         String activityName = activity != null ? classObjectToReportNameMap.get(activity.getClass()) : "";
+        if (activity != null && StringHelper.isEmpty(activityName)){
+            activityName = activity.getClass().toString();
+        }
         String fragmentName = fragment != null ? classObjectToReportNameMap.get(fragment.getClass()) : "";
+        if (fragment != null && StringHelper.isEmpty(fragmentName)){
+            fragmentName = fragment.getClass().toString();
+        }
 
         if (NextGenExperience.getNextGenEventHandler() != null)
             NextGenExperience.getNextGenEventHandler().userEventLog(activityName, fragmentName, button, action.sValue, value);

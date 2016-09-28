@@ -10,6 +10,7 @@ import com.squareup.picasso.Picasso;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 
+import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgenlibrary.interfaces.SensitiveFragmentInterface;
 import com.wb.nextgenlibrary.network.BaselineApiDAO;
@@ -84,6 +85,7 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment<CastD
 
         }
         listAdaptor.notifyDataSetChanged();
+        NextGenAnalyticData.reportEvent(getActivity(), this, "Actor", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, selectedObject.getTitle());
     }
 
     protected int getListItemCount() {

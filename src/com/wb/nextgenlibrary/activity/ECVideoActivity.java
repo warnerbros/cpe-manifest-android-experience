@@ -3,6 +3,7 @@ package com.wb.nextgenlibrary.activity;
 import android.os.Bundle;
 
 import com.wb.nextgenlibrary.R;
+import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.fragment.ECVideoViewFragment;
 
@@ -44,6 +45,7 @@ public class ECVideoActivity extends AbstractECView implements ECVideoViewFragme
     public void onLeftListItemSelected(MovieMetaData.ExperienceData ec){
         if (ec != null && ec.audioVisualItems.size() > 0) {
             rightVideoFrame.setAudioVisualItem(ec.audioVisualItems.get(0));
+            NextGenAnalyticData.reportEvent(this, null, "EC Video", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, ec.title);
         }
     }
 
