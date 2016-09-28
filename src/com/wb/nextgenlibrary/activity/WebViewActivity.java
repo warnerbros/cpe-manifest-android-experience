@@ -11,7 +11,7 @@ import com.wb.nextgenlibrary.util.utils.F;
  */
 public class WebViewActivity extends NextGenHideStatusBarActivity {
 
-    private WebView webView;
+    protected WebView webView;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

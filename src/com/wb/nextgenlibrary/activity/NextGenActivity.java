@@ -36,6 +36,7 @@ import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.data.StyleData;
 import com.wb.nextgenlibrary.parser.cpestyle.BackgroundOverlayAreaType;
+import com.wb.nextgenlibrary.testassets.TestItemsActivity;
 import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
@@ -100,6 +101,14 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
         extraButton = (ImageButton) findViewById(R.id.next_gen_startup_extra_button);
         if (extraButton != null){
             extraButton.setOnClickListener(this);
+            extraButton.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Intent intent = new Intent(NextGenActivity.this, TestItemsActivity.class);
+                    startActivity(intent);
+                    return true;
+                }
+            });
         }
 
         playMovieTextButton = (Button)findViewById(R.id.next_gen_startup_play_text_button);
@@ -109,6 +118,14 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
         extraTextButton = (Button)findViewById(R.id.next_gen_startup_extra_text_button);
         if (extraTextButton != null){
             extraTextButton.setOnClickListener(this);
+            extraTextButton.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Intent intent = new Intent(NextGenActivity.this, TestItemsActivity.class);
+                    startActivity(intent);
+                    return true;
+                }
+            });
         }
 
         StyleData.NodeBackground nodeBackground = (mainStyle != null ) ? mainStyle.getBackground() : null;
