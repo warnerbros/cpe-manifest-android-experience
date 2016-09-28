@@ -20,6 +20,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.wb.nextgenlibrary.R;
+import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
@@ -89,11 +90,12 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment {
                     share.putExtra(Intent.EXTRA_TEXT, imageUrl);
 
                     startActivity(Intent.createChooser(share, ""));
+                    NextGenAnalyticData.reportEvent(getActivity(), ECGalleryViewFragment.this, "Share Image",
+                            NextGenAnalyticData.AnalyticAction.ACTION_CLICK, imageUrl);
                 }
             });
         }
     }
-
 
     public void setShouldShowShareBtn(boolean bShow){
         shouldShowShareBtn = bShow;

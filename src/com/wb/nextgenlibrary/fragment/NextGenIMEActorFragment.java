@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.data.MovieMetaData;
+import com.wb.nextgenlibrary.data.MovieMetaData.CastData;
 import com.wb.nextgenlibrary.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgenlibrary.interfaces.NextGenPlaybackStatusListener;
 import com.wb.nextgenlibrary.model.NextGenIMEEngine;
@@ -21,8 +22,9 @@ import java.util.List;
 public class NextGenIMEActorFragment extends NextGenActorListFragment implements NextGenPlaybackStatusListener{
 
     List<CastIMEEngine> castIMEEngines = new ArrayList<CastIMEEngine>();
-    List<MovieMetaData.CastData> currentActiveActorList = new ArrayList<MovieMetaData.CastData>();
-    TextView showMoreLessTextView = null;
+    List<CastData> currentActiveActorList = new ArrayList<CastData>();
+
+    static final CastData showMoreLessDummyData = new CastData(null);
 
     boolean fullListEnabled = false;
 
@@ -31,7 +33,7 @@ public class NextGenIMEActorFragment extends NextGenActorListFragment implements
     }
 
     @Override
-    protected void onListItemClick(int index, Object selectedObject){
+    protected void onListItemClick(int index, CastData selectedObject){
 
         if (index >= getActorInfos().size() ){
             fullListEnabled = !fullListEnabled;
@@ -39,7 +41,7 @@ public class NextGenIMEActorFragment extends NextGenActorListFragment implements
         } else if (getActivity() instanceof NextGenFragmentTransactionInterface){
             NextGenActorDetailFragment target = new NextGenActorDetailFragment();
             target.setShouldShowCloseBtn(true);
-            target.setDetailObject((MovieMetaData.CastData) selectedObject);
+            target.setDetailObject(selectedObject);
             ((NextGenFragmentTransactionInterface)getActivity()).transitMainFragment( target);
             ((NextGenFragmentTransactionInterface)getActivity()).resetUI(false);
 
@@ -124,11 +126,11 @@ public class NextGenIMEActorFragment extends NextGenActorListFragment implements
     }
 
     @Override
-    protected Object getListItemAtPosition(int i) {
+    protected CastData getListItemAtPosition(int i) {
         if (i < getActorInfos().size())
             return getActorInfos().get(i);
         else
-            return getResources().getString(fullListEnabled ? R.string.show_less_text : R.string.show_more_text);
+            return showMoreLessDummyData;
     }
 
     protected int getListItemViewId(int row){
@@ -140,11 +142,11 @@ public class NextGenIMEActorFragment extends NextGenActorListFragment implements
         }
     }
 
-    protected void fillListRowWithObjectInfo(View rowView, Object item) {
-        if (item instanceof String){
+    protected void fillListRowWithObjectInfo(View rowView, CastData item) {
+        if (item == showMoreLessDummyData){
             TextView showTxt = (TextView)rowView.findViewById(R.id.show_more_less_text);
             if (showTxt != null)
-                showTxt.setText((String)item);
+                showTxt.setText(getResources().getString(fullListEnabled ? R.string.show_less_text : R.string.show_more_text));
         }else {
             super.fillListRowWithObjectInfo(rowView, item);
         }

@@ -2,12 +2,15 @@ package com.wb.nextgenlibrary.activity;
 
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.Surface;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
+import com.wb.nextgenlibrary.NextGenExperience;
+import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 
 /**
  * Created by gzcheng on 7/20/16.
@@ -27,6 +30,16 @@ public class NextGenHideStatusBarActivity extends AppCompatActivity {
         currentScreenOrientation = getScreenOrientation();
         getWindow().getDecorView().setSystemUiVisibility(getWindow().getDecorView().getSystemUiVisibility() | DESIRE_VISIBILITY);
 
+    }
+
+    @Override
+    protected void onPostCreate( Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        NextGenAnalyticData.reportEvent(this, null, null, NextGenAnalyticData.AnalyticAction.ACTION_START, getReportContentName());
+    }
+
+    String getReportContentName(){
+        return null;
     }
 
     boolean shouldHideActionBar(){

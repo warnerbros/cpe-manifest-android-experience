@@ -42,6 +42,9 @@ public class ECTrviaViewFragment extends AbstractNextGenFragment {
         }
 
     }
+    public String getReportContentName(){
+        return title;
+    }
 
     public void setTriviaItem(String textTitle, MovieMetaData.TriviaItem triviaItem){
         if (triviaItem != null) {

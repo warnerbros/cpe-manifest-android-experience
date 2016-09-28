@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.wb.nextgenlibrary.R;
+import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 
 
@@ -67,6 +68,8 @@ public class ShareClipFragment extends ECVideoViewFragment implements View.OnCli
             share.putExtra(Intent.EXTRA_TEXT, videoUrl);
 
             startActivity(Intent.createChooser(share, ""));
+            NextGenAnalyticData.reportEvent(getActivity(), ShareClipFragment.this, "Share",
+                    NextGenAnalyticData.AnalyticAction.ACTION_CLICK, videoUrl);
         } else if (v.getId() == R.id.prev_clip_btn){
                 if (itemIndex >= 0){
                     setShouldAutoPlay(false);

@@ -10,6 +10,8 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.wb.nextgenlibrary.R;
+import com.wb.nextgenlibrary.activity.NextGenPlayer;
+import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 
 import java.util.List;
@@ -90,10 +92,12 @@ public class ActorDetailGalleryRecyclerAdapter extends RecyclerView.Adapter<Acto
         public void onClick(View v) {
             if (listener != null){
                 listener.onItemSelected(index);
+
+                NextGenAnalyticData.reportEvent(null, null, "Actor Gallery Picture",
+                        NextGenAnalyticData.AnalyticAction.ACTION_CLICK, headShot.fullSizeUrl);
             }
         }
     }
-
 
 
     public static interface ActorGalleryRecyclerSelectionListener{

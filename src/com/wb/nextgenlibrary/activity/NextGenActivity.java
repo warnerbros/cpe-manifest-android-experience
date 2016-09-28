@@ -32,6 +32,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
+import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.data.StyleData;
 import com.wb.nextgenlibrary.parser.cpestyle.BackgroundOverlayAreaType;
@@ -230,12 +231,6 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
 
                 });
-                startupVideoView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        startupVideoView.stopPlayback();
-                    }
-                });
 
                 startupVideoView.requestFocus();
                 startupVideoView.setVideoURI(Uri.parse(mainStyle.getBackgroundVideoUrl()));
@@ -400,10 +395,12 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
             Intent intent = new Intent(this, NextGenPlayer.class);
             intent.setDataAndType(Uri.parse(NextGenExperience.getMovieMetaData().getMainMovieUrl()), "video/*");
             startActivity(intent);
+            NextGenAnalyticData.reportEvent(this, null, "Play Movie", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
 
         } else if (v.getId() == R.id.next_gen_startup_extra_button || v.getId() == R.id.next_gen_startup_extra_text_button) {
             Intent extraIntent = new Intent(this, NextGenExtraActivity.class);
             startActivity(extraIntent);
+            NextGenAnalyticData.reportEvent(this, null, "Extras", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
         }
     }
 

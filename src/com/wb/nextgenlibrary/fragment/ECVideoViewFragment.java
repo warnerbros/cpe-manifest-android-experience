@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.wb.nextgenlibrary.R;
+import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.util.utils.F;
 import com.wb.nextgenlibrary.util.utils.NextGenLogger;
@@ -67,6 +68,13 @@ public class ECVideoViewFragment extends ECViewFragment{
         boolean shouldStartCountDownForNext();
     }
 
+    String getReportContentName(){
+        if (selectedAVItem != null)
+            return selectedAVItem.getTitle();
+        else
+            return null;
+    }
+
     public void setBGImageUrl(String url){
         bgImageUrl = url;
     }
@@ -113,6 +121,8 @@ public class ECVideoViewFragment extends ECViewFragment{
                     if (previewFrame != null)
                         previewFrame.setVisibility(View.GONE);
                     videoView.start();
+                    NextGenAnalyticData.reportEvent(getActivity(), ECVideoViewFragment.this, "EC Play Button",
+                            NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
                 }
             });
         }
@@ -207,7 +217,6 @@ public class ECVideoViewFragment extends ECViewFragment{
 
         if (bgImageView != null && !StringHelper.isEmpty(bgImageUrl)){
             Glide.with(getActivity()).load(bgImageUrl).fitCenter().into(bgImageView);
-            //PicassoTrustAll.loadImageIntoView(getActivity(), bgImageUrl, bgImageView);
         }
     }
 

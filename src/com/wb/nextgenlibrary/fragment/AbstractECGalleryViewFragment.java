@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.activity.AbstractECView;
+import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.util.TabletUtils;
 
@@ -33,6 +34,8 @@ abstract public class AbstractECGalleryViewFragment extends ECViewFragment  {
                     public void onClick(View v) {
                         if (getActivity() instanceof AbstractECView) {
                             ((AbstractECView) getActivity()).onRequestToggleFullscreen();
+                            NextGenAnalyticData.reportEvent(getActivity(), AbstractECGalleryViewFragment.this, "Toggle Fullscreen",
+                                    NextGenAnalyticData.AnalyticAction.ACTION_CLICK, "");
                         }
                     }
                 });
@@ -40,6 +43,10 @@ abstract public class AbstractECGalleryViewFragment extends ECViewFragment  {
                 fullscreenToggleBtn.setVisibility(View.GONE);
             }
         }
+    }
+
+    String getReportContentName(){
+        return currentGallery.getTitle();
     }
 
     public void setCurrentGallery(MovieMetaData.ECGalleryItem gallery){

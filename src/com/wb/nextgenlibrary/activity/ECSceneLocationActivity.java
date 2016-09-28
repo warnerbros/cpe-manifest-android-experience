@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.wb.nextgenlibrary.R;
+import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.data.MovieMetaData.ExperienceData;
 import com.wb.nextgenlibrary.data.MovieMetaData.PresentationDataItem;
@@ -349,6 +350,8 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
                     locationECsAdapter.setSceneLocation((MovieMetaData.LocationItem) currentItem);
                     locationECsAdapter.notifyDataSetChanged();
                     locationECRecyclerView.smoothScrollToPosition(0);
+                    NextGenAnalyticData.reportEvent(ECSceneLocationActivity.this, null, "Location Item",
+                            NextGenAnalyticData.AnalyticAction.ACTION_CLICK, ((MovieMetaData.LocationItem) currentItem).getTitle());
                 } else if (currentItem instanceof MovieMetaData.AudioVisualItem) {
                     ECVideoViewFragment videoViewFragment;
                     if (currentFragment instanceof ECVideoViewFragment) {
@@ -366,6 +369,8 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
                     videoViewFragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) currentItem);
 
                     transitToFragment(videoViewFragment);
+                    NextGenAnalyticData.reportEvent(ECSceneLocationActivity.this, null, "EC Video Item",
+                            NextGenAnalyticData.AnalyticAction.ACTION_CLICK, ((MovieMetaData.AudioVisualItem) currentItem).getTitle());
 
                 } else if (currentItem instanceof MovieMetaData.ECGalleryItem) {
                     ECGalleryViewFragment galleryViewFragment;
@@ -379,7 +384,10 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
                     }
                     galleryViewFragment.setCurrentGallery((MovieMetaData.ECGalleryItem) currentItem);
                     transitToFragment(galleryViewFragment);
+                    NextGenAnalyticData.reportEvent(ECSceneLocationActivity.this, null, "EC Gallery Item",
+                            NextGenAnalyticData.AnalyticAction.ACTION_CLICK, ((MovieMetaData.ECGalleryItem) currentItem).getTitle());
                 }
+
             }
         }
     }

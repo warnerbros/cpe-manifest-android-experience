@@ -25,6 +25,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.adapter.ActorDetailGalleryRecyclerAdapter;
+import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData.CastHeadShot;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 
@@ -79,6 +80,7 @@ public class ActorGalleryActivity extends AbstractNextGenActivity implements Act
             closeBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    NextGenAnalyticData.reportEvent(ActorGalleryActivity.this, null, "Back Button", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
                     onBackPressed();
                 }
             });

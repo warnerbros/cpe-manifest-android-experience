@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.wb.nextgenlibrary.R;
+import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.util.utils.F;
 import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 
@@ -55,12 +56,18 @@ public abstract class AbstractNextGenFragment extends Fragment {
             closeBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (getActivity() != null)
+                    if (getActivity() != null) {
+                        NextGenAnalyticData.reportEvent(getActivity(), AbstractNextGenFragment.this, "Back Button",
+                                NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
                         getActivity().onBackPressed();
+                    }
                 }
             });
         }
+        NextGenAnalyticData.reportEvent(getActivity(), this, null, NextGenAnalyticData.AnalyticAction.ACTION_START, getReportContentName());
     }
+
+    abstract String getReportContentName();
 
     public void setShouldShowCloseBtn(boolean bShow){
         shouldShowCloseBtn = bShow;

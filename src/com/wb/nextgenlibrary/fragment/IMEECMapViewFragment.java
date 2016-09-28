@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.activity.NextGenPlayer;
+import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.util.HttpImageHelper;
 import com.wb.nextgenlibrary.util.TabletUtils;
@@ -128,6 +129,13 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
                 });
             }
         }
+        NextGenAnalyticData.reportEvent(getActivity(), this, "Satellite/Map View",
+                NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
+    }
+
+    @Override
+    String getReportContentName(){
+        return title;
     }
 
     @Override
@@ -307,6 +315,8 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
                     mapView.setVisibility(View.VISIBLE);
                     videoFrame.setVisibility(View.GONE);
                     galleryFrame.setVisibility(View.GONE);
+                    NextGenAnalyticData.reportEvent(getActivity(), IMEECMapViewFragment.this, "Location Item",
+                            NextGenAnalyticData.AnalyticAction.ACTION_CLICK, ((MovieMetaData.LocationItem) currentItem).getTitle());
 
                 } else if (currentItem instanceof MovieMetaData.AudioVisualItem) {
                     mapView.setVisibility(View.GONE);
@@ -320,6 +330,8 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
                     videoViewFragment.setShouldShowCloseBtn(false);
                     videoViewFragment.setAspectRatioFramePriority(FixedAspectRatioFrameLayout.Priority.HEIGHT_PRIORITY);
                     videoViewFragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) currentItem);
+                    NextGenAnalyticData.reportEvent(getActivity(), IMEECMapViewFragment.this, "Location Item",
+                            NextGenAnalyticData.AnalyticAction.ACTION_CLICK, ((MovieMetaData.AudioVisualItem) currentItem).getTitle());
 
                 } else if (currentItem instanceof MovieMetaData.ECGalleryItem) {
                     mapView.setVisibility(View.GONE);
@@ -338,6 +350,8 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
                     galleryViewFragment.setAspectRatioFramePriority(FixedAspectRatioFrameLayout.Priority.HEIGHT_PRIORITY);
 
                     galleryViewFragment.setCurrentGallery((MovieMetaData.ECGalleryItem) currentItem);
+                    NextGenAnalyticData.reportEvent(getActivity(), IMEECMapViewFragment.this, "Location Item",
+                            NextGenAnalyticData.AnalyticAction.ACTION_CLICK, ((MovieMetaData.ECGalleryItem) currentItem).getTitle());
                 }
             }
         }

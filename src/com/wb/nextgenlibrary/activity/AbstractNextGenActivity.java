@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
+import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.interfaces.ContentViewFullscreenRequestInterface;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 
@@ -206,6 +207,7 @@ public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivi
     }
 
     protected void onLeftTopActionBarButtonPressed(){
+        NextGenAnalyticData.reportEvent(this, null, "Back Button", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
         onBackPressed();
     }
 

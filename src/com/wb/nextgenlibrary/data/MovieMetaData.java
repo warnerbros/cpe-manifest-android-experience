@@ -873,7 +873,7 @@ public class MovieMetaData {
 
         public CastData(BasicMetadataPeopleType castInfo){
             super(null, null, null);
-            if (castInfo.getJob() != null && castInfo.getJob().size() > 0){     // this may have multiple values
+            if (castInfo!= null && castInfo.getJob() != null && castInfo.getJob().size() > 0){     // this may have multiple values
                 job = castInfo.getJob().get(0).getJobFunction().getValue();
                 if (castInfo.getJob().get(0).getCharacter() != null && castInfo.getJob().get(0).getCharacter().size() > 0)
                     charactorName = castInfo.getJob().get(0).getCharacter().get(0);
@@ -889,7 +889,7 @@ public class MovieMetaData {
                 charactorName = "";
             }
 
-            if (castInfo.getName() != null){
+            if (castInfo!= null && castInfo.getName() != null){
                 lastName = castInfo.getName().getFamilyName();
                 firstGivenName = castInfo.getName().getFirstGivenName();
                 secondGivenName = castInfo.getName().getSecondGivenName();
@@ -906,13 +906,13 @@ public class MovieMetaData {
                 displayName = "";
             }
 
-            if (castInfo.getGender() != null){
+            if (castInfo!= null && castInfo.getGender() != null){
                 gender = castInfo.getGender();
             }else{
                 gender = "";
             }
 
-            if (castInfo.getIdentifier() != null){
+            if (castInfo!= null && castInfo.getIdentifier() != null){
                 for (PersonIdentifierType personId : castInfo.getIdentifier()) {
                     if (BASELINE_NAMESPACE.equals(personId.getNamespace()) ) {
                         baselineApiActorId = personId.getIdentifier();

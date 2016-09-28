@@ -8,4 +8,5 @@ import android.app.Activity;
 public interface NextGenEventHandler {
     void handleMovieTitleSelection(Activity activity, String movieId);
     boolean isDebugBuild();
+    void userEventLog(String screen, String subScreen, String button, String action, String value);
 }

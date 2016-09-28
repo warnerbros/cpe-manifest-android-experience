@@ -9,12 +9,13 @@ import com.bumptech.glide.Glide;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.activity.AbstractECView;
 import com.wb.nextgenlibrary.data.MovieMetaData;
+import com.wb.nextgenlibrary.data.MovieMetaData.ExperienceData;
 import com.wb.nextgenlibrary.widget.SelectedOverlayImageView;
 
 /**
  * Created by gzcheng on 3/7/16.
  */
-public class ECViewLeftListFragment extends NextGenExtraLeftListFragment{
+public class ECViewLeftListFragment extends NextGenExtraLeftListFragment<ExperienceData>{
     MovieMetaData.ExperienceData listECGroupData;
     AbstractECView ecViewActivity;
 
@@ -39,15 +40,15 @@ public class ECViewLeftListFragment extends NextGenExtraLeftListFragment{
     }
 
     @Override
-    public void onListItemClick(int index, Object selectedObject){
-        ecViewActivity.onLeftListItemSelected((MovieMetaData.ExperienceData) selectedObject);
+    public void onListItemClick(int index, ExperienceData selectedObject){
+        ecViewActivity.onLeftListItemSelected(selectedObject);
     }
 
     protected int getListItemCount(){
         return listECGroupData.getChildrenContents().size();
     }
 
-    protected Object getListItemAtPosition(int i){
+    protected ExperienceData getListItemAtPosition(int i){
         return listECGroupData.getChildrenContents().get(i);
     }
 
@@ -58,8 +59,7 @@ public class ECViewLeftListFragment extends NextGenExtraLeftListFragment{
         return R.layout.next_gen_ec_list_item;
     }
 
-    protected void fillListRowWithObjectInfo(View rowView, Object item){
-        MovieMetaData.ExperienceData thisEC = (MovieMetaData.ExperienceData) item;
+    protected void fillListRowWithObjectInfo(View rowView, ExperienceData thisEC){
 
         SelectedOverlayImageView imageView = (SelectedOverlayImageView)rowView.findViewById(R.id.ec_list_image);
         if (imageView != null){

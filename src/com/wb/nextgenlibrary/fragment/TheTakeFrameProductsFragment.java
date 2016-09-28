@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.wb.nextgenlibrary.R;
+import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.TheTakeData.TheTakeProduct;
 import com.wb.nextgenlibrary.network.TheTakeApiDAO;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
@@ -63,6 +64,10 @@ public class TheTakeFrameProductsFragment extends AbstractNextGenFragment {
         titleText = title;
         if (titleTextView != null)
             titleTextView.setText(titleText);
+    }
+    @Override
+    String getReportContentName(){
+        return titleText;
     }
 
     @Override
@@ -139,6 +144,8 @@ public class TheTakeFrameProductsFragment extends AbstractNextGenFragment {
             loadProductIntoDetailFragment(product);
             frameProductsAdaptor.setSelectedIndex(position);
             frameProductsAdaptor.notifyDataSetChanged();
+            NextGenAnalyticData.reportEvent(getActivity(), TheTakeFrameProductsFragment.this, "Product",
+                    NextGenAnalyticData.AnalyticAction.ACTION_CLICK, product.productName);
         }
     }
 

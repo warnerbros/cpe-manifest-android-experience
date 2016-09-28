@@ -22,6 +22,7 @@ import com.wb.nextgenlibrary.R;
 
 import com.wb.nextgenlibrary.activity.ActorGalleryActivity;
 import com.wb.nextgenlibrary.adapter.ActorDetailGalleryRecyclerAdapter;
+import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.data.MovieMetaData.Filmography;
 import com.wb.nextgenlibrary.data.MovieMetaData.CastData;
@@ -117,6 +118,14 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
             actorGalleryRecyclerView.setAdapter(null);
     }
 
+    @Override
+    String getReportContentName(){
+        if (actorOjbect != null)
+            return actorOjbect.displayName;
+        else
+            return "";
+    }
+
     public void setDetailObject(CastData object){
         actorOjbect = object;
     }
@@ -143,8 +152,12 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
             fullImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (object.getBaselineCastData() != null && object.getBaselineCastData().headShots != null && object.getBaselineCastData().headShots.size()> 0)
+                    if (object.getBaselineCastData() != null && object.getBaselineCastData().headShots != null && object.getBaselineCastData().headShots.size()> 0) {
                         onItemSelected(0);
+                        NextGenAnalyticData.reportEvent(getActivity(), NextGenActorDetailFragment.this, "Actor Thumbnail Image",
+                                NextGenAnalyticData.AnalyticAction.ACTION_CLICK, object.getBaselineCastData().headShots.get(0).fullSizeUrl);
+
+                    }
                 }
             });
             if (actorOjbect.getBaselineCastData().filmogrphies == null){
@@ -252,30 +265,9 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
             if (NextGenExperience.getNextGenEventHandler() != null){
                 NextGenExperience.getNextGenEventHandler().handleMovieTitleSelection(getActivity(), filmInfo.title);
             }
-            //NextGenExperience.getMainMovieFragmentClass()
-            /*
-            final String url = filmInfo.movieInfoUrl;
-            if (!StringHelper.isEmpty(url)){
-                return;
-            }
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-            alertDialogBuilder.setTitle(getResources().getString(R.string.dialog_leave_app));
-            alertDialogBuilder.setMessage(getResources().getString(R.string.dialog_follow_link));
-            alertDialogBuilder.setPositiveButton(getResources().getString(android.R.string.yes), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    startActivity(browserIntent);
-                }
-            });
-            alertDialogBuilder.setNegativeButton(getResources().getString(android.R.string.no), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-            alertDialogBuilder.show();*/
+            NextGenAnalyticData.reportEvent(getActivity(), NextGenActorDetailFragment.this, "Actor Filmography",
+                    NextGenAnalyticData.AnalyticAction.ACTION_CLICK, filmInfo.title);
+
         }
     }
 
@@ -338,14 +330,20 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
                 getActivity().getPackageManager().getPackageInfo("com.facebook.katana", 0);
                 // http://stackoverflow.com/a/24547437/1048340
                 socialUrl = "fb://facewebmodal/f?href=" + socialUrl;
+                NextGenAnalyticData.reportEvent(getActivity(), this, "Facebook Button",
+                        NextGenAnalyticData.AnalyticAction.ACTION_CLICK, socialUrl);
             } catch (PackageManager.NameNotFoundException e) {
 
             }
 
         }else if (v.equals(twitterBtn)){
             socialUrl = actorOjbect.getBaselineCastData().getSocialMediaUrl(MovieMetaData.BaselineCastData.SOCIAL_MEDIA_KEY.TWITTER_KEY);
+            NextGenAnalyticData.reportEvent(getActivity(), this, "Twitter Button",
+                    NextGenAnalyticData.AnalyticAction.ACTION_CLICK, socialUrl);
         }else if (v.equals(instagramBtn)){
             socialUrl = actorOjbect.getBaselineCastData().getSocialMediaUrl(MovieMetaData.BaselineCastData.SOCIAL_MEDIA_KEY.INSTAGRAM_KEY);
+            NextGenAnalyticData.reportEvent(getActivity(), this, "Instagram Button",
+                    NextGenAnalyticData.AnalyticAction.ACTION_CLICK, socialUrl);
         }
 
         if (!StringHelper.isEmpty(socialUrl)){

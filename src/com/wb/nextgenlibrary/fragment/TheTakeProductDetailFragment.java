@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
+import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.TheTakeData.TheTakeProduct;
 import com.wb.nextgenlibrary.data.TheTakeData.TheTakeProductDetail;
 import com.wb.nextgenlibrary.network.TheTakeApiDAO;
@@ -74,9 +75,22 @@ public class TheTakeProductDetailFragment extends AbstractNextGenFragment implem
                     NextGenExperience.launchChromeWithUrl(product.getProductDetail().purchaseLink);
                 }
             });
+            NextGenAnalyticData.reportEvent(getActivity(), TheTakeProductDetailFragment.this, "Shop At The Take",
+                    NextGenAnalyticData.AnalyticAction.ACTION_CLICK, product.productName);
         }else if (v.getId() == R.id.send_link_button){
             NextGenExperience.launchChromeWithUrl(product.getProductDetail().shareUrl);
+            NextGenAnalyticData.reportEvent(getActivity(), TheTakeProductDetailFragment.this, "Send Link",
+                    NextGenAnalyticData.AnalyticAction.ACTION_CLICK, product.productName);
         }
+    }
+
+
+    @Override
+    String getReportContentName(){
+        if (product != null)
+            return product.productName;
+        else
+            return null;
     }
 
     private void populateProductDetail(TheTakeProduct product){

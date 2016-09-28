@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Created by gzcheng on 1/13/16.
  */
-public class NextGenActorListFragment extends NextGenExtraLeftListFragment implements SensitiveFragmentInterface {
+public class NextGenActorListFragment extends NextGenExtraLeftListFragment<CastData> implements SensitiveFragmentInterface {
 
 
     @Override
@@ -73,12 +73,12 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment imple
 
 
     @Override
-    protected void onListItemClick(int index, Object selectedObject){
+    protected void onListItemClick(int index, CastData selectedObject){
 
         if (getActivity() instanceof NextGenFragmentTransactionInterface){
             NextGenActorDetailFragment target = new NextGenActorDetailFragment();
             target.setbEnableActorGallery(true);
-            target.setDetailObject((CastData) selectedObject);
+            target.setDetailObject(selectedObject);
             ((NextGenFragmentTransactionInterface)getActivity()).transitRightFragment(target);
             ((NextGenFragmentTransactionInterface)getActivity()).resetUI(false);
 
@@ -90,7 +90,7 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment imple
         return getActorInfos().size();
     }
 
-    protected Object getListItemAtPosition(int i) {
+    protected CastData getListItemAtPosition(int i) {
         return getActorInfos().get(i);
     }
 
@@ -102,24 +102,17 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment imple
         return -1;
     }
 
-    protected void fillListRowWithObjectInfo(View rowView, Object item) {
+    protected void fillListRowWithObjectInfo(View rowView, final CastData thisActor) {
 
 
         final ImageView avatarImg = (ImageView) rowView.findViewById(R.id.next_gen_actor_avatar);
         TextView realNameTxt = (TextView) rowView.findViewById(R.id.next_gen_actor_real_name);
         TextView characterNameTxt = (TextView) rowView.findViewById(R.id.next_gen_actor_character_name);
 
-
-        final CastData thisActor = (CastData) item;
-
-
         if(!thisActor.displayName.equals(realNameTxt.getText())) {
             realNameTxt.setText(thisActor.displayName.toUpperCase());
             characterNameTxt.setText(thisActor.charactorName);
-
-
         }
-
 
         if (thisActor.getBaselineCastData() != null){
             Picasso.with(getActivity()).load(thisActor.getBaselineCastData().getThumbnailImageUrl()).fit().centerCrop().into(avatarImg);

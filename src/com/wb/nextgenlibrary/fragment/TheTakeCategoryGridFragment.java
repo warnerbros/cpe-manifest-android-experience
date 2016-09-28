@@ -85,6 +85,15 @@ public class TheTakeCategoryGridFragment extends AbstractNextGenFragment{
         }
     }
 
+
+    @Override
+    String getReportContentName(){
+        if (selectedCategory != null)
+            return selectedCategory.categoryName;
+        else
+            return null;
+    }
+
     @Override
     public void onDestroy(){
         itemsGridViewAdaptor = null;

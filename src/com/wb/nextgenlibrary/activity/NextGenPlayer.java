@@ -20,6 +20,8 @@ import android.widget.RelativeLayout;
 import com.bumptech.glide.Glide;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
+import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
+import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.fragment.AbstractNextGenMainMovieFragment;
 import com.wb.nextgenlibrary.fragment.NextGenPlayerBottomFragment;
 import com.wb.nextgenlibrary.interfaces.NextGenFragmentTransactionInterface;
@@ -329,6 +331,8 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                         public void run() {
                             bInterstitialVideoComplete = true;
                             playMainMovie();
+                            NextGenAnalyticData.reportEvent(NextGenPlayer.this, null, "Skip InterStitial Video",
+                                    NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
                         }
                     });
                 }

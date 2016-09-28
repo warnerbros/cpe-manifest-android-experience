@@ -18,7 +18,7 @@ import com.wb.nextgenlibrary.R;
 /**
  * Created by gzcheng on 1/12/16.
  */
-public abstract class NextGenExtraLeftListFragment extends Fragment implements AdapterView.OnItemClickListener{
+public abstract class NextGenExtraLeftListFragment<T> extends Fragment implements AdapterView.OnItemClickListener{
 
     protected ListView listView;
     protected NextGenExtraLeftPanelAdapter listAdaptor;
@@ -81,11 +81,11 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
         listAdaptor.notifyDataSetChanged();
     }
 
-    protected abstract void onListItemClick(int index, Object selectedObject);
+    protected abstract void onListItemClick(int index, T selectedObject);
 
     protected abstract int getListItemCount();
 
-    protected abstract Object getListItemAtPosition(int i);
+    protected abstract T getListItemAtPosition(int i);
 
     protected abstract int getListItemViewId();
 
@@ -93,7 +93,7 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
         return getListItemViewId();
     }
 
-    protected abstract void fillListRowWithObjectInfo(View rowView, Object item);
+    protected abstract void fillListRowWithObjectInfo(View rowView, T item);
 
     protected abstract String getHeaderText();
 
@@ -149,7 +149,7 @@ public abstract class NextGenExtraLeftListFragment extends Fragment implements A
             return getListItemCount();
         }
 
-        public Object getItem(int position) {
+        public T getItem(int position) {
             return getListItemAtPosition(position);
         }
 
