@@ -254,6 +254,7 @@ public class ECVideoViewFragment extends ECViewFragment{
     @Override
     public void onPause(){
         super.onPause();
+        videoView.pause();
         previousPlaybackTime = videoView.getCurrentPosition();
     }
 
