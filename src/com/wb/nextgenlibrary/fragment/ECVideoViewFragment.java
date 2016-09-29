@@ -140,7 +140,7 @@ public class ECVideoViewFragment extends ECViewFragment{
                         //new
                         startRepeatingTask();
                     }else {
-                        if (getActivity() != null) {
+                        if (getActivity() != null) {                // only do this if the activity is still alive
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -183,14 +183,14 @@ public class ECVideoViewFragment extends ECViewFragment{
 
                                 }
                             });
-                        }
 
-                        if (counter < 0){
-                            ecsAdaptor.playbackFinished();
-                            stopRepeatingTask();
-                            shouldFinish = true;
+                            if (counter < 0){
+                                ecsAdaptor.playbackFinished();
+                                stopRepeatingTask();
+                                shouldFinish = true;
+                            }
+                            counter = counter - 1;
                         }
-                        counter = counter - 1;
                     } finally {
                         // 100% guarantee that this always happens, even if
                         // your update method throws an exception
