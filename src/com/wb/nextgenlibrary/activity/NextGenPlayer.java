@@ -57,7 +57,9 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
     private MainFeatureMediaController mediaController;
 
-    private ProgressDialog mDialog;
+    //private ProgressDialog mDialog;
+
+    private ProgressBar loadingView;
 
     NextGenFragmentTransactionEngine nextGenFragmentTransactionEngine;
 
@@ -85,14 +87,20 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     public void onCreate(Bundle savedInstanceState) {
         supportRequestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         super.onCreate(savedInstanceState);
-
-        mDialog = new ProgressDialog(this);
+        /*mDialog = new ProgressDialog(this);
         mDialog.setCancelable(true);
         mDialog.setOnCancelListener(this);
-        mDialog.setCanceledOnTouchOutside(true);
+        mDialog.setCanceledOnTouchOutside(true);*/
 
         nextGenFragmentTransactionEngine = new NextGenFragmentTransactionEngine(this);
         setContentView(R.layout.next_gen_videoview);
+        loadingView = (ProgressBar)findViewById(R.id.next_gen_loading_progress_bar);
+        if (loadingView != null){
+            loadingView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+            /*loadingView.getIndeterminateDrawable().setColorFilter(
+                    getResources().getColor(android.R.color.transparent),
+                    android.graphics.PorterDuff.Mode.SRC_IN);*/
+        }
 
         actionbarPlaceHolder = findViewById(R.id.next_gen_ime_actionbar_placeholder);
 
@@ -131,7 +139,8 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         transitMainFragment(imeBottomFragment);
         try {
             mainMovieFragment = NextGenExperience.getMainMovieFragmentClass().newInstance();
-            mainMovieFragment.setProgressDialog(mDialog);
+            //mainMovieFragment.setProgressDialog(mDialog);
+            mainMovieFragment.setLoadingView(loadingView);
             mainMovieFragment.setOnCompletionLister(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
@@ -364,9 +373,10 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         currentUri = Uri.parse("");
 
         if (drmStatus == DRMStatus.IN_PROGRESS){    // show loading
-            mDialog.setCanceledOnTouchOutside(false);
+            mainMovieFragment.showLoadingView();
+            /*mDialog.setCanceledOnTouchOutside(false);
             mDialog.setMessage(getResources().getString(R.string.loading));
-            mDialog.show();
+            mDialog.show();*/
             return;
         }else if (drmStatus == DRMStatus.FAILED){
             //Show error Message and exit
@@ -383,7 +393,8 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         }
         interstitialVideoView.stopPlayback();
         interstitialVideoView.setVisibility(View.GONE);
-        mDialog.hide();
+        mainMovieFragment.hideLoadingView();
+        //mDialog.hide();
 
         nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.video_view_frame, mainMovieFragment);
         if (imeUpdateTimer == null){

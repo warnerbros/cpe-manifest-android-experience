@@ -3,6 +3,7 @@ package com.wb.nextgenlibrary.fragment;
 import android.app.ProgressDialog;
 import android.media.MediaPlayer;
 import android.support.v4.app.Fragment;
+import android.view.View;
 
 import com.wb.nextgenlibrary.interfaces.NextGenPlayerInterface;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
@@ -15,6 +16,7 @@ import com.wb.nextgenlibrary.widget.CustomMediaController;
 public abstract class AbstractNextGenMainMovieFragment extends Fragment implements NextGenPlayerInterface{
     protected IVideoViewActionListener nextGenVideoViewListener;
     protected MediaPlayer.OnCompletionListener completionListener;
+    private View loadingView;
 
     public abstract void setPlaybackObject(Object playbackObject);
     public abstract void setCustomMediaController(CustomMediaController customMC);
@@ -36,6 +38,36 @@ public abstract class AbstractNextGenMainMovieFragment extends Fragment implemen
 
     public abstract void streamStartPreparations(ResultListener<Boolean> resultLister);
 
+    public void setLoadingView(View view){
+        loadingView = view;
+    }
+
+    public void showLoadingView(){
+        if (getActivity() != null && loadingView != null){
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    synchronized (loadingView) {
+                        loadingView.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
+        }
+    }
+
+    public void hideLoadingView(){
+        if (getActivity() != null && loadingView != null){
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    synchronized (loadingView) {
+                        loadingView.setVisibility(View.GONE);
+                    }
+                }
+            });
+        }
+    }
+
     public void startIME(){
        streamStartPreparations(new ResultListener<Boolean>() {
            @Override
@@ -51,5 +83,5 @@ public abstract class AbstractNextGenMainMovieFragment extends Fragment implemen
     }
 
 
-    public abstract void setProgressDialog(ProgressDialog dialog);   // do not use app's dialog, always use the NextGen Library one.
+    //public abstract void setProgressDialog(ProgressDialog dialog);   // do not use app's dialog, always use the NextGen Library one.
 }
