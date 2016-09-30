@@ -1,7 +1,7 @@
 package com.wb.nextgenlibrary.fragment;
 
-import android.content.pm.PackageInfo;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,14 +26,11 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.activity.NextGenPlayer;
 import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.util.HttpImageHelper;
 import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
-import com.wb.nextgenlibrary.util.utils.F;
-import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
 
@@ -61,7 +58,7 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
 
     Bundle savedInstanceState;
     public int getContentViewId(){
-        return R.layout.ec_map_view;
+        return R.layout.ime_map_view;
     }
     private Button mapButton;
     private Button satelliteButton;
@@ -88,8 +85,18 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
         sceneLocationECRecyclerView.setLayoutManager(recyclerViewLayoutManager);
         sceneLocationECRecyclerView.setAdapter(new ECsAdapter());
 
-        videoViewFragment = (ECVideoViewFragment) getChildFragmentManager().findFragmentById(R.id.ime_secene_location_video);
-        galleryViewFragment = (ECGalleryViewFragment) getChildFragmentManager().findFragmentById(R.id.ime_secene_location_gallery);
+        videoViewFragment = new ECVideoViewFragment();//(ECVideoViewFragment) getChildFragmentManager().findFragmentById(R.id.ime_secene_location_video);
+        galleryViewFragment = new ECGalleryViewFragment();// getChildFragmentManager().findFragmentById(R.id.ime_secene_location_gallery);
+
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.map_video_frame, videoViewFragment, videoViewFragment.getClass().toString());
+        fragmentTransaction.addToBackStack(videoViewFragment.getClass().toString());
+        fragmentTransaction.commit();
+
+        FragmentTransaction fragmentTransaction2 = getFragmentManager().beginTransaction();
+        fragmentTransaction2.replace(R.id.map_gallery_frame, galleryViewFragment, galleryViewFragment.getClass().toString());
+        fragmentTransaction2.addToBackStack(galleryViewFragment.getClass().toString());
+        fragmentTransaction2.commit();
 
         mapButton = (Button) view.findViewById(R.id.map_button);
         satelliteButton = (Button) view.findViewById(R.id.satellite_button);
@@ -323,15 +330,15 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
                     videoFrame.setVisibility(View.VISIBLE);
                     galleryFrame.setVisibility(View.GONE);
 
-                    if (videoViewFragment == null)
-                        videoViewFragment = (ECVideoViewFragment) getChildFragmentManager().findFragmentById(R.id.ime_secene_location_video);
-                    videoViewFragment.setShouldAutoPlay(true);
-                    videoViewFragment.setShouldHideMetaData(true);
-                    videoViewFragment.setShouldShowCloseBtn(false);
-                    videoViewFragment.setAspectRatioFramePriority(FixedAspectRatioFrameLayout.Priority.HEIGHT_PRIORITY);
-                    videoViewFragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) currentItem);
-                    NextGenAnalyticData.reportEvent(getActivity(), IMEECMapViewFragment.this, "Location Item",
-                            NextGenAnalyticData.AnalyticAction.ACTION_CLICK, ((MovieMetaData.AudioVisualItem) currentItem).getTitle());
+                    if (videoViewFragment != null) {
+                        videoViewFragment.setShouldAutoPlay(true);
+                        videoViewFragment.setShouldHideMetaData(true);
+                        videoViewFragment.setShouldShowCloseBtn(false);
+                        videoViewFragment.setAspectRatioFramePriority(FixedAspectRatioFrameLayout.Priority.HEIGHT_PRIORITY);
+                        videoViewFragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) currentItem);
+                        NextGenAnalyticData.reportEvent(getActivity(), IMEECMapViewFragment.this, "Location Item",
+                                NextGenAnalyticData.AnalyticAction.ACTION_CLICK, ((MovieMetaData.AudioVisualItem) currentItem).getTitle());
+                    }
 
                 } else if (currentItem instanceof MovieMetaData.ECGalleryItem) {
                     mapView.setVisibility(View.GONE);
@@ -341,17 +348,17 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
                     if (videoViewFragment != null){
                         videoViewFragment.stopPlayback();
                     }
-                    if (galleryViewFragment == null)
-                        galleryViewFragment = (ECGalleryViewFragment) getChildFragmentManager().findFragmentById(R.id.ime_secene_location_gallery);
-                    galleryViewFragment.setShouldHideMetaData(true);
-                    galleryViewFragment.setShouldShowCloseBtn(false);
-                    galleryViewFragment.setShouldShowFullScreenBtn(false);
-                    galleryViewFragment.setShouldShowShareBtn(false);
-                    galleryViewFragment.setAspectRatioFramePriority(FixedAspectRatioFrameLayout.Priority.HEIGHT_PRIORITY);
+                    if (galleryViewFragment != null) {
+                        galleryViewFragment.setShouldHideMetaData(true);
+                        galleryViewFragment.setShouldShowCloseBtn(false);
+                        galleryViewFragment.setShouldShowFullScreenBtn(false);
+                        galleryViewFragment.setShouldShowShareBtn(false);
+                        galleryViewFragment.setAspectRatioFramePriority(FixedAspectRatioFrameLayout.Priority.HEIGHT_PRIORITY);
 
-                    galleryViewFragment.setCurrentGallery((MovieMetaData.ECGalleryItem) currentItem);
-                    NextGenAnalyticData.reportEvent(getActivity(), IMEECMapViewFragment.this, "Location Item",
-                            NextGenAnalyticData.AnalyticAction.ACTION_CLICK, ((MovieMetaData.ECGalleryItem) currentItem).getTitle());
+                        galleryViewFragment.setCurrentGallery((MovieMetaData.ECGalleryItem) currentItem);
+                        NextGenAnalyticData.reportEvent(getActivity(), IMEECMapViewFragment.this, "Location Item",
+                                NextGenAnalyticData.AnalyticAction.ACTION_CLICK, ((MovieMetaData.ECGalleryItem) currentItem).getTitle());
+                    }
                 }
             }
         }

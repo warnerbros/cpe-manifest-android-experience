@@ -50,6 +50,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
     Bundle savedInstanceState = null;
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         imeGroups = NextGenExperience.getMovieMetaData().getImeElementGroups();
         this.savedInstanceState = savedInstanceState;
         for (IMEElementsGroup group : imeGroups){

@@ -46,7 +46,10 @@ abstract public class AbstractECGalleryViewFragment extends ECViewFragment  {
     }
 
     String getReportContentName(){
-        return currentGallery.getTitle();
+        if (currentGallery != null)
+            return currentGallery.getTitle();
+        else
+            return null;
     }
 
     public void setCurrentGallery(MovieMetaData.ECGalleryItem gallery){

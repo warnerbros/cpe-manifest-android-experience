@@ -67,12 +67,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:visibility="gone">
-                    <fragment
-                        android:id="@+id/ime_secene_location_gallery"
-                        android:name="com.wb.nextgenlibrary.fragment.ECGalleryViewFragment"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:layout_centerInParent="true"/>
 
                 </FrameLayout>
                 <FrameLayout
@@ -80,12 +74,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:visibility="gone">
-                    <fragment
-                        android:id="@+id/ime_secene_location_video"
-                        android:name="com.wb.nextgenlibrary.fragment.ECVideoViewFragment"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:layout_centerInParent="true" />
                 </FrameLayout>
 
             </RelativeLayout>
