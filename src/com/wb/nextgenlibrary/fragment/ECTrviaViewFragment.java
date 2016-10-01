@@ -9,6 +9,7 @@ import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.model.AVGalleryIMEEngine.IMECombineItem;
 import com.wb.nextgenlibrary.util.PicassoTrustAll;
+import com.wb.nextgenlibrary.widget.FontFitTextView;
 
 
 /**
@@ -18,7 +19,7 @@ public class ECTrviaViewFragment extends AbstractNextGenFragment {
     protected ImageView posterImageView;
 
     protected TextView triviaTitle;
-    protected TextView triviaContent;
+    protected FontFitTextView triviaContent;
 
 
     IMECombineItem selectedCombineItem = null;
@@ -34,7 +35,7 @@ public class ECTrviaViewFragment extends AbstractNextGenFragment {
         super.onViewCreated(view, savedInstanceState);
         posterImageView = (ImageView) view.findViewById(R.id.ec_trivia_image);
         triviaTitle = (TextView) view.findViewById(R.id.ec_title_name);
-        triviaContent = (TextView) view.findViewById(R.id.ec_content_name);
+        triviaContent = (FontFitTextView) view.findViewById(R.id.ec_content_name);
         if (selectedCombineItem != null && title != null){
             setTextItem(title, selectedCombineItem);
         } else if (selectedTriviaItem != null && title != null){
