@@ -407,5 +407,11 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
         }
 
     }
+    @Override
+    protected void onCloseButtonClick(){
+        getFragmentManager().popBackStack();        // pop gallery fragment
+        getFragmentManager().popBackStack();        // pop video fragment
+        super.onCloseButtonClick();
+    }
 
 }
