@@ -56,15 +56,19 @@ public abstract class AbstractNextGenFragment extends Fragment {
             closeBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (getActivity() != null) {
-                        NextGenAnalyticData.reportEvent(getActivity(), AbstractNextGenFragment.this, "Back Button",
-                                NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
-                        getActivity().onBackPressed();
-                    }
+                    onCloseButtonClick();
                 }
             });
         }
         NextGenAnalyticData.reportEvent(getActivity(), this, null, NextGenAnalyticData.AnalyticAction.ACTION_START, getReportContentName());
+    }
+
+    protected void onCloseButtonClick(){
+        if (getActivity() != null) {
+            NextGenAnalyticData.reportEvent(getActivity(), AbstractNextGenFragment.this, "Back Button",
+                    NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
+            getActivity().onBackPressed();
+        }
     }
 
     abstract String getReportContentName();
