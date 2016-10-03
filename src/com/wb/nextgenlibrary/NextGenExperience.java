@@ -117,6 +117,11 @@ public class NextGenExperience {
                 "https://d19p213wjrwt85.cloudfront.net/uvvu-images/2C89FE061219D322E05314345B0AFE72",
                 "/xml/minions_hls_manifest_v6-R60-generated-spec1.5.xml",
                 null, null));
+        manifestItems.add(new ManifestItem("HP 2", "urn:dece:cid:org:WB:2004703x6000004186",
+                "https://d19p213wjrwt85.cloudfront.net/uvvu-images/2C89FE061219D322E05314345B0AFE72",
+                "/xml/urn:dece:cid:org:WB:2004703x6000004186/hp2_manifest-1.1.xml",
+                "/xml/urn:dece:cid:org:WB:2004703x6000004186/hp2_appdata-1.1.xml",
+                null));
 
 
     }

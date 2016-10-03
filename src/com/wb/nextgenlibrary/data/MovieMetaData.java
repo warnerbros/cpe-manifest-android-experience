@@ -404,29 +404,26 @@ public class MovieMetaData {
                     timeSequenceIdToECGroup.put(experience.getTimedSequenceID().get(0), thisExperience);
                 }
 
+                if (experience.getExperienceChild() != null && experience.getExperienceChild().size() > 0) {
+                    for (ExperienceChildType child : experience.getExperienceChild()) {
+                        if (result.experienceIdToExperienceMap.containsKey(child.getExperienceID())){
+                            thisExperience.addChild(result.experienceIdToExperienceMap.get(child.getExperienceID()));
+                        }
+                        if (experienceChildrenToParentMap.containsKey(child.getExperienceID())){
+                            List<ExperienceData> parents =  experienceChildrenToParentMap.get(child.getExperienceID());
+                            parents.add(thisExperience);
+                        } else {
+                            List<ExperienceData> parents = new ArrayList<ExperienceData>();
+                            parents.add(thisExperience);
+                            experienceChildrenToParentMap.put(child.getExperienceID(), parents);    //skip these IDs when encounter.
 
-
-                if ((experience.getExperienceChild() != null && experience.getExperienceChild().size() > 0) || (experience.getAudiovisual() != null && experience.getAudiovisual().size() > 0) ) {
-
-                    //result.movieExperiences.add(groupData);
-                    if (experience.getExperienceChild() != null && experience.getExperienceChild().size() > 0) {
-                        for (ExperienceChildType child : experience.getExperienceChild()) {
-
-                            if (experienceChildrenToParentMap.containsKey(child.getExperienceID())){
-                                List<ExperienceData> parents =  experienceChildrenToParentMap.get(child.getExperienceID());
-                                parents.add(thisExperience);
-                            } else {
-                                List<ExperienceData> parents = new ArrayList<ExperienceData>();
-                                parents.add(thisExperience);
-                                experienceChildrenToParentMap.put(child.getExperienceID(), parents);    //skip these IDs when encounter.
-
-                            }
                         }
                     }
-
                 }
 
             }
+
+
 
             if (rootData != null && rootData.childrenExperience.size() == 2) {
                 result.extraECGroups.addAll(rootData.childrenExperience.get(0).childrenExperience);
@@ -1010,12 +1007,7 @@ public class MovieMetaData {
 
 
                 localizedInfo = getMatchingLocalizableObject(metaData.getBasicMetadata().getLocalizedInfo());
-                /*for(BasicMetadataInfoType metadataInfoType : metaData.getBasicMetadata().getLocalizedInfo()){
-                    if (NextGenExperience.matchesClientLocale(metadataInfoType.getLanguage())) {
-                        localizedInfo = metadataInfoType;
-                        break;
-                    }
-                }*/
+
 
                 if (localizedInfo == null)
                     localizedInfo = metaData.getBasicMetadata().getLocalizedInfo().get(0);
@@ -1135,8 +1127,10 @@ public class MovieMetaData {
                 computeFromExperience();
                 if (experienceData != null)
                     return experienceData.getPosterImgUrl();
-            }
-            return "";
+                else
+                    return getGoogleMapImageUrl(240, 180);
+            }else
+                return getGoogleMapImageUrl(240, 180);
         }
 
         final static String GOOGLE_MAP_IMAGE_URL = "http://maps.google.com/maps/api/staticmap?center=%s,%s&zoom=%s&size=%sx%s&sensor=false";
