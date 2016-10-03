@@ -33,13 +33,13 @@
 
         </com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout>
 
-        <TextView
+        <com.wb.nextgenlibrary.widget.FontFitTextView
             android:id="@+id/ec_content_name"
             android:textColor="@color/drawer_yellow"
             android:textSize="@dimen/textLarge"
             android:fontFamily="sans-serif-condensed"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"/>
     </LinearLayout>
     <ImageButton
         android:id="@+id/close_button"

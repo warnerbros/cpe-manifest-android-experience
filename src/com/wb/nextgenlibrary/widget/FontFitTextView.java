@@ -101,6 +101,6 @@ public class FontFitTextView extends TextView {
         paintCopy.setTextSize(textSize);
         // Measure using a static layout
         StaticLayout layout = new StaticLayout(source, paintCopy, width, Layout.Alignment.ALIGN_NORMAL, mSpacingMult, mSpacingAdd, true);
-        return layout.getHeight();
+        return layout.getLineCount() * layout.getHeight();
     }
 }
