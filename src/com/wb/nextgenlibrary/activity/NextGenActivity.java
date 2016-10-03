@@ -267,6 +267,13 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
     }
 
+    public void onPause(){
+        super.onPause();
+        if (startupVideoView.isPlaying()){
+            startupVideoView.pause();
+        }
+    }
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -424,6 +431,9 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
     @Override
     public void onResume(){
         super.onResume();
+        if (!startupVideoView.isPlaying() && startupVideoView.getVisibility() == View.VISIBLE){
+            startupVideoView.start();
+        }
     }
 
 }
