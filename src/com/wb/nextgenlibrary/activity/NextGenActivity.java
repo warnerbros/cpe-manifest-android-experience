@@ -312,7 +312,7 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
                     public void onGlobalLayout() {
                         adjustButtonSizesAndPosition_priv();
                         counter = counter + 1;
-                        if (counter > 1) {
+                        if (counter > 3) {
                             startupVideoView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                         }
                     }
@@ -353,9 +353,16 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
                     return;
 
                 double shrinkRatio = ((double) referenceFrameSize.getWidth()) / ((double) targetSize.getWidth());
+                double buttonShrinkRation = shrinkRatio;
 
                 int width = (int) (((double) buttonLayoutArea.getWidthPixels().intValue()) * shrinkRatio);
-                int height = (int) (((double) buttonLayoutArea.getHeightPixels().intValue()) * shrinkRatio);
+                int screenWidth = NextGenExperience.getScreenWidth(this);
+                if (width > screenWidth){
+                    width = screenWidth;
+                    buttonShrinkRation = ((double) width / ((double) buttonLayoutArea.getWidthPixels().intValue()));
+                }
+
+                int height = (int) (((double) buttonLayoutArea.getHeightPixels().intValue()) * buttonShrinkRation);
                 int y = (int) (((double) targetSize.getHeight() - buttonLayoutArea.getPixelsFromBottom().intValue()) * shrinkRatio) - height;
                 int x = (int) (((double) buttonLayoutArea.getPixelsFromLeft().intValue()) * shrinkRatio);
 

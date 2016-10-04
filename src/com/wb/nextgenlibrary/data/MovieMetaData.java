@@ -406,13 +406,12 @@ public class MovieMetaData {
 
                 if (experience.getExperienceChild() != null && experience.getExperienceChild().size() > 0) {
                     for (ExperienceChildType child : experience.getExperienceChild()) {
-                        if (result.experienceIdToExperienceMap.containsKey(child.getExperienceID())){
+                        if (result.experienceIdToExperienceMap.containsKey(child.getExperienceID())){   // if child experience has already been created.
                             thisExperience.addChild(result.experienceIdToExperienceMap.get(child.getExperienceID()));
-                        }
-                        if (experienceChildrenToParentMap.containsKey(child.getExperienceID())){
+                        }else if (experienceChildrenToParentMap.containsKey(child.getExperienceID())){  // if child exp has not been created, but children list in the hash table already exist
                             List<ExperienceData> parents =  experienceChildrenToParentMap.get(child.getExperienceID());
                             parents.add(thisExperience);
-                        } else {
+                        } else {                    // if the children list has not been created in the hash table yet
                             List<ExperienceData> parents = new ArrayList<ExperienceData>();
                             parents.add(thisExperience);
                             experienceChildrenToParentMap.put(child.getExperienceID(), parents);    //skip these IDs when encounter.
