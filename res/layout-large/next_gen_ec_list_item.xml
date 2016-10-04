@@ -18,7 +18,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_centerHorizontal="true"
-                nextgen:inActiveOverlayDrawable="@drawable/play_button"
+                nextgen:inActiveOverlayDrawable="@drawable/nge_play_button"
                 nextgen:inActiveOverlayColor="@color/inactive_mask_color"
                 android:scaleType="fitCenter"
                 android:duplicateParentState="true"/>

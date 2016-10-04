@@ -32,7 +32,7 @@
                 android:layout_centerInParent="true"
                 android:layout_width="@dimen/ime_play_icon_dimen"
                 android:layout_height="@dimen/ime_play_icon_dimen"
-                android:src="@drawable/play_button"
+                android:src="@drawable/nge_play_button"
                 android:visibility="gone"/>
 
         </RelativeLayout>

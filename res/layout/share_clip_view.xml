@@ -85,7 +85,7 @@
                                 android:layout_height="@dimen/ime_actor_thumbnail_dimen"
                                 android:scaleType="fitCenter"
                                 android:layout_centerInParent="true"
-                                android:src="@drawable/play_button"
+                                android:src="@drawable/nge_play_button"
                                 android:visibility="gone"/>
 
                         </RelativeLayout>
