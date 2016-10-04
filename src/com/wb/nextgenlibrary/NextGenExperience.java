@@ -49,7 +49,7 @@ public class NextGenExperience {
         private final String appDataFileUrl;
         public final String contentId;
 
-        ManifestItem(String movieName, String cid, String imageUrl, String manifestFileUrl, String appDataFileUrl, String ngeStyleFileUrl){
+        public ManifestItem(String movieName, String cid, String imageUrl, String manifestFileUrl, String appDataFileUrl, String ngeStyleFileUrl){
             this.imageUrl = imageUrl;
             contentId = cid;
             this.manifestFileUrl = manifestFileUrl;
@@ -59,22 +59,22 @@ public class NextGenExperience {
         }
 
         final static String DEBUG_HOST = "https://cpe-manifest.s3.amazonaws.com";
-        final static String REALEASE_HOST = "https://d3hu292hohbyvv.cloudfront.net";
+        final static String RELEASE_HOST = "https://d3hu292hohbyvv.cloudfront.net";
 
         public String getManifestFileUrl(){
-            return (nextGenEventHandler.isDebugBuild() ? DEBUG_HOST : REALEASE_HOST) + manifestFileUrl;
+            return (nextGenEventHandler.isDebugBuild() ? DEBUG_HOST : RELEASE_HOST) + manifestFileUrl;
         }
 
         public String getAppDataFileUrl(){
             if (appDataFileUrl == null)
                 return null;
-            return (nextGenEventHandler.isDebugBuild() ? DEBUG_HOST : REALEASE_HOST) + appDataFileUrl;
+            return (nextGenEventHandler.isDebugBuild() ? DEBUG_HOST : RELEASE_HOST) + appDataFileUrl;
         }
 
         public String getNgeStyleFileUrl(){
             if (ngeStyleFileUrl == null)
                 return null;
-            return (nextGenEventHandler.isDebugBuild() ? DEBUG_HOST : REALEASE_HOST) + ngeStyleFileUrl;
+            return (nextGenEventHandler.isDebugBuild() ? DEBUG_HOST : RELEASE_HOST) + ngeStyleFileUrl;
         }
     }
 
@@ -158,17 +158,22 @@ public class NextGenExperience {
                 }
             }, new ResultListener<Boolean>() {
                 public void onResult(Boolean result) {
-                    launcherActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+                    if (result) {
+                        launcherActivity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
 
-                            mDialog.dismiss();
-                            mDialog.cancel();
-                            Intent intent = new Intent(launcherActivity, NextGenActivity.class);
-                            launcherActivity.startActivity(intent);
-                        }
-                    });
-
+                                mDialog.dismiss();
+                                mDialog.cancel();
+                                Intent intent = new Intent(launcherActivity, NextGenActivity.class);
+                                launcherActivity.startActivity(intent);
+                            }
+                        });
+                    } else {
+                        // TODO error handling if startNextGenParsing returns false
+                        mDialog.dismiss();
+                        mDialog.cancel();
+                    }
                 }
 
                 public void onException(Exception e) {
@@ -194,6 +199,8 @@ public class NextGenExperience {
                     manifestItem.getAppDataFileUrl(), manifestItem.getNgeStyleFileUrl());
             long currentTime = SystemClock.currentThreadTimeMillis() - systime;
             NextGenLogger.d("TIME_THIS", "Time to finish parsing: " + currentTime);
+
+            // TODO error handling if manifest is null
             movieMetaData = MovieMetaData.process(manifest);
 
 
