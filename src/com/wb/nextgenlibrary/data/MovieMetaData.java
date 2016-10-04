@@ -1128,9 +1128,9 @@ public class MovieMetaData {
                 if (experienceData != null)
                     return experienceData.getPosterImgUrl();
                 else
-                    return getGoogleMapImageUrl(240, 180);
+                    return getGoogleMapImageUrl(320, 180);
             }else
-                return getGoogleMapImageUrl(240, 180);
+                return getGoogleMapImageUrl(320, 180);
         }
 
         final static String GOOGLE_MAP_IMAGE_URL = "http://maps.google.com/maps/api/staticmap?center=%s,%s&zoom=%s&size=%sx%s&sensor=false";
@@ -1191,7 +1191,7 @@ public class MovieMetaData {
             return title;
         }
 
-        public String getLocationThumbnailUrl(){
+        private String getLocationThumbnailUrl(){
             computeFromExperience();
             if (locationThumbnail != null){
                 return locationThumbnail.url;

@@ -325,12 +325,12 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
                     locationItem = ((MovieMetaData.LocationItem) item);
 
                 }
-                if (locationItem != null && !StringHelper.isEmpty(locationItem.getLocationThumbnailUrl())) {
-                    Glide.with(ECSceneLocationActivity.this).load(locationItem.getLocationThumbnailUrl()).into(locationPhoto);
+                if (locationItem != null && !StringHelper.isEmpty(locationItem.getPosterImgUrl())) {
+                    Glide.with(ECSceneLocationActivity.this).load(locationItem.getPosterImgUrl()).into(locationPhoto);
                     locationName.setText(((MovieMetaData.LocationItem) item).getTitle());
                     int locationCount = 0;//((MovieMetaData.LocationItem)item).childrenSceneLocations.size();
 
-                    NextGenLogger.d(F.TAG, "Position: " + itemIndex + " loaded: " + locationItem.getLocationThumbnailUrl());
+                    NextGenLogger.d(F.TAG, "Position: " + itemIndex + " loaded: " + locationItem.getPosterImgUrl());
                 }
             } else if (item instanceof PresentationDataItem) {
                 if (item instanceof MovieMetaData.AudioVisualItem)
