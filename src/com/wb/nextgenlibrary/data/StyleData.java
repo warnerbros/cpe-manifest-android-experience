@@ -238,7 +238,10 @@ public class StyleData {
 
                     if (video != null)
                         videoUrl = video.getContainerReference().getContainerLocation();
-                    videoLoopingPoint = Double.parseDouble(backgroundType.getVideo().getLoopTimecode().getValue());
+                    if (backgroundType.getVideo().getLoopTimecode() != null)
+                        videoLoopingPoint = Double.parseDouble(backgroundType.getVideo().getLoopTimecode().getValue());
+                    else
+                        videoLoopingPoint = 0;
                 }
                 if (backgroundType.getImage() != null) {
                     imagePictureGroupID = backgroundType.getImage().getPictureGroupID();

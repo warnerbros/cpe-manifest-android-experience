@@ -121,7 +121,7 @@ public class NextGenExperience {
                 "https://d19p213wjrwt85.cloudfront.net/uvvu-images/2C89FE061219D322E05314345B0AFE72",
                 "/xml/urn:dece:cid:org:WB:2004703x6000004186/hp2_manifest-1.1.xml",
                 "/xml/urn:dece:cid:org:WB:2004703x6000004186/hp2_appdata-1.1.xml",
-                null));
+                "/xml/urn:dece:cid:org:WB:2004703x6000004186/hp2_cpestyle-1.1.xml"));
 
 
     }

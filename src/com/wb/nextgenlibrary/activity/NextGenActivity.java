@@ -132,7 +132,8 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
         if (nodeBackground != null && !StringHelper.isEmpty(nodeBackground.getVideoUrl())) {
             videoLoopPoint = nodeBackground.getVideoLoopingPoint();
-            buttonAnimationStartTime = nodeBackground.getVideoLoopingPoint() - 500;
+            if (videoLoopPoint > 500)
+                buttonAnimationStartTime = nodeBackground.getVideoLoopingPoint() - 500;
         }
         MovieMetaData.PictureImageData bgImageData = (mainStyle != null ) ? mainStyle.getBackgroundImage() : null;
         if (bgImageData != null && !StringHelper.isEmpty(bgImageData.url)){
