@@ -196,7 +196,8 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                startupVideoSize = new Size(mp.getVideoWidth(), mp.getVideoHeight());
+								if (startupVideoSize == null)
+	                                startupVideoSize = new Size(mp.getVideoWidth(), mp.getVideoHeight());
                                 videoParentFrame.setAspectRatio(startupVideoSize.getWidth(), startupVideoSize.getHeight());
                                 adjustButtonSizesAndPosition();
 
@@ -252,7 +253,7 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
                 startupVideoView.requestFocus();
                 startupVideoView.setVideoURI(Uri.parse(mainStyle.getBackgroundVideoUrl()));
-
+				startupVideoSize = mainStyle.getBackgroundVideoSize();
 
             }
         }else {

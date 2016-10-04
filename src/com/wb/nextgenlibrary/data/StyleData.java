@@ -1,6 +1,7 @@
 package com.wb.nextgenlibrary.data;
 
 import android.content.pm.ActivityInfo;
+import android.util.Size;
 
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.parser.cpestyle.BackgroundOverlayAreaType;
@@ -102,6 +103,13 @@ public class StyleData {
         public String getBackgroundVideoUrl(){
             if (nodeStyles[0] != null && nodeStyles[0].background != null){
                 return nodeStyles[0].background.getVideoUrl();
+            } else
+                return null;
+        }
+
+        public Size getBackgroundVideoSize(){
+            if (nodeStyles[0] != null && nodeStyles[0].background != null){
+                return nodeStyles[0].background.getVideoPresetSize();
             } else
                 return null;
         }
@@ -220,6 +228,7 @@ public class StyleData {
         PositionMethod positionMethod;
         double videoLoopingPoint;
         String videoUrl;
+        Size videoSize = null;
         List<PictureImageData> bgImages = new ArrayList<>();
 
         BackgroundOverlayAreaType overlayAreaType;
@@ -236,8 +245,12 @@ public class StyleData {
                     PresentationType presentation = presentationAssetMap.get(videoPresentationID);
                     InventoryVideoType video = videoAssetsMap.get(presentation.getTrackMetadata().get(0).getVideoTrackReference().get(0).getVideoTrackID().get(0));
 
-                    if (video != null)
+                    if (video != null) {
                         videoUrl = video.getContainerReference().getContainerLocation();
+                        if (video.getPicture() != null){
+                            videoSize = new Size(video.getPicture().getWidthPixels(), video.getPicture().getHeightPixels());
+                        }
+                    }
                     if (backgroundType.getVideo().getLoopTimecode() != null)
                         videoLoopingPoint = Double.parseDouble(backgroundType.getVideo().getLoopTimecode().getValue());
                     else
@@ -271,6 +284,10 @@ public class StyleData {
 
         public String getVideoUrl(){
             return videoUrl;
+        }
+
+        public Size getVideoPresetSize(){
+            return videoSize;
         }
 
         public PictureImageData getImage(){
