@@ -62,19 +62,19 @@ public class NextGenExperience {
         final static String RELEASE_HOST = "https://d3hu292hohbyvv.cloudfront.net";
 
         public String getManifestFileUrl(){
-            return (nextGenEventHandler.isDebugBuild() ? DEBUG_HOST : RELEASE_HOST) + manifestFileUrl;
+            return manifestFileUrl.startsWith("http") ? manifestFileUrl : (nextGenEventHandler.isDebugBuild() ? DEBUG_HOST : RELEASE_HOST) + manifestFileUrl;
         }
 
         public String getAppDataFileUrl(){
             if (appDataFileUrl == null)
                 return null;
-            return (nextGenEventHandler.isDebugBuild() ? DEBUG_HOST : RELEASE_HOST) + appDataFileUrl;
+            return appDataFileUrl.startsWith("http") ? appDataFileUrl : (nextGenEventHandler.isDebugBuild() ? DEBUG_HOST : RELEASE_HOST) + appDataFileUrl;
         }
 
         public String getNgeStyleFileUrl(){
             if (ngeStyleFileUrl == null)
                 return null;
-            return (nextGenEventHandler.isDebugBuild() ? DEBUG_HOST : RELEASE_HOST) + ngeStyleFileUrl;
+            return ngeStyleFileUrl.startsWith("http") ? ngeStyleFileUrl : (nextGenEventHandler.isDebugBuild() ? DEBUG_HOST : RELEASE_HOST) + ngeStyleFileUrl;
         }
     }
 
@@ -101,9 +101,9 @@ public class NextGenExperience {
         manifestItems = new ArrayList<ManifestItem>();
         manifestItems.add(new ManifestItem("Man of Steel v0.7", "urn:dece:cid:eidr-s:DAFF-8AB8-3AF0-FD3A-29EF-Q",
                 "https://d19p213wjrwt85.cloudfront.net/uvvu-images/EB180713D3536025E0405B0A07341ECE",
-                "/xml/urn:dece:cid:eidr-s:DAFF-8AB8-3AF0-FD3A-29EF-Q/mos_manifest-2.1.xml",
-                "/xml/urn:dece:cid:eidr-s:DAFF-8AB8-3AF0-FD3A-29EF-Q/mos_appdata_locations-2.1.xml",
-                "/xml/urn:dece:cid:eidr-s:DAFF-8AB8-3AF0-FD3A-29EF-Q/mos_cpestyle-2.1.xml"));
+                "/xml/urn:dece:cid:eidr-s:DAFF-8AB8-3AF0-FD3A-29EF-Q/mos_manifest-2.2.xml",
+                "/xml/urn:dece:cid:eidr-s:DAFF-8AB8-3AF0-FD3A-29EF-Q/mos_appdata_locations-2.2.xml",
+                "/xml/urn:dece:cid:eidr-s:DAFF-8AB8-3AF0-FD3A-29EF-Q/mos_cpestyle-2.2.xml"));
         manifestItems.add(new ManifestItem("Batman vs Superman w/360", "urn:dece:cid:eidr-s:B257-8696-871C-A12B-B8C1-S",
                 "https://d19p213wjrwt85.cloudfront.net/uvvu-images/2C89FE061219D322E05314345B0AFE72",
                 "/xml/urn:dece:cid:eidr-s:B257-8696-871C-A12B-B8C1-S/bvs_manifest-2.2.xml",
