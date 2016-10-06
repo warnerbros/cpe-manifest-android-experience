@@ -33,6 +33,8 @@ import com.wb.nextgenlibrary.util.utils.StringHelper;
 
 import java.util.List;
 
+import static com.google.android.gms.analytics.internal.zzy.r;
+
 /**
  * Created by gzcheng on 1/13/16.
  */
@@ -255,7 +257,8 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
         public void setFilmInfo(Filmography filmInfo, int position){
             this.filmInfo = filmInfo;
             if (filmInfo.isFilmPosterRequest()) {
-                Glide.with(getActivity()).load(filmInfo.getFilmPosterImageUrl()).asBitmap().fitCenter().into(personPhoto);
+               // Glide.with(getActivity()).load(filmInfo.getFilmPosterImageUrl()).asBitmap().fitCenter().into(personPhoto);
+                Glide.with(getActivity()).load(filmInfo.getFilmPosterImageUrl()).into(personPhoto);
                 //NextGenLogger.d(F.TAG, "Position: " + position  +" loaded: " + filmInfo.getFilmPosterImageUrl());
             }
         }
