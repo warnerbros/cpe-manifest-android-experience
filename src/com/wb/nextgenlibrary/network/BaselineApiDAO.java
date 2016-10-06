@@ -160,6 +160,7 @@ public class BaselineApiDAO {
 
         Gson gson = new GsonBuilder().create();
         castData = gson.fromJson(userdataResult, BaselineCastData.class);
+        castData.filterText();
 
         //castsInfoMap.put(castId, thisData);
 

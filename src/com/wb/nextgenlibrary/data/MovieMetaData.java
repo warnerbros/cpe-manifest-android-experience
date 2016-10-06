@@ -785,6 +785,12 @@ public class MovieMetaData {
             }
             return true;
         }
+
+        public void filterText() {
+            if (biography != null) {
+                biography = biography.replaceAll("&amp;", "&");
+            }
+        }
     }
 
     static public class FilmPoster{
