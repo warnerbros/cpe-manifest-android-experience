@@ -1126,15 +1126,18 @@ public class MovieMetaData {
         }
 
         public String getPosterImgUrl(){
+            String retImgUrl = null;
             if (locationThumbnail != null)
-                return locationThumbnail.url;
+                retImgUrl = locationThumbnail.url;
             else if (experienceId != null){
                 computeFromExperience();
-                if (experienceData != null)
-                    return experienceData.getPosterImgUrl();
-                else
-                    return getGoogleMapImageUrl(320, 180);
-            }else
+                if (experienceData != null) {
+                        retImgUrl =  experienceData.getPosterImgUrl();
+                }
+            }
+            if (!StringHelper.isEmpty(retImgUrl))
+                return retImgUrl;
+            else
                 return getGoogleMapImageUrl(320, 180);
         }
 
