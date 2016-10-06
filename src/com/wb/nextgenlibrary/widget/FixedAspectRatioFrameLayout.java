@@ -133,7 +133,7 @@ public class FixedAspectRatioFrameLayout extends FrameLayout
             }
 
             if (priority == Priority.WIDTH_PRIORITY) {
-                finalHeight = originalWidth * mAspectRatioHeight / mAspectRatioWidth;
+                finalHeight = (int)Math.ceil( (double)(originalWidth * mAspectRatioHeight) / (double)mAspectRatioWidth) - 1;
                 finalWidth = originalWidth;
                 if (!bAllowLargerThanParent && originalHeight != 0 && finalHeight > originalHeight){
                     finalWidth = originalHeight * mAspectRatioWidth / mAspectRatioHeight;
@@ -142,10 +142,10 @@ public class FixedAspectRatioFrameLayout extends FrameLayout
                 }
 
             } else {
-                finalWidth = originalHeight * mAspectRatioWidth / mAspectRatioHeight;
+                finalWidth = (int)Math.ceil( (double)(originalHeight * mAspectRatioWidth) / (double)mAspectRatioHeight);
                 finalHeight = originalHeight;
                 if (!bAllowLargerThanParent && originalWidth != 0 && finalWidth > originalWidth){
-                    finalHeight = originalWidth * mAspectRatioHeight / mAspectRatioWidth;
+                    finalHeight = (int)Math.ceil( (double)(originalWidth * mAspectRatioHeight) / (double)mAspectRatioWidth);
                     finalWidth = originalWidth;
 
                 }
@@ -159,6 +159,7 @@ public class FixedAspectRatioFrameLayout extends FrameLayout
 
     public void setAspectRatioPriority(Priority priority){
         this.priority = priority;
+
     }
 
     public void setAspectRatio(int widthRatio, int heightRatio){
