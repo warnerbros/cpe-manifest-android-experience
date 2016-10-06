@@ -4,15 +4,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -29,11 +35,13 @@ import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
  * Created by gzcheng on 3/31/16.
  */
 public class ECGalleryViewFragment extends AbstractECGalleryViewFragment {
-    private ViewPager galleryViewPager;
+
+	private ViewPager galleryViewPager;
     private GalleryPagerAdapter adapter;
     FixedAspectRatioFrameLayout aspectRatioFrame = null;
     ImageView bgImageView;
     Button shareImageButton;
+    private TextView countText;
     boolean shouldShowShareBtn = true;
 
     String bgImageUrl = null;
@@ -58,7 +66,44 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment {
 
         galleryViewPager.setAdapter(adapter);
 
-        aspectRatioFrame = (FixedAspectRatioFrameLayout) view.findViewById(R.id.gallery_aspect_ratio_frame);
+		countText = (TextView) view.findViewById(R.id.count_text);
+		countText.setText("1/" +  adapter.getCount());
+		galleryViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+			@Override
+			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+			}
+
+			@Override
+			public void onPageSelected(int position) {
+				countText.setText((position + 1) + "/" +  adapter.getCount());
+			}
+
+			@Override
+			public void onPageScrollStateChanged(int state) {
+				if (state == ViewPager.SCROLL_STATE_SETTLING) {
+
+				} else if (state == ViewPager.SCROLL_STATE_DRAGGING) {
+					countText.clearAnimation();
+					if (countText.getVisibility() == View.GONE)
+						countText.setVisibility(View.VISIBLE);
+				} else if (state == ViewPager.SCROLL_STATE_IDLE) {
+					if (countText.getVisibility() == View.VISIBLE) {
+						ECGalleryViewFragment.this.getActivity().runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								Animation fade_out = AnimationUtils.loadAnimation(ECGalleryViewFragment.this.getActivity(), R.anim.fade_out);
+								fade_out.setStartOffset(3500);		// start after 3.5 secs
+								countText.startAnimation(fade_out);
+								countText.setVisibility(View.GONE);
+							}
+						});
+					}
+				}
+			}
+		});
+
+		aspectRatioFrame = (FixedAspectRatioFrameLayout) view.findViewById(R.id.gallery_aspect_ratio_frame);
         if (aspectRatioFrame != null){
             aspectRatioFrame.setAspectRatioPriority(aspectFramePriority);
         }
@@ -104,7 +149,22 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment {
         }
     }
 
-    @Override
+	protected final Handler hideCountTextHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			if (countText.getVisibility() == View.VISIBLE){
+				try {
+					Animation fade_out = AnimationUtils.loadAnimation(ECGalleryViewFragment.this.getActivity(), R.anim.fade_out);
+					countText.startAnimation(fade_out);
+				}catch (Exception ex){}
+				countText.setVisibility(View.GONE);
+			}
+		}
+
+	};
+
+
+	@Override
     public void onDestroy(){
         adapter = null;
         if (galleryViewPager != null)

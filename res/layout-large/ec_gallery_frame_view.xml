@@ -40,6 +40,16 @@
                     android:src="@drawable/expand_shrink"
                     android:background="@android:color/transparent"
                     android:text="TEST"/>
+                <TextView
+                    android:layout_margin="@dimen/spacing_normal"
+                    android:padding="@dimen/spacing_normal"
+                    android:id="@+id/count_text"
+                    android:layout_gravity="top|right"
+                    android:background="@drawable/count_text_bg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:visibility="gone"/>
             </com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout>
 
             <ImageButton
