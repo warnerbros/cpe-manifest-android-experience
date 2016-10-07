@@ -12,7 +12,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
-import android.util.Size;
 import android.view.Display;
 import android.view.WindowManager;
 
@@ -24,6 +23,7 @@ import com.wb.nextgenlibrary.network.BaselineApiDAO;
 import com.wb.nextgenlibrary.network.NextGenCacheManager;
 import com.wb.nextgenlibrary.network.TheTakeApiDAO;
 import com.wb.nextgenlibrary.parser.ManifestXMLParser;
+import com.wb.nextgenlibrary.util.Size;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.util.concurrent.Worker;
 import com.wb.nextgenlibrary.util.utils.F;

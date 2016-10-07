@@ -6,9 +6,10 @@ import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.util.Size;
 import android.util.TypedValue;
 import android.widget.TextView;
+
+import com.wb.nextgenlibrary.util.Size;
 
 public class FontFitTextView extends TextView {
 

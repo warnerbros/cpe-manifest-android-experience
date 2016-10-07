@@ -1,7 +1,6 @@
 package com.wb.nextgenlibrary.data;
 
 import android.content.pm.ActivityInfo;
-import android.util.Size;
 
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.parser.cpestyle.BackgroundOverlayAreaType;
@@ -15,6 +14,7 @@ import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.InventoryVideoType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.PictureGroupType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.PictureType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.PresentationType;
+import com.wb.nextgenlibrary.util.Size;
 import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.data.MovieMetaData.PictureImageData;
