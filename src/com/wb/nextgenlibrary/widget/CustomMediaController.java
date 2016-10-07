@@ -494,9 +494,9 @@ public class CustomMediaController extends MediaController {
             return;
         }
 
-        requestTogggleFullScreen();
+        requestToggleFullScreen();
     }
-    protected void requestTogggleFullScreen(){
+    protected void requestToggleFullScreen(){
 
     }
     // There are two scenarios that can trigger the seekbar listener to trigger:

@@ -26,7 +26,7 @@ public class ECMediaController extends NextGenMediaController {
 
 
     @Override
-    public void requestTogggleFullScreen(){
+    public void requestToggleFullScreen(){
         if (mContext instanceof ContentViewFullscreenRequestInterface) {
             ((ContentViewFullscreenRequestInterface) mContext).onRequestToggleFullscreen();
         }
