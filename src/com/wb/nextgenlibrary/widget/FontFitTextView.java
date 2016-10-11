@@ -2,6 +2,7 @@ package com.wb.nextgenlibrary.widget;
 
 import android.content.Context;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -102,6 +103,15 @@ public class FontFitTextView extends TextView {
         paintCopy.setTextSize(textSize);
         // Measure using a static layout
         StaticLayout layout = new StaticLayout(source, paintCopy, width, Layout.Alignment.ALIGN_NORMAL, mSpacingMult, mSpacingAdd, true);
-        return layout.getLineCount() * layout.getHeight();
+
+        if (layout.getHeight() > 0) {
+            return layout.getHeight() * layout.getLineCount();
+        } else {
+            // android 4.3 layout.getHeight() returns 0
+            Rect bounds = new Rect();
+            paintCopy.getTextBounds(source.toString(), 0, source.length(), bounds);
+            int height = bounds.bottom + bounds.height();
+            return height * layout.getLineCount();
+        }
     }
 }
