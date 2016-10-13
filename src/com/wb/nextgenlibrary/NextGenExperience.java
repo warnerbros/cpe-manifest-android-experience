@@ -15,6 +15,10 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.security.ProviderInstaller;
 import com.wb.nextgenlibrary.activity.NextGenActivity;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.fragment.AbstractNextGenMainMovieFragment;
@@ -201,43 +205,57 @@ public class NextGenExperience {
 
     }
 
-    private static boolean startNextGenParsing(ManifestItem manifestItem){
-        try{
-            NextGenLogger.d("TIME_THIS", "---------------Next Test--------------");
+    private static boolean startNextGenParsing(ManifestItem manifestItem) {
+		try {
+			// install security provider before calling getCastActorsData to avoid SSL errors on < Android 5.0 devices
+			ProviderInstaller.installIfNeeded(getApplicationContext());
+		} catch (GooglePlayServicesRepairableException ex) {
+			// Indicates that Google Play services is out of date, disabled, etc.
+			// Prompt the user to install/update/enable Google Play services.
+			GooglePlayServicesUtil.showErrorNotification(
+					ex.getConnectionStatusCode(), getApplicationContext());
+		} catch (GooglePlayServicesNotAvailableException ex) {
+			NextGenLogger.e(F.TAG, ex.getLocalizedMessage());
+		}
 
-            long systime = SystemClock.currentThreadTimeMillis();
-            ManifestXMLParser.NextGenManifestData manifest = new ManifestXMLParser().startParsing(manifestItem.getManifestFileUrl(),
-                    manifestItem.getAppDataFileUrl(), manifestItem.getNgeStyleFileUrl());
-            long currentTime = SystemClock.currentThreadTimeMillis() - systime;
-            NextGenLogger.d("TIME_THIS", "Time to finish parsing: " + currentTime);
+		try{
+			NextGenLogger.d("TIME_THIS", "---------------Next Test--------------");
 
-            // TODO error handling if manifest is null
-            movieMetaData = MovieMetaData.process(manifest);
+			long systime = SystemClock.currentThreadTimeMillis();
+			ManifestXMLParser.NextGenManifestData manifest = new ManifestXMLParser().startParsing(manifestItem.getManifestFileUrl(),
+					manifestItem.getAppDataFileUrl(), manifestItem.getNgeStyleFileUrl());
+			long currentTime = SystemClock.currentThreadTimeMillis() - systime;
+			NextGenLogger.d("TIME_THIS", "Time to finish parsing: " + currentTime);
+
+			// TODO error handling if manifest is null
+			movieMetaData = MovieMetaData.process(manifest);
 
 
-            currentTime = SystemClock.currentThreadTimeMillis() - currentTime;
-            NextGenLogger.d("TIME_THIS", "Time to finish processing: " + currentTime);
+			currentTime = SystemClock.currentThreadTimeMillis() - currentTime;
+			NextGenLogger.d("TIME_THIS", "Time to finish processing: " + currentTime);
 
-            BaselineApiDAO.init();
-            BaselineApiDAO.getCastActorsData(movieMetaData.getActorsList(), new ResultListener<Boolean>() {
-                @Override
-                public void onResult(Boolean result) {
-                    movieMetaData.setHasCalledBaselineAPI(result);
-                }
+			BaselineApiDAO.init();
+			BaselineApiDAO.getCastActorsData(movieMetaData.getActorsList(), new ResultListener<Boolean>() {
+				@Override
+				public void onResult(Boolean result) {
+					movieMetaData.setHasCalledBaselineAPI(result);
+				}
 
-                @Override
-                public <E extends Exception> void onException(E e) {
+				@Override
+				public <E extends Exception> void onException(E e) {
 
-                }
-            });
+				}
+			});
 
-            TheTakeApiDAO.init();
-            return true;
-        }catch (Exception ex){
-            NextGenLogger.e(F.TAG, ex.getLocalizedMessage());
-            NextGenLogger.e(F.TAG, ex.getStackTrace().toString());
-            return false;
-        }
+			TheTakeApiDAO.init();
+			return true;
+		}catch (Exception ex){
+			NextGenLogger.e(F.TAG, ex.getLocalizedMessage());
+			NextGenLogger.e(F.TAG, ex.getStackTrace().toString());
+			return false;
+		}
+
+
     }
 
 
