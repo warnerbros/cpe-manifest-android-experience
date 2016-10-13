@@ -29,6 +29,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.google.android.gms.security.ProviderInstaller;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
@@ -38,6 +39,8 @@ import com.wb.nextgenlibrary.parser.cpestyle.BackgroundOverlayAreaType;
 import com.wb.nextgenlibrary.testassets.TestItemsActivity;
 import com.wb.nextgenlibrary.util.Size;
 import com.wb.nextgenlibrary.util.TabletUtils;
+import com.wb.nextgenlibrary.util.utils.F;
+import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
 
@@ -47,8 +50,8 @@ import java.util.TimerTask;
 /**
  * Created by gzcheng on 1/7/16.
  */
-public class NextGenActivity extends NextGenHideStatusBarActivity implements View.OnClickListener {
-    // wrapper of ProfileViewFragment
+public class NextGenActivity extends NextGenHideStatusBarActivity implements View.OnClickListener, ProviderInstaller.ProviderInstallListener {
+	// wrapper of ProfileViewFragment
 
     VideoView startupVideoView;
     ImageView startupImageView;
@@ -75,10 +78,20 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
     private boolean isStartUp = true;
 
+	static enum ProviderInstallStatus {
+		NOT_INITIALIZED, INSTALL_STARTED, INSTALL_SUCCEEDED, INSTALL_FAILED;
+	}
+
+	private ProviderInstallStatus providerInstallAttemptCompleted = ProviderInstallStatus.NOT_INITIALIZED;
+
     StyleData.ExperienceStyle mainStyle = NextGenExperience.getMovieMetaData().getRootExperienceStyle();
     @Override
     public void onCreate(Bundle savedState) {
         super.onCreate(savedState);
+
+		ProviderInstaller.installIfNeededAsync(this, this);
+		providerInstallAttemptCompleted = ProviderInstallStatus.INSTALL_STARTED;
+
         setContentView(R.layout.next_gen_startup_view);
 
         videoParentFrame = (FixedAspectRatioFrameLayout)findViewById(R.id.video_parent_aspect_ratio_frame);
@@ -422,19 +435,18 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
     @Override
     public void onClick(View v){
+		if (v.getId() == R.id.next_gen_startup_play_button || v.getId() == R.id.next_gen_startup_play_text_button) {
 
-        if (v.getId() == R.id.next_gen_startup_play_button || v.getId() == R.id.next_gen_startup_play_text_button) {
+			Intent intent = new Intent(this, NextGenPlayer.class);
+			intent.setDataAndType(Uri.parse(NextGenExperience.getMovieMetaData().getMainMovieUrl()), "video/*");
+			startActivity(intent);
+			NextGenAnalyticData.reportEvent(this, null, "Play Movie", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
 
-            Intent intent = new Intent(this, NextGenPlayer.class);
-            intent.setDataAndType(Uri.parse(NextGenExperience.getMovieMetaData().getMainMovieUrl()), "video/*");
-            startActivity(intent);
-            NextGenAnalyticData.reportEvent(this, null, "Play Movie", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
-
-        } else if (v.getId() == R.id.next_gen_startup_extra_button || v.getId() == R.id.next_gen_startup_extra_text_button) {
-            Intent extraIntent = new Intent(this, NextGenExtraActivity.class);
-            startActivity(extraIntent);
-            NextGenAnalyticData.reportEvent(this, null, "Extras", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
-        }
+		} else if (v.getId() == R.id.next_gen_startup_extra_button || v.getId() == R.id.next_gen_startup_extra_text_button) {
+			Intent extraIntent = new Intent(this, NextGenExtraActivity.class);
+			startActivity(extraIntent);
+			NextGenAnalyticData.reportEvent(this, null, "Extras", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
+		}
     }
 
     @Override
@@ -445,5 +457,16 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
         }
     }
 
+	@Override
+	public void onProviderInstalled() {
+		NextGenLogger.d(F.TAG, "ProviderInstalled");
+		providerInstallAttemptCompleted = ProviderInstallStatus.INSTALL_SUCCEEDED;
+	}
+
+	@Override
+	public void onProviderInstallFailed(int i, Intent intent) {
+		NextGenLogger.d(F.TAG, "ProviderInstallFailed");
+		providerInstallAttemptCompleted = ProviderInstallStatus.INSTALL_FAILED;
+	}
 }
 
