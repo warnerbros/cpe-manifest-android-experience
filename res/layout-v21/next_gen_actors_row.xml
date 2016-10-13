@@ -8,11 +8,16 @@
             android:layout_width="@dimen/next_gen_actor_thumbnail_dimen"
             android:layout_height="@dimen/next_gen_actor_thumbnail_dimen"
             android:duplicateParentState="true">
-            <ImageView
+            <com.wb.nextgenlibrary.widget.CircularClippedImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:duplicateParentState="true"
                 android:id="@+id/next_gen_actor_avatar"/>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/white_ring"
+                android:duplicateParentState="true"/>
 
         </RelativeLayout>
 
