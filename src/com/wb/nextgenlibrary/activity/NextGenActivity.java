@@ -1,22 +1,14 @@
 package com.wb.nextgenlibrary.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -29,7 +21,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.google.android.gms.security.ProviderInstaller;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
@@ -39,8 +30,6 @@ import com.wb.nextgenlibrary.parser.cpestyle.BackgroundOverlayAreaType;
 import com.wb.nextgenlibrary.testassets.TestItemsActivity;
 import com.wb.nextgenlibrary.util.Size;
 import com.wb.nextgenlibrary.util.TabletUtils;
-import com.wb.nextgenlibrary.util.utils.F;
-import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
 
@@ -50,7 +39,7 @@ import java.util.TimerTask;
 /**
  * Created by gzcheng on 1/7/16.
  */
-public class NextGenActivity extends NextGenHideStatusBarActivity implements View.OnClickListener, ProviderInstaller.ProviderInstallListener {
+public class NextGenActivity extends NextGenHideStatusBarActivity implements View.OnClickListener {
 	// wrapper of ProfileViewFragment
 
     VideoView startupVideoView;
@@ -78,19 +67,10 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
     private boolean isStartUp = true;
 
-	static enum ProviderInstallStatus {
-		NOT_INITIALIZED, INSTALL_STARTED, INSTALL_SUCCEEDED, INSTALL_FAILED;
-	}
-
-	private ProviderInstallStatus providerInstallAttemptCompleted = ProviderInstallStatus.NOT_INITIALIZED;
-
     StyleData.ExperienceStyle mainStyle = NextGenExperience.getMovieMetaData().getRootExperienceStyle();
     @Override
     public void onCreate(Bundle savedState) {
         super.onCreate(savedState);
-
-		ProviderInstaller.installIfNeededAsync(this, this);
-		providerInstallAttemptCompleted = ProviderInstallStatus.INSTALL_STARTED;
 
         setContentView(R.layout.next_gen_startup_view);
 
@@ -456,17 +436,5 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
             startupVideoView.start();
         }
     }
-
-	@Override
-	public void onProviderInstalled() {
-		NextGenLogger.d(F.TAG, "ProviderInstalled");
-		providerInstallAttemptCompleted = ProviderInstallStatus.INSTALL_SUCCEEDED;
-	}
-
-	@Override
-	public void onProviderInstallFailed(int i, Intent intent) {
-		NextGenLogger.d(F.TAG, "ProviderInstallFailed");
-		providerInstallAttemptCompleted = ProviderInstallStatus.INSTALL_FAILED;
-	}
 }
 
