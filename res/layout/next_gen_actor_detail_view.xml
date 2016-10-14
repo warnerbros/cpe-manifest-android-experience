@@ -26,18 +26,23 @@
                     android:id="@+id/next_gen_detail_full_image"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"/>
+                    android:visibility="visible"
+                    android:scaleType="centerInside"
+                    android:layout_weight="0.34"/>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_weight="0.98"
                     android:orientation="vertical">
                     <TextView
                         android:id="@+id/actor_real_name_text"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/textXLarge"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:paddingEnd="@dimen/spacing_normal"
+                        android:paddingStart="@dimen/spacing_normal" />
                     <LinearLayout
                         android:layout_alignParentRight="true"
                         android:id="@+id/actor_social_buttons"
