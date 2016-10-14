@@ -75,7 +75,7 @@ public class FontFitTextView extends TextView {
 
     @Override
     protected void onSizeChanged (int w, int h, int oldw, int oldh) {
-        if (w != oldw) {
+        if (w != oldw || h != oldh) {
             refitText(this.getText().toString(), new Size(w, h));
         }
     }
@@ -101,17 +101,9 @@ public class FontFitTextView extends TextView {
         TextPaint paintCopy = new TextPaint(paint);
         // Update the text paint object
         paintCopy.setTextSize(textSize);
-        // Measure using a static layout
-        StaticLayout layout = new StaticLayout(source, paintCopy, width, Layout.Alignment.ALIGN_NORMAL, mSpacingMult, mSpacingAdd, true);
+        // Measure using a static layout. need to use 1 as spacingMult so it'll calculate the lines properly
+        StaticLayout layout = new StaticLayout(source, paintCopy, width, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, true);
 
-        if (layout.getHeight() > 0) {
-            return layout.getHeight() * layout.getLineCount();
-        } else {
-            // android 4.3 layout.getHeight() returns 0
-            Rect bounds = new Rect();
-            paintCopy.getTextBounds(source.toString(), 0, source.length(), bounds);
-            int height = bounds.bottom + bounds.height();
-            return height * layout.getLineCount();
-        }
+        return layout.getHeight();
     }
 }
