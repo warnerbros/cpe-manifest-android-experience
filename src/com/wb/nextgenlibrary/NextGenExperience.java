@@ -215,7 +215,7 @@ public class NextGenExperience {
 			GooglePlayServicesUtil.showErrorNotification(
 					ex.getConnectionStatusCode(), getApplicationContext());
 		} catch (GooglePlayServicesNotAvailableException ex) {
-			NextGenLogger.e(F.TAG, ex.getLocalizedMessage());
+			NextGenLogger.e(F.TAG, "GooglePlayServicesNotAvailableException: " + ex.getMessage());
 		}
 
 		try{
