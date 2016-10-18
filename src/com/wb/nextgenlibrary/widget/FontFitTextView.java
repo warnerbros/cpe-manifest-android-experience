@@ -14,8 +14,8 @@ import com.wb.nextgenlibrary.util.Size;
 
 public class FontFitTextView extends TextView {
 
-    float mSpacingMult;
-    float mSpacingAdd;
+	float mSpacingMult = 1.0f;
+	float mSpacingAdd = 0.0f;
 
     public FontFitTextView(Context context) {
         super(context);
@@ -40,6 +40,7 @@ public class FontFitTextView extends TextView {
     {
         if (boundarySize.getHeight() <= 0)
             return;
+
         int targetHeight = boundarySize.getHeight() - this.getPaddingTop() - this.getPaddingBottom();
         float hi = 100;
         float lo = 2;
@@ -51,7 +52,7 @@ public class FontFitTextView extends TextView {
             float size = (hi+lo)/2;
             int textHeight = getTextHeight(text, getPaint(), boundarySize.getWidth(), size);
 
-            if(textHeight >= boundarySize.getHeight())
+            if(textHeight >= targetHeight)
                 hi = size; // too big
             else
                 lo = size; // too small
@@ -102,7 +103,7 @@ public class FontFitTextView extends TextView {
         // Update the text paint object
         paintCopy.setTextSize(textSize);
         // Measure using a static layout. need to use 1 as spacingMult so it'll calculate the lines properly
-        StaticLayout layout = new StaticLayout(source, paintCopy, width, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, true);
+        StaticLayout layout = new StaticLayout(source, paintCopy, width, Layout.Alignment.ALIGN_NORMAL, mSpacingMult, mSpacingAdd, true);
 
         return layout.getHeight();
     }

@@ -38,6 +38,7 @@
             android:id="@+id/ec_content_name"
             android:textColor="@color/drawer_yellow"
             android:textSize="@dimen/textLarge"
+            android:gravity="center"
             android:fontFamily="sans-serif-condensed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
