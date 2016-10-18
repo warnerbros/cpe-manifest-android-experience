@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="@dimen/spacing_small">
 
     <LinearLayout
         android:id="@+id/next_gen_ec_content_view"
@@ -37,6 +38,7 @@
             android:id="@+id/ec_content_name"
             android:textColor="@color/drawer_yellow"
             android:textSize="@dimen/textLarge"
+            android:gravity="center"
             android:fontFamily="sans-serif-condensed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

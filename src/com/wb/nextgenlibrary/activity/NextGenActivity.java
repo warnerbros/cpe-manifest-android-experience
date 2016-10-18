@@ -1,23 +1,14 @@
 package com.wb.nextgenlibrary.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.util.Size;
-import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -37,6 +28,7 @@ import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.data.StyleData;
 import com.wb.nextgenlibrary.parser.cpestyle.BackgroundOverlayAreaType;
 import com.wb.nextgenlibrary.testassets.TestItemsActivity;
+import com.wb.nextgenlibrary.util.Size;
 import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
@@ -48,7 +40,7 @@ import java.util.TimerTask;
  * Created by gzcheng on 1/7/16.
  */
 public class NextGenActivity extends NextGenHideStatusBarActivity implements View.OnClickListener {
-    // wrapper of ProfileViewFragment
+	// wrapper of ProfileViewFragment
 
     VideoView startupVideoView;
     ImageView startupImageView;
@@ -79,6 +71,7 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
     @Override
     public void onCreate(Bundle savedState) {
         super.onCreate(savedState);
+
         setContentView(R.layout.next_gen_startup_view);
 
         videoParentFrame = (FixedAspectRatioFrameLayout)findViewById(R.id.video_parent_aspect_ratio_frame);
@@ -422,19 +415,18 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
     @Override
     public void onClick(View v){
+		if (v.getId() == R.id.next_gen_startup_play_button || v.getId() == R.id.next_gen_startup_play_text_button) {
 
-        if (v.getId() == R.id.next_gen_startup_play_button || v.getId() == R.id.next_gen_startup_play_text_button) {
+			Intent intent = new Intent(this, NextGenPlayer.class);
+			intent.setDataAndType(Uri.parse(NextGenExperience.getMovieMetaData().getMainMovieUrl()), "video/*");
+			startActivity(intent);
+			NextGenAnalyticData.reportEvent(this, null, "Play Movie", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
 
-            Intent intent = new Intent(this, NextGenPlayer.class);
-            intent.setDataAndType(Uri.parse(NextGenExperience.getMovieMetaData().getMainMovieUrl()), "video/*");
-            startActivity(intent);
-            NextGenAnalyticData.reportEvent(this, null, "Play Movie", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
-
-        } else if (v.getId() == R.id.next_gen_startup_extra_button || v.getId() == R.id.next_gen_startup_extra_text_button) {
-            Intent extraIntent = new Intent(this, NextGenExtraActivity.class);
-            startActivity(extraIntent);
-            NextGenAnalyticData.reportEvent(this, null, "Extras", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
-        }
+		} else if (v.getId() == R.id.next_gen_startup_extra_button || v.getId() == R.id.next_gen_startup_extra_text_button) {
+			Intent extraIntent = new Intent(this, NextGenExtraActivity.class);
+			startActivity(extraIntent);
+			NextGenAnalyticData.reportEvent(this, null, "Extras", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
+		}
     }
 
     @Override
@@ -444,6 +436,5 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
             startupVideoView.start();
         }
     }
-
 }
 

@@ -19,7 +19,7 @@ android {
 	useLibrary 'org.apache.http.legacy'
 
 	defaultConfig {
-		minSdkVersion 21
+		minSdkVersion 18
 		targetSdkVersion 21
     }
 	/*

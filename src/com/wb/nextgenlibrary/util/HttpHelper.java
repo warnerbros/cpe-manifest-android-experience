@@ -535,14 +535,8 @@ public class HttpHelper {
 	}
 	
 	private static final String SECURE_BASE_URL = "https://";
-	
-	 private static String[] sAdminBaseUrlArray = { "api.flixster.com", "staging.flixster.com",
-         "community.flixsterqa.com", "branch.flixsterqa.com", "yuntao.flixsteroffice.com",
-         "saran.flixsteroffice.com", "saranchari.dnsalias.com" };
+
 	public static boolean isSecureFlxUrl(String url) {
-	    return url.startsWith(SECURE_BASE_URL) || url.startsWith(getSecureBaseUrl());
+	    return url.startsWith(SECURE_BASE_URL);
 	}
-    private static String getSecureBaseUrl() {
-        return "";//https://" + sAdminBaseUrlArray[NextGenExperience.getAdminApiSource()] + "/android/api/v1/";
-    }
 }

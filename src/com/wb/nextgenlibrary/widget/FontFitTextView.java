@@ -2,18 +2,20 @@ package com.wb.nextgenlibrary.widget;
 
 import android.content.Context;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.util.Size;
 import android.util.TypedValue;
 import android.widget.TextView;
 
+import com.wb.nextgenlibrary.util.Size;
+
 public class FontFitTextView extends TextView {
 
-    float mSpacingMult;
-    float mSpacingAdd;
+	float mSpacingMult = 1.0f;
+	float mSpacingAdd = 0.0f;
 
     public FontFitTextView(Context context) {
         super(context);
@@ -38,6 +40,7 @@ public class FontFitTextView extends TextView {
     {
         if (boundarySize.getHeight() <= 0)
             return;
+
         int targetHeight = boundarySize.getHeight() - this.getPaddingTop() - this.getPaddingBottom();
         float hi = 100;
         float lo = 2;
@@ -49,7 +52,7 @@ public class FontFitTextView extends TextView {
             float size = (hi+lo)/2;
             int textHeight = getTextHeight(text, getPaint(), boundarySize.getWidth(), size);
 
-            if(textHeight >= boundarySize.getHeight())
+            if(textHeight >= targetHeight)
                 hi = size; // too big
             else
                 lo = size; // too small
@@ -73,7 +76,7 @@ public class FontFitTextView extends TextView {
 
     @Override
     protected void onSizeChanged (int w, int h, int oldw, int oldh) {
-        if (w != oldw) {
+        if (w != oldw || h != oldh) {
             refitText(this.getText().toString(), new Size(w, h));
         }
     }
@@ -99,8 +102,9 @@ public class FontFitTextView extends TextView {
         TextPaint paintCopy = new TextPaint(paint);
         // Update the text paint object
         paintCopy.setTextSize(textSize);
-        // Measure using a static layout
+        // Measure using a static layout. need to use 1 as spacingMult so it'll calculate the lines properly
         StaticLayout layout = new StaticLayout(source, paintCopy, width, Layout.Alignment.ALIGN_NORMAL, mSpacingMult, mSpacingAdd, true);
-        return layout.getLineCount() * layout.getHeight();
+
+        return layout.getHeight();
     }
 }

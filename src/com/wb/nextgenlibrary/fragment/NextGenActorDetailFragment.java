@@ -147,7 +147,8 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
         actorOjbect = object;
 
         if (actorOjbect != null && actorOjbect.getBaselineCastData() != null){
-            Glide.with(getActivity()).load(actorOjbect.getBaselineCastData().getFullImageUrl()).fitCenter().centerCrop().into(fullImageView);
+            //Glide.with(getActivity()).load(actorOjbect.getBaselineCastData().getFullImageUrl()).fitCenter().centerCrop().into(fullImageView);
+            Glide.with(getActivity()).load(actorOjbect.getBaselineCastData().getFullImageUrl()).into(fullImageView);
             //Picasso.with(getActivity()).load(actorOjbect.getBaselineCastData().getFullImageUrl()).fit().centerCrop().into(fullImageView);
             //PicassoTrustAll.loadImageIntoView(getActivity(), actorOjbect.getBaselineCastData().getFullImageUrl(), fullImageView);
 

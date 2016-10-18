@@ -36,7 +36,7 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment<CastD
             BaselineApiDAO.getCastActorsData(NextGenExperience.getMovieMetaData().getActorsList(), new ResultListener<Boolean>() {
                 @Override
                 public void onResult(Boolean result) {
-                    NextGenExperience.getMovieMetaData().setHasCalledBaselineAPI(true);
+                    NextGenExperience.getMovieMetaData().setHasCalledBaselineAPI(result);
 
                     if (getActivity() != null) {
                         getActivity().runOnUiThread(new Runnable() {

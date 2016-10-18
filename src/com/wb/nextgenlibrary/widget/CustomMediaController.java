@@ -286,7 +286,7 @@ public class CustomMediaController extends MediaController {
             if (this.getParent() != null){
                 ((ViewGroup)this.getParent()).removeView(this);
             }
-            if (this.getParent() == null)
+            if (this.getParent() == null && mAnchor.getParent() != null)
                 ((ViewGroup)mAnchor.getParent()).addView(this, tlp);
             mShowing = true;
         }
@@ -319,11 +319,13 @@ public class CustomMediaController extends MediaController {
         if (mVisibilityListenter != null)
             mVisibilityListenter.onVisibilityChange(false);
 
-        try {
-            ((ViewGroup)(mAnchor.getParent())).removeView(this);
-            mHandler.removeMessages(SHOW_PROGRESS);
-        } catch (IllegalArgumentException ex) {
-            Log.w("MediaController", "already removed");
+        if (mAnchor.getParent() != null) {
+            try {
+                ((ViewGroup) (mAnchor.getParent())).removeView(this);
+                mHandler.removeMessages(SHOW_PROGRESS);
+            } catch (IllegalArgumentException ex) {
+                Log.w("MediaController", "already removed");
+            }
         }
         mShowing = false;
     }
