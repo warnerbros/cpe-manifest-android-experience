@@ -37,7 +37,7 @@
         <com.wb.nextgenlibrary.widget.FontFitTextView
             android:id="@+id/ec_content_name"
             android:textColor="@color/drawer_yellow"
-            android:textSize="@dimen/textLarge"
+            android:textSize="@dimen/textXLarge"
             android:gravity="center"
             android:fontFamily="sans-serif-condensed"
             android:layout_width="match_parent"

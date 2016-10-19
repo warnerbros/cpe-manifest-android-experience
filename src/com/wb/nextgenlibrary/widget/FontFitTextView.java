@@ -14,6 +14,10 @@ import com.wb.nextgenlibrary.util.Size;
 
 public class FontFitTextView extends TextView {
 
+	//Attributes
+	private float maxTextSize;
+	private Paint mTestPaint;
+
 	float mSpacingMult = 1.0f;
 	float mSpacingAdd = 0.0f;
 
@@ -31,6 +35,7 @@ public class FontFitTextView extends TextView {
         mTestPaint = new Paint();
         mTestPaint.set(this.getPaint());
         //max size defaults to the initially specified text size unless it is too small
+		maxTextSize = getTextSize();
     }
 
     /* Re size the font so the specified text fits in the text box
@@ -42,7 +47,7 @@ public class FontFitTextView extends TextView {
             return;
 
         int targetHeight = boundarySize.getHeight() - this.getPaddingTop() - this.getPaddingBottom();
-        float hi = 100;
+        float hi = maxTextSize;
         float lo = 2;
         final float threshold = 0.5f; // How close we have to be
 
@@ -80,9 +85,6 @@ public class FontFitTextView extends TextView {
             refitText(this.getText().toString(), new Size(w, h));
         }
     }
-
-    //Attributes
-    private Paint mTestPaint;
 
     /**
      * Override the set line spacing to update our internal reference values
