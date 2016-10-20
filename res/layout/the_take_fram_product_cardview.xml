@@ -11,6 +11,8 @@
         android:layout_height="match_parent"
         android:background="@android:color/transparent"
         cardview:cardBackgroundColor="@android:color/transparent"
+        cardview:cardElevation="0dp"
+        cardview:cardCornerRadius="0dp"
         android:duplicateParentState="true"
         android:id="@+id/product_cv">
         <com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout
