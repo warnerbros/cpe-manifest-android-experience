@@ -17,6 +17,7 @@
             android:id="@+id/share_clip_title_txt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/spacing_normal"
             android:textColor="@android:color/white"
             android:textSize="@dimen/textMedium"
             android:fontFamily="sans-serif-condensed"
@@ -94,6 +95,8 @@
                     </com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout>
                     <TextView
                         android:layout_alignParentLeft="true"
+                        android:layout_marginTop="@dimen/spacing_small"
+                        android:layout_marginBottom="@dimen/spacing_small"
                         android:id="@+id/ec_content_name"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/textMedium"

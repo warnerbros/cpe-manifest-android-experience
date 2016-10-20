@@ -56,9 +56,10 @@ import javax.xml.datatype.Duration;
  */
 public class MovieMetaData {
 
-    final public static String THE_TAKE_MANIFEST_IDENTIFIER = "thetake.com";
+	final public static String THE_TAKE_MANIFEST_IDENTIFIER = "thetake.com";
     final public static String BASELINE_NAMESPACE = "baselineapi.com";
-    final public static String SHARE_CLIP_KEY = ":clipshare";
+    final public static String SHARE_CLIP_KEY = "clipshare";
+	final public static String SHARE_CLIP_SUBTYPE = "clip share";
 
     final public static String OTHER_APP_DATA_ID = "AppID";
     final public static String OTHER_PEOPLE_ID = "PeopleOtherID";
@@ -273,6 +274,9 @@ public class MovieMetaData {
                 List<InteractiveItem> interactiveItems = new ArrayList<InteractiveItem>();
                 String subtype = null;
                 InventoryMetadataType experienceMetaData = metaDataAssetsMap.get(experience.getContentID());
+
+                if (experience.getExperienceID().contains(SHARE_CLIP_KEY))
+                    subtype = SHARE_CLIP_KEY;
 
                 if (experience.getGallery() != null && experience.getGallery().size() > 0) {
                     for(GalleryType gallery : experience.getGallery()) {
@@ -1002,7 +1006,7 @@ public class MovieMetaData {
     static public abstract class PresentationDataItem{
         protected String id;
         protected String title;
-        protected String parentExperienceId;
+		protected String parentExperienceId;
         protected String posterImgUrl;
         protected String summary = "";
 
@@ -1047,11 +1051,11 @@ public class MovieMetaData {
             return title;
         }
 
-        public String getParentExperienceId(){
-            return parentExperienceId;
-        }
+		public String getParentExperienceId(){
+			return parentExperienceId;
+		}
 
-        public abstract String getPosterImgUrl();
+		public abstract String getPosterImgUrl();
 
         public String getSummary(){
             return  summary;
@@ -1413,8 +1417,18 @@ public class MovieMetaData {
             isWatched = true;
         }
 
-        public boolean isShareClip(){
-            return "clip share".equalsIgnoreCase(subtype);
+        public boolean isShareClip() {
+			if (SHARE_CLIP_SUBTYPE.equalsIgnoreCase(subtype))
+				return true;	// man of steel
+			else {
+				// travel up the parent to see if it's a sharable clip
+				ExperienceData exp = NextGenExperience.getMovieMetaData().findExperienceDataById(parentExperienceId);
+				do {
+					if (exp.isShareClip())
+						return true;
+				} while ((exp = exp.parent) != null);
+				return false;
+			}
         }
     }
 
@@ -1549,6 +1563,7 @@ public class MovieMetaData {
                     int checkSequenceNumber = childIdToSequenceNumber.get(checkExpId);
                     if (childSequenceNumber > checkSequenceNumber){
                         childrenExperience.add(i+1, ecContent);
+                        ecContent.parent = this;
                         return;
                     }
                 }
@@ -1613,6 +1628,10 @@ public class MovieMetaData {
             }
             return style;
         }
+
+		public boolean isShareClip() {
+			return experienceId != null && experienceId.contains(SHARE_CLIP_KEY);
+		}
     }
 
     public static class IMEElementsGroup<T>{
