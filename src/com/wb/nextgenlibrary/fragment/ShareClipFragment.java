@@ -71,7 +71,7 @@ public class ShareClipFragment extends ECVideoViewFragment implements View.OnCli
             NextGenAnalyticData.reportEvent(getActivity(), ShareClipFragment.this, "Share",
                     NextGenAnalyticData.AnalyticAction.ACTION_CLICK, videoUrl);
         } else if (v.getId() == R.id.prev_clip_btn){
-                if (itemIndex >= 0){
+                if (itemIndex > 0){
                     setShouldAutoPlay(false);
                     setExperienceAndIndex(shareClipExperience, itemIndex - 1);
                     updateUI();

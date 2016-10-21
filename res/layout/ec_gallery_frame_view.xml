@@ -17,6 +17,7 @@
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="4">
+
             <com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout
                 xmlns:nextgen="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/gallery_aspect_ratio_frame"
@@ -52,6 +53,29 @@
                     android:textColor="@color/white"
                     android:visibility="gone"/>
             </com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout>
+
+            <ImageButton
+                android:layout_alignParentLeft="true"
+                android:id="@+id/prev_clip_btn"
+                android:layout_width="@dimen/close_icon_dimen"
+                android:layout_height="@dimen/close_icon_dimen"
+                android:layout_centerVertical="true"
+                android:scaleType="fitCenter"
+                android:background="@android:color/transparent"
+                android:src="@drawable/back_logo"
+                android:visibility="invisible"/>
+
+            <ImageButton
+                android:layout_alignParentRight="true"
+                android:id="@+id/next_clip_btn"
+                android:layout_width="@dimen/close_icon_dimen"
+                android:layout_height="@dimen/close_icon_dimen"
+                android:layout_centerVertical="true"
+                android:scaleType="fitCenter"
+                android:rotation="180"
+                android:background="@android:color/transparent"
+                android:src="@drawable/back_logo"
+                android:visibility="invisible"/>
 
             <ImageButton
                 android:id="@+id/close_button"

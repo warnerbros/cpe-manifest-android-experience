@@ -54,6 +54,29 @@
             </com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout>
 
             <ImageButton
+                android:layout_alignParentLeft="true"
+                android:id="@+id/prev_clip_btn"
+                android:layout_width="@dimen/close_icon_dimen"
+                android:layout_height="@dimen/close_icon_dimen"
+                android:layout_centerVertical="true"
+                android:scaleType="fitCenter"
+                android:background="@android:color/transparent"
+                android:src="@drawable/back_logo"
+                android:visibility="invisible"/>
+
+            <ImageButton
+                android:layout_alignParentRight="true"
+                android:id="@+id/next_clip_btn"
+                android:layout_width="@dimen/close_icon_dimen"
+                android:layout_height="@dimen/close_icon_dimen"
+                android:layout_centerVertical="true"
+                android:scaleType="fitCenter"
+                android:rotation="180"
+                android:background="@android:color/transparent"
+                android:src="@drawable/back_logo"
+                android:visibility="invisible"/>
+
+            <ImageButton
                 android:id="@+id/close_button"
                 android:layout_width="@dimen/close_icon_dimen"
                 android:layout_height="@dimen/close_icon_dimen"
