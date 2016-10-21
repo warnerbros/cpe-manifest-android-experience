@@ -1552,6 +1552,11 @@ public class MovieMetaData {
         }
 
         private void addChild(ExperienceData ecContent){
+			ecContent.parent = this;
+			// skip if children has been added already
+			if (childrenExperience.contains(ecContent))
+				return;
+
             if (childrenExperience.size() == 0 && childIdToSequenceNumber.size() > 0){
                 childrenExperience.add(ecContent);
             }else if (childIdToSequenceNumber.containsKey(ecContent.experienceId)) {
@@ -1563,7 +1568,6 @@ public class MovieMetaData {
                     int checkSequenceNumber = childIdToSequenceNumber.get(checkExpId);
                     if (childSequenceNumber > checkSequenceNumber){
                         childrenExperience.add(i+1, ecContent);
-                        ecContent.parent = this;
                         return;
                     }
                 }
@@ -1571,8 +1575,6 @@ public class MovieMetaData {
             }else{
                 childrenExperience.add(ecContent);
             }
-            ecContent.parent = this;
-
         }
 
         public List<ExperienceData> getChildrenContents(){
@@ -1632,7 +1634,23 @@ public class MovieMetaData {
 		public boolean isShareClip() {
 			return experienceId != null && experienceId.contains(SHARE_CLIP_KEY);
 		}
-    }
+
+		@Override
+		public boolean equals(Object o) {
+			if (this == o) return true;
+			if (o == null || getClass() != o.getClass()) return false;
+
+			ExperienceData that = (ExperienceData) o;
+
+			return experienceId.equals(that.experienceId);
+
+		}
+
+		@Override
+		public int hashCode() {
+			return experienceId.hashCode();
+		}
+	}
 
     public static class IMEElementsGroup<T>{
         public final ExperienceData linkedExperience;
