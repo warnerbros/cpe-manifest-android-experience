@@ -13,6 +13,8 @@ import com.wb.nextgenlibrary.parser.cpestyle.ExperienceMenuMapType;
 import com.wb.nextgenlibrary.parser.cpestyle.NodeStyleType;
 import com.wb.nextgenlibrary.parser.cpestyle.ThemeType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.AppGroupType;
+import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.AudioClipRefType;
+import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.AudiovisualClipRefType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.AudiovisualType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.ExperienceAppType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.ExperienceChildType;
@@ -306,7 +308,6 @@ public class MovieMetaData {
 
                 if (experience.getAudiovisual() != null){
                     InventoryVideoType video = null;
-                    String presentationId = "";
                     if (experience.getAudiovisual().size() > 0) {                           // for video Asset
                         for (AudiovisualType audioVisual : experience.getAudiovisual()) {
                             InventoryMetadataType avMetaData = metaDataAssetsMap.get(audioVisual.getContentID());        // get Video asset by ContentID of its AudioVisual
@@ -337,30 +338,40 @@ public class MovieMetaData {
                                 });
                             }
 
-                            presentationId = audioVisual.getPresentationID();
-                            if (StringHelper.isEmpty(presentationId) && !StringHelper.isEmpty(audioVisual.getPlayableSequenceID())){
+                            List<String> presentationIds = new ArrayList<>();
+                            if (!StringHelper.isEmpty(audioVisual.getPresentationID()) ){
+                                presentationIds.add(audioVisual.getPresentationID());
+                            }
+
+                            if (presentationIds.size() == 0 && !StringHelper.isEmpty(audioVisual.getPlayableSequenceID())){
                                 PlayableSequenceType playableSequenceType = playableSequenceTypeHashMap.get(audioVisual.getPlayableSequenceID());
                                 if (playableSequenceType != null && playableSequenceType.getClip() != null && playableSequenceType.getClip().size() > 0){
-                                    presentationId = playableSequenceType.getClip().get(0).getPresentationID();
+                                    for (AudiovisualClipRefType clipRefType : playableSequenceType.getClip()) {
+                                        presentationIds.add(clipRefType.getPresentationID());
+
+                                    }
                                 }
                             }
 
-                            if (!StringHelper.isEmpty(presentationId)) {
-                                PresentationType presentation = presentationAssetMap.get(presentationId);  // get Presentation by presentation id
-                                if (presentation.getTrackMetadata() != null && presentation.getTrackMetadata().size() > 0 &&
-                                        presentation.getTrackMetadata().get(0).getVideoTrackReference().size() > 0 &&
-                                        presentation.getTrackMetadata().get(0).getVideoTrackReference().get(0).getVideoTrackID().size() > 0) {                                           // get the video id from presentation
-                                    video = videoAssetsMap.get(presentation.getTrackMetadata().get(0).getVideoTrackReference().get(0).getVideoTrackID().get(0));
-                                }
-                            }
+                            for(String presentationId : presentationIds) {
 
-                            if (!StringHelper.isEmpty(presentationId) && video != null) {
-                                //ExperienceData ecData = new ExperienceData(experience, metaData, video, null);
-                                if (audioVisual.getSubType() != null && audioVisual.getSubType().size() > 0)
-                                    subtype = audioVisual.getSubType().get(0);
-                                AudioVisualItem item = new AudioVisualItem(experience.getExperienceID(), avMetaData, video, externalApiDatas, subtype);
-                                avItems.add(item);
-                                presentationIdToAVItemMap.put(presentationId, item);
+                                if (!StringHelper.isEmpty(presentationId)) {
+                                    PresentationType presentation = presentationAssetMap.get(presentationId);  // get Presentation by presentation id
+                                    if (presentation.getTrackMetadata() != null && presentation.getTrackMetadata().size() > 0 &&
+                                            presentation.getTrackMetadata().get(0).getVideoTrackReference().size() > 0 &&
+                                            presentation.getTrackMetadata().get(0).getVideoTrackReference().get(0).getVideoTrackID().size() > 0) {                                           // get the video id from presentation
+                                        video = videoAssetsMap.get(presentation.getTrackMetadata().get(0).getVideoTrackReference().get(0).getVideoTrackID().get(0));
+                                    }
+                                }
+
+                                if (!StringHelper.isEmpty(presentationId) && video != null) {
+                                    //ExperienceData ecData = new ExperienceData(experience, metaData, video, null);
+                                    if (audioVisual.getSubType() != null && audioVisual.getSubType().size() > 0)
+                                        subtype = audioVisual.getSubType().get(0);
+                                    AudioVisualItem item = new AudioVisualItem(experience.getExperienceID(), avMetaData, video, externalApiDatas, subtype);
+                                    avItems.add(item);
+                                    presentationIdToAVItemMap.put(presentationId, item);
+                                }
                             }
 
                         }
