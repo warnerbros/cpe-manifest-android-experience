@@ -269,11 +269,13 @@ public class MovieMetaData {
             //List<ExperienceType> exprienceParentList = new ArrayList<ExperienceType>();
             ExperienceData rootData = null;
 
+
             for (ExperienceType experience : mediaManifest.getExperiences().getExperience()) {
                 List<ECGalleryItem> galleryItems = new ArrayList<ECGalleryItem>();
                 List<AudioVisualItem> avItems = new ArrayList<AudioVisualItem>();
                 List<LocationItem> locationItems = new ArrayList<LocationItem>();
                 List<InteractiveItem> interactiveItems = new ArrayList<InteractiveItem>();
+                boolean isRootExperience = false;
                 String subtype = null;
                 InventoryMetadataType experienceMetaData = metaDataAssetsMap.get(experience.getContentID());
 
@@ -310,6 +312,9 @@ public class MovieMetaData {
                     InventoryVideoType video = null;
                     if (experience.getAudiovisual().size() > 0) {                           // for video Asset
                         for (AudiovisualType audioVisual : experience.getAudiovisual()) {
+                            if (audioVisual.getType().equals("Main"))       // root experience check
+                                isRootExperience = true;
+
                             InventoryMetadataType avMetaData = metaDataAssetsMap.get(audioVisual.getContentID());        // get Video asset by ContentID of its AudioVisual
                             List<ExternalApiData> externalApiDatas = new ArrayList<ExternalApiData>();
                             if (avMetaData.getBasicMetadata() != null && avMetaData.getBasicMetadata().getAltIdentifier() != null){
@@ -412,7 +417,8 @@ public class MovieMetaData {
                     for (ExperienceData parentGroup : parentGroups)
                         parentGroup.addChild(thisExperience);
                 }
-                if (rootData == null){
+
+                if (isRootExperience){
                     rootData = thisExperience;
                 }
                 if (experience.getTimedSequenceID() != null && experience.getTimedSequenceID().size() > 0 && !StringHelper.isEmpty(experience.getTimedSequenceID().get(0)) ){
