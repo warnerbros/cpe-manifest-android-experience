@@ -19,6 +19,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.Callable;
@@ -135,4 +136,33 @@ public class WebViewActivity extends NextGenHideStatusBarActivity {
         return out;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (webView != null){
+            webView.onPause();
+        }/*
+        try {
+            Class.forName("android.webkit.WebView")
+                    .getMethod("onPause", (Class[]) null)
+                    .invoke(webView, (Object[]) null);
+
+        } catch(ClassNotFoundException cnfe) {
+
+        } catch(NoSuchMethodException nsme) {
+
+        } catch(InvocationTargetException ite) {
+
+        } catch (IllegalAccessException iae) {
+
+        }*/
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        if (webView != null){
+            webView.onResume();
+        }
+    }
 }
