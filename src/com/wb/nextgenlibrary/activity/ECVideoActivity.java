@@ -49,6 +49,10 @@ public class ECVideoActivity extends AbstractECView implements ECVideoViewFragme
 
     @Override
     public void onLeftListItemSelected(MovieMetaData.ExperienceData ec){
+        if (selectedEC == ec)      // avoid video reload
+            return;
+        else
+            selectedEC = ec;
         if (ec != null && ec.audioVisualItems.size() > 0) {
 			MovieMetaData.AudioVisualItem audioVisualItem = ec.audioVisualItems.get(0);
 			rightVideoFrame.setAudioVisualItem(audioVisualItem);

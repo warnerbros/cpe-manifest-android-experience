@@ -21,6 +21,7 @@ import com.wb.nextgenlibrary.util.utils.F;
 public abstract class AbstractECView extends AbstractNextGenActivity {
 
     protected MovieMetaData.ExperienceData ecGroupData ;
+    protected MovieMetaData.ExperienceData selectedEC = null;
     protected ECViewLeftListFragment listFragment;
     protected FrameLayout leftListFrame;
     protected boolean isContentFullScreen = false;
