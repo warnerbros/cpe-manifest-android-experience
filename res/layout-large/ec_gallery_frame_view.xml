@@ -60,7 +60,7 @@
                 android:layout_height="@dimen/close_icon_dimen"
                 android:layout_centerVertical="true"
                 android:scaleType="fitCenter"
-                android:background="@android:color/transparent"
+                android:background="@color/transparent_black"
                 android:src="@drawable/back_logo"
                 android:visibility="invisible"/>
 
@@ -72,7 +72,7 @@
                 android:layout_centerVertical="true"
                 android:scaleType="fitCenter"
                 android:rotation="180"
-                android:background="@android:color/transparent"
+                android:background="@color/transparent_black"
                 android:src="@drawable/back_logo"
                 android:visibility="invisible"/>
 
