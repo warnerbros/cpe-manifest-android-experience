@@ -16,6 +16,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.google.gson.Gson;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
@@ -30,6 +33,7 @@ import com.wb.nextgenlibrary.network.BaselineApiDAO;
 import com.wb.nextgenlibrary.util.DialogUtils;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
+import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
 
 import java.util.List;
 
@@ -247,11 +251,13 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
         CardView cv;
         ImageView personPhoto;
         Filmography filmInfo;
+        FixedAspectRatioFrameLayout imageFrame;
 
         FilmographyViewHolder(View itemView) {
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.cv);
             personPhoto = (ImageView)itemView.findViewById(R.id.person_photo);
+            imageFrame = (FixedAspectRatioFrameLayout)itemView.findViewById(R.id.actor_detail_filmography_frame_layout);
             itemView.setOnClickListener(this);
         }
 
@@ -259,7 +265,23 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
             this.filmInfo = filmInfo;
             if (filmInfo.isFilmPosterRequest()) {
                // Glide.with(getActivity()).load(filmInfo.getFilmPosterImageUrl()).asBitmap().fitCenter().into(personPhoto);
-                Glide.with(getActivity()).load(filmInfo.getFilmPosterImageUrl()).into(personPhoto);
+                Glide.with(getActivity()).load(filmInfo.getFilmPosterImageUrl()).listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(final GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                imageFrame.setAspectRatio(resource.getIntrinsicWidth(), resource.getIntrinsicHeight());
+                            }
+                        });
+                        return false;
+                    }
+                }).fitCenter().into(personPhoto);
                 //NextGenLogger.d(F.TAG, "Position: " + position  +" loaded: " + filmInfo.getFilmPosterImageUrl());
             }
         }
