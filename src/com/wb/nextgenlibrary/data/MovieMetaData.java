@@ -1371,14 +1371,17 @@ public class MovieMetaData {
                 }
 
                 String dValue = "";
-                if (metaData != null)
+                if (metaData != null && metaData.getBasicMetadata() != null)
                     durationObject = metaData.getBasicMetadata().getRunLength();
                 else
                     durationObject = null;
-                try {
-                    dValue = metaData.getBasicMetadata().getRunLength().toString();
-                }catch ( Exception ex){
-                    NextGenLogger.d(F.TAG, ex.getLocalizedMessage());
+
+                if (durationObject != null) {
+                    try {
+                        dValue = durationObject.toString();
+                    } catch (Exception ex) {
+                        NextGenLogger.d(F.TAG, ex.getLocalizedMessage());
+                    }
                 }
                 duration = dValue;
             }else{

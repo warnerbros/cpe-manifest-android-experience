@@ -8,23 +8,30 @@ import java.util.Date;
  */
 public class Duration {
 
-    public final int hour, minutes, second;
-    public Duration(String durationString){
-        Date d = null;
-        try {
-            d = new SimpleDateFormat("'PT's'S'").parse(durationString);
-        }catch (Exception ex){
-        }
-        if (d != null) {
+	public final int hours, minutes, seconds;
 
-            hour = d.getHours();
-            minutes = d.getMinutes();
-            second = d.getSeconds();
-        }else{
-            hour = 0;
-            minutes = 0;
-            second = 0;
+	private Date date;
 
-        }
-    }
+	public Duration(String durationString) {
+		try {
+			date = new SimpleDateFormat("'PT's'S'").parse(durationString);
+		} catch (Exception ex) {
+			try {
+				date = new SimpleDateFormat("'PT's.S'S'").parse(durationString);
+			} catch (Exception ex2) {}
+		}
+		if (date != null) {
+			hours = date.getHours();
+			minutes = date.getMinutes();
+			seconds = date.getSeconds();
+		} else {
+			hours = 0;
+			minutes = 0;
+			seconds = 0;
+		}
+	}
+
+	public Date getDate() {
+		return date;
+	}
 }
