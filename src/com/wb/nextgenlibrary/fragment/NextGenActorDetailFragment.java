@@ -8,6 +8,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,6 +83,7 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
         super.onViewCreated(view, savedInstanceState);
         fullImageView = (ImageView)view.findViewById(R.id.next_gen_detail_full_image);
         detailTextView = (TextView)view.findViewById(R.id.actor_biography_text);
+        detailTextView.setMovementMethod(new ScrollingMovementMethod());
         actorNameTextView = (TextView)view.findViewById(R.id.actor_real_name_text);
         filmographyRecyclerView = (RecyclerView)view.findViewById(R.id.actor_detail_filmography);
         actorGalleryRecyclerView = (RecyclerView) view.findViewById(R.id.actor_gallery_recycler);
@@ -112,7 +114,9 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
         } else if (actorGalleryFrame != null){
             actorGalleryFrame.setVisibility(View.GONE);
         }
-        reloadDetail(actorOjbect);
+        CastData actor = actorOjbect;
+        actorOjbect = null;
+        reloadDetail(actor);
     }
 
     @Override
@@ -148,13 +152,11 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
     }
 
     public void reloadDetail(final CastData object){
-        actorOjbect = object;
 
-        if (actorOjbect != null && actorOjbect.getBaselineCastData() != null){
-            //Glide.with(getActivity()).load(actorOjbect.getBaselineCastData().getFullImageUrl()).fitCenter().centerCrop().into(fullImageView);
-            Glide.with(getActivity()).load(actorOjbect.getBaselineCastData().getFullImageUrl()).into(fullImageView);
-            //Picasso.with(getActivity()).load(actorOjbect.getBaselineCastData().getFullImageUrl()).fit().centerCrop().into(fullImageView);
-            //PicassoTrustAll.loadImageIntoView(getActivity(), actorOjbect.getBaselineCastData().getFullImageUrl(), fullImageView);
+        if (object != null && object.getBaselineCastData() != null && !object.equals(actorOjbect)){
+            actorOjbect = object;
+            detailTextView.scrollTo(0,0);
+            Glide.with(getActivity()).load(actorOjbect.getBaselineCastData().getFullImageUrl()).centerCrop().into(fullImageView);
 
             fullImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -224,7 +226,7 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
             }
 
             detailTextView.setText(actorOjbect.getBaselineCastData().biography);
-            actorNameTextView.setText(actorOjbect.displayName);
+            actorNameTextView.setText(actorOjbect.displayName.toUpperCase());
         }
     }
 
