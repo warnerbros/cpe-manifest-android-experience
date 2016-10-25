@@ -20,6 +20,7 @@ import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.ExperienceAppType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.ExperienceChildType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.ExperienceType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.GalleryType;
+import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.InventoryAudioType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.InventoryImageType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.InventoryInteractiveType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.InventoryMetadataType;
@@ -128,6 +129,7 @@ public class MovieMetaData {
 
         HashMap<String, InventoryMetadataType> metaDataAssetsMap = new HashMap<String, InventoryMetadataType>();
         HashMap<String, InventoryVideoType> videoAssetsMap = new HashMap<String, InventoryVideoType>();
+        HashMap<String, InventoryAudioType> audioAssetsMap = new HashMap<String, InventoryAudioType>();
         HashMap<String, PresentationType> presentationAssetMap = new HashMap<String, PresentationType>();
         HashMap<String, PictureImageData> pictureImageMap = new HashMap<String, PictureImageData>();
         HashMap<String, InventoryInteractiveType> inventoryAssetsMap = new HashMap<String, InventoryInteractiveType>();
@@ -162,6 +164,12 @@ public class MovieMetaData {
             if (mediaManifest.getInventory().getVideo().size() > 0){
                 for (InventoryVideoType videoData : mediaManifest.getInventory().getVideo()){
                     videoAssetsMap.put(videoData.getVideoTrackID(), videoData);
+                }
+            }
+
+            if (mediaManifest.getInventory().getAudio().size() > 0){
+                for (InventoryAudioType audioData : mediaManifest.getInventory().getAudio()){
+                    audioAssetsMap.put(audioData.getAudioTrackID(), audioData);
                 }
             }
 
@@ -250,7 +258,7 @@ public class MovieMetaData {
             if (styleSetType.getNodeStyle() != null && styleSetType.getNodeStyle().size() > 0) {
                 for (NodeStyleType nodeStyle : styleSetType.getNodeStyle()){
                     StyleData.NodeStyleData thisStyle = new StyleData.NodeStyleData(nodeStyle, themeDataHashMap,
-                            pictureGroupAssetsMap, pictureImageMap, presentationAssetMap, videoAssetsMap);
+                            pictureGroupAssetsMap, pictureImageMap, presentationAssetMap, videoAssetsMap, audioAssetsMap);
                     nodeStyleTypeHashMap.put(thisStyle.nodeStyleId, thisStyle);
                 }
             }
@@ -310,6 +318,7 @@ public class MovieMetaData {
 
                 if (experience.getAudiovisual() != null){
                     InventoryVideoType video = null;
+                    InventoryAudioType audio = null;
                     if (experience.getAudiovisual().size() > 0) {                           // for video Asset
                         for (AudiovisualType audioVisual : experience.getAudiovisual()) {
                             if (audioVisual.getType().equals("Main"))       // root experience check
@@ -363,9 +372,12 @@ public class MovieMetaData {
                                 if (!StringHelper.isEmpty(presentationId)) {
                                     PresentationType presentation = presentationAssetMap.get(presentationId);  // get Presentation by presentation id
                                     if (presentation.getTrackMetadata() != null && presentation.getTrackMetadata().size() > 0 &&
-                                            presentation.getTrackMetadata().get(0).getVideoTrackReference().size() > 0 &&
-                                            presentation.getTrackMetadata().get(0).getVideoTrackReference().get(0).getVideoTrackID().size() > 0) {                                           // get the video id from presentation
-                                        video = videoAssetsMap.get(presentation.getTrackMetadata().get(0).getVideoTrackReference().get(0).getVideoTrackID().get(0));
+                                            presentation.getTrackMetadata().get(0).getVideoTrackReference().size() > 0){
+                                        if (presentation.getTrackMetadata().get(0).getVideoTrackReference().get(0).getVideoTrackID().size() > 0)                                          // get the video id from presentation
+                                            video = videoAssetsMap.get(presentation.getTrackMetadata().get(0).getVideoTrackReference().get(0).getVideoTrackID().get(0));
+
+                                        if (presentation.getTrackMetadata().get(0).getAudioTrackReference().get(0).getAudioTrackID().size() > 0)                                          // get the video id from presentation
+                                            audio = audioAssetsMap.get(presentation.getTrackMetadata().get(0).getAudioTrackReference().get(0).getAudioTrackID().get(0));
                                     }
                                 }
 
@@ -373,7 +385,7 @@ public class MovieMetaData {
                                     //ExperienceData ecData = new ExperienceData(experience, metaData, video, null);
                                     if (audioVisual.getSubType() != null && audioVisual.getSubType().size() > 0)
                                         subtype = audioVisual.getSubType().get(0);
-                                    AudioVisualItem item = new AudioVisualItem(experience.getExperienceID(), avMetaData, video, externalApiDatas, subtype);
+                                    AudioVisualItem item = new AudioVisualItem(experience.getExperienceID(), avMetaData, video, audio, externalApiDatas, subtype);
                                     avItems.add(item);
                                     presentationIdToAVItemMap.put(presentationId, item);
                                 }
@@ -1325,6 +1337,7 @@ public class MovieMetaData {
 
     static public class AudioVisualItem extends PresentationDataItem{
         final public String videoUrl;
+        final public String audioUrl;
         final public String duration;
         final public List<ExternalApiData> externalApiDataList = new ArrayList<ExternalApiData>();
         final PresentationImageData[] images;
@@ -1333,12 +1346,17 @@ public class MovieMetaData {
 
         boolean isWatched = false;
 
-        public AudioVisualItem(String parentExperienceId, InventoryMetadataType metaData, InventoryVideoType videoData, String subtype){
+        public AudioVisualItem(String parentExperienceId, InventoryMetadataType metaData, InventoryVideoType videoData, InventoryAudioType audioData, String subtype){
             super(metaData, parentExperienceId);
             this.subtype = subtype;
             BasicMetadataInfoType localizedInfo = metaData!= null ? metaData.getBasicMetadata().getLocalizedInfo().get(0): null;
             if (videoData != null) {
                 videoUrl = videoData.getContainerReference().getContainerLocation();
+
+                if (audioData != null)
+                    audioUrl = audioData.getContainerReference().getContainerLocation();
+                else
+                    audioUrl = null;
 
                 if (localizedInfo != null && localizedInfo.getArtReference() != null && localizedInfo.getArtReference().size() > 0) {
                     posterImgUrl = localizedInfo.getArtReference().get(0).getValue();
@@ -1364,6 +1382,7 @@ public class MovieMetaData {
                 duration = dValue;
             }else{
                 videoUrl = null;
+                audioUrl = null;
                 posterImgUrl = null;
                 duration = null;
                 images = null;
@@ -1380,6 +1399,7 @@ public class MovieMetaData {
             }else{
                 videoUrl = null;
             }
+            audioUrl = null;
             duration = null;
             images = null;
             durationObject = null;
@@ -1407,8 +1427,8 @@ public class MovieMetaData {
             return  retString;
         }
 
-        public AudioVisualItem(String parentExperienceId, InventoryMetadataType metaData, InventoryVideoType videoData, List<ExternalApiData> apiDataList, String subtype){
-            this(parentExperienceId, metaData, videoData, subtype);
+        public AudioVisualItem(String parentExperienceId, InventoryMetadataType metaData, InventoryVideoType videoData, InventoryAudioType audioData, List<ExternalApiData> apiDataList, String subtype){
+            this(parentExperienceId, metaData, videoData, audioData, subtype);
             if (apiDataList != null)
                 externalApiDataList.addAll(apiDataList);
         }

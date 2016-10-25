@@ -30,6 +30,8 @@ import com.wb.nextgenlibrary.parser.cpestyle.BackgroundOverlayAreaType;
 import com.wb.nextgenlibrary.testassets.TestItemsActivity;
 import com.wb.nextgenlibrary.util.Size;
 import com.wb.nextgenlibrary.util.TabletUtils;
+import com.wb.nextgenlibrary.util.utils.F;
+import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
 
@@ -44,6 +46,8 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
     VideoView startupVideoView;
     ImageView startupImageView;
+
+	MediaPlayer audioPlayer;
 
     ImageButton playMovieButton;
     ImageButton extraButton;
@@ -73,6 +77,7 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
         super.onCreate(savedState);
 
         setContentView(R.layout.next_gen_startup_view);
+
 
         videoParentFrame = (FixedAspectRatioFrameLayout)findViewById(R.id.video_parent_aspect_ratio_frame);
         buttonParentFrame = (FixedAspectRatioFrameLayout)findViewById(R.id.button_parent_aspect_ratio_frame);
@@ -246,6 +251,16 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
                 startupVideoView.requestFocus();
                 startupVideoView.setVideoURI(Uri.parse(mainStyle.getBackgroundVideoUrl()));
+				if (!StringHelper.isEmpty(mainStyle.getBackgroundAudioUrl())){
+					try {
+						audioPlayer = MediaPlayer.create(this, Uri.parse(mainStyle.getBackgroundAudioUrl()));
+						audioPlayer.setLooping(true);
+						audioPlayer.start();
+					}catch (Exception ex){
+						NextGenLogger.e(F.TAG, ex.getMessage());
+					}
+				}
+
 				startupVideoSize = mainStyle.getBackgroundVideoSize();
 
             }
@@ -267,6 +282,9 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
         if (startupVideoView.isPlaying()){
             startupVideoView.pause();
         }
+		if (audioPlayer != null){
+			audioPlayer.pause();
+		}
     }
 
     @Override
@@ -435,6 +453,9 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
         if (!startupVideoView.isPlaying() && startupVideoView.getVisibility() == View.VISIBLE){
             startupVideoView.start();
         }
+		if (audioPlayer !=  null){
+			audioPlayer.start();
+		}
     }
 }
 
