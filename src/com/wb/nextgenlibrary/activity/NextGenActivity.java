@@ -181,6 +181,8 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
                 if (startupVideoView != null) {
                     startupVideoView.setVisibility(View.GONE);
                 }
+                adjustButtonSizesAndPosition();
+
             } else if (startupVideoView != null) {
                 if (!isStartUp) {
                     startupVideoView.seekTo(videoLoopPoint);
@@ -295,7 +297,7 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
     }
 
     private void adjustButtonSizesAndPosition(){
-        if (mainStyle != null) {
+        if (mainStyle != null && !StringHelper.isEmpty(mainStyle.getBackgroundVideoUrl())) {
             int orientation = NextGenHideStatusBarActivity.getCurrentScreenOrientation();       // adjust video frame aspect ration priority according to orientation
             FixedAspectRatioFrameLayout.Priority newPriority = FixedAspectRatioFrameLayout.Priority.HEIGHT_PRIORITY;
             switch (orientation) {
@@ -312,45 +314,58 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
             }
             if (newPriority == videoParentFrame.getAspectRatioPriority()) {                      // just adjust the botton locations if there's no layout change
-                adjustButtonSizesAndPosition_priv();
+                adjustButtonSizesAndPosition_priv(true);
 
             } else {
                 videoParentFrame.setAspectRatioPriority(newPriority);
-                startupVideoView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                    int counter = 0;
-
-                    @Override
-                    public void onGlobalLayout() {
-                        adjustButtonSizesAndPosition_priv();
-                        counter = counter + 1;
-                        if (counter > 3) {
-                            startupVideoView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                        }
-                    }
-                });
+                startupVideoView.getViewTreeObserver().addOnGlobalLayoutListener(new StartupViewTreeObserver(startupVideoView, true));
             }
         }else{              // for experience without CPE style xml
+            startupImageView.getViewTreeObserver().addOnGlobalLayoutListener(new StartupViewTreeObserver(startupImageView, false));
             buttonParentFrame.copyFrameParams(imageParentFrame);
-            adjustButtonSizesAndPosition_priv();
+            adjustButtonSizesAndPosition_priv(false);
         }
     }
 
-    private void adjustButtonSizesAndPosition_priv(){
+    class StartupViewTreeObserver implements ViewTreeObserver.OnGlobalLayoutListener {
+        int counter = 0;
+
+        View targetView;
+        boolean isVideoView;
+        public StartupViewTreeObserver(View view, boolean isVideoView){
+            targetView = view;
+            this.isVideoView = isVideoView;
+        }
+
+        @Override
+        public void onGlobalLayout() {
+            adjustButtonSizesAndPosition_priv(isVideoView);
+            counter = counter + 1;
+            if (counter > 3) {
+                targetView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                targetView = null;
+            }
+        }
+    };
+
+    private void adjustButtonSizesAndPosition_priv(boolean hasBGVideo){
 
         int orientation = NextGenHideStatusBarActivity.getCurrentScreenOrientation();
         Size referenceFrameSize = new Size(buttonParentFrame.getWidth(), buttonParentFrame.getHeight());
 
-        Size targetSize = startupVideoSize;
-        switch(orientation){
-            case ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE:
-            case ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE:
-                targetSize = startupVideoSize;
-                break;
-            case ActivityInfo.SCREEN_ORIENTATION_PORTRAIT:
-            case ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT:
-                targetSize = bgImageSize;
-                break;
+        Size targetSize = bgImageSize;
+        if (hasBGVideo) {
+            switch (orientation) {
+                case ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE:
+                case ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE:
+                    targetSize = startupVideoSize;
+                    break;
+                case ActivityInfo.SCREEN_ORIENTATION_PORTRAIT:
+                case ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT:
+                    targetSize = bgImageSize;
+                    break;
 
+            }
         }
 
         if (mainStyle != null) {
@@ -360,7 +375,7 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
                 StyleData.ThemeData buttonTheme = nodeStyleData.theme;
                 BackgroundOverlayAreaType buttonLayoutArea = nodeStyleData.getBGOverlay();
 
-                if (startupVideoSize == null)
+                if (hasBGVideo && startupVideoSize == null)
                     return;
 
                 double shrinkRatio = ((double) referenceFrameSize.getWidth()) / ((double) targetSize.getWidth());
@@ -420,6 +435,8 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
                         Glide.with(this).load(extraBtnImageData.url).into(extraButton);
                 }
                 buttonsLayout.invalidate();
+                if (!hasBGVideo)
+                    buttonsLayout.setVisibility(View.VISIBLE);
                 return;
             }
         }
