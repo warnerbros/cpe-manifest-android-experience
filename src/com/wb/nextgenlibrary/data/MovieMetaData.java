@@ -62,6 +62,7 @@ public class MovieMetaData {
     final public static String BASELINE_NAMESPACE = "baselineapi.com";
     final public static String SHARE_CLIP_KEY = "clipshare";
 	final public static String SHARE_CLIP_SUBTYPE = "clip share";
+    final public static String MAIN_SUBTYPE = "Main";
 
     final public static String OTHER_APP_DATA_ID = "AppID";
     final public static String OTHER_PEOPLE_ID = "PeopleOtherID";
@@ -312,7 +313,7 @@ public class MovieMetaData {
                     InventoryVideoType video = null;
                     if (experience.getAudiovisual().size() > 0) {                           // for video Asset
                         for (AudiovisualType audioVisual : experience.getAudiovisual()) {
-                            if (audioVisual.getType().equals("Main"))       // root experience check
+                            if (MAIN_SUBTYPE.equalsIgnoreCase(audioVisual.getType()))       // root experience check
                                 isRootExperience = true;
 
                             InventoryMetadataType avMetaData = metaDataAssetsMap.get(audioVisual.getContentID());        // get Video asset by ContentID of its AudioVisual
