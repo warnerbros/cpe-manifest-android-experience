@@ -31,6 +31,8 @@ public class TestItemsActivity extends NextGenHideStatusBarActivity {
     static{
         testItemList.add(new TestItem("360 test", "http://s3.amazonaws.com/r60-cpe/hosting/radius60/manifest/microhtml/Bravo-Video360/index.html#/home-view"));
         testItemList.add(new TestItem("Lego Selfie Builder", "http://selfie.legobatman.com/"));
+        testItemList.add(new TestItem("Storks: Delivery Dash", "http://s3.amazonaws.com/r60-cpe/hosting/radius60/manifest/microhtml/Storks-Delivery-Dash/index.html"));
+        testItemList.add(new TestItem("Storks: Tulip Builder", "http://s3.amazonaws.com/r60-cpe/hosting/radius60/manifest/microhtml/Storks-Tulip-Builder/index.html"));
     }
     @Override
     public void onCreate(Bundle savedState) {
