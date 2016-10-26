@@ -230,6 +230,9 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
 
 
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, locationItem.zoom));   // set location
+
+            int yOffSet = mapView.getHeight()/3;
+            googleMap.moveCamera(CameraUpdateFactory.scrollBy(0, -yOffSet));
             googleMap.getMaxZoomLevel();
             BitmapDescriptor bmDes ;
             if (selectedLocationItem.pinImage != null && !StringHelper.isEmpty(selectedLocationItem.pinImage.url)) {

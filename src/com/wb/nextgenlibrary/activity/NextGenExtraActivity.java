@@ -142,7 +142,7 @@ public class NextGenExtraActivity extends AbstractNextGenActivity implements Nex
 
     @Override
     public String getRightTitleText(){
-        return NextGenExperience.getMovieMetaData().getExtraExperience().title;
+        return getResources().getString(R.string.extras);
     }
 
 }
