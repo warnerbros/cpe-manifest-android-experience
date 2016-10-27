@@ -63,10 +63,16 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
     ImageButton twitterBtn;
     ImageButton instagramBtn;
 
+    int layoutId = R.layout.next_gen_actor_detail_view;
+
     boolean bEnableActorGallery = false;
 
     int getContentViewId(){
         return 0;
+    }
+
+    public void setLayoutId(int layoutId){
+        this.layoutId = layoutId;
     }
 
     @Override
@@ -75,7 +81,7 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
         if (bEnableActorGallery){
 
         }
-        return inflater.inflate(R.layout.next_gen_actor_detail_view, container, false);
+        return inflater.inflate(layoutId, container, false);
     }
 
     @Override
