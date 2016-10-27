@@ -20,6 +20,7 @@ import com.wb.nextgenlibrary.model.TheTakeIMEEngine;
 import com.wb.nextgenlibrary.network.TheTakeApiDAO;
 import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
+import com.wb.nextgenlibrary.util.utils.StringHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,7 @@ import java.util.List;
  */
 public class IMEElementsGridFragment extends NextGenGridViewFragment implements NextGenPlaybackStatusListener {
 
-    List<IMEElementsGroup> imeGroups;
+	List<IMEElementsGroup> imeGroups;
     final List<NextGenIMEEngine> imeEngines = new ArrayList<NextGenIMEEngine>();
     long currentTimeCode = 0L;
 
@@ -151,7 +152,13 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                         playerActivity.transitMainFragment(fragment);
                         playerActivity.pausMovieForImeECPiece();
 
-                    }
+                    } else if (dataObj instanceof MovieMetaData.TextItem) {
+						ECTextViewFragment fragment = new ECTextViewFragment();
+						fragment.setShouldShowCloseBtn(true);
+						fragment.setTextItem(activeObj.title, (MovieMetaData.TextItem)dataObj);
+						playerActivity.transitMainFragment(fragment);
+						playerActivity.pausMovieForImeECPiece();
+					}
                 }
             }
         } else if (activeObj.imeObject instanceof TheTakeProductFrame){
@@ -195,7 +202,9 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                 else if (dataObj instanceof MovieMetaData.AudioVisualItem &&
                         ((MovieMetaData.AudioVisualItem)dataObj).isShareClip()) {
                     retId = R.layout.ime_grid_share_item;
-                }
+                } else if (dataObj instanceof MovieMetaData.TextItem) {
+					retId = R.layout.ime_grid_text_item;
+				}
             }
         }else if (activeObj.imeObject instanceof TheTakeProductFrame){
             retId = R.layout.ime_grid_shop_item;
@@ -208,8 +217,8 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
     protected void fillListRowWithObjectInfo(int position, View rowView, Object item, boolean isSelected){
         IMEDisplayObject activeObj = (IMEDisplayObject)item;
 
-        TextView titleText= (TextView)rowView.findViewById(R.id.ime_title);
-        final TextView subText1= (TextView)rowView.findViewById(R.id.ime_desc_text1);
+        TextView titleText = (TextView)rowView.findViewById(R.id.ime_title);
+        final TextView subText1 = (TextView)rowView.findViewById(R.id.ime_desc_text1);
         final ImageView poster = (ImageView)rowView.findViewById(R.id.ime_image_poster);
 
         titleText.setText(activeObj.title.toUpperCase());      // set a tag with the linked Experience Id
@@ -228,31 +237,26 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                     }*/
                     MovieMetaData.LocationItem locationItem = (MovieMetaData.LocationItem) dataObj;
                     if (locationItem != null && poster.getHeight() > 0 && poster.getWidth() > 0){
-
                         String imageUrl = locationItem.getGoogleMapImageUrl(poster.getWidth(), poster.getHeight());
-
                         Glide.with(getActivity()).load(imageUrl).centerCrop().into(poster);
-
-
-
                     }
 
-
-
-                }else if (poster != null) {
+                } else if (poster != null) {
                     String imageUrl = ((MovieMetaData.PresentationDataItem) dataObj).getPosterImgUrl();
-
-                    Glide.with(getActivity())
-                            .load(imageUrl).centerCrop()
-                            .into(poster);
+					if (!StringHelper.isEmpty(imageUrl)) {
+						Glide.with(getActivity())
+								.load(imageUrl).centerCrop()
+								.into(poster);
+						poster.setVisibility(View.VISIBLE);
+					} else {
+						poster.setVisibility(View.GONE);
+					}
                 }
 
                 ImageView playbutton = (ImageView)rowView.findViewById(R.id.ime_item_play_logo);
                 if (playbutton != null){
                     playbutton.setVisibility((dataObj instanceof MovieMetaData.AudioVisualItem) ? View.VISIBLE : View.INVISIBLE);
                 }
-
-
 
                 if (subText1 != null && !subText1.getText().equals(((MovieMetaData.PresentationDataItem) dataObj).getTitle())) {
                     subText1.setText(((MovieMetaData.PresentationDataItem) dataObj).getTitle());

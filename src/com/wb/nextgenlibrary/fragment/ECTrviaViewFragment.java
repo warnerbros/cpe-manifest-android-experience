@@ -16,7 +16,7 @@ import com.wb.nextgenlibrary.widget.FontFitTextView;
  * Created by gzcheng on 3/31/16.
  */
 public class ECTrviaViewFragment extends AbstractNextGenFragment {
-    protected ImageView posterImageView;
+	protected ImageView posterImageView;
 
     protected TextView triviaTitle;
     protected FontFitTextView triviaContent;
