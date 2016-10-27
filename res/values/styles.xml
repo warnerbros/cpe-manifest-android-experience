@@ -177,20 +177,26 @@
 		<item name="windowNoTitle">true</item>
 		<item name="android:windowIsFloating">true</item>
 	</style>
-	
-	<style name="AlertDialog" parent="@android:style/Theme.Light">
-		<item name="windowNoTitle">true</item>
-		<item name="android:windowIsFloating">true</item>
-		<item name="android:background">@color/black</item>
-	</style>
-	
-	<style name="AlertDialog.TitleText" parent="@style/TextLarge">
-	    <item name="android:textColor">@color/white</item>
-	</style>
-	
-	<style name="AlertDialog.BodyText" parent="@style/TextMedium">
-	    <item name="android:textColor">@color/white</item>
-	</style>
+    <style name="AlertDialog" parent="@style/Theme.AppCompat.Light">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
+
+    <style name="AlertDialog.TitleText" parent="@style/TextLarge">
+        <item name="android:textColor">@color/holo_blue_light</item>
+    </style>
+
+    <style name="AlertDialog.BodyText" parent="@style/TextMedium">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="ExtraActionBar" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:tabWidgetStyle">@style/NextGenTabStyle</item>
+        <item name="windowActionBarOverlay">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:textAppearance">@style/TextNormalBold</item>
+        <item name="android:logo">@android:color/transparent</item>
+    </style>
 	
 	<style name="CenterAlignedAlertDialog" parent="@style/AlertDialog">
 		<item name="android:gravity">center_horizontal</item>
@@ -219,15 +225,6 @@
         <item name="android:textColor">@color/subheader_text</item>
     </style>
 
-    <style name="ExtraActionBar" parent="@style/Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:tabWidgetStyle">@style/NextGenTabStyle</item>
-        <item name="windowActionBarOverlay">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:textAppearance">@style/TextNormalBold</item>
-        <item name="logo">@android:color/transparent</item>
-
-    </style>
-
     <style name="NextGenPlayerActionBar" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <item name="android:tabWidgetStyle">@style/NextGenTabStyle</item>
         <item name="android:windowBackground">@android:color/transparent</item>
@@ -238,10 +235,6 @@
 
     <style name="NextGenMediaControllerStyle">
         <item name="android:textColor">#FFFFFF</item>
-        <item name="android:progressBackgroundTint">@android:color/white</item>
-        <item name="android:progressBackgroundTintMode">src_over</item>
-        <item name="android:progressTint">@color/drawer_yellow</item>
-        <item name="android:progressTintMode">src_atop</item>
         <!--<item name="android:thumb">@drawable/seek_bar_thumb</item>-->
     </style>
 
@@ -252,4 +245,28 @@
     <style name="spinnerDropDownItemStyle" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
 
     </style>
+
+
+
+
+    <style name="PlayerActionBar" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:tabWidgetStyle">@style/NextGenTabStyle</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:textAppearance">@style/TextNormalBold</item>
+        <item name="android:logo">@android:color/transparent</item>
+    </style>
+
+
+    <style name="Theme.Nge.BaseSelector" parent="@android:style/Theme.Holo.Light" />
+    <style name="Theme.Nge.NoTitle" parent="@style/Theme.Nge.BaseSelector">
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="Theme.Nge.BaseSelector.Dark" parent="@android:style/Theme.Holo" />
+    <style name="Theme.Nge.NoTitle.Dark" parent="@style/Theme.Nge.BaseSelector.Dark">
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="Theme.Nge.FullscreenVideo" parent="@style/Theme.Nge.NoTitle.Dark">
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
 </resources>
