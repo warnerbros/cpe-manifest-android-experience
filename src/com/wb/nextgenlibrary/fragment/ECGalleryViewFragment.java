@@ -81,6 +81,7 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
 			@Override
 			public void onPageSelected(int position) {
 				itemIndex = position;
+                adapter.notifyDataSetChanged(); //tr 10/27/2016
 				updateUI(true);
 			}
 
@@ -144,6 +145,7 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
 		}
 
 		updateUI(false);
+ ;
 	}
 
     public void setShouldShowShareBtn(boolean bShow){
@@ -207,7 +209,8 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
 			}
 		}
 		galleryViewPager.setCurrentItem(itemIndex, true);	// use smooth scrolling
-		updateUI(true);
+        adapter.notifyDataSetChanged(); //tr 10/27/2016
+        updateUI(true);
 	}
 
 	public void updateUI(boolean userTriggerd) {
