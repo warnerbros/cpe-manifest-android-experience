@@ -19,6 +19,7 @@
 
         <com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout
             xmlns:nextgen="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/image_container"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             nextgen:aspectRatioHeight="9"
