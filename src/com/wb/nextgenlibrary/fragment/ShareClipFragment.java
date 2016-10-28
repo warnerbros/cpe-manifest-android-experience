@@ -100,7 +100,8 @@ public class ShareClipFragment extends ECVideoViewFragment implements View.OnCli
         int nextBtnVisibility = View.VISIBLE;
         if (itemIndex == 0){
             prevBtnVisibility = View.INVISIBLE;
-        }else if (itemIndex == shareClipExperience.getChildrenContents().size() -1){
+        }
+        if (itemIndex == shareClipExperience.getChildrenContents().size() -1){
             nextBtnVisibility = View.INVISIBLE;
         }
         prevClipButton.setVisibility(prevBtnVisibility);
