@@ -16,15 +16,47 @@
             android:stretchMode="columnWidth" />
     </FrameLayout>
     <LinearLayout
-        android:id="@+id/next_gen_ec_content_view"
         android:layout_weight="3"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <fragment
-            android:id="@+id/ec_video_view_fragment"
-            android:name="com.wb.nextgenlibrary.fragment.ECVideoViewFragment"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"/>
+
+        <LinearLayout
+            android:id="@+id/next_gen_ec_content_view"
+            android:layout_weight="3"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical">
+            <fragment
+                android:id="@+id/ec_video_view_fragment"
+                android:name="com.wb.nextgenlibrary.fragment.ECVideoViewFragment"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_marginLeft="@dimen/spacing_small"
+            android:layout_marginRight="@dimen/spacing_small">
+
+            <TextView
+                android:id="@+id/ec_content_name"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/textXLarge"
+                android:fontFamily="sans-serif-condensed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/ec_content_description"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="@dimen/textLarge"
+                android:fontFamily="sans-serif-condensed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

@@ -8,6 +8,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.google.gson.Gson;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
@@ -30,6 +34,7 @@ import com.wb.nextgenlibrary.network.BaselineApiDAO;
 import com.wb.nextgenlibrary.util.DialogUtils;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
+import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
 
 import java.util.List;
 
@@ -58,10 +63,16 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
     ImageButton twitterBtn;
     ImageButton instagramBtn;
 
+    int layoutId = R.layout.next_gen_actor_detail_view;
+
     boolean bEnableActorGallery = false;
 
     int getContentViewId(){
         return 0;
+    }
+
+    public void setLayoutId(int layoutId){
+        this.layoutId = layoutId;
     }
 
     @Override
@@ -70,7 +81,7 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
         if (bEnableActorGallery){
 
         }
-        return inflater.inflate(R.layout.next_gen_actor_detail_view, container, false);
+        return inflater.inflate(layoutId, container, false);
     }
 
     @Override
@@ -78,6 +89,7 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
         super.onViewCreated(view, savedInstanceState);
         fullImageView = (ImageView)view.findViewById(R.id.next_gen_detail_full_image);
         detailTextView = (TextView)view.findViewById(R.id.actor_biography_text);
+        detailTextView.setMovementMethod(new ScrollingMovementMethod());
         actorNameTextView = (TextView)view.findViewById(R.id.actor_real_name_text);
         filmographyRecyclerView = (RecyclerView)view.findViewById(R.id.actor_detail_filmography);
         actorGalleryRecyclerView = (RecyclerView) view.findViewById(R.id.actor_gallery_recycler);
@@ -108,7 +120,9 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
         } else if (actorGalleryFrame != null){
             actorGalleryFrame.setVisibility(View.GONE);
         }
-        reloadDetail(actorOjbect);
+        CastData actor = actorOjbect;
+        actorOjbect = null;
+        reloadDetail(actor);
     }
 
     @Override
@@ -144,12 +158,11 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
     }
 
     public void reloadDetail(final CastData object){
-        actorOjbect = object;
 
-        if (actorOjbect != null && actorOjbect.getBaselineCastData() != null){
-            Glide.with(getActivity()).load(actorOjbect.getBaselineCastData().getFullImageUrl()).fitCenter().centerCrop().into(fullImageView);
-            //Picasso.with(getActivity()).load(actorOjbect.getBaselineCastData().getFullImageUrl()).fit().centerCrop().into(fullImageView);
-            //PicassoTrustAll.loadImageIntoView(getActivity(), actorOjbect.getBaselineCastData().getFullImageUrl(), fullImageView);
+        if (object != null && object.getBaselineCastData() != null && !object.equals(actorOjbect)){
+            actorOjbect = object;
+            detailTextView.scrollTo(0,0);
+            Glide.with(getActivity()).load(actorOjbect.getBaselineCastData().getFullImageUrl()).centerCrop().into(fullImageView);
 
             fullImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -219,7 +232,7 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
             }
 
             detailTextView.setText(actorOjbect.getBaselineCastData().biography);
-            actorNameTextView.setText(actorOjbect.displayName);
+            actorNameTextView.setText(actorOjbect.displayName.toUpperCase());
         }
     }
 
@@ -246,11 +259,13 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
         CardView cv;
         ImageView personPhoto;
         Filmography filmInfo;
+        FixedAspectRatioFrameLayout imageFrame;
 
         FilmographyViewHolder(View itemView) {
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.cv);
             personPhoto = (ImageView)itemView.findViewById(R.id.person_photo);
+            imageFrame = (FixedAspectRatioFrameLayout)itemView.findViewById(R.id.actor_detail_filmography_frame_layout);
             itemView.setOnClickListener(this);
         }
 
@@ -258,7 +273,23 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
             this.filmInfo = filmInfo;
             if (filmInfo.isFilmPosterRequest()) {
                // Glide.with(getActivity()).load(filmInfo.getFilmPosterImageUrl()).asBitmap().fitCenter().into(personPhoto);
-                Glide.with(getActivity()).load(filmInfo.getFilmPosterImageUrl()).into(personPhoto);
+                Glide.with(getActivity()).load(filmInfo.getFilmPosterImageUrl()).listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(final GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                imageFrame.setAspectRatio(resource.getIntrinsicWidth(), resource.getIntrinsicHeight());
+                            }
+                        });
+                        return false;
+                    }
+                }).fitCenter().into(personPhoto);
                 //NextGenLogger.d(F.TAG, "Position: " + position  +" loaded: " + filmInfo.getFilmPosterImageUrl());
             }
         }

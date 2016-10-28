@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:nextgen="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:background="@drawable/ime_grid_item_bg"
+    android:padding="@dimen/spacing_small">
+    <TextView
+        android:id="@+id/ime_title"
+        android:layout_width="wrap_content"
+        android:text="Title"
+        android:maxLines="1"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/textMedium"
+        android:fontFamily="sans-serif-condensed"
+        android:layout_height="wrap_content"/>
+
+    <com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout
+        xmlns:nextgen="http://schemas.android.com/apk/res-auto"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        nextgen:aspectRatioHeight="9"
+        nextgen:aspectRatioWidth="16"
+        nextgen:priority="WIDTH_PRIORITY">
+
+        <TextView
+            android:id="@+id/ime_desc_text1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:textColor="@android:color/white"
+            android:fontFamily="sans-serif-condensed"
+            android:textSize="@dimen/textNormal"
+            android:paddingTop="@dimen/spacing_small"/>
+    </com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout>
+
+</LinearLayout>

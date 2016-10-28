@@ -41,6 +41,7 @@ public class NextGenIMEActorFragment extends NextGenActorListFragment implements
             NextGenAnalyticData.reportEvent(getActivity(), this, "Show Less/More", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, Boolean.toString(fullListEnabled));
         } else if (getActivity() instanceof NextGenFragmentTransactionInterface){
             NextGenActorDetailFragment target = new NextGenActorDetailFragment();
+            target.setLayoutId(R.layout.nge_ime_actor_detail_view);
             target.setShouldShowCloseBtn(true);
             target.setDetailObject(selectedObject);
             ((NextGenFragmentTransactionInterface)getActivity()).transitMainFragment( target);

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- added tr 10/14/2016 -->
+    <dimen name="textXSmall">6sp</dimen>
+    <dimen name="textSmall">10sp</dimen>
+    <dimen name="textMSmall">12sp</dimen>
+    <dimen name="textNormal">14sp</dimen>
+    <dimen name="textMedium">16sp</dimen>
+    <dimen name="textLarge">20sp</dimen>
+    <dimen name="textXLarge">24sp</dimen>
+
+    <!-- original dimens.xml values
+    <dimen name="textXSmall">8sp</dimen>
+    <dimen name="textSmall">12sp</dimen>
+    <dimen name="textMSmall">15sp</dimen>
+    <dimen name="textNormal">16sp</dimen>
+    <dimen name="textMedium">18sp</dimen>
+    <dimen name="textLarge">22sp</dimen>
+    <dimen name="textXLarge">30sp</dimen>
+    <dimen name="alert_dialog_title_height">64dip</dimen>
+    <dimen name="alert_dialog_button_bar_height">48dip</dimen>  -->
+
+
+</resources>

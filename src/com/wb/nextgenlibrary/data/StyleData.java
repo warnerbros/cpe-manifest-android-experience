@@ -1,7 +1,6 @@
 package com.wb.nextgenlibrary.data;
 
 import android.content.pm.ActivityInfo;
-import android.util.Size;
 
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.parser.cpestyle.BackgroundOverlayAreaType;
@@ -11,10 +10,12 @@ import com.wb.nextgenlibrary.parser.cpestyle.CompatibilityDeviceType;
 import com.wb.nextgenlibrary.parser.cpestyle.ExperienceMenuMapType;
 import com.wb.nextgenlibrary.parser.cpestyle.NodeStyleType;
 import com.wb.nextgenlibrary.parser.cpestyle.ThemeType;
+import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.InventoryAudioType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.InventoryVideoType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.PictureGroupType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.PictureType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.PresentationType;
+import com.wb.nextgenlibrary.util.Size;
 import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.data.MovieMetaData.PictureImageData;
@@ -107,6 +108,13 @@ public class StyleData {
                 return null;
         }
 
+        public String getBackgroundAudioUrl(){
+            if (nodeStyles[0] != null && nodeStyles[0].background != null){
+                return nodeStyles[0].background.getAudioUrl();
+            } else
+                return null;
+        }
+
         public Size getBackgroundVideoSize(){
             if (nodeStyles[0] != null && nodeStyles[0].background != null){
                 return nodeStyles[0].background.getVideoPresetSize();
@@ -190,7 +198,8 @@ public class StyleData {
                              HashMap<String, PictureGroupType> pictureGroupAssetsMap,
                              HashMap<String, MovieMetaData.PictureImageData> pictureImageMap,
                              HashMap<String, PresentationType> presentationAssetMap,
-                             HashMap<String, InventoryVideoType> videoAssetsMap){
+                             HashMap<String, InventoryVideoType> videoAssetsMap,
+                             HashMap<String, InventoryAudioType> audioAssetsMap){
             nodeStyleId = nodeStyleType.getNodeStyleID();
             themeId = nodeStyleType.getThemeID();
             if (!StringHelper.isEmpty(themeId)){
@@ -199,7 +208,7 @@ public class StyleData {
                 theme = null;
 
             if (nodeStyleType.getBackground() != null) {
-                background = new NodeBackground(nodeStyleType.getBackground(), pictureGroupAssetsMap, pictureImageMap, presentationAssetMap, videoAssetsMap);
+                background = new NodeBackground(nodeStyleType.getBackground(), pictureGroupAssetsMap, pictureImageMap, presentationAssetMap, videoAssetsMap, audioAssetsMap);
             }else
                 background = null;
         }
@@ -228,6 +237,7 @@ public class StyleData {
         PositionMethod positionMethod;
         double videoLoopingPoint;
         String videoUrl;
+        String audioUrl;
         Size videoSize = null;
         List<PictureImageData> bgImages = new ArrayList<>();
 
@@ -237,9 +247,18 @@ public class StyleData {
                               HashMap<String, PictureGroupType> pictureGroupAssetsMap,
                               HashMap<String, MovieMetaData.PictureImageData> pictureImageMap,
                               HashMap<String, PresentationType> presentationAssetMap,
-                              HashMap<String, InventoryVideoType> videoAssetsMap ){
+                              HashMap<String, InventoryVideoType> videoAssetsMap ,
+                              HashMap<String, InventoryAudioType> audioAssetsMap ){
             if (backgroundType != null){
                 colorHex = backgroundType.getColor();
+				if (backgroundType.getAudioLoop() != null && !StringHelper.isEmpty(backgroundType.getAudioLoop().getAudioTrackID())){
+					String audioAssetId = backgroundType.getAudioLoop().getAudioTrackID();
+
+						InventoryAudioType audio = audioAssetsMap.get(backgroundType.getAudioLoop().getAudioTrackID());
+						if (audio != null)
+							audioUrl = audio.getContainerReference().getContainerLocation();
+
+				}
                 if (backgroundType.getVideo() != null) {
                     videoPresentationID = backgroundType.getVideo().getPresentationID();
                     PresentationType presentation = presentationAssetMap.get(videoPresentationID);
@@ -251,6 +270,16 @@ public class StyleData {
                             videoSize = new Size(video.getPicture().getWidthPixels(), video.getPicture().getHeightPixels());
                         }
                     }
+
+
+                    if (video != null) {
+                        videoUrl = video.getContainerReference().getContainerLocation();
+                        if (video.getPicture() != null){
+                            videoSize = new Size(video.getPicture().getWidthPixels(), video.getPicture().getHeightPixels());
+                        }
+                    }
+
+
                     if (backgroundType.getVideo().getLoopTimecode() != null)
                         videoLoopingPoint = Double.parseDouble(backgroundType.getVideo().getLoopTimecode().getValue());
                     else
@@ -284,6 +313,10 @@ public class StyleData {
 
         public String getVideoUrl(){
             return videoUrl;
+        }
+
+        public String getAudioUrl(){
+            return audioUrl;
         }
 
         public Size getVideoPresetSize(){

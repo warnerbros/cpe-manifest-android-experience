@@ -4,11 +4,12 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
+
     <LinearLayout
         android:id="@+id/next_gen_ime_actionbar_placeholder"
         android:layout_width="match_parent"
         android:orientation="vertical"
-        android:layout_height="?android:attr/actionBarSize"/>
+        android:layout_height="?actionBarSize"/>
     <com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout
         android:id="@+id/video_view_frame"
         nextgen:aspectRatioWidth="16"
@@ -72,7 +73,8 @@
                         android:id="@+id/skip_this_text"
                         android:text="@string/skip_this"
                         android:textColor="@color/drawer_yellow"
-                        android:textSize="@dimen/textLarge"
+                        android:textSize="@dimen/textXLarge"
+                        android:gravity="center"
                         android:fontFamily="sans-serif-condensed"
                         android:layout_gravity="center_vertical"
                         android:layout_width="wrap_content"

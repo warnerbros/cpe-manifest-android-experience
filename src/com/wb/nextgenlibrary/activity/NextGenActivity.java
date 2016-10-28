@@ -1,23 +1,14 @@
 package com.wb.nextgenlibrary.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.util.Size;
-import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -37,7 +28,10 @@ import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.data.StyleData;
 import com.wb.nextgenlibrary.parser.cpestyle.BackgroundOverlayAreaType;
 import com.wb.nextgenlibrary.testassets.TestItemsActivity;
+import com.wb.nextgenlibrary.util.Size;
 import com.wb.nextgenlibrary.util.TabletUtils;
+import com.wb.nextgenlibrary.util.utils.F;
+import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
 
@@ -48,10 +42,12 @@ import java.util.TimerTask;
  * Created by gzcheng on 1/7/16.
  */
 public class NextGenActivity extends NextGenHideStatusBarActivity implements View.OnClickListener {
-    // wrapper of ProfileViewFragment
+	// wrapper of ProfileViewFragment
 
     VideoView startupVideoView;
     ImageView startupImageView;
+
+	MediaPlayer audioPlayer;
 
     ImageButton playMovieButton;
     ImageButton extraButton;
@@ -79,7 +75,9 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
     @Override
     public void onCreate(Bundle savedState) {
         super.onCreate(savedState);
+
         setContentView(R.layout.next_gen_startup_view);
+
 
         videoParentFrame = (FixedAspectRatioFrameLayout)findViewById(R.id.video_parent_aspect_ratio_frame);
         buttonParentFrame = (FixedAspectRatioFrameLayout)findViewById(R.id.button_parent_aspect_ratio_frame);
@@ -183,6 +181,8 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
                 if (startupVideoView != null) {
                     startupVideoView.setVisibility(View.GONE);
                 }
+                adjustButtonSizesAndPosition();
+
             } else if (startupVideoView != null) {
                 if (!isStartUp) {
                     startupVideoView.seekTo(videoLoopPoint);
@@ -253,6 +253,16 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
                 startupVideoView.requestFocus();
                 startupVideoView.setVideoURI(Uri.parse(mainStyle.getBackgroundVideoUrl()));
+				if (!StringHelper.isEmpty(mainStyle.getBackgroundAudioUrl())){
+					try {
+						audioPlayer = MediaPlayer.create(this, Uri.parse(mainStyle.getBackgroundAudioUrl()));
+						audioPlayer.setLooping(true);
+						audioPlayer.start();
+					}catch (Exception ex){
+						NextGenLogger.e(F.TAG, ex.getMessage());
+					}
+				}
+
 				startupVideoSize = mainStyle.getBackgroundVideoSize();
 
             }
@@ -274,6 +284,9 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
         if (startupVideoView.isPlaying()){
             startupVideoView.pause();
         }
+		if (audioPlayer != null){
+			audioPlayer.pause();
+		}
     }
 
     @Override
@@ -284,7 +297,7 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
     }
 
     private void adjustButtonSizesAndPosition(){
-        if (mainStyle != null) {
+        if (mainStyle != null && !StringHelper.isEmpty(mainStyle.getBackgroundVideoUrl())) {
             int orientation = NextGenHideStatusBarActivity.getCurrentScreenOrientation();       // adjust video frame aspect ration priority according to orientation
             FixedAspectRatioFrameLayout.Priority newPriority = FixedAspectRatioFrameLayout.Priority.HEIGHT_PRIORITY;
             switch (orientation) {
@@ -301,45 +314,58 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
             }
             if (newPriority == videoParentFrame.getAspectRatioPriority()) {                      // just adjust the botton locations if there's no layout change
-                adjustButtonSizesAndPosition_priv();
+                adjustButtonSizesAndPosition_priv(true);
 
             } else {
                 videoParentFrame.setAspectRatioPriority(newPriority);
-                startupVideoView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                    int counter = 0;
-
-                    @Override
-                    public void onGlobalLayout() {
-                        adjustButtonSizesAndPosition_priv();
-                        counter = counter + 1;
-                        if (counter > 3) {
-                            startupVideoView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                        }
-                    }
-                });
+                startupVideoView.getViewTreeObserver().addOnGlobalLayoutListener(new StartupViewTreeObserver(startupVideoView, true));
             }
         }else{              // for experience without CPE style xml
+            startupImageView.getViewTreeObserver().addOnGlobalLayoutListener(new StartupViewTreeObserver(startupImageView, false));
             buttonParentFrame.copyFrameParams(imageParentFrame);
-            adjustButtonSizesAndPosition_priv();
+            adjustButtonSizesAndPosition_priv(false);
         }
     }
 
-    private void adjustButtonSizesAndPosition_priv(){
+    class StartupViewTreeObserver implements ViewTreeObserver.OnGlobalLayoutListener {
+        int counter = 0;
+
+        View targetView;
+        boolean isVideoView;
+        public StartupViewTreeObserver(View view, boolean isVideoView){
+            targetView = view;
+            this.isVideoView = isVideoView;
+        }
+
+        @Override
+        public void onGlobalLayout() {
+            adjustButtonSizesAndPosition_priv(isVideoView);
+            counter = counter + 1;
+            if (counter > 3) {
+                targetView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                targetView = null;
+            }
+        }
+    };
+
+    private void adjustButtonSizesAndPosition_priv(boolean hasBGVideo){
 
         int orientation = NextGenHideStatusBarActivity.getCurrentScreenOrientation();
         Size referenceFrameSize = new Size(buttonParentFrame.getWidth(), buttonParentFrame.getHeight());
 
-        Size targetSize = startupVideoSize;
-        switch(orientation){
-            case ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE:
-            case ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE:
-                targetSize = startupVideoSize;
-                break;
-            case ActivityInfo.SCREEN_ORIENTATION_PORTRAIT:
-            case ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT:
-                targetSize = bgImageSize;
-                break;
+        Size targetSize = bgImageSize;
+        if (hasBGVideo) {
+            switch (orientation) {
+                case ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE:
+                case ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE:
+                    targetSize = startupVideoSize;
+                    break;
+                case ActivityInfo.SCREEN_ORIENTATION_PORTRAIT:
+                case ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT:
+                    targetSize = bgImageSize;
+                    break;
 
+            }
         }
 
         if (mainStyle != null) {
@@ -349,7 +375,7 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
                 StyleData.ThemeData buttonTheme = nodeStyleData.theme;
                 BackgroundOverlayAreaType buttonLayoutArea = nodeStyleData.getBGOverlay();
 
-                if (startupVideoSize == null)
+                if (hasBGVideo && startupVideoSize == null)
                     return;
 
                 double shrinkRatio = ((double) referenceFrameSize.getWidth()) / ((double) targetSize.getWidth());
@@ -409,6 +435,8 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
                         Glide.with(this).load(extraBtnImageData.url).into(extraButton);
                 }
                 buttonsLayout.invalidate();
+                if (!hasBGVideo)
+                    buttonsLayout.setVisibility(View.VISIBLE);
                 return;
             }
         }
@@ -422,19 +450,18 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
     @Override
     public void onClick(View v){
+		if (v.getId() == R.id.next_gen_startup_play_button || v.getId() == R.id.next_gen_startup_play_text_button) {
 
-        if (v.getId() == R.id.next_gen_startup_play_button || v.getId() == R.id.next_gen_startup_play_text_button) {
+			Intent intent = new Intent(this, NextGenPlayer.class);
+			intent.setDataAndType(Uri.parse(NextGenExperience.getMovieMetaData().getMainMovieUrl()), "video/*");
+			startActivity(intent);
+			NextGenAnalyticData.reportEvent(this, null, "Play Movie", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
 
-            Intent intent = new Intent(this, NextGenPlayer.class);
-            intent.setDataAndType(Uri.parse(NextGenExperience.getMovieMetaData().getMainMovieUrl()), "video/*");
-            startActivity(intent);
-            NextGenAnalyticData.reportEvent(this, null, "Play Movie", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
-
-        } else if (v.getId() == R.id.next_gen_startup_extra_button || v.getId() == R.id.next_gen_startup_extra_text_button) {
-            Intent extraIntent = new Intent(this, NextGenExtraActivity.class);
-            startActivity(extraIntent);
-            NextGenAnalyticData.reportEvent(this, null, "Extras", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
-        }
+		} else if (v.getId() == R.id.next_gen_startup_extra_button || v.getId() == R.id.next_gen_startup_extra_text_button) {
+			Intent extraIntent = new Intent(this, NextGenExtraActivity.class);
+			startActivity(extraIntent);
+			NextGenAnalyticData.reportEvent(this, null, "Extras", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
+		}
     }
 
     @Override
@@ -443,7 +470,9 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
         if (!startupVideoView.isPlaying() && startupVideoView.getVisibility() == View.VISIBLE){
             startupVideoView.start();
         }
+		if (audioPlayer !=  null){
+			audioPlayer.start();
+		}
     }
-
 }
 

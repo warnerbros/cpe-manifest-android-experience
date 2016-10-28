@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="@dimen/spacing_small">
     <ImageView
         android:id="@+id/ec_video_frame_bg"
         android:scaleType="centerCrop"
@@ -16,6 +17,7 @@
             android:id="@+id/share_clip_title_txt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/spacing_normal"
             android:textColor="@android:color/white"
             android:textSize="@dimen/textMedium"
             android:fontFamily="sans-serif-condensed"
@@ -42,8 +44,8 @@
                 <ImageButton
                     android:layout_alignParentLeft="true"
                     android:id="@+id/prev_clip_btn"
-                    android:layout_width="@dimen/social_icon_dimen"
-                    android:layout_height="@dimen/social_icon_dimen"
+                    android:layout_width="@dimen/close_icon_dimen"
+                    android:layout_height="@dimen/close_icon_dimen"
                     android:layout_centerVertical="true"
                     android:scaleType="fitCenter"
                     android:background="@android:color/transparent"
@@ -93,6 +95,8 @@
                     </com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout>
                     <TextView
                         android:layout_alignParentLeft="true"
+                        android:layout_marginTop="@dimen/spacing_small"
+                        android:layout_marginBottom="@dimen/spacing_small"
                         android:id="@+id/ec_content_name"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/textMedium"
@@ -106,8 +110,8 @@
                 <ImageButton
                     android:layout_alignParentRight="true"
                     android:id="@+id/next_clip_btn"
-                    android:layout_width="@dimen/social_icon_dimen"
-                    android:layout_height="@dimen/social_icon_dimen"
+                    android:layout_width="@dimen/close_icon_dimen"
+                    android:layout_height="@dimen/close_icon_dimen"
                     android:layout_centerVertical="true"
                     android:scaleType="fitCenter"
                     android:rotation="180"

@@ -21,9 +21,11 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -36,7 +38,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * Created by gzcheng on 3/16/16.
  */
 public class ManifestXMLParser {
-    private static final String ns = null;
+	private static final String ns = null;
 
     private static String MANIFEST_HEADER = "manifest:";
     private static String MANIFEST_APPDATA_HEADER = "manifestdata:";
@@ -364,11 +366,11 @@ public class ManifestXMLParser {
                 @Override
                 public Number getField(DatatypeConstants.Field field) {
                     if (field.equals(DatatypeConstants.HOURS))
-                        return BigInteger.valueOf(d.hour);
+                        return BigInteger.valueOf(d.hours);
                     else if (field.equals(DatatypeConstants.MINUTES))
                         return BigInteger.valueOf(d.minutes);
                     else if (field.equals(DatatypeConstants.SECONDS))
-                        return BigInteger.valueOf(d.second);
+                        return BigInteger.valueOf(d.seconds);
                     return null;
                 }
 
@@ -379,27 +381,13 @@ public class ManifestXMLParser {
                         return formattedString;
 
                     formattedString = "";
-                    String hString="", mString="00", sString="00", resultString = "00";
-                    if (d.hour > 0){
-                        hString = Integer.toString(d.hour);
+                    SimpleDateFormat formatter = null;
+                    if (d.hours > 0) {
+                        formatter = new SimpleDateFormat("h:mm:ss");
+                    } else {
+                        formatter = new SimpleDateFormat("m:ss");
                     }
-                    if (d.minutes > 0){
-                        mString = d.minutes < 10 ? "0" + d.minutes : Integer.toString(d.minutes);
-                    }else{
-
-                    }
-                    if (d.second > 0){
-                        sString = d.second < 10 ? "0" + d.second : Integer.toString(d.second);
-                    }
-
-
-
-                    formattedString += hString + ":" + mString + ":" + sString;
-
-                    while (formattedString.startsWith("0") || formattedString.startsWith(":")){
-                        formattedString = formattedString.substring(1);
-                    }
-
+                    formattedString = formatter.format(d.getDate());
 
                     return formattedString;
                 }

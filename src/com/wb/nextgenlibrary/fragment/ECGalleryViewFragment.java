@@ -16,6 +16,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -28,13 +29,14 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
+import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
 
 /**
  * Created by gzcheng on 3/31/16.
  */
-public class ECGalleryViewFragment extends AbstractECGalleryViewFragment {
+public class ECGalleryViewFragment extends AbstractECGalleryViewFragment implements View.OnClickListener {
 
 	private ViewPager galleryViewPager;
     private GalleryPagerAdapter adapter;
@@ -43,6 +45,8 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment {
     Button shareImageButton;
     private TextView countText;
     boolean shouldShowShareBtn = true;
+	ImageButton prevClipButton, nextClipButton;
+	int itemIndex = 0;
 
     String bgImageUrl = null;
     FixedAspectRatioFrameLayout.Priority aspectFramePriority = null;
@@ -67,7 +71,7 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment {
         galleryViewPager.setAdapter(adapter);
 
 		countText = (TextView) view.findViewById(R.id.count_text);
-		countText.setText("1/" +  adapter.getCount());
+		countText.setVisibility(View.GONE);
 		galleryViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 			@Override
 			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -76,7 +80,9 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment {
 
 			@Override
 			public void onPageSelected(int position) {
-				countText.setText((position + 1) + "/" +  adapter.getCount());
+				itemIndex = position;
+                adapter.notifyDataSetChanged(); //tr 10/27/2016
+				updateUI(true);
 			}
 
 			@Override
@@ -84,21 +90,9 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment {
 				if (state == ViewPager.SCROLL_STATE_SETTLING) {
 
 				} else if (state == ViewPager.SCROLL_STATE_DRAGGING) {
-					countText.clearAnimation();
-					if (countText.getVisibility() == View.GONE)
-						countText.setVisibility(View.VISIBLE);
+
 				} else if (state == ViewPager.SCROLL_STATE_IDLE) {
-					if (countText.getVisibility() == View.VISIBLE) {
-						ECGalleryViewFragment.this.getActivity().runOnUiThread(new Runnable() {
-							@Override
-							public void run() {
-								Animation fade_out = AnimationUtils.loadAnimation(ECGalleryViewFragment.this.getActivity(), R.anim.fade_out);
-								fade_out.setStartOffset(3500);		// start after 3.5 secs
-								countText.startAnimation(fade_out);
-								countText.setVisibility(View.GONE);
-							}
-						});
-					}
+					fadeOutCountText();
 				}
 			}
 		});
@@ -140,7 +134,19 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment {
                 }
             });
         }
-    }
+
+		prevClipButton = (ImageButton) view.findViewById(R.id.prev_clip_btn);
+		if (prevClipButton != null){
+			prevClipButton.setOnClickListener(this);
+		}
+		nextClipButton = (ImageButton) view.findViewById(R.id.next_clip_btn);
+		if (nextClipButton != null){
+			nextClipButton.setOnClickListener(this);
+		}
+
+		updateUI(false);
+ ;
+	}
 
     public void setShouldShowShareBtn(boolean bShow){
         shouldShowShareBtn = bShow;
@@ -148,21 +154,6 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment {
             shareImageButton.setVisibility(bShow ? View.VISIBLE : View.GONE);
         }
     }
-
-	protected final Handler hideCountTextHandler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			if (countText.getVisibility() == View.VISIBLE){
-				try {
-					Animation fade_out = AnimationUtils.loadAnimation(ECGalleryViewFragment.this.getActivity(), R.anim.fade_out);
-					countText.startAnimation(fade_out);
-				}catch (Exception ex){}
-				countText.setVisibility(View.GONE);
-			}
-		}
-
-	};
-
 
 	@Override
     public void onDestroy(){
@@ -175,10 +166,9 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment {
     public void setCurrentGallery(MovieMetaData.ECGalleryItem gallery){
         super.setCurrentGallery(gallery);
         if (adapter != null) {
-
             adapter.notifyDataSetChanged();
             galleryViewPager.setCurrentItem(0);
-
+			updateUI(false);
         }else{
             bSetOnResume = true;
         }
@@ -206,6 +196,60 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment {
         adapter.notifyDataSetChanged();
 
     }
+
+	@Override
+	public void onClick(View v) {
+		if (v.getId() == R.id.prev_clip_btn){
+			if (itemIndex > 0) {
+				itemIndex--;
+			}
+		} else if (v.getId() == R.id.next_clip_btn){
+			if (itemIndex < adapter.getCount() - 1){
+				itemIndex++;
+			}
+		}
+		galleryViewPager.setCurrentItem(itemIndex, true);	// use smooth scrolling
+        adapter.notifyDataSetChanged(); //tr 10/27/2016
+        updateUI(true);
+	}
+
+	public void updateUI(boolean userTriggerd) {
+		if (adapter != null && adapter.getCount() > 1) {
+			if (userTriggerd) {
+				countText.clearAnimation();
+				if (countText.getVisibility() == View.GONE) {
+					countText.setText((itemIndex + 1) + "/" + adapter.getCount());
+					countText.setVisibility(View.VISIBLE);
+				}
+			}
+
+			int prevBtnVisibility = View.VISIBLE;
+			int nextBtnVisibility = View.VISIBLE;
+			if (itemIndex == 0) {
+				prevBtnVisibility = View.INVISIBLE;
+			}
+			if (itemIndex == adapter.getCount() - 1) {
+				nextBtnVisibility = View.INVISIBLE;
+			}
+
+			prevClipButton.setVisibility(prevBtnVisibility);
+			nextClipButton.setVisibility(nextBtnVisibility);
+		}
+	}
+
+	public void fadeOutCountText() {
+		if (countText != null && countText.getVisibility() == View.VISIBLE) {
+			ECGalleryViewFragment.this.getActivity().runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					Animation fade_out = AnimationUtils.loadAnimation(ECGalleryViewFragment.this.getActivity(), R.anim.fade_out);
+					fade_out.setStartOffset(3000);		// start after 3 secs
+					countText.startAnimation(fade_out);
+					countText.setVisibility(View.GONE);
+				}
+			});
+		}
+	}
 
     class GalleryPagerAdapter extends PagerAdapter {
 

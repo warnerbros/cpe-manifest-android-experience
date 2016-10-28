@@ -35,7 +35,7 @@ import java.util.concurrent.Callable;
  */
 public class BaselineApiDAO {
 
-    private static String baselineAPIKey;
+	private static String baselineAPIKey;
     private static String xAPIKey;
 
     private static String API_KEY_KEY = "baseline_api_key";
@@ -118,6 +118,7 @@ public class BaselineApiDAO {
         Worker.execute(new Callable<Boolean>() {
             @Override
             public Boolean call() throws Exception {
+                boolean success = true;
                 HashMap<String, BaselineCastData> castsInfoMap = new HashMap<String, BaselineCastData>();
                 for (MovieMetaData.CastData castData : castsDatas) {
                     try {
@@ -126,12 +127,12 @@ public class BaselineApiDAO {
 
                     } catch (Exception ex){
                         NextGenLogger.e(F.TAG_API, ex.getLocalizedMessage());
+                        success = false;
                     }
 
                 }
 
-
-                return true;
+                return success;
             }
         }, l);
     }

@@ -12,6 +12,7 @@ import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -42,16 +43,17 @@ import java.util.List;
  * Created by gzcheng on 3/31/16.
  */
 public class IMEECMapViewFragment extends AbstractNextGenFragment implements View.OnClickListener {
-    protected MapView mapView;
+	protected MapView mapView;
 
     protected TextView ecTitle;
+    protected TextView ecNameTextView;
     protected RecyclerView sceneLocationECRecyclerView;
     protected ECVideoViewFragment videoViewFragment;
     protected ECGalleryViewFragment galleryViewFragment;
     private RecyclerView.LayoutManager recyclerViewLayoutManager;
 
     private FrameLayout videoFrame, galleryFrame;
-    private RelativeLayout mapFrame;
+    private LinearLayout mapFrame;
 
     MovieMetaData.LocationItem selectedLocationItem = null;
     String title = null;
@@ -72,13 +74,14 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
         if(mapView != null)
             mapView.onCreate(savedInstanceState);
         ecTitle = (TextView) view.findViewById(R.id.ec_title_name);
+        ecNameTextView = (TextView)view.findViewById(R.id.ec_content_name);
         if (selectedLocationItem != null && title != null){
             setLocationItem(title, selectedLocationItem);
         }
 
         videoFrame = (FrameLayout) view.findViewById(R.id.map_video_frame);
         galleryFrame = (FrameLayout) view.findViewById(R.id.map_gallery_frame);
-        mapFrame = (RelativeLayout) view.findViewById(R.id.map_map_frame);
+        mapFrame = (LinearLayout) view.findViewById(R.id.map_map_frame);
 
         recyclerViewLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         sceneLocationECRecyclerView = (RecyclerView) view.findViewById(R.id.map_associate_ecs_list);
@@ -172,6 +175,10 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
             if (ecTitle != null) {
                 ecTitle.setText(textTitle);
             }
+            if (ecNameTextView != null) {
+                ecNameTextView.setText(selectedLocationItem.description);
+            }
+
             if (mapView != null) {
                 final LatLng location = new LatLng(selectedLocationItem.latitude, selectedLocationItem.longitude);
 
@@ -223,6 +230,9 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
 
 
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, locationItem.zoom));   // set location
+
+            int yOffSet = mapView.getHeight()/3;
+            googleMap.moveCamera(CameraUpdateFactory.scrollBy(0, -yOffSet));
             googleMap.getMaxZoomLevel();
             BitmapDescriptor bmDes ;
             if (selectedLocationItem.pinImage != null && !StringHelper.isEmpty(selectedLocationItem.pinImage.url)) {

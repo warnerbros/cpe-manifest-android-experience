@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@android:color/black">
+    android:background="@android:color/black"
+    android:paddingTop="@dimen/spacing_small">
 
     <ImageView
         android:id="@+id/ec_gallery_frame_bg"
@@ -51,6 +52,29 @@
                     android:textColor="@color/white"
                     android:visibility="gone"/>
             </com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout>
+
+            <ImageButton
+                android:layout_alignParentLeft="true"
+                android:id="@+id/prev_clip_btn"
+                android:layout_width="@dimen/close_icon_dimen"
+                android:layout_height="@dimen/close_icon_dimen"
+                android:layout_centerVertical="true"
+                android:scaleType="fitCenter"
+                android:background="@color/transparent_black"
+                android:src="@drawable/back_logo"
+                android:visibility="invisible"/>
+
+            <ImageButton
+                android:layout_alignParentRight="true"
+                android:id="@+id/next_clip_btn"
+                android:layout_width="@dimen/close_icon_dimen"
+                android:layout_height="@dimen/close_icon_dimen"
+                android:layout_centerVertical="true"
+                android:scaleType="fitCenter"
+                android:rotation="180"
+                android:background="@color/transparent_black"
+                android:src="@drawable/back_logo"
+                android:visibility="invisible"/>
 
             <ImageButton
                 android:id="@+id/close_button"

@@ -7,10 +7,12 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,6 +23,8 @@ import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.interfaces.ContentViewFullscreenRequestInterface;
+import com.wb.nextgenlibrary.util.utils.F;
+import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 
 /**
@@ -28,7 +32,7 @@ import com.wb.nextgenlibrary.util.utils.StringHelper;
  */
 public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivity implements ContentViewFullscreenRequestInterface {
 
-    public abstract String getBackgroundImgUri();
+	public abstract String getBackgroundImgUri();
     public abstract String getLeftButtonText();
     public abstract String getRightTitleImageUri();
     public abstract String getRightTitleText();
@@ -47,10 +51,10 @@ public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivi
     protected void onCreate(Bundle savedInstanceState) {
         //requestWindowFeature(Window.FEATURE_ACTION_BAR);
 
-        //getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
+		// actionbar height issue: http://stackoverflow.com/questions/26449195/new-theme-appcompat-actionbar-height
         final ActionBar actionBar = getSupportActionBar();
         TypedValue tv = new TypedValue();
-        if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true))
+        if (getTheme().resolveAttribute(R.attr.actionBarSize, tv, true))
         {
             actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data,getResources().getDisplayMetrics());
         }
@@ -71,6 +75,11 @@ public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivi
         rightLogo = (ImageView) actionBarCustomView.findViewById(R.id.action_bar_right_logo);
         actionBar.setCustomView(actionBarCustomView);
 
+		// Remove margins from Action Bar -- Check with Grant to see if this is necessary
+		// http://stackoverflow.com/questions/27354812/android-remove-left-margin-from-actionbars-custom-layout
+		//Toolbar toolbarParent = (Toolbar) actionBarCustomView.getParent();
+		//toolbarParent.setPadding(0, 0, 0, 0);
+		//toolbarParent.setContentInsetsAbsolute(0, 0);
 
         if (actionBarLeftButton != null) {
             setBackButtonText(getLeftButtonText());
@@ -84,17 +93,16 @@ public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivi
             });
         }
 
-
-
         super.onCreate(savedInstanceState);
     }
 
     @Override
     protected void onPostCreate( Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        if (centerBanner != null && !StringHelper.isEmpty(getTitleImageUrl()))
+        if (centerBanner != null && !StringHelper.isEmpty(getTitleImageUrl())) {
             Glide.with(this).load(getTitleImageUrl()).fitCenter().into(centerBanner);
-        //PicassoTrustAll.loadImageIntoView(this, getTitleImageUrl(), centerBanner);
+            //PicassoTrustAll.loadImageIntoView(this, getTitleImageUrl(), centerBanner);
+        }
 
         if (rightLogo != null && !StringHelper.isEmpty(getRightTitleImageUri())) {
             Glide.with(this).load(getRightTitleImageUri()).fitCenter().into(rightLogo);
@@ -175,7 +183,7 @@ public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivi
             return;
 
         if (actionBarLeftButton != null && logoId != 0){
-            Drawable icon= getResources().getDrawable( logoId);
+            Drawable icon = getResources().getDrawable(logoId);
             if (icon instanceof BitmapDrawable) {
                 Bitmap source = ((BitmapDrawable) icon).getBitmap();
                 int targetHeight = actionBarHeight / 3;                                     // resize the logo to 1/3 of the height of aciton bar

@@ -9,6 +9,8 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         cardview:cardBackgroundColor="@android:color/transparent"
+        cardview:cardElevation="0dp"
+        cardview:cardCornerRadius="0dp"
         android:id="@+id/text_cv">
         <LinearLayout
             android:layout_width="wrap_content"

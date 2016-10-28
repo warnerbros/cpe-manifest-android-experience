@@ -12,10 +12,13 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
-import android.util.Size;
 import android.view.Display;
 import android.view.WindowManager;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.security.ProviderInstaller;
 import com.wb.nextgenlibrary.activity.NextGenActivity;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.fragment.AbstractNextGenMainMovieFragment;
@@ -24,6 +27,7 @@ import com.wb.nextgenlibrary.network.BaselineApiDAO;
 import com.wb.nextgenlibrary.network.NextGenCacheManager;
 import com.wb.nextgenlibrary.network.TheTakeApiDAO;
 import com.wb.nextgenlibrary.parser.ManifestXMLParser;
+import com.wb.nextgenlibrary.util.Size;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.util.concurrent.Worker;
 import com.wb.nextgenlibrary.util.utils.F;
@@ -41,7 +45,7 @@ import java.util.concurrent.Callable;
 public class NextGenExperience {
 
 
-    public static class ManifestItem{
+	public static class ManifestItem{
         public final String imageUrl;
         public final String movieName;
         private final String manifestFileUrl;
@@ -97,36 +101,42 @@ public class NextGenExperience {
 
     private static String sUserAgent;
 
-    static {
-        manifestItems = new ArrayList<ManifestItem>();
-        manifestItems.add(new ManifestItem("Man of Steel v0.7", "urn:dece:cid:eidr-s:DAFF-8AB8-3AF0-FD3A-29EF-Q",
-                "https://d19p213wjrwt85.cloudfront.net/uvvu-images/EB180713D3536025E0405B0A07341ECE",
-                "/xml/urn:dece:cid:eidr-s:DAFF-8AB8-3AF0-FD3A-29EF-Q/mos_manifest-2.2.xml",
-                "/xml/urn:dece:cid:eidr-s:DAFF-8AB8-3AF0-FD3A-29EF-Q/mos_appdata_locations-2.2.xml",
-                "/xml/urn:dece:cid:eidr-s:DAFF-8AB8-3AF0-FD3A-29EF-Q/mos_cpestyle-2.2.xml"));
-        manifestItems.add(new ManifestItem("Batman vs Superman w/360", "urn:dece:cid:eidr-s:B257-8696-871C-A12B-B8C1-S",
-                "https://d19p213wjrwt85.cloudfront.net/uvvu-images/2C89FE061219D322E05314345B0AFE72",
-                "/xml/urn:dece:cid:eidr-s:B257-8696-871C-A12B-B8C1-S/bvs_manifest-2.2.xml",
-                "/xml/urn:dece:cid:eidr-s:B257-8696-871C-A12B-B8C1-S/bvs_appdata_locations-2.2.xml",
-                "/xml/urn:dece:cid:eidr-s:B257-8696-871C-A12B-B8C1-S/bvs_cpestyle-2.2.xml"));
-        manifestItems.add(new ManifestItem("Sister", "urn:dece:cid:eidr-s:D2E8-4520-9446-BFAD-B106-4",
-                "https://d19p213wjrwt85.cloudfront.net/uvvu-images/2C89FE061219D322E05314345B0AFE72",
-                "/xml/sisters_extended_hls_manifest_v3-generated-spec1.5.xml",
-                null, null));
-        manifestItems.add(new ManifestItem("Minions", "urn:dece:cid:eidr-s:F1F8-3CDA-0844-0D78-E520-Q",
-                "https://d19p213wjrwt85.cloudfront.net/uvvu-images/2C89FE061219D322E05314345B0AFE72",
-                "/xml/minions_hls_manifest_v6-R60-generated-spec1.5.xml",
-                null, null));
-        manifestItems.add(new ManifestItem("HP 2", "urn:dece:cid:org:WB:2004703x6000004186",
-                "https://d19p213wjrwt85.cloudfront.net/uvvu-images/2C89FE061219D322E05314345B0AFE72",
-                "/xml/urn:dece:cid:org:WB:2004703x6000004186/hp2_manifest-1.1.xml",
-                "/xml/urn:dece:cid:org:WB:2004703x6000004186/hp2_appdata-1.1.xml",
-                "/xml/urn:dece:cid:org:WB:2004703x6000004186/hp2_cpestyle-1.1.xml"));
-        manifestItems.add(new ManifestItem("HP 4", "urn:dece:cid:org:WB:2024879x6000007724",
-                "https://d19p213wjrwt85.cloudfront.net/uvvu-images/2C89FE061219D322E05314345B0AFE72",
-                "/xml/urn:dece:cid:org:WB:2024879x6000007724/hp4_manifest-1.0.xml",
-                "/xml/urn:dece:cid:org:WB:2024879x6000007724/hp4_appdata-1.0.xml",
-                "/xml/urn:dece:cid:org:WB:2024879x6000007724/hp4_cpestyle-1.0.xml"));
+	static {
+		manifestItems = new ArrayList<ManifestItem>();
+		manifestItems.add(new ManifestItem("Man of Steel v0.7", "urn:dece:cid:eidr-s:DAFF-8AB8-3AF0-FD3A-29EF-Q",
+				"https://d19p213wjrwt85.cloudfront.net/uvvu-images/EB180713D3536025E0405B0A07341ECE",
+				"/xml/urn:dece:cid:eidr-s:DAFF-8AB8-3AF0-FD3A-29EF-Q/mos_manifest-2.2.xml",
+				"/xml/urn:dece:cid:eidr-s:DAFF-8AB8-3AF0-FD3A-29EF-Q/mos_appdata_locations-2.2.xml",
+				"/xml/urn:dece:cid:eidr-s:DAFF-8AB8-3AF0-FD3A-29EF-Q/mos_cpestyle-2.2.xml"));
+		manifestItems.add(new ManifestItem("Batman vs Superman w/360", "urn:dece:cid:eidr-s:B257-8696-871C-A12B-B8C1-S",
+				"https://d19p213wjrwt85.cloudfront.net/uvvu-images/2C89FE061219D322E05314345B0AFE72",
+				"/xml/urn:dece:cid:eidr-s:B257-8696-871C-A12B-B8C1-S/bvs_manifest-2.2.xml",
+				"/xml/urn:dece:cid:eidr-s:B257-8696-871C-A12B-B8C1-S/bvs_appdata_locations-2.2.xml",
+				"/xml/urn:dece:cid:eidr-s:B257-8696-871C-A12B-B8C1-S/bvs_cpestyle-2.2.xml"));
+		manifestItems.add(new ManifestItem("Sister", "urn:dece:cid:eidr-s:D2E8-4520-9446-BFAD-B106-4",
+				"https://d19p213wjrwt85.cloudfront.net/uvvu-images/2C89FE061219D322E05314345B0AFE72",
+				"/xml/sisters_extended_hls_manifest_v3-generated-spec1.5.xml",
+				null, null));
+		manifestItems.add(new ManifestItem("Minions", "urn:dece:cid:eidr-s:F1F8-3CDA-0844-0D78-E520-Q",
+				"https://d19p213wjrwt85.cloudfront.net/uvvu-images/2C89FE061219D322E05314345B0AFE72",
+				"/xml/minions_hls_manifest_v6-R60-generated-spec1.5.xml",
+				null, null));
+		manifestItems.add(new ManifestItem("HP 2", "urn:dece:cid:org:WB:2004703x6000004186",
+				"https://d19p213wjrwt85.cloudfront.net/uvvu-images/2C89FE061219D322E05314345B0AFE72",
+				"/xml/urn:dece:cid:org:WB:2004703x6000004186/hp2_manifest-1.1.xml",
+				"/xml/urn:dece:cid:org:WB:2004703x6000004186/hp2_appdata-1.1.xml",
+				"/xml/urn:dece:cid:org:WB:2004703x6000004186/hp2_cpestyle-1.1.xml"));
+		manifestItems.add(new ManifestItem("HP 4", "urn:dece:cid:org:WB:2024879x6000007724",
+				"https://d19p213wjrwt85.cloudfront.net/uvvu-images/2C89FE061219D322E05314345B0AFE72",
+				"/xml/urn:dece:cid:org:WB:2024879x6000007724/hp4_manifest-1.0.xml",
+				"/xml/urn:dece:cid:org:WB:2024879x6000007724/hp4_appdata-1.0.xml",
+				"/xml/urn:dece:cid:org:WB:2024879x6000007724/hp4_cpestyle-1.0.xml"));
+		manifestItems.add(new ManifestItem("War Dogs", "urn:dece:cid:eidr-s:FE5F-6323-6DBC-F158-0387-M",
+				"https://d19p213wjrwt85.cloudfront.net/uvvu-images/3D7330DEB0A2B70CE05315345A0A5BB5",
+				"/xml/urn:dece:cid:eidr-s:FE5F-6323-6DBC-F158-0387-M/wardogs_manifest-1.0.xml",
+				"/xml/urn:dece:cid:eidr-s:FE5F-6323-6DBC-F158-0387-M/wardogs_appdata-1.0.xml",
+				"/xml/urn:dece:cid:eidr-s:FE5F-6323-6DBC-F158-0387-M/wardogs_cpestyle-1.0.xml"));
+
 
 
     }
@@ -195,43 +205,57 @@ public class NextGenExperience {
 
     }
 
-    private static boolean startNextGenParsing(ManifestItem manifestItem){
-        try{
-            NextGenLogger.d("TIME_THIS", "---------------Next Test--------------");
+    private static boolean startNextGenParsing(ManifestItem manifestItem) {
+		try {
+			// install security provider before calling getCastActorsData to avoid SSL errors on < Android 5.0 devices
+			ProviderInstaller.installIfNeeded(getApplicationContext());
+		} catch (GooglePlayServicesRepairableException ex) {
+			// Indicates that Google Play services is out of date, disabled, etc.
+			// Prompt the user to install/update/enable Google Play services.
+			GooglePlayServicesUtil.showErrorNotification(
+					ex.getConnectionStatusCode(), getApplicationContext());
+		} catch (GooglePlayServicesNotAvailableException ex) {
+			NextGenLogger.e(F.TAG, "GooglePlayServicesNotAvailableException: " + ex.getMessage());
+		}
 
-            long systime = SystemClock.currentThreadTimeMillis();
-            ManifestXMLParser.NextGenManifestData manifest = new ManifestXMLParser().startParsing(manifestItem.getManifestFileUrl(),
-                    manifestItem.getAppDataFileUrl(), manifestItem.getNgeStyleFileUrl());
-            long currentTime = SystemClock.currentThreadTimeMillis() - systime;
-            NextGenLogger.d("TIME_THIS", "Time to finish parsing: " + currentTime);
+		try{
+			NextGenLogger.d("TIME_THIS", "---------------Next Test--------------");
 
-            // TODO error handling if manifest is null
-            movieMetaData = MovieMetaData.process(manifest);
+			long systime = SystemClock.currentThreadTimeMillis();
+			ManifestXMLParser.NextGenManifestData manifest = new ManifestXMLParser().startParsing(manifestItem.getManifestFileUrl(),
+					manifestItem.getAppDataFileUrl(), manifestItem.getNgeStyleFileUrl());
+			long currentTime = SystemClock.currentThreadTimeMillis() - systime;
+			NextGenLogger.d("TIME_THIS", "Time to finish parsing: " + currentTime);
+
+			// TODO error handling if manifest is null
+			movieMetaData = MovieMetaData.process(manifest);
 
 
-            currentTime = SystemClock.currentThreadTimeMillis() - currentTime;
-            NextGenLogger.d("TIME_THIS", "Time to finish processing: " + currentTime);
+			currentTime = SystemClock.currentThreadTimeMillis() - currentTime;
+			NextGenLogger.d("TIME_THIS", "Time to finish processing: " + currentTime);
 
-            BaselineApiDAO.init();
-            BaselineApiDAO.getCastActorsData(movieMetaData.getActorsList(), new ResultListener<Boolean>() {
-                @Override
-                public void onResult(Boolean result) {
-                    movieMetaData.setHasCalledBaselineAPI(true);
-                }
+			BaselineApiDAO.init();
+			BaselineApiDAO.getCastActorsData(movieMetaData.getActorsList(), new ResultListener<Boolean>() {
+				@Override
+				public void onResult(Boolean result) {
+					movieMetaData.setHasCalledBaselineAPI(result);
+				}
 
-                @Override
-                public <E extends Exception> void onException(E e) {
+				@Override
+				public <E extends Exception> void onException(E e) {
 
-                }
-            });
+				}
+			});
 
-            TheTakeApiDAO.init();
-            return true;
-        }catch (Exception ex){
-            NextGenLogger.e(F.TAG, ex.getLocalizedMessage());
-            NextGenLogger.e(F.TAG, ex.getStackTrace().toString());
-            return false;
-        }
+			TheTakeApiDAO.init();
+			return true;
+		}catch (Exception ex){
+			NextGenLogger.e(F.TAG, ex.getLocalizedMessage());
+			NextGenLogger.e(F.TAG, ex.getStackTrace().toString());
+			return false;
+		}
+
+
     }
 
 

@@ -35,8 +35,8 @@ public class ECVideoViewFragment extends ECViewFragment{
     protected ObservableVideoView videoView;
 
     ECMediaController mediaController;
-    protected TextView selectedECNameTextView;
-    protected TextView descriptionTextView;
+    //protected TextView selectedECNameTextView;
+    //protected TextView descriptionTextView;
     protected TextView countDownTextView;
     protected View countDownCountainer;
     protected ProgressBar countDownProgressBar;
@@ -93,8 +93,8 @@ public class ECVideoViewFragment extends ECViewFragment{
         super.onViewCreated(view, savedInstanceState);
         videoView = (ObservableVideoView) view.findViewById(R.id.ec_video_view);
         mediaController = new ECMediaController(getActivity(), videoView);
-        selectedECNameTextView = (TextView)view.findViewById(R.id.ec_content_name);
-        descriptionTextView = (TextView)view.findViewById(R.id.ec_content_runtime);
+        //selectedECNameTextView = (TextView)view.findViewById(R.id.ec_content_name);
+        //descriptionTextView = (TextView)view.findViewById(R.id.ec_content_runtime);
         previewImageView = (ImageView)view.findViewById(R.id.ec_video_preview_image);
         previewFrame = (RelativeLayout)view.findViewById(R.id.ec_video_preview_image_frame);
         previewPlayBtn = (ImageButton)view.findViewById(R.id.ec_video_preview_playButton);
@@ -313,11 +313,11 @@ public class ECVideoViewFragment extends ECViewFragment{
             if (countDownCountainer != null)
                 countDownCountainer.setVisibility(View.INVISIBLE);
 
-            if (selectedECNameTextView != null && videoView != null) {
-                selectedECNameTextView.setText(avItem.getTitle());
-                if (descriptionTextView != null) {
-                    descriptionTextView.setText(avItem.getSummary());
-                }
+            if (/*selectedECNameTextView != null && */videoView != null) {
+                //selectedECNameTextView.setText(avItem.getTitle());
+                //if (descriptionTextView != null) {
+                //    descriptionTextView.setText(avItem.getSummary());
+                //}
                 if (!shouldAutoPlay) {
                     if(videoView.isPlaying())
                         videoView.stopPlayback();

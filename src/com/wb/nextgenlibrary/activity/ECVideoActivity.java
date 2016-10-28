@@ -1,6 +1,7 @@
 package com.wb.nextgenlibrary.activity;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
@@ -13,7 +14,9 @@ import com.wb.nextgenlibrary.fragment.ECVideoViewFragment;
  */
 public class ECVideoActivity extends AbstractECView implements ECVideoViewFragment.ECVideoListAdaptor{
 
-    ECVideoViewFragment rightVideoFrame;
+	ECVideoViewFragment rightVideoFrame;
+    protected TextView selectedECNameTextView;
+    protected TextView descriptionTextView;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,6 +24,9 @@ public class ECVideoActivity extends AbstractECView implements ECVideoViewFragme
         rightVideoFrame = (ECVideoViewFragment) getSupportFragmentManager().findFragmentById(R.id.ec_video_view_fragment);
         rightVideoFrame.setShouldAutoPlay(false);
         rightVideoFrame.setEcsAdaptor(this);
+
+		selectedECNameTextView = (TextView) findViewById(R.id.ec_content_name);
+		descriptionTextView = (TextView) findViewById(R.id.ec_content_description);
     }
 
     @Override
@@ -43,8 +49,17 @@ public class ECVideoActivity extends AbstractECView implements ECVideoViewFragme
 
     @Override
     public void onLeftListItemSelected(MovieMetaData.ExperienceData ec){
+        if (selectedEC == ec)      // avoid video reload
+            return;
+        else
+            selectedEC = ec;
         if (ec != null && ec.audioVisualItems.size() > 0) {
-            rightVideoFrame.setAudioVisualItem(ec.audioVisualItems.get(0));
+			MovieMetaData.AudioVisualItem audioVisualItem = ec.audioVisualItems.get(0);
+			rightVideoFrame.setAudioVisualItem(audioVisualItem);
+			if (selectedECNameTextView != null)
+				selectedECNameTextView.setText(audioVisualItem.getTitle());
+			if (descriptionTextView != null)
+				descriptionTextView.setText(audioVisualItem.getSummary());
             NextGenAnalyticData.reportEvent(this, null, "EC Video", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, ec.title);
         }
     }

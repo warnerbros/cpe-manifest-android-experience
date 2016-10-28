@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.Surface;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.bumptech.glide.Glide;
 import com.wb.nextgenlibrary.NextGenExperience;
@@ -28,6 +29,7 @@ public class NextGenHideStatusBarActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         currentScreenOrientation = getScreenOrientation();
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().getDecorView().setSystemUiVisibility(getWindow().getDecorView().getSystemUiVisibility() | DESIRE_VISIBILITY);
 
     }

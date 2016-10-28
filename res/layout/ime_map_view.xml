@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="@dimen/spacing_small">
 
     <LinearLayout
         android:id="@+id/next_gen_ec_content_view"
@@ -20,48 +21,69 @@
             android:layout_height="fill_parent"
             android:orientation="vertical">
             <RelativeLayout
-                android:layout_weight="3"
+                android:layout_weight="5"
                 android:layout_width="match_parent"
                 android:layout_height="0dp">
-                <RelativeLayout
+
+                <LinearLayout
                     android:id="@+id/map_map_frame"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                    <com.google.android.gms.maps.MapView
-                        android:id="@+id/ec_mapview"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:layout_centerInParent="true" />
-                    <LinearLayout
-                        android:layout_margin="@dimen/spacing_small"
-                        android:padding="@dimen/spacing_small"
-                        android:layout_alignParentLeft="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <Button
-                            android:id="@+id/map_button"
-                            android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_weight="3"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp">
+                        <com.google.android.gms.maps.MapView
+                            android:id="@+id/ec_mapview"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_centerInParent="true" />
+                        <LinearLayout
+                            android:layout_margin="@dimen/spacing_small"
+                            android:padding="@dimen/spacing_small"
+                            android:layout_alignParentLeft="true"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-condensed"
-                            android:background="@drawable/map_tab_bg"
-                            android:textColor="@color/nextgen_tab_textcolor"
-                            android:text="@string/map_string"
-                            android:layout_weight="1"/>
-                        <Button
-                            android:id="@+id/satellite_button"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-condensed"
-                            android:background="@drawable/satellit_tab_bg"
-                            android:textColor="@color/nextgen_tab_textcolor"
-                            android:text="@string/satellite_string"
-                            android:layout_weight="1"/>
+                            android:orientation="horizontal">
+                            <Button
+                                android:id="@+id/map_button"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif-condensed"
+                                android:background="@drawable/map_tab_bg"
+                                android:textColor="@color/nextgen_tab_textcolor"
+                                android:text="@string/map_string"
+                                android:layout_weight="1"/>
+                            <Button
+                                android:id="@+id/satellite_button"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif-condensed"
+                                android:background="@drawable/satellit_tab_bg"
+                                android:textColor="@color/nextgen_tab_textcolor"
+                                android:text="@string/satellite_string"
+                                android:layout_weight="1"/>
+
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <com.wb.nextgenlibrary.widget.FontFitTextView
+                        android:id="@+id/ec_content_name"
+                        android:layout_weight="1"
+                        android:textColor="@color/drawer_yellow"
+                        android:textSize="@dimen/textLarge"
+                        android:fontFamily="sans-serif-condensed"
+                        android:gravity="center"
+                        android:paddingTop="@dimen/spacing_normal"
+                        android:paddingBottom="@dimen/spacing_normal"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp" />
+
+                </LinearLayout>
 
 
-                    </LinearLayout>
-
-                </RelativeLayout>
                 <FrameLayout
                     android:id="@+id/map_gallery_frame"
                     android:layout_width="match_parent"
@@ -77,6 +99,7 @@
                 </FrameLayout>
 
             </RelativeLayout>
+
             <android.support.v7.widget.RecyclerView
                 android:layout_weight="2"
                 android:id="@+id/map_associate_ecs_list"
