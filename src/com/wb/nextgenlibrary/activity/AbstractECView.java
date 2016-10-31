@@ -57,7 +57,7 @@ public abstract class AbstractECView extends AbstractNextGenActivity {
         super.onStart();
         if (TabletUtils.isTablet())
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        if (listFragment != null && listFragment.getSelectedIndex() <= 0){
+        if (listFragment != null && listFragment.getSelectedIndex() <= 0 && ecGroupData.getChildrenContents().size() > 0){
             listFragment.onListItemClick(0, ecGroupData.getChildrenContents().get(0));
             listFragment.scrollToTop();
         }
