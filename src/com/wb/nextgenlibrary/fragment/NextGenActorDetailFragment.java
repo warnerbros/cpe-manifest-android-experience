@@ -38,8 +38,6 @@ import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
 
 import java.util.List;
 
-import static com.google.android.gms.analytics.internal.zzy.r;
-
 /**
  * Created by gzcheng on 1/13/16.
  */

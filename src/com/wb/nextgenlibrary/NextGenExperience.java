@@ -136,8 +136,11 @@ public class NextGenExperience {
 				"/xml/urn:dece:cid:eidr-s:FE5F-6323-6DBC-F158-0387-M/wardogs_manifest-1.0.xml",
 				"/xml/urn:dece:cid:eidr-s:FE5F-6323-6DBC-F158-0387-M/wardogs_appdata-1.0.xml",
 				"/xml/urn:dece:cid:eidr-s:FE5F-6323-6DBC-F158-0387-M/wardogs_cpestyle-1.0.xml"));
-
-
+		manifestItems.add(new ManifestItem("Suicide squad", "urn:dece:cid:eidr-s:41D1-41F1-B266-14D0-416F-9",
+				null,
+				"/xml/urn:dece:cid:eidr-s:41D1-41F1-B266-14D0-416F-9/suicidesquad_manifest-1.0.xml",
+				"/xml/urn:dece:cid:eidr-s:41D1-41F1-B266-14D0-416F-9/suicidesquad_appdata-1.0.xml",
+				"/xml/urn:dece:cid:eidr-s:41D1-41F1-B266-14D0-416F-9/suicidesquad_cpestyle-1.0.xml"));
 
     }
 
