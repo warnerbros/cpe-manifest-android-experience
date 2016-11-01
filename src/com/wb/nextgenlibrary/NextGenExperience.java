@@ -19,6 +19,7 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.security.ProviderInstaller;
+import com.wb.nextgenlibrary.activity.LauncherActivity;
 import com.wb.nextgenlibrary.activity.NextGenActivity;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.fragment.AbstractNextGenMainMovieFragment;
@@ -62,23 +63,16 @@ public class NextGenExperience {
             this.ngeStyleFileUrl = ngeStyleFileUrl;
         }
 
-        final static String DEBUG_HOST = "https://cpe-manifest.s3.amazonaws.com";
-        final static String RELEASE_HOST = "https://d3hu292hohbyvv.cloudfront.net";
-
         public String getManifestFileUrl(){
-            return manifestFileUrl.startsWith("http") ? manifestFileUrl : (nextGenEventHandler.isDebugBuild() ? DEBUG_HOST : RELEASE_HOST) + manifestFileUrl;
+            return manifestFileUrl;
         }
 
         public String getAppDataFileUrl(){
-            if (appDataFileUrl == null)
-                return null;
-            return appDataFileUrl.startsWith("http") ? appDataFileUrl : (nextGenEventHandler.isDebugBuild() ? DEBUG_HOST : RELEASE_HOST) + appDataFileUrl;
+            return appDataFileUrl;
         }
 
         public String getNgeStyleFileUrl(){
-            if (ngeStyleFileUrl == null)
-                return null;
-            return ngeStyleFileUrl.startsWith("http") ? ngeStyleFileUrl : (nextGenEventHandler.isDebugBuild() ? DEBUG_HOST : RELEASE_HOST) + ngeStyleFileUrl;
+            return ngeStyleFileUrl;
         }
     }
 
@@ -98,56 +92,41 @@ public class NextGenExperience {
     private static Object nextgenPlaybackObject;
     private static NextGenEventHandler nextGenEventHandler;
     private static String googleMapAPIKey = null;
+    private static ManifestItem manifestItem = null;
 
     private static String sUserAgent;
-
-	static {
-		manifestItems = new ArrayList<ManifestItem>();
-		manifestItems.add(new ManifestItem("Man of Steel v0.7", "urn:dece:cid:eidr-s:DAFF-8AB8-3AF0-FD3A-29EF-Q",
-				"https://d19p213wjrwt85.cloudfront.net/uvvu-images/EB180713D3536025E0405B0A07341ECE",
-				"/xml/urn:dece:cid:eidr-s:DAFF-8AB8-3AF0-FD3A-29EF-Q/mos_manifest-2.2.xml",
-				"/xml/urn:dece:cid:eidr-s:DAFF-8AB8-3AF0-FD3A-29EF-Q/mos_appdata_locations-2.2.xml",
-				"/xml/urn:dece:cid:eidr-s:DAFF-8AB8-3AF0-FD3A-29EF-Q/mos_cpestyle-2.2.xml"));
-		manifestItems.add(new ManifestItem("Batman vs Superman w/360", "urn:dece:cid:eidr-s:B257-8696-871C-A12B-B8C1-S",
-				"https://d19p213wjrwt85.cloudfront.net/uvvu-images/2C89FE061219D322E05314345B0AFE72",
-				"/xml/urn:dece:cid:eidr-s:B257-8696-871C-A12B-B8C1-S/bvs_manifest-2.2.xml",
-				"/xml/urn:dece:cid:eidr-s:B257-8696-871C-A12B-B8C1-S/bvs_appdata_locations-2.2.xml",
-				"/xml/urn:dece:cid:eidr-s:B257-8696-871C-A12B-B8C1-S/bvs_cpestyle-2.2.xml"));
-		manifestItems.add(new ManifestItem("Sister", "urn:dece:cid:eidr-s:D2E8-4520-9446-BFAD-B106-4",
-				"https://d19p213wjrwt85.cloudfront.net/uvvu-images/2C89FE061219D322E05314345B0AFE72",
-				"/xml/sisters_extended_hls_manifest_v3-generated-spec1.5.xml",
-				null, null));
-		manifestItems.add(new ManifestItem("Minions", "urn:dece:cid:eidr-s:F1F8-3CDA-0844-0D78-E520-Q",
-				"https://d19p213wjrwt85.cloudfront.net/uvvu-images/2C89FE061219D322E05314345B0AFE72",
-				"/xml/minions_hls_manifest_v6-R60-generated-spec1.5.xml",
-				null, null));
-		manifestItems.add(new ManifestItem("HP 2", "urn:dece:cid:org:WB:2004703x6000004186",
-				"https://d19p213wjrwt85.cloudfront.net/uvvu-images/2C89FE061219D322E05314345B0AFE72",
-				"/xml/urn:dece:cid:org:WB:2004703x6000004186/hp2_manifest-1.1.xml",
-				"/xml/urn:dece:cid:org:WB:2004703x6000004186/hp2_appdata-1.1.xml",
-				"/xml/urn:dece:cid:org:WB:2004703x6000004186/hp2_cpestyle-1.1.xml"));
-		manifestItems.add(new ManifestItem("HP 4", "urn:dece:cid:org:WB:2024879x6000007724",
-				"https://d19p213wjrwt85.cloudfront.net/uvvu-images/2C89FE061219D322E05314345B0AFE72",
-				"/xml/urn:dece:cid:org:WB:2024879x6000007724/hp4_manifest-1.0.xml",
-				"/xml/urn:dece:cid:org:WB:2024879x6000007724/hp4_appdata-1.0.xml",
-				"/xml/urn:dece:cid:org:WB:2024879x6000007724/hp4_cpestyle-1.0.xml"));
-		manifestItems.add(new ManifestItem("War Dogs", "urn:dece:cid:eidr-s:FE5F-6323-6DBC-F158-0387-M",
-				"https://d19p213wjrwt85.cloudfront.net/uvvu-images/3D7330DEB0A2B70CE05315345A0A5BB5",
-				"/xml/urn:dece:cid:eidr-s:FE5F-6323-6DBC-F158-0387-M/wardogs_manifest-1.0.xml",
-				"/xml/urn:dece:cid:eidr-s:FE5F-6323-6DBC-F158-0387-M/wardogs_appdata-1.0.xml",
-				"/xml/urn:dece:cid:eidr-s:FE5F-6323-6DBC-F158-0387-M/wardogs_cpestyle-1.0.xml"));
-		manifestItems.add(new ManifestItem("Suicide squad", "urn:dece:cid:eidr-s:41D1-41F1-B266-14D0-416F-9",
-				null,
-				"/xml/urn:dece:cid:eidr-s:41D1-41F1-B266-14D0-416F-9/suicidesquad_manifest-1.0.xml",
-				"/xml/urn:dece:cid:eidr-s:41D1-41F1-B266-14D0-416F-9/suicidesquad_appdata-1.0.xml",
-				"/xml/urn:dece:cid:eidr-s:41D1-41F1-B266-14D0-416F-9/suicidesquad_cpestyle-1.0.xml"));
-
-    }
 
     public static void startNextGenExperience(Context appContext, final Activity launcherActivity, final ManifestItem item,
                                               Object playbackObject, Class<? extends AbstractNextGenMainMovieFragment> fragmentClass,
                                               NextGenEventHandler eventHandler, Locale locale){
-        final ProgressDialog mDialog = ProgressDialog.show(launcherActivity, "", "Loading", false, false);
+        nextgenPlaybackObject = playbackObject;
+
+        applicationContext = appContext;
+        sCacheManager = new NextGenCacheManager(applicationContext);
+        mainMovieFragmentClass = fragmentClass;
+        nextGenEventHandler = eventHandler;
+        clientLocale = locale == null? Locale.US : locale;
+        manifestItem = item;
+
+        sUserAgent = "Android/" + sVersionName + " (Linux; U; Android " + Build.VERSION.RELEASE + "; " + Build.MODEL + ")";
+        try {
+            ApplicationInfo appInfo = appContext.getPackageManager().getApplicationInfo(
+                    appContext.getPackageName(), PackageManager.GET_META_DATA);
+            if (appInfo.metaData != null) {
+                googleMapAPIKey = appInfo.metaData.getString("com.google.android.geo.API_KEY");
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+        }
+
+        Intent intent = new Intent(launcherActivity, LauncherActivity.class);
+        launcherActivity.startActivity(intent);
+
+    }
+
+    public static void startNextGenExperience_prv(Context appContext, final Activity launcherActivity, final ManifestItem item,
+                                              Object playbackObject, Class<? extends AbstractNextGenMainMovieFragment> fragmentClass,
+                                              NextGenEventHandler eventHandler, Locale locale){
+        /*final ProgressDialog mDialog = ProgressDialog.show(launcherActivity, "", "Loading", false, false);
 
         nextgenPlaybackObject = playbackObject;
 
@@ -203,12 +182,12 @@ public class NextGenExperience {
         }else {
             mDialog.dismiss();
             mDialog.cancel();
-        }
+        }*/
 
 
     }
 
-    private static boolean startNextGenParsing(ManifestItem manifestItem) {
+    public static boolean startNextGenParsing(ManifestItem manifestItem) {
 		try {
 			// install security provider before calling getCastActorsData to avoid SSL errors on < Android 5.0 devices
 			ProviderInstaller.installIfNeeded(getApplicationContext());
@@ -261,6 +240,9 @@ public class NextGenExperience {
 
     }
 
+    public static ManifestItem getManifestItem(){
+        return manifestItem;
+    }
 
     public static Context getApplicationContext(){
         return applicationContext;

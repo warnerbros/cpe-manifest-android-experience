@@ -369,6 +369,9 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
         }
 
         if (mainStyle != null) {
+            if (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT == orientation && TabletUtils.isTablet()){
+                orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+            }
             StyleData.NodeStyleData nodeStyleData = mainStyle.getNodeStyleData(orientation);
             if (nodeStyleData != null) {
                 textButtonParentFrame.setVisibility(View.GONE);

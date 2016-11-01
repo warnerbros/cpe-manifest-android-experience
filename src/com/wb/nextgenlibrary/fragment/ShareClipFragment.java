@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
@@ -61,6 +62,9 @@ public class ShareClipFragment extends ECVideoViewFragment implements View.OnCli
         if (v.getId() == R.id.share_clip_button) {
             videoView.pause();
             String videoUrl = selectedAVItem.videoUrl;
+
+            NextGenExperience.getNextGenEventHandler().handleShareLink(null, this, videoUrl);
+
             Intent share = new Intent(Intent.ACTION_SEND);
             share.setType("text/plain");
             share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
@@ -100,7 +104,8 @@ public class ShareClipFragment extends ECVideoViewFragment implements View.OnCli
         int nextBtnVisibility = View.VISIBLE;
         if (itemIndex == 0){
             prevBtnVisibility = View.INVISIBLE;
-        }else if (itemIndex == shareClipExperience.getChildrenContents().size() -1){
+        }
+        if (itemIndex == shareClipExperience.getChildrenContents().size() -1){
             nextBtnVisibility = View.INVISIBLE;
         }
         prevClipButton.setVisibility(prevBtnVisibility);

@@ -35,7 +35,11 @@ public class NextGenExtraMainTableFragment extends NextGenGridViewFragment {
     protected void onListItemClick(View v, int position, long id){
         ExperienceData selectedGroup = ecGroups.get(position);
         Intent intent = null;
+        boolean bHasChildren = selectedGroup.getChildrenContents() != null && selectedGroup.getChildrenContents().size() > 0;
+
         if (selectedGroup.getECGroupType() == MovieMetaData.ECGroupType.FEATURETTES) {
+            if (!bHasChildren)
+                return;
             intent = new Intent(getActivity(), ECVideoActivity.class);
         }else if (selectedGroup.getECGroupType() == MovieMetaData.ECGroupType.LOCATIONS){
             intent = new Intent(getActivity(), ECSceneLocationActivity.class);
