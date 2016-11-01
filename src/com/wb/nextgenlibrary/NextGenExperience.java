@@ -19,6 +19,7 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.security.ProviderInstaller;
+import com.wb.nextgenlibrary.activity.LauncherActivity;
 import com.wb.nextgenlibrary.activity.NextGenActivity;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.fragment.AbstractNextGenMainMovieFragment;
@@ -91,13 +92,41 @@ public class NextGenExperience {
     private static Object nextgenPlaybackObject;
     private static NextGenEventHandler nextGenEventHandler;
     private static String googleMapAPIKey = null;
+    private static ManifestItem manifestItem = null;
 
     private static String sUserAgent;
 
     public static void startNextGenExperience(Context appContext, final Activity launcherActivity, final ManifestItem item,
                                               Object playbackObject, Class<? extends AbstractNextGenMainMovieFragment> fragmentClass,
                                               NextGenEventHandler eventHandler, Locale locale){
-        final ProgressDialog mDialog = ProgressDialog.show(launcherActivity, "", "Loading", false, false);
+        nextgenPlaybackObject = playbackObject;
+
+        applicationContext = appContext;
+        sCacheManager = new NextGenCacheManager(applicationContext);
+        mainMovieFragmentClass = fragmentClass;
+        nextGenEventHandler = eventHandler;
+        clientLocale = locale == null? Locale.US : locale;
+        manifestItem = item;
+
+        sUserAgent = "Android/" + sVersionName + " (Linux; U; Android " + Build.VERSION.RELEASE + "; " + Build.MODEL + ")";
+        try {
+            ApplicationInfo appInfo = appContext.getPackageManager().getApplicationInfo(
+                    appContext.getPackageName(), PackageManager.GET_META_DATA);
+            if (appInfo.metaData != null) {
+                googleMapAPIKey = appInfo.metaData.getString("com.google.android.geo.API_KEY");
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+        }
+
+        Intent intent = new Intent(launcherActivity, LauncherActivity.class);
+        launcherActivity.startActivity(intent);
+
+    }
+
+    public static void startNextGenExperience_prv(Context appContext, final Activity launcherActivity, final ManifestItem item,
+                                              Object playbackObject, Class<? extends AbstractNextGenMainMovieFragment> fragmentClass,
+                                              NextGenEventHandler eventHandler, Locale locale){
+        /*final ProgressDialog mDialog = ProgressDialog.show(launcherActivity, "", "Loading", false, false);
 
         nextgenPlaybackObject = playbackObject;
 
@@ -153,12 +182,12 @@ public class NextGenExperience {
         }else {
             mDialog.dismiss();
             mDialog.cancel();
-        }
+        }*/
 
 
     }
 
-    private static boolean startNextGenParsing(ManifestItem manifestItem) {
+    public static boolean startNextGenParsing(ManifestItem manifestItem) {
 		try {
 			// install security provider before calling getCastActorsData to avoid SSL errors on < Android 5.0 devices
 			ProviderInstaller.installIfNeeded(getApplicationContext());
@@ -211,6 +240,9 @@ public class NextGenExperience {
 
     }
 
+    public static ManifestItem getManifestItem(){
+        return manifestItem;
+    }
 
     public static Context getApplicationContext(){
         return applicationContext;
