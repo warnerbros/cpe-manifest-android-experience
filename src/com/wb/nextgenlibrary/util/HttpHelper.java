@@ -35,12 +35,18 @@ import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.conn.ConnectionReleaseTrigger;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.ExecutionContext;
 import org.apache.http.protocol.HTTP;
+import org.apache.http.protocol.HttpContext;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
 
@@ -322,10 +328,11 @@ public class HttpHelper {
 	public static String getFromUrl(String url, List <NameValuePair> params, List <NameValuePair> headerValues) throws IOException {
 		NextGenLogger.d(F.TAG_API, "HttpHelper.getFromUrl url:" + url);
 		InputStream content = null;
+		HttpClient httpClient = null;
 		try {
-			HttpClient httpClient = isSecureFlxUrl(url) ? new SecureFlxHttpClient()
+			httpClient = isSecureFlxUrl(url) ? new SecureFlxHttpClient()
 					: new DefaultHttpClient();
-			
+
 			HttpParams clientParameters = httpClient.getParams();
 			HttpConnectionParams.setConnectionTimeout(clientParameters, TIMEOUT_CONNECTION);
 			HttpConnectionParams.setSoTimeout(clientParameters, TIMEOUT_HTTP_POST);
@@ -373,6 +380,9 @@ public class HttpHelper {
 				} catch (IOException e) {
 					/* Ignored */
 				}
+			}
+			if (httpClient != null) {
+				httpClient.getConnectionManager().shutdown();
 			}
 		}
 	}
