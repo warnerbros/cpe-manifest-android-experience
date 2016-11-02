@@ -166,7 +166,7 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
                 @Override
                 public void onClick(View v) {
                     if (object.getBaselineCastData() != null && object.getBaselineCastData().headShots != null && object.getBaselineCastData().headShots.size()> 0) {
-                        onItemSelected(0);
+                        onItemSelected(-1);     // pass -1 because we set index + 1 in onItemSelected
                         NextGenAnalyticData.reportEvent(getActivity(), NextGenActorDetailFragment.this, "Actor Thumbnail Image",
                                 NextGenAnalyticData.AnalyticAction.ACTION_CLICK, object.getBaselineCastData().headShots.get(0).fullSizeUrl);
 
