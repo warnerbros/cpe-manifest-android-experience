@@ -2,7 +2,9 @@ package com.wb.nextgenlibrary.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.wb.nextgenlibrary.NextGenExperience;
@@ -18,18 +20,31 @@ import java.util.concurrent.Callable;
  */
 
 public class LauncherActivity extends Activity {
+
+	ProgressDialog mDialog;
+	NextGenLauncherTask launcherTask;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.next_gen_launcher_view);
+
+		mDialog = ProgressDialog.show(this, "", "Loading", false, true);
+		mDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				LauncherActivity.this.finish();
+			}
+		});
+		launcherTask = new NextGenLauncherTask();
+		launcherTask.execute(NextGenExperience.getManifestItem());
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
-		final ProgressDialog mDialog = ProgressDialog.show(this, "", "Loading", false, false);
-
+		/*
 		final NextGenExperience.ManifestItem item = NextGenExperience.getManifestItem();
 		if (!StringHelper.isEmpty(item.getManifestFileUrl())) {
 			Worker.execute(new Callable<Boolean>() {
@@ -66,8 +81,38 @@ public class LauncherActivity extends Activity {
 		}else {
 			mDialog.dismiss();
 			mDialog.cancel();
-		}
+		}*/
 
 	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if (launcherTask != null && !launcherTask.isCancelled())
+			launcherTask.cancel(true);
+	}
+
+
+	private class NextGenLauncherTask extends AsyncTask<NextGenExperience.ManifestItem, Integer, Boolean> {
+		protected Boolean doInBackground(NextGenExperience.ManifestItem... manifestItems) {
+
+			return NextGenExperience.startNextGenParsing(manifestItems[0]);
+		}
+
+		protected void onProgressUpdate(Integer... progress) {
+			//setProgressPercent(progress[0]);
+		}
+
+		protected void onPostExecute(Boolean result) {
+			if (result){
+				Intent intent = new Intent(LauncherActivity.this, NextGenActivity.class);
+				LauncherActivity.this.startActivity(intent);
+			}
+			mDialog.dismiss();
+			mDialog.cancel();
+			LauncherActivity.this.finish();
+		}
+	}
+
 
 }
