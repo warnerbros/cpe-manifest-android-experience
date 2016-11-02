@@ -10,6 +10,7 @@ import com.wb.nextgenlibrary.util.utils.StringHelper;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.annotation.Annotation;
@@ -28,6 +29,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
@@ -56,89 +58,127 @@ public class ManifestXMLParser {
         }
     }
 
-    public NextGenManifestData startParsing(String manifestUrl, String appDataUrl, String styleDataUrl){
-        NextGenManifestData manifest = null;
-        CPEStyleSetType styleData = null;
-        HttpURLConnection conn = null;
-        ManifestAppDataSetType appData = null;
-        try{
+    public NextGenManifestData startParsing(final String manifestUrl, final String appDataUrl, final String styleDataUrl){
+        final CPEStyleSetType styleData[] = new CPEStyleSetType[1];
+        final ManifestAppDataSetType[] appData = new ManifestAppDataSetType[1];
+        final MediaManifestType[] mainManifest = new MediaManifestType[1];
+        final CountDownLatch latch = new CountDownLatch(3);
+        if (appDataUrl != null) {
+            new Thread() {
+                @Override
+                public void run() {
+                    // App Data Parsing
+                    HttpURLConnection conn = null;
+                    try {
+                        URL appDataURL = new URL(appDataUrl);
 
-            // App Data Parsing
-            if (appDataUrl != null) {
-                URL appDataURL = new URL(appDataUrl);
-                conn = (HttpURLConnection) appDataURL.openConnection();
-                conn.setReadTimeout(10000);
-                conn.setConnectTimeout(20000);
-                conn.setRequestMethod("GET");
-                conn.setDoInput(true);
-                conn.connect();
-                InputStream appDataIS = conn.getInputStream();
+                        conn = (HttpURLConnection) appDataURL.openConnection();
+                        conn.setReadTimeout(10000);
+                        conn.setConnectTimeout(20000);
+                        conn.setRequestMethod("GET");
+                        conn.setDoInput(true);
+                        conn.connect();
+                        InputStream appDataIS = new BufferedInputStream(conn.getInputStream());
+                        XmlPullParser appDataParser = Xml.newPullParser();
+                        appDataParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+                        //AssetManager am2 = NextGenExperience.getContext().getAssets();
+                        appDataParser.setInput(appDataIS, null);
+                        //appDataParser.setInput(am2.open(appDataUrl), null);
+                        appDataParser.nextTag();
 
-                XmlPullParser appDataParser = Xml.newPullParser();
-                appDataParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-                //AssetManager am2 = NextGenExperience.getContext().getAssets();
-                appDataParser.setInput(appDataIS, null);
-                //appDataParser.setInput(am2.open(appDataUrl), null);
-                appDataParser.nextTag();
-
-                appData = parseAppData(appDataParser);
-                conn.disconnect();
-                conn = null;
-            }
-            //************ End of AppData Parsing
-
-            // CPE Style Parsing
-            if (styleDataUrl != null) {
-                URL appDataURL = new URL(styleDataUrl);
-                conn = (HttpURLConnection) appDataURL.openConnection();
-                conn.setReadTimeout(10000);
-                conn.setConnectTimeout(20000);
-                conn.setRequestMethod("GET");
-                conn.setDoInput(true);
-                conn.connect();
-                InputStream appDataIS = conn.getInputStream();
-
-                XmlPullParser styleDataParser = Xml.newPullParser();
-                styleDataParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-                styleDataParser.setInput(appDataIS, null);
-                styleDataParser.nextTag();
-
-                styleData = parseStyleData(styleDataParser);
-
-                conn.disconnect();
-                conn = null;
-            }
-            //************ End of CPE Style Parsing
-
-            // Manifest parsing
-            URL manifestURL = new URL(manifestUrl);
-            conn = (HttpURLConnection)manifestURL.openConnection();
-            conn.setReadTimeout(10000);
-            conn.setConnectTimeout(20000);
-            conn.setRequestMethod("GET");
-            conn.setDoInput(true);
-            conn.connect();
-            InputStream manifestIS = conn.getInputStream();
-
-            XmlPullParser manifestParser = Xml.newPullParser();
-            manifestParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-            manifestParser.setInput(manifestIS, null);
-            manifestParser.nextTag();
-
-
-            MediaManifestType mainManifest = parseManifest(manifestParser);
-            conn.disconnect();
-            conn = null;
-            manifest = new NextGenManifestData(mainManifest, appData, styleData);
-
-
-
-        }catch (Exception ex){
-            System.out.println(ex.getMessage());
-            if (conn != null)
-                conn.disconnect();
+                        appData[0] = parseAppData(appDataParser);
+                        conn.disconnect();
+                    } catch (Exception ex) {
+                        System.out.println(ex.getMessage());
+                        if (conn != null)
+                            conn.disconnect();
+                    } finally {
+                        latch.countDown();
+                    }
+                }
+            }.start();
         }
-        return manifest;
+        //**
+
+        //************ End of AppData Parsing
+
+        new Thread() {
+            @Override
+            public void run() {
+                // App Data Parsing
+
+                HttpURLConnection conn = null;
+                try {
+                    URL appDataURL = new URL(styleDataUrl);
+                    conn = (HttpURLConnection) appDataURL.openConnection();
+                    conn.setReadTimeout(10000);
+                    conn.setConnectTimeout(20000);
+                    conn.setRequestMethod("GET");
+                    conn.setDoInput(true);
+                    conn.connect();
+                    InputStream appDataIS = new BufferedInputStream(conn.getInputStream());
+                    XmlPullParser styleDataParser = Xml.newPullParser();
+                    styleDataParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+                    styleDataParser.setInput(appDataIS, null);
+                    styleDataParser.nextTag();
+                    styleData[0] = parseStyleData(styleDataParser);
+                    conn.disconnect();
+                } catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                    if (conn != null)
+                        conn.disconnect();
+                } finally {
+                    latch.countDown();
+                }
+            }
+        }.start();
+
+        //************ End of CPE Style Parsing
+
+
+        new Thread() {
+            @Override
+            public void run() {
+                // App Data Parsing
+
+                HttpURLConnection conn = null;
+                try {
+                    // Manifest parsing
+                    URL manifestURL = new URL(manifestUrl);
+                    conn = (HttpURLConnection) manifestURL.openConnection();
+                    conn.setReadTimeout(10000);
+                    conn.setConnectTimeout(20000);
+                    conn.setRequestMethod("GET");
+                    conn.setDoInput(true);
+                    conn.connect();
+                    InputStream manifestIS = new BufferedInputStream(conn.getInputStream());
+
+                    XmlPullParser manifestParser = Xml.newPullParser();
+                    manifestParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+                    manifestParser.setInput(manifestIS, null);
+                    manifestParser.nextTag();
+
+
+                    mainManifest[0] = parseManifest(manifestParser);
+                    conn.disconnect();
+                } catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                    if (conn != null) {
+                        conn.disconnect();
+                    }
+                } finally {
+                    latch.countDown();
+                }
+            }
+        }.start();
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return new NextGenManifestData(mainManifest[0], appData[0], styleData[0]);
     }
 
     private Annotation[] getAllInheritedAnnotations(Class classObj){
