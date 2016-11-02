@@ -62,7 +62,8 @@ public class ManifestXMLParser {
         final CPEStyleSetType styleData[] = new CPEStyleSetType[1];
         final ManifestAppDataSetType[] appData = new ManifestAppDataSetType[1];
         final MediaManifestType[] mainManifest = new MediaManifestType[1];
-        final CountDownLatch latch = new CountDownLatch(3);
+        final CountDownLatch latch = new CountDownLatch(StringHelper.isEmpty(appDataUrl) && StringHelper.isEmpty(styleDataUrl) ? 1 :
+				(StringHelper.isEmpty(appDataUrl) && StringHelper.isEmpty(styleDataUrl) ? 2 : 3) );
         if (appDataUrl != null) {
             new Thread() {
                 @Override
@@ -101,37 +102,38 @@ public class ManifestXMLParser {
         //**
 
         //************ End of AppData Parsing
+		if (styleDataUrl != null) {
+			new Thread() {
+				@Override
+				public void run() {
+					// App Data Parsing
 
-        new Thread() {
-            @Override
-            public void run() {
-                // App Data Parsing
-
-                HttpURLConnection conn = null;
-                try {
-                    URL appDataURL = new URL(styleDataUrl);
-                    conn = (HttpURLConnection) appDataURL.openConnection();
-                    conn.setReadTimeout(10000);
-                    conn.setConnectTimeout(20000);
-                    conn.setRequestMethod("GET");
-                    conn.setDoInput(true);
-                    conn.connect();
-                    InputStream appDataIS = new BufferedInputStream(conn.getInputStream());
-                    XmlPullParser styleDataParser = Xml.newPullParser();
-                    styleDataParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-                    styleDataParser.setInput(appDataIS, null);
-                    styleDataParser.nextTag();
-                    styleData[0] = parseStyleData(styleDataParser);
-                    conn.disconnect();
-                } catch (Exception ex) {
-                    System.out.println(ex.getMessage());
-                    if (conn != null)
-                        conn.disconnect();
-                } finally {
-                    latch.countDown();
-                }
-            }
-        }.start();
+					HttpURLConnection conn = null;
+					try {
+						URL appDataURL = new URL(styleDataUrl);
+						conn = (HttpURLConnection) appDataURL.openConnection();
+						conn.setReadTimeout(10000);
+						conn.setConnectTimeout(20000);
+						conn.setRequestMethod("GET");
+						conn.setDoInput(true);
+						conn.connect();
+						InputStream appDataIS = new BufferedInputStream(conn.getInputStream());
+						XmlPullParser styleDataParser = Xml.newPullParser();
+						styleDataParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+						styleDataParser.setInput(appDataIS, null);
+						styleDataParser.nextTag();
+						styleData[0] = parseStyleData(styleDataParser);
+						conn.disconnect();
+					} catch (Exception ex) {
+						System.out.println(ex.getMessage());
+						if (conn != null)
+							conn.disconnect();
+					} finally {
+						latch.countDown();
+					}
+				}
+			}.start();
+		}
 
         //************ End of CPE Style Parsing
 
