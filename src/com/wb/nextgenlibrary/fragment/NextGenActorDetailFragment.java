@@ -248,6 +248,9 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
         if (getActivity() != null) {
             filmographyAdaptor.setFilmographies(updateList);
             filmographyAdaptor.notifyDataSetChanged();
+			if (filmographyRecyclerView != null && filmographyAdaptor.getItemCount() > 0) {
+				filmographyRecyclerView.scrollToPosition(0);
+			}
         }
 
 
