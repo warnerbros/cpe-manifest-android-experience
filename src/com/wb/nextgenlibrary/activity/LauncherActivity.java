@@ -44,45 +44,6 @@ public class LauncherActivity extends Activity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		/*
-		final NextGenExperience.ManifestItem item = NextGenExperience.getManifestItem();
-		if (!StringHelper.isEmpty(item.getManifestFileUrl())) {
-			Worker.execute(new Callable<Boolean>() {
-				public Boolean call() throws Exception {
-					return NextGenExperience.startNextGenParsing(item);
-				}
-			}, new ResultListener<Boolean>() {
-				public void onResult(Boolean result) {
-					if (result) {
-						LauncherActivity.this.runOnUiThread(new Runnable() {
-							@Override
-							public void run() {
-
-								mDialog.dismiss();
-								mDialog.cancel();
-								Intent intent = new Intent(LauncherActivity.this, NextGenActivity.class);
-								LauncherActivity.this.startActivity(intent);
-								LauncherActivity.this.finish();
-							}
-						});
-					} else {
-						// TODO error handling if startNextGenParsing returns false
-						mDialog.dismiss();
-						mDialog.cancel();
-					}
-				}
-
-				public void onException(Exception e) {
-					mDialog.dismiss();
-					mDialog.cancel();
-
-				}
-			});
-		}else {
-			mDialog.dismiss();
-			mDialog.cancel();
-		}*/
-
 	}
 
 	@Override
@@ -105,7 +66,7 @@ public class LauncherActivity extends Activity {
 
 		protected void onPostExecute(Boolean result) {
 			if (result){
-				Intent intent = new Intent(LauncherActivity.this, NextGenActivity.class);
+				Intent intent = new Intent(LauncherActivity.this, NextGenStartupActivity.class);
 				LauncherActivity.this.startActivity(intent);
 			}
 			mDialog.dismiss();
