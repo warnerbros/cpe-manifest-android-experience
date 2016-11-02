@@ -1,6 +1,7 @@
 package com.wb.nextgenlibrary.activity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import com.wb.nextgenlibrary.R;
@@ -15,16 +16,18 @@ import com.wb.nextgenlibrary.fragment.ECVideoViewFragment;
 public class ECVideoActivity extends AbstractECView implements ECVideoViewFragment.ECVideoListAdaptor{
 
 	ECVideoViewFragment rightVideoFrame;
-    protected TextView selectedECNameTextView;
-    protected TextView descriptionTextView;
+	protected View contentMetaFrame;
+	protected TextView selectedECNameTextView;
+	protected TextView descriptionTextView;
 
-    public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         rightVideoFrame = (ECVideoViewFragment) getSupportFragmentManager().findFragmentById(R.id.ec_video_view_fragment);
         rightVideoFrame.setShouldAutoPlay(false);
         rightVideoFrame.setEcsAdaptor(this);
 
+        contentMetaFrame = (View) findViewById(R.id.ec_content_meta_frame);
 		selectedECNameTextView = (TextView) findViewById(R.id.ec_content_name);
 		descriptionTextView = (TextView) findViewById(R.id.ec_content_description);
     }
@@ -76,6 +79,10 @@ public class ECVideoActivity extends AbstractECView implements ECVideoViewFragme
             getSupportActionBar().hide();
         }
         rightVideoFrame.onFullScreenChange(bFullscreen);
+        if (bFullscreen) {
+            if (contentMetaFrame != null)
+                contentMetaFrame.setVisibility(bFullscreen? View.GONE : View.VISIBLE);
+        }
     }
 
     @Override
