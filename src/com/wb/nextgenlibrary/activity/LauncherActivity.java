@@ -66,7 +66,7 @@ public class LauncherActivity extends Activity {
 
 		protected void onPostExecute(Boolean result) {
 			if (result){
-				Intent intent = new Intent(LauncherActivity.this, NextGenStartupActivity.class);
+				Intent intent = new Intent(LauncherActivity.this, NextGenActivity.class);
 				LauncherActivity.this.startActivity(intent);
 			}
 			mDialog.dismiss();
