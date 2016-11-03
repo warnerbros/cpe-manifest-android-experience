@@ -26,10 +26,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.zip.GZIPInputStream;
 
 import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
@@ -62,24 +62,34 @@ public class ManifestXMLParser {
         final CPEStyleSetType styleData[] = new CPEStyleSetType[1];
         final ManifestAppDataSetType[] appData = new ManifestAppDataSetType[1];
         final MediaManifestType[] mainManifest = new MediaManifestType[1];
-        final CountDownLatch latch = new CountDownLatch(StringHelper.isEmpty(appDataUrl) && StringHelper.isEmpty(styleDataUrl) ? 1 :
+
+		final CountDownLatch latch = new CountDownLatch(StringHelper.isEmpty(appDataUrl) && StringHelper.isEmpty(styleDataUrl) ? 1 :
 				(StringHelper.isEmpty(appDataUrl) && StringHelper.isEmpty(styleDataUrl) ? 2 : 3) );
-        if (appDataUrl != null) {
+
+		if (appDataUrl != null) {
             new Thread() {
                 @Override
                 public void run() {
                     // App Data Parsing
+
                     HttpURLConnection conn = null;
                     try {
                         URL appDataURL = new URL(appDataUrl);
-
                         conn = (HttpURLConnection) appDataURL.openConnection();
                         conn.setReadTimeout(10000);
                         conn.setConnectTimeout(20000);
                         conn.setRequestMethod("GET");
                         conn.setDoInput(true);
+                        conn.setRequestProperty("Accept-Encoding", "gzip");
                         conn.connect();
-                        InputStream appDataIS = new BufferedInputStream(conn.getInputStream());
+                        String responseEncoding = conn.getHeaderField("Content-Encoding");
+                        InputStream appDataIS;
+                        if ("gzip".equalsIgnoreCase(responseEncoding)) {
+                            appDataIS = new BufferedInputStream(new GZIPInputStream(conn.getInputStream()));
+                        } else {
+                            appDataIS = new BufferedInputStream(conn.getInputStream());
+                        }
+
                         XmlPullParser appDataParser = Xml.newPullParser();
                         appDataParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
                         //AssetManager am2 = NextGenExperience.getContext().getAssets();
@@ -94,49 +104,60 @@ public class ManifestXMLParser {
                         if (conn != null)
                             conn.disconnect();
                     } finally {
+
                         latch.countDown();
                     }
                 }
             }.start();
         }
-        //**
+            //************ End of AppData Parsing
 
-        //************ End of AppData Parsing
-		if (styleDataUrl != null) {
-			new Thread() {
-				@Override
-				public void run() {
-					// App Data Parsing
+            // CPE Style Parsing
+            if (styleDataUrl != null) {
+                new Thread() {
+                    @Override
+                    public void run() {
+                        // App Data Parsing
 
-					HttpURLConnection conn = null;
-					try {
-						URL appDataURL = new URL(styleDataUrl);
-						conn = (HttpURLConnection) appDataURL.openConnection();
-						conn.setReadTimeout(10000);
-						conn.setConnectTimeout(20000);
-						conn.setRequestMethod("GET");
-						conn.setDoInput(true);
-						conn.connect();
-						InputStream appDataIS = new BufferedInputStream(conn.getInputStream());
-						XmlPullParser styleDataParser = Xml.newPullParser();
-						styleDataParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-						styleDataParser.setInput(appDataIS, null);
-						styleDataParser.nextTag();
-						styleData[0] = parseStyleData(styleDataParser);
-						conn.disconnect();
-					} catch (Exception ex) {
-						System.out.println(ex.getMessage());
-						if (conn != null)
-							conn.disconnect();
-					} finally {
-						latch.countDown();
-					}
-				}
-			}.start();
-		}
+                        HttpURLConnection conn = null;
+                        try {
+                            URL appDataURL = new URL(styleDataUrl);
+                            conn = (HttpURLConnection) appDataURL.openConnection();
+                            conn.setReadTimeout(10000);
+                            conn.setConnectTimeout(20000);
+                            conn.setRequestMethod("GET");
+                            conn.setDoInput(true);
+                            conn.setRequestProperty("Accept-Encoding", "gzip");
+                            conn.connect();
+                            String responseEncoding = conn.getHeaderField("Content-Encoding");
+                            InputStream styleDataIS;
+                            if ("gzip".equalsIgnoreCase(responseEncoding)) {
+                                styleDataIS = new BufferedInputStream(new GZIPInputStream(conn.getInputStream()));
+                            } else {
+                                styleDataIS = new BufferedInputStream(conn.getInputStream());
+                            }
 
-        //************ End of CPE Style Parsing
+                            XmlPullParser styleDataParser = Xml.newPullParser();
+                            styleDataParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+                            styleDataParser.setInput(styleDataIS, null);
+                            styleDataParser.nextTag();
 
+                            styleData[0] = parseStyleData(styleDataParser);
+
+                            conn.disconnect();
+
+                        } catch (Exception ex) {
+                            System.out.println(ex.getMessage());
+                            if (conn != null)
+                                conn.disconnect();
+                        } finally {
+
+                            latch.countDown();
+                        }
+                    }
+                }.start();
+            }
+            //************ End of CPE Style Parsing
 
         new Thread() {
             @Override
@@ -152,8 +173,15 @@ public class ManifestXMLParser {
                     conn.setConnectTimeout(20000);
                     conn.setRequestMethod("GET");
                     conn.setDoInput(true);
+                    conn.setRequestProperty("Accept-Encoding", "gzip");
                     conn.connect();
-                    InputStream manifestIS = new BufferedInputStream(conn.getInputStream());
+                    String responseEncoding = conn.getHeaderField("Content-Encoding");
+                    InputStream manifestIS;
+                    if ("gzip".equalsIgnoreCase(responseEncoding)) {
+                        manifestIS = new BufferedInputStream(new GZIPInputStream(conn.getInputStream()));
+                    } else {
+                        manifestIS = new BufferedInputStream(conn.getInputStream());
+                    }
 
                     XmlPullParser manifestParser = Xml.newPullParser();
                     manifestParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
