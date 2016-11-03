@@ -263,7 +263,6 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
             }
         }else {
-            //buttonParentFrame.setVisibility(View.VISIBLE);
             setPlayExtraButtonsVisibility(ButtonsMode.TEXT_BUTTON_VISIBLE);
         }
     }
@@ -313,9 +312,11 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
         Size buttonsReferenceFrameSize;
         Size buttonsReferenceFrameSourceSize;
         StyleData.NodeStyleData nodeStyleData;
+        boolean isPortrait = false;
         if (mainStyle == null)		// if there's no main style, no calculations of button positions will be needed
             return;
         if (orientation == Configuration.ORIENTATION_PORTRAIT && !TabletUtils.isTablet()) {	// handle portrait mode only when it's on phone
+            isPortrait = true;
             buttonsReferenceFrameSize = new Size(imageParentFrame.getWidth(), imageParentFrame.getHeight());
             buttonsReferenceFrame = imageParentFrame;
             buttonsReferenceFrameSourceSize = bgImageSize;
@@ -369,14 +370,18 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
             int width = (int) (((double) buttonLayoutArea.getWidthPixels().intValue()) * shrinkRatio);
             int screenWidth = NextGenExperience.getScreenWidth(this);
-            if (width > screenWidth){
-                width = screenWidth;
+            if (width > screenWidth){           // if the specific area is wider than the screen, set the button area to be the screen width
+                width = screenWidth - 20 ;      // 20 being the padding on the size, 10 pixels each side
                 buttonShrinkRation = ((double) width / ((double) buttonLayoutArea.getWidthPixels().intValue()));
             }
 
             int height = (int) (((double) buttonLayoutArea.getHeightPixels().intValue()) * buttonShrinkRation);
             int y = (int) (((double) buttonsReferenceFrameSourceSize.getHeight() - buttonLayoutArea.getPixelsFromBottom().intValue()) * shrinkRatio) - height;
             int x = (int) (((double) buttonLayoutArea.getPixelsFromLeft().intValue()) * shrinkRatio);
+
+            if (isPortrait){
+                x = (buttonsReferenceFrameSize.getWidth() - width) / 2;
+            }
 
             ViewGroup.LayoutParams buttonsLayoutParams = imageButtonsFrame.getLayoutParams();
             if (buttonsLayoutParams instanceof LinearLayout.LayoutParams) {
