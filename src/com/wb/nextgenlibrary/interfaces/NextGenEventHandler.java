@@ -12,4 +12,7 @@ public interface NextGenEventHandler {
     boolean isDebugBuild();
     void userEventLog(String screen, String subScreen, String button, String action, String value);
     void handleShareLink(Activity activity, Fragment fragment, String shareUrl);
+    boolean shouldShowInterstitialForContent(Object content);       // the default should be true so that Nextgen will show the interstitial, set this to false then NextGen will not show interstitial for the given content.
+    void setInterstitialWatchedForContent(Object content);
+    void setInterstitialSkippedForContent(Object content);
 }
