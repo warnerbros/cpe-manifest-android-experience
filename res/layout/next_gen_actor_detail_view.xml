@@ -11,105 +11,100 @@
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="match_parent">
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="5"
-            android:orientation="vertical">
+            android:layout_weight="2"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/next_gen_detail_full_image"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:visibility="visible"
+                android:layout_weight="3"/>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="2"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/next_gen_detail_full_image"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:visibility="visible"
-                    android:layout_weight="3"/>
-
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/actor_real_name_text"
+                    android:textColor="@android:color/white"
+                    android:fontFamily="sans-serif-condensed"
+                    android:textSize="@dimen/textXLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="@dimen/spacing_normal"
+                    android:paddingStart="@dimen/spacing_normal" />
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="5"
-                    android:orientation="vertical">
-                    <TextView
-                        android:id="@+id/actor_real_name_text"
-                        android:textColor="@android:color/white"
-                        android:fontFamily="sans-serif-condensed"
-                        android:textSize="@dimen/textXLarge"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingEnd="@dimen/spacing_normal"
-                        android:paddingStart="@dimen/spacing_normal" />
-                    <LinearLayout
-                        android:layout_alignParentRight="true"
-                        android:id="@+id/actor_social_buttons"
-                        android:layout_toRightOf="@+id/actor_real_name_text"
-                        android:layout_width="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:id="@+id/actor_social_buttons"
+                    android:layout_toRightOf="@+id/actor_real_name_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/social_icon_dimen"
+                    android:orientation="horizontal">
+                    <ImageButton
+                        android:padding="@dimen/spacing_xsmall"
+                        android:id="@+id/actor_page_facebook_button"
+                        android:src="@drawable/social_icon_facebook"
+                        android:background="@android:color/transparent"
+                        android:scaleType="centerInside"
+                        android:layout_width="@dimen/social_icon_dimen"
                         android:layout_height="@dimen/social_icon_dimen"
-                        android:orientation="horizontal">
-                        <ImageButton
-                            android:padding="@dimen/spacing_xsmall"
-                            android:id="@+id/actor_page_facebook_button"
-                            android:src="@drawable/social_icon_facebook"
-                            android:background="@android:color/transparent"
-                            android:scaleType="centerInside"
-                            android:layout_width="@dimen/social_icon_dimen"
-                            android:layout_height="@dimen/social_icon_dimen"
-                            android:visibility="gone"/>
-                        <ImageButton
-                            android:padding="@dimen/spacing_xsmall"
-                            android:id="@+id/actor_page_twitter_button"
-                            android:src="@drawable/social_icon_twitter"
-                            android:background="@android:color/transparent"
-                            android:scaleType="centerInside"
-                            android:layout_width="@dimen/social_icon_dimen"
-                            android:layout_height="@dimen/social_icon_dimen"
-                            android:visibility="gone" />
-                        <ImageButton
-                            android:padding="@dimen/spacing_xsmall"
-                            android:id="@+id/actor_page_instagram_button"
-                            android:background="@android:color/transparent"
-                            android:scaleType="centerInside"
-                            android:src="@drawable/social_icon_instagram"
-                            android:layout_width="@dimen/social_icon_dimen"
-                            android:layout_height="@dimen/social_icon_dimen"
-                            android:visibility="gone" />
-                    </LinearLayout>
-
+                        android:visibility="gone"/>
+                    <ImageButton
+                        android:padding="@dimen/spacing_xsmall"
+                        android:id="@+id/actor_page_twitter_button"
+                        android:src="@drawable/social_icon_twitter"
+                        android:background="@android:color/transparent"
+                        android:scaleType="centerInside"
+                        android:layout_width="@dimen/social_icon_dimen"
+                        android:layout_height="@dimen/social_icon_dimen"
+                        android:visibility="gone" />
+                    <ImageButton
+                        android:padding="@dimen/spacing_xsmall"
+                        android:id="@+id/actor_page_instagram_button"
+                        android:background="@android:color/transparent"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/social_icon_instagram"
+                        android:layout_width="@dimen/social_icon_dimen"
+                        android:layout_height="@dimen/social_icon_dimen"
+                        android:visibility="gone" />
                 </LinearLayout>
+
             </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:paddingLeft="@dimen/spacing_xsmall"
-                    android:layout_height="0dp"
-                    android:layout_weight="3"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/actor_biography_title"
-                        android:textColor="@android:color/white"
-                        android:text="@string/biography"
-                        android:textSize="@dimen/textMedium"
-                        android:paddingTop="@dimen/spacing_normal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                        <TextView
-                            android:id="@+id/actor_biography_text"
-                            android:scrollbars = "vertical"
-                            android:textColor="@android:color/white"
-                            android:textSize="@dimen/textMSmall"
-                            android:fontFamily="sans-serif-condensed"
-                            android:layout_width="match_parent"
-                            android:layout_height="fill_parent" />
-                </LinearLayout>
-
-
-
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:id="@+id/actor_biography_frame"
+            android:paddingLeft="@dimen/spacing_xsmall"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/actor_biography_title"
+                android:textColor="@android:color/white"
+                android:text="@string/biography"
+                android:textSize="@dimen/textMedium"
+                android:paddingTop="@dimen/spacing_normal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/actor_biography_text"
+                    android:scrollbars = "vertical"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/textMSmall"
+                    android:fontFamily="sans-serif-condensed"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent" />
+        </LinearLayout>
+
         <LinearLayout
             android:id="@+id/actor_gallery_recycler_frame"
             android:layout_weight="2"
@@ -129,6 +124,7 @@
                 android:layout_height="fill_parent">
             </android.support.v7.widget.RecyclerView>
         </LinearLayout>
+
         <LinearLayout
             android:layout_weight="3"
             android:orientation="vertical"
@@ -148,6 +144,21 @@
                 android:layout_height="fill_parent">
             </android.support.v7.widget.RecyclerView>
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/actor_gallery_recycler_frame_padding"
+            android:layout_weight="2"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:orientation="vertical"
+            android:layout_height="0dp"/>
+        <LinearLayout
+            android:id="@+id/actor_biography_frame_padding"
+            android:layout_weight="3"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:orientation="vertical"
+            android:layout_height="0dp"/>
 
     </LinearLayout>
     <ImageButton

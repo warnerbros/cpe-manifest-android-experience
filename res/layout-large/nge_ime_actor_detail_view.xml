@@ -95,46 +95,34 @@
                             android:visibility="gone"
                             android:background="@android:color/transparent"/>
                     </RelativeLayout>
-                    <TextView
-                        android:id="@+id/actor_biography_title"
-                        android:textColor="@android:color/white"
-                        android:text="@string/biography"
-                        android:textSize="@dimen/textMedium"
-                        android:paddingTop="@dimen/spacing_normal"
+                    <LinearLayout
+                        android:id="@+id/actor_biography_frame"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                    <TextView
-                        android:id="@+id/actor_biography_text"
-                        android:textColor="@android:color/white"
-                        android:scrollbars="vertical"
-                        android:textSize="@dimen/textMedium"
-                        android:fontFamily="sans-serif-condensed"
-                        android:layout_width="match_parent"
-                        android:layout_height="fill_parent" />
+                        android:layout_height="fill_parent"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/actor_biography_title"
+                            android:textColor="@android:color/white"
+                            android:text="@string/biography"
+                            android:textSize="@dimen/textMedium"
+                            android:paddingTop="@dimen/spacing_normal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:id="@+id/actor_biography_text"
+                            android:textColor="@android:color/white"
+                            android:scrollbars="vertical"
+                            android:textSize="@dimen/textMedium"
+                            android:fontFamily="sans-serif-condensed"
+                            android:layout_width="match_parent"
+                            android:layout_height="fill_parent" />
+
+                    </LinearLayout>
                 </LinearLayout>
 
             </LinearLayout>
 
         </RelativeLayout>
-        <LinearLayout
-            android:id="@+id/actor_gallery_recycler_frame"
-            android:layout_weight="2"
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="0dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
-                android:fontFamily="sans-serif-condensed"
-                android:text="@string/actor_gallery"
-                android:textSize="@dimen/textMedium" />
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/actor_gallery_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="fill_parent">
-            </android.support.v7.widget.RecyclerView>
-        </LinearLayout>
         <LinearLayout
             android:layout_weight="3"
             android:orientation="vertical"
@@ -153,6 +141,13 @@
                 android:layout_height="fill_parent">
             </android.support.v7.widget.RecyclerView>
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/actor_biography_frame_padding"
+            android:visibility="gone"
+            android:layout_weight="0"
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"/>
 
     </LinearLayout>
 </RelativeLayout>
