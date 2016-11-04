@@ -9,6 +9,7 @@ import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.fragment.AbstractECGalleryViewFragment;
 import com.wb.nextgenlibrary.fragment.ECGalleryViewFragment;
 import com.wb.nextgenlibrary.fragment.ECTurnTableViewFragment;
+import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.utils.NextGenFragmentTransactionEngine;
 
 /**
@@ -86,6 +87,8 @@ public class ECGalleryActivity extends AbstractECView {
                     nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.next_gen_gallery_content_view, galleryFragment);
                 }
             }
+            if (!TabletUtils.isTablet())
+                galleryFragment.setShouldShowFullScreenBtn(false);
             galleryFragment.setCurrentGallery(galleryItem);
             NextGenAnalyticData.reportEvent(this, null, "EC Gallery", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, ec.title);
 
