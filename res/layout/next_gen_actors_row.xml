@@ -8,6 +8,18 @@
             android:layout_width="@dimen/next_gen_actor_thumbnail_dimen"
             android:layout_height="@dimen/next_gen_actor_thumbnail_dimen"
             android:duplicateParentState="true">
+            <com.wb.nextgenlibrary.widget.FontFitTextView
+                android:layout_margin="2dp"
+                android:includeFontPadding="false"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:duplicateParentState="true"
+                android:textColor="@color/white"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:textSize="100sp"
+                android:id="@+id/next_gen_actor_initial"
+                android:background="@drawable/nge_yellow_circle"/>
             <com.wb.nextgenlibrary.widget.CircularClippedImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
