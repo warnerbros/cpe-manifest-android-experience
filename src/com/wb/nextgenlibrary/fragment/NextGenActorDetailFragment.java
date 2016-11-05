@@ -32,6 +32,7 @@ import com.wb.nextgenlibrary.data.MovieMetaData.Filmography;
 import com.wb.nextgenlibrary.data.MovieMetaData.CastData;
 import com.wb.nextgenlibrary.network.BaselineApiDAO;
 import com.wb.nextgenlibrary.util.DialogUtils;
+import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
@@ -55,12 +56,14 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
     RecyclerView actorGalleryRecyclerView;
     LinearLayoutManager actorGalleryLayoutManager;
     ActorDetailGalleryRecyclerAdapter actorGalleryAdaptor;
-    View actorGalleryFrame, actorGalleryFramePadder;
-    View actorBiographyFrame, actorBiographyFramePadder;
+    View actorGalleryFrame;
+    View actorBiographyFrame;
 
     ImageButton facebookBtn;
     ImageButton twitterBtn;
     ImageButton instagramBtn;
+
+    View profileFrame, profileFrameNoImage;
 
     int layoutId = R.layout.next_gen_actor_detail_view;
 
@@ -83,34 +86,23 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-    }
 
-    private void reloadLayout(){
+        profileFrame = view.findViewById(R.id.actor_profile_frame);
+        profileFrameNoImage = view.findViewById(R.id.actor_profile_frame_no_profile_pic);
+
+        relayoutProfilePortion(true);
+
         fullImageView = (ImageView)view.findViewById(R.id.next_gen_detail_full_image);
         detailTextView = (TextView)view.findViewById(R.id.actor_biography_text);
         detailTextView.setMovementMethod(new ScrollingMovementMethod());
-        actorNameTextView = (TextView)view.findViewById(R.id.actor_real_name_text);
+
         filmographyRecyclerView = (RecyclerView)view.findViewById(R.id.actor_detail_filmography);
         actorGalleryRecyclerView = (RecyclerView) view.findViewById(R.id.actor_gallery_recycler);
 
         actorGalleryFrame = view.findViewById(R.id.actor_gallery_recycler_frame);
-        actorGalleryFramePadder = view.findViewById(R.id.actor_gallery_recycler_frame_padding);
 
         actorBiographyFrame = view.findViewById(R.id.actor_biography_frame);
-        actorBiographyFramePadder = view.findViewById(R.id.actor_biography_frame_padding);
 
-        facebookBtn = (ImageButton)view.findViewById(R.id.actor_page_facebook_button);
-        twitterBtn = (ImageButton)view.findViewById(R.id.actor_page_twitter_button);
-        instagramBtn = (ImageButton)view.findViewById(R.id.actor_page_instagram_button);
-        if (facebookBtn != null){
-            facebookBtn.setOnClickListener(this);
-        }
-        if (twitterBtn != null){
-            twitterBtn.setOnClickListener(this);
-        }
-        if (instagramBtn != null){
-            instagramBtn.setOnClickListener(this);
-        }
 
         if (filmographyRecyclerView != null){
             filmographyLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false);
@@ -127,7 +119,6 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
         CastData actor = actorOjbect;
         actorOjbect = null;
         reloadDetail(actor);
-
     }
 
     @Override
@@ -163,17 +154,65 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
         }
     }
 
+    private void relayoutProfilePortion(boolean hasProfilePicture){
+        if (hasProfilePicture){
+            profileFrame.setVisibility(View.VISIBLE);
+            profileFrameNoImage.setVisibility(View.GONE);
+
+            actorNameTextView = (TextView)getView().findViewById(R.id.actor_real_name_text);
+
+            facebookBtn = (ImageButton)getView().findViewById(R.id.actor_page_facebook_button);
+            twitterBtn = (ImageButton)getView().findViewById(R.id.actor_page_twitter_button);
+            instagramBtn = (ImageButton)getView().findViewById(R.id.actor_page_instagram_button);
+        } else {
+            profileFrame.setVisibility(View.GONE);
+            profileFrameNoImage.setVisibility(View.VISIBLE);
+
+            actorNameTextView = (TextView)getView().findViewById(R.id.actor_real_name_text_no_profile_pic);
+
+            facebookBtn = (ImageButton)getView().findViewById(R.id.actor_page_facebook_button_no_profile_pic);
+            twitterBtn = (ImageButton)getView().findViewById(R.id.actor_page_twitter_button_no_profile_pic);
+            instagramBtn = (ImageButton)getView().findViewById(R.id.actor_page_instagram_button_no_profile_pic);
+        }
+
+        if (facebookBtn != null){
+            facebookBtn.setOnClickListener(this);
+        }
+        if (twitterBtn != null){
+            twitterBtn.setOnClickListener(this);
+        }
+        if (instagramBtn != null){
+            instagramBtn.setOnClickListener(this);
+        }
+    }
+
     public void reloadDetail(final CastData object){
 
         if (object != null && object.getBaselineCastData() != null && !object.equals(actorOjbect)){
             actorOjbect = object;
             detailTextView.scrollTo(0,0);
+
+
             if (!StringHelper.isEmpty(actorOjbect.getBaselineCastData().getFullImageUrl())) {
+                relayoutProfilePortion(true);
                 fullImageView.setVisibility(View.VISIBLE);
                 Glide.with(getActivity()).load(actorOjbect.getBaselineCastData().getFullImageUrl()).centerCrop().into(fullImageView);
             } else {
+                if (!TabletUtils.isTablet() || StringHelper.isEmpty(actorOjbect.getBaselineCastData().biography))
+                    relayoutProfilePortion(false);
+                else
+                    relayoutProfilePortion(true);
                 fullImageView.setVisibility(View.GONE);
             }
+
+            detailTextView.setText(actorOjbect.getBaselineCastData().biography);
+            if (!StringHelper.isEmpty(actorOjbect.getBaselineCastData().biography)) {
+                actorBiographyFrame.setVisibility(View.VISIBLE);
+            } else {
+                actorBiographyFrame.setVisibility(View.GONE);
+            }
+            actorNameTextView.setText(actorOjbect.displayName.toUpperCase());
+
             fullImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -198,11 +237,9 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
                                     public void run() {
                                         if (!StringHelper.isEmpty(actorOjbect.getBaselineCastData().biography)) {
                                             actorBiographyFrame.setVisibility(View.VISIBLE);
-                                            actorBiographyFramePadder.setVisibility(View.GONE);
 
                                         } else {
                                             actorBiographyFrame.setVisibility(View.GONE);
-                                            actorGalleryFramePadder.setVisibility(View.VISIBLE);
                                         }
                                         detailTextView.setText(actorOjbect.getBaselineCastData().biography);
                                         updateFilmographyList();
@@ -244,7 +281,6 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
                     if (actorOjbect.getBaselineCastData().getGallery().size() > 1) {
 
                         actorGalleryFrame.setVisibility(View.VISIBLE);
-                        actorGalleryFramePadder.setVisibility(View.GONE);
 
                     } else
                         actorGalleryFrame.setVisibility(View.GONE);
@@ -257,19 +293,8 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
                     actorGalleryAdaptor.notifyDataSetChanged();
                 } else {
                     actorGalleryFrame.setVisibility(View.GONE);
-                    actorGalleryFramePadder.setVisibility(View.VISIBLE);
                 }
             }
-
-            detailTextView.setText(actorOjbect.getBaselineCastData().biography);
-            if (!StringHelper.isEmpty(actorOjbect.getBaselineCastData().biography)) {
-                actorBiographyFrame.setVisibility(View.VISIBLE);
-                actorBiographyFramePadder.setVisibility(View.GONE);
-            } else {
-                actorBiographyFrame.setVisibility(View.GONE);
-                actorBiographyFramePadder.setVisibility(View.VISIBLE);
-            }
-            actorNameTextView.setText(actorOjbect.displayName.toUpperCase());
         }
     }
 

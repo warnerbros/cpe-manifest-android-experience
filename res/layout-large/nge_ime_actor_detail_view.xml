@@ -9,9 +9,58 @@
         android:layout_height="match_parent" />
     <LinearLayout
         android:orientation="vertical"
+        android:weightSum="6"
         android:layout_width="fill_parent"
         android:layout_height="match_parent">
         <RelativeLayout
+            android:id="@+id/actor_profile_frame_no_profile_pic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/actor_real_name_text_no_profile_pic"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/textXLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_alignParentRight="true"
+                android:id="@+id/actor_social_buttons_no_profile_pic"
+                android:layout_toRightOf="@+id/actor_real_name_text_no_profile_pic"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/social_icon_dimen"
+                android:orientation="horizontal">
+                <ImageButton
+                    android:padding="@dimen/spacing_xsmall"
+                    android:id="@+id/actor_page_facebook_button_no_profile_pic"
+                    android:src="@drawable/social_icon_facebook"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerInside"
+                    android:layout_width="@dimen/social_icon_dimen"
+                    android:layout_height="@dimen/social_icon_dimen"
+                    android:visibility="gone"/>
+                <ImageButton
+                    android:padding="@dimen/spacing_xsmall"
+                    android:id="@+id/actor_page_twitter_button_no_profile_pic"
+                    android:src="@drawable/social_icon_twitter"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerInside"
+                    android:layout_width="@dimen/social_icon_dimen"
+                    android:layout_height="@dimen/social_icon_dimen"
+                    android:visibility="gone" />
+                <ImageButton
+                    android:padding="@dimen/spacing_xsmall"
+                    android:id="@+id/actor_page_instagram_button_no_profile_pic"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/social_icon_instagram"
+                    android:layout_width="@dimen/social_icon_dimen"
+                    android:layout_height="@dimen/social_icon_dimen"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/actor_profile_frame"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="3"
@@ -36,64 +85,49 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_toLeftOf="@+id/close_button">
-                            <TextView
-                                android:id="@+id/actor_real_name_text"
-                                android:textColor="@android:color/white"
-                                android:textSize="@dimen/textXLarge"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
+                        <TextView
+                            android:id="@+id/actor_real_name_text"
+                            android:textColor="@android:color/white"
+                            android:textSize="@dimen/textXLarge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
 
 
-                            <LinearLayout
-                                android:layout_alignParentRight="true"
-                                android:id="@+id/actor_social_buttons"
-                                android:layout_toRightOf="@+id/actor_real_name_text"
-                                android:layout_width="wrap_content"
-                                android:layout_height="@dimen/social_icon_dimen"
-                                android:orientation="horizontal">
-                                <ImageButton
-                                    android:padding="@dimen/spacing_xsmall"
-                                    android:id="@+id/actor_page_facebook_button"
-                                    android:src="@drawable/social_icon_facebook"
-                                    android:background="@android:color/transparent"
-                                    android:scaleType="centerInside"
-                                    android:layout_width="@dimen/social_icon_dimen"
-                                    android:layout_height="@dimen/social_icon_dimen"
-                                    android:visibility="gone"/>
-                                <ImageButton
-                                    android:padding="@dimen/spacing_xsmall"
-                                    android:id="@+id/actor_page_twitter_button"
-                                    android:src="@drawable/social_icon_twitter"
-                                    android:background="@android:color/transparent"
-                                    android:scaleType="centerInside"
-                                    android:layout_width="@dimen/social_icon_dimen"
-                                    android:layout_height="@dimen/social_icon_dimen"
-                                    android:visibility="gone" />
-                                <ImageButton
-                                    android:padding="@dimen/spacing_xsmall"
-                                    android:id="@+id/actor_page_instagram_button"
-                                    android:background="@android:color/transparent"
-                                    android:scaleType="centerInside"
-                                    android:src="@drawable/social_icon_instagram"
-                                    android:layout_width="@dimen/social_icon_dimen"
-                                    android:layout_height="@dimen/social_icon_dimen"
-                                    android:visibility="gone" />
-                            </LinearLayout>
-
-                        </RelativeLayout>
-                        <ImageButton
-                            android:id="@+id/close_button"
-                            android:layout_width="@dimen/close_icon_dimen"
-                            android:layout_height="@dimen/close_icon_dimen"
-                            android:src="@drawable/close_x_circle"
-                            android:scaleType="centerInside"
+                        <LinearLayout
                             android:layout_alignParentRight="true"
-                            android:visibility="gone"
-                            android:background="@android:color/transparent"/>
+                            android:id="@+id/actor_social_buttons"
+                            android:layout_toRightOf="@+id/actor_real_name_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/social_icon_dimen"
+                            android:orientation="horizontal">
+                            <ImageButton
+                                android:padding="@dimen/spacing_xsmall"
+                                android:id="@+id/actor_page_facebook_button"
+                                android:src="@drawable/social_icon_facebook"
+                                android:background="@android:color/transparent"
+                                android:scaleType="centerInside"
+                                android:layout_width="@dimen/social_icon_dimen"
+                                android:layout_height="@dimen/social_icon_dimen"
+                                android:visibility="gone"/>
+                            <ImageButton
+                                android:padding="@dimen/spacing_xsmall"
+                                android:id="@+id/actor_page_twitter_button"
+                                android:src="@drawable/social_icon_twitter"
+                                android:background="@android:color/transparent"
+                                android:scaleType="centerInside"
+                                android:layout_width="@dimen/social_icon_dimen"
+                                android:layout_height="@dimen/social_icon_dimen"
+                                android:visibility="gone" />
+                            <ImageButton
+                                android:padding="@dimen/spacing_xsmall"
+                                android:id="@+id/actor_page_instagram_button"
+                                android:background="@android:color/transparent"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/social_icon_instagram"
+                                android:layout_width="@dimen/social_icon_dimen"
+                                android:layout_height="@dimen/social_icon_dimen"
+                                android:visibility="gone" />
+                        </LinearLayout>
                     </RelativeLayout>
                     <LinearLayout
                         android:id="@+id/actor_biography_frame"
@@ -141,13 +175,16 @@
                 android:layout_height="fill_parent">
             </android.support.v7.widget.RecyclerView>
         </LinearLayout>
-        <LinearLayout
-            android:id="@+id/actor_biography_frame_padding"
-            android:visibility="gone"
-            android:layout_weight="0"
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"/>
 
     </LinearLayout>
+    <ImageButton
+        android:id="@+id/close_button"
+        android:layout_width="@dimen/close_icon_dimen"
+        android:layout_height="@dimen/close_icon_dimen"
+        android:src="@drawable/close_x_circle"
+        android:scaleType="centerInside"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:visibility="gone"
+        android:background="@android:color/transparent"/>
 </RelativeLayout>
