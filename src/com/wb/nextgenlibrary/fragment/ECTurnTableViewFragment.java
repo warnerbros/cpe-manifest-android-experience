@@ -3,6 +3,7 @@ package com.wb.nextgenlibrary.fragment;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -15,14 +16,11 @@ import com.bumptech.glide.Glide;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.data.MovieMetaData;
-import com.wb.nextgenlibrary.util.concurrent.ResultListener;
-import com.wb.nextgenlibrary.util.concurrent.Worker;
 import com.wb.nextgenlibrary.util.utils.F;
 import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 /**
  * Created by gzcheng on 7/13/16.
@@ -35,6 +33,8 @@ public class ECTurnTableViewFragment extends AbstractECGalleryViewFragment{
 
     private static int RESTRICTED_IMAGE_HEIGHT = 540;
     private static int RESTRICTED_IMAGE_WIDTH = 960;
+
+    private static DownloadImagesFilesTask downloadImagesFilesTask = null;
 
     List<Bitmap> turntableBitmaps = new ArrayList<Bitmap>();
     @Override
@@ -127,94 +127,80 @@ public class ECTurnTableViewFragment extends AbstractECGalleryViewFragment{
             if (loadingProgressBar != null)
                 loadingProgressBar.setVisibility(View.VISIBLE);
 
-            getImages(new ResultListener<List<Bitmap>>() {
-                @Override
-                public void onResult(List<Bitmap> result) {
-                    turntableBitmaps = result;
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            seekBarListener.onProgressChanged(turnTableSeekBar, 0, false);
-                            turnTableSeekBar.setMax(turntableBitmaps.size());
-                            loadingProgressBar.setVisibility(View.GONE);
-                            loadingProgressBar.setProgress(0);
 
-                        }
-                    });
-                }
+            if (downloadImagesFilesTask != null && !downloadImagesFilesTask.isCancelled()){
+                downloadImagesFilesTask.cancel(true);
+            }
+            downloadImagesFilesTask = new DownloadImagesFilesTask();
+            downloadImagesFilesTask.execute(currentGallery.galleryImages);
 
-                @Override
-                public <E extends Exception> void onException(E e) {
-                    NextGenLogger.d(F.TAG, e.getLocalizedMessage());
-                }
-            });
         }
-        /*
-        if (turnTableSeekBar != null && turnTableImageView != null) {
-            turnTableSeekBar.setMax(gallery.galleryImages.size()/4);
-        }*/
     }
 
+    private class DownloadImagesFilesTask extends AsyncTask<List<MovieMetaData.PictureItem>, Integer, List<Bitmap>> {
+        protected List<Bitmap> doInBackground(List<MovieMetaData.PictureItem>... pictureItemsArray) {
+
+            List<MovieMetaData.PictureItem> pictureItems = pictureItemsArray[0];
+            int count = pictureItems.size();
+
+            if (getActivity() == null)
+                return null;
+
+            double fractionNumber = count > 50 ? (double)count / 50.0 : count;
+
+            ActivityManager actManager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+            ActivityManager.MemoryInfo memInfo = new ActivityManager.MemoryInfo();
+            actManager.getMemoryInfo(memInfo);
+            long availMemory = memInfo.availMem / 2 ;
+
+            long perPageSize = availMemory / 1024 / 50 ;
+            long perUnitSize = perPageSize / (16 * 9);
 
 
-    public void getImages(final ResultListener<List<Bitmap>> l){
-        Worker.execute(new Callable<List<Bitmap>>() {
-            @Override
-            public List<Bitmap> call() throws Exception {
+            int targetWidth = (int)perUnitSize * 16;
 
-                if (getActivity() == null)
-                    return null;
+            if (targetWidth > RESTRICTED_IMAGE_WIDTH)
+                targetWidth = RESTRICTED_IMAGE_WIDTH;
 
-                double fractionNumber = currentGallery.galleryImages.size() > 50 ? (double)currentGallery.galleryImages.size() / 50.0 : currentGallery.galleryImages.size();
+            int targetHeight = targetWidth * 9 / 16;
 
-                ActivityManager actManager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
-                ActivityManager.MemoryInfo memInfo = new ActivityManager.MemoryInfo();
-                actManager.getMemoryInfo(memInfo);
-                long availMemory = memInfo.availMem / 2 ;
+            NextGenLogger.d("TurnTable", "Image width " + targetWidth + " Image Height " + targetHeight);
 
-                long perPageSize = availMemory / 1024 / 50 ;
-                long perUnitSize = perPageSize / (16 * 9);
+            List<Bitmap> result = new ArrayList<Bitmap>();
 
-
-                int targetWidth = (int)perUnitSize * 16;
-
-                if (targetWidth > RESTRICTED_IMAGE_WIDTH)
-                    targetWidth = RESTRICTED_IMAGE_WIDTH;
-
-                int targetHeight = targetWidth * 9 / 16;
-
-                NextGenLogger.d("TurnTable", "Image width " + targetWidth + " Image Height " + targetHeight);
-
-                List<Bitmap> result = new ArrayList<Bitmap>();
-
-                for (int i = 0 ; i * fractionNumber < currentGallery.galleryImages.size(); i++ ) {
-                    MovieMetaData.PictureItem item = currentGallery.galleryImages.get((int)(i * fractionNumber));
-
+            for (int i = 0 ; i * fractionNumber < pictureItems.size(); i++ ) {
+                MovieMetaData.PictureItem item = pictureItems.get((int)(i * fractionNumber));
+                try {
                     Bitmap theBitmap = Glide.
                             with(NextGenExperience.getApplicationContext()).
                             load(item.fullImage.url).asBitmap().
                             into(targetWidth, targetHeight). // Width and height
                             get();
                     result.add(theBitmap);
-                    final int progress = i*2;
+                    publishProgress(i * 2);
 
-                    if (getActivity() != null){
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (loadingProgressBar != null)
-                                    loadingProgressBar.setProgress(progress);
-                            }
-                        });
-                    }
+
+                }catch (Exception ex){
+
                 }
-
-
-                return result;
+                if (isCancelled()) break;
             }
-        }, l);
-    }
+            return result;
+        }
 
+        protected void onProgressUpdate(Integer... progress) {
+            loadingProgressBar.setProgress(progress[0]);
+            //setProgressPercent(progress[0]);
+        }
+
+        protected void onPostExecute(List<Bitmap> result) {
+            turntableBitmaps = result;
+            seekBarListener.onProgressChanged(turnTableSeekBar, 0, false);
+            turnTableSeekBar.setMax(turntableBitmaps.size());
+            loadingProgressBar.setVisibility(View.GONE);
+            loadingProgressBar.setProgress(0);
+        }
+    }
 
     public class OnSwipeTouchListener implements View.OnTouchListener {
 

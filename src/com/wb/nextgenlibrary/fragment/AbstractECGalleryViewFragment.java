@@ -28,7 +28,11 @@ abstract public class AbstractECGalleryViewFragment extends ECViewFragment  {
         if (fullscreenToggleBtn != null){
             if (TabletUtils.isTablet()) {
 
-                fullscreenToggleBtn.setVisibility(shouldShowFullScreenBtn ? View.VISIBLE : View.GONE);
+                if (shouldShowFullScreenBtn)
+                    showFullScreenBtn();
+                else
+                    hideFullScreenBtn();
+
                 fullscreenToggleBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -40,7 +44,7 @@ abstract public class AbstractECGalleryViewFragment extends ECViewFragment  {
                     }
                 });
             }else{
-                fullscreenToggleBtn.setVisibility(View.GONE);
+                hideFullScreenBtn();
             }
         }
     }
@@ -62,14 +66,25 @@ abstract public class AbstractECGalleryViewFragment extends ECViewFragment  {
     public void onFullScreenChange(boolean bFullscreen){
         super.onFullScreenChange(bFullscreen);
         if (bFullscreen) {
-            fullscreenToggleBtn.setVisibility(View.GONE);
+            hideFullScreenBtn();
             if (TabletUtils.isTablet())
                 closeBtn.setVisibility(View.VISIBLE);
         } else {
-            fullscreenToggleBtn.setVisibility(View.VISIBLE);
+            showFullScreenBtn();
             if (!shouldShowCloseBtn)
                 closeBtn.setVisibility(View.GONE);
         }
+
+    }
+
+    protected void showFullScreenBtn(){
+        if (fullscreenToggleBtn != null && shouldShowFullScreenBtn)
+            fullscreenToggleBtn.setVisibility(View.VISIBLE);
+    }
+
+    protected void hideFullScreenBtn(){
+        if (fullscreenToggleBtn != null)
+            fullscreenToggleBtn.setVisibility(View.GONE);
 
     }
 

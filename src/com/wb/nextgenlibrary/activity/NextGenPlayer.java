@@ -126,6 +126,8 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
             @Override
             public void onCompletion(MediaPlayer mp) {
                 updateImeFragment(NextGenPlaybackStatusListener.NextGenPlaybackStatus.STOP, -1L);
+
+                NextGenExperience.getNextGenEventHandler().setInterstitialWatchedForContent(NextGenExperience.getNextgenPlaybackObject());
                 bInterstitialVideoComplete = true;
                 playMainMovie();
             }
@@ -198,10 +200,10 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
     @Override
     public void onBackPressed(){
-        super.onBackPressed();
         if (ecFragmentsCounter == 1)
-            finish();
+            super.onBackPressed();
         else {
+            getSupportFragmentManager().popBackStackImmediate();
             ecFragmentsCounter = ecFragmentsCounter - 1;
             if (isPausedByIME){
                 isPausedByIME = false;
@@ -342,6 +344,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                         @Override
                         public void run() {
                             bInterstitialVideoComplete = true;
+                            NextGenExperience.getNextGenEventHandler().setInterstitialSkippedForContent(NextGenExperience.getNextgenPlaybackObject());
                             playMainMovie();
                             NextGenAnalyticData.reportEvent(NextGenPlayer.this, null, "Skip InterStitial Video",
                                     NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
@@ -446,10 +449,17 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
         if (currentUri == null) {
             currentUri = INTERSTITIAL_VIDEO_URI;
-            interstitialVideoView.setVisibility(View.VISIBLE);
-            interstitialVideoView.setVideoURI(currentUri);
 
             drmStatus = DRMStatus.IN_PROGRESS;
+            if (NextGenExperience.getNextGenEventHandler().shouldShowInterstitialForContent(NextGenExperience.getNextgenPlaybackObject())) {
+                interstitialVideoView.setVisibility(View.VISIBLE);
+                interstitialVideoView.setVideoURI(currentUri);
+            } else {
+
+                bInterstitialVideoComplete = true;
+                playMainMovie();
+            }
+
             mainMovieFragment.streamStartPreparations(new ResultListener<Boolean>() {
                 @Override
                 public void onResult(Boolean result) {

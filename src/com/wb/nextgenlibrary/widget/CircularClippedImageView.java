@@ -92,26 +92,7 @@ public class CircularClippedImageView extends ImageView{
         canvas.drawCircle(centerX, centerY, insideRaius, paint);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(bm, rect, rect, paint);
-        /*if (isActivated() || isSelected() || isPressed()) {
 
-            //create another bitmap for selected overlay
-            Bitmap overlay = Bitmap.createBitmap(getWidth(),
-                    getHeight(), Bitmap.Config.ARGB_8888);
-            Canvas onCanvas = new Canvas(overlay);
-
-            // draw a circle on the overlay bitmap
-            Paint selectedPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            selectedPaint.setColor(getResources().getColor(android.R.color.white));
-            onCanvas.drawCircle(centerX, centerY, radius, selectedPaint);
-
-            selectedPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-            selectedPaint.setColor(getResources().getColor(android.R.color.black));
-            onCanvas.drawCircle(centerX, centerY, insideRaius, selectedPaint);
-
-            // draw on top of normal state image
-            selectedPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.ADD));
-            canvas.drawBitmap(overlay, rect, rect, selectedPaint);
-        }*/
         return output;
     }
 

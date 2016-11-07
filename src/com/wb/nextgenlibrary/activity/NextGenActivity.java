@@ -42,26 +42,24 @@ import java.util.TimerTask;
  * Created by gzcheng on 1/7/16.
  */
 public class NextGenActivity extends NextGenHideStatusBarActivity implements View.OnClickListener {
-	// wrapper of ProfileViewFragment
-
     VideoView startupVideoView;
     ImageView startupImageView;
 
-	MediaPlayer audioPlayer;
+    MediaPlayer audioPlayer;
 
     ImageButton playMovieButton;
     ImageButton extraButton;
     Button playMovieTextButton;
     Button extraTextButton;
 
-    View buttonsLayout;
+    View imageButtonsFrame;
+    View textButtonsFrame;
     Size startupVideoSize = null;
     Size bgImageSize = null;
 
     FixedAspectRatioFrameLayout videoParentFrame;
     FixedAspectRatioFrameLayout imageParentFrame;
     FixedAspectRatioFrameLayout buttonParentFrame;
-    View textButtonParentFrame;
 
     private int videoLoopPoint = 0;
     private int buttonAnimationStartTime = 0;
@@ -78,52 +76,45 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
         setContentView(R.layout.next_gen_startup_view);
 
-
         videoParentFrame = (FixedAspectRatioFrameLayout)findViewById(R.id.video_parent_aspect_ratio_frame);
         buttonParentFrame = (FixedAspectRatioFrameLayout)findViewById(R.id.button_parent_aspect_ratio_frame);
         imageParentFrame = (FixedAspectRatioFrameLayout)findViewById(R.id.image_background_aspect_ratio_frame);
-        textButtonParentFrame = findViewById(R.id.startup_text_buttons_layout);
+        textButtonsFrame = findViewById(R.id.startup_text_buttons_layout);
 
         startupVideoView = (VideoView)findViewById(R.id.startup_video_view);
         startupImageView = (ImageView) findViewById(R.id.startup_image_view);
 
-        buttonsLayout = findViewById(R.id.startup_buttons_layout);
-        if (buttonsLayout != null){
-            buttonsLayout.setVisibility(View.GONE);
-        }
+        imageButtonsFrame = findViewById(R.id.startup_buttons_layout);
+
+        setPlayExtraButtonsVisibility(ButtonsMode.ALL_INVISIBLE);
 
         playMovieButton = (ImageButton) findViewById(R.id.next_gen_startup_play_button);
         if (playMovieButton != null){
             playMovieButton.setOnClickListener(this);
-        }
-        extraButton = (ImageButton) findViewById(R.id.next_gen_startup_extra_button);
-        if (extraButton != null){
-            extraButton.setOnClickListener(this);
-            extraButton.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    Intent intent = new Intent(NextGenActivity.this, TestItemsActivity.class);
-                    startActivity(intent);
-                    return true;
-                }
-            });
         }
 
         playMovieTextButton = (Button)findViewById(R.id.next_gen_startup_play_text_button);
         if (playMovieTextButton != null){
             playMovieTextButton.setOnClickListener(this);
         }
+
+        View.OnLongClickListener extraLongClickListener = new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Intent intent = new Intent(NextGenActivity.this, TestItemsActivity.class);
+                startActivity(intent);
+                return true;
+            }
+        };
+        extraButton = (ImageButton) findViewById(R.id.next_gen_startup_extra_button);
+        if (extraButton != null){
+            extraButton.setOnClickListener(this);
+            extraButton.setOnLongClickListener(extraLongClickListener);
+        }
         extraTextButton = (Button)findViewById(R.id.next_gen_startup_extra_text_button);
         if (extraTextButton != null){
             extraTextButton.setOnClickListener(this);
-            extraTextButton.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    Intent intent = new Intent(NextGenActivity.this, TestItemsActivity.class);
-                    startActivity(intent);
-                    return true;
-                }
-            });
+            extraTextButton.setOnLongClickListener(extraLongClickListener);
         }
 
         StyleData.NodeBackground nodeBackground = (mainStyle != null ) ? mainStyle.getBackground() : null;
@@ -133,9 +124,9 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
             if (videoLoopPoint > 500)
                 buttonAnimationStartTime = nodeBackground.getVideoLoopingPoint() - 500;
         }
+
         MovieMetaData.PictureImageData bgImageData = (mainStyle != null ) ? mainStyle.getBackgroundImage() : null;
         if (bgImageData != null && !StringHelper.isEmpty(bgImageData.url)){
-            //buttonsLayout.setVisibility(View.VISIBLE);
             String bgImageUrl = bgImageData.url;
             imageParentFrame.setAspectRatio(bgImageData.width, bgImageData.height);
             bgImageSize = new Size(bgImageData.width, bgImageData.height);
@@ -166,7 +157,8 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
             }).fitCenter().into(startupImageView);
 
         }
-        adjustButtonSizesAndPosition();
+
+        arrangeLayoutAccordingToScreenOrientation(getResources().getConfiguration().orientation);
     }
 
     @Override
@@ -177,29 +169,33 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
         else
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
         if (mainStyle != null) {
-            if (StringHelper.isEmpty(mainStyle.getBackgroundVideoUrl())) {
-                if (startupVideoView != null) {
-                    startupVideoView.setVisibility(View.GONE);
-                }
-                adjustButtonSizesAndPosition();
+            if (StringHelper.isEmpty(mainStyle.getBackgroundVideoUrl())) {		// if there's no background video
 
-            } else if (startupVideoView != null) {
+                startupVideoView.setVisibility(View.GONE);
+                setPlayExtraButtonsVisibility(ButtonsMode.IMAGE_BUTTON_VISIBLE);
+
+            } else {
                 if (!isStartUp) {
                     startupVideoView.seekTo(videoLoopPoint);
                     startupVideoView.start();
                     return;
                 }
                 isStartUp = false;
+                startupVideoSize = mainStyle.getBackgroundVideoSize();
+                if (startupVideoSize != null)
+                    videoParentFrame.setAspectRatio(startupVideoSize.getWidth(), startupVideoSize.getHeight());
+
                 startupVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                     @Override
                     public void onPrepared(final MediaPlayer mp) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-								if (startupVideoSize == null)
-	                                startupVideoSize = new Size(mp.getVideoWidth(), mp.getVideoHeight());
-                                videoParentFrame.setAspectRatio(startupVideoSize.getWidth(), startupVideoSize.getHeight());
-                                adjustButtonSizesAndPosition();
+                                if (startupVideoSize == null) {
+                                    startupVideoSize = new Size(mp.getVideoWidth(), mp.getVideoHeight());
+                                    videoParentFrame.setAspectRatio(startupVideoSize.getWidth(), startupVideoSize.getHeight());
+                                }
+                                //adjustButtonSizesAndPosition();
 
                             }
                         });
@@ -215,12 +211,13 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            if (buttonsLayout != null) {
-                                                buttonsLayout.setVisibility(View.VISIBLE);
-                                                buttonsLayout.setAlpha(0.0f);
+                                            if (imageButtonsFrame != null) {
+                                                setPlayExtraButtonsVisibility(ButtonsMode.IMAGE_BUTTON_VISIBLE);
+                                                imageButtonsFrame.setVisibility(View.VISIBLE);
+                                                imageButtonsFrame.setAlpha(0.0f);
 
                                                 // Start the animation
-                                                buttonsLayout.animate().setDuration(1000).alpha(1.0f);
+                                                imageButtonsFrame.animate().setDuration(1000).alpha(1.0f);
 
                                             }
 
@@ -253,30 +250,21 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
                 startupVideoView.requestFocus();
                 startupVideoView.setVideoURI(Uri.parse(mainStyle.getBackgroundVideoUrl()));
-				if (!StringHelper.isEmpty(mainStyle.getBackgroundAudioUrl())){
-					try {
-						audioPlayer = MediaPlayer.create(this, Uri.parse(mainStyle.getBackgroundAudioUrl()));
-						audioPlayer.setLooping(true);
-						audioPlayer.start();
-					}catch (Exception ex){
-						NextGenLogger.e(F.TAG, ex.getMessage());
-					}
-				}
+                if (!StringHelper.isEmpty(mainStyle.getBackgroundAudioUrl())){
+                    try {
+                        audioPlayer = MediaPlayer.create(this, Uri.parse(mainStyle.getBackgroundAudioUrl()));
+                        audioPlayer.setLooping(true);
+                        audioPlayer.start();
+                    }catch (Exception ex){
+                        NextGenLogger.e(F.TAG, ex.getMessage());
+                    }
+                }
 
-				startupVideoSize = mainStyle.getBackgroundVideoSize();
 
             }
         }else {
-            buttonParentFrame.setVisibility(View.VISIBLE);
-            buttonsLayout.setVisibility(View.GONE);
-            textButtonParentFrame.setVisibility(View.VISIBLE);
+            setPlayExtraButtonsVisibility(ButtonsMode.TEXT_BUTTON_VISIBLE);
         }
-    }
-
-    public void onStop(){
-        super.onStop();
-
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
     }
 
     public void onPause(){
@@ -284,187 +272,9 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
         if (startupVideoView.isPlaying()){
             startupVideoView.pause();
         }
-		if (audioPlayer != null){
-			audioPlayer.pause();
-		}
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        adjustButtonSizesAndPosition();
-
-    }
-
-    private void adjustButtonSizesAndPosition(){
-        if (mainStyle != null && !StringHelper.isEmpty(mainStyle.getBackgroundVideoUrl())) {
-            int orientation = NextGenHideStatusBarActivity.getCurrentScreenOrientation();       // adjust video frame aspect ration priority according to orientation
-            FixedAspectRatioFrameLayout.Priority newPriority = FixedAspectRatioFrameLayout.Priority.HEIGHT_PRIORITY;
-            switch (orientation) {
-                case ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE:
-                case ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE:
-                    newPriority = FixedAspectRatioFrameLayout.Priority.HEIGHT_PRIORITY;
-                    buttonParentFrame.copyFrameParams(videoParentFrame);                        // copy the video frame's layout params to Button frame
-                    break;
-                case ActivityInfo.SCREEN_ORIENTATION_PORTRAIT:
-                case ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT:
-                    newPriority = FixedAspectRatioFrameLayout.Priority.WIDTH_PRIORITY;
-                    buttonParentFrame.copyFrameParams(imageParentFrame);                        // copy the background image frame's layout params to Button frame
-                    break;
-
-            }
-            if (newPriority == videoParentFrame.getAspectRatioPriority()) {                      // just adjust the botton locations if there's no layout change
-                adjustButtonSizesAndPosition_priv(true);
-
-            } else {
-                videoParentFrame.setAspectRatioPriority(newPriority);
-                startupVideoView.getViewTreeObserver().addOnGlobalLayoutListener(new StartupViewTreeObserver(startupVideoView, true));
-            }
-        }else{              // for experience without CPE style xml
-            startupImageView.getViewTreeObserver().addOnGlobalLayoutListener(new StartupViewTreeObserver(startupImageView, false));
-            buttonParentFrame.copyFrameParams(imageParentFrame);
-            adjustButtonSizesAndPosition_priv(false);
+        if (audioPlayer != null){
+            audioPlayer.pause();
         }
-    }
-
-    class StartupViewTreeObserver implements ViewTreeObserver.OnGlobalLayoutListener {
-        int counter = 0;
-
-        View targetView;
-        boolean isVideoView;
-        public StartupViewTreeObserver(View view, boolean isVideoView){
-            targetView = view;
-            this.isVideoView = isVideoView;
-        }
-
-        @Override
-        public void onGlobalLayout() {
-            adjustButtonSizesAndPosition_priv(isVideoView);
-            counter = counter + 1;
-            if (counter > 3) {
-                targetView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                targetView = null;
-            }
-        }
-    };
-
-    private void adjustButtonSizesAndPosition_priv(boolean hasBGVideo){
-
-        int orientation = NextGenHideStatusBarActivity.getCurrentScreenOrientation();
-        Size referenceFrameSize = new Size(buttonParentFrame.getWidth(), buttonParentFrame.getHeight());
-
-        Size targetSize = bgImageSize;
-        if (hasBGVideo) {
-            switch (orientation) {
-                case ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE:
-                case ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE:
-                    targetSize = startupVideoSize;
-                    break;
-                case ActivityInfo.SCREEN_ORIENTATION_PORTRAIT:
-                case ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT:
-                    targetSize = bgImageSize;
-                    break;
-
-            }
-        }
-
-        if (mainStyle != null) {
-            if (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT == orientation && TabletUtils.isTablet()){
-                orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-            }
-            StyleData.NodeStyleData nodeStyleData = mainStyle.getNodeStyleData(orientation);
-            if (nodeStyleData != null) {
-                textButtonParentFrame.setVisibility(View.GONE);
-                StyleData.ThemeData buttonTheme = nodeStyleData.theme;
-                BackgroundOverlayAreaType buttonLayoutArea = nodeStyleData.getBGOverlay();
-
-                if (hasBGVideo && startupVideoSize == null)
-                    return;
-
-                double shrinkRatio = ((double) referenceFrameSize.getWidth()) / ((double) targetSize.getWidth());
-                double buttonShrinkRation = shrinkRatio;
-
-                int width = (int) (((double) buttonLayoutArea.getWidthPixels().intValue()) * shrinkRatio);
-                int screenWidth = NextGenExperience.getScreenWidth(this);
-                if (width > screenWidth){
-                    width = screenWidth;
-                    buttonShrinkRation = ((double) width / ((double) buttonLayoutArea.getWidthPixels().intValue()));
-                }
-
-                int height = (int) (((double) buttonLayoutArea.getHeightPixels().intValue()) * buttonShrinkRation);
-                int y = (int) (((double) targetSize.getHeight() - buttonLayoutArea.getPixelsFromBottom().intValue()) * shrinkRatio) - height;
-                int x = (int) (((double) buttonLayoutArea.getPixelsFromLeft().intValue()) * shrinkRatio);
-
-                ViewGroup.LayoutParams buttonsLayoutParams = buttonsLayout.getLayoutParams();
-                if (buttonsLayoutParams instanceof LinearLayout.LayoutParams) {
-                    ((LinearLayout.LayoutParams) buttonsLayoutParams).setMargins(x, y, 0, 0);
-                } else if (buttonsLayoutParams instanceof RelativeLayout.LayoutParams) {
-                    ((RelativeLayout.LayoutParams) buttonsLayoutParams).setMargins(x, y, 0, 0);
-                } else if (buttonsLayoutParams instanceof FrameLayout.LayoutParams) {
-                    ((FrameLayout.LayoutParams) buttonsLayoutParams).setMargins(x, y, 0, 0);
-                }
-
-                buttonsLayoutParams.height = height;
-                buttonsLayoutParams.width = width;
-
-                buttonsLayout.setLayoutParams(buttonsLayoutParams);
-
-                MovieMetaData.PictureImageData extraBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.EXTRA_BUTTON);
-                MovieMetaData.PictureImageData playBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.PLAY_BUTTON);
-
-                double buttonRatio = (double) width / (double) playBtnImageData.width;
-                if (playMovieButton != null) {
-                    ViewGroup.LayoutParams buttonsParams = playMovieButton.getLayoutParams();
-
-                    int newHeight = (int) ((double) playBtnImageData.height * buttonRatio);
-                    buttonsParams.height = newHeight;
-                    playMovieButton.setLayoutParams(buttonsParams);
-
-                    if (playBtnImageData != null)
-                        Glide.with(this).load(playBtnImageData.url).into(playMovieButton);
-                }
-
-                if (extraButton != null) {
-                    ViewGroup.LayoutParams buttonsParams = extraButton.getLayoutParams();
-
-                    int newWidth = (int) ((double) extraBtnImageData.width * buttonRatio);
-                    int newHeight = (int) ((double) extraBtnImageData.height * buttonRatio);
-                    buttonsParams.height = newHeight;
-                    buttonsParams.width = newWidth;
-                    extraButton.setLayoutParams(buttonsParams);
-
-
-                    if (extraBtnImageData != null)
-                        Glide.with(this).load(extraBtnImageData.url).into(extraButton);
-                }
-                buttonsLayout.invalidate();
-                if (!hasBGVideo)
-                    buttonsLayout.setVisibility(View.VISIBLE);
-                return;
-            }
-        }
-
-        buttonParentFrame.setVisibility(View.VISIBLE);
-        buttonsLayout.setVisibility(View.GONE);
-        textButtonParentFrame.setVisibility(View.VISIBLE);
-
-
-    }
-
-    @Override
-    public void onClick(View v){
-		if (v.getId() == R.id.next_gen_startup_play_button || v.getId() == R.id.next_gen_startup_play_text_button) {
-
-			Intent intent = new Intent(this, NextGenPlayer.class);
-			intent.setDataAndType(Uri.parse(NextGenExperience.getMovieMetaData().getMainMovieUrl()), "video/*");
-			startActivity(intent);
-			NextGenAnalyticData.reportEvent(this, null, "Play Movie", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
-
-		} else if (v.getId() == R.id.next_gen_startup_extra_button || v.getId() == R.id.next_gen_startup_extra_text_button) {
-			Intent extraIntent = new Intent(this, NextGenExtraActivity.class);
-			startActivity(extraIntent);
-			NextGenAnalyticData.reportEvent(this, null, "Extras", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
-		}
     }
 
     @Override
@@ -473,9 +283,193 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
         if (!startupVideoView.isPlaying() && startupVideoView.getVisibility() == View.VISIBLE){
             startupVideoView.start();
         }
-		if (audioPlayer !=  null){
-			audioPlayer.start();
-		}
+        if (audioPlayer !=  null){
+            audioPlayer.start();
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        arrangeLayoutAccordingToScreenOrientation(newConfig.orientation);
+
+    }
+
+    private void arrangeLayoutAccordingToScreenOrientation(final int orientation){
+        imageParentFrame.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                arrangeLayoutAccordingToScreenOrientation_priv(orientation);
+                imageParentFrame.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
+    }
+
+
+    private void arrangeLayoutAccordingToScreenOrientation_priv(int orientation){
+        ViewGroup.LayoutParams layoutParams = videoParentFrame.getLayoutParams();
+        FixedAspectRatioFrameLayout buttonsReferenceFrame;
+        Size buttonsReferenceFrameSize;
+        Size buttonsReferenceFrameSourceSize;
+        StyleData.NodeStyleData nodeStyleData;
+        boolean isPortrait = false;
+        if (mainStyle == null)		// if there's no main style, no calculations of button positions will be needed
+            return;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT && !TabletUtils.isTablet()) {	// handle portrait mode only when it's on phone
+            isPortrait = true;
+            buttonsReferenceFrameSize = new Size(imageParentFrame.getWidth(), imageParentFrame.getHeight());
+            buttonsReferenceFrame = imageParentFrame;
+            buttonsReferenceFrameSourceSize = bgImageSize;
+            nodeStyleData = mainStyle.getNodeStyleData(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            if (!StringHelper.isEmpty(mainStyle.getBackgroundVideoUrl())) {
+                videoParentFrame.setAspectRatioPriority(FixedAspectRatioFrameLayout.Priority.WIDTH_PRIORITY);
+                layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                videoParentFrame.setLayoutParams(layoutParams);
+            } else {
+
+            }
+
+        }else /*if (orientation == Configuration.ORIENTATION_LANDSCAPE)*/{		// for tablets and Landscape mode
+            nodeStyleData = mainStyle.getNodeStyleData(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            if (!StringHelper.isEmpty(mainStyle.getBackgroundVideoUrl())) {
+                Size videoSize = mainStyle.getBackgroundVideoSize();
+                Size screenSize = NextGenExperience.getScreenSize(NextGenExperience.getApplicationContext());
+                float videoAspectRatio = ((float) videoSize.getHeight()) /((float) videoSize.getWidth());
+                float screenAspectRatio = ((float) screenSize.getHeight()) /((float) screenSize.getWidth());
+                if (screenAspectRatio > 1)
+                    screenAspectRatio = 1/ screenAspectRatio;
+                if (screenAspectRatio >= videoAspectRatio) {
+                    videoParentFrame.setAspectRatioPriority(FixedAspectRatioFrameLayout.Priority.HEIGHT_PRIORITY);
+                    layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                } else {
+                    videoParentFrame.setAspectRatioPriority(FixedAspectRatioFrameLayout.Priority.WIDTH_PRIORITY);
+                    layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                }
+                videoParentFrame.setLayoutParams(layoutParams);
+                buttonsReferenceFrameSize = new Size(videoParentFrame.getWidth(), videoParentFrame.getHeight());
+                buttonsReferenceFrame = videoParentFrame;
+                buttonsReferenceFrameSourceSize = startupVideoSize;
+            } else {
+                buttonsReferenceFrameSize = new Size(imageParentFrame.getWidth(), imageParentFrame.getHeight());
+                buttonsReferenceFrame = imageParentFrame;
+                buttonsReferenceFrameSourceSize = bgImageSize;
+            }
+        }
+
+        if (nodeStyleData != null) {
+            textButtonsFrame.setVisibility(View.GONE);
+            StyleData.ThemeData buttonTheme = nodeStyleData.theme;
+            BackgroundOverlayAreaType buttonLayoutArea = nodeStyleData.getBGOverlay();
+
+            if (!StringHelper.isEmpty(mainStyle.getBackgroundVideoUrl()) && startupVideoSize == null)
+                return;
+
+            double shrinkRatio = ((double) buttonsReferenceFrameSize.getWidth()) / ((double) buttonsReferenceFrameSourceSize.getWidth());
+            double buttonShrinkRation = shrinkRatio;
+            buttonParentFrame.copyFrameParams(buttonsReferenceFrame);
+
+            int width = (int) (((double) buttonLayoutArea.getWidthPixels().intValue()) * shrinkRatio);
+            int screenWidth = NextGenExperience.getScreenWidth(this);
+            if (width > screenWidth){           // if the specific area is wider than the screen, set the button area to be the screen width
+                width = screenWidth - 20 ;      // 20 being the padding on the size, 10 pixels each side
+                buttonShrinkRation = ((double) width / ((double) buttonLayoutArea.getWidthPixels().intValue()));
+            }
+
+            int height = (int) (((double) buttonLayoutArea.getHeightPixels().intValue()) * buttonShrinkRation);
+            int y = (int) (((double) buttonsReferenceFrameSourceSize.getHeight() - buttonLayoutArea.getPixelsFromBottom().intValue()) * shrinkRatio) - height;
+            int x = (int) (((double) buttonLayoutArea.getPixelsFromLeft().intValue()) * shrinkRatio);
+
+            if (isPortrait){
+                x = (buttonsReferenceFrameSize.getWidth() - width) / 2;
+            }
+
+            ViewGroup.LayoutParams buttonsLayoutParams = imageButtonsFrame.getLayoutParams();
+            if (buttonsLayoutParams instanceof LinearLayout.LayoutParams) {
+                ((LinearLayout.LayoutParams) buttonsLayoutParams).setMargins(x, y, 0, 0);
+            } else if (buttonsLayoutParams instanceof RelativeLayout.LayoutParams) {
+                ((RelativeLayout.LayoutParams) buttonsLayoutParams).setMargins(x, y, 0, 0);
+            } else if (buttonsLayoutParams instanceof FrameLayout.LayoutParams) {
+                ((FrameLayout.LayoutParams) buttonsLayoutParams).setMargins(x, y, 0, 0);
+            }
+
+            buttonsLayoutParams.height = height;
+            buttonsLayoutParams.width = width;
+
+            imageButtonsFrame.setLayoutParams(buttonsLayoutParams);
+
+            MovieMetaData.PictureImageData extraBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.EXTRA_BUTTON);
+            MovieMetaData.PictureImageData playBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.PLAY_BUTTON);
+
+            double buttonRatio = (double) width / (double) playBtnImageData.width;
+            if (playMovieButton != null) {
+                ViewGroup.LayoutParams buttonsParams = playMovieButton.getLayoutParams();
+
+                int newHeight = (int) ((double) playBtnImageData.height * buttonRatio);
+                buttonsParams.height = newHeight;
+                playMovieButton.setLayoutParams(buttonsParams);
+
+                if (playBtnImageData != null)
+                    Glide.with(this).load(playBtnImageData.url).into(playMovieButton);
+            }
+
+            if (extraButton != null) {
+                ViewGroup.LayoutParams buttonsParams = extraButton.getLayoutParams();
+
+                int newWidth = (int) ((double) extraBtnImageData.width * buttonRatio);
+                int newHeight = (int) ((double) extraBtnImageData.height * buttonRatio);
+                buttonsParams.height = newHeight;
+                buttonsParams.width = newWidth;
+                extraButton.setLayoutParams(buttonsParams);
+
+
+                if (extraBtnImageData != null)
+                    Glide.with(this).load(extraBtnImageData.url).into(extraButton);
+            }
+            imageButtonsFrame.invalidate();
+            if (StringHelper.isEmpty(mainStyle.getBackgroundVideoUrl()))
+                imageButtonsFrame.setVisibility(View.VISIBLE);
+            return;
+        }
+    }
+
+
+
+    @Override
+    public void onClick(View v){
+        if (v.getId() == R.id.next_gen_startup_play_button || v.getId() == R.id.next_gen_startup_play_text_button) {
+
+            Intent intent = new Intent(this, NextGenPlayer.class);
+            intent.setDataAndType(Uri.parse(NextGenExperience.getMovieMetaData().getMainMovieUrl()), "video/*");
+            startActivity(intent);
+            NextGenAnalyticData.reportEvent(this, null, "Play Movie", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
+
+        } else if (v.getId() == R.id.next_gen_startup_extra_button || v.getId() == R.id.next_gen_startup_extra_text_button) {
+            Intent extraIntent = new Intent(this, NextGenExtraActivity.class);
+            startActivity(extraIntent);
+            NextGenAnalyticData.reportEvent(this, null, "Extras", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
+        }
+    }
+
+    static enum ButtonsMode{
+        TEXT_BUTTON_VISIBLE, IMAGE_BUTTON_VISIBLE, ALL_INVISIBLE;
+    }
+
+    private void setPlayExtraButtonsVisibility(ButtonsMode mode){
+        switch (mode){
+            case TEXT_BUTTON_VISIBLE:
+                textButtonsFrame.setVisibility(View.VISIBLE);
+                imageButtonsFrame.setVisibility(View.GONE);
+                break;
+            case IMAGE_BUTTON_VISIBLE:
+                imageButtonsFrame.setVisibility(View.VISIBLE);
+                textButtonsFrame.setVisibility(View.GONE);
+                break;
+            case ALL_INVISIBLE:
+            default:
+                imageButtonsFrame.setVisibility(View.GONE);
+                textButtonsFrame.setVisibility(View.GONE);
+        }
     }
 }
+
 

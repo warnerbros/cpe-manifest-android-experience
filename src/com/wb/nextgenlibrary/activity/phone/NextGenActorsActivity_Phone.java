@@ -24,7 +24,6 @@ public class NextGenActorsActivity_Phone extends AbstractNextGenActivity impleme
         actorListFragment = (NextGenActorListFragment)getSupportFragmentManager().findFragmentById(R.id.actor_list_fragment);
         actorDetailFragment = (NextGenActorDetailFragment)getSupportFragmentManager().findFragmentById(R.id.actor_detail_fragment);
         if (actorListFragment != null && actorDetailFragment != null) {
-            actorDetailFragment.setbEnableActorGallery(true);
             actorDetailFragment.reloadDetail(actorListFragment.getActorInfos().get(0));
         }
     }

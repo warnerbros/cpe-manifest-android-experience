@@ -203,17 +203,17 @@ public class NextGenExperience {
 		try{
 			NextGenLogger.d("TIME_THIS", "---------------Next Test--------------");
 
-			long systime = SystemClock.currentThreadTimeMillis();
+			long systime = SystemClock.uptimeMillis();
 			ManifestXMLParser.NextGenManifestData manifest = new ManifestXMLParser().startParsing(manifestItem.getManifestFileUrl(),
 					manifestItem.getAppDataFileUrl(), manifestItem.getNgeStyleFileUrl());
-			long currentTime = SystemClock.currentThreadTimeMillis() - systime;
+			long currentTime = SystemClock.uptimeMillis() - systime;
 			NextGenLogger.d("TIME_THIS", "Time to finish parsing: " + currentTime);
 
 			// TODO error handling if manifest is null
 			movieMetaData = MovieMetaData.process(manifest);
 
 
-			currentTime = SystemClock.currentThreadTimeMillis() - currentTime;
+			currentTime = SystemClock.uptimeMillis() - currentTime - systime;
 			NextGenLogger.d("TIME_THIS", "Time to finish processing: " + currentTime);
 
 			BaselineApiDAO.init();

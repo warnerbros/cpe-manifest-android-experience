@@ -17,6 +17,8 @@ import com.wb.nextgenlibrary.network.BaselineApiDAO;
 
 import com.wb.nextgenlibrary.data.MovieMetaData.CastData;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
+import com.wb.nextgenlibrary.util.utils.StringHelper;
+import com.wb.nextgenlibrary.widget.FontFitTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +80,6 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment<CastD
 
         if (getActivity() instanceof NextGenFragmentTransactionInterface){
             NextGenActorDetailFragment target = new NextGenActorDetailFragment();
-            target.setbEnableActorGallery(true);
             target.setDetailObject(selectedObject);
             ((NextGenFragmentTransactionInterface)getActivity()).transitRightFragment(target);
             ((NextGenFragmentTransactionInterface)getActivity()).resetUI(false);
@@ -116,12 +117,16 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment<CastD
             characterNameTxt.setText(thisActor.charactorName);
         }
 
-        if (thisActor.getBaselineCastData() != null){
+        FontFitTextView initialText = (FontFitTextView)rowView.findViewById(R.id.next_gen_actor_initial);
+        initialText.setText(thisActor.displayName.substring(0,1).toUpperCase());
+
+
+        if (thisActor.getBaselineCastData() != null && !StringHelper.isEmpty(thisActor.getBaselineCastData().getThumbnailImageUrl())){
             Picasso.with(getActivity()).load(thisActor.getBaselineCastData().getThumbnailImageUrl()).fit().centerCrop().into(avatarImg);
+            initialText.setVisibility(View.GONE);
             // have to use picasso in this case because Glide won't do return any bitmap for centerCrop images.
-        }
-
-
+        }else
+            initialText.setVisibility(View.VISIBLE);
 
 
     }

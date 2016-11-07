@@ -13,6 +13,7 @@ import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
+import com.wb.nextgenlibrary.widget.CustomMediaController;
 
 
 /**
@@ -54,6 +55,18 @@ public class ShareClipFragment extends ECVideoViewFragment implements View.OnCli
             shareClipTitleTextView.setText(shareClipExperience.title);
         }
         updateUI();
+        mediaController.setVisibilityChangeListener(new CustomMediaController.MediaControllerVisibilityChangeListener() {
+            @Override
+            public void onVisibilityChange(boolean bShow) {
+                if (bShow) {
+                    prevClipButton.setVisibility( View.INVISIBLE);
+                    nextClipButton.setVisibility( View.INVISIBLE);
+                } else {
+                    prevClipButton.setVisibility( View.VISIBLE);
+                    nextClipButton.setVisibility( View.VISIBLE);
+                }
+            }
+        });
 
     }
 
@@ -102,6 +115,7 @@ public class ShareClipFragment extends ECVideoViewFragment implements View.OnCli
     public void updateUI(){
         int prevBtnVisibility = View.VISIBLE;
         int nextBtnVisibility = View.VISIBLE;
+
         if (itemIndex == 0){
             prevBtnVisibility = View.INVISIBLE;
         }
@@ -111,6 +125,7 @@ public class ShareClipFragment extends ECVideoViewFragment implements View.OnCli
         prevClipButton.setVisibility(prevBtnVisibility);
         nextClipButton.setVisibility(nextBtnVisibility);
         mediaController.hide();
+
     }
 
     // Method to share either text or URL.

@@ -159,6 +159,7 @@ public class FixedAspectRatioFrameLayout extends FrameLayout
 
     public void setAspectRatioPriority(Priority priority){
         this.priority = priority;
+        invalidate();
 
     }
 

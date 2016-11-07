@@ -18,7 +18,7 @@
         <ImageView
             android:id="@+id/startup_image_view"
             android:layout_centerInParent="true"
-            android:scaleType="fitCenter"
+            android:scaleType="fitXY"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout>
@@ -30,7 +30,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         nextgen:priority="HEIGHT_PRIORITY"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         nextgen:allowLargerThanParent="true">
         <VideoView
