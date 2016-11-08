@@ -79,10 +79,10 @@ public class ECVideoActivity extends AbstractECView implements ECVideoViewFragme
             getSupportActionBar().hide();
         }
         rightVideoFrame.onFullScreenChange(bFullscreen);
-        if (bFullscreen) {
-            if (contentMetaFrame != null)
-                contentMetaFrame.setVisibility(bFullscreen? View.GONE : View.VISIBLE);
-        }
+
+        if (contentMetaFrame != null)
+            contentMetaFrame.setVisibility(bFullscreen? View.GONE : View.VISIBLE);
+
     }
 
     @Override
