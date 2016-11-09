@@ -47,6 +47,7 @@
             <TextView
                 android:id="@+id/ec_content_description"
                 android:textColor="@android:color/darker_gray"
+                android:scrollbars = "vertical"
                 android:textSize="@dimen/textMSmall"
                 android:fontFamily="sans-serif-condensed"
                 android:layout_width="match_parent"

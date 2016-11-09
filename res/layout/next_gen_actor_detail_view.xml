@@ -149,14 +149,14 @@
                 android:paddingTop="@dimen/spacing_normal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-                <TextView
-                    android:id="@+id/actor_biography_text"
-                    android:scrollbars = "vertical"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/textMSmall"
-                    android:fontFamily="sans-serif-condensed"
-                    android:layout_width="match_parent"
-                    android:layout_height="fill_parent" />
+            <TextView
+                android:id="@+id/actor_biography_text"
+                android:scrollbars = "vertical"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/textMSmall"
+                android:fontFamily="sans-serif-condensed"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent" />
         </LinearLayout>
 
         <LinearLayout
