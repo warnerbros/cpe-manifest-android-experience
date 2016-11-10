@@ -203,7 +203,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     @Override
     public void onBackPressed(){
         if (ecFragmentsCounter == 1)
-            super.onBackPressed();
+            finish();
         else {
             getSupportFragmentManager().popBackStackImmediate();
             ecFragmentsCounter = ecFragmentsCounter - 1;
