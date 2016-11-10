@@ -91,7 +91,7 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
 				} else if (state == ViewPager.SCROLL_STATE_DRAGGING) {
 
 				} else if (state == ViewPager.SCROLL_STATE_IDLE) {
-					fadeOutCountText();
+                    resetImageSizeActivities();
 				}
 			}
 		});
@@ -142,9 +142,7 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
 		if (nextClipButton != null){
 			nextClipButton.setOnClickListener(this);
 		}
-
 		updateUI(false);
- ;
 	}
 
     public void setShouldShowShareBtn(boolean bShow){
@@ -179,7 +177,6 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
         aspectFramePriority = priority;
     }
 
-
     @Override
     public void onResume(){
         super.onResume();
@@ -208,7 +205,6 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
 			}
 		}
         galleryViewPager.setCurrentItem(itemIndex, true);	// use smooth scrolling
-        updateUI(true);
 	}
 
 	public void updateUI(boolean userTriggerd) {
@@ -248,6 +244,12 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
 			});
 		}
 	}
+
+    public void resetImageSizeActivities(){
+        adapter.notifyDataSetChanged();
+        updateUI(true);
+        fadeOutCountText();
+    }
 
     class GalleryPagerAdapter extends PagerAdapter {
 
