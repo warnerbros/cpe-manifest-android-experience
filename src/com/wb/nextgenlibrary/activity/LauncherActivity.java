@@ -31,6 +31,7 @@ public class LauncherActivity extends Activity {
 		setContentView(R.layout.next_gen_launcher_view);
 
 		mDialog = ProgressDialog.show(this, "", "Loading", false, true);
+		mDialog.setCanceledOnTouchOutside(false);
 		mDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
