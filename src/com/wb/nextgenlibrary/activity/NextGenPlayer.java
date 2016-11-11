@@ -182,6 +182,11 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                 }
 
                 @Override
+                public void onStart() {
+                    updateImeFragment(NextGenPlaybackStatusListener.NextGenPlaybackStatus.PAUSE, mainMovieFragment.getCurrentPosition());
+                }
+
+                @Override
                 public void onPause() {
                     updateImeFragment(NextGenPlaybackStatusListener.NextGenPlaybackStatus.RESUME, mainMovieFragment.getCurrentPosition());
                 }
@@ -528,7 +533,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     }
 
     boolean isPausedByIME = false;
-    public void pausMovieForImeECPiece(){
+    public void pauseMovieForImeECPiece(){
         if (mediaController.isShowing()){
             mediaController.hide();
         }

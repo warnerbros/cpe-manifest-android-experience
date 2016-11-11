@@ -13,6 +13,7 @@ import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.data.MovieMetaData.IMEElementsGroup;
 import com.wb.nextgenlibrary.data.TheTakeData;
 import com.wb.nextgenlibrary.data.TheTakeData.TheTakeProductFrame;
+import com.wb.nextgenlibrary.interfaces.IMEVideoStatusListener;
 import com.wb.nextgenlibrary.interfaces.NextGenPlaybackStatusListener;
 import com.wb.nextgenlibrary.model.AVGalleryIMEEngine;
 import com.wb.nextgenlibrary.model.NextGenIMEEngine;
@@ -28,7 +29,7 @@ import java.util.List;
 /**
  * Created by gzcheng on 3/28/16.
  */
-public class IMEElementsGridFragment extends NextGenGridViewFragment implements NextGenPlaybackStatusListener {
+public class IMEElementsGridFragment extends NextGenGridViewFragment implements NextGenPlaybackStatusListener, IMEVideoStatusListener {
 
 	List<IMEElementsGroup> imeGroups;
     final List<NextGenIMEEngine> imeEngines = new ArrayList<NextGenIMEEngine>();
@@ -73,7 +74,16 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
         super.onDestroyView();
     }
 
+    public void onVideoStartPlaying(){
+        NextGenPlayer playerActivity = null;
+        if (getActivity() instanceof NextGenPlayer) {
+            playerActivity = (NextGenPlayer) getActivity();
+            playerActivity.pauseMovieForImeECPiece();
+        }
+    }
+    public void onFragmentDestroyed(){
 
+    }
 
     protected void onListItemClick(View v, int position, long id){
         if (position < 0 || position >= activeIMEs.size())
@@ -101,7 +111,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                             fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getInMovieExperience().style.getBackground().getImage().url);
                         fragment.setCurrentGallery((MovieMetaData.ECGalleryItem) headElement);
                         playerActivity.transitMainFragment(fragment);
-                        playerActivity.pausMovieForImeECPiece();
+                        //playerActivity.pausMovieForImeECPiece();
 
 
                     } else if (headElement instanceof MovieMetaData.AudioVisualItem) {
@@ -115,8 +125,9 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                                 fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getInMovieExperience().style.getBackground().getImage().url);
                             /*
                             fragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) dataObj);*/
+                            fragment.setVideoStatusListener(this);
                             playerActivity.transitMainFragment(fragment);
-                            playerActivity.pausMovieForImeECPiece();
+                            //playerActivity.pausMovieForImeECPiece();
                         }else {
 
                             ECVideoViewFragment fragment = new ECVideoViewFragment();
@@ -125,8 +136,9 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                             if (NextGenExperience.getMovieMetaData().getInMovieExperience().style != null)
                                 fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getInMovieExperience().style.getBackground().getImage().url);
                             fragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) headElement);
+                            fragment.setVideoStatusListener(this);
                             playerActivity.transitMainFragment(fragment);
-                            playerActivity.pausMovieForImeECPiece();
+                            //playerActivity.pausMovieForImeECPiece();
                         }
                     } else if (headElement instanceof MovieMetaData.LocationItem ||
                             (headElement instanceof AVGalleryIMEEngine.IMECombineItem && ((AVGalleryIMEEngine.IMECombineItem)headElement).isLocation() ) ){
@@ -139,7 +151,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                         fragment.setShouldShowCloseBtn(true);
                         fragment.setLocationItem(activeObj.title, (MovieMetaData.LocationItem)headElement);
                         playerActivity.transitMainFragment(fragment);
-                        playerActivity.pausMovieForImeECPiece();
+                        //playerActivity.pausMovieForImeECPiece();
                     /*} else if (dataObj instanceof AVGalleryIMEEngine.IMECombineItem){
                         ECTrviaViewFragment fragment = new ECTrviaViewFragment();
                         fragment.setTextItem(activeObj.title, (AVGalleryIMEEngine.IMECombineItem)dataObj);
@@ -150,14 +162,14 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                         fragment.setShouldShowCloseBtn(true);
                         fragment.setTriviaItem(activeObj.title, (MovieMetaData.TriviaItem)dataObj);
                         playerActivity.transitMainFragment(fragment);
-                        playerActivity.pausMovieForImeECPiece();
+                        //playerActivity.pausMovieForImeECPiece();
 
                     } else if (dataObj instanceof MovieMetaData.TextItem) {
 						ECTextViewFragment fragment = new ECTextViewFragment();
 						fragment.setShouldShowCloseBtn(true);
 						fragment.setTextItem(activeObj.title, (MovieMetaData.TextItem)dataObj);
 						playerActivity.transitMainFragment(fragment);
-						playerActivity.pausMovieForImeECPiece();
+						//playerActivity.pausMovieForImeECPiece();
 					}
                 }
             }
@@ -168,7 +180,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                 fragment.setTitleText(activeObj.title.toUpperCase());
                 fragment.setFrameProductTime(((TheTakeProductFrame)activeObj.imeObject).frameTime);
                 playerActivity.transitMainFragment(fragment);
-                playerActivity.pausMovieForImeECPiece();
+                //playerActivity.pausMovieForImeECPiece();
             }
         }
     }

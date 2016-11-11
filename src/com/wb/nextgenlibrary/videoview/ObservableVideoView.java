@@ -47,6 +47,9 @@ public final class ObservableVideoView extends VideoView implements NextGenPlaye
 			}
 			
 			mIsOnPauseMode = false;
+		}else {
+			if (mVideoViewListener != null)
+				mVideoViewListener.onStart();
 		}
 		
         if (mListener != null) {

@@ -20,9 +20,11 @@ import com.squareup.picasso.Target;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
+import com.wb.nextgenlibrary.interfaces.IMEVideoStatusListener;
 import com.wb.nextgenlibrary.util.utils.F;
 import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
+import com.wb.nextgenlibrary.videoview.IVideoViewActionListener;
 import com.wb.nextgenlibrary.videoview.ObservableVideoView;
 import com.wb.nextgenlibrary.widget.ECMediaController;
 import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
@@ -55,6 +57,7 @@ public class ECVideoViewFragment extends ECViewFragment{
 
     boolean shouldAutoPlay = true;
     boolean shouldExitWhenComplete = false;
+    IMEVideoStatusListener videoStatusListener;
 
     FixedAspectRatioFrameLayout.Priority aspectFramePriority = null;
 
@@ -73,6 +76,10 @@ public class ECVideoViewFragment extends ECViewFragment{
             return selectedAVItem.getTitle();
         else
             return null;
+    }
+
+    public void setVideoStatusListener(IMEVideoStatusListener listener){
+        this.videoStatusListener = listener;
     }
 
     public void setBGImageUrl(String url){
@@ -213,7 +220,28 @@ public class ECVideoViewFragment extends ECViewFragment{
         videoView.setOnPreparedListener(new PreparedListener());
         videoView.requestFocus();
 
-        bgImageView = (ImageView)view.findViewById(R.id.ec_video_frame_bg);
+        videoView.setVideoViewListener(new IVideoViewActionListener() {
+            @Override
+            public void onPause() {
+
+            }
+            @Override
+            public void onStart() {
+                if (videoStatusListener != null)
+                    videoStatusListener.onVideoStartPlaying();
+
+            }
+            @Override
+            public void onResume() {
+            }
+
+            @Override
+            public void onTimeBarSeekChanged(int currentTime) {
+
+            }
+       });
+
+        bgImageView = (ImageView) view.findViewById(R.id.ec_video_frame_bg);
 
         if (bgImageView != null && !StringHelper.isEmpty(bgImageUrl)){
             Glide.with(getActivity()).load(bgImageUrl).fitCenter().into(bgImageView);
@@ -277,6 +305,9 @@ public class ECVideoViewFragment extends ECViewFragment{
         videoView.stopPlayback();
         mediaController.onPlayerDestroy();
         mediaController = null;
+
+        if (videoStatusListener != null)
+            videoStatusListener.onFragmentDestroyed();
         super.onDestroyView();
     }
 
