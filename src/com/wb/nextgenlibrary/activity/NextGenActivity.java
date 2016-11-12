@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -249,7 +250,10 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
                 });
 
                 startupVideoView.requestFocus();
-                startupVideoView.setVideoURI(Uri.parse(mainStyle.getBackgroundVideoUrl()));
+                if (Build.FINGERPRINT.contains("generic")){
+                    startupVideoView.setVideoURI(Uri.parse("https://ia800201.us.archive.org/12/items/BigBuckBunny_328/BigBuckBunny_512kb.mp4"));
+                }else
+                    startupVideoView.setVideoURI(Uri.parse(mainStyle.getBackgroundVideoUrl()));
                 if (!StringHelper.isEmpty(mainStyle.getBackgroundAudioUrl())){
                     try {
                         audioPlayer = MediaPlayer.create(this, Uri.parse(mainStyle.getBackgroundAudioUrl()));
