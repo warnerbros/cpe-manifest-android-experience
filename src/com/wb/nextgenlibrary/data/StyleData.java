@@ -165,6 +165,7 @@ public class StyleData {
     public static class ThemeData{
 
         public final static String EXTRA_BUTTON = "Extras";
+        public final static String PURCHASE_BUTTON = "Buy";
         public final static String PLAY_BUTTON = "Play";
         public final String themeId;
         public HashMap<String, ButtonData> buttonDatas = new HashMap<>();

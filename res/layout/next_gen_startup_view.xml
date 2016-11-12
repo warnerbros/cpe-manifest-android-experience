@@ -71,8 +71,16 @@
                 <com.wb.nextgenlibrary.widget.SelectedMaskImageButton
                     android:id="@+id/next_gen_startup_extra_button"
                     android:layout_centerHorizontal="true"
-                    android:layout_alignParentBottom="true"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitXY"
+                    nextgen:selectedOverlayColor="@color/transparent_black"
+                    android:background="@android:color/transparent"/>
+                <com.wb.nextgenlibrary.widget.SelectedMaskImageButton
+                    android:id="@+id/next_gen_startup_purchase_button"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:scaleType="fitXY"
                     nextgen:selectedOverlayColor="@color/transparent_black"
@@ -96,7 +104,6 @@
                 <Button
                     android:id="@+id/next_gen_startup_extra_text_button"
                     android:layout_centerHorizontal="true"
-                    android:layout_alignParentBottom="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/extras"

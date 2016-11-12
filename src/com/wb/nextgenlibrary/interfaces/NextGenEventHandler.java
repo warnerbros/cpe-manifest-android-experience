@@ -15,4 +15,5 @@ public interface NextGenEventHandler {
     boolean shouldShowInterstitialForContent(Object content);       // the default should be true so that Nextgen will show the interstitial, set this to false then NextGen will not show interstitial for the given content.
     void setInterstitialWatchedForContent(Object content);
     void setInterstitialSkippedForContent(Object content);
+    void handlePurchaseButtonPressed(Activity ngeActivity, Object contentObject);
 }

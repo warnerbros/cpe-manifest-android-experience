@@ -50,6 +50,8 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
     ImageButton playMovieButton;
     ImageButton extraButton;
+    ImageButton purchaseButton;
+
     Button playMovieTextButton;
     Button extraTextButton;
 
@@ -116,6 +118,12 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
         if (extraTextButton != null){
             extraTextButton.setOnClickListener(this);
             extraTextButton.setOnLongClickListener(extraLongClickListener);
+        }
+
+        purchaseButton = (ImageButton) findViewById(R.id.next_gen_startup_purchase_button);
+        if (purchaseButton != null){
+            purchaseButton.setOnClickListener(this);
+            purchaseButton.setOnLongClickListener(extraLongClickListener);
         }
 
         StyleData.NodeBackground nodeBackground = (mainStyle != null ) ? mainStyle.getBackground() : null;
@@ -403,17 +411,32 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
             MovieMetaData.PictureImageData extraBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.EXTRA_BUTTON);
             MovieMetaData.PictureImageData playBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.PLAY_BUTTON);
+            MovieMetaData.PictureImageData purchaseBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.PURCHASE_BUTTON);
 
             double buttonRatio = (double) width / (double) playBtnImageData.width;
+            ViewGroup.LayoutParams playBtnParams = null;
             if (playMovieButton != null) {
-                ViewGroup.LayoutParams buttonsParams = playMovieButton.getLayoutParams();
+                playBtnParams = playMovieButton.getLayoutParams();
 
                 int newHeight = (int) ((double) playBtnImageData.height * buttonRatio);
-                buttonsParams.height = newHeight;
-                playMovieButton.setLayoutParams(buttonsParams);
+                playBtnParams.height = newHeight;
+                playMovieButton.setLayoutParams(playBtnParams);
 
                 if (playBtnImageData != null)
                     Glide.with(this).load(playBtnImageData.url).into(playMovieButton);
+            }
+
+            if (purchaseButton != null) {
+                if (purchaseBtnImageData != null && playBtnParams != null) {
+                    //purchaseButton.setVisibility(View.VISIBLE);
+                    ViewGroup.LayoutParams buttonsParams = purchaseButton.getLayoutParams();
+
+                    buttonsParams.height = playBtnParams.height;
+                    purchaseButton.setLayoutParams(buttonsParams);
+
+                    Glide.with(this).load(purchaseBtnImageData.url).into(purchaseButton);
+                }else
+                    purchaseButton.setVisibility(View.GONE);
             }
 
             if (extraButton != null) {
@@ -423,12 +446,35 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
                 int newHeight = (int) ((double) extraBtnImageData.height * buttonRatio);
                 buttonsParams.height = newHeight;
                 buttonsParams.width = newWidth;
+
+
+                int extra_x, extra_y;
+                extra_x = (buttonsLayoutParams.width - newWidth )/ 2;
+
+                //calculate extra Btn position
+                if (purchaseBtnImageData != null){
+                    extra_y = (buttonsLayoutParams.height - newHeight) / 2;
+                }else{
+                    extra_y = buttonsLayoutParams.height - newHeight;
+                }
+
+                if (buttonsParams instanceof LinearLayout.LayoutParams) {
+                    ((LinearLayout.LayoutParams) buttonsParams).setMargins(extra_x, extra_y, 0, 0);
+                } else if (buttonsParams instanceof RelativeLayout.LayoutParams) {
+                    ((RelativeLayout.LayoutParams) buttonsParams).setMargins(extra_x, extra_y, 0, 0);
+                } else if (buttonsParams instanceof FrameLayout.LayoutParams) {
+                    ((FrameLayout.LayoutParams) buttonsParams).setMargins(extra_x, extra_y, 0, 0);
+                }
+
+
                 extraButton.setLayoutParams(buttonsParams);
 
 
                 if (extraBtnImageData != null)
                     Glide.with(this).load(extraBtnImageData.url).into(extraButton);
+
             }
+
             imageButtonsFrame.invalidate();
             if (StringHelper.isEmpty(mainStyle.getBackgroundVideoUrl()))
                 imageButtonsFrame.setVisibility(View.VISIBLE);
@@ -451,6 +497,9 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
             Intent extraIntent = new Intent(this, NextGenExtraActivity.class);
             startActivity(extraIntent);
             NextGenAnalyticData.reportEvent(this, null, "Extras", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
+        } else if (v.getId() == R.id.next_gen_startup_purchase_button) {
+            if (NextGenExperience.getNextGenEventHandler() != null)
+                NextGenExperience.getNextGenEventHandler().handlePurchaseButtonPressed(this, NextGenExperience.getNextgenPlaybackObject());
         }
     }
 

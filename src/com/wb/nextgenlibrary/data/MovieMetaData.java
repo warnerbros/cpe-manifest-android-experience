@@ -1789,6 +1789,15 @@ public class MovieMetaData {
         }
     }
 
+    public String getPreviewMovieVideoURL(){
+        if (rootExperience.audioVisualItems != null && rootExperience.audioVisualItems.size() > 1){
+
+            return rootExperience.audioVisualItems.get(rootExperience.audioVisualItems.size() -1 ).videoUrl;
+        }else{
+            return "";
+        }
+    }
+
     public StyleData.ExperienceStyle getRootExperienceStyle(){
         return rootExperience.style;
     }
