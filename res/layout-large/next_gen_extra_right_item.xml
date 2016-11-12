@@ -10,13 +10,14 @@
         android:layout_width="match_parent"
         android:background="@android:color/transparent"
         android:layout_height="wrap_content">
-        <TextView
+        <com.wb.nextgenlibrary.widget.FontFitTextView
             android:id="@+id/next_gen_extra_title"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
+            android:gravity="center_vertical"
             android:text="Title"
             android:textColor="@android:color/white"
             android:textSize="@dimen/textLarge"
-            android:layout_height="wrap_content"/>
+            android:layout_height="@dimen/grid_item_title_height"/>
     </RelativeLayout>
 
     <com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout
