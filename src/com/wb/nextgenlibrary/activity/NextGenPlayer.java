@@ -65,7 +65,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
     NextGenPlayerBottomFragment imeBottomFragment;
 
-    private Uri INTERSTITIAL_VIDEO_URI = Uri.parse(NextGenExperience.getMovieMetaData().getInterstitialVideoURL());//Uri.parse("android.resource://com.wb.nextgen/" + R.raw.mos_nextgen_interstitial);
+    private Uri INTERSTITIAL_VIDEO_URI = null;
 
     private Uri currentUri = null;
 
@@ -91,6 +91,10 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         mDialog.setCancelable(true);
         mDialog.setOnCancelListener(this);
         mDialog.setCanceledOnTouchOutside(true);*/
+
+
+        if (NextGenExperience.getMovieMetaData() == null)
+            finish();
 
         INTERSTITIAL_VIDEO_URI = Uri.parse(NextGenExperience.getMovieMetaData().getInterstitialVideoURL());
 

@@ -29,6 +29,9 @@ public class NextGenExtraActivity extends AbstractNextGenActivity implements Nex
     public void onCreate(Bundle savedState) {
         super.onCreate(savedState);
 
+        if (NextGenExperience.getMovieMetaData() == null)
+            finish();
+
         setContentView(R.layout.next_gen_extra);
         float density = NextGenExperience.getScreenDensity(this);
         int spacing = (int)(10 *density);

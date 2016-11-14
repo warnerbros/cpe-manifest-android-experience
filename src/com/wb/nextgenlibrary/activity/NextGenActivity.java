@@ -72,12 +72,14 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
     private boolean isStartUp = true;
 
-    StyleData.ExperienceStyle mainStyle = NextGenExperience.getMovieMetaData().getRootExperienceStyle();
+    StyleData.ExperienceStyle mainStyle = NextGenExperience.getMovieMetaData() != null ? NextGenExperience.getMovieMetaData().getRootExperienceStyle() : null;
     @Override
     public void onCreate(Bundle savedState) {
         super.onCreate(savedState);
 
         setContentView(R.layout.next_gen_startup_view);
+        if (NextGenExperience.getMovieMetaData() == null)
+            finish();
 
         videoParentFrame = (FixedAspectRatioFrameLayout)findViewById(R.id.video_parent_aspect_ratio_frame);
         buttonParentFrame = (FixedAspectRatioFrameLayout)findViewById(R.id.button_parent_aspect_ratio_frame);
