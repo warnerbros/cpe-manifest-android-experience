@@ -214,7 +214,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
             ecFragmentsCounter = ecFragmentsCounter - 1;
             if (isPausedByIME){
                 isPausedByIME = false;
-                mainMovieFragment.resumePlayback();
+                mainMovieFragment.resumePlaybackFromIME();
                 if (mediaController.isShowing()){
                     mediaController.hide();
                 } //tr 9/28
@@ -537,7 +537,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         if (mediaController.isShowing()){
             mediaController.hide();
         }
-        mainMovieFragment.pause();
+        mainMovieFragment.pauseForIME();
         isPausedByIME = true;
     } //tr 9/28
 

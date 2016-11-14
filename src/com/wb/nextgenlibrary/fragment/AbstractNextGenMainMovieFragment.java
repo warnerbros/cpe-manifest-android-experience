@@ -36,6 +36,10 @@ public abstract class AbstractNextGenMainMovieFragment extends Fragment implemen
     public abstract void pause();
     public abstract void resumePlayback();
 
+
+    public abstract void pauseForIME();
+    public abstract void resumePlaybackFromIME();
+
     public abstract void streamStartPreparations(ResultListener<Boolean> resultLister);
 
     public void setLoadingView(View view){

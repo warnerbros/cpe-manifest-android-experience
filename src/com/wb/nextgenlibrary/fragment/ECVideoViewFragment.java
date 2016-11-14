@@ -301,8 +301,9 @@ public class ECVideoViewFragment extends ECViewFragment{
 
     @Override
     public void onDestroyView(){
-        videoView.setMediaController(null);
         videoView.stopPlayback();
+        videoView.setVideoURI(null);
+        videoView.setMediaController(null);
         mediaController.onPlayerDestroy();
         mediaController = null;
 
