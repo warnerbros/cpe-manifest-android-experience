@@ -10,9 +10,6 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop" />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
         <LinearLayout
             android:id="@+id/next_gen_ec_content_view"
@@ -147,7 +144,6 @@
                 android:textSize="@dimen/textMedium" />
         </LinearLayout>
 
-    </ScrollView>
     <ImageButton
         android:id="@+id/close_button"
         android:layout_width="@dimen/close_icon_dimen"
