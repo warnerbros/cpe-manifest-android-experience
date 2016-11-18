@@ -114,18 +114,17 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
         extraButton = (ImageButton) findViewById(R.id.next_gen_startup_extra_button);
         if (extraButton != null){
             extraButton.setOnClickListener(this);
-            extraButton.setOnLongClickListener(extraLongClickListener);
+           // extraButton.setOnLongClickListener(extraLongClickListener);
         }
         extraTextButton = (Button)findViewById(R.id.next_gen_startup_extra_text_button);
         if (extraTextButton != null){
             extraTextButton.setOnClickListener(this);
-            extraTextButton.setOnLongClickListener(extraLongClickListener);
+            //extraTextButton.setOnLongClickListener(extraLongClickListener);
         }
 
         purchaseButton = (ImageButton) findViewById(R.id.next_gen_startup_purchase_button);
         if (purchaseButton != null){
             purchaseButton.setOnClickListener(this);
-            purchaseButton.setOnLongClickListener(extraLongClickListener);
         }
 
         StyleData.NodeBackground nodeBackground = (mainStyle != null ) ? mainStyle.getBackground() : null;
