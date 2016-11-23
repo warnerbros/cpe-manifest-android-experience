@@ -55,35 +55,10 @@
             android:layout_height="match_parent">
 
             <RelativeLayout
-                android:id="@+id/startup_text_buttons_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone"
-                android:gravity="center|bottom">
-                <Button
-                    android:id="@+id/next_gen_startup_play_text_button"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@+id/next_gen_startup_extra_text_button"
-                    android:text="@string/play_movie"
-                    android:layout_marginBottom="@dimen/spacing_large"
-                    android:layout_centerHorizontal="true"
-                    android:background="@color/red" />
-                <Button
-                    android:id="@+id/next_gen_startup_extra_text_button"
-                    android:layout_centerHorizontal="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/extras"
-                    android:layout_marginBottom="@dimen/spacing_large"
-                    android:background="@color/gray"/>
-            </RelativeLayout>
-            <RelativeLayout
                 android:id="@+id/startup_buttons_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="left" android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/startup_text_buttons_layout">
+                android:gravity="left">
                 <com.wb.nextgenlibrary.widget.SelectedMaskImageButton
                     android:id="@+id/next_gen_startup_play_button"
                     android:layout_width="match_parent"
@@ -111,23 +86,47 @@
                     nextgen:selectedOverlayColor="@color/transparent_black"
                     android:background="@android:color/transparent"/>
             </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/startup_text_buttons_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:gravity="center|bottom">
+                <Button
+                    android:id="@+id/next_gen_startup_play_text_button"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/next_gen_startup_extra_text_button"
+                    android:text="@string/play_movie"
+                    android:layout_marginBottom="@dimen/spacing_large"
+                    android:layout_centerHorizontal="true"
+                    android:background="@color/red" />
+                <Button
+                    android:id="@+id/next_gen_startup_extra_text_button"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/extras"
+                    android:layout_marginBottom="@dimen/spacing_large"
+                    android:background="@color/gray"/>
+            </RelativeLayout>
 
         </RelativeLayout>
     </com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout>
     <LinearLayout
         android:id="@+id/nge_main_exit"
-        android:layout_margin="@dimen/spacing_large"
+        android:layout_margin="@dimen/spacing_xlarge"
         android:drawableLeft="@drawable/nge_main_exit_icon"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="30dp">
+        android:layout_height="60dp">
         <ImageView
             android:src="@drawable/nge_main_exit_icon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"/>
+            android:layout_width="60dp"
+            android:layout_height="60dp"/>
         <com.wb.nextgenlibrary.widget.FontFitTextView
             android:layout_width="wrap_content"
-            android:paddingLeft="@dimen/spacing_small"
+            android:paddingLeft="@dimen/spacing_normal"
             android:layout_height="match_parent"
             android:text="@string/nge_exit"
             android:textSize="200sp"
@@ -136,6 +135,5 @@
             android:fontFamily="sans-serif"/>
 
     </LinearLayout>
-
 
 </RelativeLayout>

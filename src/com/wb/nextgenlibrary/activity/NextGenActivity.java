@@ -168,6 +168,12 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
         }
 
+        View exitIcon = findViewById(R.id.nge_main_exit);
+        if (exitIcon != null){
+            exitIcon.setOnClickListener(this);
+        }
+
+
         arrangeLayoutAccordingToScreenOrientation(getResources().getConfiguration().orientation);
     }
 
@@ -501,6 +507,8 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
         } else if (v.getId() == R.id.next_gen_startup_purchase_button) {
             if (NextGenExperience.getNextGenEventHandler() != null)
                 NextGenExperience.getNextGenEventHandler().handlePurchaseButtonPressed(this, NextGenExperience.getNextgenPlaybackObject());
+        } else if (v.getId() == R.id.nge_main_exit){
+            finish();
         }
     }
 

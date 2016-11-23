@@ -73,4 +73,5 @@
 
 	<string name="play_movie">Play Movie</string>
 	<string name="extras">Extras</string>
+	<string name="nge_exit">Exit</string>
 </resources>
