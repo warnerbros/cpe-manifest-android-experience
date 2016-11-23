@@ -194,7 +194,7 @@ public class MovieMetaData {
             }
         }
 
-        if (mediaManifest.getAppGroups().getAppGroup().size() > 0){
+        if (mediaManifest.getAppGroups() != null && mediaManifest.getAppGroups().getAppGroup().size() > 0){
             for(AppGroupType appGroup : mediaManifest.getAppGroups().getAppGroup()){
                 appGroupIdToAppGroupMap.put(appGroup.getAppGroupID(), appGroup);
             }
