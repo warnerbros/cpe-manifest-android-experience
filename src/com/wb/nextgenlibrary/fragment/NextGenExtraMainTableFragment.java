@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.activity.ECGalleryActivity;
+import com.wb.nextgenlibrary.activity.ECInteractiveActivity;
 import com.wb.nextgenlibrary.activity.ECSceneLocationActivity;
 import com.wb.nextgenlibrary.activity.ECVideoActivity;
 import com.wb.nextgenlibrary.activity.TheTakeShopCategoryActivity;
@@ -53,8 +54,13 @@ public class NextGenExtraMainTableFragment extends NextGenGridViewFragment {
         }else if (selectedGroup.getECGroupType() == MovieMetaData.ECGroupType.GALLERY){
             intent = new Intent(getActivity(), ECGalleryActivity.class);
         }else if (selectedGroup.getECGroupType() == MovieMetaData.ECGroupType.INTERACTIVE){
-            intent = new Intent(getActivity(), WebViewActivity.class);
-            intent.putExtra(F.URL, selectedGroup.interactiveItems.get(0).assetLocation);
+            if (selectedGroup.interactiveItems.size() == 0 && selectedGroup.getChildrenContents().size() > 0){        // launch grid
+
+                intent = new Intent(getActivity(), ECInteractiveActivity.class);
+            }else {
+                intent = new Intent(getActivity(), WebViewActivity.class);
+                intent.putExtra(F.URL, selectedGroup.interactiveItems.get(0).assetLocation);
+            }
         }
 
         if (intent != null) {

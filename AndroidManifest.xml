@@ -99,6 +99,11 @@
 				  android:exported="false"
 				  android:theme="@style/ExtraActionBar" >
 		</activity>
+		<activity android:name="com.wb.nextgenlibrary.activity.ECInteractiveActivity"
+				  android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+				  android:exported="false"
+				  android:theme="@style/ExtraActionBar" >
+		</activity>
 
 		<!-- phone -->
 		<activity android:name="com.wb.nextgenlibrary.activity.phone.NextGenActorsActivity_Phone"

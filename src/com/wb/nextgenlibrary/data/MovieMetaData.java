@@ -51,6 +51,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.xml.datatype.Duration;
 
@@ -138,7 +139,7 @@ public class MovieMetaData {
         HashMap<String, PictureType> pictureTypeAssetsMap = new HashMap<String, PictureType>();
         HashMap<String, AudioVisualItem> presentationIdToAVItemMap = new HashMap<String, AudioVisualItem>();
         HashMap<String, ECGalleryItem> galleryIdToGalleryItemMap = new HashMap<String, ECGalleryItem>();
-        HashMap<BigInteger, String> indexToTextMap = new HashMap<BigInteger, String>();
+        HashMap<String, HashMap<BigInteger, String>> indexToTextMap = new HashMap<>();
 
         HashMap<String, AppGroupType> appGroupIdToAppGroupMap = new HashMap<String, AppGroupType>();
 
@@ -218,18 +219,14 @@ public class MovieMetaData {
         }
 
         if (mediaManifest.getInventory().getTextObject()!= null && mediaManifest.getInventory().getTextObject().size() > 0){
-            InventoryTextObjectType textObjectType = getMatchingLocalizableObject(mediaManifest.getInventory().getTextObject());
+            //Map<String, InventoryTextObjectType> textObjects = getTextGroups(mediaManifest.getInventory().getTextObject());
 
-            if (NextGenExperience.matchesClientLocale(textObjectType.getLanguage())){
-                if (textObjectType.getTextString() != null){
-                    for (int i = 0 ; i< mediaManifest.getInventory().getTextObject().get(0).getTextString().size(); i++){
-                        InventoryTextObjectType.TextString textString = textObjectType.getTextString().get(i);
-                        BigInteger index = textString.getIndex();
-                        if (index != null) {
-                            indexToTextMap.put(textString.getIndex(), textString.getValue());
-                        }else {
-                            indexToTextMap.put(BigInteger.valueOf(i+1), textString.getValue());
-                        }
+            if (mediaManifest.getInventory().getTextObject().size() > 0){
+                for (InventoryTextObjectType textObjectType : mediaManifest.getInventory().getTextObject()){
+                    HashMap<BigInteger, String> textMap = new HashMap<BigInteger, String>();
+                    indexToTextMap.put(textObjectType.getTextObjectID(), textMap);
+                    for (InventoryTextObjectType.TextString textString : textObjectType.getTextString()){
+                        textMap.put(textString.getIndex(), textString.getValue());
                     }
                 }
 
@@ -519,15 +516,17 @@ public class MovieMetaData {
                             }
                         }else if (textGroupId != null && !StringHelper.isEmpty(textGroupId.getValue())){
                             BigInteger index = textGroupId.getIndex();
-                            String triviaText = indexToTextMap.get(index);
-                            if (!StringHelper.isEmpty(initialization)){                 //this is trivia
-                                PictureType picture = pictureTypeAssetsMap.get(initialization);
-                                PictureImageData fullImageData = pictureImageMap.get(picture.getImageID());
-                                PictureImageData thumbNailImageData = pictureImageMap.get(picture.getThumbnailImageID());
+                            if (indexToTextMap.containsKey(textGroupId.getValue())) {
+                                String triviaText = indexToTextMap.get(textGroupId.getValue()).get(index);
+                                if (!StringHelper.isEmpty(initialization)) {                 //this is trivia
+                                    PictureType picture = pictureTypeAssetsMap.get(initialization);
+                                    PictureImageData fullImageData = pictureImageMap.get(picture.getImageID());
+                                    PictureImageData thumbNailImageData = pictureImageMap.get(picture.getThumbnailImageID());
 
-                                presentationData = new TriviaItem(index, triviaText, fullImageData, thumbNailImageData);
-                            }else
-                                presentationData = new TextItem(index, triviaText);
+                                    presentationData = new TriviaItem(index, triviaText, fullImageData, thumbNailImageData);
+                                } else
+                                    presentationData = new TextItem(index, triviaText);
+                            }
                         } else if (!StringHelper.isEmpty(pictureID)){
                             PictureType picture = pictureTypeAssetsMap.get(pictureID);
                             PictureImageData fullImageData = pictureImageMap.get(picture.getImageID());
@@ -584,6 +583,20 @@ public class MovieMetaData {
     }
 
 
+    public static Map<String, InventoryTextObjectType> getTextGroups(List<InventoryTextObjectType> localizableObjects){
+        Map<String, InventoryTextObjectType> result = new HashMap<>();
+        if (localizableObjects != null && localizableObjects.size() > 0) {
+            for (InventoryTextObjectType textObject : localizableObjects ){
+                result.put(textObject.getTextObjectID(), textObject);
+
+            }
+
+        }
+        return result;
+    }
+
+
+
     public static <T extends LocalizableMetaDataInterface>T getMatchingLocalizableObject(List<T> localizableObjects){
         if (localizableObjects != null && localizableObjects.size() > 0) {
             Locale clientLocale = NextGenExperience.getClientLocale();
@@ -630,6 +643,7 @@ public class MovieMetaData {
         }
         return null;
     }
+
 
     private static LocationItem getLocationItemfromMap(HashMap<String, AppDataType> appDataMap,
                                                        HashMap<String, PictureImageData> imageAssetsMap,
