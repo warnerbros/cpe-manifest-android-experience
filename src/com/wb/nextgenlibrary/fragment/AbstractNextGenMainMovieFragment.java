@@ -5,10 +5,12 @@ import android.media.MediaPlayer;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
+import com.wb.nextgenlibrary.interfaces.NextGenPlaybackStatusListener;
 import com.wb.nextgenlibrary.interfaces.NextGenPlayerInterface;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.videoview.IVideoViewActionListener;
 import com.wb.nextgenlibrary.widget.CustomMediaController;
+
 
 /**
  * Created by gzcheng on 8/15/16.
@@ -18,10 +20,37 @@ public abstract class AbstractNextGenMainMovieFragment extends Fragment implemen
     protected MediaPlayer.OnCompletionListener completionListener;
     private View loadingView;
 
+    protected NextGenPlaybackStatusListener.NextGenPlaybackStatus playbackStatus = NextGenPlaybackStatusListener.NextGenPlaybackStatus.BUFFERING;
+
+    public NextGenPlaybackStatusListener.NextGenPlaybackStatus getPlaybackStatus(){     // only 1 of the 3 status will be returned;
+        switch (playbackStatus){
+
+            case PREPARED:
+            case READY:
+            case STARTED:
+            case PAUSE:
+            case STOP:
+            case RESUME:
+            case SEEK:
+            case TIMESTAMP_UPDATE:
+                return NextGenPlaybackStatusListener.NextGenPlaybackStatus.READY;
+            case COMPLETED:
+                return NextGenPlaybackStatusListener.NextGenPlaybackStatus.COMPLETED;
+            case BUFFERING:
+            default:
+                return NextGenPlaybackStatusListener.NextGenPlaybackStatus.BUFFERING;
+        }
+
+    }
+
     public abstract void setPlaybackObject(Object playbackObject);
     public abstract void setCustomMediaController(CustomMediaController customMC);
     public abstract void setResumeTime(int resumeTime);
-    public abstract int getCurrentPosition();
+    public abstract int getCurrentPosition();       // get current player position
+
+    public int getMovieOffsetMilliSecond(){
+        return 0;
+    }
 
     public void setNextGenVideoViewListener(IVideoViewActionListener listener) {
         nextGenVideoViewListener = listener;
@@ -86,6 +115,9 @@ public abstract class AbstractNextGenMainMovieFragment extends Fragment implemen
        });
     }
 
+    public  void switchMainFeatureAudio(boolean bOnOff){
+
+    }
 
     //public abstract void setProgressDialog(ProgressDialog dialog);   // do not use app's dialog, always use the NextGen Library one.
 }

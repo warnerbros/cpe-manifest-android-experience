@@ -368,7 +368,7 @@ public class ECVideoViewFragment extends ECViewFragment{
                         previewPlayBtn.setVisibility(View.GONE);
                     }
                 }
-                videoView.setVideoURI(Uri.parse(avItem.videoUrl));
+                videoView.setVideoURI(Uri.parse(avItem.getVideoUrl()));
                 if (mediaController != null) {
                     mediaController.reset();
                 }

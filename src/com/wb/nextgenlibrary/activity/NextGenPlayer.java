@@ -1,6 +1,5 @@
 package com.wb.nextgenlibrary.activity;
 
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -8,7 +7,6 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
@@ -16,18 +14,21 @@ import android.view.animation.Transformation;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
-import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.fragment.AbstractNextGenMainMovieFragment;
 import com.wb.nextgenlibrary.fragment.NextGenPlayerBottomFragment;
 import com.wb.nextgenlibrary.interfaces.NextGenFragmentTransactionInterface;
-import com.wb.nextgenlibrary.interfaces.NextGenPlaybackStatusListener;
+import com.wb.nextgenlibrary.interfaces.NextGenPlaybackStatusListener.NextGenPlaybackStatus;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
+import com.wb.nextgenlibrary.util.utils.F;
 import com.wb.nextgenlibrary.util.utils.NextGenFragmentTransactionEngine;
+import com.wb.nextgenlibrary.util.utils.NextGenLogger;
+import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.videoview.IVideoViewActionListener;
 import com.wb.nextgenlibrary.videoview.ObservableVideoView;
 import com.wb.nextgenlibrary.widget.CustomMediaController;
@@ -78,6 +79,8 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     AbstractNextGenMainMovieFragment mainMovieFragment;
 
     int ecFragmentsCounter = 0;
+
+    MediaPlayer commentaryAudioPlayer;
 
     static enum DRMStatus{
         SUCCESS, FAILED, IN_PROGRESS, NOT_INITIATED
@@ -131,7 +134,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         interstitialVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                updateImeFragment(NextGenPlaybackStatusListener.NextGenPlaybackStatus.STOP, -1L);
+                updateImeFragment(NextGenPlaybackStatus.STOP, -1L);
 
                 NextGenExperience.getNextGenEventHandler().setInterstitialWatchedForContent(NextGenExperience.getNextgenPlaybackObject());
                 bInterstitialVideoComplete = true;
@@ -177,28 +180,49 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
                 @Override
                 public void onTimeBarSeekChanged(int currentTime) {
-                    updateImeFragment(NextGenPlaybackStatusListener.NextGenPlaybackStatus.SEEK, currentTime);
+                    updateImeFragment(NextGenPlaybackStatus.SEEK, currentTime);
+                    /*if (isCommentaryOn && commentaryAudioPlayer != null)
+                        commentaryAudioPlayer.seekTo(currentTime - mainMovieFragment.getMovieOffsetMilliSecond());*/
                 }
 
                 @Override
                 public void onResume() {
-                    updateImeFragment(NextGenPlaybackStatusListener.NextGenPlaybackStatus.PAUSE, mainMovieFragment.getCurrentPosition());
+                    updateImeFragment(NextGenPlaybackStatus.PAUSE, mainMovieFragment.getCurrentPosition());
+                    /*if (isCommentaryOn && commentaryAudioPlayer != null) {
+                        commentaryAudioPlayer.seekTo(mainMovieFragment.getCurrentPosition() - mainMovieFragment.getMovieOffsetMilliSecond());
+                        commentaryAudioPlayer.start();
+                    }*/
                 }
 
                 @Override
                 public void onStart() {
-                    updateImeFragment(NextGenPlaybackStatusListener.NextGenPlaybackStatus.PAUSE, mainMovieFragment.getCurrentPosition());
+                    updateImeFragment(NextGenPlaybackStatus.PAUSE, mainMovieFragment.getCurrentPosition());
                 }
 
                 @Override
                 public void onPause() {
-                    updateImeFragment(NextGenPlaybackStatusListener.NextGenPlaybackStatus.RESUME, mainMovieFragment.getCurrentPosition());
+                    updateImeFragment(NextGenPlaybackStatus.RESUME, mainMovieFragment.getCurrentPosition());
+                    /*if (isCommentaryOn && commentaryAudioPlayer != null)
+                        commentaryAudioPlayer.pause();*/
                 }
             });
         }catch (InstantiationException ex){
 
         }catch (IllegalAccessException iex){
 
+        }
+
+        if (isCommentaryAvailable()) {
+            actionBarRightTextView.setText(getResources().getString(R.string.nge_commentary));
+            actionBarRightTextView.setTextColor( getResources().getColor(R.color.gray));
+            actionBarRightTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    toggleCommentary();
+                }
+            });
+
+            prepareCommentaryTrack();
         }
     }
 
@@ -243,21 +267,24 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         //this.finish();
     }
 
-    protected void updateImeFragment(final NextGenPlaybackStatusListener.NextGenPlaybackStatus playbackStatus, final long timecode){
+    protected void updateImeFragment(final NextGenPlaybackStatus playbackStatus, final long timecode){
         if (INTERSTITIAL_VIDEO_URI.equals(currentUri))
             return;
 
-        if (lastTimeCode == timecode)
+        if (lastTimeCode == timecode - mainMovieFragment.getMovieOffsetMilliSecond())
             return;
 
-        lastTimeCode = timecode;
+        lastTimeCode = timecode - mainMovieFragment.getMovieOffsetMilliSecond();
+
+        if (lastTimeCode < 0)
+            lastTimeCode = 0;
 
 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (imeBottomFragment != null)
-                    imeBottomFragment.playbackStatusUpdate(playbackStatus, timecode);
+                    imeBottomFragment.playbackStatusUpdate(playbackStatus, lastTimeCode);
 
             }
         });
@@ -271,6 +298,14 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                 break;
             case TIMESTAMP_UPDATE:
                 break;
+        }
+        if (isCommentaryOn && isCommentaryAvailable()){
+            resyncCommentary();
+            /* TODO: should handle commentary here.
+                resync if the timediference is more than 1/2 second
+                and keep track of the player state with it's paused or playing
+
+             */
         }
     }
 
@@ -418,14 +453,14 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
             imeUpdateTask = new TimerTask() {
                 @Override
                 public void run() {
-                    updateImeFragment(NextGenPlaybackStatusListener.NextGenPlaybackStatus.TIMESTAMP_UPDATE, mainMovieFragment.getCurrentPosition());
+                    updateImeFragment(NextGenPlaybackStatus.TIMESTAMP_UPDATE, mainMovieFragment.getCurrentPosition());
                 }
             };
             imeUpdateTimer.scheduleAtFixedRate(imeUpdateTask, 0, 1000);
         }
 
 
-        updateImeFragment(NextGenPlaybackStatusListener.NextGenPlaybackStatus.PREPARED, -1L);
+        updateImeFragment(NextGenPlaybackStatus.PREPARED, -1L);
         //mainMovieFragment
         /*videoView.setCustomMediaController(mediaController);
         if (INTERSTITIAL_VIDEO_URI.equals(currentUri)) {
@@ -448,6 +483,9 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     public void onPause() {
         shouldStartAfterResume = mainMovieFragment.isPlaying();
         resumePlayTime = mainMovieFragment.getCurrentPosition();
+        if (isCommentaryOn && commentaryAudioPlayer != null){
+                commentaryAudioPlayer.pause();
+        }
         super.onPause();
 
     }
@@ -513,6 +551,11 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         if (imeUpdateTimer != null){
             imeUpdateTimer.cancel();
             imeUpdateTimer = null;
+        }
+        if (commentaryAudioPlayer != null){
+            if (isCommentaryOn)
+                commentaryAudioPlayer.stop();
+            commentaryAudioPlayer.release();
         }
         super.onDestroy();
 
@@ -590,5 +633,146 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     @Override
     public String getRightTitleText(){
         return "";
+    }
+
+    private boolean isCommentaryAvailable(){
+        return !StringHelper.isEmpty(NextGenExperience.getMovieMetaData().getCommentaryTrackURL());
+    }
+
+    private boolean isCommentaryOn = false;
+
+    private NGECommentaryPlayersStatusListener commentaryPlayersStatusListener = null;
+
+    private void prepareCommentaryTrack(){
+        if (isCommentaryAvailable()) {
+            try {
+                commentaryAudioPlayer = MediaPlayer.create(this, Uri.parse(NextGenExperience.getMovieMetaData().getCommentaryTrackURL()));
+                commentaryAudioPlayer.setLooping(false);
+                commentaryPlayersStatusListener = new NGECommentaryPlayersStatusListener();
+                commentaryAudioPlayer.setOnPreparedListener(commentaryPlayersStatusListener);
+                //commentaryAudioPlayer.setOnCompletionListener(commentaryPlayersStatusListener);
+                commentaryAudioPlayer.setOnInfoListener(commentaryPlayersStatusListener);
+            } catch (Exception ex) {
+                NextGenLogger.e(F.TAG, ex.getMessage());
+            }
+        }
+    }
+
+    private class NGECommentaryPlayersStatusListener implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnInfoListener {
+        private NextGenPlaybackStatus playerStatus = NextGenPlaybackStatus.BUFFERING;
+
+        public NextGenPlaybackStatus getPlayerStatus(){
+            return playerStatus;
+        }
+
+        @Override
+        public void onPrepared(MediaPlayer mp) {
+            playerStatus = NextGenPlaybackStatus.READY;
+            resyncCommentary();
+        }
+
+        @Override
+        public void onCompletion(MediaPlayer mp) {
+            playerStatus = NextGenPlaybackStatus.COMPLETED;
+        }
+
+        @Override
+        public boolean onInfo(MediaPlayer mp, int what, int extra) {
+            NextGenLogger.d(F.TAG_COMMENTARY,  "CommentaryPlayer " + NextGenPlayer.this.getClass().getSimpleName() + ".onInfo: " + what);
+
+            switch (what) {
+                case MediaPlayer.MEDIA_INFO_BUFFERING_START: // @since API Level 9
+                    NextGenLogger.d(F.TAG_COMMENTARY, "CommentaryPlayer.onInfo: MEDIA_INFO_BUFFERING_START");
+                    playerStatus = NextGenPlaybackStatus.BUFFERING;
+                    resyncCommentary();
+
+                    break;
+                case MediaPlayer.MEDIA_INFO_BUFFERING_END: // @since API Level 9
+                    NextGenLogger.d(F.TAG_COMMENTARY, "CommentaryPlayer.onInfo: MEDIA_INFO_BUFFERING_END");
+                    playerStatus = NextGenPlaybackStatus.READY;
+                    resyncCommentary();
+
+                    //mDialog.hide();
+
+                    break;
+
+                case MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
+                    playerStatus = NextGenPlaybackStatus.READY;
+                    resyncCommentary();
+                    //mDialog.hide();
+
+                    break;
+
+                default:
+                    //mDialog.hide();
+                    break;
+
+            }
+            return true;
+        }
+    }
+
+    private void toggleCommentary(){
+        if (isCommentaryAvailable() && commentaryAudioPlayer != null){
+           if (isCommentaryOn) {            // turning commentary off
+               //mainMovieFragment.switchMainFeatureAudio(true);
+               //commentaryAudioPlayer.pause();
+               isCommentaryOn = false;
+               resyncCommentary();
+           }else {                          // turning commentary on
+               //mainMovieFragment.switchMainFeatureAudio(false);
+               isCommentaryOn = true;
+               resyncCommentary();
+               commentaryAudioPlayer.start();
+               commentaryAudioPlayer.seekTo(mainMovieFragment.getCurrentPosition() - mainMovieFragment.getMovieOffsetMilliSecond());
+
+           }
+        }
+        actionBarRightTextView.setTextColor(isCommentaryOn? getResources().getColor(R.color.white) : getResources().getColor(R.color.gray));
+    }
+
+    private boolean bPausedForCommentaryBuffering = false;
+
+    private void resyncCommentary(){
+         if (isCommentaryAvailable()){
+            if (isCommentaryOn){
+                if (commentaryPlayersStatusListener.getPlayerStatus() == NextGenPlaybackStatus.READY && mainMovieFragment.getPlaybackStatus() == NextGenPlaybackStatus.READY){        // both ready
+                    int mainMovieTime = mainMovieFragment.getCurrentPosition() - mainMovieFragment.getMovieOffsetMilliSecond();
+                    if (mainMovieTime < 0)
+                        mainMovieTime = 0;
+                    int commentaryTime = commentaryAudioPlayer.getCurrentPosition();
+                    int timeDifference = Math.abs(mainMovieTime - commentaryTime);
+                    if (timeDifference > 500) {     // when they are out of sync i.e. more than 1/2 second apart.
+                        commentaryAudioPlayer.start();
+                        commentaryAudioPlayer.seekTo(mainMovieTime);
+                    }
+
+                    if (mainMovieFragment.isPlaying()) {    // if it's playing, check to see if recy
+                        commentaryAudioPlayer.start();
+                    }else if (bPausedForCommentaryBuffering){       // if it's paused for commentary buffering
+                        bPausedForCommentaryBuffering = false;
+                        mainMovieFragment.resumePlayback();
+                        commentaryAudioPlayer.start();
+                    } else if (commentaryAudioPlayer.isPlaying()){                                        // if main movie is paused.
+                        commentaryAudioPlayer.pause();
+                    }
+                } else if (commentaryPlayersStatusListener.getPlayerStatus() == NextGenPlaybackStatus.BUFFERING || mainMovieFragment.getPlaybackStatus() == NextGenPlaybackStatus.BUFFERING){     // show loading progress bar and pause and wait for buffering completion
+                    if (commentaryPlayersStatusListener.getPlayerStatus() == NextGenPlaybackStatus.READY && commentaryAudioPlayer.isPlaying())
+                        commentaryAudioPlayer.pause();
+
+                    if (mainMovieFragment.getPlaybackStatus() == NextGenPlaybackStatus.READY){
+                        bPausedForCommentaryBuffering = true;
+                        mainMovieFragment.pause();
+                    }
+
+                }
+
+                mainMovieFragment.switchMainFeatureAudio(false);    // turn off movie audio track
+            } else{                 // switch off commentary
+                mainMovieFragment.switchMainFeatureAudio(true);     // turn on movie audio track
+                if (commentaryPlayersStatusListener.getPlayerStatus() == NextGenPlaybackStatus.READY && commentaryAudioPlayer.isPlaying())
+                    commentaryAudioPlayer.pause();
+            }
+        }
     }
 }
