@@ -106,9 +106,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         loadingView = (ProgressBar)findViewById(R.id.next_gen_loading_progress_bar);
         if (loadingView != null){
             loadingView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-            /*loadingView.getIndeterminateDrawable().setColorFilter(
-                    getResources().getColor(android.R.color.transparent),
-                    android.graphics.PorterDuff.Mode.SRC_IN);*/
+
         }
 
         actionbarPlaceHolder = findViewById(R.id.next_gen_ime_actionbar_placeholder);
@@ -119,7 +117,6 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                 String bgImgUrl = NextGenExperience.getMovieMetaData().getExtraExperience().style.getBackground().getImage().url;
                 Glide.with(this).load(bgImgUrl).into(backgroundImageView);
             }
-            //PicassoTrustAll.loadImageIntoView(this, NextGenExperience.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie), backgroundImageView);
         }
 
         containerView = (RelativeLayout)findViewById(R.id.interstitial_container);
@@ -146,11 +143,9 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         imeBottomFragment = new NextGenPlayerBottomFragment();
 
 
-        //transitLeftFragment(new NextGenIMEActorFragment());
         transitMainFragment(imeBottomFragment);
         try {
             mainMovieFragment = NextGenExperience.getMainMovieFragmentClass().newInstance();
-            //mainMovieFragment.setProgressDialog(mDialog);
             mainMovieFragment.setLoadingView(loadingView);
             mainMovieFragment.setOnCompletionLister(new MediaPlayer.OnCompletionListener() {
                 @Override
@@ -181,17 +176,11 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                 @Override
                 public void onTimeBarSeekChanged(int currentTime) {
                     updateImeFragment(NextGenPlaybackStatus.SEEK, currentTime);
-                    /*if (isCommentaryOn && commentaryAudioPlayer != null)
-                        commentaryAudioPlayer.seekTo(currentTime - mainMovieFragment.getMovieOffsetMilliSecond());*/
                 }
 
                 @Override
                 public void onResume() {
                     updateImeFragment(NextGenPlaybackStatus.PAUSE, mainMovieFragment.getCurrentPosition());
-                    /*if (isCommentaryOn && commentaryAudioPlayer != null) {
-                        commentaryAudioPlayer.seekTo(mainMovieFragment.getCurrentPosition() - mainMovieFragment.getMovieOffsetMilliSecond());
-                        commentaryAudioPlayer.start();
-                    }*/
                 }
 
                 @Override
@@ -202,8 +191,6 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                 @Override
                 public void onPause() {
                     updateImeFragment(NextGenPlaybackStatus.RESUME, mainMovieFragment.getCurrentPosition());
-                    /*if (isCommentaryOn && commentaryAudioPlayer != null)
-                        commentaryAudioPlayer.pause();*/
                 }
             });
         }catch (InstantiationException ex){
@@ -320,7 +307,6 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     }
 
     private void hideShowNextGenView(){
-        //if (TabletUtils.isTablet()) {
             View nextGenView = findViewById(R.id.next_gen_ime_bottom_view);
             if (nextGenView == null)
                 return;
@@ -461,19 +447,6 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
 
         updateImeFragment(NextGenPlaybackStatus.PREPARED, -1L);
-        //mainMovieFragment
-        /*videoView.setCustomMediaController(mediaController);
-        if (INTERSTITIAL_VIDEO_URI.equals(currentUri)) {
-            videoView.setOnTouchListener(null);
-            Intent intent = getIntent();
-            Uri uri = intent.getData();
-            currentUri = uri;
-            videoView.setVideoURI(uri);
-            if (mediaController == null) {
-                mediaController = new MainFeatureMediaController(this, videoView);
-
-            }
-        }*/
     }
 
     int resumePlayTime = -1;
@@ -612,7 +585,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
     @Override
     public String getBackgroundImgUri(){
-        return "";//NextGenExperience.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie);
+        return "";
     }
 
     @Override
@@ -650,7 +623,6 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                 commentaryAudioPlayer.setLooping(false);
                 commentaryPlayersStatusListener = new NGECommentaryPlayersStatusListener();
                 commentaryAudioPlayer.setOnPreparedListener(commentaryPlayersStatusListener);
-                //commentaryAudioPlayer.setOnCompletionListener(commentaryPlayersStatusListener);
                 commentaryAudioPlayer.setOnInfoListener(commentaryPlayersStatusListener);
             } catch (Exception ex) {
                 NextGenLogger.e(F.TAG, ex.getMessage());
@@ -715,12 +687,8 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     private void toggleCommentary(){
         if (isCommentaryAvailable() && commentaryAudioPlayer != null){
            if (isCommentaryOn) {            // turning commentary off
-               //mainMovieFragment.switchMainFeatureAudio(true);
-               //commentaryAudioPlayer.pause();
-               isCommentaryOn = false;
                resyncCommentary();
            }else {                          // turning commentary on
-               //mainMovieFragment.switchMainFeatureAudio(false);
                isCommentaryOn = true;
                resyncCommentary();
                commentaryAudioPlayer.start();
@@ -728,7 +696,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
            }
         }
-        actionBarRightTextView.setTextColor(isCommentaryOn? getResources().getColor(R.color.white) : getResources().getColor(R.color.gray));
+        actionBarRightTextView.setTextColor(isCommentaryOn? getResources().getColor(R.color.drawer_yellow) : getResources().getColor(R.color.gray));
     }
 
     private boolean bPausedForCommentaryBuffering = false;
