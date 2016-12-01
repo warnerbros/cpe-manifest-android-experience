@@ -160,11 +160,15 @@ public class CustomMediaController extends MediaController {
      */
     protected View makeControllerView() {
         LayoutInflater inflate = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mRoot = inflate.inflate(R.layout.custom_media_controller, null);
+        mRoot = inflate.inflate(getLayoutId(), null);
 
         initControllerView(mRoot);
 
         return mRoot;
+    }
+
+    protected int getLayoutId(){
+        return R.layout.custom_media_controller;
     }
 
     private void initControllerView(View v) {
