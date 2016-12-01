@@ -710,7 +710,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                         mainMovieTime = 0;
                     int commentaryTime = commentaryAudioPlayer.getCurrentPosition();
                     int timeDifference = Math.abs(mainMovieTime - commentaryTime);
-                    if (timeDifference > 500) {     // when they are out of sync i.e. more than 1/2 second apart.
+                    if (timeDifference > 150) {     // when they are out of sync i.e. more than 150 mini seconds apart.
                         commentaryAudioPlayer.start();
                         commentaryAudioPlayer.seekTo(mainMovieTime);
                     }
