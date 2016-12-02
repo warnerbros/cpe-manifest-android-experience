@@ -33,6 +33,7 @@ import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.PictureType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.PlayableSequenceListType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.PlayableSequenceType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.PresentationType;
+import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.TextGroupType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.TimecodeType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.TimedEventSequenceType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.TimedEventType;
@@ -219,21 +220,33 @@ public class MovieMetaData {
             }
         }
 
+        HashMap<String, String> textObjectIdToTextGroupId = new HashMap<String, String>();
+        if (mediaManifest.getTextGroups() != null && mediaManifest.getTextGroups().getTextGroup() != null && mediaManifest.getTextGroups().getTextGroup().size() > 0 ){
+            for (TextGroupType textGroupType : mediaManifest.getTextGroups().getTextGroup()){
+                if (textGroupType.getTextObjectID() != null && textGroupType.getTextObjectID().size() > 0){
+                    textObjectIdToTextGroupId.put(textGroupType.getTextObjectID().get(0), textGroupType.getTextGroupID());
+                }
+            }
+        }
+
         if (mediaManifest.getInventory().getTextObject()!= null && mediaManifest.getInventory().getTextObject().size() > 0){
             //Map<String, InventoryTextObjectType> textObjects = getTextGroups(mediaManifest.getInventory().getTextObject());
 
             if (mediaManifest.getInventory().getTextObject().size() > 0){
                 for (InventoryTextObjectType textObjectType : mediaManifest.getInventory().getTextObject()){
                     HashMap<BigInteger, String> textMap = new HashMap<BigInteger, String>();
-                    indexToTextMap.put(textObjectType.getTextObjectID(), textMap);
-                    for (InventoryTextObjectType.TextString textString : textObjectType.getTextString()){
-                        textMap.put(textString.getIndex(), textString.getValue());
+                    String textGroupId = textObjectIdToTextGroupId.get(textObjectType.getTextObjectID());
+                    indexToTextMap.put(textGroupId, textMap);
+
+                    for (int i = 0 ; i< textObjectType.getTextString().size(); i++){
+                        if (textObjectType.getTextString().get(i).getIndex() == null){
+                            textMap.put(BigInteger.valueOf(i), textObjectType.getTextString().get(i).getValue());
+                        }else {
+                            textMap.put(textObjectType.getTextString().get(i).getIndex(), textObjectType.getTextString().get(i).getValue());
+                        }
                     }
                 }
-
             }
-
-
         }
 
         if (appDataManifest != null && appDataManifest.getManifestAppData() != null && appDataManifest.getManifestAppData().size() > 0){
