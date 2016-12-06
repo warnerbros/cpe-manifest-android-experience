@@ -3,7 +3,7 @@
 	package="com.wb.nextgenlibrary"
 	android:installLocation="auto"
 	android:versionCode="15"
-	android:versionName="v1.0.0" >
+	android:versionName="v1.1.0" >
 	<uses-sdk
 		android:minSdkVersion="18"
 		android:targetSdkVersion="21" />
