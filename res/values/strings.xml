@@ -75,4 +75,8 @@
 	<string name="extras">Extras</string>
 	<string name="nge_exit">Exit</string>
 	<string name="nge_commentary">Commentary</string>
+	<string name="nge_commentary_on">Commentary On</string>
+	<string name="off_text">Off</string>
+	<string name="on_text">On</string>
+	<string name="director_commentary">Director Commentary</string>
 </resources>

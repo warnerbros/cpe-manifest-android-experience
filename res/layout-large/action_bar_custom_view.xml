@@ -53,6 +53,7 @@
                 android:fontFamily="sans-serif-condensed"
                 android:textStyle="bold"
                 android:textSize="@dimen/textLarge"
+                android:drawablePadding="@dimen/textMSmall"
                 android:background="@android:color/transparent"
                 android:layout_alignParentRight="true" />
 

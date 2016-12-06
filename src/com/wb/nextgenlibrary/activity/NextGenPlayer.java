@@ -1,17 +1,26 @@
 package com.wb.nextgenlibrary.activity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.ListPopupWindow;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -34,6 +43,7 @@ import com.wb.nextgenlibrary.videoview.ObservableVideoView;
 import com.wb.nextgenlibrary.widget.CustomMediaController;
 import com.wb.nextgenlibrary.widget.MainFeatureMediaController;
 
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -81,6 +91,8 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     int ecFragmentsCounter = 0;
 
     MediaPlayer commentaryAudioPlayer;
+    CommentaryOnOffAdapter commentaryOnOffAdapter;
+    ListPopupWindow commentaryPopupWindow;
 
     static enum DRMStatus{
         SUCCESS, FAILED, IN_PROGRESS, NOT_INITIATED
@@ -201,16 +213,152 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
         if (isCommentaryAvailable()) {
             actionBarRightTextView.setText(getResources().getString(R.string.nge_commentary));
+            actionBarRightTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.nge_commentary), null);
             actionBarRightTextView.setTextColor( getResources().getColor(R.color.gray));
+
+            commentaryOnOffAdapter = new CommentaryOnOffAdapter();
+
+            commentaryPopupWindow = new ListPopupWindow(this);
+            commentaryPopupWindow.setModal(false);
+            commentaryPopupWindow.setAdapter(commentaryOnOffAdapter);
+
+            commentaryPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    commentaryOnOffAdapter.setSelection(position);
+                    if (position == 0){ // OFF
+                        switchCommentary(false);
+                    } else {
+                        switchCommentary(true);
+                    }
+                    commentaryPopupWindow.dismiss();
+                }
+            });
+
             actionBarRightTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    toggleCommentary();
+                    //toggleCommentary();
+                    if (commentaryPopupWindow.isShowing())
+                        commentaryPopupWindow.dismiss();
+                    else {
+                        commentaryPopupWindow.setAnchorView(actionBarRightTextView);
+                        commentaryPopupWindow.setContentWidth(measureContentWidth(commentaryOnOffAdapter));
+                        commentaryPopupWindow.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black)));
+                        commentaryPopupWindow.show();
+                    }
+
                 }
             });
 
             prepareCommentaryTrack();
         }
+    }
+
+    private int measureContentWidth(ListAdapter listAdapter) {
+        ViewGroup mMeasureParent = null;
+        int maxWidth = 0;
+        View itemView = null;
+        int itemType = 0;
+
+        final ListAdapter adapter = listAdapter;
+        final int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        final int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        final int count = adapter.getCount();
+        for (int i = 0; i < count; i++) {
+            final int positionType = adapter.getItemViewType(i);
+            if (positionType != itemType) {
+                itemType = positionType;
+                itemView = null;
+            }
+
+            if (mMeasureParent == null) {
+                mMeasureParent = new FrameLayout(this);
+            }
+
+            itemView = adapter.getView(i, itemView, mMeasureParent);
+            itemView.measure(widthMeasureSpec, heightMeasureSpec);
+
+            final int itemWidth = itemView.getMeasuredWidth();
+
+            if (itemWidth > maxWidth) {
+                maxWidth = itemWidth;
+            }
+        }
+
+        return maxWidth;
+    }
+
+    class CommentaryOnOffAdapter extends BaseAdapter {
+        private final String[] items = new String[]{getResources().getString(R.string.off_text), getResources().getString(R.string.director_commentary)};
+        int selectedIndex = 0;
+        CommentaryOnOffAdapter() {
+
+        }
+
+        public void setSelection(int index){
+            selectedIndex = index;
+            notifyDataSetChanged();
+        }
+
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+
+        @Override
+        public String getItem(int index) {
+            return items[index];
+        }
+
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+
+        @Override
+        public View getView(final int index, View view, ViewGroup arg2) {
+            View target = null;
+
+            if (view != null){
+                target = view;
+            }else{
+                LayoutInflater inflate = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                target = inflate.inflate(R.layout.nge_commentary_onoff, arg2, false);
+
+            }
+
+
+            TextView tView = (TextView)target.findViewById(R.id.commentary_text_button);
+            tView.setText(getItem(index));
+
+            TextView description = (TextView) target.findViewById(R.id.commentary_description);
+
+            ImageView iView = (ImageView)target.findViewById(R.id.commentary_radio_image);
+            /*
+            if (index > 0){
+                description.setText("Hear from the director in his own words about the decision he made");
+                description.setVisibility(View.VISIBLE);
+            }else {
+                description.setVisibility(View.GONE);
+            }*/
+
+            if (index == selectedIndex){
+                tView.setTextColor(getResources().getColor(R.color.drawer_yellow));
+                iView.setImageDrawable(getResources().getDrawable(R.drawable.commentary_radio_button_selected));
+            }else {
+                tView.setTextColor(getResources().getColor(R.color.white));
+                iView.setImageDrawable(getResources().getDrawable(R.drawable.commentary_radio_button));
+            }
+
+            return target;
+        }
+
+
     }
 
     @Override
@@ -684,9 +832,11 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         }
     }
 
+    /*
     private void toggleCommentary(){
         if (isCommentaryAvailable() && commentaryAudioPlayer != null){
            if (isCommentaryOn) {            // turning commentary off
+               isCommentaryOn = false;
                resyncCommentary();
            }else {                          // turning commentary on
                isCommentaryOn = true;
@@ -696,7 +846,35 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
            }
         }
+
         actionBarRightTextView.setTextColor(isCommentaryOn? getResources().getColor(R.color.drawer_yellow) : getResources().getColor(R.color.gray));
+    }*/
+
+    private void switchCommentary(boolean bOnOff){
+        if (isCommentaryAvailable() && commentaryAudioPlayer != null){
+            if (!bOnOff) {            // turning commentary off
+                isCommentaryOn = bOnOff;
+                resyncCommentary();
+            }else {                          // turning commentary on
+                isCommentaryOn = bOnOff;
+                resyncCommentary();
+                commentaryAudioPlayer.start();
+                commentaryAudioPlayer.seekTo(mainMovieFragment.getCurrentPosition() - mainMovieFragment.getMovieOffsetMilliSecond());
+
+            }
+            if (isCommentaryOn){
+                actionBarRightTextView.setTextColor(getResources().getColor(R.color.drawer_yellow));
+                actionBarRightTextView.setText(getResources().getString(R.string.nge_commentary_on));
+                actionBarRightTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.nge_commentary_on), null);
+
+            } else {
+                actionBarRightTextView.setTextColor( getResources().getColor(R.color.white));
+                actionBarRightTextView.setText(getResources().getString(R.string.nge_commentary));
+                actionBarRightTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.nge_commentary), null);
+            }
+        }
+
+
     }
 
     private boolean bPausedForCommentaryBuffering = false;
