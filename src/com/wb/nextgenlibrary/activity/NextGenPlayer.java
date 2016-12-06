@@ -43,6 +43,7 @@ import com.wb.nextgenlibrary.videoview.ObservableVideoView;
 import com.wb.nextgenlibrary.widget.CustomMediaController;
 import com.wb.nextgenlibrary.widget.MainFeatureMediaController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -766,14 +767,21 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
     private void prepareCommentaryTrack(){
         if (isCommentaryAvailable()) {
-            try {
-                commentaryAudioPlayer = MediaPlayer.create(this, Uri.parse(NextGenExperience.getMovieMetaData().getCommentaryTrackURL()));
-                commentaryAudioPlayer.setLooping(false);
-                commentaryPlayersStatusListener = new NGECommentaryPlayersStatusListener();
-                commentaryAudioPlayer.setOnPreparedListener(commentaryPlayersStatusListener);
-                commentaryAudioPlayer.setOnInfoListener(commentaryPlayersStatusListener);
-            } catch (Exception ex) {
-                NextGenLogger.e(F.TAG, ex.getMessage());
+            if (mainMovieFragment.canHandleCommentaryAudioTrackSwitching()){
+                List<String> commentaries = new ArrayList<>();
+                commentaries.add(NextGenExperience.getMovieMetaData().getCommentaryTrackURL());
+                mainMovieFragment.setCommentaryTrackUrls(commentaries);
+            }else {
+
+                try {
+                    commentaryAudioPlayer = MediaPlayer.create(this, Uri.parse(NextGenExperience.getMovieMetaData().getCommentaryTrackURL()));
+                    commentaryAudioPlayer.setLooping(false);
+                    commentaryPlayersStatusListener = new NGECommentaryPlayersStatusListener();
+                    commentaryAudioPlayer.setOnPreparedListener(commentaryPlayersStatusListener);
+                    commentaryAudioPlayer.setOnInfoListener(commentaryPlayersStatusListener);
+                } catch (Exception ex) {
+                    NextGenLogger.e(F.TAG, ex.getMessage());
+                }
             }
         }
     }
@@ -851,27 +859,30 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     }*/
 
     private void switchCommentary(boolean bOnOff){
-        if (isCommentaryAvailable() && commentaryAudioPlayer != null){
-            if (!bOnOff) {            // turning commentary off
-                isCommentaryOn = bOnOff;
-                resyncCommentary();
-            }else {                          // turning commentary on
-                isCommentaryOn = bOnOff;
-                resyncCommentary();
-                commentaryAudioPlayer.start();
-                commentaryAudioPlayer.seekTo(mainMovieFragment.getCurrentPosition() - mainMovieFragment.getMovieOffsetMilliSecond());
+        isCommentaryOn = bOnOff;
+        if (isCommentaryAvailable()){
+            if (mainMovieFragment.canHandleCommentaryAudioTrackSwitching()){
+                mainMovieFragment.setActiveCommentaryTrack(bOnOff ? 0 : -1);
+            }else if (commentaryAudioPlayer != null) {
+                if (!bOnOff) {            // turning commentary off
+                    resyncCommentary();
+                } else {                          // turning commentary on
+                    resyncCommentary();
+                    commentaryAudioPlayer.start();
+                    commentaryAudioPlayer.seekTo(mainMovieFragment.getCurrentPosition() - mainMovieFragment.getMovieOffsetMilliSecond());
 
+                }
             }
-            if (isCommentaryOn){
-                actionBarRightTextView.setTextColor(getResources().getColor(R.color.drawer_yellow));
-                actionBarRightTextView.setText(getResources().getString(R.string.nge_commentary_on));
-                actionBarRightTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.nge_commentary_on), null);
+        }
+        if (isCommentaryOn) {
+            actionBarRightTextView.setTextColor(getResources().getColor(R.color.drawer_yellow));
+            actionBarRightTextView.setText(getResources().getString(R.string.nge_commentary_on));
+            actionBarRightTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.nge_commentary_on), null);
 
-            } else {
-                actionBarRightTextView.setTextColor( getResources().getColor(R.color.white));
-                actionBarRightTextView.setText(getResources().getString(R.string.nge_commentary));
-                actionBarRightTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.nge_commentary), null);
-            }
+        } else {
+            actionBarRightTextView.setTextColor(getResources().getColor(R.color.white));
+            actionBarRightTextView.setText(getResources().getString(R.string.nge_commentary));
+            actionBarRightTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.nge_commentary), null);
         }
 
 
@@ -880,7 +891,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     private boolean bPausedForCommentaryBuffering = false;
 
     private void resyncCommentary(){
-         if (isCommentaryAvailable()){
+         if (isCommentaryAvailable() && !mainMovieFragment.canHandleCommentaryAudioTrackSwitching()){
             if (isCommentaryOn){
                 if (commentaryPlayersStatusListener.getPlayerStatus() == NextGenPlaybackStatus.READY && mainMovieFragment.getPlaybackStatus() == NextGenPlaybackStatus.READY){        // both ready
                     int mainMovieTime = mainMovieFragment.getCurrentPosition() - mainMovieFragment.getMovieOffsetMilliSecond();
