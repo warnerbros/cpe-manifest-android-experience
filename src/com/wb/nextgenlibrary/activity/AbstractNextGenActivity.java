@@ -43,7 +43,7 @@ public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivi
     private Button actionBarLeftButton;
     protected ImageView backgroundImageView;
     protected LinearLayout topUnderlayActionbarSpacer;
-    private TextView actionBarRightTextView;
+    protected TextView actionBarRightTextView;
     private int actionBarHeight=0;
     ImageView centerBanner, rightLogo;
 

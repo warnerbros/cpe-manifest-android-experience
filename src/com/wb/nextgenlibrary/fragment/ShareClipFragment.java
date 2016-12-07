@@ -74,7 +74,7 @@ public class ShareClipFragment extends ECVideoViewFragment implements View.OnCli
     public void onClick(View v) {
         if (v.getId() == R.id.share_clip_button) {
             videoView.pause();
-            String videoUrl = selectedAVItem.videoUrl;
+            String videoUrl = selectedAVItem.getVideoUrl();
 
             NextGenExperience.getNextGenEventHandler().handleShareLink(null, this, videoUrl);
 

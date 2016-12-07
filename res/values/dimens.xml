@@ -27,6 +27,9 @@
     <dimen name="alert_dialog_button_bar_height">48dip</dimen>
 
 
+    <dimen name="grid_item_title_height">25dp</dimen>
+
+
     <!-- Left panel list -->
     <dimen name="list_title_font_size">20dp</dimen>
     <dimen name="list_item_spacing">20dp</dimen>

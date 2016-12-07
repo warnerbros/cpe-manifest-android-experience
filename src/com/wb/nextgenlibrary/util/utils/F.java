@@ -36,6 +36,7 @@ public class F {
 	public static final String TAG_GA = "NextGenGa";
 	public static final String TAG_DRM = "NextGenDrm";
 	public static final String TAG_USER_ACTION = "NextGenUserAction";
+	public static final String TAG_COMMENTARY = "NextGenCommentary";
 
 	/* Misc */
 	public static final long SPLASH_DURATION = 1800;

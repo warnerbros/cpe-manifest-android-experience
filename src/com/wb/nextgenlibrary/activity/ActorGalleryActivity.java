@@ -111,7 +111,7 @@ public class ActorGalleryActivity extends AbstractNextGenActivity implements Act
         if (actorGalleryRecycler != null){
             recyclerLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
             actorGalleryRecycler.setLayoutManager(recyclerLayoutManager);
-            galleryRecyclerAdapter = new ActorDetailGalleryRecyclerAdapter(this, this);
+            galleryRecyclerAdapter = new ActorDetailGalleryRecyclerAdapter(this, ActorDetailGalleryRecyclerAdapter.ImageRedition.LARGE, this);
             galleryRecyclerAdapter.setCastHeadShots(actorGalleryItems);
             galleryRecyclerAdapter.setSelectedIndex(startUpSelectedIndex);
             actorGalleryRecycler.setAdapter(galleryRecyclerAdapter);
@@ -210,7 +210,7 @@ public class ActorGalleryActivity extends AbstractNextGenActivity implements Act
 
             CastHeadShot currentItem = actorGalleryItems.get(position);
 
-            String useUrl = currentItem.largeUrl;
+            String useUrl = currentItem.fullSizeUrl;
 
             itemView.setTag(useUrl);
 

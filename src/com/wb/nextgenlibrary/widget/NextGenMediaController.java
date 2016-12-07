@@ -18,7 +18,7 @@ import com.wb.nextgenlibrary.interfaces.NextGenPlayerInterface;
  */
 public class NextGenMediaController extends CustomMediaController {
 
-    Context mContext;
+    protected Context mContext;
     protected View mBaseSystemUIView;
     NextGenPlayerInterface player;
 

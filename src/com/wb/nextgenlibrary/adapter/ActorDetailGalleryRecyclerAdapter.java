@@ -25,8 +25,14 @@ public class ActorDetailGalleryRecyclerAdapter extends RecyclerView.Adapter<Acto
     ActorGalleryRecyclerSelectionListener listener;
     Context mContext;
     int selectedIndex = -1;
+    ImageRedition redition = null;
 
-    public ActorDetailGalleryRecyclerAdapter(Context context, ActorGalleryRecyclerSelectionListener listener){
+    public static enum ImageRedition{
+        SMALL, MEDIUM, LARGE, FULL_SIZE;
+    }
+
+    public ActorDetailGalleryRecyclerAdapter(Context context, ImageRedition redition, ActorGalleryRecyclerSelectionListener listener){
+        this.redition = redition;
         mContext = context;
         this.listener = listener;
     }
@@ -52,7 +58,7 @@ public class ActorDetailGalleryRecyclerAdapter extends RecyclerView.Adapter<Acto
     public void onBindViewHolder(ActorGalleryViewHolder holder, int position){
 
         MovieMetaData.CastHeadShot headShot = headShots.get(position );
-        holder.setCastHeadShot(mContext, headShot, position);
+        holder.setCastHeadShot(mContext, headShot, redition, position);
 
         holder.itemView.setSelected(position == selectedIndex);
 
@@ -71,6 +77,7 @@ public class ActorDetailGalleryRecyclerAdapter extends RecyclerView.Adapter<Acto
         MovieMetaData.CastHeadShot headShot;
         ActorGalleryRecyclerSelectionListener listener;
         int index = 0;
+        ImageRedition redition = null;
 
         ActorGalleryViewHolder(View itemView, ActorGalleryRecyclerSelectionListener listener) {
             super(itemView);
@@ -80,11 +87,27 @@ public class ActorDetailGalleryRecyclerAdapter extends RecyclerView.Adapter<Acto
             itemView.setOnClickListener(this);
         }
 
-        public void setCastHeadShot(Context context, MovieMetaData.CastHeadShot headShot, int position){
+        public void setCastHeadShot(Context context, MovieMetaData.CastHeadShot headShot, ImageRedition redition, int position){
             this.headShot = headShot;
             index = position;
             //Picasso.with(getActivity()).load(headShot.mediumUrl).fit().centerCrop().into(personPhoto);
-            Glide.with(context).load(headShot.mediumUrl).centerCrop().into(personPhoto);
+            String imageUrl = null;
+
+            switch (redition){
+                case SMALL:
+                    imageUrl = headShot.smallUrl;
+                    break;
+                case LARGE:
+                    imageUrl = headShot.largeUrl;
+                    break;
+                case FULL_SIZE:
+                    imageUrl = headShot.fullSizeUrl;
+                    break;
+                case MEDIUM:
+                default:
+                    imageUrl = headShot.mediumUrl;
+            }
+            Glide.with(context).load(imageUrl).centerCrop().into(personPhoto);
 
         }
 

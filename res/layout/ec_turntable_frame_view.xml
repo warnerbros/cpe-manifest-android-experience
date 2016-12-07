@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@android:color/black">
+    android:background="@android:color/transparent">
 
     <ImageView
         android:id="@+id/ec_gallery_frame_bg"
@@ -19,6 +19,7 @@
             <com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout
                 xmlns:nextgen="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/gallery_aspect_ratio_frame"
+                android:background="@android:color/black"
                 android:layout_centerInParent="true"
                 android:layout_height="fill_parent"
                 android:layout_width="fill_parent"

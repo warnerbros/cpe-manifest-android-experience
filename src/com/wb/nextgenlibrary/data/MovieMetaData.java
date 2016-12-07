@@ -33,9 +33,11 @@ import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.PictureType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.PlayableSequenceListType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.PlayableSequenceType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.PresentationType;
+import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.TextGroupType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.TimecodeType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.TimedEventSequenceType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.TimedEventType;
+import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.TrackMetadataType;
 import com.wb.nextgenlibrary.parser.md.schema.v2_3.BasicMetadataInfoType;
 import com.wb.nextgenlibrary.parser.md.schema.v2_3.BasicMetadataPeopleType;
 import com.wb.nextgenlibrary.parser.md.schema.v2_3.ContentIdentifierType;
@@ -51,6 +53,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.xml.datatype.Duration;
 
@@ -100,7 +103,7 @@ public class MovieMetaData {
 
     public String getMainMovieUrl(){
         if (rootExperience != null && rootExperience.audioVisualItems.size() > 0){
-            return rootExperience.audioVisualItems.get(0).videoUrl;
+            return rootExperience.audioVisualItems.get(0).getVideoUrl();
         }
         return "";
     }
@@ -138,7 +141,7 @@ public class MovieMetaData {
         HashMap<String, PictureType> pictureTypeAssetsMap = new HashMap<String, PictureType>();
         HashMap<String, AudioVisualItem> presentationIdToAVItemMap = new HashMap<String, AudioVisualItem>();
         HashMap<String, ECGalleryItem> galleryIdToGalleryItemMap = new HashMap<String, ECGalleryItem>();
-        HashMap<BigInteger, String> indexToTextMap = new HashMap<BigInteger, String>();
+        HashMap<String, HashMap<BigInteger, String>> indexToTextMap = new HashMap<>();
 
         HashMap<String, AppGroupType> appGroupIdToAppGroupMap = new HashMap<String, AppGroupType>();
 
@@ -194,7 +197,7 @@ public class MovieMetaData {
             }
         }
 
-        if (mediaManifest.getAppGroups().getAppGroup().size() > 0){
+        if (mediaManifest.getAppGroups() != null && mediaManifest.getAppGroups().getAppGroup().size() > 0){
             for(AppGroupType appGroup : mediaManifest.getAppGroups().getAppGroup()){
                 appGroupIdToAppGroupMap.put(appGroup.getAppGroupID(), appGroup);
             }
@@ -217,25 +220,33 @@ public class MovieMetaData {
             }
         }
 
-        if (mediaManifest.getInventory().getTextObject()!= null && mediaManifest.getInventory().getTextObject().size() > 0){
-            InventoryTextObjectType textObjectType = getMatchingLocalizableObject(mediaManifest.getInventory().getTextObject());
+        HashMap<String, String> textObjectIdToTextGroupId = new HashMap<String, String>();
+        if (mediaManifest.getTextGroups() != null && mediaManifest.getTextGroups().getTextGroup() != null && mediaManifest.getTextGroups().getTextGroup().size() > 0 ){
+            for (TextGroupType textGroupType : mediaManifest.getTextGroups().getTextGroup()){
+                if (textGroupType.getTextObjectID() != null && textGroupType.getTextObjectID().size() > 0){
+                    textObjectIdToTextGroupId.put(textGroupType.getTextObjectID().get(0), textGroupType.getTextGroupID());
+                }
+            }
+        }
 
-            if (NextGenExperience.matchesClientLocale(textObjectType.getLanguage())){
-                if (textObjectType.getTextString() != null){
-                    for (int i = 0 ; i< mediaManifest.getInventory().getTextObject().get(0).getTextString().size(); i++){
-                        InventoryTextObjectType.TextString textString = textObjectType.getTextString().get(i);
-                        BigInteger index = textString.getIndex();
-                        if (index != null) {
-                            indexToTextMap.put(textString.getIndex(), textString.getValue());
+        if (mediaManifest.getInventory().getTextObject()!= null && mediaManifest.getInventory().getTextObject().size() > 0){
+            //Map<String, InventoryTextObjectType> textObjects = getTextGroups(mediaManifest.getInventory().getTextObject());
+
+            if (mediaManifest.getInventory().getTextObject().size() > 0){
+                for (InventoryTextObjectType textObjectType : mediaManifest.getInventory().getTextObject()){
+                    HashMap<BigInteger, String> textMap = new HashMap<BigInteger, String>();
+                    String textGroupId = textObjectIdToTextGroupId.get(textObjectType.getTextObjectID());
+                    indexToTextMap.put(textGroupId, textMap);
+
+                    for (int i = 0 ; i< textObjectType.getTextString().size(); i++){
+                        if (textObjectType.getTextString().get(i).getIndex() == null){
+                            textMap.put(BigInteger.valueOf(i), textObjectType.getTextString().get(i).getValue());
                         }else {
-                            indexToTextMap.put(BigInteger.valueOf(i+1), textString.getValue());
+                            textMap.put(textObjectType.getTextString().get(i).getIndex(), textObjectType.getTextString().get(i).getValue());
                         }
                     }
                 }
-
             }
-
-
         }
 
         if (appDataManifest != null && appDataManifest.getManifestAppData() != null && appDataManifest.getManifestAppData().size() > 0){
@@ -318,8 +329,6 @@ public class MovieMetaData {
                 }
 
                 if (experience.getAudiovisual() != null){
-                    InventoryVideoType video = null;
-                    InventoryAudioType audio = null;
                     if (experience.getAudiovisual().size() > 0) {                           // for video Asset
                         for (AudiovisualType audioVisual : experience.getAudiovisual()) {
                             if (MAIN_SUBTYPE.equalsIgnoreCase(audioVisual.getType()))       // root experience check
@@ -368,25 +377,41 @@ public class MovieMetaData {
                                 }
                             }
 
-                            for(String presentationId : presentationIds) {
 
+                            for(String presentationId : presentationIds) {
+                                List<AudioVisualTrack> tracks = new ArrayList<>();
+                                boolean isValidAVItem = false;
                                 if (!StringHelper.isEmpty(presentationId)) {
                                     PresentationType presentation = presentationAssetMap.get(presentationId);  // get Presentation by presentation id
-                                    if (presentation.getTrackMetadata() != null && presentation.getTrackMetadata().size() > 0 &&
-                                            presentation.getTrackMetadata().get(0).getVideoTrackReference().size() > 0){
-                                        if (presentation.getTrackMetadata().get(0).getVideoTrackReference().get(0).getVideoTrackID().size() > 0)                                          // get the video id from presentation
-                                            video = videoAssetsMap.get(presentation.getTrackMetadata().get(0).getVideoTrackReference().get(0).getVideoTrackID().get(0));
+                                    if (presentation.getTrackMetadata() != null && presentation.getTrackMetadata().size() > 0 ){
+                                        for (TrackMetadataType trackMetadataType : presentation.getTrackMetadata()){
 
-                                        if (presentation.getTrackMetadata().get(0).getAudioTrackReference().get(0).getAudioTrackID().size() > 0)                                          // get the video id from presentation
-                                            audio = audioAssetsMap.get(presentation.getTrackMetadata().get(0).getAudioTrackReference().get(0).getAudioTrackID().get(0));
+                                            InventoryVideoType video = null;
+                                            InventoryAudioType audio = null;
+
+                                            if (trackMetadataType.getVideoTrackReference() != null &&
+                                                    trackMetadataType.getVideoTrackReference().size() > 0 &&
+                                                    trackMetadataType.getVideoTrackReference().get(0).getVideoTrackID().size() > 0)                                          // get the video id from presentation
+                                                video = videoAssetsMap.get(trackMetadataType.getVideoTrackReference().get(0).getVideoTrackID().get(0));
+                                            if (trackMetadataType.getAudioTrackReference() != null &&
+                                                    trackMetadataType.getAudioTrackReference().size() > 0 &&
+                                                    trackMetadataType.getAudioTrackReference().get(0).getAudioTrackID().size() > 0)                                          // get the video id from presentation
+                                                audio = audioAssetsMap.get(trackMetadataType.getAudioTrackReference().get(0).getAudioTrackID().get(0));
+                                            if (video != null){
+                                                isValidAVItem = true;
+                                            }
+                                            tracks.add(new AudioVisualTrack(video, audio));
+                                        }
+
+
                                     }
                                 }
 
-                                if (!StringHelper.isEmpty(presentationId) && video != null) {
+                                if (!StringHelper.isEmpty(presentationId) && tracks.size() > 0 && isValidAVItem) {
                                     //ExperienceData ecData = new ExperienceData(experience, metaData, video, null);
                                     if (audioVisual.getSubType() != null && audioVisual.getSubType().size() > 0)
                                         subtype = audioVisual.getSubType().get(0);
-                                    AudioVisualItem item = new AudioVisualItem(experience.getExperienceID(), avMetaData, video, audio, externalApiDatas, subtype);
+                                    AudioVisualItem item = new AudioVisualItem(experience.getExperienceID(), avMetaData, tracks, externalApiDatas, subtype);
                                     avItems.add(item);
                                     presentationIdToAVItemMap.put(presentationId, item);
                                 }
@@ -468,7 +493,7 @@ public class MovieMetaData {
                 result.imeECGroups.addAll(rootData.childrenExperience.get(1).childrenExperience);
                 result.rootExperience = rootData;
                 if (rootData.audioVisualItems != null && rootData.audioVisualItems.size() > 0) {
-                    String inter = rootData.audioVisualItems.get(0).videoUrl;
+                    String inter = rootData.audioVisualItems.get(0).getVideoUrl();
                 }
             }
 
@@ -519,15 +544,17 @@ public class MovieMetaData {
                             }
                         }else if (textGroupId != null && !StringHelper.isEmpty(textGroupId.getValue())){
                             BigInteger index = textGroupId.getIndex();
-                            String triviaText = indexToTextMap.get(index);
-                            if (!StringHelper.isEmpty(initialization)){                 //this is trivia
-                                PictureType picture = pictureTypeAssetsMap.get(initialization);
-                                PictureImageData fullImageData = pictureImageMap.get(picture.getImageID());
-                                PictureImageData thumbNailImageData = pictureImageMap.get(picture.getThumbnailImageID());
+                            if (indexToTextMap.containsKey(textGroupId.getValue())) {
+                                String triviaText = indexToTextMap.get(textGroupId.getValue()).get(index);
+                                if (!StringHelper.isEmpty(initialization)) {                 //this is trivia
+                                    PictureType picture = pictureTypeAssetsMap.get(initialization);
+                                    PictureImageData fullImageData = pictureImageMap.get(picture.getImageID());
+                                    PictureImageData thumbNailImageData = pictureImageMap.get(picture.getThumbnailImageID());
 
-                                presentationData = new TriviaItem(index, triviaText, fullImageData, thumbNailImageData);
-                            }else
-                                presentationData = new TextItem(index, triviaText);
+                                    presentationData = new TriviaItem(index, triviaText, fullImageData, thumbNailImageData);
+                                } else
+                                    presentationData = new TextItem(index, triviaText);
+                            }
                         } else if (!StringHelper.isEmpty(pictureID)){
                             PictureType picture = pictureTypeAssetsMap.get(pictureID);
                             PictureImageData fullImageData = pictureImageMap.get(picture.getImageID());
@@ -584,6 +611,20 @@ public class MovieMetaData {
     }
 
 
+    public static Map<String, InventoryTextObjectType> getTextGroups(List<InventoryTextObjectType> localizableObjects){
+        Map<String, InventoryTextObjectType> result = new HashMap<>();
+        if (localizableObjects != null && localizableObjects.size() > 0) {
+            for (InventoryTextObjectType textObject : localizableObjects ){
+                result.put(textObject.getTextObjectID(), textObject);
+
+            }
+
+        }
+        return result;
+    }
+
+
+
     public static <T extends LocalizableMetaDataInterface>T getMatchingLocalizableObject(List<T> localizableObjects){
         if (localizableObjects != null && localizableObjects.size() > 0) {
             Locale clientLocale = NextGenExperience.getClientLocale();
@@ -630,6 +671,7 @@ public class MovieMetaData {
         }
         return null;
     }
+
 
     private static LocationItem getLocationItemfromMap(HashMap<String, AppDataType> appDataMap,
                                                        HashMap<String, PictureImageData> imageAssetsMap,
@@ -1336,9 +1378,34 @@ public class MovieMetaData {
         }
     }
 
+    static public class AudioVisualTrack{
+        public final InventoryVideoType videoData;
+        public final InventoryAudioType audioData;
+        public AudioVisualTrack(InventoryVideoType videoData, InventoryAudioType audioData){
+            this.videoData = videoData;
+            this.audioData = audioData;
+        }
+
+        public String getVideoUrl(){
+            if (videoData != null)
+                return  videoData.getContainerReference().getContainerLocation();
+            else
+                return null;
+        }
+
+        public String getAudioUrl(){
+            if (audioData != null)
+                return  audioData.getContainerReference().getContainerLocation();
+            else
+                return null;
+        }
+    }
+
     static public class AudioVisualItem extends PresentationDataItem{
-        final public String videoUrl;
-        final public String audioUrl;
+        //final public String videoUrl;
+        //final public String audioUrl;
+
+        final public List<AudioVisualTrack> tracksList;
         final public String duration;
         final public List<ExternalApiData> externalApiDataList = new ArrayList<ExternalApiData>();
         final PresentationImageData[] images;
@@ -1347,17 +1414,12 @@ public class MovieMetaData {
 
         boolean isWatched = false;
 
-        public AudioVisualItem(String parentExperienceId, InventoryMetadataType metaData, InventoryVideoType videoData, InventoryAudioType audioData, String subtype){
+        public AudioVisualItem(String parentExperienceId, InventoryMetadataType metaData, List<AudioVisualTrack> tracks, String subtype){
             super(metaData, parentExperienceId);
             this.subtype = subtype;
             BasicMetadataInfoType localizedInfo = metaData!= null ? metaData.getBasicMetadata().getLocalizedInfo().get(0): null;
-            if (videoData != null) {
-                videoUrl = videoData.getContainerReference().getContainerLocation();
-
-                if (audioData != null)
-                    audioUrl = audioData.getContainerReference().getContainerLocation();
-                else
-                    audioUrl = null;
+            if (tracks != null && tracks.size() > 0) {
+                tracksList = tracks;
 
                 if (localizedInfo != null && localizedInfo.getArtReference() != null && localizedInfo.getArtReference().size() > 0) {
                     posterImgUrl = localizedInfo.getArtReference().get(0).getValue();
@@ -1385,8 +1447,7 @@ public class MovieMetaData {
                 }
                 duration = dValue;
             }else{
-                videoUrl = null;
-                audioUrl = null;
+                tracksList = null;
                 posterImgUrl = null;
                 duration = null;
                 images = null;
@@ -1397,16 +1458,28 @@ public class MovieMetaData {
         public AudioVisualItem(InventoryVideoType videoData, String subtype){
             super(null, null);
             this.subtype = subtype;
+            tracksList = new ArrayList<>();
             if (videoData != null) {
-                videoUrl = videoData.getContainerReference().getContainerLocation();
-
-            }else{
-                videoUrl = null;
+                tracksList.add(new AudioVisualTrack(videoData, null));
             }
-            audioUrl = null;
+
             duration = null;
             images = null;
             durationObject = null;
+        }
+
+        public String getVideoUrl(){
+            if (tracksList != null && tracksList.size() > 0)
+                return tracksList.get(0).getVideoUrl();
+            else
+                return null;
+        }
+
+        public String getAudioUrl(){
+            if (tracksList != null && tracksList.size() > 0)
+                return tracksList.get(0).getAudioUrl();
+            else
+                return null;
         }
 
         public void setLocationMetaData(String title, String url){
@@ -1431,8 +1504,8 @@ public class MovieMetaData {
             return  retString;
         }
 
-        public AudioVisualItem(String parentExperienceId, InventoryMetadataType metaData, InventoryVideoType videoData, InventoryAudioType audioData, List<ExternalApiData> apiDataList, String subtype){
-            this(parentExperienceId, metaData, videoData, audioData, subtype);
+        public AudioVisualItem(String parentExperienceId, InventoryMetadataType metaData, List<AudioVisualTrack> tracksList, List<ExternalApiData> apiDataList, String subtype){
+            this(parentExperienceId, metaData, tracksList, subtype);
             if (apiDataList != null)
                 externalApiDataList.addAll(apiDataList);
         }
@@ -1783,9 +1856,31 @@ public class MovieMetaData {
 
     public String getInterstitialVideoURL(){
         if (rootExperience.audioVisualItems != null && rootExperience.audioVisualItems.size() > 1){
-            return rootExperience.audioVisualItems.get(0).videoUrl;
+            return rootExperience.audioVisualItems.get(0).getVideoUrl();
         }else{
             return "http://wb-extras.warnerbros.com/extrasplus/prod/Manifest/BatmanvSuperman/streams/BVS_final_v2_H264_HDX_Stream_6750K_23976p.mp4";
+        }
+    }
+
+    public String getPreviewMovieVideoURL(){
+        if (rootExperience.audioVisualItems != null && rootExperience.audioVisualItems.size() > 1){
+
+            return rootExperience.audioVisualItems.get(rootExperience.audioVisualItems.size() -1 ).getVideoUrl();
+        }else{
+            return "";
+        }
+    }
+
+    public String getCommentaryTrackURL(){
+        if (rootExperience.audioVisualItems != null && rootExperience.audioVisualItems.size() > 0){
+            List<AudioVisualTrack> tracks = rootExperience.audioVisualItems.get(rootExperience.audioVisualItems.size() -1 ).tracksList;
+            if (tracks.size() > 1){
+                AudioVisualTrack commentaryTrack = tracks.get(tracks.size() - 1);
+                return commentaryTrack.getAudioUrl();
+            }else
+                return "";
+        }else{
+            return "";
         }
     }
 

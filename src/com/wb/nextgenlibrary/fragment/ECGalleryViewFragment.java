@@ -81,7 +81,6 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
 			@Override
 			public void onPageSelected(int position) {
 				itemIndex = position;
-                adapter.notifyDataSetChanged(); //tr 10/27/2016
 				updateUI(true);
 			}
 
@@ -92,7 +91,7 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
 				} else if (state == ViewPager.SCROLL_STATE_DRAGGING) {
 
 				} else if (state == ViewPager.SCROLL_STATE_IDLE) {
-					fadeOutCountText();
+                    resetImageSizeActivities();
 				}
 			}
 		});
@@ -143,9 +142,7 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
 		if (nextClipButton != null){
 			nextClipButton.setOnClickListener(this);
 		}
-
 		updateUI(false);
- ;
 	}
 
     public void setShouldShowShareBtn(boolean bShow){
@@ -180,7 +177,6 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
         aspectFramePriority = priority;
     }
 
-
     @Override
     public void onResume(){
         super.onResume();
@@ -208,9 +204,7 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
 				itemIndex++;
 			}
 		}
-		galleryViewPager.setCurrentItem(itemIndex, true);	// use smooth scrolling
-        adapter.notifyDataSetChanged(); //tr 10/27/2016
-        updateUI(true);
+        galleryViewPager.setCurrentItem(itemIndex, true);	// use smooth scrolling
 	}
 
 	public void updateUI(boolean userTriggerd) {
@@ -250,6 +244,12 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
 			});
 		}
 	}
+
+    public void resetImageSizeActivities(){
+        adapter.notifyDataSetChanged();
+        updateUI(true);
+        fadeOutCountText();
+    }
 
     class GalleryPagerAdapter extends PagerAdapter {
 

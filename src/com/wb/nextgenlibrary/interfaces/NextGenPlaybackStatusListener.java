@@ -5,7 +5,8 @@ package com.wb.nextgenlibrary.interfaces;
  */
 public interface NextGenPlaybackStatusListener {
     public static enum NextGenPlaybackStatus{
-        PREPARED, STARTED, STOP, PAUSE, RESUME, SEEK, TIMESTAMP_UPDATE
+        PREPARED, STARTED, STOP, PAUSE, RESUME, SEEK, TIMESTAMP_UPDATE, BUFFERING, COMPLETED, READY
     }
+
     public void playbackStatusUpdate(NextGenPlaybackStatus playbackStatus, long timecode);
 }

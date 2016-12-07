@@ -64,7 +64,7 @@ public class ManifestXMLParser {
         final MediaManifestType[] mainManifest = new MediaManifestType[1];
 
 		final CountDownLatch latch = new CountDownLatch(StringHelper.isEmpty(appDataUrl) && StringHelper.isEmpty(styleDataUrl) ? 1 :
-				(StringHelper.isEmpty(appDataUrl) && StringHelper.isEmpty(styleDataUrl) ? 2 : 3) );
+				(StringHelper.isEmpty(appDataUrl) || StringHelper.isEmpty(styleDataUrl) ? 2 : 3) );
 
 		if (appDataUrl != null) {
             new Thread() {

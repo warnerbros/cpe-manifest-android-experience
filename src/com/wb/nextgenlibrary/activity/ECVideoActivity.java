@@ -1,6 +1,7 @@
 package com.wb.nextgenlibrary.activity;
 
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.TextView;
 
@@ -30,6 +31,8 @@ public class ECVideoActivity extends AbstractECView implements ECVideoViewFragme
         contentMetaFrame = (View) findViewById(R.id.ec_content_meta_frame);
 		selectedECNameTextView = (TextView) findViewById(R.id.ec_content_name);
 		descriptionTextView = (TextView) findViewById(R.id.ec_content_description);
+		if (descriptionTextView != null)
+			descriptionTextView.setMovementMethod(new ScrollingMovementMethod());
     }
 
     @Override
@@ -79,10 +82,10 @@ public class ECVideoActivity extends AbstractECView implements ECVideoViewFragme
             getSupportActionBar().hide();
         }
         rightVideoFrame.onFullScreenChange(bFullscreen);
-        if (bFullscreen) {
-            if (contentMetaFrame != null)
-                contentMetaFrame.setVisibility(bFullscreen? View.GONE : View.VISIBLE);
-        }
+
+        if (contentMetaFrame != null)
+            contentMetaFrame.setVisibility(bFullscreen? View.GONE : View.VISIBLE);
+
     }
 
     @Override

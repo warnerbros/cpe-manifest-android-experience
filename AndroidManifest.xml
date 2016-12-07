@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.wb.nextgenlibrary"
 	android:installLocation="auto"
-	android:versionCode="12"
-	android:versionName="v1.0.0" >
+	android:versionCode="15"
+	android:versionName="v1.1.0" >
 	<uses-sdk
 		android:minSdkVersion="18"
 		android:targetSdkVersion="21" />
@@ -16,7 +16,14 @@
 		android:smallScreens="true"
 		android:xlargeScreens="true" />
 
-	<application>
+	<permission
+		android:name="com.wb.nextgenlibrary.permission.MAPS_RECEIVE"
+		android:protectionLevel="signature" />
+	<uses-permission android:name="com.wb.nextgen.permission.MAPS_RECEIVE"/>
+
+	<application
+		android:largeHeap="true" >
+
 		<meta-data
 			android:name="com.google.android.gms.version"
 			android:value="@integer/google_play_services_version" />
@@ -88,6 +95,11 @@
 				  android:theme="@style/ExtraActionBar" >
 		</activity>
 		<activity android:name="com.wb.nextgenlibrary.activity.TheTakeShopCategoryActivity"
+				  android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+				  android:exported="false"
+				  android:theme="@style/ExtraActionBar" >
+		</activity>
+		<activity android:name="com.wb.nextgenlibrary.activity.ECInteractiveActivity"
 				  android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
 				  android:exported="false"
 				  android:theme="@style/ExtraActionBar" >

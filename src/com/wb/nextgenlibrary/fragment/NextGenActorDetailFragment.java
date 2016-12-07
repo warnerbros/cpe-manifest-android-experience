@@ -146,7 +146,7 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
         if (actorGalleryRecyclerView != null && actorGalleryAdaptor == null){
             actorGalleryLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false);
             actorGalleryRecyclerView.setLayoutManager(actorGalleryLayoutManager);
-            actorGalleryAdaptor = new ActorDetailGalleryRecyclerAdapter(getActivity(), this);
+            actorGalleryAdaptor = new ActorDetailGalleryRecyclerAdapter(getActivity(), ActorDetailGalleryRecyclerAdapter.ImageRedition.MEDIUM, this);
             actorGalleryRecyclerView.setAdapter(actorGalleryAdaptor);
             if (actorGalleryFrame != null) {
                 actorGalleryFrame.setVisibility(View.VISIBLE);
