@@ -902,6 +902,22 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                     if (timeDifference > 150) {     // when they are out of sync i.e. more than 150 mini seconds apart.
                         commentaryAudioPlayer.start();
                         commentaryAudioPlayer.seekTo(mainMovieTime);
+                        final boolean bWasPlaying ;
+                        if (mainMovieFragment.isPlaying()) {
+                            mainMovieFragment.pause();
+                            bWasPlaying = true;
+                        }else
+                            bWasPlaying = false;
+                        commentaryAudioPlayer.setOnSeekCompleteListener(new MediaPlayer.OnSeekCompleteListener() {
+                            @Override
+                            public void onSeekComplete(MediaPlayer mp) {
+                                if (bWasPlaying){
+                                    try{
+                                        mainMovieFragment.resumePlayback();
+                                    }catch (Exception ex){}
+                                }
+                            }
+                        });
                     }
 
                     if (mainMovieFragment.isPlaying()) {    // if it's playing, check to see if recy
