@@ -160,8 +160,12 @@ public class BaselineApiDAO {
         //JSONObject json = new JSONObject(result);
 
         Gson gson = new GsonBuilder().create();
-        castData = gson.fromJson(userdataResult, BaselineCastData.class);
-        castData.filterText();
+        try {
+            castData = gson.fromJson(userdataResult, BaselineCastData.class);
+            castData.filterText();
+        }catch (Exception ex){
+            castData = new BaselineCastData();
+        }
 
         //castsInfoMap.put(castId, thisData);
 
