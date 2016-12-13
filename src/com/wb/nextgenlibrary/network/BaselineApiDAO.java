@@ -42,7 +42,7 @@ public class BaselineApiDAO {
     private static String X_API_KEY_KEY = "x-api-key";
 
     private static final String BASELINE_DOMAIN = "http://baselineapi.com/api";
-    private static final String X_API_DOMAIN = "https://vic57ayytg.execute-api.us-west-2.amazonaws.com/prod";
+    private static final String X_API_DOMAIN = "https://vic57ayytg.execute-api.us-west-2.amazonaws.com/staging";
 
     private static class Endpoints {
         static final String GetCredits = "/ProjectAllCredits";

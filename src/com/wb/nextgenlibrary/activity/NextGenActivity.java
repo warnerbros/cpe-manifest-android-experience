@@ -227,7 +227,7 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            if (imageButtonsFrame != null) {
+                                            if (imageButtonsFrame != null && extraButton.getDrawable() != null && playMovieButton.getDrawable() != null) {
                                                 setPlayExtraButtonsVisibility(ButtonsMode.IMAGE_BUTTON_VISIBLE);
                                                 imageButtonsFrame.setVisibility(View.VISIBLE);
                                                 imageButtonsFrame.setAlpha(0.0f);
@@ -420,71 +420,75 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
             MovieMetaData.PictureImageData playBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.PLAY_BUTTON);
             MovieMetaData.PictureImageData purchaseBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.PURCHASE_BUTTON);
 
-            double buttonRatio = (double) width / (double) playBtnImageData.width;
-            ViewGroup.LayoutParams playBtnParams = null;
-            if (playMovieButton != null) {
-                playBtnParams = playMovieButton.getLayoutParams();
+            if (extraBtnImageData != null && playBtnImageData != null) {
+                double buttonRatio = (double) width / (double) playBtnImageData.width;
+                ViewGroup.LayoutParams playBtnParams = null;
+                if (playMovieButton != null) {
+                    playBtnParams = playMovieButton.getLayoutParams();
 
-                int newHeight = (int) ((double) playBtnImageData.height * buttonRatio);
-                playBtnParams.height = newHeight;
-                playMovieButton.setLayoutParams(playBtnParams);
+                    int newHeight = (int) ((double) playBtnImageData.height * buttonRatio);
+                    playBtnParams.height = newHeight;
+                    playMovieButton.setLayoutParams(playBtnParams);
 
-                if (playBtnImageData != null)
-                    Glide.with(this).load(playBtnImageData.url).into(playMovieButton);
-            }
-
-            if (purchaseButton != null) {
-                if (purchaseBtnImageData != null && playBtnParams != null) {
-                    //purchaseButton.setVisibility(View.VISIBLE);
-                    ViewGroup.LayoutParams buttonsParams = purchaseButton.getLayoutParams();
-
-                    buttonsParams.height = playBtnParams.height;
-                    purchaseButton.setLayoutParams(buttonsParams);
-
-                    Glide.with(this).load(purchaseBtnImageData.url).into(purchaseButton);
-                }else
-                    purchaseButton.setVisibility(View.GONE);
-            }
-
-            if (extraButton != null) {
-                ViewGroup.LayoutParams buttonsParams = extraButton.getLayoutParams();
-
-                int newWidth = (int) ((double) extraBtnImageData.width * buttonRatio);
-                int newHeight = (int) ((double) extraBtnImageData.height * buttonRatio);
-                buttonsParams.height = newHeight;
-                buttonsParams.width = newWidth;
-
-
-                int extra_x, extra_y;
-                extra_x = (buttonsLayoutParams.width - newWidth )/ 2;
-
-                //calculate extra Btn position
-                if (purchaseBtnImageData != null){
-                    extra_y = (buttonsLayoutParams.height - newHeight) / 2;
-                }else{
-                    extra_y = buttonsLayoutParams.height - newHeight;
+                    if (playBtnImageData != null)
+                        Glide.with(this).load(playBtnImageData.url).into(playMovieButton);
                 }
 
-                if (buttonsParams instanceof LinearLayout.LayoutParams) {
-                    ((LinearLayout.LayoutParams) buttonsParams).setMargins(extra_x, extra_y, 0, 0);
-                } else if (buttonsParams instanceof RelativeLayout.LayoutParams) {
-                    ((RelativeLayout.LayoutParams) buttonsParams).setMargins(extra_x, extra_y, 0, 0);
-                } else if (buttonsParams instanceof FrameLayout.LayoutParams) {
-                    ((FrameLayout.LayoutParams) buttonsParams).setMargins(extra_x, extra_y, 0, 0);
+                if (purchaseButton != null) {
+                    if (purchaseBtnImageData != null && playBtnParams != null) {
+                        //purchaseButton.setVisibility(View.VISIBLE);
+                        ViewGroup.LayoutParams buttonsParams = purchaseButton.getLayoutParams();
+
+                        buttonsParams.height = playBtnParams.height;
+                        purchaseButton.setLayoutParams(buttonsParams);
+
+                        Glide.with(this).load(purchaseBtnImageData.url).into(purchaseButton);
+                    } else
+                        purchaseButton.setVisibility(View.GONE);
                 }
 
+                if (extraButton != null) {
+                    ViewGroup.LayoutParams buttonsParams = extraButton.getLayoutParams();
 
-                extraButton.setLayoutParams(buttonsParams);
+                    int newWidth = (int) ((double) extraBtnImageData.width * buttonRatio);
+                    int newHeight = (int) ((double) extraBtnImageData.height * buttonRatio);
+                    buttonsParams.height = newHeight;
+                    buttonsParams.width = newWidth;
 
 
-                if (extraBtnImageData != null)
-                    Glide.with(this).load(extraBtnImageData.url).into(extraButton);
+                    int extra_x, extra_y;
+                    extra_x = (buttonsLayoutParams.width - newWidth) / 2;
 
+                    //calculate extra Btn position
+                    if (purchaseBtnImageData != null) {
+                        extra_y = (buttonsLayoutParams.height - newHeight) / 2;
+                    } else {
+                        extra_y = buttonsLayoutParams.height - newHeight;
+                    }
+
+                    if (buttonsParams instanceof LinearLayout.LayoutParams) {
+                        ((LinearLayout.LayoutParams) buttonsParams).setMargins(extra_x, extra_y, 0, 0);
+                    } else if (buttonsParams instanceof RelativeLayout.LayoutParams) {
+                        ((RelativeLayout.LayoutParams) buttonsParams).setMargins(extra_x, extra_y, 0, 0);
+                    } else if (buttonsParams instanceof FrameLayout.LayoutParams) {
+                        ((FrameLayout.LayoutParams) buttonsParams).setMargins(extra_x, extra_y, 0, 0);
+                    }
+
+
+                    extraButton.setLayoutParams(buttonsParams);
+
+
+                    if (extraBtnImageData != null)
+                        Glide.with(this).load(extraBtnImageData.url).into(extraButton);
+
+                }
+                imageButtonsFrame.invalidate();
+                if (StringHelper.isEmpty(mainStyle.getBackgroundVideoUrl()))
+                    imageButtonsFrame.setVisibility(View.VISIBLE);
+            }else{
+                setPlayExtraButtonsVisibility(ButtonsMode.TEXT_BUTTON_VISIBLE);
             }
 
-            imageButtonsFrame.invalidate();
-            if (StringHelper.isEmpty(mainStyle.getBackgroundVideoUrl()))
-                imageButtonsFrame.setVisibility(View.VISIBLE);
             return;
         }
     }
