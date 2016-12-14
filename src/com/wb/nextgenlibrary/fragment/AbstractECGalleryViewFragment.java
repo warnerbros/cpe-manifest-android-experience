@@ -38,8 +38,7 @@ abstract public class AbstractECGalleryViewFragment extends ECViewFragment  {
                     public void onClick(View v) {
                         if (getActivity() instanceof AbstractECView) {
                             ((AbstractECView) getActivity()).onRequestToggleFullscreen();
-                            NextGenAnalyticData.reportEvent(getActivity(), AbstractECGalleryViewFragment.this, "Toggle Fullscreen",
-                                    NextGenAnalyticData.AnalyticAction.ACTION_CLICK, "");
+                            NextGenAnalyticData.reportEvent(getActivity(), AbstractECGalleryViewFragment.this, NextGenAnalyticData.AnalyticAction.ACTION_SET_IMAGE_FULLSCREEN, currentGallery.galleryId, null);
                         }
                     }
                 });

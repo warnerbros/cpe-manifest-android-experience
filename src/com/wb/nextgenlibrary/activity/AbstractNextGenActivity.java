@@ -215,7 +215,7 @@ public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivi
     }
 
     protected void onLeftTopActionBarButtonPressed(){
-        NextGenAnalyticData.reportEvent(this, null, "Back Button", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
+        //NextGenAnalyticData.reportEvent(this, null, "Back Button", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
         onBackPressed();
     }
 

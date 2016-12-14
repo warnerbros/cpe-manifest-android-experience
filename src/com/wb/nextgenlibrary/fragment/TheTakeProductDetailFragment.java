@@ -75,12 +75,10 @@ public class TheTakeProductDetailFragment extends AbstractNextGenFragment implem
                     NextGenExperience.launchChromeWithUrl(product.getProductDetail().purchaseLink);
                 }
             });
-            NextGenAnalyticData.reportEvent(getActivity(), TheTakeProductDetailFragment.this, "Shop At The Take",
-                    NextGenAnalyticData.AnalyticAction.ACTION_CLICK, product.productName);
+            //NextGenAnalyticData.reportEvent(getActivity(), TheTakeProductDetailFragment.this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_SHOPPING, product.productName);
         }else if (v.getId() == R.id.send_link_button){
             NextGenExperience.launchChromeWithUrl(product.getProductDetail().shareUrl);
-            NextGenAnalyticData.reportEvent(getActivity(), TheTakeProductDetailFragment.this, "Send Link",
-                    NextGenAnalyticData.AnalyticAction.ACTION_CLICK, product.productName);
+           // NextGenAnalyticData.reportEvent(getActivity(), TheTakeProductDetailFragment.this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_SHOPPING, product.productName);
         }
     }
 

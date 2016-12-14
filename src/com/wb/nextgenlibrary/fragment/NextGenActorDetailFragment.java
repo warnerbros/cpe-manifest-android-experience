@@ -218,8 +218,6 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
                 public void onClick(View v) {
                     if (object.getBaselineCastData() != null && object.getBaselineCastData().headShots != null && object.getBaselineCastData().headShots.size()> 0) {
                         onItemSelected(-1);     // pass -1 because we set index + 1 in onItemSelected
-                        NextGenAnalyticData.reportEvent(getActivity(), NextGenActorDetailFragment.this, "Actor Thumbnail Image",
-                                NextGenAnalyticData.AnalyticAction.ACTION_CLICK, object.getBaselineCastData().headShots.get(0).fullSizeUrl);
 
                     }
                 }
@@ -364,8 +362,8 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
             if (NextGenExperience.getNextGenEventHandler() != null){
                 NextGenExperience.getNextGenEventHandler().handleMovieTitleSelection(getActivity(), filmInfo.title);
             }
-            NextGenAnalyticData.reportEvent(getActivity(), NextGenActorDetailFragment.this, "Actor Filmography",
-                    NextGenAnalyticData.AnalyticAction.ACTION_CLICK, filmInfo.title);
+            NextGenAnalyticData.reportEvent(getActivity(), NextGenActorDetailFragment.this,
+                    NextGenAnalyticData.AnalyticAction.ACTION_SELECT_ACTOR_FILM, actorOjbect.getId(), filmInfo.title);
 
         }
     }
@@ -429,20 +427,17 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
                 getActivity().getPackageManager().getPackageInfo("com.facebook.katana", 0);
                 // http://stackoverflow.com/a/24547437/1048340
                 socialUrl = "fb://facewebmodal/f?href=" + socialUrl;
-                NextGenAnalyticData.reportEvent(getActivity(), this, "Facebook Button",
-                        NextGenAnalyticData.AnalyticAction.ACTION_CLICK, socialUrl);
+                NextGenAnalyticData.reportEvent(getActivity(), this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_ACTOR_SOCIAL, actorOjbect.getId(), "Facebook");
             } catch (PackageManager.NameNotFoundException e) {
 
             }
 
         }else if (v.equals(twitterBtn)){
             socialUrl = actorOjbect.getBaselineCastData().getSocialMediaUrl(MovieMetaData.BaselineCastData.SOCIAL_MEDIA_KEY.TWITTER_KEY);
-            NextGenAnalyticData.reportEvent(getActivity(), this, "Twitter Button",
-                    NextGenAnalyticData.AnalyticAction.ACTION_CLICK, socialUrl);
+            NextGenAnalyticData.reportEvent(getActivity(), this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_ACTOR_SOCIAL, actorOjbect.getId(), "Twitter");
         }else if (v.equals(instagramBtn)){
             socialUrl = actorOjbect.getBaselineCastData().getSocialMediaUrl(MovieMetaData.BaselineCastData.SOCIAL_MEDIA_KEY.INSTAGRAM_KEY);
-            NextGenAnalyticData.reportEvent(getActivity(), this, "Instagram Button",
-                    NextGenAnalyticData.AnalyticAction.ACTION_CLICK, socialUrl);
+            NextGenAnalyticData.reportEvent(getActivity(), this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_ACTOR_SOCIAL, actorOjbect.getId(), "Instagram");
         }
 
         if (!StringHelper.isEmpty(socialUrl)){

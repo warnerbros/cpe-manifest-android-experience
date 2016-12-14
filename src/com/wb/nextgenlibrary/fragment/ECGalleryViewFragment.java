@@ -128,8 +128,7 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
                     share.putExtra(Intent.EXTRA_TEXT, imageUrl);
 
                     startActivity(Intent.createChooser(share, ""));
-                    NextGenAnalyticData.reportEvent(getActivity(), ECGalleryViewFragment.this, "Share Image",
-                            NextGenAnalyticData.AnalyticAction.ACTION_CLICK, imageUrl);
+                    NextGenAnalyticData.reportEvent(getActivity(), ECGalleryViewFragment.this, NextGenAnalyticData.AnalyticAction.ACTION_SHARE_IMAGE, currentGallery.galleryId, null);
                 }
             });
         }

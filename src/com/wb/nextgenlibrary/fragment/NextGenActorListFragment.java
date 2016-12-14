@@ -86,7 +86,7 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment<CastD
 
         }
         listAdaptor.notifyDataSetChanged();
-        NextGenAnalyticData.reportEvent(getActivity(), this, "Actor", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, selectedObject.getTitle());
+        NextGenAnalyticData.reportEvent(getActivity(), this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_TALENT, selectedObject.getId(), null);
     }
 
     protected int getListItemCount() {

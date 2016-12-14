@@ -506,16 +506,18 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
             Intent intent = new Intent(this, NextGenPlayer.class);
             intent.setDataAndType(Uri.parse(NextGenExperience.getMovieMetaData().getMainMovieUrl()), "video/*");
             startActivity(intent);
-            NextGenAnalyticData.reportEvent(this, null, "Play Movie", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
+            NextGenAnalyticData.reportEvent(this, null, NextGenAnalyticData.AnalyticAction.ACTION_PLAY_MOVIE, null, null);
 
         } else if (v.getId() == R.id.next_gen_startup_extra_button || v.getId() == R.id.next_gen_startup_extra_text_button) {
             Intent extraIntent = new Intent(this, NextGenExtraActivity.class);
             startActivity(extraIntent);
-            NextGenAnalyticData.reportEvent(this, null, "Extras", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
+            NextGenAnalyticData.reportEvent(this, null, NextGenAnalyticData.AnalyticAction.ACTION_EXTRAS, null, null);
         } else if (v.getId() == R.id.next_gen_startup_purchase_button) {
             if (NextGenExperience.getNextGenEventHandler() != null)
                 NextGenExperience.getNextGenEventHandler().handlePurchaseButtonPressed(this, NextGenExperience.getNextgenPlaybackObject());
+            NextGenAnalyticData.reportEvent(this, null, NextGenAnalyticData.AnalyticAction.ACTION_BUY, null, null);
         } else if (v.getId() == R.id.nge_main_exit){
+            NextGenAnalyticData.reportEvent(this, null, NextGenAnalyticData.AnalyticAction.ACTION_EXIT, null, null);
             finish();
         }
     }

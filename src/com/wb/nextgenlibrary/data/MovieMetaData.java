@@ -321,7 +321,7 @@ public class MovieMetaData {
                             subtype = gallery.getSubType().get(0);
                         }
 
-                        ECGalleryItem thisItem = new ECGalleryItem(experience.getExperienceID(), galleryMataData, pictureItems, subtype);
+                        ECGalleryItem thisItem = new ECGalleryItem(experience.getExperienceID(), gallery.getGalleryID(), galleryMataData, pictureItems, subtype);
                         galleryItems.add(thisItem);
 
                         galleryIdToGalleryItemMap.put(gallery.getGalleryID(), thisItem);
@@ -411,7 +411,7 @@ public class MovieMetaData {
                                     //ExperienceData ecData = new ExperienceData(experience, metaData, video, null);
                                     if (audioVisual.getSubType() != null && audioVisual.getSubType().size() > 0)
                                         subtype = audioVisual.getSubType().get(0);
-                                    AudioVisualItem item = new AudioVisualItem(experience.getExperienceID(), avMetaData, tracks, externalApiDatas, subtype);
+                                    AudioVisualItem item = new AudioVisualItem(experience.getExperienceID(), audioVisual.getPresentationID(), avMetaData, tracks, externalApiDatas, subtype);
                                     avItems.add(item);
                                     presentationIdToAVItemMap.put(presentationId, item);
                                 }
@@ -950,7 +950,17 @@ public class MovieMetaData {
         public BaselineCastData baselineCastData;
 
         public CastData(BasicMetadataPeopleType castInfo){
+
             super(null, null, null);
+            if (castInfo != null && castInfo.getIdentifier() != null && castInfo.getIdentifier().size() > 0){
+                for (PersonIdentifierType identifierType : castInfo.getIdentifier()){
+                    if ("PeopleOtherID".equals(identifierType.getNamespace())){
+                        id = identifierType.getIdentifier();
+                        break;
+                    }
+                }
+            }
+
             if (castInfo!= null && castInfo.getJob() != null && castInfo.getJob().size() > 0){     // this may have multiple values
                 job = castInfo.getJob().get(0).getJobFunction().getValue();
                 if (castInfo.getJob().get(0).getCharacter() != null && castInfo.getJob().get(0).getCharacter().size() > 0)
@@ -1341,9 +1351,11 @@ public class MovieMetaData {
     static public class ECGalleryItem extends PresentationDataItem{
         final public List<PictureItem> galleryImages = new ArrayList<PictureItem>();
         final public String subType;
-        public ECGalleryItem(String parentExperienceId, InventoryMetadataType metaData, List<PictureItem> galleryImages, String subType){
+        final public String galleryId;
+        public ECGalleryItem(String parentExperienceId, String galleryId, InventoryMetadataType metaData, List<PictureItem> galleryImages, String subType){
             super(metaData, parentExperienceId);
             this.galleryImages.addAll(galleryImages);
+            this.galleryId = galleryId;
             this.subType = subType;
             if (metaData != null) {
                 BasicMetadataInfoType localizedInfo = metaData != null ? metaData.getBasicMetadata().getLocalizedInfo().get(0) : null;
@@ -1411,12 +1423,14 @@ public class MovieMetaData {
         final PresentationImageData[] images;
         final Duration durationObject;
         final String subtype;
+        final public String videoId;
 
         boolean isWatched = false;
 
-        public AudioVisualItem(String parentExperienceId, InventoryMetadataType metaData, List<AudioVisualTrack> tracks, String subtype){
+        public AudioVisualItem(String parentExperienceId, String videoId, InventoryMetadataType metaData, List<AudioVisualTrack> tracks, String subtype){
             super(metaData, parentExperienceId);
             this.subtype = subtype;
+            this.videoId = videoId;
             BasicMetadataInfoType localizedInfo = metaData!= null ? metaData.getBasicMetadata().getLocalizedInfo().get(0): null;
             if (tracks != null && tracks.size() > 0) {
                 tracksList = tracks;
@@ -1455,18 +1469,6 @@ public class MovieMetaData {
             }
         }
 
-        public AudioVisualItem(InventoryVideoType videoData, String subtype){
-            super(null, null);
-            this.subtype = subtype;
-            tracksList = new ArrayList<>();
-            if (videoData != null) {
-                tracksList.add(new AudioVisualTrack(videoData, null));
-            }
-
-            duration = null;
-            images = null;
-            durationObject = null;
-        }
 
         public String getVideoUrl(){
             if (tracksList != null && tracksList.size() > 0)
@@ -1504,8 +1506,8 @@ public class MovieMetaData {
             return  retString;
         }
 
-        public AudioVisualItem(String parentExperienceId, InventoryMetadataType metaData, List<AudioVisualTrack> tracksList, List<ExternalApiData> apiDataList, String subtype){
-            this(parentExperienceId, metaData, tracksList, subtype);
+        public AudioVisualItem(String parentExperienceId, String videoId, InventoryMetadataType metaData, List<AudioVisualTrack> tracksList, List<ExternalApiData> apiDataList, String subtype){
+            this(parentExperienceId, videoId, metaData, tracksList, subtype);
             if (apiDataList != null)
                 externalApiDataList.addAll(apiDataList);
         }

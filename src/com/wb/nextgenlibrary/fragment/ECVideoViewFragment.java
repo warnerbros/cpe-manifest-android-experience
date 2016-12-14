@@ -128,8 +128,7 @@ public class ECVideoViewFragment extends ECViewFragment{
                     if (previewFrame != null)
                         previewFrame.setVisibility(View.GONE);
                     videoView.start();
-                    NextGenAnalyticData.reportEvent(getActivity(), ECVideoViewFragment.this, "EC Play Button",
-                            NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
+                    NextGenAnalyticData.reportEvent(getActivity(), ECVideoViewFragment.this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_VIDEO, selectedAVItem.videoId, null);
                 }
             });
         }

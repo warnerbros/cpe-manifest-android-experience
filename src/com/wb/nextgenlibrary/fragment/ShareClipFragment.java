@@ -85,19 +85,20 @@ public class ShareClipFragment extends ECVideoViewFragment implements View.OnCli
             share.putExtra(Intent.EXTRA_TEXT, videoUrl);
 
             startActivity(Intent.createChooser(share, ""));
-            NextGenAnalyticData.reportEvent(getActivity(), ShareClipFragment.this, "Share",
-                    NextGenAnalyticData.AnalyticAction.ACTION_CLICK, videoUrl);
+            NextGenAnalyticData.reportEvent(getActivity(), ShareClipFragment.this, NextGenAnalyticData.AnalyticAction.ACTION_SHARE_VIDEO, selectedAVItem.videoId, null);
         } else if (v.getId() == R.id.prev_clip_btn){
                 if (itemIndex > 0){
                     setShouldAutoPlay(false);
                     setExperienceAndIndex(shareClipExperience, itemIndex - 1);
                     updateUI();
+                    NextGenAnalyticData.reportEvent(getActivity(), ShareClipFragment.this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_PREVIOUS, selectedAVItem.videoId, null);
                 }
         } else if (v.getId() == R.id.next_clip_btn){
                 if (itemIndex < shareClipExperience.getChildrenContents().size()){
                     setShouldAutoPlay(false);
                     setExperienceAndIndex(shareClipExperience, itemIndex + 1);
                     updateUI();
+                    NextGenAnalyticData.reportEvent(getActivity(), ShareClipFragment.this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_NEXT, selectedAVItem.videoId, null);
                 }
 
 

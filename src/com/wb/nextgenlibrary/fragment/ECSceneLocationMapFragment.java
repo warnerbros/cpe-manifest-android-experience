@@ -152,8 +152,7 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
                 });
             }
         }
-        NextGenAnalyticData.reportEvent(getActivity(), this, "Satellite/Map View",
-                NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
+        NextGenAnalyticData.reportEvent(getActivity(), this, NextGenAnalyticData.AnalyticAction.ACTION_SET_MAP_TYPE, v.equals(mapButton) ? "road" : "satellite", null);
     }
 
     public void setOnSceneLocationSelectedListener(OnSceneLocationSelectedListener listener){

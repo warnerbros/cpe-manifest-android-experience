@@ -123,11 +123,8 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                             fragment.setExperienceAndIndex(activeObj.imeExperience, ((MovieMetaData.IMEElement) activeObj.imeObject).itemIndex);
                             if (NextGenExperience.getMovieMetaData().getInMovieExperience().style != null)
                                 fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getInMovieExperience().style.getBackground().getImage().url);
-                            /*
-                            fragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) dataObj);*/
                             fragment.setVideoStatusListener(this);
                             playerActivity.transitMainFragment(fragment);
-                            //playerActivity.pausMovieForImeECPiece();
                         }else {
 
                             ECVideoViewFragment fragment = new ECVideoViewFragment();
@@ -138,7 +135,6 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                             fragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) headElement);
                             fragment.setVideoStatusListener(this);
                             playerActivity.transitMainFragment(fragment);
-                            //playerActivity.pausMovieForImeECPiece();
                         }
                     } else if (headElement instanceof MovieMetaData.LocationItem ||
                             (headElement instanceof AVGalleryIMEEngine.IMECombineItem && ((AVGalleryIMEEngine.IMECombineItem)headElement).isLocation() ) ){
@@ -151,25 +147,17 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                         fragment.setShouldShowCloseBtn(true);
                         fragment.setLocationItem(activeObj.title, (MovieMetaData.LocationItem)headElement);
                         playerActivity.transitMainFragment(fragment);
-                        //playerActivity.pausMovieForImeECPiece();
-                    /*} else if (dataObj instanceof AVGalleryIMEEngine.IMECombineItem){
-                        ECTrviaViewFragment fragment = new ECTrviaViewFragment();
-                        fragment.setTextItem(activeObj.title, (AVGalleryIMEEngine.IMECombineItem)dataObj);
-                        playerActivity.loadIMEECFragment(fragment);
-                        playerActivity.pausMovieForImeECPiece();*/
                     } else if (dataObj instanceof MovieMetaData.TriviaItem){
                         ECTrviaViewFragment fragment = new ECTrviaViewFragment();
                         fragment.setShouldShowCloseBtn(true);
                         fragment.setTriviaItem(activeObj.title, (MovieMetaData.TriviaItem)dataObj);
                         playerActivity.transitMainFragment(fragment);
-                        //playerActivity.pausMovieForImeECPiece();
 
                     } else if (dataObj instanceof MovieMetaData.TextItem) {
 						ECTextViewFragment fragment = new ECTextViewFragment();
 						fragment.setShouldShowCloseBtn(true);
 						fragment.setTextItem(activeObj.title, (MovieMetaData.TextItem)dataObj);
 						playerActivity.transitMainFragment(fragment);
-						//playerActivity.pausMovieForImeECPiece();
 					}
                 }
             }
@@ -180,7 +168,6 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                 fragment.setTitleText(activeObj.title.toUpperCase());
                 fragment.setFrameProductTime(((TheTakeProductFrame)activeObj.imeObject).frameTime);
                 playerActivity.transitMainFragment(fragment);
-                //playerActivity.pausMovieForImeECPiece();
             }
         }
     }
@@ -240,13 +227,8 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
             if (dataObj instanceof MovieMetaData.PresentationDataItem) {
 
                 rowView.setTag(R.id.ime_title, ((MovieMetaData.PresentationDataItem) dataObj).getId());
-                if (dataObj instanceof MovieMetaData.LocationItem /*||
-                        (dataObj instanceof AVGalleryIMEEngine.IMECombineItem && ((AVGalleryIMEEngine.IMECombineItem)dataObj).isLocation() )*/ ){
+                if (dataObj instanceof MovieMetaData.LocationItem ){
 
-                    /*
-                    if (dataObj instanceof AVGalleryIMEEngine.IMECombineItem){
-                        dataObj = ((AVGalleryIMEEngine.IMECombineItem)dataObj).getAllPresentationItems().get(0);
-                    }*/
                     MovieMetaData.LocationItem locationItem = (MovieMetaData.LocationItem) dataObj;
                     if (locationItem != null && poster.getHeight() > 0 && poster.getWidth() > 0){
                         String imageUrl = locationItem.getGoogleMapImageUrl(poster.getWidth(), poster.getHeight());

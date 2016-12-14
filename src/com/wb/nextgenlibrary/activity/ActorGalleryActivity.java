@@ -1,5 +1,6 @@
 package com.wb.nextgenlibrary.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -40,6 +41,7 @@ public class ActorGalleryActivity extends AbstractNextGenActivity implements Act
 
     public static String HEAD_SHOTS_KEY = "HEAD_SHOTS";
     public static String CURRENT_INDEX_KEY = "CURRENT_INDEX";
+    public static String TALENT_ID = "TALENT_ID";
 
     RecyclerView actorGalleryRecycler;
     ViewPager actorGalleryViewPager;
@@ -80,7 +82,7 @@ public class ActorGalleryActivity extends AbstractNextGenActivity implements Act
             closeBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    NextGenAnalyticData.reportEvent(ActorGalleryActivity.this, null, "Back Button", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
+                    //NextGenAnalyticData.reportEvent(ActorGalleryActivity.this, null, "Back Button", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
                     onBackPressed();
                 }
             });
@@ -174,8 +176,8 @@ public class ActorGalleryActivity extends AbstractNextGenActivity implements Act
 
     public void onItemSelected(int index){
         actorGalleryViewPager.setCurrentItem(index);
-        //galleryRecyclerAdapter.setSelectedIndex(index);
-        //galleryRecyclerAdapter.notifyDataSetChanged();
+        NextGenAnalyticData.reportEvent(this, null, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_IMAGE, actorGalleryItems.get(index).imageId, null);
+
     }
 
 

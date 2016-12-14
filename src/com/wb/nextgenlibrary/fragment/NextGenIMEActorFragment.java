@@ -38,7 +38,7 @@ public class NextGenIMEActorFragment extends NextGenActorListFragment implements
 
         if (index >= getActorInfos().size() ){
             fullListEnabled = !fullListEnabled;
-            NextGenAnalyticData.reportEvent(getActivity(), this, "Show Less/More", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, Boolean.toString(fullListEnabled));
+            //NextGenAnalyticData.reportEvent(getActivity(), this, "Show Less/More", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, Boolean.toString(fullListEnabled));
         } else if (getActivity() instanceof NextGenFragmentTransactionInterface){
             NextGenActorDetailFragment target = new NextGenActorDetailFragment();
             target.setLayoutId(R.layout.nge_ime_actor_detail_view);
@@ -46,7 +46,7 @@ public class NextGenIMEActorFragment extends NextGenActorListFragment implements
             target.setDetailObject(selectedObject);
             ((NextGenFragmentTransactionInterface)getActivity()).transitMainFragment( target);
             ((NextGenFragmentTransactionInterface)getActivity()).resetUI(false);
-            NextGenAnalyticData.reportEvent(getActivity(), this, "Actor", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, selectedObject.getTitle());
+            NextGenAnalyticData.reportEvent(getActivity(), this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_TALENT, selectedObject.getId(), null);
 
         }
 

@@ -66,7 +66,7 @@ public class ECVideoActivity extends AbstractECView implements ECVideoViewFragme
 				selectedECNameTextView.setText(audioVisualItem.getTitle());
 			if (descriptionTextView != null)
 				descriptionTextView.setText(audioVisualItem.getSummary());
-            NextGenAnalyticData.reportEvent(this, null, "EC Video", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, ec.title);
+            NextGenAnalyticData.reportEvent(this, null, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_VIDEO, audioVisualItem.videoId, null);
         }
     }
 

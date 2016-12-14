@@ -37,7 +37,7 @@ public class NextGenHideStatusBarActivity extends AppCompatActivity {
     @Override
     protected void onPostCreate( Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        NextGenAnalyticData.reportEvent(this, null, null, NextGenAnalyticData.AnalyticAction.ACTION_START, getReportContentName());
+        //NextGenAnalyticData.reportEvent(this, null, null, NextGenAnalyticData.AnalyticAction.ACTION_START, getReportContentName());
     }
 
     String getReportContentName(){

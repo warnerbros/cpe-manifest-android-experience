@@ -37,11 +37,4 @@ public abstract class ECViewFragment extends AbstractNextGenFragment{
 
     }
 
-    String getReport(){
-        String screenName  = NextGenAnalyticData.classObjectToReportNameMap.get(this.getClass());
-        if (!StringHelper.isEmpty(screenName)){
-            return screenName;
-        }else
-            return this.getClass().toString();
-    }
 }

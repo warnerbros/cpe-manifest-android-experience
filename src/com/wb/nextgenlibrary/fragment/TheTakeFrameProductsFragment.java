@@ -144,8 +144,7 @@ public class TheTakeFrameProductsFragment extends AbstractNextGenFragment {
             loadProductIntoDetailFragment(product);
             frameProductsAdaptor.setSelectedIndex(position);
             frameProductsAdaptor.notifyDataSetChanged();
-            NextGenAnalyticData.reportEvent(getActivity(), TheTakeFrameProductsFragment.this, "Product",
-                    NextGenAnalyticData.AnalyticAction.ACTION_CLICK, product.productName);
+            //NextGenAnalyticData.reportEvent(getActivity(), TheTakeFrameProductsFragment.this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_SHOPPING, product.productName);
         }
     }
 

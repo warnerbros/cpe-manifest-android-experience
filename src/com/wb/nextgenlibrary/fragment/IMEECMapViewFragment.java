@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.wb.nextgenlibrary.R;
+import com.wb.nextgenlibrary.activity.ECSceneLocationActivity;
 import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.util.HttpImageHelper;
@@ -139,8 +140,7 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
                 });
             }
         }
-        NextGenAnalyticData.reportEvent(getActivity(), this, "Satellite/Map View",
-                NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
+        NextGenAnalyticData.reportEvent(getActivity(), this, NextGenAnalyticData.AnalyticAction.ACTION_SET_MAP_TYPE, v.equals(mapButton) ? "road" : "satellite", null);
     }
 
     @Override
@@ -332,9 +332,7 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
                     mapView.setVisibility(View.VISIBLE);
                     videoFrame.setVisibility(View.GONE);
                     galleryFrame.setVisibility(View.GONE);
-                    NextGenAnalyticData.reportEvent(getActivity(), IMEECMapViewFragment.this, "Location Item",
-                            NextGenAnalyticData.AnalyticAction.ACTION_CLICK, ((MovieMetaData.LocationItem) currentItem).getTitle());
-
+                    NextGenAnalyticData.reportEvent(getActivity(), IMEECMapViewFragment.this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_LOCATION_THUMBNAIL, ((MovieMetaData.LocationItem) currentItem).getId(), null);
                 } else if (currentItem instanceof MovieMetaData.AudioVisualItem) {
                     mapView.setVisibility(View.GONE);
                     videoFrame.setVisibility(View.VISIBLE);
@@ -346,8 +344,7 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
                         videoViewFragment.setShouldShowCloseBtn(false);
                         videoViewFragment.setAspectRatioFramePriority(FixedAspectRatioFrameLayout.Priority.HEIGHT_PRIORITY);
                         videoViewFragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) currentItem);
-                        NextGenAnalyticData.reportEvent(getActivity(), IMEECMapViewFragment.this, "Location Item",
-                                NextGenAnalyticData.AnalyticAction.ACTION_CLICK, ((MovieMetaData.AudioVisualItem) currentItem).getTitle());
+                        NextGenAnalyticData.reportEvent(getActivity(), IMEECMapViewFragment.this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_VIDEO, ((MovieMetaData.AudioVisualItem) currentItem).videoId, null);
                     }
 
                 } else if (currentItem instanceof MovieMetaData.ECGalleryItem) {
@@ -366,8 +363,7 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
                         galleryViewFragment.setAspectRatioFramePriority(FixedAspectRatioFrameLayout.Priority.HEIGHT_PRIORITY);
 
                         galleryViewFragment.setCurrentGallery((MovieMetaData.ECGalleryItem) currentItem);
-                        NextGenAnalyticData.reportEvent(getActivity(), IMEECMapViewFragment.this, "Location Item",
-                                NextGenAnalyticData.AnalyticAction.ACTION_CLICK, ((MovieMetaData.ECGalleryItem) currentItem).getTitle());
+                        NextGenAnalyticData.reportEvent(getActivity(), IMEECMapViewFragment.this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_VIDEO, ((MovieMetaData.ECGalleryItem) currentItem).galleryId, null);
                     }
                 }
             }

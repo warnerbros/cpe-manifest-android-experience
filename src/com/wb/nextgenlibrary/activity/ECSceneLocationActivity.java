@@ -350,8 +350,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
                     locationECsAdapter.setSceneLocation((MovieMetaData.LocationItem) currentItem);
                     locationECsAdapter.notifyDataSetChanged();
                     locationECRecyclerView.smoothScrollToPosition(0);
-                    NextGenAnalyticData.reportEvent(ECSceneLocationActivity.this, null, "Location Item",
-                            NextGenAnalyticData.AnalyticAction.ACTION_CLICK, ((MovieMetaData.LocationItem) currentItem).getTitle());
+                    NextGenAnalyticData.reportEvent(ECSceneLocationActivity.this, null, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_LOCATION_THUMBNAIL, ((MovieMetaData.LocationItem) currentItem).getId(), null);
                 } else if (currentItem instanceof MovieMetaData.AudioVisualItem) {
                     ECVideoViewFragment videoViewFragment;
                     if (currentFragment instanceof ECVideoViewFragment) {
@@ -369,8 +368,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
                     videoViewFragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) currentItem);
 
                     transitToFragment(videoViewFragment);
-                    NextGenAnalyticData.reportEvent(ECSceneLocationActivity.this, null, "EC Video Item",
-                            NextGenAnalyticData.AnalyticAction.ACTION_CLICK, ((MovieMetaData.AudioVisualItem) currentItem).getTitle());
+                    NextGenAnalyticData.reportEvent(ECSceneLocationActivity.this, null, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_VIDEO, ((MovieMetaData.AudioVisualItem) currentItem).videoId, null);
 
                 } else if (currentItem instanceof MovieMetaData.ECGalleryItem) {
                     ECGalleryViewFragment galleryViewFragment;
@@ -384,8 +382,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
                     }
                     galleryViewFragment.setCurrentGallery((MovieMetaData.ECGalleryItem) currentItem);
                     transitToFragment(galleryViewFragment);
-                    NextGenAnalyticData.reportEvent(ECSceneLocationActivity.this, null, "EC Gallery Item",
-                            NextGenAnalyticData.AnalyticAction.ACTION_CLICK, ((MovieMetaData.ECGalleryItem) currentItem).getTitle());
+                    NextGenAnalyticData.reportEvent(ECSceneLocationActivity.this, null, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_VIDEO, ((MovieMetaData.ECGalleryItem) currentItem).galleryId, null);
                 }
 
             }

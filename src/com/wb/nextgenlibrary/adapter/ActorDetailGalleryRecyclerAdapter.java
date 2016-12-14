@@ -1,5 +1,6 @@
 package com.wb.nextgenlibrary.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -116,8 +117,6 @@ public class ActorDetailGalleryRecyclerAdapter extends RecyclerView.Adapter<Acto
             if (listener != null){
                 listener.onItemSelected(index);
 
-                NextGenAnalyticData.reportEvent(null, null, "Actor Gallery Picture",
-                        NextGenAnalyticData.AnalyticAction.ACTION_CLICK, headShot.fullSizeUrl);
             }
         }
     }

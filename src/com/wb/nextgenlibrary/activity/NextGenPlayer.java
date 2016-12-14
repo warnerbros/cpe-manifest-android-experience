@@ -527,8 +527,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                             bInterstitialVideoComplete = true;
                             NextGenExperience.getNextGenEventHandler().setInterstitialSkippedForContent(NextGenExperience.getNextgenPlaybackObject());
                             playMainMovie();
-                            NextGenAnalyticData.reportEvent(NextGenPlayer.this, null, "Skip InterStitial Video",
-                                    NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
+                            NextGenAnalyticData.reportEvent(NextGenPlayer.this, null, NextGenAnalyticData.AnalyticAction.ACTION_SKIP_INTERSTITIAL, null, null);
                         }
                     });
                 }
