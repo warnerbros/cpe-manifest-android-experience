@@ -227,7 +227,11 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            if (imageButtonsFrame != null && extraButton.getDrawable() != null && playMovieButton.getDrawable() != null) {
+                                            StyleData.NodeStyleData nodeStyleData = mainStyle.getNodeStyleData(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                                            StyleData.ThemeData buttonTheme = mainStyle.getNodeStyleData(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE).theme;
+                                            MovieMetaData.PictureImageData extraBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.EXTRA_BUTTON);
+                                            MovieMetaData.PictureImageData playBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.PLAY_BUTTON);
+                                            if (imageButtonsFrame != null && extraBtnImageData != null && playBtnImageData != null) {
                                                 setPlayExtraButtonsVisibility(ButtonsMode.IMAGE_BUTTON_VISIBLE);
                                                 imageButtonsFrame.setVisibility(View.VISIBLE);
                                                 imageButtonsFrame.setAlpha(0.0f);
