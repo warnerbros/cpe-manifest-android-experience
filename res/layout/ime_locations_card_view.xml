@@ -24,8 +24,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                nextgen:aspectRatioHeight="16"
-                nextgen:aspectRatioWidth="9"
+                nextgen:aspectRatioHeight="3"
+                nextgen:aspectRatioWidth="4"
                 nextgen:priority="HEIGHT_PRIORITY">
 
                 <ImageView

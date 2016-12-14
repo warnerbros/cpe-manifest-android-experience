@@ -318,7 +318,7 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
                     Glide.with(getActivity()).load(((MovieMetaData.PresentationDataItem) item).getPosterImgUrl()).fitCenter().into(locationPhoto);
 
                 }else
-                    Glide.with(getActivity()).load(((MovieMetaData.PresentationDataItem) item).getPosterImgUrl()).centerCrop().into(locationPhoto);
+                    Glide.with(getActivity()).load(((MovieMetaData.PresentationDataItem) item).getPosterImgUrl()).fitCenter().into(locationPhoto);
             }
         }
 

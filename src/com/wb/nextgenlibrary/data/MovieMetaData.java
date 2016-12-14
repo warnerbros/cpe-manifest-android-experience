@@ -230,7 +230,6 @@ public class MovieMetaData {
         }
 
         if (mediaManifest.getInventory().getTextObject()!= null && mediaManifest.getInventory().getTextObject().size() > 0){
-            //Map<String, InventoryTextObjectType> textObjects = getTextGroups(mediaManifest.getInventory().getTextObject());
 
             if (mediaManifest.getInventory().getTextObject().size() > 0){
                 for (InventoryTextObjectType textObjectType : mediaManifest.getInventory().getTextObject()){
@@ -240,7 +239,7 @@ public class MovieMetaData {
 
                     for (int i = 0 ; i< textObjectType.getTextString().size(); i++){
                         if (textObjectType.getTextString().get(i).getIndex() == null){
-                            textMap.put(BigInteger.valueOf(i), textObjectType.getTextString().get(i).getValue());
+                            textMap.put(BigInteger.valueOf(i + 1), textObjectType.getTextString().get(i).getValue());
                         }else {
                             textMap.put(textObjectType.getTextString().get(i).getIndex(), textObjectType.getTextString().get(i).getValue());
                         }
@@ -252,7 +251,6 @@ public class MovieMetaData {
         if (appDataManifest != null && appDataManifest.getManifestAppData() != null && appDataManifest.getManifestAppData().size() > 0){
             for (AppDataType appData : appDataManifest.getManifestAppData()){
                 appDataIdTpAppDataMap.put(appData.getAppID(), appData);
-
             }
         }
 

@@ -148,7 +148,14 @@ public class NextGenAnalyticData {
     }
 
     public static void reportEvent(Activity activity, Fragment fragment, AnalyticAction action, String idValue, String nameValue){
-        String activityName = activity != null ? classObjectToReportNameMap.get(activity.getClass()).get(fragment) : "";
+        String activityName = null;
+        if (activity != null){
+            if (fragment != null){
+                activityName = classObjectToReportNameMap.get(activity.getClass()).get(fragment.getClass());
+            } else {
+                activityName = classObjectToReportNameMap.get(activity.getClass()).get(null);
+            }
+        }
         if (activity != null && StringHelper.isEmpty(activityName)){
             activityName = activity.getClass().toString();
         }
