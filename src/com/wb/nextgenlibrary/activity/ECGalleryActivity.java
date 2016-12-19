@@ -90,7 +90,7 @@ public class ECGalleryActivity extends AbstractECView {
             if (!TabletUtils.isTablet())
                 galleryFragment.setShouldShowFullScreenBtn(false);
             galleryFragment.setCurrentGallery(galleryItem);
-            NextGenAnalyticData.reportEvent(this, null, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_IMAGE, galleryItem.galleryId, null);
+            NextGenAnalyticData.reportEvent(this, null, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_IMAGE_GALLERY, galleryItem.galleryId, null);
 
 
            //galleryFrame.setCurrentGallery(ec.galleryItems.get(0));
