@@ -22,6 +22,7 @@ import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.interfaces.IMEVideoStatusListener;
 import com.wb.nextgenlibrary.util.utils.F;
+import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.videoview.IVideoViewActionListener;
@@ -243,7 +244,7 @@ public class ECVideoViewFragment extends ECViewFragment{
         bgImageView = (ImageView) view.findViewById(R.id.ec_video_frame_bg);
 
         if (bgImageView != null && !StringHelper.isEmpty(bgImageUrl)){
-            Glide.with(getActivity()).load(bgImageUrl).fitCenter().into(bgImageView);
+            NextGenGlide.load(getActivity(), bgImageUrl).fitCenter().into(bgImageView);
         }
     }
 

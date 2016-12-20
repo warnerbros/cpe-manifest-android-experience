@@ -29,6 +29,7 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
+import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
@@ -104,7 +105,7 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
         bgImageView = (ImageView)view.findViewById(R.id.ec_gallery_frame_bg);
 
         if (bgImageView != null && !StringHelper.isEmpty(bgImageUrl)){
-            Glide.with(getActivity()).load(bgImageUrl).fitCenter().into(bgImageView);
+			NextGenGlide.load(getActivity(), bgImageUrl).fitCenter().into(bgImageView);
             //PicassoTrustAll.loadImageIntoView(getActivity(), bgImageUrl, bgImageView);
         }
 
@@ -295,8 +296,7 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
                     (SubsamplingScaleImageView) itemView.findViewById(R.id.image);
 
             // Asynchronously load the image and set the thumbnail and pager view
-            Glide.with(getActivity())
-                    .load(currentItem.galleryImages.get(position).fullImage.url)
+            NextGenGlide.load(getActivity(), currentItem.galleryImages.get(position).fullImage.url)
                     .asBitmap()
                     .into(new SimpleTarget<Bitmap>() {
                         @Override

@@ -33,6 +33,7 @@ import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.util.HttpImageHelper;
 import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
+import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
 
@@ -300,7 +301,7 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
                                 int width = viewParent.getWidth();
                                 final String mapImageUrl = locationItem.getGoogleMapImageUrl(width, height);
 
-                                Glide.with(getActivity()).load(mapImageUrl).fitCenter().into(locationPhoto);
+                                NextGenGlide.load(getActivity(), mapImageUrl).fitCenter().into(locationPhoto);
 
                             }
                         });
@@ -315,10 +316,10 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
                 else
                     locationPlayIcon.setVisibility(View.INVISIBLE);
                 if (TabletUtils.isTablet()){
-                    Glide.with(getActivity()).load(((MovieMetaData.PresentationDataItem) item).getPosterImgUrl()).fitCenter().into(locationPhoto);
+                    NextGenGlide.load(getActivity(), ((MovieMetaData.PresentationDataItem) item).getPosterImgUrl()).fitCenter().into(locationPhoto);
 
                 }else
-                    Glide.with(getActivity()).load(((MovieMetaData.PresentationDataItem) item).getPosterImgUrl()).fitCenter().into(locationPhoto);
+                    NextGenGlide.load(getActivity(), ((MovieMetaData.PresentationDataItem) item).getPosterImgUrl()).fitCenter().into(locationPhoto);
             }
         }
 

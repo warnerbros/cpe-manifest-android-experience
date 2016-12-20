@@ -17,6 +17,7 @@ import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.utils.F;
+import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 
 /**
  * Created by gzcheng on 11/28/16.
@@ -100,7 +101,7 @@ public class ECInteractiveActivity extends AbstractECView implements AdapterView
 			MovieMetaData.ExperienceData thisExtra = getItem(position);
 			if(!thisExtra.title.equals(titleTxt.getText())){
 				titleTxt.setText(thisExtra.title.toUpperCase());
-				Glide.with(ECInteractiveActivity.this).load(thisExtra.getPosterImgUrl()).fitCenter().into(thumbnailImg);
+				NextGenGlide.load(ECInteractiveActivity.this, thisExtra.getPosterImgUrl()).fitCenter().into(thumbnailImg);
 				//PicassoTrustAll.loadImageIntoView(getActivity(), thisExtra.getPosterImgUrl(), thumbnailImg);
 			}
 

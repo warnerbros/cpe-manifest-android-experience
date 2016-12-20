@@ -36,6 +36,7 @@ import com.wb.nextgenlibrary.interfaces.NextGenPlaybackStatusListener.NextGenPla
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.util.utils.F;
 import com.wb.nextgenlibrary.util.utils.NextGenFragmentTransactionEngine;
+import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.videoview.IVideoViewActionListener;
@@ -128,7 +129,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         if (backgroundImageView != null){
             if (NextGenExperience.getMovieMetaData().getExtraExperience().style != null) {
                 String bgImgUrl = NextGenExperience.getMovieMetaData().getExtraExperience().style.getBackground().getImage().url;
-                Glide.with(this).load(bgImgUrl).into(backgroundImageView);
+                NextGenGlide.load(this, bgImgUrl).into(backgroundImageView);
             }
         }
 

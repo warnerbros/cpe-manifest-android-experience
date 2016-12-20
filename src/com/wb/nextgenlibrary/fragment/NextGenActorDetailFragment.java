@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
@@ -34,6 +35,7 @@ import com.wb.nextgenlibrary.network.BaselineApiDAO;
 import com.wb.nextgenlibrary.util.DialogUtils;
 import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
+import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
 
@@ -196,7 +198,7 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
             if (!StringHelper.isEmpty(actorOjbect.getBaselineCastData().getFullImageUrl())) {
                 relayoutProfilePortion(true);
                 fullImageView.setVisibility(View.VISIBLE);
-                Glide.with(getActivity()).load(actorOjbect.getBaselineCastData().getFullImageUrl()).centerCrop().into(fullImageView);
+                NextGenGlide.load(getActivity(), actorOjbect.getBaselineCastData().getFullImageUrl()).centerCrop().into(fullImageView);
             } else {
                 if (!TabletUtils.isTablet() || StringHelper.isEmpty(actorOjbect.getBaselineCastData().biography))
                     relayoutProfilePortion(false);
@@ -336,14 +338,14 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
             this.filmInfo = filmInfo;
             if (filmInfo.isFilmPosterRequest()) {
                // Glide.with(getActivity()).load(filmInfo.getFilmPosterImageUrl()).asBitmap().fitCenter().into(personPhoto);
-                Glide.with(getActivity()).load(filmInfo.getFilmPosterImageUrl()).listener(new RequestListener<String, GlideDrawable>() {
+                NextGenGlide.load(getActivity(), filmInfo.getFilmPosterImageUrl()).listener(new RequestListener<GlideUrl, GlideDrawable>() {
                     @Override
-                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                    public boolean onException(Exception e, GlideUrl model, Target<GlideDrawable> target, boolean isFirstResource) {
                         return false;
                     }
 
                     @Override
-                    public boolean onResourceReady(final GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                    public boolean onResourceReady(final GlideDrawable resource, GlideUrl model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

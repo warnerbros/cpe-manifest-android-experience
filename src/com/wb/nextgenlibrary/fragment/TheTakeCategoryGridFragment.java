@@ -16,6 +16,7 @@ import com.wb.nextgenlibrary.data.TheTakeData;
 import com.wb.nextgenlibrary.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgenlibrary.network.TheTakeApiDAO;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
+import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.widget.DotIndicatorImageView;
 
 import java.util.List;
@@ -130,7 +131,7 @@ public class TheTakeCategoryGridFragment extends AbstractNextGenFragment{
             if (product != null){
                 if (productThumbnail != null){
                     productThumbnail.setKeyCropXY(product.keyCropProductX, product.keyCropProductY);
-                    Glide.with(getActivity()).load(product.getThumbnailUrl()).asBitmap().fitCenter().into(productThumbnail);
+                    NextGenGlide.load(getActivity(), product.getThumbnailUrl()).asBitmap().fitCenter().into(productThumbnail);
                     //PicassoTrustAll.loadImageIntoView(getActivity(), product.getThumbnailUrl(), productThumbnail);
                 }
                 if (brandName != null)

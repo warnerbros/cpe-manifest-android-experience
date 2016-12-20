@@ -14,6 +14,7 @@ import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.activity.NextGenPlayer;
 import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
+import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 
 import java.util.List;
 
@@ -108,7 +109,7 @@ public class ActorDetailGalleryRecyclerAdapter extends RecyclerView.Adapter<Acto
                 default:
                     imageUrl = headShot.mediumUrl;
             }
-            Glide.with(context).load(imageUrl).centerCrop().into(personPhoto);
+            NextGenGlide.load(context, imageUrl).centerCrop().into(personPhoto);
 
         }
 

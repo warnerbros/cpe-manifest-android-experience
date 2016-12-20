@@ -21,6 +21,7 @@ import com.wb.nextgenlibrary.model.TheTakeIMEEngine;
 import com.wb.nextgenlibrary.network.TheTakeApiDAO;
 import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
+import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 
 import java.util.ArrayList;
@@ -232,14 +233,13 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                     MovieMetaData.LocationItem locationItem = (MovieMetaData.LocationItem) dataObj;
                     if (locationItem != null && poster.getHeight() > 0 && poster.getWidth() > 0){
                         String imageUrl = locationItem.getGoogleMapImageUrl(poster.getWidth(), poster.getHeight());
-                        Glide.with(getActivity()).load(imageUrl).centerCrop().into(poster);
+                        NextGenGlide.load(getActivity(), imageUrl).centerCrop().into(poster);
                     }
 
                 } else if (poster != null) {
                     String imageUrl = ((MovieMetaData.PresentationDataItem) dataObj).getPosterImgUrl();
 					if (!StringHelper.isEmpty(imageUrl)) {
-						Glide.with(getActivity())
-								.load(imageUrl).centerCrop()
+                        NextGenGlide.load(getActivity(), imageUrl).centerCrop()
 								.into(poster);
 						poster.setVisibility(View.VISIBLE);
 					} else {
@@ -283,7 +283,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                                     public void run() {
                                         subText1.setText(result.get(0).productName);
                                         poster.setBackgroundColor(getResources().getColor(android.R.color.white));
-                                        Glide.with(getActivity()).load(result.get(0).getProductThumbnailUrl()).into(poster);
+                                        NextGenGlide.load(getActivity(), result.get(0).getProductThumbnailUrl()).into(poster);
 
                                     }
                                 });

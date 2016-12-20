@@ -25,6 +25,7 @@ import com.wb.nextgenlibrary.fragment.ECVideoViewFragment;
 import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.utils.F;
 import com.wb.nextgenlibrary.util.utils.NextGenFragmentTransactionEngine;
+import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
@@ -326,7 +327,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
 
                 }
                 if (locationItem != null && !StringHelper.isEmpty(locationItem.getPosterImgUrl())) {
-                    Glide.with(ECSceneLocationActivity.this).load(locationItem.getPosterImgUrl()).into(locationPhoto);
+                    NextGenGlide.load(ECSceneLocationActivity.this, locationItem.getPosterImgUrl()).into(locationPhoto);
                     locationName.setText(((MovieMetaData.LocationItem) item).getTitle());
                     int locationCount = 0;//((MovieMetaData.LocationItem)item).childrenSceneLocations.size();
 
@@ -338,7 +339,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
                 else
                     locationPlayIcon.setVisibility(View.INVISIBLE);
                 locationName.setText(((PresentationDataItem) item).getTitle());
-                Glide.with(ECSceneLocationActivity.this).load(((PresentationDataItem) item).getPosterImgUrl()).into(locationPhoto);
+                NextGenGlide.load(ECSceneLocationActivity.this, ((PresentationDataItem) item).getPosterImgUrl()).into(locationPhoto);
             }
         }
 

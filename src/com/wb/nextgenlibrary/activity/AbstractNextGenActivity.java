@@ -19,11 +19,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.LazyHeaders;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.interfaces.ContentViewFullscreenRequestInterface;
 import com.wb.nextgenlibrary.util.utils.F;
+import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 
@@ -100,12 +103,12 @@ public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivi
     protected void onPostCreate( Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         if (centerBanner != null && !StringHelper.isEmpty(getTitleImageUrl())) {
-            Glide.with(this).load(getTitleImageUrl()).fitCenter().into(centerBanner);
+            NextGenGlide.load(this, getTitleImageUrl()).fitCenter().into(centerBanner);
             //PicassoTrustAll.loadImageIntoView(this, getTitleImageUrl(), centerBanner);
         }
 
         if (rightLogo != null && !StringHelper.isEmpty(getRightTitleImageUri())) {
-            Glide.with(this).load(getRightTitleImageUri()).fitCenter().into(rightLogo);
+            NextGenGlide.load(this, getRightTitleImageUri()).fitCenter().into(rightLogo);
             //PicassoTrustAll.loadImageIntoView(this, getRightTitleImageUri(), rightLogo);
             actionBarRightTextView.setVisibility(View.INVISIBLE);
         }else if (!StringHelper.isEmpty(getRightTitleText())){
@@ -168,7 +171,7 @@ public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivi
 
     protected void loadBGImage(){
         if (!StringHelper.isEmpty(getBackgroundImgUri())){
-            Glide.with(this).load(getBackgroundImgUri()).centerCrop().into(backgroundImageView);
+            NextGenGlide.load(this, getBackgroundImgUri()).centerCrop().into(backgroundImageView);
         }
     }
 

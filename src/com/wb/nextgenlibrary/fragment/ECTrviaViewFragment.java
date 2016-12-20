@@ -9,6 +9,7 @@ import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.model.AVGalleryIMEEngine.IMECombineItem;
 import com.wb.nextgenlibrary.util.PicassoTrustAll;
+import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.widget.FontFitTextView;
 
 
@@ -58,7 +59,8 @@ public class ECTrviaViewFragment extends AbstractNextGenFragment {
                 triviaTitle.setText(textTitle);
             }
             if (posterImageView != null) {
-                PicassoTrustAll.getInstance(getActivity()).load(triviaItem.pictureItem.fullImage.url).into(posterImageView);
+                NextGenGlide.load(getActivity(), triviaItem.pictureItem.fullImage.url).into(posterImageView);
+                //PicassoTrustAll.getInstance(getActivity()).load(triviaItem.pictureItem.fullImage.url).into(posterImageView);
             }
 
         }
@@ -75,7 +77,8 @@ public class ECTrviaViewFragment extends AbstractNextGenFragment {
                 triviaTitle.setText(textTitle);
             }
             if (posterImageView != null) {
-                PicassoTrustAll.getInstance(getActivity()).load(triviaItem.getPictureItem().fullImage.url).into(posterImageView);
+                NextGenGlide.load(getActivity(), triviaItem.getPictureItem().fullImage.url).into(posterImageView);
+                //PicassoTrustAll.getInstance(getActivity()).load(triviaItem.getPictureItem().fullImage.url).into(posterImageView);
             }
 
         }

@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
@@ -32,6 +33,7 @@ import com.wb.nextgenlibrary.testassets.TestItemsActivity;
 import com.wb.nextgenlibrary.util.Size;
 import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.utils.F;
+import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
@@ -142,19 +144,19 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
             bgImageSize = new Size(bgImageData.width, bgImageData.height);
             if (startupImageView != null && !StringHelper.isEmpty(bgImageUrl)){
                 startupImageView.setVisibility(View.VISIBLE);
-                Glide.with(this).load(bgImageUrl).asBitmap().fitCenter().into(startupImageView);
+                NextGenGlide.load(this, bgImageUrl).asBitmap().fitCenter().into(startupImageView);
             }
         }else{      // load default image
             String imageurl = NextGenExperience.getMovieMetaData().getExtraExperience().getPosterImgUrl();
             videoParentFrame.setVisibility(View.GONE);
-            Glide.with(this).load(imageurl).listener(new RequestListener<String, GlideDrawable>() {
+            NextGenGlide.load(this, imageurl).listener(new RequestListener<GlideUrl, GlideDrawable>() {
                 @Override
-                public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                public boolean onException(Exception e, GlideUrl model, Target<GlideDrawable> target, boolean isFirstResource) {
                     return false;
                 }
 
                 @Override
-                public boolean onResourceReady(final GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                public boolean onResourceReady(final GlideDrawable resource, GlideUrl model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -435,7 +437,7 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
                     playMovieButton.setLayoutParams(playBtnParams);
 
                     if (playBtnImageData != null)
-                        Glide.with(this).load(playBtnImageData.url).into(playMovieButton);
+                        NextGenGlide.load(this, playBtnImageData.url).into(playMovieButton);
                 }
 
                 if (purchaseButton != null) {
@@ -446,7 +448,7 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
                         buttonsParams.height = playBtnParams.height;
                         purchaseButton.setLayoutParams(buttonsParams);
 
-                        Glide.with(this).load(purchaseBtnImageData.url).into(purchaseButton);
+                        NextGenGlide.load(this, purchaseBtnImageData.url).into(purchaseButton);
                     } else
                         purchaseButton.setVisibility(View.GONE);
                 }
@@ -483,7 +485,7 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
 
                     if (extraBtnImageData != null)
-                        Glide.with(this).load(extraBtnImageData.url).into(extraButton);
+                        NextGenGlide.load(this, extraBtnImageData.url).into(extraButton);
 
                 }
                 imageButtonsFrame.invalidate();

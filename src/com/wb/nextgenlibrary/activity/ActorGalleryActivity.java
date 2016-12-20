@@ -28,6 +28,7 @@ import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.adapter.ActorDetailGalleryRecyclerAdapter;
 import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData.CastHeadShot;
+import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 
 import java.lang.reflect.Type;
@@ -224,8 +225,7 @@ public class ActorGalleryActivity extends AbstractNextGenActivity implements Act
                     (SubsamplingScaleImageView) itemView.findViewById(R.id.image);
 
             // Asynchronously load the image and set the thumbnail and pager view
-            Glide.with(ActorGalleryActivity.this)
-                    .load(useUrl)
+            NextGenGlide.load((ActorGalleryActivity.this), useUrl)
                     .asBitmap()
                     .into(new SimpleTarget<Bitmap>() {
                         @Override

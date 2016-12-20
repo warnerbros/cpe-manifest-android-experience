@@ -16,6 +16,7 @@ import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.TheTakeData.TheTakeProduct;
 import com.wb.nextgenlibrary.network.TheTakeApiDAO;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
+import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 
 import java.util.ArrayList;
@@ -174,7 +175,7 @@ public class TheTakeFrameProductsFragment extends AbstractNextGenFragment {
                 TheTakeProduct thisProduct = productList.get(position);
                 holder.setTheTakeProduct(thisProduct, position);
                 if (!StringHelper.isEmpty(thisProduct.getProductThumbnailUrl())) {
-                    Glide.with(getActivity()).load(thisProduct.getProductThumbnailUrl()).into(holder.personPhoto);
+                    NextGenGlide.load(getActivity(), thisProduct.getProductThumbnailUrl()).into(holder.personPhoto);
                     //PicassoTrustAll.loadImageIntoView(getActivity(), thisProduct.getProductThumbnailUrl(), holder.personPhoto);
                     holder.productBrand.setText(thisProduct.productBrand);
                     holder.productName.setText(thisProduct.productName);

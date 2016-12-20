@@ -10,6 +10,7 @@ import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.activity.AbstractECView;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.data.MovieMetaData.ExperienceData;
+import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.widget.SelectedOverlayImageView;
 
 /**
@@ -65,7 +66,7 @@ public class ECViewLeftListFragment extends NextGenExtraLeftListFragment<Experie
         if (imageView != null){
             //ViewGroup.LayoutParams imageLayoutParams = imageView.getLayoutParams();
             //imageView.setTag(thisEC.title);
-            Glide.with(getActivity()).load(thisEC.getPosterImgUrl()).fitCenter().into(imageView);
+            NextGenGlide.load(getActivity(), thisEC.getPosterImgUrl()).fitCenter().into(imageView);
             //PicassoTrustAll.loadImageIntoView(getActivity(), thisEC.getPosterImgUrl(), imageView);
         }
 
