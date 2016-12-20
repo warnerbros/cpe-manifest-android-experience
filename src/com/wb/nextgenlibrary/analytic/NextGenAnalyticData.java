@@ -77,7 +77,10 @@ public class NextGenAnalyticData {
         ACTION_SKIP_INTERSTITIAL("skip_interstitial"),
         ACTION_SHARE_VIDEO("share_video"),
         ACTION_SELECT_NEXT("select_next"),
-        ACTION_SELECT_PREVIOUS("select_previous")
+        ACTION_SELECT_PREVIOUS("select_previous"),
+        ACTION_ROTATE_SCREEN_SHOW_EXTRAS("rotate_show_extras"),
+        ACTION_ROTATE_SCREEN_HIDE_EXTRAS("rotate_hide_extras")
+
         ;
 
 

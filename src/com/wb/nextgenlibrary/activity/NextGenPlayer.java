@@ -466,13 +466,15 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                     actionbarPlaceHolder.setVisibility(View.VISIBLE);
                     if (mediaController != null)
                         mediaController.hideShowControls(true);
+                    NextGenAnalyticData.reportEvent(NextGenPlayer.this, null, NextGenAnalyticData.AnalyticAction.ACTION_ROTATE_SCREEN_SHOW_EXTRAS, Integer.toString(mainMovieFragment.getCurrentPosition()), null);
                     break;
-                 case Configuration.ORIENTATION_LANDSCAPE:
+                case Configuration.ORIENTATION_LANDSCAPE:
                     nextGenView.setVisibility(View.GONE);
-                     actionbarPlaceHolder.setVisibility(View.GONE);
-                     getSupportActionBar().hide();
+                    actionbarPlaceHolder.setVisibility(View.GONE);
+                    getSupportActionBar().hide();
                     if (mediaController != null)
                         mediaController.hideShowControls(false);
+                    NextGenAnalyticData.reportEvent(NextGenPlayer.this, null, NextGenAnalyticData.AnalyticAction.ACTION_ROTATE_SCREEN_HIDE_EXTRAS, Integer.toString(mainMovieFragment.getCurrentPosition()), null);
             }
     }
 
