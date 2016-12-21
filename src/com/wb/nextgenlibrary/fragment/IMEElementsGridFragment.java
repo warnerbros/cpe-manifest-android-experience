@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.activity.NextGenPlayer;
+import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.data.MovieMetaData.IMEElementsGroup;
 import com.wb.nextgenlibrary.data.TheTakeData;
@@ -44,7 +45,10 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
         final String title;
 
         public IMEDisplayObject(MovieMetaData.ExperienceData experienceData, Object imeObject){
-            this.title = experienceData.title;
+            if (experienceData.title != null)
+                this.title = experienceData.title;
+            else
+                this.title = "";
             this.imeObject = imeObject;
             this.imeExperience = experienceData;
         }
@@ -112,6 +116,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                             fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getInMovieExperience().style.getBackground().getImage().url);
                         fragment.setCurrentGallery((MovieMetaData.ECGalleryItem) headElement);
                         playerActivity.transitMainFragment(fragment);
+                        NextGenAnalyticData.reportEvent(getActivity(), this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_IMAGE_GALLERY, ((MovieMetaData.ECGalleryItem) headElement).galleryId, null);
                         //playerActivity.pausMovieForImeECPiece();
 
 
@@ -126,6 +131,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                                 fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getInMovieExperience().style.getBackground().getImage().url);
                             fragment.setVideoStatusListener(this);
                             playerActivity.transitMainFragment(fragment);
+                            NextGenAnalyticData.reportEvent(getActivity(), this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_CLIP_SHARE, ((MovieMetaData.AudioVisualItem) headElement).videoId, null);
                         }else {
 
                             ECVideoViewFragment fragment = new ECVideoViewFragment();
@@ -136,6 +142,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                             fragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) headElement);
                             fragment.setVideoStatusListener(this);
                             playerActivity.transitMainFragment(fragment);
+                            NextGenAnalyticData.reportEvent(getActivity(), this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_VIDEO, ((MovieMetaData.AudioVisualItem) headElement).videoId, null);
                         }
                     } else if (headElement instanceof MovieMetaData.LocationItem ||
                             (headElement instanceof AVGalleryIMEEngine.IMECombineItem && ((AVGalleryIMEEngine.IMECombineItem)headElement).isLocation() ) ){
@@ -148,17 +155,20 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                         fragment.setShouldShowCloseBtn(true);
                         fragment.setLocationItem(activeObj.title, (MovieMetaData.LocationItem)headElement);
                         playerActivity.transitMainFragment(fragment);
+                        NextGenAnalyticData.reportEvent(getActivity(), this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_LOCATION, headElement.getId(), null);
                     } else if (dataObj instanceof MovieMetaData.TriviaItem){
                         ECTrviaViewFragment fragment = new ECTrviaViewFragment();
                         fragment.setShouldShowCloseBtn(true);
                         fragment.setTriviaItem(activeObj.title, (MovieMetaData.TriviaItem)dataObj);
                         playerActivity.transitMainFragment(fragment);
+                        NextGenAnalyticData.reportEvent(getActivity(), this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_TRIVIA, headElement.getId(), null);
 
                     } else if (dataObj instanceof MovieMetaData.TextItem) {
 						ECTextViewFragment fragment = new ECTextViewFragment();
 						fragment.setShouldShowCloseBtn(true);
 						fragment.setTextItem(activeObj.title, (MovieMetaData.TextItem)dataObj);
 						playerActivity.transitMainFragment(fragment);
+                        NextGenAnalyticData.reportEvent(getActivity(), this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_TRIVIA, headElement.getId(), null);
 					}
                 }
             }
