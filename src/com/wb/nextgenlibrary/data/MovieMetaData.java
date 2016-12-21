@@ -549,7 +549,7 @@ public class MovieMetaData {
                                     PictureImageData fullImageData = pictureImageMap.get(picture.getImageID());
                                     PictureImageData thumbNailImageData = pictureImageMap.get(picture.getThumbnailImageID());
 
-                                    presentationData = new TriviaItem(index, triviaText, fullImageData, thumbNailImageData);
+                                    presentationData = new TriviaItem(textGroupId.getValue(), index, triviaText, fullImageData, thumbNailImageData);
                                 } else
                                     presentationData = new TextItem(index, triviaText);
                             }
@@ -1157,8 +1157,8 @@ public class MovieMetaData {
     static public class TriviaItem extends PresentationDataItem{
         public final PictureItem pictureItem;
         public final TextItem textItem;
-        public TriviaItem(BigInteger index, String text, PictureImageData fullImg, PictureImageData thumbnailImg){
-            super("",text, null);
+        public TriviaItem(String id, BigInteger index, String text, PictureImageData fullImg, PictureImageData thumbnailImg){
+            super(id,text, null);
             textItem = new TextItem(index, text);
             pictureItem = new PictureItem(null, null, fullImg, thumbnailImg);
         }
