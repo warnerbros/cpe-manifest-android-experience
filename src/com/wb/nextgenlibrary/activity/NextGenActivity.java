@@ -61,6 +61,7 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
     View textButtonsFrame;
     Size startupVideoSize = null;
     Size bgImageSize = null;
+    View exitIcon = null;
 
     FixedAspectRatioFrameLayout videoParentFrame;
     FixedAspectRatioFrameLayout imageParentFrame;
@@ -87,6 +88,7 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
         buttonParentFrame = (FixedAspectRatioFrameLayout)findViewById(R.id.button_parent_aspect_ratio_frame);
         imageParentFrame = (FixedAspectRatioFrameLayout)findViewById(R.id.image_background_aspect_ratio_frame);
         textButtonsFrame = findViewById(R.id.startup_text_buttons_layout);
+        exitIcon = findViewById(R.id.nge_main_exit);
 
         startupVideoView = (VideoView)findViewById(R.id.startup_video_view);
         startupImageView = (ImageView) findViewById(R.id.startup_image_view);
@@ -94,6 +96,11 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
         imageButtonsFrame = findViewById(R.id.startup_buttons_layout);
 
         setPlayExtraButtonsVisibility(ButtonsMode.ALL_INVISIBLE);
+
+
+        if (exitIcon != null){
+            exitIcon.setOnClickListener(this);
+        }
 
         playMovieButton = (ImageButton) findViewById(R.id.next_gen_startup_play_button);
         if (playMovieButton != null){
@@ -170,10 +177,6 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
         }
 
-        View exitIcon = findViewById(R.id.nge_main_exit);
-        if (exitIcon != null){
-            exitIcon.setOnClickListener(this);
-        }
 
 
         arrangeLayoutAccordingToScreenOrientation(getResources().getConfiguration().orientation);
@@ -241,6 +244,14 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
                                                 // Start the animation
                                                 imageButtonsFrame.animate().setDuration(1000).alpha(1.0f);
 
+                                            }
+                                            if (exitIcon != null){
+                                                exitIcon.setVisibility(View.GONE);
+                                                exitIcon.setVisibility(View.VISIBLE);
+                                                exitIcon.setAlpha(0.0f);
+
+                                                // Start the animation
+                                                exitIcon.animate().setDuration(1000).alpha(1.0f);
                                             }
 
                                         }
@@ -489,8 +500,10 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
                 }
                 imageButtonsFrame.invalidate();
-                if (StringHelper.isEmpty(mainStyle.getBackgroundVideoUrl()))
+                if (StringHelper.isEmpty(mainStyle.getBackgroundVideoUrl())) {
                     imageButtonsFrame.setVisibility(View.VISIBLE);
+                    exitIcon.setVisibility(View.VISIBLE);
+                }
             }else{
                 setPlayExtraButtonsVisibility(ButtonsMode.TEXT_BUTTON_VISIBLE);
             }
@@ -533,15 +546,18 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
             case TEXT_BUTTON_VISIBLE:
                 textButtonsFrame.setVisibility(View.VISIBLE);
                 imageButtonsFrame.setVisibility(View.GONE);
+                exitIcon.setVisibility(View.VISIBLE);
                 break;
             case IMAGE_BUTTON_VISIBLE:
                 imageButtonsFrame.setVisibility(View.VISIBLE);
                 textButtonsFrame.setVisibility(View.GONE);
+                exitIcon.setVisibility(View.VISIBLE);
                 break;
             case ALL_INVISIBLE:
             default:
                 imageButtonsFrame.setVisibility(View.GONE);
                 textButtonsFrame.setVisibility(View.GONE);
+                exitIcon.setVisibility(View.GONE);
         }
     }
 }
