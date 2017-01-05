@@ -177,6 +177,21 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
         }
 
+        View.OnClickListener showButtonOnClickLister = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                animateButtonsOn();
+            }
+        };
+
+        if (startupVideoView != null){
+            startupVideoView.setOnClickListener(showButtonOnClickLister);
+        }
+
+        if (buttonParentFrame != null){
+            buttonParentFrame.setOnClickListener(showButtonOnClickLister);
+        }
+
 
 
         arrangeLayoutAccordingToScreenOrientation(getResources().getConfiguration().orientation);
@@ -221,46 +236,8 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
                             }
                         });
                         startupVideoView.start();
-                        if (startUpTimer == null) {
-                            startUpTimer = new Timer();
-                        }
-                        if (startUpTimerTask == null) {
-                            startUpTimerTask = new TimerTask() {
-                                @Override
-                                public void run() {
 
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            StyleData.NodeStyleData nodeStyleData = mainStyle.getNodeStyleData(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                                            StyleData.ThemeData buttonTheme = mainStyle.getNodeStyleData(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE).theme;
-                                            MovieMetaData.PictureImageData extraBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.EXTRA_BUTTON);
-                                            MovieMetaData.PictureImageData playBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.PLAY_BUTTON);
-                                            if (imageButtonsFrame != null && extraBtnImageData != null && playBtnImageData != null) {
-                                                setPlayExtraButtonsVisibility(ButtonsMode.IMAGE_BUTTON_VISIBLE);
-                                                imageButtonsFrame.setVisibility(View.VISIBLE);
-                                                imageButtonsFrame.setAlpha(0.0f);
-
-                                                // Start the animation
-                                                imageButtonsFrame.animate().setDuration(1000).alpha(1.0f);
-
-                                            }
-                                            if (exitIcon != null){
-                                                exitIcon.setVisibility(View.GONE);
-                                                exitIcon.setVisibility(View.VISIBLE);
-                                                exitIcon.setAlpha(0.0f);
-
-                                                // Start the animation
-                                                exitIcon.animate().setDuration(1000).alpha(1.0f);
-                                            }
-
-                                        }
-                                    });
-                                }
-                            };
-                            startUpTimer.schedule(startUpTimerTask, buttonAnimationStartTime);
-                        }
-
+                        animateButtonsOn();
                         //added: tr 9/19
                         mp.setOnSeekCompleteListener(new MediaPlayer.OnSeekCompleteListener() {
                             @Override
@@ -301,6 +278,51 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
         }else {
             setPlayExtraButtonsVisibility(ButtonsMode.TEXT_BUTTON_VISIBLE);
         }
+    }
+
+    private void animateButtonsOn(){
+
+        if (startUpTimer == null) {
+            startUpTimer = new Timer();
+        }
+        if (startUpTimerTask == null) {
+            startUpTimerTask = new TimerTask() {
+                @Override
+                public void run() {
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            StyleData.NodeStyleData nodeStyleData = mainStyle.getNodeStyleData(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                            StyleData.ThemeData buttonTheme = mainStyle.getNodeStyleData(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE).theme;
+                            MovieMetaData.PictureImageData extraBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.EXTRA_BUTTON);
+                            MovieMetaData.PictureImageData playBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.PLAY_BUTTON);
+                            if (imageButtonsFrame != null && extraBtnImageData != null && playBtnImageData != null) {
+                                setPlayExtraButtonsVisibility(ButtonsMode.IMAGE_BUTTON_VISIBLE);
+                                imageButtonsFrame.setVisibility(View.VISIBLE);
+                                imageButtonsFrame.setAlpha(0.0f);
+
+                                // Start the animation
+                                imageButtonsFrame.animate().setDuration(1000).alpha(1.0f);
+
+                            }
+                            if (exitIcon != null){
+                                exitIcon.setVisibility(View.GONE);
+                                exitIcon.setVisibility(View.VISIBLE);
+                                exitIcon.setAlpha(0.0f);
+
+                                // Start the animation
+                                exitIcon.animate().setDuration(1000).alpha(1.0f);
+                            }
+
+                        }
+                    });
+                }
+            };
+            startUpTimer.schedule(startUpTimerTask, buttonAnimationStartTime);
+        }
+
+
     }
 
     public void onPause(){
