@@ -88,7 +88,7 @@ public class NextGenExperience {
     private static String sVersionName = null;
     private static Locale clientLocale = null;
     private static boolean isDiagnosticMode = true;
-    private static Class<? extends AbstractNextGenMainMovieFragment> mainMovieFragmentClass;
+    private static Class<? extends AbstractNextGenMainMovieFragment> mainMovieFragmentClass, castMovieFragmentClass;
     private static Object nextgenPlaybackObject;
     private static NextGenEventHandler nextGenEventHandler;
     private static String googleMapAPIKey = null;
@@ -98,12 +98,14 @@ public class NextGenExperience {
 
     public static void startNextGenExperience(Context appContext, final Activity launcherActivity, final ManifestItem item,
                                               Object playbackObject, Class<? extends AbstractNextGenMainMovieFragment> fragmentClass,
+                                              Class<? extends AbstractNextGenMainMovieFragment> castFragmentClass,
                                               NextGenEventHandler eventHandler, Locale locale){
         nextgenPlaybackObject = playbackObject;
 
         applicationContext = appContext;
         sCacheManager = new NextGenCacheManager(applicationContext);
         mainMovieFragmentClass = fragmentClass;
+        castMovieFragmentClass = castFragmentClass;
         nextGenEventHandler = eventHandler;
         clientLocale = locale == null? Locale.US : locale;
         manifestItem = item;
@@ -254,6 +256,10 @@ public class NextGenExperience {
 
     public static Class<? extends AbstractNextGenMainMovieFragment> getMainMovieFragmentClass(){
         return mainMovieFragmentClass;
+    }
+
+    public static Class<? extends AbstractNextGenMainMovieFragment> getCastMovieFragmentClass(){
+        return castMovieFragmentClass;
     }
 
     public static Object getNextgenPlaybackObject(){

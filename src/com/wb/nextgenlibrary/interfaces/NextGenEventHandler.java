@@ -16,4 +16,5 @@ public interface NextGenEventHandler {
     void setInterstitialWatchedForContent(Object content);
     void setInterstitialSkippedForContent(Object content);
     void handlePurchaseButtonPressed(Activity ngeActivity, Object contentObject);
+    boolean isCasting();
 }

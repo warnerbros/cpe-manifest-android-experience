@@ -159,7 +159,10 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
         transitMainFragment(imeBottomFragment);
         try {
-            mainMovieFragment = NextGenExperience.getMainMovieFragmentClass().newInstance();
+            if (NextGenExperience.getNextGenEventHandler().isCasting()){
+                mainMovieFragment = NextGenExperience.getCastMovieFragmentClass().newInstance();
+            }else
+                mainMovieFragment = NextGenExperience.getMainMovieFragmentClass().newInstance();
             mainMovieFragment.setLoadingView(loadingView);
             mainMovieFragment.setOnCompletionLister(new MediaPlayer.OnCompletionListener() {
                 @Override

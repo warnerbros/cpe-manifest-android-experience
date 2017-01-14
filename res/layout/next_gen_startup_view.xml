@@ -123,10 +123,11 @@
         android:layout_height="30dp">
         <ImageView
             android:src="@drawable/nge_main_exit_icon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"/>
+            android:layout_gravity="center_vertical"
+            android:layout_width="20dp"
+            android:layout_height="20dp"/>
         <com.wb.nextgenlibrary.widget.FontFitTextView
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:paddingLeft="@dimen/spacing_small"
             android:layout_height="match_parent"
             android:text="@string/nge_exit"
