@@ -53,6 +53,7 @@ public abstract class AbstractNextGenMainMovieFragment extends Fragment implemen
     public abstract void setCustomMediaController(CustomMediaController customMC);
     public abstract void setResumeTime(int resumeTime);
     public abstract int getCurrentPosition();       // get current player position
+    public abstract int getDuration();       // get current player position
 
     public int getMovieOffsetMilliSecond(){
         return 0;

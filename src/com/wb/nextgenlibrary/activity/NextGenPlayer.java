@@ -463,6 +463,13 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
             View nextGenView = findViewById(R.id.next_gen_ime_bottom_view);
             if (nextGenView == null)
                 return;
+
+            String label = "interstitial";
+            if (bInterstitialVideoComplete){
+                double percentageDbl = (double)mainMovieFragment.getCurrentPosition()/ (double)mainMovieFragment.getDuration() * 100.0;
+                int percentage = ((int)((percentageDbl + 2.5) / 5) * 5);
+                label = Integer.toString(percentage);
+            }
             switch (this.getResources().getConfiguration().orientation) {
                 case Configuration.ORIENTATION_PORTRAIT:
 
@@ -470,7 +477,10 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                     actionbarPlaceHolder.setVisibility(View.VISIBLE);
                     if (mediaController != null)
                         mediaController.hideShowControls(true);
-                    NextGenAnalyticData.reportEvent(NextGenPlayer.this, null, NextGenAnalyticData.AnalyticAction.ACTION_ROTATE_SCREEN_SHOW_EXTRAS, Integer.toString(mainMovieFragment.getCurrentPosition()), null);
+
+
+
+                    NextGenAnalyticData.reportEvent(NextGenPlayer.this, null, NextGenAnalyticData.AnalyticAction.ACTION_ROTATE_SCREEN_SHOW_EXTRAS, label, null);
                     break;
                 case Configuration.ORIENTATION_LANDSCAPE:
                     nextGenView.setVisibility(View.GONE);
@@ -478,7 +488,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                     getSupportActionBar().hide();
                     if (mediaController != null)
                         mediaController.hideShowControls(false);
-                    NextGenAnalyticData.reportEvent(NextGenPlayer.this, null, NextGenAnalyticData.AnalyticAction.ACTION_ROTATE_SCREEN_HIDE_EXTRAS, Integer.toString(mainMovieFragment.getCurrentPosition()), null);
+                    NextGenAnalyticData.reportEvent(NextGenPlayer.this, null, NextGenAnalyticData.AnalyticAction.ACTION_ROTATE_SCREEN_HIDE_EXTRAS, label, null);
             }
     }
 

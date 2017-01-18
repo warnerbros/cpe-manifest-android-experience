@@ -10,7 +10,7 @@ import android.support.v4.app.Fragment;
 public interface NextGenEventHandler {
     void handleMovieTitleSelection(Activity activity, String movieId);
     boolean isDebugBuild();
-    void userEventLog(String event, String action, String idValue, String nameValue);
+    void userEventLog(Object movieObject, String event, String action, String idValue, String nameValue);
     void handleShareLink(Activity activity, Fragment fragment, String shareUrl);
     boolean shouldShowInterstitialForContent(Object content);       // the default should be true so that Nextgen will show the interstitial, set this to false then NextGen will not show interstitial for the given content.
     void setInterstitialWatchedForContent(Object content);

@@ -167,7 +167,7 @@ public class NextGenAnalyticData {
         }
 
         if (NextGenExperience.getNextGenEventHandler() != null)
-            NextGenExperience.getNextGenEventHandler().userEventLog(activityName, action.sValue, idValue, nameValue);
+            NextGenExperience.getNextGenEventHandler().userEventLog(NextGenExperience.getNextgenPlaybackObject(), activityName, action.sValue, idValue, nameValue);
 
     }
 }
