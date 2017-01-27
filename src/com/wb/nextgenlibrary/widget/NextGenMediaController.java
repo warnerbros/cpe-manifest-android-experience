@@ -76,9 +76,9 @@ public class NextGenMediaController extends CustomMediaController {
 
     @Override
     public void hide() {
-        if (player.isPlaying()) {
+        //if (player.isPlaying()) {
             super.hide();
-        }
+        //}
     }
 
     Handler dismissNavHandler = new Handler(){
