@@ -478,6 +478,7 @@ public class CustomMediaController extends MediaController {
 
     public void reset(){
         setProgress();
+        updatePausePlay();
     }
 
     public void updateFullScreen() {
