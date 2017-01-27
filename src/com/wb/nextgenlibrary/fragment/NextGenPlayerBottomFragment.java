@@ -1,5 +1,6 @@
 package com.wb.nextgenlibrary.fragment;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.InflateException;
@@ -93,4 +94,13 @@ public class  NextGenPlayerBottomFragment extends Fragment implements NextGenPla
         imeActorsFragment.resetSelectedItem();
     }
 
+    public void onOrientationChange(int orientation){
+        imeGridFragment.onOrientationChange(orientation);
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE){
+
+        } else if (orientation == Configuration.ORIENTATION_PORTRAIT){
+
+        }
+
+    }
 }

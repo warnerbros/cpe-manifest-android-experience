@@ -1,14 +1,19 @@
 package com.wb.nextgenlibrary.activity;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.TextView;
 
+import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
+import com.wb.nextgenlibrary.fragment.ECCastPlayerFragment;
 import com.wb.nextgenlibrary.fragment.ECVideoViewFragment;
+import com.wb.nextgenlibrary.interfaces.ECVideoPlayerInterface;
+import com.wb.nextgenlibrary.util.utils.NextGenFragmentTransactionEngine;
 
 
 /**
@@ -16,17 +21,40 @@ import com.wb.nextgenlibrary.fragment.ECVideoViewFragment;
  */
 public class ECVideoActivity extends AbstractECView implements ECVideoViewFragment.ECVideoListAdaptor{
 
-	ECVideoViewFragment rightVideoFrame;
+	ECVideoViewFragment ecVideoFragment;
+	ECCastPlayerFragment castFragment;
+
+	ECVideoPlayerInterface activePlayerInterface;
+
 	protected View contentMetaFrame;
 	protected TextView selectedECNameTextView;
 	protected TextView descriptionTextView;
 
+	private NextGenFragmentTransactionEngine fragmentTransactionEngine;
+
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        rightVideoFrame = (ECVideoViewFragment) getSupportFragmentManager().findFragmentById(R.id.ec_video_view_fragment);
-        rightVideoFrame.setShouldAutoPlay(false);
-        rightVideoFrame.setEcsAdaptor(this);
+		//rightVideoFrame = (ECVideoViewFragment) getSupportFragmentManager().findFragmentById(R.id.ec_video_view_fragment);
+		ecVideoFragment = new ECVideoViewFragment();
+
+		castFragment = new ECCastPlayerFragment();
+
+		if (NextGenExperience.getNextGenEventHandler().isCasting()) {
+			activePlayerInterface = castFragment;
+		} else {
+			activePlayerInterface = ecVideoFragment;
+		}
+
+
+		activePlayerInterface.setShouldAutoPlay(false);
+		activePlayerInterface.setEcsAdaptor(this);
+
+
+
+		fragmentTransactionEngine = new NextGenFragmentTransactionEngine(this);
+		fragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.next_gen_ec_content_view, (Fragment)activePlayerInterface);
+
 
         contentMetaFrame = (View) findViewById(R.id.ec_content_meta_frame);
 		selectedECNameTextView = (TextView) findViewById(R.id.ec_content_name);
@@ -37,8 +65,8 @@ public class ECVideoActivity extends AbstractECView implements ECVideoViewFragme
 
     @Override
     public void onDestroy() {
-        if (rightVideoFrame != null)
-            rightVideoFrame.setEcsAdaptor(null);
+        if (activePlayerInterface != null)
+			activePlayerInterface.setEcsAdaptor(null);
         super.onDestroy();
     }
 
@@ -61,7 +89,10 @@ public class ECVideoActivity extends AbstractECView implements ECVideoViewFragme
             selectedEC = ec;
         if (ec != null && ec.audioVisualItems.size() > 0) {
 			MovieMetaData.AudioVisualItem audioVisualItem = ec.audioVisualItems.get(0);
-			rightVideoFrame.setAudioVisualItem(audioVisualItem);
+			if (activePlayerInterface != null)
+				activePlayerInterface.setAudioVisualItem(audioVisualItem);
+
+
 			if (selectedECNameTextView != null)
 				selectedECNameTextView.setText(audioVisualItem.getTitle());
 			if (descriptionTextView != null)
@@ -81,7 +112,8 @@ public class ECVideoActivity extends AbstractECView implements ECVideoViewFragme
 
             getSupportActionBar().hide();
         }
-        rightVideoFrame.onFullScreenChange(bFullscreen);
+		if (activePlayerInterface != null)
+			activePlayerInterface.onFullScreenChange(bFullscreen);
 
         if (contentMetaFrame != null)
             contentMetaFrame.setVisibility(bFullscreen? View.GONE : View.VISIBLE);
@@ -97,4 +129,9 @@ public class ECVideoActivity extends AbstractECView implements ECVideoViewFragme
     public boolean shouldStartCountDownForNext(){
         return listFragment.hasReachedLastItem();
     }
+
+	@Override
+	public void onBackPressed(){
+		finish();
+	}
 }

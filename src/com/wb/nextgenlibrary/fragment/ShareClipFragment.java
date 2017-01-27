@@ -1,6 +1,7 @@
 package com.wb.nextgenlibrary.fragment;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
+import com.wb.nextgenlibrary.videoview.IVideoViewActionListener;
 import com.wb.nextgenlibrary.widget.CustomMediaController;
 
 
@@ -67,7 +69,6 @@ public class ShareClipFragment extends ECVideoViewFragment implements View.OnCli
                 }
             }
         });
-
     }
 
     @Override
@@ -141,6 +142,19 @@ public class ShareClipFragment extends ECVideoViewFragment implements View.OnCli
         share.putExtra(Intent.EXTRA_TEXT, "https://www.codeofaninja.com");
 
         startActivity(Intent.createChooser(share, "Share link!"));
+    }
+
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+
+        } else if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
+            videoView.pause();
+        }
+    }
+
+    public void setMainMovieListener(IVideoViewActionListener mainMovieListener){
+
     }
 
 

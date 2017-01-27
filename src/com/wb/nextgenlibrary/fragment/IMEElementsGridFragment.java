@@ -1,5 +1,6 @@
 package com.wb.nextgenlibrary.fragment;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -24,6 +25,7 @@ import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
+import com.wb.nextgenlibrary.videoview.IVideoViewActionListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +38,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
 	List<IMEElementsGroup> imeGroups;
     final List<NextGenIMEEngine> imeEngines = new ArrayList<NextGenIMEEngine>();
     long currentTimeCode = 0L;
+    IVideoViewActionListener mainMovieListener = null;
 
     List<IMEDisplayObject> activeIMEs = new ArrayList<IMEDisplayObject>();
 
@@ -79,6 +82,8 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
         super.onDestroyView();
     }
 
+    /***********************IMEVideoStatusListener***********************/
+    @Override
     public void onVideoStartPlaying(){
         NextGenPlayer playerActivity = null;
         if (getActivity() instanceof NextGenPlayer) {
@@ -86,9 +91,32 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
             playerActivity.pauseMovieForImeECPiece();
         }
     }
+    @Override
     public void onFragmentDestroyed(){
+        mainMovieListener = null;
+        onVideoPause();
+    }
+
+    @Override
+    public void onVideoPause(){
+        NextGenPlayer playerActivity = null;
+        if (getActivity() instanceof NextGenPlayer) {
+            playerActivity = (NextGenPlayer) getActivity();
+            playerActivity.resumeMovideForImeECPiece();
+        }
+    }
+
+    @Override
+    public void onVideoResume(){
+        onVideoStartPlaying();
+    }
+
+    @Override
+    public void onVideoComplete(){
+        onVideoPause();
 
     }
+    /***********************************************/
 
     protected void onListItemClick(View v, int position, long id){
         if (position < 0 || position >= activeIMEs.size())
@@ -115,6 +143,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                         if (NextGenExperience.getMovieMetaData().getInMovieExperience().style != null)
                             fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getInMovieExperience().style.getBackground().getImage().url);
                         fragment.setCurrentGallery((MovieMetaData.ECGalleryItem) headElement);
+                        mainMovieListener = null;
                         playerActivity.transitMainFragment(fragment);
                         NextGenAnalyticData.reportEvent(getActivity(), this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_IMAGE_GALLERY, ((MovieMetaData.ECGalleryItem) headElement).galleryId, null);
                         //playerActivity.pausMovieForImeECPiece();
@@ -130,6 +159,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                             if (NextGenExperience.getMovieMetaData().getInMovieExperience().style != null)
                                 fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getInMovieExperience().style.getBackground().getImage().url);
                             fragment.setVideoStatusListener(this);
+                            mainMovieListener = fragment;
                             playerActivity.transitMainFragment(fragment);
                             NextGenAnalyticData.reportEvent(getActivity(), this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_CLIP_SHARE, ((MovieMetaData.AudioVisualItem) headElement).videoId, null);
                         }else {
@@ -141,6 +171,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                                 fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getInMovieExperience().style.getBackground().getImage().url);
                             fragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) headElement);
                             fragment.setVideoStatusListener(this);
+                            mainMovieListener = fragment;
                             playerActivity.transitMainFragment(fragment);
                             NextGenAnalyticData.reportEvent(getActivity(), this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_VIDEO, ((MovieMetaData.AudioVisualItem) headElement).videoId, null);
                         }
@@ -155,12 +186,14 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                         fragment.setShouldShowCloseBtn(true);
                         fragment.setLocationItem(activeObj.title, (MovieMetaData.LocationItem)headElement);
                         playerActivity.transitMainFragment(fragment);
+                        mainMovieListener = null;
                         NextGenAnalyticData.reportEvent(getActivity(), this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_LOCATION, headElement.getId(), null);
                     } else if (dataObj instanceof MovieMetaData.TriviaItem){
                         ECTrviaViewFragment fragment = new ECTrviaViewFragment();
                         fragment.setShouldShowCloseBtn(true);
                         fragment.setTriviaItem(activeObj.title, (MovieMetaData.TriviaItem)dataObj);
                         playerActivity.transitMainFragment(fragment);
+                        mainMovieListener = null;
                         NextGenAnalyticData.reportEvent(getActivity(), this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_TRIVIA, headElement.getId(), null);
 
                     } else if (dataObj instanceof MovieMetaData.TextItem) {
@@ -168,6 +201,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
 						fragment.setShouldShowCloseBtn(true);
 						fragment.setTextItem(activeObj.title, (MovieMetaData.TextItem)dataObj);
 						playerActivity.transitMainFragment(fragment);
+                        mainMovieListener = null;
                         NextGenAnalyticData.reportEvent(getActivity(), this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_TRIVIA, headElement.getId(), null);
 					}
                 }
@@ -178,9 +212,20 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                 fragment.setShouldShowCloseBtn(true);
                 fragment.setTitleText(activeObj.title.toUpperCase());
                 fragment.setFrameProductTime(((TheTakeProductFrame)activeObj.imeObject).frameTime);
+                mainMovieListener = null;
                 playerActivity.transitMainFragment(fragment);
             }
         }
+    }
+
+    public void onOrientationChange(int orientation){
+
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE){
+
+        } else if (orientation == Configuration.ORIENTATION_PORTRAIT){
+
+        }
+
     }
 
     protected int getNumberOfColumns(){
@@ -334,6 +379,17 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
 
         if (listAdaptor != null)
             listAdaptor.notifyDataSetChanged();
+
+        if (mainMovieListener != null) {
+            switch (playbackStatus) {
+                case PAUSE:
+                    mainMovieListener.onVideoPause();
+                    break;
+                case RESUME:
+                    mainMovieListener.onVideoResume();
+                    break;
+            }
+        }
 
     }
 

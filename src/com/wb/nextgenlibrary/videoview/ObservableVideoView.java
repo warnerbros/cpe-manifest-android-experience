@@ -28,7 +28,7 @@ public final class ObservableVideoView extends VideoView implements NextGenPlaye
 		super.pause();
 		
 		if (mVideoViewListener != null) {
-			mVideoViewListener.onPause();
+			mVideoViewListener.onVideoPause();
 		}
 		
         if (mListener != null) {
@@ -43,13 +43,13 @@ public final class ObservableVideoView extends VideoView implements NextGenPlaye
 		super.start();
 		if (mIsOnPauseMode) {
 			if (mVideoViewListener != null) {
-				mVideoViewListener.onResume();
+				mVideoViewListener.onVideoResume();
 			}
 			
 			mIsOnPauseMode = false;
 		}else {
 			if (mVideoViewListener != null)
-				mVideoViewListener.onStart();
+				mVideoViewListener.onVideoStart();
 		}
 		
         if (mListener != null) {

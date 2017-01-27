@@ -79,4 +79,7 @@
 	<string name="off_text">Off</string>
 	<string name="on_text">On</string>
 	<string name="director_commentary">Director Commentary</string>
+
+	<string name="playing_on_str">Casting to %s</string>
+	<string name="loading_on_str">Loading on %s</string>
 </resources>

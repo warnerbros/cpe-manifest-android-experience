@@ -20,6 +20,7 @@ import com.squareup.picasso.Target;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
+import com.wb.nextgenlibrary.interfaces.ECVideoPlayerInterface;
 import com.wb.nextgenlibrary.interfaces.IMEVideoStatusListener;
 import com.wb.nextgenlibrary.util.utils.F;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;
@@ -34,7 +35,7 @@ import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
 /**
  * Created by gzcheng on 3/31/16.
  */
-public class ECVideoViewFragment extends ECViewFragment{
+public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayerInterface, IVideoViewActionListener {
     protected ObservableVideoView videoView;
 
     ECMediaController mediaController;
@@ -62,7 +63,7 @@ public class ECVideoViewFragment extends ECViewFragment{
 
     FixedAspectRatioFrameLayout.Priority aspectFramePriority = null;
 
-    private static int COUNT_DOWN_SECONDS = 5;
+    public final static int COUNT_DOWN_SECONDS = 5;
 
     ECVideoListAdaptor ecsAdaptor = null;
     private int previousPlaybackTime = 0;
@@ -140,6 +141,7 @@ public class ECVideoViewFragment extends ECViewFragment{
             int counter = COUNT_DOWN_SECONDS;
             @Override
             public void onCompletion(MediaPlayer mp) {
+                onVideoComplete();
                 if (shouldExitWhenComplete){
                     closeBtn.callOnClick();
                 }else if (ecsAdaptor != null) {
@@ -220,32 +222,83 @@ public class ECVideoViewFragment extends ECViewFragment{
         videoView.setOnPreparedListener(new PreparedListener());
         videoView.requestFocus();
 
-        videoView.setVideoViewListener(new IVideoViewActionListener() {
-            @Override
-            public void onPause() {
-
-            }
-            @Override
-            public void onStart() {
-                if (videoStatusListener != null)
-                    videoStatusListener.onVideoStartPlaying();
-
-            }
-            @Override
-            public void onResume() {
-            }
-
-            @Override
-            public void onTimeBarSeekChanged(int currentTime) {
-
-            }
-       });
+        videoView.setVideoViewListener(getVideoViewActionListern());
 
         bgImageView = (ImageView) view.findViewById(R.id.ec_video_frame_bg);
 
         if (bgImageView != null && !StringHelper.isEmpty(bgImageUrl)){
             NextGenGlide.load(getActivity(), bgImageUrl).fitCenter().into(bgImageView);
         }
+    }
+
+    boolean isClipPlaying;
+    //******* Observe videoView Playback
+    protected IVideoViewActionListener getVideoViewActionListern(){
+        return new IVideoViewActionListener() {
+            @Override
+            public void onVideoPause() {
+                if (videoStatusListener != null){
+                    videoStatusListener.onVideoPause();
+                }
+            }
+
+            @Override
+            public void onVideoStart() {
+                isClipPlaying = true;
+                if (videoStatusListener != null)
+                    videoStatusListener.onVideoStartPlaying();
+            }
+
+            @Override
+            public void onVideoResume() {
+                if (videoStatusListener != null){
+                    videoStatusListener.onVideoResume();
+                }
+            }
+
+            @Override
+            public void onVideoComplete(){
+                isClipPlaying = false;
+                if (videoStatusListener != null){
+                    videoStatusListener.onVideoComplete();
+                }
+            }
+
+            @Override
+            public void onTimeBarSeekChanged(int currentTime) {
+
+            }
+        };
+    }
+
+    //******* Observe Main Movie Playback
+    @Override
+    public void onVideoPause() {
+        if (isClipPlaying)
+            videoView.start();
+    }
+
+    @Override
+    public void onVideoStart() {
+        if (isClipPlaying)
+            videoView.pause();
+    }
+
+    @Override
+    public void onVideoResume() {
+        if (isClipPlaying)
+            videoView.pause();
+
+    }
+
+    @Override
+    public void onVideoComplete(){
+
+    }
+
+    @Override
+    public void onTimeBarSeekChanged(int currentTime) {
+
     }
 
 
@@ -393,4 +446,5 @@ public class ECVideoViewFragment extends ECViewFragment{
     public void stopPlayback(){
         videoView.stopPlayback();
     }
+
 }

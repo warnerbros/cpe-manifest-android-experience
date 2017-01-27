@@ -87,6 +87,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     //TextView imeText;
     //IMEElementsGridFragment imeGridFragment;
     private long lastTimeCode = -1;
+    private NextGenPlaybackStatus lastPlaybackStatus = null;
 
     AbstractNextGenMainMovieFragment mainMovieFragment;
 
@@ -196,19 +197,22 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                 }
 
                 @Override
-                public void onResume() {
-                    updateImeFragment(NextGenPlaybackStatus.PAUSE, mainMovieFragment.getCurrentPosition());
-                }
-
-                @Override
-                public void onStart() {
-                    updateImeFragment(NextGenPlaybackStatus.PAUSE, mainMovieFragment.getCurrentPosition());
-                }
-
-                @Override
-                public void onPause() {
+                public void onVideoResume() {
                     updateImeFragment(NextGenPlaybackStatus.RESUME, mainMovieFragment.getCurrentPosition());
                 }
+
+                @Override
+                public void onVideoStart() {
+                    updateImeFragment(NextGenPlaybackStatus.RESUME, mainMovieFragment.getCurrentPosition());
+                }
+
+                @Override
+                public void onVideoPause() {
+                    updateImeFragment(NextGenPlaybackStatus.PAUSE, mainMovieFragment.getCurrentPosition());
+                }
+
+                @Override
+                public void onVideoComplete(){}
             });
         }catch (InstantiationException ex){
 
@@ -382,7 +386,6 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
             ecFragmentsCounter = ecFragmentsCounter - 1;
             if (isPausedByIME){
                 isPausedByIME = false;
-                mainMovieFragment.resumePlaybackFromIME();
                 if (mediaController.isShowing()){
                     mediaController.hide();
                 } //tr 9/28
@@ -411,9 +414,10 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         if (INTERSTITIAL_VIDEO_URI.equals(currentUri))
             return;
 
-        if (lastTimeCode == timecode - mainMovieFragment.getMovieOffsetMilliSecond())
+        if (lastTimeCode == timecode - mainMovieFragment.getMovieOffsetMilliSecond() && lastPlaybackStatus == playbackStatus)
             return;
 
+        lastPlaybackStatus = playbackStatus;
         lastTimeCode = timecode - mainMovieFragment.getMovieOffsetMilliSecond();
 
         if (lastTimeCode < 0)
@@ -489,6 +493,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                     if (mediaController != null)
                         mediaController.hideShowControls(false);
                     NextGenAnalyticData.reportEvent(NextGenPlayer.this, null, NextGenAnalyticData.AnalyticAction.ACTION_ROTATE_SCREEN_HIDE_EXTRAS, label, null);
+                    imeBottomFragment.onOrientationChange(this.getResources().getConfiguration().orientation);
             }
     }
 
@@ -724,6 +729,14 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         mainMovieFragment.pauseForIME();
         isPausedByIME = true;
     } //tr 9/28
+
+    public void resumeMovideForImeECPiece(){
+        if (mediaController.isShowing()){
+            mediaController.hide();
+        }
+        mainMovieFragment.resumePlaybackFromIME();
+        isPausedByIME = true;
+    }
 
 
     @Override

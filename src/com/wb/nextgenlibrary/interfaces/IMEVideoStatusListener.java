@@ -7,4 +7,7 @@ package com.wb.nextgenlibrary.interfaces;
 public interface IMEVideoStatusListener {
 	void onVideoStartPlaying();
 	void onFragmentDestroyed();
+	void onVideoPause();
+	void onVideoResume();
+	void onVideoComplete();
 }

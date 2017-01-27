@@ -1,11 +1,13 @@
 package com.wb.nextgenlibrary.videoview;
 
 public interface IVideoViewActionListener {
-	void onPause();
+	void onVideoPause();
 	
-	void onResume();
+	void onVideoResume();
 
-	void onStart();
+	void onVideoStart();
+
+	void onVideoComplete();
 	
 	void onTimeBarSeekChanged(int currentTime);
 }
