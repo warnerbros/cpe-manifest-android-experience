@@ -17,7 +17,7 @@ import com.bumptech.glide.load.model.LazyHeaders;
 
 public class NextGenGlide{
 	public static DrawableTypeRequest<GlideUrl> load(Context context, String url){
-		if (!StringHelper.isEmpty(url)){
+		if (StringHelper.isEmpty(url)){
 			GlideUrl glideUrl = new GlideUrl("http://www.wb.com/pink.jpg", new LazyHeaders.Builder().addHeader("package_name", context.getPackageName()).build());
 			return Glide.with(context).load(glideUrl);
 
