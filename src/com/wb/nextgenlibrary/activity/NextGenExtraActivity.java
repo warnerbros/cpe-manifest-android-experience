@@ -120,7 +120,7 @@ public class NextGenExtraActivity extends AbstractNextGenActivity implements Nex
 
     @Override
     public String getBackgroundImgUri(){
-        if (extraStyle != null)
+        if (extraStyle != null && extraStyle.getBackground() != null && extraStyle.getBackground().getImage() != null)
             return extraStyle.getBackground().getImage().url;
         else
             return "";

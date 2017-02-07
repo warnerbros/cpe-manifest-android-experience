@@ -79,7 +79,9 @@ public abstract class AbstractECView extends AbstractNextGenActivity {
 
     @Override
     public String getBackgroundImgUri(){
-        if (NextGenExperience.getMovieMetaData().getExtraExperience().style != null)
+        if (NextGenExperience.getMovieMetaData().getExtraExperience().style != null &&
+                NextGenExperience.getMovieMetaData().getExtraExperience().style.getBackground() != null &&
+                NextGenExperience.getMovieMetaData().getExtraExperience().style.getBackground().getImage() != null)
             return NextGenExperience.getMovieMetaData().getExtraExperience().style.getBackground().getImage().url;
         else
             return null;

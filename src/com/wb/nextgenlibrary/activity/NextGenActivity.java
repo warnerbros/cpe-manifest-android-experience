@@ -422,7 +422,10 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
             if (!StringHelper.isEmpty(mainStyle.getBackgroundVideoUrl()) && startupVideoSize == null)
                 return;
 
+            if (buttonsReferenceFrameSourceSize == null)
+                buttonsReferenceFrameSourceSize = new Size(1920, 1080);
             double shrinkRatio = ((double) buttonsReferenceFrameSize.getWidth()) / ((double) buttonsReferenceFrameSourceSize.getWidth());
+
             double buttonShrinkRation = shrinkRatio;
             buttonParentFrame.copyFrameParams(buttonsReferenceFrame);
 
