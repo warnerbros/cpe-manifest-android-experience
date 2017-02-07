@@ -18,6 +18,7 @@ import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.data.MovieMetaData.ExperienceData;
 import com.wb.nextgenlibrary.util.utils.F;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;
+import com.wb.nextgenlibrary.util.utils.StringHelper;
 
 import java.util.List;
 
@@ -101,7 +102,8 @@ public class NextGenExtraMainTableFragment extends NextGenGridViewFragment {
         ExperienceData thisExtra = (ExperienceData)item;
         if(!thisExtra.title.equals(titleTxt.getText())){
             titleTxt.setText(thisExtra.title.toUpperCase());
-            NextGenGlide.load(getActivity(), thisExtra.getPosterImgUrl()).fitCenter().into(thumbnailImg);
+            if (!StringHelper.isEmpty(thisExtra.getPosterImgUrl()))
+                NextGenGlide.load(getActivity(), thisExtra.getPosterImgUrl()).fitCenter().into(thumbnailImg);
             //PicassoTrustAll.loadImageIntoView(getActivity(), thisExtra.getPosterImgUrl(), thumbnailImg);
         }
     }
