@@ -45,29 +45,6 @@ public class ECVideoActivity extends AbstractECView implements ECVideoViewFragme
 	private Menu mOptionsMenu;
 
 
-	RemoteMediaClient remoteMediaClient;
-	RemoteMediaClient.Listener castListener = null;
-	private CastSession mCastSession;
-	private SessionManager mSessionManager;
-	private final SessionManagerListener mSessionManagerListener = new SessionManagerListenerImpl();
-	CastStateListener castStateListener = new CastStateListener() {
-		@Override
-		public void onCastStateChanged(int i) {
-			switch (i){
-				case CastState.CONNECTED:
-					resetActivePlaybackFragment();
-					break;
-				case CastState.CONNECTING:
-					break;
-				case CastState.NO_DEVICES_AVAILABLE:
-					break;
-				case CastState.NOT_CONNECTED:
-					resetActivePlaybackFragment();
-					break;
-			}
-		}
-	};
-
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -83,35 +60,15 @@ public class ECVideoActivity extends AbstractECView implements ECVideoViewFragme
 		if (descriptionTextView != null)
 			descriptionTextView.setMovementMethod(new ScrollingMovementMethod());
 
-		CastContext castContext = CastContext.getSharedInstance(this);
-		mSessionManager = castContext.getSessionManager();
-		mSessionManager.addCastStateListener(castStateListener);
 		resetActivePlaybackFragment();
     }
 
-	@Override
-	public void onResume(){
-		super.onResume();
-		mCastSession = mSessionManager.getCurrentCastSession();
-		mSessionManager.addSessionManagerListener(mSessionManagerListener);
-	}
-
-	@Override
-	public void onPause(){
-		super.onPause();
-		mSessionManager.removeSessionManagerListener(mSessionManagerListener);
-		mCastSession = null;
-	}
 
     @Override
     public void onDestroy() {
         if (activePlayerInterface != null)
 			activePlayerInterface.setEcsAdaptor(null);
 
-		if (castListener != null)
-			remoteMediaClient.removeListener(castListener);
-		if (castStateListener != null)
-			mSessionManager.removeCastStateListener(castStateListener);
         super.onDestroy();
     }
 
@@ -212,31 +169,20 @@ public class ECVideoActivity extends AbstractECView implements ECVideoViewFragme
 		finish();
 	}
 
-	private class SessionManagerListenerImpl implements SessionManagerListener {
-		@Override
-		public void onSessionStarted(Session session, String sessionId) {
-
+	@Override
+	public void onCastStateChanged(int i) {
+		switch (i){
+			case CastState.CONNECTED:
+				resetActivePlaybackFragment();
+				break;
+			case CastState.CONNECTING:
+				break;
+			case CastState.NO_DEVICES_AVAILABLE:
+				break;
+			case CastState.NOT_CONNECTED:
+				resetActivePlaybackFragment();
+				break;
 		}
-		@Override
-		public void onSessionResumed(Session session, boolean wasSuspended) {
-
-		}
-		@Override
-		public void onSessionEnded(Session session, int error) {
-			//FlixsterLogger.e(F.TAG_CAST, "Error = " + error);
-			//finish();
-		}
-
-		public void onSessionResuming(Session var1, String str){}
-		public void onSessionStarting(Session var1){}
-
-		public void onSessionStartFailed(Session var1, int var2){}
-
-		public void onSessionEnding(Session var1){}
-
-		public void onSessionResumeFailed(Session var1, int var2){}
-
-		public void onSessionSuspended(Session var1, int var2){}
 	}
 
 	private void resetActivePlaybackFragment(){
@@ -248,7 +194,7 @@ public class ECVideoActivity extends AbstractECView implements ECVideoViewFragme
 
 		}
 
-		if (mSessionManager != null && mCastSession != null && mCastSession.isConnected()) {
+		if (isCasting()) {
 			activePlayerInterface = castFragment;
 			castFragment.setCastControllers(mCastSession, remoteMediaClient, mSessionManager);
 		} else {

@@ -107,14 +107,13 @@
                 android:textColor="@android:color/white"
                 android:visibility="visible" />
 
-            <!--<ImageView
+            <ImageView
                 android:id="@+id/cast_cc_toggle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
-                android:background="@drawable/selectable_background_flxabv44"
                 android:padding="4dp"
-                android:src="@drawable/ic_cc" />-->
+                android:src="@drawable/ic_cc" />
         </LinearLayout>
     </LinearLayout>
 

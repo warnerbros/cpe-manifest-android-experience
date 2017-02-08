@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.ListPopupWindow;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -26,9 +27,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.cast.framework.CastButtonFactory;
+import com.google.android.gms.cast.framework.CastContext;
+import com.google.android.gms.cast.framework.CastSession;
+import com.google.android.gms.cast.framework.CastState;
+import com.google.android.gms.cast.framework.CastStateListener;
+import com.google.android.gms.cast.framework.SessionManager;
+import com.google.android.gms.cast.framework.SessionManagerListener;
+import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
+import com.wb.nextgenlibrary.fragment.AbstractCastMainMovieFragment;
 import com.wb.nextgenlibrary.fragment.AbstractNextGenMainMovieFragment;
 import com.wb.nextgenlibrary.fragment.NextGenPlayerBottomFragment;
 import com.wb.nextgenlibrary.interfaces.NextGenFragmentTransactionInterface;
@@ -97,18 +107,34 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     CommentaryOnOffAdapter commentaryOnOffAdapter;
     ListPopupWindow commentaryPopupWindow;
 
+    Menu mOptionsMenu;
+
     static enum DRMStatus{
         SUCCESS, FAILED, IN_PROGRESS, NOT_INITIATED
+    }
+
+    @Override
+    public void onCastStateChanged(int i) {
+        switch (i){
+            case CastState.CONNECTED:
+                resetMainMovieFragment();
+                startStreamPreparations();
+                break;
+            case CastState.CONNECTING:
+                break;
+            case CastState.NO_DEVICES_AVAILABLE:
+                break;
+            case CastState.NOT_CONNECTED:
+                resetMainMovieFragment();
+                startStreamPreparations();
+                break;
+        }
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         supportRequestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         super.onCreate(savedInstanceState);
-        /*mDialog = new ProgressDialog(this);
-        mDialog.setCancelable(true);
-        mDialog.setOnCancelListener(this);
-        mDialog.setCanceledOnTouchOutside(true);*/
 
 
         if (NextGenExperience.getMovieMetaData() == null)
@@ -159,11 +185,68 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
 
         transitMainFragment(imeBottomFragment);
+
+        resetMainMovieFragment();
+
+        if (isCommentaryAvailable()) {
+            actionBarRightTextView.setText(getResources().getString(R.string.nge_commentary));
+            actionBarRightTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.nge_commentary), null);
+            actionBarRightTextView.setTextColor( getResources().getColor(R.color.gray));
+
+            commentaryOnOffAdapter = new CommentaryOnOffAdapter();
+
+            commentaryPopupWindow = new ListPopupWindow(this);
+            commentaryPopupWindow.setModal(false);
+            commentaryPopupWindow.setAdapter(commentaryOnOffAdapter);
+
+            commentaryPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    commentaryOnOffAdapter.setSelection(position);
+                    if (position == 0){ // OFF
+                        switchCommentary(false);
+                    } else {
+                        switchCommentary(true);
+                    }
+                    commentaryPopupWindow.dismiss();
+                }
+            });
+
+            actionBarRightTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //toggleCommentary();
+                    if (commentaryPopupWindow.isShowing())
+                        commentaryPopupWindow.dismiss();
+                    else {
+                        commentaryPopupWindow.setAnchorView(actionBarRightTextView);
+                        commentaryPopupWindow.setContentWidth(measureContentWidth(commentaryOnOffAdapter));
+                        commentaryPopupWindow.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black)));
+                        commentaryPopupWindow.show();
+                    }
+
+                }
+            });
+
+            prepareCommentaryTrack();
+        }
+
+        //resetActivePlaybackFragment();
+    }
+
+    private void resetMainMovieFragment(){
         try {
-            if (NextGenExperience.getNextGenEventHandler().isCasting()){
+            int resumeTime = -1;
+            if (mainMovieFragment != null)
+                resumeTime = mainMovieFragment.getCurrentPosition();
+
+            if (isCasting()){
                 mainMovieFragment = NextGenExperience.getCastMovieFragmentClass().newInstance();
+                ((AbstractCastMainMovieFragment)mainMovieFragment).setCastControllers(mCastSession, remoteMediaClient, mSessionManager);
             }else
                 mainMovieFragment = NextGenExperience.getMainMovieFragmentClass().newInstance();
+
+            mainMovieFragment.setResumeTime(resumeTime);
             mainMovieFragment.setLoadingView(loadingView);
             mainMovieFragment.setOnCompletionLister(new MediaPlayer.OnCompletionListener() {
                 @Override
@@ -220,48 +303,39 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
         }
 
-        if (isCommentaryAvailable()) {
-            actionBarRightTextView.setText(getResources().getString(R.string.nge_commentary));
-            actionBarRightTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.nge_commentary), null);
-            actionBarRightTextView.setTextColor( getResources().getColor(R.color.gray));
+        playMainMovie();
+    }
 
-            commentaryOnOffAdapter = new CommentaryOnOffAdapter();
-
-            commentaryPopupWindow = new ListPopupWindow(this);
-            commentaryPopupWindow.setModal(false);
-            commentaryPopupWindow.setAdapter(commentaryOnOffAdapter);
-
-            commentaryPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    commentaryOnOffAdapter.setSelection(position);
-                    if (position == 0){ // OFF
-                        switchCommentary(false);
-                    } else {
-                        switchCommentary(true);
-                    }
-                    commentaryPopupWindow.dismiss();
-                }
-            });
-
-            actionBarRightTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //toggleCommentary();
-                    if (commentaryPopupWindow.isShowing())
-                        commentaryPopupWindow.dismiss();
-                    else {
-                        commentaryPopupWindow.setAnchorView(actionBarRightTextView);
-                        commentaryPopupWindow.setContentWidth(measureContentWidth(commentaryOnOffAdapter));
-                        commentaryPopupWindow.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black)));
-                        commentaryPopupWindow.show();
-                    }
-
-                }
-            });
-
-            prepareCommentaryTrack();
+    @Override
+    public boolean onPrepareOptionsMenu(final Menu menu) {
+        if (mOptionsMenu == null) {
+            getMenuInflater().inflate(R.menu.next_gen_cast_option_menu, menu);
+            mOptionsMenu = menu;
+            return super.onCreateOptionsMenu(menu);
         }
+        //resetMenuItems();
+        return true;
+    }
+
+    /**
+     * Set up action bar items
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        getMenuInflater().inflate(R.menu.next_gen_cast_option_menu, menu);
+
+        mOptionsMenu = menu;
+
+
+        CastButtonFactory.setUpMediaRouteButton(getApplicationContext(),
+                menu,
+                R.id.menuChromecast);
+
+
+
+        return true;
     }
 
     private int measureContentWidth(ListAdapter listAdapter) {
@@ -600,7 +674,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         mainMovieFragment.hideLoadingView();
         //mDialog.hide();
 
-        nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.video_view_frame, mainMovieFragment);
+        nextGenFragmentTransactionEngine.replaceFragment(getSupportFragmentManager(), R.id.video_view_frame, mainMovieFragment);
         if (imeUpdateTimer == null){
             imeUpdateTimer = new Timer();
         }
@@ -638,7 +712,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         }
         super.onResume();
 
-        if (currentUri == null) {
+        if (currentUri == null || StringHelper.isEmpty(currentUri.toString())) {
             currentUri = INTERSTITIAL_VIDEO_URI;
 
             drmStatus = DRMStatus.IN_PROGRESS;
@@ -650,26 +724,8 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                 bInterstitialVideoComplete = true;
                 playMainMovie();
             }
+            startStreamPreparations();
 
-            mainMovieFragment.streamStartPreparations(new ResultListener<Boolean>() {
-                @Override
-                public void onResult(Boolean result) {
-
-                    drmStatus = DRMStatus.SUCCESS;
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            playMainMovie();
-                        }
-                    });
-
-                }
-
-                @Override
-                public <E extends Exception> void onException(E e) {
-                    drmStatus = DRMStatus.FAILED;
-                }
-            });
 
         } else{
             skipThisView.setVisibility(View.GONE);
@@ -677,8 +733,31 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
             currentUri = Uri.parse("");
         }
         hideShowNextGenView();
+
     }
 
+    private void startStreamPreparations(){
+        mainMovieFragment.streamStartPreparations(new ResultListener<Boolean>() {
+            @Override
+            public void onResult(Boolean result) {
+
+                drmStatus = DRMStatus.SUCCESS;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!NextGenPlayer.this.isDestroyed() && !NextGenPlayer.this.isFinishing())
+                            playMainMovie();
+                    }
+                });
+
+            }
+
+            @Override
+            public <E extends Exception> void onException(E e) {
+                drmStatus = DRMStatus.FAILED;
+            }
+        });
+    }
 
 
     @Override
@@ -699,6 +778,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                 commentaryAudioPlayer.stop();
             commentaryAudioPlayer.release();
         }
+
         super.onDestroy();
 
     }

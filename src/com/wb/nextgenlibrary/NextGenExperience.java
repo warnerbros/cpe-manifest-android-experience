@@ -22,6 +22,7 @@ import com.google.android.gms.security.ProviderInstaller;
 import com.wb.nextgenlibrary.activity.LauncherActivity;
 import com.wb.nextgenlibrary.activity.NextGenActivity;
 import com.wb.nextgenlibrary.data.MovieMetaData;
+import com.wb.nextgenlibrary.fragment.AbstractCastMainMovieFragment;
 import com.wb.nextgenlibrary.fragment.AbstractNextGenMainMovieFragment;
 import com.wb.nextgenlibrary.interfaces.NextGenEventHandler;
 import com.wb.nextgenlibrary.network.BaselineApiDAO;
@@ -88,7 +89,8 @@ public class NextGenExperience {
     private static String sVersionName = null;
     private static Locale clientLocale = null;
     private static boolean isDiagnosticMode = true;
-    private static Class<? extends AbstractNextGenMainMovieFragment> mainMovieFragmentClass, castMovieFragmentClass;
+    private static Class<? extends AbstractNextGenMainMovieFragment> mainMovieFragmentClass;
+    private static Class<? extends AbstractCastMainMovieFragment> castMovieFragmentClass;
     private static Object nextgenPlaybackObject;
     private static NextGenEventHandler nextGenEventHandler;
     private static String googleMapAPIKey = null;
@@ -98,7 +100,7 @@ public class NextGenExperience {
 
     public static void startNextGenExperience(Context appContext, final Activity launcherActivity, final ManifestItem item,
                                               Object playbackObject, Class<? extends AbstractNextGenMainMovieFragment> fragmentClass,
-                                              Class<? extends AbstractNextGenMainMovieFragment> castFragmentClass,
+                                              Class<? extends AbstractCastMainMovieFragment> castFragmentClass,
                                               NextGenEventHandler eventHandler, Locale locale){
         nextgenPlaybackObject = playbackObject;
 
@@ -258,7 +260,7 @@ public class NextGenExperience {
         return mainMovieFragmentClass;
     }
 
-    public static Class<? extends AbstractNextGenMainMovieFragment> getCastMovieFragmentClass(){
+    public static Class<? extends AbstractCastMainMovieFragment> getCastMovieFragmentClass(){
         return castMovieFragmentClass;
     }
 

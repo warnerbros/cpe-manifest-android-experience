@@ -21,6 +21,14 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
+import com.google.android.gms.cast.framework.CastContext;
+import com.google.android.gms.cast.framework.CastSession;
+import com.google.android.gms.cast.framework.CastState;
+import com.google.android.gms.cast.framework.CastStateListener;
+import com.google.android.gms.cast.framework.Session;
+import com.google.android.gms.cast.framework.SessionManager;
+import com.google.android.gms.cast.framework.SessionManagerListener;
+import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
@@ -33,7 +41,7 @@ import com.wb.nextgenlibrary.util.utils.StringHelper;
 /**
  * Created by gzcheng on 3/9/16.
  */
-public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivity implements ContentViewFullscreenRequestInterface {
+public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivity implements ContentViewFullscreenRequestInterface, CastStateListener {
 
 	public abstract String getBackgroundImgUri();
     public abstract String getLeftButtonText();
@@ -49,6 +57,18 @@ public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivi
     protected TextView actionBarRightTextView;
     private int actionBarHeight=0;
     ImageView centerBanner, rightLogo;
+
+
+
+    protected RemoteMediaClient remoteMediaClient;
+    protected RemoteMediaClient.Listener castListener = null;
+    protected CastSession mCastSession;
+    protected SessionManager mSessionManager;
+    protected final SessionManagerListener mSessionManagerListener = new SessionManagerListenerImpl();
+
+    public void onCastStateChanged(int i){
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +117,10 @@ public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivi
         }
 
         super.onCreate(savedInstanceState);
+
+        CastContext castContext = CastContext.getSharedInstance(this);
+        mSessionManager = castContext.getSessionManager();
+        mSessionManager.addCastStateListener(this);
     }
 
     @Override
@@ -169,6 +193,28 @@ public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivi
         }
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        mCastSession = mSessionManager.getCurrentCastSession();
+        mSessionManager.addSessionManagerListener(mSessionManagerListener);
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        mSessionManager.removeSessionManagerListener(mSessionManagerListener);
+        mCastSession = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        if (castListener != null)
+            remoteMediaClient.removeListener(castListener);
+        mSessionManager.removeCastStateListener(this);
+        super.onDestroy();
+    }
+
     protected void loadBGImage(){
         if (!StringHelper.isEmpty(getBackgroundImgUri())){
             NextGenGlide.load(this, getBackgroundImgUri()).centerCrop().into(backgroundImageView);
@@ -229,5 +275,36 @@ public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivi
     String getTitleImageUrl(){
         return NextGenExperience.getMovieMetaData().getTitletreatmentImageUrl();
         //return NextGenExperience.getMovieMetaData().getStyle().getTitleImageURL(NextGenStyle.NextGenAppearanceType.InMovie);
+    }
+
+    public boolean isCasting(){
+        mCastSession = mSessionManager.getCurrentCastSession();
+        return mSessionManager != null && mCastSession != null && mCastSession.isConnected();
+    }
+
+    private class SessionManagerListenerImpl implements SessionManagerListener {
+        @Override
+        public void onSessionStarted(Session session, String sessionId) {
+
+        }
+        @Override
+        public void onSessionResumed(Session session, boolean wasSuspended) {
+
+        }
+        @Override
+        public void onSessionEnded(Session session, int error) {
+
+        }
+
+        public void onSessionResuming(Session var1, String str){}
+        public void onSessionStarting(Session var1){}
+
+        public void onSessionStartFailed(Session var1, int var2){}
+
+        public void onSessionEnding(Session var1){}
+
+        public void onSessionResumeFailed(Session var1, int var2){}
+
+        public void onSessionSuspended(Session var1, int var2){}
     }
 }
