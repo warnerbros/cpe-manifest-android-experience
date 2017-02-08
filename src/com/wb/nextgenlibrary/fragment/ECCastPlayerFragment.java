@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.MediaRouteButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaMetadata;
 import com.google.android.gms.cast.MediaStatus;
+import com.google.android.gms.cast.framework.CastButtonFactory;
 import com.google.android.gms.cast.framework.CastContext;
 import com.google.android.gms.cast.framework.CastSession;
 import com.google.android.gms.cast.framework.CastStateListener;
@@ -74,11 +76,21 @@ public class ECCastPlayerFragment extends Fragment implements ECVideoPlayerInter
 	RemoteMediaClient.Listener castListener = null;
 	private CastSession mCastSession;
 	private SessionManager mSessionManager;
-	private final SessionManagerListener mSessionManagerListener = new SessionManagerListenerImpl();
+
+	private int resumeTime = -1;
+
+	//MediaRouteButton mMediaRouteButton;
+
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
 		return inflater.inflate(R.layout.cast_player_layout, container, false);
+	}
+
+	public void setCastControllers(CastSession castSession, RemoteMediaClient remoteMediaClient, SessionManager sessionManager){
+		this.remoteMediaClient = remoteMediaClient;
+		this.mCastSession = castSession;
+		this.mSessionManager = sessionManager;
 	}
 
 	@Override
@@ -102,8 +114,6 @@ public class ECCastPlayerFragment extends Fragment implements ECVideoPlayerInter
 
 		sbSeek = (SeekBar) view.findViewById(R.id.cast_seek);
 		sbSeek.setOnSeekBarChangeListener(this);
-		CastContext castContext = CastContext.getSharedInstance(getActivity());
-		mSessionManager = castContext.getSessionManager();
 
 		countDownCountainer = view.findViewById(R.id.count_down_container);
 		countDownTextView = (TextView) view.findViewById(R.id.count_down_text_view);
@@ -115,6 +125,10 @@ public class ECCastPlayerFragment extends Fragment implements ECVideoPlayerInter
 			countDownProgressBar.setMax(ECVideoViewFragment.COUNT_DOWN_SECONDS);
 		}
 
+/*
+		mMediaRouteButton = (MediaRouteButton) view.findViewById(R.id.media_route_button);
+		CastButtonFactory.setUpMediaRouteButton(NextGenExperience.getApplicationContext(), mMediaRouteButton);*/
+
 	}
 
 
@@ -123,8 +137,6 @@ public class ECCastPlayerFragment extends Fragment implements ECVideoPlayerInter
 		super.onResume();
 		startCasting();
 		mFuture = mThreadPoolExecutor.scheduleWithFixedDelay(mUpdateRunnable, 500, 500, TimeUnit.MILLISECONDS);
-		mCastSession = mSessionManager.getCurrentCastSession();
-		mSessionManager.addSessionManagerListener(mSessionManagerListener);
 
 		//FlixsterApplication.getCastControl().onStart();
 
@@ -132,8 +144,6 @@ public class ECCastPlayerFragment extends Fragment implements ECVideoPlayerInter
 
 	@Override
 	public void onDestroy(){
-		if (castListener != null)
-			remoteMediaClient.removeListener(castListener);
 		super.onDestroy();
 	}
 
@@ -143,8 +153,6 @@ public class ECCastPlayerFragment extends Fragment implements ECVideoPlayerInter
 		super.onPause();
 
 		mFuture.cancel(false);
-		mSessionManager.removeSessionManagerListener(mSessionManagerListener);
-		mCastSession = null;
 	}
 
 	private Runnable mUpdateRunnable = new Runnable() {
@@ -166,6 +174,10 @@ public class ECCastPlayerFragment extends Fragment implements ECVideoPlayerInter
 	};
 
 	private void updateStatus(){
+		if (mCastSession == null || !mCastSession.isConnected()) {
+			mFuture.cancel(true);
+			return;
+		}
 		int playerState = remoteMediaClient.getPlayerState();
 		String deviceName = mCastSession.getCastDevice().getFriendlyName();
 		int idleReason = remoteMediaClient.getIdleReason();
@@ -208,9 +220,10 @@ public class ECCastPlayerFragment extends Fragment implements ECVideoPlayerInter
 						finish();*/
 		}
 
-		int position = (int) (remoteMediaClient.getApproximateStreamPosition() );
-		int duration = (int) (remoteMediaClient.getStreamDuration() );
-
+		int position = (int) (remoteMediaClient.getApproximateStreamPosition() ) / 1000;
+		int duration = (int) (remoteMediaClient.getStreamDuration() ) / 1000;
+		if (duration == -1 || duration == 0)
+			return;
 		if (duration == position)
 			mPlaybackCompleted = true;
 
@@ -398,6 +411,7 @@ public class ECCastPlayerFragment extends Fragment implements ECVideoPlayerInter
 						String posterUrl = selectedAVItem.getPosterImgUrl();
 
 						if (posterUrl != null) {
+							Glide.with(getActivity()).load(posterUrl).fitCenter().into(ivPoster);
 							mediaMetadata.addImage(new WebImage(Uri.parse(posterUrl)));
 						}
 						String contentType = "video/mp4";
@@ -423,7 +437,7 @@ public class ECCastPlayerFragment extends Fragment implements ECVideoPlayerInter
 			}
 
 			mSessionManager = CastContext.getSharedInstance(getActivity()).getSessionManager();
-			mSessionManager.addSessionManagerListener(mSessionManagerListener);
+			/*mSessionManager.addSessionManagerListener(mSessionManagerListener);
 			mSessionManager.addCastStateListener(new CastStateListener() {
 				@Override
 				public void onCastStateChanged(int i) {
@@ -432,32 +446,11 @@ public class ECCastPlayerFragment extends Fragment implements ECVideoPlayerInter
 					}
 
 				}
-			});
+			});*/
 			mCastSession = mSessionManager.getCurrentCastSession();//AbstractStartupActivity.getInstance().getCastSession();
 			remoteMediaClient = mCastSession.getRemoteMediaClient();
 
-			castListener = new RemoteMediaClient.Listener() {
-				@Override
-				public void onStatusUpdated() {
-					updateStatus();
-				}
 
-				@Override
-				public void onMetadataUpdated() {
-				}
-
-				@Override
-				public void onQueueStatusUpdated() {
-				}
-
-				@Override
-				public void onPreloadStatusUpdated() {
-				}
-
-				@Override
-				public void onSendingRemoteMediaRequest() {
-				}
-			};
 
 			remoteMediaClient.addListener(castListener);
 
@@ -465,7 +458,12 @@ public class ECCastPlayerFragment extends Fragment implements ECVideoPlayerInter
 			if (areEqualMediaInfo(currentCastMediaInfo, mediaInfo) && (remoteMediaClient.isPlaying() || remoteMediaClient.isPaused()) ){
 				updateStatus();
 			}else if (selectedAVItem != null){
-				remoteMediaClient.load(mediaInfo, true, mStartTime);
+				if (resumeTime > 0) {
+					remoteMediaClient.load(mediaInfo, true, resumeTime);
+				}else {
+					remoteMediaClient.load(mediaInfo, shouldAutoPlay, mStartTime);
+				}
+				shouldAutoPlay = true;
 			}
 		}
 	}
@@ -522,6 +520,7 @@ public class ECCastPlayerFragment extends Fragment implements ECVideoPlayerInter
 			selectedAVItem = avItem;
 			if (countDownCountainer != null)
 				countDownCountainer.setVisibility(View.INVISIBLE);
+
 			startCasting();
 
 			/*if (videoView != null) {
@@ -570,31 +569,17 @@ public class ECCastPlayerFragment extends Fragment implements ECVideoPlayerInter
 
 	public void onFullScreenChange(boolean bFullscreen){}
 
-
-	private class SessionManagerListenerImpl implements SessionManagerListener {
-		@Override
-		public void onSessionStarted(Session session, String sessionId) {
-
-		}
-		@Override
-		public void onSessionResumed(Session session, boolean wasSuspended) {
-
-		}
-		@Override
-		public void onSessionEnded(Session session, int error) {
-			//FlixsterLogger.e(F.TAG_CAST, "Error = " + error);
-			//finish();
-		}
-
-		public void onSessionResuming(Session var1, String str){}
-		public void onSessionStarting(Session var1){}
-
-		public void onSessionStartFailed(Session var1, int var2){}
-
-		public void onSessionEnding(Session var1){}
-
-		public void onSessionResumeFailed(Session var1, int var2){}
-
-		public void onSessionSuspended(Session var1, int var2){}
+	@Override
+	public void setResumeTimeMillisecond(int resumeTime){
+		this.resumeTime = resumeTime;
 	}
+
+	@Override
+	public int getCurrentPlaybackTimeMillisecond(){
+		if (remoteMediaClient != null)
+			return (int) (remoteMediaClient.getApproximateStreamPosition() );
+		else
+			return 0;
+	}
+
 }

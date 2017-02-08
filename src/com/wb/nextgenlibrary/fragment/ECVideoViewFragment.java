@@ -63,6 +63,8 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
 
     FixedAspectRatioFrameLayout.Priority aspectFramePriority = null;
 
+    int resumeTime = -1;
+
     public final static int COUNT_DOWN_SECONDS = 5;
 
     ECVideoListAdaptor ecsAdaptor = null;
@@ -229,6 +231,9 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
         if (bgImageView != null && !StringHelper.isEmpty(bgImageUrl)){
             NextGenGlide.load(getActivity(), bgImageUrl).fitCenter().into(bgImageView);
         }
+        if (selectedAVItem != null){
+            setAudioVisualItem(selectedAVItem);
+        }
     }
 
     boolean isClipPlaying;
@@ -301,6 +306,18 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
 
     }
 
+    @Override
+    public void setResumeTimeMillisecond(int resumeTime){
+        this.resumeTime = resumeTime;
+    }
+
+    @Override
+    public int getCurrentPlaybackTimeMillisecond(){
+        if (videoView != null)
+            return videoView.getCurrentPosition();
+        else
+            return 0;
+    }
 
     public void setAspectRatioFramePriority(FixedAspectRatioFrameLayout.Priority priority){
         if (aspectRatioFrame != null)
@@ -311,9 +328,16 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
     private class PreparedListener implements MediaPlayer.OnPreparedListener {
         @Override
         public void onPrepared(MediaPlayer mp) {
-            if (shouldAutoPlay) {
-                if (previousPlaybackTime != 0){
-                    videoView.seekTo(previousPlaybackTime);
+            int startTime = previousPlaybackTime;
+            if (resumeTime > 0)
+                startTime = resumeTime;
+
+            if (shouldAutoPlay || resumeTime > 0) {
+
+                previewFrame.setVisibility(View.GONE);
+                previewPlayBtn.setVisibility(View.GONE);
+                if (startTime != 0){
+                    videoView.seekTo(startTime);
                     //added: tr 9/19
                     mp.setOnSeekCompleteListener(new MediaPlayer.OnSeekCompleteListener() {
                         @Override
@@ -342,8 +366,6 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
     @Override
     public void onResume() {
         super.onResume();
-        /*Intent intent = getIntent();
-        Uri uri = intent.getData();*/
         videoView.setVisibility(View.VISIBLE);
 
         if (bSetOnResume){

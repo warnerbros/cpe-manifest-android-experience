@@ -18,4 +18,8 @@ public interface ECVideoPlayerInterface {
 	void setAudioVisualItem(MovieMetaData.AudioVisualItem avItem);
 
 	void onFullScreenChange(boolean bFullscreen);
+
+	void setResumeTimeMillisecond(int resumeTime);
+
+	int getCurrentPlaybackTimeMillisecond();
 }

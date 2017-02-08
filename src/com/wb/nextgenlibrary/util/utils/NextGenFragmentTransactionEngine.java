@@ -80,6 +80,26 @@ public class NextGenFragmentTransactionEngine {
 
     }
 
+
+
+    public void replaceFragment(FragmentManager fragmentManager, int frameId, Fragment nextFragment){
+        if (fragmentManager == null)
+            fragmentManager = activity.getSupportFragmentManager();
+
+        Fragment rightFragment = nextFragment;
+        FragmentTransaction ftRight = fragmentManager.beginTransaction();
+
+        ftRight.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out);
+
+
+        ftRight.replace(frameId, rightFragment, rightFragment.getClass().toString());
+        ftRight.commit();
+
+
+
+    }
+
+
     public void onDestroy(){
         activity = null;        // garbage collection
     }
