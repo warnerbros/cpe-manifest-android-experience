@@ -175,8 +175,8 @@ public abstract class AbstractCastMainMovieFragment extends AbstractNextGenMainM
 			updateStatus();
 		}else if (mStartTime <= 0){
 			mStartTime = getStoredPlaybackPositon();
+			remoteMediaClient.load(mediaInfo, true, mStartTime);
 		}
-		remoteMediaClient.load(mediaInfo, true, mStartTime);
 	}
 	/*
 	public void startCasting(){
@@ -385,6 +385,8 @@ public abstract class AbstractCastMainMovieFragment extends AbstractNextGenMainM
 			}
 
 		}
+		ivCcToggle.setEnabled(mCastSession.getRemoteMediaClient().getMediaInfo().getMediaTracks() != null);
+		ivCcToggle.setSelected(mCastSession.getRemoteMediaClient().getMediaStatus().getActiveTrackIds() != null);
 
 		//ivCcToggle.setEnabled(mRemote.isCaptionsAvailable());
 		//ivCcToggle.setSelected(mRemote.isCaptionsEnabled());
@@ -413,6 +415,14 @@ public abstract class AbstractCastMainMovieFragment extends AbstractNextGenMainM
 					remoteMediaClient.play();
 			}
 		} else if (v.getId() == R.id.cast_cc_toggle) {
+			if (mCastSession.getRemoteMediaClient().getMediaInfo().getMediaTracks() != null){
+				if (mCastSession.getRemoteMediaClient().getMediaStatus().getActiveTrackIds() != null)
+					mCastSession.getRemoteMediaClient().setActiveMediaTracks(new long[]{});
+				else
+					mCastSession.getRemoteMediaClient().setActiveMediaTracks(new long[]{1});
+
+				//mCastSession.getRemoteMediaClient().set
+			}
 				/*if (mRemote != null && mRemote.isCaptionsAvailable()) {
 					mRemote.setCaptionsEnabled(!mRemote.isCaptionsEnabled());
 				}*/

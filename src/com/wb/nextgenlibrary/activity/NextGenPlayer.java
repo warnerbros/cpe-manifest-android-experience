@@ -119,6 +119,8 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
             case CastState.CONNECTED:
                 resetMainMovieFragment();
                 startStreamPreparations();
+                if (isCommentaryAvailable())
+                    actionBarRightTextView.setVisibility(View.GONE);
                 break;
             case CastState.CONNECTING:
                 break;
@@ -127,6 +129,8 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
             case CastState.NOT_CONNECTED:
                 resetMainMovieFragment();
                 startStreamPreparations();
+                if (isCommentaryAvailable())
+                    actionBarRightTextView.setVisibility(View.VISIBLE);
                 break;
         }
     }
@@ -228,7 +232,6 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                 }
             });
 
-            prepareCommentaryTrack();
         }
 
         //resetActivePlaybackFragment();
@@ -303,6 +306,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
         }
 
+        prepareCommentaryTrack();
         playMainMovie();
     }
 
