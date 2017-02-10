@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
+import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.data.TheTakeData.TheTakeProduct;
 import com.wb.nextgenlibrary.network.TheTakeApiDAO;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
@@ -28,7 +29,7 @@ import java.util.List;
 public class TheTakeFrameProductsFragment extends AbstractNextGenFragment {
 
     TheTakeProductDetailFragment productDetailFragment;
-    List<TheTakeProduct> productList = new ArrayList<TheTakeProduct>();
+    List<MovieMetaData.ShopItemInterface> productList = new ArrayList<MovieMetaData.ShopItemInterface>();
     RecyclerView frameProductsRecyclerView;
     LinearLayoutManager frameProductsLayoutManager;
     FrameProductsAdapter frameProductsAdaptor;
@@ -88,9 +89,9 @@ public class TheTakeFrameProductsFragment extends AbstractNextGenFragment {
     @Override
     public void onStart(){
         super.onStart();
-        TheTakeApiDAO.getFrameProducts((double) frameTime, new ResultListener<List<TheTakeProduct>>() {
+        TheTakeApiDAO.getFrameProducts((double) frameTime, new ResultListener<List<MovieMetaData.ShopItemInterface>>() {
             @Override
-            public void onResult(final List<TheTakeProduct> result) {
+            public void onResult(final List<MovieMetaData.ShopItemInterface> result) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -110,7 +111,7 @@ public class TheTakeFrameProductsFragment extends AbstractNextGenFragment {
         });
     }
 
-    public void loadProductIntoDetailFragment(TheTakeProduct product){
+    public void loadProductIntoDetailFragment(MovieMetaData.ShopItemInterface product){
         if (productDetailFragment != null) {
             productDetailFragment.setProduct(product);
             productDetailFragment.getProductDetail();
@@ -122,10 +123,10 @@ public class TheTakeFrameProductsFragment extends AbstractNextGenFragment {
         TextView productBrand;
         TextView productName;
         ImageView personPhoto;
-        TheTakeProduct product;
+        MovieMetaData.ShopItemInterface product;
         int position;
 
-        FrameProductViewHolder(View itemView, TheTakeProduct product) {
+        FrameProductViewHolder(View itemView, MovieMetaData.ShopItemInterface product) {
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.product_cv);
             productBrand = (TextView)itemView.findViewById(R.id.cv_product_brand_name);
@@ -135,7 +136,7 @@ public class TheTakeFrameProductsFragment extends AbstractNextGenFragment {
             itemView.setOnClickListener(this);
         }
 
-        public void setTheTakeProduct(TheTakeProduct product, int position){
+        public void setTheTakeProduct(MovieMetaData.ShopItemInterface product, int position){
             this.position = position;
             this.product = product;
         }
@@ -172,13 +173,13 @@ public class TheTakeFrameProductsFragment extends AbstractNextGenFragment {
 
 
             if (productList != null && productList.size() > position) {
-                TheTakeProduct thisProduct = productList.get(position);
+                MovieMetaData.ShopItemInterface thisProduct = productList.get(position);
                 holder.setTheTakeProduct(thisProduct, position);
                 if (!StringHelper.isEmpty(thisProduct.getProductThumbnailUrl())) {
                     NextGenGlide.load(getActivity(), thisProduct.getProductThumbnailUrl()).into(holder.personPhoto);
                     //PicassoTrustAll.loadImageIntoView(getActivity(), thisProduct.getProductThumbnailUrl(), holder.personPhoto);
-                    holder.productBrand.setText(thisProduct.productBrand);
-                    holder.productName.setText(thisProduct.productName);
+                    holder.productBrand.setText(thisProduct.getProductBrand());
+                    holder.productName.setText(thisProduct.getProductName());
 
                 }else if (position < lastloadingIndex) {
                     //holder.personPhoto.setImageResource(R.drawable.poster_blank);

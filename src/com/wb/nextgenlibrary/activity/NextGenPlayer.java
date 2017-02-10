@@ -3,6 +3,7 @@ package com.wb.nextgenlibrary.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
@@ -117,6 +118,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     public void onCastStateChanged(int i) {
         switch (i){
             case CastState.CONNECTED:
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
                 resetMainMovieFragment();
                 startStreamPreparations();
                 if (isCommentaryAvailable())
@@ -127,6 +129,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
             case CastState.NO_DEVICES_AVAILABLE:
                 break;
             case CastState.NOT_CONNECTED:
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
                 resetMainMovieFragment();
                 startStreamPreparations();
                 if (isCommentaryAvailable())

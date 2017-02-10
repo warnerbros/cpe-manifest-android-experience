@@ -11,6 +11,7 @@ import com.squareup.picasso.Picasso;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
+import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.data.TheTakeData.TheTakeProduct;
 import com.wb.nextgenlibrary.data.TheTakeData.TheTakeProductDetail;
 import com.wb.nextgenlibrary.network.TheTakeApiDAO;
@@ -23,7 +24,7 @@ import com.wb.nextgenlibrary.util.utils.StringHelper;
  */
 public class TheTakeProductDetailFragment extends AbstractNextGenFragment implements View.OnClickListener{
 
-    TheTakeProduct product;
+    MovieMetaData.ShopItemInterface product;
     ImageView productPoster;
     TextView matchStatus, brandText, nameText, priceText;
     Button shopAtTheTakeBtn, sendLinkBtn;
@@ -37,7 +38,7 @@ public class TheTakeProductDetailFragment extends AbstractNextGenFragment implem
     }
 
 
-    public void setProduct(TheTakeProduct product){
+    public void setProduct(MovieMetaData.ShopItemInterface product){
         this.product = product;
     }
 
@@ -72,12 +73,12 @@ public class TheTakeProductDetailFragment extends AbstractNextGenFragment implem
             DialogUtils.showLeavingAppDialog(getActivity(), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    NextGenExperience.launchChromeWithUrl(product.getProductDetail().purchaseLink);
+                    NextGenExperience.launchChromeWithUrl(product.getPurchaseLinkUrl());
                 }
             });
             //NextGenAnalyticData.reportEvent(getActivity(), TheTakeProductDetailFragment.this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_SHOPPING, product.productName);
         }else if (v.getId() == R.id.send_link_button){
-            NextGenExperience.launchChromeWithUrl(product.getProductDetail().shareUrl);
+            NextGenExperience.launchChromeWithUrl(product.getShareLinkUrl());
            // NextGenAnalyticData.reportEvent(getActivity(), TheTakeProductDetailFragment.this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_SHOPPING, product.productName);
         }
     }
@@ -86,56 +87,82 @@ public class TheTakeProductDetailFragment extends AbstractNextGenFragment implem
     @Override
     String getReportContentName(){
         if (product != null)
-            return product.productName;
+            return product.getProductName();
         else
             return null;
     }
 
-    private void populateProductDetail(TheTakeProduct product){
-        if(product.getProductDetail() != null){
-            Picasso.with(getActivity()).load(product.getProductDetail().getProductImage()).fit().centerInside().into(productPoster);
+    private void populateProductDetail(MovieMetaData.ShopItemInterface shopItem){
+        shopAtTheTakeBtn.setText(shopItem.getShopItemText(getContext()));
+        if (shopItem instanceof  TheTakeProduct) {
+            TheTakeProduct product = (TheTakeProduct)shopItem;
+            if (product.getProductDetail() != null) {
+                Picasso.with(getActivity()).load(product.getProductDetail().getProductImage()).fit().centerInside().into(productPoster);
 
-            if (product.verified)
+                if (product.isVerified())
+                    matchStatus.setText(getActivity().getResources().getString(R.string.exact_match));
+                else
+                    matchStatus.setText(getActivity().getResources().getString(R.string.close_match));
+                brandText.setText(product.getProductDetail().productBrand);
+                nameText.setText(product.getProductDetail().productName);
+                priceText.setText(product.getProductDetail().productPrice);
+                if (!StringHelper.isEmpty(product.getProductDetail().purchaseLink)) {
+                    shopAtTheTakeBtn.setVisibility(View.VISIBLE);
+                } else {
+                    shopAtTheTakeBtn.setVisibility(View.GONE);
+                }
+                if (!StringHelper.isEmpty(product.getProductDetail().shareUrl)) {
+                    sendLinkBtn.setVisibility(View.VISIBLE);
+                } else {
+                    sendLinkBtn.setVisibility(View.GONE);
+                }
+            }
+        } else {
+            Picasso.with(getActivity()).load(product.getProductThumbnailUrl()).fit().centerInside().into(productPoster);
+
+            /*if (product.isVerified())
                 matchStatus.setText(getActivity().getResources().getString(R.string.exact_match));
             else
-                matchStatus.setText(getActivity().getResources().getString(R.string.close_match));
-            brandText.setText(product.getProductDetail().productBrand);
-            nameText.setText(product.getProductDetail().productName);
-            priceText.setText(product.getProductDetail().productPrice);
-            if (!StringHelper.isEmpty(product.getProductDetail().purchaseLink)) {
+                matchStatus.setText(getActivity().getResources().getString(R.string.close_match));*/
+            brandText.setText(product.getProductBrand());
+            nameText.setText(product.getProductName());
+            priceText.setText("");
+            if (!StringHelper.isEmpty(product.getPurchaseLinkUrl())) {
                 shopAtTheTakeBtn.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 shopAtTheTakeBtn.setVisibility(View.GONE);
             }
-            if (!StringHelper.isEmpty(product.getProductDetail().shareUrl)) {
-                sendLinkBtn.setVisibility(View.VISIBLE);
-            }else {
-                sendLinkBtn.setVisibility(View.GONE);
-            }
+            sendLinkBtn.setVisibility(View.GONE);
         }
     }
 
     public void getProductDetail(){
-        if (product.getProductDetail() != null)
+        if (product instanceof TheTakeProduct) {
+            final TheTakeProduct theTakeProduct = (TheTakeProduct)product;
+
+            if (theTakeProduct.getProductDetail() != null)
+                populateProductDetail(theTakeProduct);
+            else {
+                TheTakeApiDAO.getProductDetails(theTakeProduct.productId, new ResultListener<TheTakeProductDetail>() {
+                    @Override
+                    public void onResult(final TheTakeProductDetail result) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                theTakeProduct.setProductDetail(result);
+                                populateProductDetail(theTakeProduct);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public <E extends Exception> void onException(E e) {
+
+                    }
+                });
+            }
+        } else {
             populateProductDetail(product);
-        else {
-            TheTakeApiDAO.getProductDetails(product.productId, new ResultListener<TheTakeProductDetail>() {
-                @Override
-                public void onResult(final TheTakeProductDetail result) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            product.setProductDetail(result);
-                            populateProductDetail(product);
-                        }
-                    });
-                }
-
-                @Override
-                public <E extends Exception> void onException(E e) {
-
-                }
-            });
         }
     }
 }

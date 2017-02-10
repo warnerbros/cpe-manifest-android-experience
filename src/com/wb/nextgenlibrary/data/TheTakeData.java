@@ -1,19 +1,22 @@
 package com.wb.nextgenlibrary.data;
 
+import android.content.Context;
+
 import com.google.gson.annotations.SerializedName;
+import com.wb.nextgenlibrary.R;
 
 import java.util.List;
 
 /**
  * Created by gzcheng on 4/7/16.
  */
-public class TheTakeData {
+public class TheTakeData{
     public static class
     TheTakeCategory{
         public int categoryId;
         public String categoryName;
         public List<TheTakeCategory> childCategories;
-        public List<TheTakeProduct> products;
+        public List<MovieMetaData.ShopItemInterface> products;
     }
 
     public static class TheTakeProductFrame {
@@ -46,7 +49,7 @@ public class TheTakeData {
 
 
 
-    public static class TheTakeProduct{
+    public static class TheTakeProduct implements MovieMetaData.ShopItemInterface {
         @SerializedName(value="cropImage", alternate={"cropImages"})
         public FrameImages cropImage;
         @SerializedName(value="productImage", alternate={"productImages"})
@@ -77,6 +80,10 @@ public class TheTakeData {
 
         private TheTakeProductDetail productDetail;
 
+        public String getShopItemText(Context context){
+            return context.getResources().getString(R.string.shop_at_the_take);
+        }
+
         public String getThumbnailUrl(){
             if (cropImage != null)
                 return cropImage.image500px;
@@ -93,12 +100,45 @@ public class TheTakeData {
                 return "";
         }
 
+        public String getProductName(){
+            return productName;
+        }
+
+        public String getProductBrand(){
+            return productBrand;
+        }
+
+        public boolean isVerified(){
+            return verified;
+        }
+
+        public float getKeyCropProductY(){
+            return keyCropProductY;
+        }
+
+        public float getKeyCropProductX(){
+            return keyCropProductX;
+        }
+
         public TheTakeProductDetail getProductDetail(){
             return productDetail;
         }
 
         public void setProductDetail(TheTakeProductDetail detail){
             productDetail = detail;
+        }
+
+
+        public String getShareLinkUrl(){
+            if (productDetail != null)
+                return productDetail.shareUrl;
+            return "";
+        }
+
+        public String getPurchaseLinkUrl(){
+            if (productDetail != null)
+                return productDetail.purchaseLink;
+            return "";
         }
     }
 

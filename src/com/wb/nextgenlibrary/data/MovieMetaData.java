@@ -1,7 +1,10 @@
 package com.wb.nextgenlibrary.data;
 
+import android.content.Context;
+
 import com.google.gson.annotations.SerializedName;
 import com.wb.nextgenlibrary.NextGenExperience;
+import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.parser.LocalizableMetaDataInterface;
 import com.wb.nextgenlibrary.parser.ManifestXMLParser;
 import com.wb.nextgenlibrary.parser.appdata.AppDataLocationType;
@@ -40,8 +43,11 @@ import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.TimedEventType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.TrackMetadataType;
 import com.wb.nextgenlibrary.parser.md.schema.v2_3.BasicMetadataInfoType;
 import com.wb.nextgenlibrary.parser.md.schema.v2_3.BasicMetadataPeopleType;
+import com.wb.nextgenlibrary.parser.md.schema.v2_3.BasicMetadataType;
 import com.wb.nextgenlibrary.parser.md.schema.v2_3.ContentIdentifierType;
+import com.wb.nextgenlibrary.parser.md.schema.v2_3.NVPairType;
 import com.wb.nextgenlibrary.parser.md.schema.v2_3.PersonIdentifierType;
+import com.wb.nextgenlibrary.util.Size;
 import com.wb.nextgenlibrary.util.utils.F;
 import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
@@ -54,6 +60,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import javax.xml.datatype.Duration;
 
@@ -65,7 +72,8 @@ public class MovieMetaData {
 	final public static String THE_TAKE_MANIFEST_IDENTIFIER = "thetake.com";
     final public static String BASELINE_NAMESPACE = "baselineapi.com";
     final public static String SHARE_CLIP_KEY = "clipshare";
-	final public static String SHARE_CLIP_SUBTYPE = "clip share";
+	final public static String SHARE_CLIP_SUBTYPE = "Shareable Clip";
+
     final public static String MAIN_SUBTYPE = "Main";
 
     final public static String OTHER_APP_DATA_ID = "AppID";
@@ -82,6 +90,13 @@ public class MovieMetaData {
     private static String ITEM_GALLERY_ID = "gallery_id";
     private static String ITEM_GALLERY_THUMBNAIL = "gallery_thumbnail";
     private static String ITEM_EXPERIENCE_ID = "experience_id";
+
+
+    private static String ITEM_CONTENT_ID = "content_id";
+    private static String ITEM_EXTERNAL_URL = "external_url";
+
+    private static String NVPAIR_TYPE = "type";
+    private static String NVPAIR_TYPE_PRODUCT = "PRODUCT";
 
 
     //final private List<ECGroupData> movieExperiences = new ArrayList<ECGroupData>();
@@ -560,7 +575,10 @@ public class MovieMetaData {
                             //String imageText= picture.getAlternateText()
                             presentationData = new PictureItem(null, null, fullImageData, thumbNailImageData);
                         } else if (otherID != null) {
-                            if (OTHER_APP_DATA_ID.equals(otherID.getNamespace())){
+                            if (isShopItem(appDataIdTpAppDataMap.get(otherID.getIdentifier()))){
+                                presentationData = new ShopItem(otherID.getIdentifier(), appDataIdTpAppDataMap, metaDataAssetsMap);
+
+                            } else if (OTHER_APP_DATA_ID.equals(otherID.getNamespace())){
                                 String locationId = otherID.getIdentifier();
 
                                 presentationData = getLocationItemfromMap(appDataIdTpAppDataMap, pictureImageMap, locationId);
@@ -606,6 +624,20 @@ public class MovieMetaData {
         /*****************End of Time Sequence Events****************************/
 
         return result;
+    }
+
+    private static boolean isShopItem(AppDataType appDataType){
+        if (appDataType != null){
+            if (appDataType.getNVPair() != null && appDataType.getNVPair().size() > 0){
+                for (AppNVPairType pair : appDataType.getNVPair()){
+                    if (pair.getName().equalsIgnoreCase(NVPAIR_TYPE) && pair.getText().equalsIgnoreCase(NVPAIR_TYPE_PRODUCT))
+                        return true;
+                }
+            }
+
+        }
+        return false;
+
     }
 
 
@@ -1198,11 +1230,19 @@ public class MovieMetaData {
             description = text;
             this.zoom = zoom;
             greaterTitle = type;
-            AppDataLocationType.Location location = appDataLocation.getLocation().get(0);
-            this.address = location.getAddress().toString();
-            this.latitude = location.getEarthCoordinate().getLatitude().floatValue();
-            this.longitude = location.getEarthCoordinate().getLongitude().floatValue();
-            this.title = location.getName();
+            if (appDataLocation!= null && appDataLocation.getLocation() != null) {
+                AppDataLocationType.Location location = appDataLocation.getLocation().get(0);
+                this.address = location.getAddress().toString();
+                this.latitude = location.getEarthCoordinate().getLatitude().floatValue();
+                this.longitude = location.getEarthCoordinate().getLongitude().floatValue();
+                this.title = location.getName();
+            }else{
+                this.address = "";
+                this.latitude = 0;
+                this.longitude = 0;
+                this.title = "";
+
+            }
             this.locationThumbnail = locationThumbnail;
             this.pinImage = pinImage;
             this.experienceId = experienceId;
@@ -1295,6 +1335,183 @@ public class MovieMetaData {
                     return "";
             }
         }
+    }
+
+    public static interface ShopItemInterface {
+
+        String getShopItemText(Context context);
+
+        String getThumbnailUrl();
+
+        String getProductThumbnailUrl();
+
+        String getProductName();
+
+        String getProductBrand();
+
+        boolean isVerified();
+
+        float getKeyCropProductY();
+
+        float getKeyCropProductX();
+
+        String getShareLinkUrl();
+
+        String getPurchaseLinkUrl();
+
+        //public TheTakeData.TheTakeProductDetail getProductDetail();
+    }
+
+    static public class ShopItem extends PresentationDataItem implements ShopItemInterface{
+        //public final boolean isFrictional;
+        public final String contentId;
+        //public final ContentMetaData longitude;
+        public final int displayOrder;
+        public final String externalUrl;
+
+        public final String titleDisplayUnlimited;
+        public final String titleSort;
+        public final String posterUrl;
+        public final String summary;
+        public final Size posterSize;
+
+        public final String workType;
+        public final String releaseYear;
+
+        public String getShopItemText(Context context){
+            return context.getResources().getString(R.string.shop_online);
+        }
+
+/*
+        public ShopItem(String id, int displayOrder, String contentId, String externalUrl){
+            super(id, "", null);
+            this.displayOrder = displayOrder;
+            this.contentId = contentId;
+            this.externalUrl = externalUrl;
+
+        }*/
+
+        public ShopItem(String id, HashMap<String, AppDataType> appDataMap, HashMap<String, InventoryMetadataType> metadataTypeHashMap){
+            super(id, "", null);
+            String cid = "";
+            int order = 0;
+            String url = "";
+
+            String titleDisplayUnlimited = "";
+            String titleSort = "";
+            String posterUrl = "";
+            String summary = "";
+            Size posterSize = null;
+
+            String workType = "";
+            String releaseYear = "";
+
+            AppDataType appDataType = appDataMap.get(id);
+
+            if (appDataType != null && appDataType.getNVPair() != null && appDataType.getNVPair().size() > 0){
+                for (AppNVPairType pair : appDataType.getNVPair()){
+                    if (pair.getName().equalsIgnoreCase(ITEM_CONTENT_ID))
+                        cid = pair.getContentID();
+                    else if (pair.getName().equalsIgnoreCase(ITEM_DISPLAY_ORDER))
+                        order = pair.getInteger().intValue();
+                    else if (pair.getName().endsWith(ITEM_EXTERNAL_URL))
+                        url = pair.getURL();
+                }
+            }
+
+            if (!StringHelper.isEmpty(cid)){
+                InventoryMetadataType metadata = metadataTypeHashMap.get(cid);
+                BasicMetadataType basicMetadata = metadata.getBasicMetadata();
+                if (basicMetadata != null){
+                    if (basicMetadata.getLocalizedInfo() != null && basicMetadata.getLocalizedInfo().size() > 0){
+                        BasicMetadataInfoType localizedInfo = getMatchingLocalizableObject(basicMetadata.getLocalizedInfo());
+                        titleDisplayUnlimited = localizedInfo.getTitleDisplayUnlimited();
+                        titleSort = localizedInfo.getTitleSort();
+                        posterUrl = localizedInfo.getArtReference().get(0).getValue();
+                        if (localizedInfo.getSummary4000() != null){
+                            summary = localizedInfo.getSummary4000().getValue();
+                        } else if (localizedInfo.getSummary400() != null){
+                            summary = localizedInfo.getSummary400().getValue();
+                        } else if (localizedInfo.getSummary190() != null)
+                            summary = localizedInfo.getSummary190().getValue();
+
+                        String dimensionStr = localizedInfo.getArtReference().get(0).getResolution();
+                        try {
+                            StringTokenizer tokenizer = new StringTokenizer(dimensionStr, "X");
+                            posterSize = new Size(Integer.parseInt(tokenizer.nextToken()), Integer.parseInt(tokenizer.nextToken()));
+                        }catch (Exception ex){
+
+                        }
+                    }
+
+                    if (basicMetadata.getReleaseYear() != null){
+                        releaseYear = basicMetadata.getReleaseYear();
+                    }
+
+                    if (basicMetadata.getWorkType() != null){
+                        workType = basicMetadata.getWorkType();
+                    }
+
+                }
+            }
+
+            this.titleDisplayUnlimited = titleDisplayUnlimited;
+            this.titleSort = titleSort;
+            this.posterUrl = posterUrl;
+            this.posterSize = posterSize;
+            this.summary = summary;
+            contentId = cid;
+            displayOrder = order;
+            externalUrl = url;
+            this.workType = workType;
+            this.releaseYear = releaseYear;
+        }
+
+        public String getPosterImgUrl(){
+            return posterUrl;
+        }
+
+        public String getTitle(){
+            return titleDisplayUnlimited;
+        }
+
+
+        public String getThumbnailUrl(){
+            return posterUrl;
+        }
+
+        public String getProductThumbnailUrl(){
+            return posterUrl;
+        }
+
+        public String getProductName(){
+            return titleDisplayUnlimited;
+        }
+
+        public String getProductBrand(){
+            return summary;
+        }
+
+        public boolean isVerified(){
+            return true;
+        }
+
+        public float getKeyCropProductY(){
+            return 0;
+        }
+
+        public float getKeyCropProductX(){
+            return 0;
+        }
+
+        public String getShareLinkUrl(){
+            return "";
+        }
+
+        public String getPurchaseLinkUrl(){
+            return externalUrl;
+        }
+
     }
 
     static public class InteractiveItem {

@@ -1,7 +1,11 @@
 package com.wb.nextgenlibrary.fragment;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -188,6 +192,36 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                         playerActivity.transitMainFragment(fragment);
                         mainMovieListener = null;
                         NextGenAnalyticData.reportEvent(getActivity(), this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_LOCATION, headElement.getId(), null);
+                    } else if (dataObj instanceof MovieMetaData.ShopItem) {
+
+                        TheTakeProductDetailFragment fragment = new TheTakeProductDetailFragment();
+                        fragment.setContentViewId(R.layout.the_take_product_view);
+                        fragment.setProduct((MovieMetaData.ShopItem)dataObj);
+                        fragment.setShouldShowCloseBtn(true);
+                        //fragment.setTitleText(activeObj.title.toUpperCase());
+                        //fragment.setFrameProductTime(((TheTakeProductFrame)activeObj.imeObject).frameTime);
+                        mainMovieListener = null;
+                        playerActivity.transitMainFragment(fragment);
+                        /*
+                        final String url = ((MovieMetaData.ShopItem) dataObj).externalUrl;
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+                        alertDialogBuilder.setTitle(getActivity().getResources().getString(com.wb.nextgenlibrary.R.string.dialog_leave_app));
+                        alertDialogBuilder.setMessage(getActivity().getResources().getString(com.wb.nextgenlibrary.R.string.dialog_follow_link));
+                        alertDialogBuilder.setPositiveButton(getActivity().getResources().getString(android.R.string.yes), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                                getActivity().startActivity(browserIntent);
+                            }
+                        });
+                        alertDialogBuilder.setNegativeButton(getActivity().getResources().getString(android.R.string.no), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        alertDialogBuilder.show();*/
                     } else if (dataObj instanceof MovieMetaData.TriviaItem){
                         ECTrviaViewFragment fragment = new ECTrviaViewFragment();
                         fragment.setShouldShowCloseBtn(true);
@@ -259,7 +293,9 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                     retId = R.layout.ime_grid_share_item;
                 } else if (dataObj instanceof MovieMetaData.TextItem) {
 					retId = R.layout.ime_grid_text_item;
-				}
+				} else if (dataObj instanceof MovieMetaData.ShopItem) {
+                    retId = R.layout.ime_grid_presentation_item;
+                }
             }
         }else if (activeObj.imeObject instanceof TheTakeProductFrame){
             retId = R.layout.ime_grid_shop_item;
@@ -328,15 +364,15 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                     subText1.setTag(R.id.ime_title, frameTime);
                 }
 
-                TheTakeApiDAO.getFrameProducts(frameTime, new ResultListener<List<TheTakeData.TheTakeProduct>>() {
+                TheTakeApiDAO.getFrameProducts(frameTime, new ResultListener<List<MovieMetaData.ShopItemInterface>>() {
                     @Override
-                    public void onResult(final List<TheTakeData.TheTakeProduct> result) {
+                    public void onResult(final List<MovieMetaData.ShopItemInterface> result) {
                         if (subText1.getTag(R.id.ime_title).equals(frameTime)) {
                             if (result != null && result.size() > 0 && getActivity() != null) {
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        subText1.setText(result.get(0).productName);
+                                        subText1.setText(result.get(0).getProductName());
                                         poster.setBackgroundColor(getResources().getColor(android.R.color.white));
                                         NextGenGlide.load(getActivity(), result.get(0).getProductThumbnailUrl()).into(poster);
 

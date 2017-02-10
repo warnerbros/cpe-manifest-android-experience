@@ -192,22 +192,22 @@ public class TheTakeApiDAO {
         }, l);
     }
 
-    public static void getFrameProducts(final double frameTime, ResultListener<List<TheTakeProduct>> l){
-        Worker.execute(new Callable<List<TheTakeProduct>>() {
+    public static void getFrameProducts(final double frameTime, ResultListener<List<MovieMetaData.ShopItemInterface>> l){
+        Worker.execute(new Callable<List<MovieMetaData.ShopItemInterface>>() {
             @Override
-            public List<TheTakeProduct> call() throws Exception {
+            public List<MovieMetaData.ShopItemInterface> call() throws Exception {
                 try {
                     List<NameValuePair> params = new ArrayList<NameValuePair>();
                     params.add(new BasicNameValuePair(Keys.Media, theTakeMediaId));
                     params.add(new BasicNameValuePair(Keys.Time, Double.toString(frameTime)));
 
                     String result = getFromUrl(THETAKE_DOMAIN + Endpoints.GetFrameProducts, params);
-                    Type listType = new TypeToken<ArrayList<TheTakeProduct>>() {
+                    Type listType = new TypeToken<ArrayList<MovieMetaData.ShopItemInterface>>() {
                     }.getType();
 
                     Gson gson = new GsonBuilder().create();
 
-                    List<TheTakeProduct> products = gson.fromJson(result, listType);
+                    List<MovieMetaData.ShopItemInterface> products = gson.fromJson(result, listType);
 
                     return products;
                 } catch (Exception ex) {
@@ -221,10 +221,10 @@ public class TheTakeApiDAO {
 
     }
 
-    public static void getCategoryProducts(final int categoryId, ResultListener<List<TheTakeProduct>> l){
-        Worker.execute(new Callable<List<TheTakeProduct>>() {
+    public static void getCategoryProducts(final int categoryId, ResultListener<List<MovieMetaData.ShopItemInterface>> l){
+        Worker.execute(new Callable<List<MovieMetaData.ShopItemInterface>>() {
             @Override
-            public List<TheTakeProduct> call() throws Exception {
+            public List<MovieMetaData.ShopItemInterface> call() throws Exception {
                 try {
 
                     List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -232,12 +232,12 @@ public class TheTakeApiDAO {
                     params.add(new BasicNameValuePair(Keys.Category, Integer.toString(categoryId) ));
 
                     String result = getFromUrl(THETAKE_DOMAIN + Endpoints.GetCategoryProducts, params);
-                    Type listType = new TypeToken<ArrayList<TheTakeProduct>>() {
+                    Type listType = new TypeToken<ArrayList<MovieMetaData.ShopItemInterface>>() {
                     }.getType();
 
                     Gson gson = new GsonBuilder().create();
 
-                    List<TheTakeProduct> resultList = gson.fromJson(result, listType);
+                    List<MovieMetaData.ShopItemInterface> resultList = gson.fromJson(result, listType);
                     return resultList;
 
                 } catch (Exception ex) {

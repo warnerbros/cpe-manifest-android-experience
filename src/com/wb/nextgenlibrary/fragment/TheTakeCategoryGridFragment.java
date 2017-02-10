@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
+import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.data.TheTakeData;
 import com.wb.nextgenlibrary.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgenlibrary.network.TheTakeApiDAO;
@@ -39,9 +40,9 @@ public class TheTakeCategoryGridFragment extends AbstractNextGenFragment{
         if (selectedCategory.products == null) {
 
 
-            TheTakeApiDAO.getCategoryProducts(selectedCategory.categoryId, new ResultListener<List<TheTakeData.TheTakeProduct>>() {
+            TheTakeApiDAO.getCategoryProducts(selectedCategory.categoryId, new ResultListener<List<MovieMetaData.ShopItemInterface>>() {
                 @Override
-                public void onResult(List<TheTakeData.TheTakeProduct> result) {
+                public void onResult(List<MovieMetaData.ShopItemInterface> result) {
                     selectedCategory.products = result;
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -127,17 +128,17 @@ public class TheTakeCategoryGridFragment extends AbstractNextGenFragment{
             TextView brandName = (TextView) convertView.findViewById(R.id.the_take_brand_name);
             TextView productName = (TextView) convertView.findViewById(R.id.the_take_product_name);
 
-            TheTakeData.TheTakeProduct product = getItem(position);
+            MovieMetaData.ShopItemInterface product = getItem(position);
             if (product != null){
                 if (productThumbnail != null){
-                    productThumbnail.setKeyCropXY(product.keyCropProductX, product.keyCropProductY);
+                    productThumbnail.setKeyCropXY(product.getKeyCropProductX(), product.getKeyCropProductY());
                     NextGenGlide.load(getActivity(), product.getThumbnailUrl()).asBitmap().fitCenter().into(productThumbnail);
                     //PicassoTrustAll.loadImageIntoView(getActivity(), product.getThumbnailUrl(), productThumbnail);
                 }
                 if (brandName != null)
-                    brandName.setText(product.productBrand);
+                    brandName.setText(product.getProductBrand());
                 if (productName != null)
-                    productName.setText(product.productName);
+                    productName.setText(product.getProductName());
             }
 
 
@@ -152,7 +153,7 @@ public class TheTakeCategoryGridFragment extends AbstractNextGenFragment{
                 return 0;
         }
 
-        public TheTakeData.TheTakeProduct getItem(int position) {
+        public MovieMetaData.ShopItemInterface getItem(int position) {
             if (selectedCategory != null && selectedCategory.products != null && position < selectedCategory.products.size())
                 return selectedCategory.products.get(position);
             else
@@ -161,7 +162,7 @@ public class TheTakeCategoryGridFragment extends AbstractNextGenFragment{
 
         public long getItemId(int position) {
             if (selectedCategory != null && selectedCategory.products != null && position < selectedCategory.products.size())
-                return selectedCategory.products.get(position).productId;
+                return ((TheTakeData.TheTakeProduct)selectedCategory.products.get(position)).productId;
             else
                 return 0;
         }
@@ -170,7 +171,7 @@ public class TheTakeCategoryGridFragment extends AbstractNextGenFragment{
         public void onItemClick(AdapterView<?> parent, View view, int position, long id){
             TheTakeProductDetailFragment fragment = new TheTakeProductDetailFragment();
             fragment.setContentViewId(R.layout.the_take_single_product_view);
-            TheTakeData.TheTakeProduct product = getItem(position);
+            MovieMetaData.ShopItemInterface product = getItem(position);
 
             fragment.setProduct(product);
             if (getActivity() instanceof NextGenFragmentTransactionInterface){
