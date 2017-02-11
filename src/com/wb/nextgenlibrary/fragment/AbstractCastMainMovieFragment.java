@@ -260,7 +260,7 @@ public abstract class AbstractCastMainMovieFragment extends AbstractNextGenMainM
 		}
 	}*/
 
-	public static boolean areEqualMediaInfo(MediaInfo info1, MediaInfo info2){
+	public boolean areEqualMediaInfo(MediaInfo info1, MediaInfo info2){
 		if (info1 == null || info2 == null)
 			return false;
 		if (info1.getMetadata().equals(info2.getMetadata()) &&
