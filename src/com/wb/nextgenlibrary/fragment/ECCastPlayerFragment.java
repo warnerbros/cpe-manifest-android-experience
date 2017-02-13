@@ -178,6 +178,10 @@ public class ECCastPlayerFragment extends Fragment implements ECVideoPlayerInter
 			mFuture.cancel(true);
 			return;
 		}
+
+		if (mPlaybackCompleted)
+			return;
+
 		int playerState = remoteMediaClient.getPlayerState();
 		String deviceName = mCastSession.getCastDevice().getFriendlyName();
 		int idleReason = remoteMediaClient.getIdleReason();
@@ -374,6 +378,8 @@ public class ECCastPlayerFragment extends Fragment implements ECVideoPlayerInter
 	}
 
 	public void startCasting(){
+
+		mPlaybackCompleted = false;
 		if ((!StringHelper.isEmpty(movieUrl) || selectedAVItem != null) && isCasting()) {
 			MediaInfo mediaInfo = null;
 
