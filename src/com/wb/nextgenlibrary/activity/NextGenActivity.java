@@ -53,6 +53,7 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
     ImageButton playMovieButton;
     ImageButton extraButton;
     ImageButton purchaseButton;
+    ImageView titleImageView;
 
     Button playMovieTextButton;
     Button extraTextButton;
@@ -92,6 +93,8 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
         startupVideoView = (VideoView)findViewById(R.id.startup_video_view);
         startupImageView = (ImageView) findViewById(R.id.startup_image_view);
+
+        titleImageView = (ImageView) findViewById(R.id.startup_title_image);
 
         imageButtonsFrame = findViewById(R.id.startup_buttons_layout);
 
@@ -417,7 +420,8 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
         if (nodeStyleData != null) {
             textButtonsFrame.setVisibility(View.GONE);
             StyleData.ThemeData buttonTheme = nodeStyleData.theme;
-            BackgroundOverlayAreaType buttonLayoutArea = nodeStyleData.getBGOverlay();
+            BackgroundOverlayAreaType buttonLayoutArea = nodeStyleData.getButtonOverlayArea();
+            BackgroundOverlayAreaType titleLayoutArea = nodeStyleData.getTitleOverlayArea();
 
             if (!StringHelper.isEmpty(mainStyle.getBackgroundVideoUrl()) && startupVideoSize == null)
                 return;
@@ -425,6 +429,7 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
             if (buttonsReferenceFrameSourceSize == null)
                 buttonsReferenceFrameSourceSize = new Size(1920, 1080);
             double shrinkRatio = ((double) buttonsReferenceFrameSize.getWidth()) / ((double) buttonsReferenceFrameSourceSize.getWidth());
+
 
             double buttonShrinkRation = shrinkRatio;
             buttonParentFrame.copyFrameParams(buttonsReferenceFrame);
@@ -525,6 +530,39 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
                 }
                 imageButtonsFrame.invalidate();
+
+
+
+                if (titleImageView != null && titleLayoutArea != null && !StringHelper.isEmpty(NextGenExperience.getMovieMetaData().getTitletreatmentImageUrl())){
+
+                    double titleShrinkRatio = shrinkRatio;
+                    int titleWidth = (int) (((double) titleLayoutArea.getWidthPixels().intValue()) * shrinkRatio);
+
+                    if (titleWidth > screenWidth){           // if the specific area is wider than the screen, set the button area to be the screen width
+                        titleWidth = screenWidth - 20 ;      // 20 being the padding on the size, 10 pixels each side
+                        titleShrinkRatio = ((double) titleWidth / ((double) titleLayoutArea.getWidthPixels().intValue()));
+                    }
+
+                    int titleHeight = (int) (((double) titleLayoutArea.getHeightPixels().intValue()) * titleShrinkRatio);
+                    int titleY = (int) (((double) buttonsReferenceFrameSourceSize.getHeight() - titleLayoutArea.getPixelsFromBottom().intValue()) * shrinkRatio) - titleHeight;
+                    int titleX = (int) (((double) titleLayoutArea.getPixelsFromLeft().intValue()) * shrinkRatio);
+
+                    if (isPortrait){
+                        titleX = (buttonsReferenceFrameSize.getWidth() - titleWidth) / 2;
+                    }
+                    ViewGroup.LayoutParams titleParams = titleImageView.getLayoutParams();
+                    titleParams.height = titleHeight;
+                    titleParams.width = titleWidth;
+                    if (titleParams instanceof LinearLayout.LayoutParams) {
+                        ((LinearLayout.LayoutParams) titleParams).setMargins(titleX, titleY, 0, 0);
+                    } else if (titleParams instanceof RelativeLayout.LayoutParams) {
+                        ((RelativeLayout.LayoutParams) titleParams).setMargins(titleX, titleY, 0, 0);
+                    } else if (titleParams instanceof FrameLayout.LayoutParams) {
+                        ((FrameLayout.LayoutParams) titleParams).setMargins(titleX, titleY, 0, 0);
+                    }
+                    NextGenGlide.load(this, NextGenExperience.getMovieMetaData().getTitletreatmentImageUrl()).into(titleImageView);
+                }
+
                 if (StringHelper.isEmpty(mainStyle.getBackgroundVideoUrl())) {
                     imageButtonsFrame.setVisibility(View.VISIBLE);
                     exitIcon.setVisibility(View.VISIBLE);

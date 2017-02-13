@@ -214,9 +214,16 @@ public class StyleData {
                 background = null;
         }
 
-        public BackgroundOverlayAreaType getBGOverlay(){
+        public BackgroundOverlayAreaType getButtonOverlayArea(){
             if (background != null)
-                return background.overlayAreaType;
+                return background.buttonOverlayArea;
+            else
+                return null;
+        }
+
+        public BackgroundOverlayAreaType getTitleOverlayArea(){
+            if (background != null)
+                return background.titleOverlayArea;
             else
                 return null;
         }
@@ -231,6 +238,10 @@ public class StyleData {
     }
 
     public static class NodeBackground{
+
+        private static final String TITLE_TAG = "title";
+        private static final String BUTTON_TAG = "button";
+
         String videoPresentationID;
         String imagePictureGroupID;
         String colorHex;
@@ -242,7 +253,7 @@ public class StyleData {
         Size videoSize = null;
         List<PictureImageData> bgImages = new ArrayList<>();
 
-        BackgroundOverlayAreaType overlayAreaType;
+        BackgroundOverlayAreaType buttonOverlayArea, titleOverlayArea;
 
         public NodeBackground(BackgroundType backgroundType,
                               HashMap<String, PictureGroupType> pictureGroupAssetsMap,
@@ -302,8 +313,14 @@ public class StyleData {
                     scaleMethod = ScaleMethod.valueOf(backgroundType.getAdaptation().getScaleMethod());
                     positionMethod = PositionMethod.valueOf(backgroundType.getAdaptation().getPositioningMethod());
                 }
-                if (backgroundType.getOverlayArea() != null && backgroundType.getOverlayArea().size() > 0)
-                    overlayAreaType = backgroundType.getOverlayArea().get(0);
+                if (backgroundType.getOverlayArea() != null && backgroundType.getOverlayArea().size() > 0) {
+                    for (BackgroundOverlayAreaType overlayArea : backgroundType.getOverlayArea()){
+                        if (TITLE_TAG.equals(overlayArea.getTag()))
+                            titleOverlayArea = overlayArea;
+                        else
+                            buttonOverlayArea = overlayArea;
+                    }
+                }
                 //backgroundType.getAdaptation().
             }
         }
