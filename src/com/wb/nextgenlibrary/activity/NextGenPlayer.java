@@ -247,6 +247,8 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                 resumeTime = mainMovieFragment.getCurrentPosition();
 
             if (isCasting()){
+
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
                 mainMovieFragment = NextGenExperience.getCastMovieFragmentClass().newInstance();
                 ((AbstractCastMainMovieFragment)mainMovieFragment).setCastControllers(mCastSession, remoteMediaClient, mSessionManager);
             }else

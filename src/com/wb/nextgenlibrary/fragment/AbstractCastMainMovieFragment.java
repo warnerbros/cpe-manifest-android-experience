@@ -1,12 +1,19 @@
 package com.wb.nextgenlibrary.fragment;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.widget.ListPopupWindow;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -31,6 +38,8 @@ import com.wb.nextgenlibrary.widget.CustomMediaController;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -80,6 +89,9 @@ public abstract class AbstractCastMainMovieFragment extends AbstractNextGenMainM
 
 	protected CastSession mCastSession;
 	protected SessionManager mSessionManager;
+
+	ListPopupWindow subtitleListPopupWindow = null;
+	AudioSubtitleListAdapter subtitleListAdapter = null;
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
@@ -178,87 +190,6 @@ public abstract class AbstractCastMainMovieFragment extends AbstractNextGenMainM
 			remoteMediaClient.load(mediaInfo, true, mStartTime);
 		}
 	}
-	/*
-	public void startCasting(){
-
-		if ((!StringHelper.isEmpty(movieUrl) || stream != null) && isCasting()) {
-			MediaInfo mediaInfo = null;
-
-			if (stream == null) {
-				MediaMetadata mediaMetadata = new MediaMetadata();
-				mediaMetadata.putString(MediaMetadata.KEY_TITLE, movieName);
-				if (!StringHelper.isEmpty(posterUrl)) {
-					mediaMetadata.addImage(new WebImage(Uri.parse(posterUrl)));
-				}
-				String url = "http://wb-extras.warnerbros.com/extrasplus/prod/Manifest/BatmanvSuperman/streams/BVS_506_DOOMSDAY01_.m3u8";
-				mediaInfo = new MediaInfo.Builder(url)
-						.setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
-						.setContentType("application/x-mpegURL")
-						//"application/vnd.ms-sstr+xml""application/dash+xml""application/x-mpegurl""application/dash+xml"
-						.setMetadata(mediaMetadata)
-						.build();
-			} else {
-				try {
-
-					if (stream.streamAssetList != null && stream.streamAssetList.size() > 0){
-						streamAsset = stream.streamAssetList.get(0);
-					}
-					if ( streamAsset != null) {
-						JSONObject metadataJson = new JSONObject();
-						metadataJson.put(MEDIAINFO_TAG_RIGHTID, currentPlaybackContent.getRightsId());
-						metadataJson.put(MEDIAINFO_TAG_STREAMID, streamAsset.streamId);
-						metadataJson.put(MEDIAINFO_TAG_USERID, FlixsterApplication.getUserID());
-						metadataJson.put(MEDIAINFO_TAG_ASSETID, currentPlaybackContent.getContentId());
-
-						String licenseUrl = StringHelper.isEmpty(streamAsset.drmServerUrl)? F.getBaseURL() + F.PLAYREADY_SERVER_KEY_STREAM: streamAsset.drmServerUrl;
-						metadataJson.put(MEDIAINFO_TAG_LICENSEURL, licenseUrl);
-						if (!StringHelper.isEmpty(streamAsset.playbackParams))
-							metadataJson.put(MEDIAINFO_TAG_LICENSECUSTOMDATA, streamAsset.playbackParams);
-
-
-						metadataJson.put(MEDIAINFO_TAG_SELECTED_SUBTITLE_TRACK, 0);
-						if (!StringHelper.isEmpty(streamAsset.amsLicenseToken))
-							metadataJson.put(MEDIAINFO_TAG_AUTHTOKEN, streamAsset.amsLicenseToken);
-						else if (!StringHelper.isEmpty(FlixsterApplication.getAuthToken()) && ContentLocker.Lasp.WB.toString().equals(streamAsset.lasp))
-							metadataJson.put(MEDIAINFO_TAG_AUTHTOKEN, FlixsterApplication.getAuthToken());
-
-						MediaMetadata mediaMetadata = new MediaMetadata();
-						mediaMetadata.putString(MediaMetadata.KEY_TITLE, currentPlaybackContent.getName());
-
-						String posterUrl = currentPlaybackContent.getChromeCastPosterURL();
-
-						if (posterUrl != null) {
-							mediaMetadata.addImage(new WebImage(Uri.parse(posterUrl)));
-						}
-						String contentType = "video/mp4";
-						if (!streamAsset.drm.equals("PLAY_READY")){
-							contentType = "application/dash+xml";
-						}
-
-						mediaInfo = new MediaInfo.Builder(streamAsset.fileLocation)
-								.setCustomData(metadataJson)
-								.setContentType(contentType)
-								.setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
-								.setMetadata(mediaMetadata).build();
-
-
-						//flixMovieId = castMediaInfo.rightsId;
-					}
-				}catch (Exception ex){
-
-				}
-
-			}
-
-			MediaInfo currentCastMediaInfo = remoteMediaClient.getMediaInfo();
-			if (areEqualMediaInfo(currentCastMediaInfo, mediaInfo) && (remoteMediaClient.isPlaying() || remoteMediaClient.isPaused()) ){
-				updateStatus();
-			}else if (currentPlaybackContent != null){
-				mStartTime = loadPlayPosition(currentPlaybackContent.getRightsId());
-				remoteMediaClient.load(mediaInfo, true, mStartTime);
-			}
-		}
-	}*/
 
 	public boolean areEqualMediaInfo(MediaInfo info1, MediaInfo info2){
 		if (info1 == null || info2 == null)
@@ -291,6 +222,12 @@ public abstract class AbstractCastMainMovieFragment extends AbstractNextGenMainM
 	private void updateStatus(){
 		if (remoteMediaClient == null || mCastSession == null || mCastSession.getCastDevice() == null)
 			return;
+
+		if (getAvailableSubtitleList() != null && getAvailableSubtitleList().size() > 0)
+			ivCcToggle.setVisibility(View.VISIBLE);
+		else
+			ivCcToggle.setVisibility(View.GONE);
+
 		int playerState = remoteMediaClient.getPlayerState();
 		String deviceName = mCastSession.getCastDevice().getFriendlyName();
 		int idleReason = remoteMediaClient.getIdleReason();
@@ -404,6 +341,16 @@ public abstract class AbstractCastMainMovieFragment extends AbstractNextGenMainM
 		return String.format(Locale.US, "%d:%02d", minutes, seconds);
 	}
 
+	public static class NGESubtitleElement{
+		final int trackNumber;
+		final String displayName;
+		public NGESubtitleElement(int track, String name){
+			trackNumber = track;
+			displayName = name;
+		}
+	}
+
+	abstract protected List<NGESubtitleElement> getAvailableSubtitleList();
 
 	@Override
 	public void onClick(View v) {
@@ -415,17 +362,61 @@ public abstract class AbstractCastMainMovieFragment extends AbstractNextGenMainM
 					remoteMediaClient.play();
 			}
 		} else if (v.getId() == R.id.cast_cc_toggle) {
-			if (mCastSession.getRemoteMediaClient().getMediaInfo().getMediaTracks() != null){
-				if (mCastSession.getRemoteMediaClient().getMediaStatus().getActiveTrackIds() != null)
-					mCastSession.getRemoteMediaClient().setActiveMediaTracks(new long[]{});
-				else
-					mCastSession.getRemoteMediaClient().setActiveMediaTracks(new long[]{1});
 
-				//mCastSession.getRemoteMediaClient().set
+			if (subtitleListPopupWindow == null){
+				if (getAvailableSubtitleList() == null || getAvailableSubtitleList().size() == 0) {
+					ivCcToggle.setVisibility(View.GONE);
+				} else {
+					ivCcToggle.setVisibility(View.VISIBLE);
+
+					List<String> list = new ArrayList<>();
+					for (NGESubtitleElement elements : getAvailableSubtitleList()) {
+						list.add(elements.displayName);
+					}
+					list.add(0, getResources().getString(R.string.subtitle_off));
+					subtitleListAdapter = new AudioSubtitleListAdapter(list);
+
+					subtitleListPopupWindow = new ListPopupWindow(getActivity());
+					subtitleListPopupWindow.setModal(false);
+					subtitleListPopupWindow.setAdapter(subtitleListAdapter);
+
+					subtitleListPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+						@Override
+						public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+							subtitleListAdapter.setSelection(position);
+
+							int selectedTrack = -1;
+							if (position != 0 && position <= getAvailableSubtitleList().size()) {
+								selectedTrack = getAvailableSubtitleList().get(position - 1).trackNumber;
+							}
+
+							if (mCastSession.getRemoteMediaClient().getMediaInfo().getMediaTracks() != null){
+
+								if (selectedTrack == -1){
+									mCastSession.getRemoteMediaClient().setActiveMediaTracks(new long[]{});
+								}else
+									mCastSession.getRemoteMediaClient().setActiveMediaTracks(new long[]{selectedTrack});
+
+								/*
+								if (mCastSession.getRemoteMediaClient().getMediaStatus().getActiveTrackIds() != null)
+									mCastSession.getRemoteMediaClient().setActiveMediaTracks(new long[]{});
+								else
+									mCastSession.getRemoteMediaClient().setActiveMediaTracks(new long[]{1});*/
+							}
+
+							subtitleListPopupWindow.dismiss();
+						}
+					});
+				}
 			}
-				/*if (mRemote != null && mRemote.isCaptionsAvailable()) {
-					mRemote.setCaptionsEnabled(!mRemote.isCaptionsEnabled());
-				}*/
+
+			subtitleListPopupWindow.setAnchorView(v);
+			subtitleListPopupWindow.setContentWidth(measureContentWidth(subtitleListAdapter));
+			subtitleListPopupWindow.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black)));
+			subtitleListPopupWindow.show();
+
+
+
 		}
 	}
 
@@ -524,6 +515,101 @@ public abstract class AbstractCastMainMovieFragment extends AbstractNextGenMainM
 	public void onDestroy(){
 		super.onDestroy();
 		mFuture.cancel(false);
+	}
+
+
+	class AudioSubtitleListAdapter extends BaseAdapter {
+		List<String> items;
+		int selectedIndex = 0;
+		AudioSubtitleListAdapter(List<String> items) {
+			this.items = items;
+		}
+
+		public void setSelection(int index){
+			selectedIndex = index;
+			notifyDataSetChanged();
+		}
+
+
+		@Override
+		public int getCount() {
+			return items == null ? 0 : items.size();
+		}
+
+
+		@Override
+		public String getItem(int index) {
+			if (items != null && index <items.size()){
+				return items.get(index);
+			}else
+				return null;
+		}
+
+
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
+
+
+		@Override
+		public View getView(final int index, View view, ViewGroup arg2) {
+			View target = null;
+
+			if (view != null){
+				target = view;
+			}else{
+				LayoutInflater inflate = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				target = inflate.inflate(R.layout.subtitle_spinner_item, arg2, false);
+
+			}
+
+
+			TextView tView = (TextView)target.findViewById(android.R.id.text1);
+			tView.setText(getItem(index));
+
+			if (index == selectedIndex){
+				tView.setTextColor(getResources().getColor(R.color.drawer_yellow));
+			}else
+				tView.setTextColor(getResources().getColor(R.color.white));
+
+			return target;
+		}
+
+	}
+
+	private int measureContentWidth(ListAdapter listAdapter) {
+		ViewGroup mMeasureParent = null;
+		int maxWidth = 0;
+		View itemView = null;
+		int itemType = 0;
+
+		final ListAdapter adapter = listAdapter;
+		final int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+		final int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+		final int count = adapter.getCount();
+		for (int i = 0; i < count; i++) {
+			final int positionType = adapter.getItemViewType(i);
+			if (positionType != itemType) {
+				itemType = positionType;
+				itemView = null;
+			}
+
+			if (mMeasureParent == null) {
+				mMeasureParent = new FrameLayout(getActivity());
+			}
+
+			itemView = adapter.getView(i, itemView, mMeasureParent);
+			itemView.measure(widthMeasureSpec, heightMeasureSpec);
+
+			final int itemWidth = itemView.getMeasuredWidth();
+
+			if (itemWidth > maxWidth) {
+				maxWidth = itemWidth;
+			}
+		}
+
+		return maxWidth;
 	}
 
 }
