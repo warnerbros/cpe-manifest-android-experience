@@ -1,5 +1,7 @@
 package com.wb.nextgenlibrary.model;
 
+import com.wb.nextgenlibrary.data.MovieMetaData;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -154,6 +156,61 @@ public abstract class NextGenIMEEngine <T>{
 
 
         return true;
+    }
+
+    public T searchForClosestItem(final long movieTimecode){
+
+        //double dTimeCode = (double)movieTimecode * 23.98/24;            // frame adjustment
+        long timecode = movieTimecode;//(long)dTimeCode;
+        if (currentIndex != -1){
+            int compareTimeCodeValue = compareCurrentTimeWithItemAtIndex(timecode, currentIndex);
+            if (compareTimeCodeValue > 0)
+                return binarySearchForClosestItem(movieTimecode, compareTimeCodeValue, imeElements.size() - 1);
+            else if (compareTimeCodeValue < 0)
+                return binarySearchForClosestItem(movieTimecode, 0, currentIndex);
+            else
+                return imeElements.get(currentIndex);
+
+        }else
+            return binarySearchForClosestItem(movieTimecode, 0, imeElements.size() - 1);
+
+    }
+
+    private T binarySearchForClosestItem(final long timecode, int lowerBoundIndex, int upperBoundIndex){
+
+        int searchIndex = lowerBoundIndex + (upperBoundIndex - lowerBoundIndex) / 2;
+
+        if (lowerBoundIndex == upperBoundIndex)
+            return imeElements.get(lowerBoundIndex);
+
+        int compareTimeCodeValue = compareCurrentTimeWithItemAtIndex(timecode, searchIndex);
+
+        if (compareTimeCodeValue > 0){ //after
+            //check in next element is after this time code => gap in IME, no element for this time
+            if (searchIndex + 1 < imeElements.size()){
+                int toNext = compareCurrentTimeWithItemAtIndex(timecode, searchIndex + 1);
+                if (toNext <= 0){
+                    currentIndex = searchIndex;
+                    return imeElements.get(searchIndex);
+                } else{
+                    return binarySearchForClosestItem(timecode, searchIndex, upperBoundIndex);
+                }
+            }
+        } else if (compareTimeCodeValue < 0) {// before
+            if (searchIndex > 0) {
+                int toNext = compareCurrentTimeWithItemAtIndex(timecode, searchIndex - 1);
+                if (toNext >= 0) {
+                    currentIndex = searchIndex - 1;
+                    return imeElements.get(searchIndex - 1);
+                } else {
+                    return binarySearchForClosestItem(timecode, lowerBoundIndex, searchIndex);
+                }
+            }
+        }
+
+        currentIndex = searchIndex;
+        return imeElements.get(searchIndex);
+
     }
 
     /*

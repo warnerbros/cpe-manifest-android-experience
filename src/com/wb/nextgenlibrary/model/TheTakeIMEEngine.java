@@ -87,7 +87,7 @@ public class TheTakeIMEEngine extends NextGenIMEEngine<TheTakeProductFrame>{
             lastGetTimecode = timecode;
             synchronized (imeElements) {
 
-                boolean result = super.binarySearch(timecode);
+                boolean result = super.linearSearch(timecode);
                 return result;
             }
         }

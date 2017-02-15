@@ -5,6 +5,8 @@ import android.content.Context;
 import com.google.gson.annotations.SerializedName;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
+import com.wb.nextgenlibrary.model.AVGalleryIMEEngine;
+import com.wb.nextgenlibrary.model.NextGenIMEEngine;
 import com.wb.nextgenlibrary.parser.LocalizableMetaDataInterface;
 import com.wb.nextgenlibrary.parser.ManifestXMLParser;
 import com.wb.nextgenlibrary.parser.appdata.AppDataLocationType;
@@ -115,6 +117,8 @@ public class MovieMetaData {
     private HashMap<String, StyleData.ExperienceStyle> experienceStyleMap = new HashMap<String, StyleData.ExperienceStyle>();
 
     final static public String movieTitleText = "Man of Steel";
+
+    private IMEElementsGroup shareClipIMEElementGroup = null;
 
     public String getMainMovieUrl(){
         if (rootExperience != null && rootExperience.audioVisualItems.size() > 0){
@@ -624,6 +628,33 @@ public class MovieMetaData {
         /*****************End of Time Sequence Events****************************/
 
         return result;
+    }
+
+    public boolean hasShareClipExp(){
+        if (imeElementGroups != null && imeElementGroups.size() > 0){
+            for (IMEElementsGroup imeElementsGroup : imeElementGroups){
+                if (imeElementsGroup.linkedExperience != null && imeElementsGroup.linkedExperience.isShareClip()) {
+                    shareClipIMEElementGroup = imeElementsGroup;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    NextGenIMEEngine shareClipIMEEngine;
+
+    public String getClosestShareClipImage(int timeCode){
+        if (hasShareClipExp()){
+            if (shareClipIMEEngine == null)
+                shareClipIMEEngine = new AVGalleryIMEEngine(shareClipIMEElementGroup.getIMEElementesList());
+            IMEElement item = ((IMEElement)shareClipIMEEngine.searchForClosestItem(timeCode));
+            if (item != null && item.imeObject != null && item.imeObject instanceof AudioVisualItem)
+                return ((AudioVisualItem) item.imeObject).getPosterImgUrl();
+            else
+                return null;
+        }
+        return null;
     }
 
     private static boolean isShopItem(AppDataType appDataType){

@@ -84,7 +84,7 @@ public class NextGenIMEActorFragment extends NextGenActorListFragment implements
         final List<MovieMetaData.CastData> newList = new ArrayList<MovieMetaData.CastData>();
         if (timecode != -1){
             for(CastIMEEngine thisEngine: castIMEEngines){
-                thisEngine.binarySearch(timecode);
+                thisEngine.linearSearch(timecode);
                 List<MovieMetaData.IMEElement<MovieMetaData.CastData>> thisData = thisEngine.getCurrentIMEItems();
                 if (thisData.size() > 0) {
                     for (MovieMetaData.IMEElement<MovieMetaData.CastData> imeObject : thisEngine.getCurrentIMEItems())

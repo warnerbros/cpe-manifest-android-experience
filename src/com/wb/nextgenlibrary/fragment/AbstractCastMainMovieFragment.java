@@ -51,17 +51,6 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class AbstractCastMainMovieFragment extends AbstractNextGenMainMovieFragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener/*, DialogBuilder.DialogListener*/ {
 
-	/////////////////////
-	// MediaInfo Constant tags
-
-	public static final String MEDIAINFO_TAG_RIGHTID = "rightId";
-	public static final String MEDIAINFO_TAG_STREAMID = "streamId";
-	public static final String MEDIAINFO_TAG_USERID = "userId";
-	public static final String MEDIAINFO_TAG_ASSETID = "assetId";
-	public static final String MEDIAINFO_TAG_AUTHTOKEN = "authToken";
-	public static final String MEDIAINFO_TAG_LICENSEURL = "licenseUrl";
-	public static final String MEDIAINFO_TAG_LICENSECUSTOMDATA = "licenseCustomData";
-	public static final String MEDIAINFO_TAG_SELECTED_SUBTITLE_TRACK = "selectedSubtitle";
 
 	private ImageView ivPoster, ivPlayPause, ivCcToggle;
 	private TextView tvTarget, tvTimeCur, tvTimeDur;
@@ -75,10 +64,7 @@ public abstract class AbstractCastMainMovieFragment extends AbstractNextGenMainM
 	protected boolean mPlaybackCompleted = false;
 
 	private String loadedTitle;
-	private Uri loadedImageUri;
 
-
-	protected String movieUrl = "", posterUrl = "", movieName = "";
 	protected long mStartTime = 0L;
 
 	private ScheduledFuture<?> mFuture;
@@ -134,28 +120,13 @@ public abstract class AbstractCastMainMovieFragment extends AbstractNextGenMainM
 		super.onResume();
 		startCasting();
 		mFuture = mThreadPoolExecutor.scheduleWithFixedDelay(mUpdateRunnable, 500, 500, TimeUnit.MILLISECONDS);
-
-		//FlixsterApplication.getCastControl().onStart();
-
 	}
 
 	@Override
 	public void onPause() {
-
-		//savePlayPosition(getCurrentPosition());
 		super.onPause();
 
 		mFuture.cancel(false);
-	}
-
-	public void setVideoInfo(String movieName, String movieUrl, String posterUrl){
-		this.movieName = movieName;
-		this.movieUrl = movieUrl;
-		this.posterUrl = posterUrl;
-		if (ivPoster != null && !StringHelper.isEmpty(this.posterUrl)){
-			Glide.with(getActivity()).load(this.posterUrl).fitCenter().into(ivPoster);
-
-		}
 	}
 
 	protected boolean isCasting(){
@@ -172,6 +143,8 @@ public abstract class AbstractCastMainMovieFragment extends AbstractNextGenMainM
 
 	public abstract long getStoredPlaybackPositon();
 
+	public abstract String getMovieName();
+	public abstract String getPosterUrl();
 
 	protected void startCasting(){
 		MediaInfo mediaInfo = getCastMediaInfo();
@@ -187,6 +160,9 @@ public abstract class AbstractCastMainMovieFragment extends AbstractNextGenMainM
 			updateStatus();
 		}else if (mStartTime <= 0){
 			mStartTime = getStoredPlaybackPositon();
+			remoteMediaClient.load(mediaInfo, true, mStartTime);
+		} else{
+
 			remoteMediaClient.load(mediaInfo, true, mStartTime);
 		}
 	}
@@ -249,13 +225,6 @@ public abstract class AbstractCastMainMovieFragment extends AbstractNextGenMainM
 		}
 
 		if (playerState == MediaStatus.PLAYER_STATE_PLAYING) {
-						/*if (!startedPlaying){
-							ContentLocker r = FlixsterApplication.getCurrentPlayableContent();
-							if (r != null && r.isRental() && !hasRentalClockStarted){
-								StreamDAO.tickRentalClock(r.getRightsId());
-							}
-							startedPlaying = true;
-						}*/
 			ivPlayPause.setImageResource(R.drawable.ic_media_pause_flat_large);
 		} else if (playerState == MediaStatus.PLAYER_STATE_PAUSED) {
 			ivPlayPause.setImageResource(R.drawable.ic_media_play_flat_large);
@@ -280,9 +249,6 @@ public abstract class AbstractCastMainMovieFragment extends AbstractNextGenMainM
 				sbSeek.setMax((int) duration);
 			}
 			sbSeek.setVisibility(View.VISIBLE);
-						/*if (position - playbackPosition > 9 || position < playbackPosition){
-							savePlayPosition(position);
-						}*/
 			tvTimeCur.setVisibility(View.VISIBLE);
 			tvTimeCur.setText(secondsToHms(position));
 			tvTimeDur.setVisibility(View.VISIBLE);
@@ -305,28 +271,22 @@ public abstract class AbstractCastMainMovieFragment extends AbstractNextGenMainM
 			return;
 		}
 
-		String title = movieName;
-		if (title != null && !title.equals(movieName) ) {
+		String title = getMovieName();
+		if (!StringHelper.isEmpty(title) ) {
 			getActivity().setTitle(title);
 			loadedTitle = title;
 		}
 
-		Uri imageUrl = Uri.parse(posterUrl);
-		if (imageUrl != null && !imageUrl.equals(imageUrl)) {
-
-
-			loadedImageUri = imageUrl;
-			if (ivPoster != null && !StringHelper.isEmpty(this.posterUrl)){
-				Glide.with(getActivity()).load(this.posterUrl).fitCenter().into(ivPoster);
-
-			}
-
+		int timeCode = getCurrentPosition();
+		String posterUrl = getPosterUrl();
+		if (NextGenExperience.getMovieMetaData().hasShareClipExp() && getActivity() instanceof NextGenPlayer){
+			posterUrl = NextGenExperience.getMovieMetaData().getClosestShareClipImage(timeCode);
+		}
+		if (!StringHelper.isEmpty(posterUrl) && ivPoster != null){
+			Glide.with(getActivity()).load(posterUrl).fitCenter().into(ivPoster);
 		}
 		ivCcToggle.setEnabled(mCastSession.getRemoteMediaClient().getMediaInfo().getMediaTracks() != null);
 		ivCcToggle.setSelected(mCastSession.getRemoteMediaClient().getMediaStatus().getActiveTrackIds() != null);
-
-		//ivCcToggle.setEnabled(mRemote.isCaptionsAvailable());
-		//ivCcToggle.setSelected(mRemote.isCaptionsEnabled());
 	}
 
 	private static String secondsToHms(int inputSeconds) {
@@ -397,11 +357,6 @@ public abstract class AbstractCastMainMovieFragment extends AbstractNextGenMainM
 								}else
 									mCastSession.getRemoteMediaClient().setActiveMediaTracks(new long[]{selectedTrack});
 
-								/*
-								if (mCastSession.getRemoteMediaClient().getMediaStatus().getActiveTrackIds() != null)
-									mCastSession.getRemoteMediaClient().setActiveMediaTracks(new long[]{});
-								else
-									mCastSession.getRemoteMediaClient().setActiveMediaTracks(new long[]{1});*/
 							}
 
 							subtitleListPopupWindow.dismiss();

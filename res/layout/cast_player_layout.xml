@@ -27,26 +27,35 @@
             android:layout_height="wrap_content" />
 
     </RelativeLayout>
-    <ImageView
-        android:id="@+id/cast_poster"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:background="@android:color/black" />
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/cast_poster"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:background="@android:color/black" />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:src="@color/transparent_black" />
+
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/cast_playpause_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/cast_remote_bottom"
+        android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:gravity="center" >
 
         <ImageView
             android:id="@+id/cast_playpause"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/social_icon_dimen"
+            android:layout_height="@dimen/social_icon_dimen"
             android:background="@drawable/ic_media_playpause_large_bg"
             android:src="@drawable/ic_media_play_flat_large"
             android:visibility="gone" />

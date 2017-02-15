@@ -158,5 +158,4 @@ public abstract class AbstractNextGenMainMovieFragment extends Fragment implemen
     public void setActiveCommentaryTrack(int tracknumber){
         activeCommentaryTrack = tracknumber;
     }
-    //public abstract void setProgressDialog(ProgressDialog dialog);   // do not use app's dialog, always use the NextGen Library one.
 }
