@@ -82,9 +82,6 @@ android {
 
 repositories {
 	mavenCentral()
-	maven {
-		url 'http://ci.warnerbros.com/artifactory/repo'
-	}
     jcenter()
 }
 
