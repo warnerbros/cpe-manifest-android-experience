@@ -6,19 +6,21 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="@dimen/spacing_normal">
         <ImageView
             android:id="@+id/the_take_product_image_full"
+            android:paddingTop="@dimen/spacing_normal"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:scaleType="fitStart"
             android:layout_weight="1"/>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:padding="@dimen/spacing_normal">
+            android:orientation="vertical">
             <TextView
                 android:id="@+id/the_take_product_match"
                 android:textColor="@color/white"
@@ -33,6 +35,7 @@
                 android:id="@+id/the_take_product_brand_name"
                 android:textColor="@android:color/darker_gray"
                 android:gravity="left"
+                android:text="The noble "
                 android:fontFamily="sans-serif-condensed"
                 android:textSize="@dimen/textMedium"
                 android:layout_width="match_parent"

@@ -23,7 +23,7 @@ import com.wb.nextgenlibrary.fragment.NextGenActorListFragment;
 import com.wb.nextgenlibrary.fragment.NextGenExtraMainTableFragment;
 import com.wb.nextgenlibrary.fragment.NextGenGridViewFragment;
 import com.wb.nextgenlibrary.fragment.ShareClipFragment;
-import com.wb.nextgenlibrary.fragment.TheTakeCategoryGridFragment;
+import com.wb.nextgenlibrary.fragment.ShopCategoryGridFragment;
 import com.wb.nextgenlibrary.fragment.TheTakeFrameProductsFragment;
 import com.wb.nextgenlibrary.fragment.TheTakeProductDetailFragment;
 import com.wb.nextgenlibrary.util.utils.StringHelper;

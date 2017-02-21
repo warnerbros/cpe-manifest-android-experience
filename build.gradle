@@ -30,7 +30,7 @@ android {
         
 	sourceSets {
 		main {
-			manifest.srcFile 'AndroidManifest.xml'
+			manifest.srcFile 'NextGenManifest.xml'
 			java.srcDirs = ['src']
 			resources.srcDirs = ['src']
 			aidl.srcDirs = ['src']
@@ -82,9 +82,7 @@ android {
 
 repositories {
 	mavenCentral()
-	maven {
-		url 'http://ci.warnerbros.com/artifactory/repo'
-	}
+
     jcenter()
 }
 

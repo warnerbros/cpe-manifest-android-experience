@@ -54,6 +54,7 @@ import com.wb.nextgenlibrary.util.utils.F;
 import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -96,6 +97,7 @@ public class MovieMetaData {
 
     private static String ITEM_CONTENT_ID = "content_id";
     private static String ITEM_EXTERNAL_URL = "external_url";
+    private static String ITEM_PARENT_CID = "parent_content_id";
 
     private static String NVPAIR_TYPE = "type";
     private static String NVPAIR_TYPE_PRODUCT = "PRODUCT";
@@ -108,6 +110,7 @@ public class MovieMetaData {
     final private List<CastData> castsList = new ArrayList<CastData>();
     final private List<CastData> actorsList = new ArrayList<CastData>();
     final private HashMap<String, ExperienceData> experienceIdToExperienceMap = new HashMap<String, ExperienceData>();
+    final private HashMap<String, ShopItem> appIdToShopItemMap = new HashMap<>();
 
     private ExperienceData rootExperience;
     private boolean hasCalledBaselineAPI = false;
@@ -142,6 +145,10 @@ public class MovieMetaData {
         hasCalledBaselineAPI = bCalled;
     }
 
+    public ShopItem getShopItemByAppId(String appId){
+        return appIdToShopItemMap.get(appId);
+    }
+
     public static MovieMetaData process(ManifestXMLParser.NextGenManifestData manifest){
 
         MediaManifestType mediaManifest = manifest.mainManifest;
@@ -173,6 +180,8 @@ public class MovieMetaData {
 
         HashMap<String, List<ExperienceData>> experienceChildrenToParentMap = new HashMap<String, List<ExperienceData>>();
         HashMap<String, AppDataType> appDataIdTpAppDataMap = new HashMap<String, AppDataType>();
+
+        HashMap<String, LocationItem> appIdToLocationItemMap = new HashMap<>();
 
         String mainMovieExperienceId = mediaManifest.getALIDExperienceMaps().getALIDExperienceMap().get(0).getExperienceID().get(0).getValue();
 
@@ -311,6 +320,7 @@ public class MovieMetaData {
                 List<ECGalleryItem> galleryItems = new ArrayList<ECGalleryItem>();
                 List<AudioVisualItem> avItems = new ArrayList<AudioVisualItem>();
                 List<LocationItem> locationItems = new ArrayList<LocationItem>();
+                List<ShopItem> shopItems = new ArrayList<ShopItem>();
                 List<InteractiveItem> interactiveItems = new ArrayList<InteractiveItem>();
                 boolean isRootExperience = false;
                 String subtype = null;
@@ -445,9 +455,16 @@ public class MovieMetaData {
                         String appGroupId = appType.getAppGroupID();
 
                         if (!StringHelper.isEmpty(appId)) {     // appData
-                            LocationItem locationItem = getLocationItemfromMap(appDataIdTpAppDataMap, pictureImageMap, appId);
-                            if (locationItem != null)
-                                locationItems.add(locationItem);
+
+                            if (isShopItem(appDataIdTpAppDataMap.get(appId))){
+                                ShopItem shopItem = getShopItemFromMap(result.appIdToShopItemMap, appDataIdTpAppDataMap, metaDataAssetsMap, appId);
+                                if (shopItem != null)
+                                    shopItems.add(shopItem);
+                            }else {
+                                LocationItem locationItem = getLocationItemfromMap(appIdToLocationItemMap, appDataIdTpAppDataMap, pictureImageMap, appId);
+                                if (locationItem != null)
+                                    locationItems.add(locationItem);
+                            }
                         } else if (!StringHelper.isEmpty(appGroupId)){      // interactive
                             AppGroupType appGroupType = appGroupIdToAppGroupMap.get(appGroupId);
                             InteractiveItem interactiveItem = new InteractiveItem(appGroupType, inventoryAssetsMap);
@@ -463,7 +480,7 @@ public class MovieMetaData {
 
                 StyleData.ExperienceStyle expStyle = result.experienceStyleMap.containsKey(experience.getExperienceID()) ?
                                                     result.experienceStyleMap.get(experience.getExperienceID()) : null;
-                ExperienceData thisExperience = new ExperienceData(experience, experienceMetaData, avItems, galleryItems, locationItems, interactiveItems, expStyle);
+                ExperienceData thisExperience = new ExperienceData(experience, experienceMetaData, avItems, galleryItems, locationItems, shopItems, interactiveItems, expStyle);
 
 
                 result.experienceIdToExperienceMap.put(experience.getExperienceID(), thisExperience);
@@ -585,7 +602,7 @@ public class MovieMetaData {
                             } else if (OTHER_APP_DATA_ID.equals(otherID.getNamespace())){
                                 String locationId = otherID.getIdentifier();
 
-                                presentationData = getLocationItemfromMap(appDataIdTpAppDataMap, pictureImageMap, locationId);
+                                presentationData = getLocationItemfromMap(appIdToLocationItemMap, appDataIdTpAppDataMap, pictureImageMap, locationId);
 
                             } else if (OTHER_PEOPLE_ID.equals(otherID.getNamespace())){
                                 isCast = true;
@@ -733,13 +750,28 @@ public class MovieMetaData {
         return null;
     }
 
+    private static ShopItem getShopItemFromMap(HashMap<String, ShopItem> appIdToShopItemMap, HashMap<String, AppDataType> appDataMap, HashMap<String, InventoryMetadataType> metadataTypeHashMap, String appId){
+        ShopItem item = appIdToShopItemMap.get(appId);
+        if (item != null)
+            return item;
+        item = new ShopItem(appId, appDataMap, metadataTypeHashMap);
+        appIdToShopItemMap.put(appId, item);
 
-    private static LocationItem getLocationItemfromMap(HashMap<String, AppDataType> appDataMap,
+        return item;
+    }
+
+
+    private static LocationItem getLocationItemfromMap(HashMap<String, LocationItem> appIdToLocationItemMap,
+                                                       HashMap<String, AppDataType> appDataMap,
                                                        HashMap<String, PictureImageData> imageAssetsMap,
                                                        String appId){
         AppDataType appData = appDataMap.get(appId);
         if(appData == null)
             return null;
+
+        LocationItem result = appIdToLocationItemMap.get(appId);
+        if (result != null)
+            return result;
 
         int displayOrder = 0;
         String type = "";
@@ -781,7 +813,9 @@ public class MovieMetaData {
             }
         }
 
-        return new LocationItem(appId, displayOrder, type, location, zoom, text, locationThumbnail, pinImage, experienceId);
+        result = new LocationItem(appId, displayOrder, type, location, zoom, text, locationThumbnail, pinImage, experienceId);
+        appIdToLocationItemMap.put(appId, result);
+        return result;
     }
 
     public List<ExperienceData> getExtraECGroups(){
@@ -1098,7 +1132,7 @@ public class MovieMetaData {
     }
 
     public static enum ECGroupType{
-        FEATURETTES, VISUAL_EFFECT, GALLERY, MIX, EXTERNAL_APP, LOCATIONS, INTERACTIVE, UNKNOWN, ACTORS
+        FEATURETTES, VISUAL_EFFECT, GALLERY, MIX, EXTERNAL_APP, LOCATIONS, INTERACTIVE, UNKNOWN, ACTORS, SHOP
     }
 
     static public class PictureImageData{
@@ -1147,11 +1181,11 @@ public class MovieMetaData {
     }
 
     static public abstract class PresentationDataItem{
-        protected String id;
-        protected String title;
-		protected String parentExperienceId;
-        protected String posterImgUrl;
-        protected String summary = "";
+        public String id;
+        public String title;
+        public String parentExperienceId;
+        public String posterImgUrl;
+        public String summary = "";
 
         public PresentationDataItem(InventoryMetadataType metaData, String parentExperienceId){
             BasicMetadataInfoType localizedInfo = null;
@@ -1368,7 +1402,7 @@ public class MovieMetaData {
         }
     }
 
-    public static interface ShopItemInterface {
+    public static interface ShopItemInterface{
 
         String getShopItemText(Context context);
 
@@ -1390,27 +1424,36 @@ public class MovieMetaData {
 
         String getPurchaseLinkUrl();
 
+        public abstract long getProductId();
+
         //public TheTakeData.TheTakeProductDetail getProductDetail();
     }
 
-    static public class ShopItem extends PresentationDataItem implements ShopItemInterface{
+
+    static public class ShopItem extends PresentationDataItem implements ShopItemInterface, Serializable{
         //public final boolean isFrictional;
-        public final String contentId;
+        public  String contentId;
         //public final ContentMetaData longitude;
-        public final int displayOrder;
-        public final String externalUrl;
+        public  int displayOrder;
+        public  String externalUrl;
 
-        public final String titleDisplayUnlimited;
-        public final String titleSort;
-        public final String posterUrl;
-        public final String summary;
-        public final Size posterSize;
+        public  String titleDisplayUnlimited;
+        public  String titleSort;
+        public  String posterUrl;
+        public  String summary;
+        public  Size posterSize;
 
-        public final String workType;
-        public final String releaseYear;
+        public  String workType;
+        public  String releaseYear;
+
+        public  InventoryMetadataType categoryType;
 
         public String getShopItemText(Context context){
             return context.getResources().getString(R.string.shop_online);
+        }
+
+        public long getProductId(){
+            return -1;
         }
 
 /*
@@ -1434,8 +1477,11 @@ public class MovieMetaData {
             String summary = "";
             Size posterSize = null;
 
+            String parentContentId;
+
             String workType = "";
             String releaseYear = "";
+            InventoryMetadataType categoryType = null;
 
             AppDataType appDataType = appDataMap.get(id);
 
@@ -1447,6 +1493,11 @@ public class MovieMetaData {
                         order = pair.getInteger().intValue();
                     else if (pair.getName().endsWith(ITEM_EXTERNAL_URL))
                         url = pair.getURL();
+                    else if (pair.getName().endsWith(ITEM_PARENT_CID)) {
+                        parentContentId = pair.getContentID();
+                        categoryType = metadataTypeHashMap.get(parentContentId);
+                    }
+
                 }
             }
 
@@ -1496,6 +1547,7 @@ public class MovieMetaData {
             externalUrl = url;
             this.workType = workType;
             this.releaseYear = releaseYear;
+            this.categoryType = categoryType;
         }
 
         public String getPosterImgUrl(){
@@ -1528,11 +1580,11 @@ public class MovieMetaData {
         }
 
         public float getKeyCropProductY(){
-            return 0;
+            return -1f;
         }
 
         public float getKeyCropProductX(){
-            return 0;
+            return -1f;
         }
 
         public String getShareLinkUrl(){
@@ -1803,6 +1855,7 @@ public class MovieMetaData {
         final public List<ECGalleryItem> galleryItems = new ArrayList<ECGalleryItem>();
         final public List<AudioVisualItem> audioVisualItems = new ArrayList<AudioVisualItem>();
         final protected List<LocationItem> locationItems = new ArrayList<LocationItem>();
+        final public List<ShopItem> shopItems = new ArrayList<ShopItem>();
         final public List<InteractiveItem> interactiveItems = new ArrayList<InteractiveItem>();
         final public String experienceId;
         final protected HashMap<String, Integer> childIdToSequenceNumber = new HashMap<String, Integer>();
@@ -1819,7 +1872,7 @@ public class MovieMetaData {
         }
 
         public ExperienceData(ExperienceType experience, InventoryMetadataType metaData, List<AudioVisualItem> avItems,
-                              List<ECGalleryItem> galleryItems, List<LocationItem> locationItems, List<InteractiveItem> interactiveItems,
+                              List<ECGalleryItem> galleryItems, List<LocationItem> locationItems, List<ShopItem> shopItems, List<InteractiveItem> interactiveItems,
                               StyleData.ExperienceStyle style){
             experienceId = experience.getExperienceID();     // or experience Id
             this.style = style;
@@ -1865,6 +1918,10 @@ public class MovieMetaData {
                 this.locationItems.addAll(locationItems);
             }
 
+            if (shopItems != null && shopItems.size() > 0) {
+                this.shopItems.addAll(shopItems);
+            }
+
             if (interactiveItems != null && interactiveItems.size() > 0){
                 this.interactiveItems.addAll(interactiveItems);
             }
@@ -1902,6 +1959,8 @@ public class MovieMetaData {
                     type = ECGroupType.FEATURETTES;
                 else if (locationItems.size() > 0)
                     type = ECGroupType.LOCATIONS;
+                else if (shopItems.size() > 0)
+                    type = ECGroupType.SHOP;
                 else if (interactiveItems.size() > 0)
                     type = ECGroupType.INTERACTIVE;
                 else if (externalApp != null)

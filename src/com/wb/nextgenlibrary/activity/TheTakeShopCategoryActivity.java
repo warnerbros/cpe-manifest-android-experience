@@ -12,15 +12,20 @@ import android.widget.TextView;
 
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.data.TheTakeData.TheTakeCategory;
-import com.wb.nextgenlibrary.fragment.TheTakeCategoryGridFragment;
+import com.wb.nextgenlibrary.data.MovieMetaData;
+import com.wb.nextgenlibrary.data.TheTakeData;
+import com.wb.nextgenlibrary.data.TheTakeData.ShopCategory;
+import com.wb.nextgenlibrary.fragment.ShopCategoryGridFragment;
 import com.wb.nextgenlibrary.fragment.TheTakeProductDetailFragment;
 import com.wb.nextgenlibrary.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgenlibrary.network.TheTakeApiDAO;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
+import com.wb.nextgenlibrary.util.utils.F;
 import com.wb.nextgenlibrary.util.utils.NextGenFragmentTransactionEngine;
+import com.wb.nextgenlibrary.util.utils.StringHelper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -28,22 +33,32 @@ import java.util.List;
  */
 public class TheTakeShopCategoryActivity extends AbstractNextGenActivity implements NextGenFragmentTransactionInterface {
 
-    List<TheTakeCategory> categories = new ArrayList<TheTakeCategory>();
+    List<ShopCategory> categories = new ArrayList<ShopCategory>();
 
     ExpandableListView categoryListView;
     TheTakeExpandableListAdapter categoryListAdaptor;
-    TheTakeCategoryGridFragment gridFrament;
+    ShopCategoryGridFragment gridFrament;
 
     FrameLayout leftFrame;
     NextGenFragmentTransactionEngine nextGenFragmentTransactionEngine;
 
     String titleText = null;
 
+    MovieMetaData.ExperienceData ecGroupData;
+
     @Override
     public void onCreate(Bundle savedState) {
         super.onCreate(savedState);
 
         setContentView(R.layout.the_take_shop_category_view);
+
+        String groupId = getIntent().getStringExtra(F.ID);
+        if (!StringHelper.isEmpty(F.ID)){
+            ecGroupData = NextGenExperience.getMovieMetaData().findExperienceDataById(groupId);
+        }
+
+        gridFrament = new ShopCategoryGridFragment();
+
         categoryListView = (ExpandableListView)findViewById(R.id.the_take_category_list);
         if (categoryListView != null) {
 
@@ -58,7 +73,7 @@ public class TheTakeShopCategoryActivity extends AbstractNextGenActivity impleme
 
         leftFrame = (FrameLayout)findViewById(R.id.category_left_frame);
 
-        gridFrament = new TheTakeCategoryGridFragment();
+
 
         nextGenFragmentTransactionEngine = new NextGenFragmentTransactionEngine(this);
         transitLeftFragment(gridFrament);
@@ -71,46 +86,89 @@ public class TheTakeShopCategoryActivity extends AbstractNextGenActivity impleme
     }
 
     private void requestCategoryList(){
-        TheTakeApiDAO.prefetchProductCategories(new ResultListener<List<TheTakeCategory>>() {
-            @Override
-            public void onResult(List<TheTakeCategory> result) {
-                categories = result;
-                if (categories != null && categories.size() > 0) {
-                    if (!categories.get(0).categoryName.equals(getResources().getString(R.string.label_all))) {
-                        TheTakeCategory rootCate = new TheTakeCategory();
-                        rootCate.categoryId = 0;
-                        rootCate.categoryName = getResources().getString(R.string.label_all);
-                        categories.add(0, rootCate);
+        if (ecGroupData != null && ecGroupData.getECGroupType() == MovieMetaData.ECGroupType.SHOP){
+            HashMap<String, ShopCategory> shopCategoryHashMap = new HashMap<>();
+            if (categories.size() == 0){
+                for (MovieMetaData.ExperienceData child : ecGroupData.getChildrenContents()){
+                    buildCategorieyFromExperience(child, shopCategoryHashMap);
+                }
+            }
+            if (categoryListAdaptor != null)
+                categoryListAdaptor.notifyDataSetChanged();
+            categoryListAdaptor.setItemChecked(0);
+        }else {
+
+            TheTakeApiDAO.prefetchProductCategories(new ResultListener<List<ShopCategory>>() {
+                @Override
+                public void onResult(List<ShopCategory> result) {
+                    categories = result;
+                    if (categories != null && categories.size() > 0) {
+                        if (!categories.get(0).categoryName.equals(getResources().getString(R.string.label_all))) {
+                            ShopCategory rootCate = new ShopCategory();
+                            rootCate.categoryId = 0;
+                            rootCate.categoryName = getResources().getString(R.string.label_all);
+                            categories.add(0, rootCate);
+                        }
                     }
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (categoryListAdaptor != null)
+                                categoryListAdaptor.notifyDataSetChanged();
+                            categoryListAdaptor.setItemChecked(0, -1);
+                        }
+                    });
                 }
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (categoryListAdaptor != null)
-                            categoryListAdaptor.notifyDataSetChanged();
-                        categoryListAdaptor.setItemChecked(0,-1);
+                @Override
+                public <E extends Exception> void onException(E e) {
+
+                }
+            });
+        }
+    }
+
+    private void buildCategorieyFromExperience(MovieMetaData.ExperienceData experienceData, HashMap<String, ShopCategory> shopCategoryHashMap){
+
+        if (experienceData != null){
+            if (experienceData.getChildrenContents() != null && experienceData.getChildrenContents().size() > 0){
+                for (MovieMetaData.ExperienceData child : experienceData.getChildrenContents()){
+                    buildCategorieyFromExperience(child, shopCategoryHashMap);
+                }
+
+            }
+
+            if (experienceData.shopItems.size() > 0){
+                for (MovieMetaData.ShopItem shopItem : experienceData.shopItems){
+                    if (shopItem.categoryType != null){
+                        String id = shopItem.categoryType.getContentID();
+                        ShopCategory category = shopCategoryHashMap.get(id);
+                        if (category == null){
+                            category = new ShopCategory();
+                            category.categoryId = categories.size();
+                            category.categoryName = MovieMetaData.getMatchingLocalizableObject(shopItem.categoryType.getBasicMetadata().getLocalizedInfo()).getTitleDisplayUnlimited();
+                            categories.add(category);
+                            category.products = new ArrayList<>();
+                            shopCategoryHashMap.put(id, category);
+                        }
+                        category.products.add(shopItem);
                     }
-                });
+                }
             }
+        }
 
-            @Override
-            public <E extends Exception> void onException(E e) {
-
-            }
-        });
     }
 
     public class TheTakeExpandableListAdapter extends BaseExpandableListAdapter implements ExpandableListView.OnChildClickListener,
             ExpandableListView.OnGroupCollapseListener, ExpandableListView.OnGroupExpandListener, ExpandableListView.OnGroupClickListener {
 
 
-        int selectedGroupIndex = -1;
-        int selectedItemIndex = -1;
+        int[] selectedItemIndexes;
         int selectedFlatIndex = -1;
 
         @Override
-        public TheTakeCategory getChild(int groupPosition, int childPosititon) {
+        public ShopCategory getChild(int groupPosition, int childPosititon) {
             if (childPosititon == 0)
                 return categories.get(groupPosition);
             return categories.get(groupPosition).childCategories.get(childPosititon-1);
@@ -146,7 +204,7 @@ public class TheTakeShopCategoryActivity extends AbstractNextGenActivity impleme
         public int getChildrenCount(int groupPosition) {
             if (groupPosition >= categories.size())
                 return 0;
-            TheTakeCategory category = categories.get(groupPosition);
+            ShopCategory category = categories.get(groupPosition);
             if (category != null && category.childCategories != null)
                 return categories.get(groupPosition).childCategories.size() + 1;
             else
@@ -154,7 +212,7 @@ public class TheTakeShopCategoryActivity extends AbstractNextGenActivity impleme
         }
 
         @Override
-        public TheTakeCategory getGroup(int groupPosition) {
+        public ShopCategory getGroup(int groupPosition) {
             return categories.get(groupPosition);
         }
 
@@ -204,7 +262,7 @@ public class TheTakeShopCategoryActivity extends AbstractNextGenActivity impleme
         @Override
         public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id){
             if (groupPosition < categories.size()) {
-                TheTakeCategory selectedCategory = categories.get(groupPosition);
+                ShopCategory selectedCategory = categories.get(groupPosition);
                 if (selectedCategory.childCategories == null || selectedCategory.childCategories.size() == 0){
                     setItemChecked(groupPosition, -1);
                     return true;
@@ -213,8 +271,31 @@ public class TheTakeShopCategoryActivity extends AbstractNextGenActivity impleme
             return false;
         }
 
-        public void setItemChecked(int groupPosition, int childPosition) {
-            TheTakeCategory selectedCategory = null;
+        public void setItemChecked(int... positions) {
+
+            List currentLevelList = categories;
+            for (int i = 0; i < positions.length; i++){
+                int selectedIndex = positions[i];
+                if (selectedIndex != -1){
+                    Object currentItem = currentLevelList.get(selectedIndex);
+                    if (currentItem instanceof ShopCategory){
+                        if (((ShopCategory)currentItem).childCategories != null && ((ShopCategory)currentItem).childCategories.size() > 0) {
+                            currentLevelList = ((ShopCategory)currentItem).childCategories;
+
+                        } else if (((ShopCategory)currentItem).products != null && ((ShopCategory)currentItem).products.size() > 0){
+                            Fragment f = getSupportFragmentManager().findFragmentByTag(TheTakeProductDetailFragment.class.toString());
+                            if (f != null)
+                                getSupportFragmentManager().popBackStack();
+                            gridFrament.refreshWithCategory((ShopCategory)currentItem);
+                        }
+                    } else if (currentItem instanceof MovieMetaData.ShopItemInterface){
+
+                    }
+                }
+
+
+            }
+/*
             if (groupPosition >= categories.size()) {
 
             }else if (groupPosition != -1) {
@@ -241,26 +322,26 @@ public class TheTakeShopCategoryActivity extends AbstractNextGenActivity impleme
                 if (f != null)
                     getSupportFragmentManager().popBackStack();
                 gridFrament.refreshWithCategory(selectedCategory);
-            }
+            }*/
 
 
         }
 
-        public TheTakeCategory getSelectedCategory(){
-            if (selectedGroupIndex != -1){
+        public ShopCategory getSelectedCategory(){
+            /*if (selectedGroupIndex != -1){
                 if (selectedItemIndex != -1) {
                     return getChild(selectedGroupIndex, selectedItemIndex);
                 }else if (categories != null && selectedItemIndex < categories.size()){
                     return categories.get(selectedGroupIndex);
                 }
 
-            }
+            }*/
             return null;
         }
 
         public void reComputeCheckedItem(){
-            if (selectedGroupIndex != -1){
-                TheTakeCategory selectedCategory = categories.get(selectedGroupIndex);
+            /*if (selectedGroupIndex != -1){
+                ShopCategory selectedCategory = categories.get(selectedGroupIndex);
                 if (selectedCategory.childCategories == null || selectedCategory.childCategories.size() == 0) {
                     selectedFlatIndex = categoryListView.getFlatListPosition(ExpandableListView.getPackedPositionForGroup(selectedGroupIndex));
                     categoryListView.setItemChecked(selectedFlatIndex, true);
@@ -273,7 +354,7 @@ public class TheTakeShopCategoryActivity extends AbstractNextGenActivity impleme
                         categoryListView.setItemChecked(selectedFlatIndex, false);
                     }
                 }
-            }
+            }*/
         }
 
         @Override

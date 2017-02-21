@@ -12,10 +12,10 @@ import java.util.List;
  */
 public class TheTakeData{
     public static class
-    TheTakeCategory{
+    ShopCategory{
         public int categoryId;
         public String categoryName;
-        public List<TheTakeCategory> childCategories;
+        public List<ShopCategory> childCategories;
         public List<MovieMetaData.ShopItemInterface> products;
     }
 
@@ -128,6 +128,9 @@ public class TheTakeData{
             productDetail = detail;
         }
 
+        public long getProductId(){
+            return productId;
+        }
 
         public String getShareLinkUrl(){
             if (productDetail != null)

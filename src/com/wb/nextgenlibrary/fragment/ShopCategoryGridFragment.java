@@ -1,5 +1,6 @@
 package com.wb.nextgenlibrary.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,32 +10,36 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
+import com.wb.nextgenlibrary.activity.ECShopItemDetailActivity;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.data.TheTakeData;
 import com.wb.nextgenlibrary.interfaces.NextGenFragmentTransactionInterface;
 import com.wb.nextgenlibrary.network.TheTakeApiDAO;
+import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.widget.DotIndicatorImageView;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by gzcheng on 4/11/16.
  */
-public class TheTakeCategoryGridFragment extends AbstractNextGenFragment{
+public class ShopCategoryGridFragment extends AbstractNextGenFragment{
     GridView itemsGridView;
     TheTakeProductsGridViewAdapter itemsGridViewAdaptor;
-    TheTakeData.TheTakeCategory selectedCategory = null;
+    TheTakeData.ShopCategory selectedCategory = null;
 
     public int getContentViewId(){
         return R.layout.the_take_category_right_grid;
     }
 
-    public void refreshWithCategory(TheTakeData.TheTakeCategory category){
+    public void refreshWithCategory(TheTakeData.ShopCategory category){
         selectedCategory = category;
 
         if (selectedCategory.products == null) {
@@ -75,7 +80,7 @@ public class TheTakeCategoryGridFragment extends AbstractNextGenFragment{
         if (itemsGridView != null){
             float density = NextGenExperience.getScreenDensity(getActivity());
             int spacing = (int)(10 *density);
-            itemsGridView.setNumColumns(2);
+            itemsGridView.setNumColumns(TabletUtils.isTablet()?2:1);
             itemsGridView.setHorizontalSpacing(spacing);
             itemsGridView.setVerticalSpacing(spacing);
             itemsGridView.setPadding(spacing, 0, spacing, spacing);
@@ -117,7 +122,7 @@ public class TheTakeCategoryGridFragment extends AbstractNextGenFragment{
 
             if (convertView == null  ) {
                 LayoutInflater inflater = getActivity().getLayoutInflater();
-                convertView = inflater.inflate(R.layout.the_take_grid_item, parent, false);
+                convertView = inflater.inflate(R.layout.shop_grid_item, parent, false);
 
 
             } else {
@@ -161,21 +166,29 @@ public class TheTakeCategoryGridFragment extends AbstractNextGenFragment{
         }
 
         public long getItemId(int position) {
-            if (selectedCategory != null && selectedCategory.products != null && position < selectedCategory.products.size())
-                return ((TheTakeData.TheTakeProduct)selectedCategory.products.get(position)).productId;
-            else
+            if (selectedCategory != null && selectedCategory.products != null && position < selectedCategory.products.size()) {
+                return selectedCategory.products.get(position).getProductId() == -1 ? position : selectedCategory.products.get(position).getProductId();
+            }else
                 return 0;
         }
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id){
-            TheTakeProductDetailFragment fragment = new TheTakeProductDetailFragment();
-            fragment.setContentViewId(R.layout.the_take_single_product_view);
             MovieMetaData.ShopItemInterface product = getItem(position);
+            if (TabletUtils.isTablet()) {
+                TheTakeProductDetailFragment fragment = new TheTakeProductDetailFragment();
+                fragment.setContentViewId(R.layout.the_take_single_product_view);
 
-            fragment.setProduct(product);
-            if (getActivity() instanceof NextGenFragmentTransactionInterface){
-                ((NextGenFragmentTransactionInterface)getActivity()).transitMainFragment(fragment);
+                fragment.setProduct(product);
+                if (getActivity() instanceof NextGenFragmentTransactionInterface) {
+                    ((NextGenFragmentTransactionInterface) getActivity()).transitMainFragment(fragment);
+                }
+            } else {
+                Intent intent = new Intent(getActivity(), ECShopItemDetailActivity.class);
+
+                if (product instanceof MovieMetaData.ShopItem)
+                    intent.putExtra(ECShopItemDetailActivity.SHOP_ITEM_ID, ((MovieMetaData.ShopItem)product).getId());
+                startActivity(intent);
             }
         }
 

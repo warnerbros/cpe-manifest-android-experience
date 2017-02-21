@@ -9,7 +9,7 @@ import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.data.TheTakeData.TheTakeProduct;
 import com.wb.nextgenlibrary.data.TheTakeData.TheTakeProductDetail;
-import com.wb.nextgenlibrary.data.TheTakeData.TheTakeCategory;
+import com.wb.nextgenlibrary.data.TheTakeData.ShopCategory;
 import com.wb.nextgenlibrary.data.TheTakeData.TheTakeProductFrame;
 import com.wb.nextgenlibrary.util.HttpHelper;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
@@ -57,7 +57,7 @@ public class TheTakeApiDAO {
         static final String Start = "start";
     }
 
-    private static final List<TheTakeCategory> categories = new ArrayList<TheTakeCategory>();
+    private static final List<ShopCategory> categories = new ArrayList<ShopCategory>();
 
     public static void init(){
         theTakeMediaId = NextGenExperience.getMovieMetaData().getIdentifierForExternalAPI(MovieMetaData.THE_TAKE_MANIFEST_IDENTIFIER);
@@ -158,21 +158,21 @@ public class TheTakeApiDAO {
         }, l);
     }
 
-    public static void prefetchProductCategories(ResultListener<List<TheTakeCategory>> l) {
-        Worker.execute(new Callable<List<TheTakeCategory>>() {
+    public static void prefetchProductCategories(ResultListener<List<ShopCategory>> l) {
+        Worker.execute(new Callable<List<ShopCategory>>() {
             @Override
-            public List<TheTakeCategory> call() throws Exception {
+            public List<ShopCategory> call() throws Exception {
                 if (categories.size() > 0)
                     return categories;
 
-                List<TheTakeCategory> resultList = new ArrayList<TheTakeCategory>();
+                List<ShopCategory> resultList = new ArrayList<ShopCategory>();
                 try {
                     List<NameValuePair> params = new ArrayList<NameValuePair>();
                     params.add(new BasicNameValuePair(Keys.Media, theTakeMediaId));
 
                     String result = getFromUrl(THETAKE_DOMAIN + Endpoints.PrefetchProductCategories, params);
 
-                    Type listType = new TypeToken<ArrayList<TheTakeCategory>>() {
+                    Type listType = new TypeToken<ArrayList<ShopCategory>>() {
                     }.getType();
 
                     Gson gson = new GsonBuilder().create();

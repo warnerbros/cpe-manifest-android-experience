@@ -63,6 +63,8 @@ public class NextGenExtraMainTableFragment extends NextGenGridViewFragment {
                 intent = new Intent(getActivity(), WebViewActivity.class);
                 intent.putExtra(F.URL, selectedGroup.interactiveItems.get(0).assetLocation);
             }
+        } else if (selectedGroup.getECGroupType() == MovieMetaData.ECGroupType.SHOP){
+            intent = new Intent(getActivity(), TheTakeShopCategoryActivity.class);
         }
 
         if (intent != null) {
