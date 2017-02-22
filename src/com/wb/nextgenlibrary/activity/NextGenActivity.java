@@ -7,6 +7,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -23,11 +24,36 @@ import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.Format;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.source.AdaptiveMediaSourceEventListener;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.source.hls.HlsMediaSource;
+import com.google.android.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DataSpec;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.google.android.exoplayer2.upstream.HttpDataSource;
+import com.google.android.exoplayer2.util.Util;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.data.StyleData;
+import com.wb.nextgenlibrary.interfaces.NextGenPlaybackStatusListener;
 import com.wb.nextgenlibrary.parser.cpestyle.BackgroundOverlayAreaType;
 import com.wb.nextgenlibrary.testassets.TestItemsActivity;
 import com.wb.nextgenlibrary.util.Size;
@@ -38,6 +64,7 @@ import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
 
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -45,7 +72,7 @@ import java.util.TimerTask;
  * Created by gzcheng on 1/7/16.
  */
 public class NextGenActivity extends NextGenHideStatusBarActivity implements View.OnClickListener {
-    VideoView startupVideoView;
+    SimpleExoPlayerView startupVideoView;
     ImageView startupImageView;
 
     MediaPlayer audioPlayer;
@@ -75,6 +102,11 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
     private Timer startUpTimer;
 
     private boolean isStartUp = true;
+    private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
+    private SimpleExoPlayer player;
+    private DataSource.Factory mediaDataSourceFactory;
+
+    //private SimpleExoPlayerView exoStartupVideoView;
 
     StyleData.ExperienceStyle mainStyle = NextGenExperience.getMovieMetaData() != null ? NextGenExperience.getMovieMetaData().getRootExperienceStyle() : null;
     @Override
@@ -91,7 +123,8 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
         textButtonsFrame = findViewById(R.id.startup_text_buttons_layout);
         exitIcon = findViewById(R.id.nge_main_exit);
 
-        startupVideoView = (VideoView)findViewById(R.id.startup_video_view);
+        startupVideoView = (SimpleExoPlayerView) findViewById(R.id.startup_exo_video_view);
+        mediaDataSourceFactory = buildDataSourceFactory(true);
         startupImageView = (ImageView) findViewById(R.id.startup_image_view);
 
         titleImageView = (ImageView) findViewById(R.id.startup_title_image);
@@ -188,6 +221,14 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
         };
 
         if (startupVideoView != null){
+            @SimpleExoPlayer.ExtensionRendererMode int extensionRendererMode = SimpleExoPlayer.EXTENSION_RENDERER_MODE_ON;//SimpleExoPlayer.EXTENSION_RENDERER_MODE_OFF;
+            TrackSelection.Factory videoTrackSelectionFactory =
+                    new AdaptiveVideoTrackSelection.Factory(BANDWIDTH_METER);
+            TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+            //trackSelectionHelper = new TrackSelectionHelper(trackSelector, videoTrackSelectionFactory);
+            player = ExoPlayerFactory.newSimpleInstance(this, trackSelector, new DefaultLoadControl(),
+                    null, extensionRendererMode);
+            startupVideoView.setPlayer(player);
             startupVideoView.setOnClickListener(showButtonOnClickLister);
         }
 
@@ -215,8 +256,8 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
             } else {
                 if (!isStartUp) {
-                    startupVideoView.seekTo(videoLoopPoint);
-                    startupVideoView.start();
+                    player.seekTo(videoLoopPoint);
+                    player.setPlayWhenReady(true);
                     return;
                 }
                 isStartUp = false;
@@ -224,6 +265,73 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
                 if (startupVideoSize != null)
                     videoParentFrame.setAspectRatio(startupVideoSize.getWidth(), startupVideoSize.getHeight());
 
+
+                player.addListener(new ExoPlayer.EventListener() {
+                    boolean isFreshloaded = true;
+                    @Override
+                    public void onTimelineChanged(Timeline timeline, Object manifest) {
+
+                    }
+
+                    @Override
+                    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+
+                    }
+
+                    @Override
+                    public void onLoadingChanged(boolean isLoading) {
+
+                    }
+
+                    @Override
+                    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+                        switch(playbackState) {
+                            case ExoPlayer.STATE_ENDED:
+                                startupVideoView.getPlayer().seekTo(videoLoopPoint);
+                                break;
+                            case ExoPlayer.STATE_READY:
+                                if (isFreshloaded) {
+                                    if (startupVideoSize == null) {
+                                        startupVideoSize = new Size(player.getVideoFormat().width, player.getVideoFormat().height);
+                                        videoParentFrame.setAspectRatio(startupVideoSize.getWidth(), startupVideoSize.getHeight());
+                                    }
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (startupVideoSize == null) {
+                                                startupVideoSize = new Size(player.getVideoFormat().width, player.getVideoFormat().height);
+                                                videoParentFrame.setAspectRatio(startupVideoSize.getWidth(), startupVideoSize.getHeight());
+                                            }
+                                            //adjustButtonSizesAndPosition();
+
+                                        }
+                                    });
+                                    player.setPlayWhenReady(true);
+
+                                    animateButtonsOn();
+                                    isFreshloaded = false;
+                                }
+                                //added: tr 9/19
+                                /*mp.setOnSeekCompleteListener(new MediaPlayer.OnSeekCompleteListener() {
+                                    @Override
+                                    public void onSeekComplete(MediaPlayer mp) {
+                                        startupVideoView.start();
+                                    }
+                                });*/
+                                break;
+                        }
+                    }
+
+                    @Override
+                    public void onPlayerError(ExoPlaybackException error) {
+
+                    }
+
+                    @Override
+                    public void onPositionDiscontinuity() {
+
+                    }
+                });/*
                 startupVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                     @Override
                     public void onPrepared(final MediaPlayer mp) {
@@ -254,18 +362,57 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
                     @Override
                     public void onCompletion(MediaPlayer mp) {
                         startupVideoView.seekTo(videoLoopPoint);
+
+
                         //need to wait until the seekTo is complete before restarting.
                         //startupVideoView.start();
                     }
 
 
-                });
+                });*/
+
 
                 startupVideoView.requestFocus();
                 if (Build.FINGERPRINT.contains("generic")){
-                    startupVideoView.setVideoURI(Uri.parse("https://ia800201.us.archive.org/12/items/BigBuckBunny_328/BigBuckBunny_512kb.mp4"));
-                }else
-                    startupVideoView.setVideoURI(Uri.parse(mainStyle.getBackgroundVideoUrl()));
+                    //startupVideoView.setVideoURI(Uri.parse("https://ia800201.us.archive.org/12/items/BigBuckBunny_328/BigBuckBunny_512kb.mp4"));
+                }else{
+                    MediaSource mediaSource = new HlsMediaSource(Uri.parse(mainStyle.getBackgroundVideoUrl()), mediaDataSourceFactory, new Handler(), new AdaptiveMediaSourceEventListener() {
+                        @Override
+                        public void onLoadStarted(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs) {
+
+                        }
+
+                        @Override
+                        public void onLoadCompleted(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded) {
+
+                        }
+
+                        @Override
+                        public void onLoadCanceled(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded) {
+
+                        }
+
+                        @Override
+                        public void onLoadError(DataSpec dataSpec, int dataType, int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded, IOException error, boolean wasCanceled) {
+
+                        }
+
+                        @Override
+                        public void onUpstreamDiscarded(int trackType, long mediaStartTimeMs, long mediaEndTimeMs) {
+
+                        }
+
+                        @Override
+                        public void onDownstreamFormatChanged(int trackType, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long mediaTimeMs) {
+
+                        }
+                    });
+                    //buildMediaSource(nonDRMPlaybackContent.contentUri, nonDRMPlaybackContent.contentType, EXTENSION_EXTRA);
+                    player.prepare(mediaSource, false, false);
+                    player.seekTo(0);
+                }
+                    //startupVideoView.setVideoURI(Uri.parse(mainStyle.getBackgroundVideoUrl()));
+                    //startupVideoView.setVideoURI(Uri.parse(mainStyle.getBackgroundVideoUrl()));
                 if (!StringHelper.isEmpty(mainStyle.getBackgroundAudioUrl())){
                     try {
                         audioPlayer = MediaPlayer.create(this, Uri.parse(mainStyle.getBackgroundAudioUrl()));
@@ -330,8 +477,8 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
 
     public void onPause(){
         super.onPause();
-        if (startupVideoView.isPlaying()){
-            startupVideoView.pause();
+        if (player!= null && player.getPlaybackState() == ExoPlayer.STATE_READY && player.getPlayWhenReady()){
+            player.setPlayWhenReady(false);
         }
         if (audioPlayer != null){
             audioPlayer.pause();
@@ -341,8 +488,8 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
     @Override
     public void onResume(){
         super.onResume();
-        if (!startupVideoView.isPlaying() && startupVideoView.getVisibility() == View.VISIBLE){
-            startupVideoView.start();
+        if (!(player!= null && player.getPlaybackState() == ExoPlayer.STATE_READY && player.getPlayWhenReady()) && startupVideoView.getVisibility() == View.VISIBLE){
+            player.setPlayWhenReady(true);
         }
         if (audioPlayer !=  null){
             audioPlayer.start();
@@ -622,6 +769,19 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
                 textButtonsFrame.setVisibility(View.GONE);
                 exitIcon.setVisibility(View.GONE);
         }
+    }
+
+    private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
+        DefaultBandwidthMeter bandwidthMeter = useBandwidthMeter ? BANDWIDTH_METER : null;
+        return new DefaultDataSourceFactory(this, bandwidthMeter,
+                buildHttpDataSourceFactory(useBandwidthMeter));
+
+    }
+
+    private HttpDataSource.Factory buildHttpDataSourceFactory(boolean useBandwidthMeter) {
+        String userAgent = Util.getUserAgent(this, "NextGenExoPlayer");
+        DefaultBandwidthMeter bandwidthMeter = useBandwidthMeter ? BANDWIDTH_METER : null;
+        return new DefaultHttpDataSourceFactory(userAgent, bandwidthMeter);
     }
 }
 

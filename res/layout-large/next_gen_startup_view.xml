@@ -33,11 +33,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         nextgen:allowLargerThanParent="true">
-        <VideoView
+        <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+            android:id="@+id/startup_exo_video_view"
+            nextgen:use_controller="false"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <!--<VideoView
             android:id="@+id/startup_video_view"
             android:layout_gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent" />-->
     </com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout>
     <com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout
         xmlns:nextgen="http://schemas.android.com/apk/res-auto"
