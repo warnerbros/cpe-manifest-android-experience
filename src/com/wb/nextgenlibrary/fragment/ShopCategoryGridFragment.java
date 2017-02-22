@@ -177,7 +177,7 @@ public class ShopCategoryGridFragment extends AbstractNextGenFragment{
             MovieMetaData.ShopItemInterface product = getItem(position);
             if (TabletUtils.isTablet()) {
                 TheTakeProductDetailFragment fragment = new TheTakeProductDetailFragment();
-                fragment.setContentViewId(R.layout.the_take_single_product_view);
+                //fragment.setContentViewId(R.layout.the_take_single_product_view);
 
                 fragment.setProduct(product);
                 if (getActivity() instanceof NextGenFragmentTransactionInterface) {

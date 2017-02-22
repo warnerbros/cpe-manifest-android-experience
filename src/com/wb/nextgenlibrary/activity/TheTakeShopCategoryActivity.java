@@ -278,6 +278,7 @@ public class TheTakeShopCategoryActivity extends AbstractNextGenActivity impleme
                 int selectedIndex = positions[i];
                 if (selectedIndex != -1){
                     Object currentItem = currentLevelList.get(selectedIndex);
+                    categoryListView.setItemChecked(selectedIndex, false);
                     if (currentItem instanceof ShopCategory){
                         if (((ShopCategory)currentItem).childCategories != null && ((ShopCategory)currentItem).childCategories.size() > 0) {
                             currentLevelList = ((ShopCategory)currentItem).childCategories;
@@ -287,6 +288,7 @@ public class TheTakeShopCategoryActivity extends AbstractNextGenActivity impleme
                             if (f != null)
                                 getSupportFragmentManager().popBackStack();
                             gridFrament.refreshWithCategory((ShopCategory)currentItem);
+                            categoryListView.setItemChecked(selectedIndex,true);
                         }
                     } else if (currentItem instanceof MovieMetaData.ShopItemInterface){
 

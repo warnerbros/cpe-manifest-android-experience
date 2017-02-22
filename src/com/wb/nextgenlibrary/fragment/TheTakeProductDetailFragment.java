@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
@@ -17,6 +18,7 @@ import com.wb.nextgenlibrary.data.TheTakeData.TheTakeProductDetail;
 import com.wb.nextgenlibrary.network.TheTakeApiDAO;
 import com.wb.nextgenlibrary.util.DialogUtils;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
+import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 
 /**
@@ -97,7 +99,7 @@ public class TheTakeProductDetailFragment extends AbstractNextGenFragment implem
         if (shopItem instanceof  TheTakeProduct) {
             TheTakeProduct product = (TheTakeProduct)shopItem;
             if (product.getProductDetail() != null) {
-                Picasso.with(getActivity()).load(product.getProductDetail().getProductImage()).fit().centerInside().into(productPoster);
+                NextGenGlide.load(getActivity(),product.getProductDetail().getProductImage()).fitCenter().into(productPoster);
 
                 if (product.isVerified())
                     matchStatus.setText(getActivity().getResources().getString(R.string.exact_match));
@@ -118,7 +120,8 @@ public class TheTakeProductDetailFragment extends AbstractNextGenFragment implem
                 }
             }
         } else {
-            Picasso.with(getActivity()).load(product.getProductThumbnailUrl()).fit().centerInside().into(productPoster);
+            matchStatus.setVisibility(View.GONE);
+            NextGenGlide.load(getActivity(),product.getProductThumbnailUrl()).fitCenter().into(productPoster);
 
             /*if (product.isVerified())
                 matchStatus.setText(getActivity().getResources().getString(R.string.exact_match));

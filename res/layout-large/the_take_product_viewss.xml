@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@android:color/transparent">
+                android:background="@android:color/white">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -81,6 +81,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"/>
+            <Button
+                android:layout_margin="@dimen/spacing_xsmall"
+                android:id="@+id/send_link_button2"
+                android:text="hehehaha"
+                android:background="@drawable/red_rounded_corner_drawable"
+                android:textColor="@color/selectable_text_white_grey_color"
+                android:fontFamily="sans-serif-condensed"
+                android:textSize="@dimen/textMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"/>
         </LinearLayout>
         <ImageButton
             android:id="@+id/close_button"
