@@ -3,6 +3,7 @@ package com.wb.nextgenlibrary.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.adapter.ActorDetailGalleryRecyclerAdapter;
 import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData.CastHeadShot;
+import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 
@@ -143,6 +145,15 @@ public class ActorGalleryActivity extends AbstractNextGenActivity implements Act
                 galleryRecyclerAdapter.notifyDataSetChanged();
             }
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (TabletUtils.isTablet())
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+        else
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     @Override
