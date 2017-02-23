@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="skip_this_icon_dimen">20dp</dimen>
+    <dimen name="skip_this_text_size">20sp</dimen>
+    <dimen name="skip_this_forward_icon_size">15dp</dimen>
+</resources>

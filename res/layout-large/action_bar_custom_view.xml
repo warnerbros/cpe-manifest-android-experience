@@ -17,7 +17,7 @@
                 android:drawablePadding="@dimen/spacing_normal"
                 android:gravity="left|center_vertical"
                 android:textColor="@color/white"
-                android:textSize="@dimen/textLarge"
+                android:textSize="@dimen/textMSmall"
                 android:background="@android:color/transparent"
                 android:layout_alignParentLeft="true"
                 android:layout_height="match_parent" />

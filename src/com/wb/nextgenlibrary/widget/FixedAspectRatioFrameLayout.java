@@ -96,8 +96,8 @@ public class FixedAspectRatioFrameLayout extends FrameLayout
             return;
         }
 
-        if (priority == Priority.WIDTH_PRIORITY && originalWidth == NextGenExperience.getScreenWidth(NextGenExperience.getApplicationContext()) &&
-                NextGenExperience.getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)  {       // this is full screen when width priority
+        if (priority == Priority.WIDTH_PRIORITY && originalWidth == NextGenExperience.getScreenWidth(NextGenExperience.getApplicationContext()) && getContext() != null && getContext().getResources() != null &&
+                getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)  {       // this is full screen when width priority
 
             /*WindowManager wm = (WindowManager) NextGenExperience.getContext().getSystemService(Context.WINDOW_SERVICE);
             Display display = wm.getDefaultDisplay();

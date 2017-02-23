@@ -235,7 +235,7 @@ public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivi
             Drawable icon = getResources().getDrawable(logoId);
             if (icon instanceof BitmapDrawable) {
                 Bitmap source = ((BitmapDrawable) icon).getBitmap();
-                int targetHeight = actionBarHeight / 3;                                     // resize the logo to 1/3 of the height of aciton bar
+                int targetHeight = actionBarHeight / 5;                                     // resize the logo to 1/5 of the height of aciton bar
                 int targetWidth = source.getWidth() * targetHeight /source.getHeight();     // calculate the width according to its aspect ratio
 
                 Bitmap resized = Bitmap.createScaledBitmap(source, targetWidth, targetHeight, false);

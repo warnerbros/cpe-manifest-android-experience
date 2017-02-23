@@ -53,7 +53,8 @@
                     android:layout_gravity="center">
                     <com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="@dimen/skip_this_icon_dimen"
+                        android:layout_gravity="center_vertical"
                         nextgen:aspectRatioWidth="1"
                         nextgen:aspectRatioHeight="1"
                         nextgen:priority="HEIGHT_PRIORITY">
@@ -73,16 +74,16 @@
                         android:id="@+id/skip_this_text"
                         android:text="@string/skip_this"
                         android:textColor="@color/drawer_yellow"
-                        android:textSize="@dimen/textXLarge"
+                        android:textSize="@dimen/skip_this_text_size"
                         android:gravity="center"
                         android:fontFamily="sans-serif-condensed"
                         android:layout_gravity="center_vertical"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent" />
                     <ImageView
-                        android:src="@drawable/skip_arrow"
-                        android:layout_width="@dimen/textLarge"
-                        android:layout_height="@dimen/textLarge"
+                        android:src="@drawable/nge_skip_arrow"
+                        android:layout_width="@dimen/skip_this_forward_icon_size"
+                        android:layout_height="@dimen/skip_this_forward_icon_size"
                         android:layout_gravity="center_vertical"/>
                 </LinearLayout>
                 <LinearLayout
