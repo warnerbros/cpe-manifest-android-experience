@@ -29,7 +29,7 @@
     <color name="bg_active">#ffffff</color>
     <color name="divider">#d9d9d9</color>
     <color name="divider2">#b9b9b9</color>
-    <color name="transparent_black">#AA000000</color>
+    <color name="transparent_black">#80000000</color>
     <color name="transparent_black2">#00000000</color>
     <color name="transparent_gray">#AA999999</color><!-- #C8999999 -->
     <color name="transparent_lightgray">#aaefefef</color>

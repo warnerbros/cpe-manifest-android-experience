@@ -18,6 +18,8 @@
             <LinearLayout
                 android:layout_weight="1"
                 android:layout_width="0dp"
+                android:layout_margin="@dimen/spacing_small"
+                android:background="@color/transparent_black"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
                 <TextView
@@ -34,6 +36,7 @@
                     android:id="@+id/ime_actor_fragment" />
             </LinearLayout>
            <fragment
+               android:layout_margin="@dimen/spacing_small"
                 android:id="@+id/ime_grid_fragment"
                 android:name="com.wb.nextgenlibrary.fragment.IMEElementsGridFragment"
                 android:layout_weight="3"
