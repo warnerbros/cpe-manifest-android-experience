@@ -1,5 +1,7 @@
 package com.wb.nextgenlibrary.fragment;
 
+import android.annotation.SuppressLint;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -7,11 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -53,7 +59,7 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
     //private List<SceneLocation> sceneLocations;
     //private ArrayAdapter<String> spinnerAdaptor;
     private OnSceneLocationSelectedListener onSceneLocationSelectedListener;
-    private HashMap<LatLng, LocationItem> markerLocationMap = new HashMap<LatLng, LocationItem>();
+    private HashMap<Marker, LocationItem> markerLocationMap = new HashMap<Marker, LocationItem>();
 
 
     //LocationItem selectedLocationItem = null;
@@ -202,6 +208,7 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
                                     googleMap.getUiSettings().setZoomControlsEnabled(true);
 
                                     googleMap.setOnMapClickListener(null);
+                                    googleMap.setInfoWindowAdapter(new PopupAdapter(getActivity().getLayoutInflater()));
 
                                     LatLngBounds.Builder boundsBuilder = LatLngBounds.builder();
 
@@ -209,21 +216,23 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
                                         LatLng latlng = new LatLng(sceneLocation.latitude, sceneLocation.longitude);
 
                                         boundsBuilder.include(latlng);
-                                        markerLocationMap.put(latlng, sceneLocation);
                                         BitmapDescriptor bmDes ;
                                         if (sceneLocation.pinImage != null && !StringHelper.isEmpty(sceneLocation.pinImage.url)) {
                                             bmDes = BitmapDescriptorFactory.fromBitmap(HttpImageHelper.getMapPinBitmap(sceneLocation.pinImage.url));
                                         }else {
-                                            bmDes = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
+                                            bmDes = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
                                         }
                                         MarkerOptions markerOpt = new MarkerOptions()
                                                 .position(latlng).title(sceneLocation.getTitle()).snippet(sceneLocation.address)
                                                 .icon(bmDes);
 
-                                        googleMap.addMarker(markerOpt);
+                                        Marker marker = googleMap.addMarker(markerOpt);
+                                        markerLocationMap.put(marker, sceneLocation);
+
                                     }
 
-                                    googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 100));
+
+                                    googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 300));
                                 }
                             });
                         }
@@ -240,10 +249,39 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
 
     }
 
+    static class PopupAdapter implements GoogleMap.InfoWindowAdapter {
+        private View popup=null;
+        private LayoutInflater inflater=null;
+
+        PopupAdapter(LayoutInflater inflater) {
+            this.inflater=inflater;
+        }
+
+        @Override
+        public View getInfoWindow(Marker marker) {
+            return(null);
+        }
+
+        @SuppressLint("InflateParams")
+        @Override
+        public View getInfoContents(Marker marker) {
+            if (popup == null) {
+                popup=inflater.inflate(R.layout.nge_map_popup, null);
+            }
+
+            TextView tv=(TextView)popup.findViewById(R.id.title);
+
+            tv.setText(marker.getTitle());
+            tv=(TextView)popup.findViewById(R.id.snippet);
+            tv.setText(marker.getSnippet());
+
+            return(popup);
+        }
+    }
+
     public boolean onMarkerClick(Marker marker){
         marker.getTitle();
-        LatLng position = marker.getPosition();
-        LocationItem sl = markerLocationMap.get(position);
+        LocationItem sl = markerLocationMap.get(marker);
         if (sl != null) {
             if (onSceneLocationSelectedListener != null && sl != null) {
                 onSceneLocationSelectedListener.onSceneLocationSelected(sl);
@@ -278,7 +316,34 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
                         for (LocationItem sceneLocation : sceneLocations){
                             boundsBuilder.include(new LatLng(sceneLocation.latitude, sceneLocation.longitude));
                         }
-                        googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 100));
+
+                        View currentLevelview = satelliteButton;
+                        int padding = satelliteButton.getHeight();
+                        while (currentLevelview != mapView.getParent() && currentLevelview != null){
+                            ViewGroup.LayoutParams layoutParams = currentLevelview.getLayoutParams();
+                            if (layoutParams instanceof LinearLayout.LayoutParams) {
+                                padding += ((LinearLayout.LayoutParams) layoutParams).bottomMargin;
+                            } else if (layoutParams instanceof RelativeLayout.LayoutParams){
+                                padding += ((RelativeLayout.LayoutParams) layoutParams).bottomMargin;
+                            }
+                            padding += currentLevelview.getPaddingTop() + currentLevelview.getPaddingBottom();
+                            if (currentLevelview.getParent() != null && currentLevelview.getParent() instanceof View)
+                                currentLevelview = (View)(currentLevelview.getParent());
+                            else
+                                currentLevelview = null;
+                        }
+
+                        if (sceneLocations.size() == 1) {
+                            Projection projection = googleMap.getProjection();
+                            LatLng target = new LatLng(sceneLocations.get(0).latitude, sceneLocations.get(0).longitude);
+                            Point screenLocation = projection.toScreenLocation(target);
+                            screenLocation.y -= padding + 5;
+                            LatLng offsetTarget = projection.fromScreenLocation(screenLocation);
+                            googleMap.animateCamera(CameraUpdateFactory.newLatLng(offsetTarget));
+                        } else {
+
+                            googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), padding + 5));
+                        }
 
 
                         if (sceneLocations == null || sceneLocations.size() == 0)

@@ -48,6 +48,7 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
     boolean shouldShowShareBtn = true;
 	ImageButton prevClipButton, nextClipButton;
 	int itemIndex = 0;
+	int bgColor = -1;
 
     String bgImageUrl = null;
     FixedAspectRatioFrameLayout.Priority aspectFramePriority = null;
@@ -57,6 +58,10 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
     public void setBGImageUrl(String url){
         bgImageUrl = url;
     }
+
+	public void setBGColor(int color){
+		bgColor = color;
+	}
 
     @Override
     public int getContentViewId(){
@@ -108,6 +113,9 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
 			NextGenGlide.load(getActivity(), bgImageUrl).fitCenter().into(bgImageView);
             //PicassoTrustAll.loadImageIntoView(getActivity(), bgImageUrl, bgImageView);
         }
+		if (bgColor != -1){
+			bgImageView.setBackgroundColor(bgColor);
+		}
 
         shareImageButton = (Button) view.findViewById(R.id.share_image_button);
         if (shareImageButton != null){

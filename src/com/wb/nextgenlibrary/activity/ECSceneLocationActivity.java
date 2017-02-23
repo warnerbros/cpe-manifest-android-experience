@@ -1,5 +1,6 @@
 package com.wb.nextgenlibrary.activity;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
@@ -379,6 +380,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
                         galleryViewFragment = new ECGalleryViewFragment();
                         galleryViewFragment.setShouldHideMetaData(true);
                         galleryViewFragment.setShouldShowCloseBtn(true);
+                        galleryViewFragment.setBGColor(ECSceneLocationActivity.this.getResources().getColor(android.R.color.black));
                         galleryViewFragment.setAspectRatioFramePriority(FixedAspectRatioFrameLayout.Priority.HEIGHT_PRIORITY);
                     }
                     galleryViewFragment.setCurrentGallery((MovieMetaData.ECGalleryItem) currentItem);
