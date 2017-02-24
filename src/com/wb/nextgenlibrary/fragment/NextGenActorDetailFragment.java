@@ -281,7 +281,7 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
                     if (actorOjbect.getBaselineCastData().getGallery().size() > 1) {
 
                         actorGalleryFrame.setVisibility(View.VISIBLE);
-
+                        actorGalleryRecyclerView.smoothScrollToPosition(0);
                     } else
                         actorGalleryFrame.setVisibility(View.GONE);
                     List<MovieMetaData.CastHeadShot> headShots = actorOjbect.getBaselineCastData().getGallery();
