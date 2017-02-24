@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
@@ -95,13 +96,18 @@ public class NextGenExperience {
     private static NextGenEventHandler nextGenEventHandler;
     private static String googleMapAPIKey = null;
     private static ManifestItem manifestItem = null;
+    private static String studioXAPIKey = null;
 
     private static String sUserAgent;
 
     public static void startNextGenExperience(Context appContext, final Activity launcherActivity, final ManifestItem item,
                                               Object playbackObject, Class<? extends AbstractNextGenMainMovieFragment> fragmentClass,
                                               Class<? extends AbstractCastMainMovieFragment> castFragmentClass,
-                                              NextGenEventHandler eventHandler, Locale locale){
+                                              NextGenEventHandler eventHandler, Locale locale, @NonNull String studioStr) throws NextGenEmptyStudioStringException{
+
+        if (StringHelper.isEmpty(studioStr))
+            throw new NextGenEmptyStudioStringException();
+
         nextgenPlaybackObject = playbackObject;
 
         applicationContext = appContext;
@@ -111,6 +117,7 @@ public class NextGenExperience {
         nextGenEventHandler = eventHandler;
         clientLocale = locale == null? Locale.US : locale;
         manifestItem = item;
+        studioXAPIKey = studioStr;
 
         sUserAgent = "Android/" + sVersionName + " (Linux; U; Android " + Build.VERSION.RELEASE + "; " + Build.MODEL + ")";
         try {
@@ -124,7 +131,17 @@ public class NextGenExperience {
 
         Intent intent = new Intent(launcherActivity, LauncherActivity.class);
         launcherActivity.startActivity(intent);
+    }
 
+    public static class NextGenEmptyStudioStringException extends Exception{
+        @Override
+        public String getMessage(){
+            return "Studio string cannot be empty";
+        }
+    }
+
+    public static String getStudioXAPIKey(){
+        return studioXAPIKey;
     }
 
     public static void startNextGenExperience_prv(Context appContext, final Activity launcherActivity, final ManifestItem item,

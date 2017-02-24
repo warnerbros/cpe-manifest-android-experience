@@ -40,6 +40,7 @@ public class BaselineApiDAO {
 
     private static String API_KEY_KEY = "baseline_api_key";
     private static String X_API_KEY_KEY = "x-api-key";
+    private static String X_STUDIO_KEY = "X-Studio";
 
     private static final String BASELINE_DOMAIN = "http://baselineapi.com/api";
     private static final String X_API_DOMAIN = "https://vic57ayytg.execute-api.us-west-2.amazonaws.com/staging";
@@ -155,6 +156,7 @@ public class BaselineApiDAO {
 
         List<NameValuePair> headers = new ArrayList<NameValuePair>();
         headers.add(new BasicNameValuePair(X_API_KEY_KEY, xAPIKey));
+        headers.add(new BasicNameValuePair(X_STUDIO_KEY, NextGenExperience.getStudioXAPIKey()));
 
         String userdataResult = HttpHelper.getFromUrl(X_API_DOMAIN + XEndpoints.GetTalentDetail, params, headers);
         //JSONObject json = new JSONObject(result);
