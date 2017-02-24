@@ -323,7 +323,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
 
                     MovieMetaData.LocationItem locationItem = (MovieMetaData.LocationItem) dataObj;
                     if (locationItem != null && poster.getHeight() > 0 && poster.getWidth() > 0){
-                        String imageUrl = locationItem.getGoogleMapImageUrl(poster.getWidth(), poster.getHeight());
+                        String imageUrl = locationItem.getGoogleMapImageUrl(poster.getWidth() / 2, poster.getHeight() / 2);
                         NextGenGlide.load(getActivity(), imageUrl).centerCrop().into(poster);
                     }
 

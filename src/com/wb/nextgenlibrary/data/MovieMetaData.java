@@ -1330,8 +1330,10 @@ public class MovieMetaData {
                 return getGoogleMapImageUrl(320, 180);
         }
 
-        final static String GOOGLE_MAP_IMAGE_URL = "http://maps.google.com/maps/api/staticmap?center=%s,%s&zoom=%s&size=%sx%s&sensor=false";
-        final static String PIN_DEFAULT = "&markers=color:blue|%s,%s";
+
+
+        final static String GOOGLE_MAP_IMAGE_URL = "http://maps.googleapis.com/maps/api/staticmap?center=%s,%s&zoom=%s&scale=2&size=%sx%s&maptype=roadmap&format=png&visual_refresh=true";
+        final static String PIN_DEFAULT = "&markers=color:red|%s,%s";
         final static String PIN_CUSTOM = "&markers=icon:%s|%s,%s";
         public String getGoogleMapImageUrl(int width, int height){
             String pinPortion = "";
@@ -1341,7 +1343,7 @@ public class MovieMetaData {
             }else{
                 pinPortion = String.format(PIN_DEFAULT, latitude, longitude);
             }
-            return String.format(GOOGLE_MAP_IMAGE_URL, latitude, longitude, zoom, width, height) + pinPortion;
+            return String.format(GOOGLE_MAP_IMAGE_URL, latitude, longitude, zoom - 3, width, height) + pinPortion;
         }
 
         public List<PresentationDataItem> getPresentationDataItems(){

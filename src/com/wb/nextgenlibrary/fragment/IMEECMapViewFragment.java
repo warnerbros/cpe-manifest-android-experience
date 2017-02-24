@@ -232,14 +232,28 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
 
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, locationItem.zoom));   // set location
 
-            int yOffSet = mapView.getHeight()/3;
-            googleMap.moveCamera(CameraUpdateFactory.scrollBy(0, -yOffSet));
+            View currentLevelview = satelliteButton;
+            int padding = satelliteButton.getHeight();
+            while (currentLevelview != mapView.getParent() && currentLevelview != null){
+                ViewGroup.LayoutParams layoutParams = currentLevelview.getLayoutParams();
+                if (layoutParams instanceof LinearLayout.LayoutParams) {
+                    padding += ((LinearLayout.LayoutParams) layoutParams).bottomMargin;
+                } else if (layoutParams instanceof RelativeLayout.LayoutParams){
+                    padding += ((RelativeLayout.LayoutParams) layoutParams).bottomMargin;
+                }
+                padding += currentLevelview.getPaddingTop() + currentLevelview.getPaddingBottom();
+                if (currentLevelview.getParent() != null && currentLevelview.getParent() instanceof View)
+                    currentLevelview = (View)(currentLevelview.getParent());
+                else
+                    currentLevelview = null;
+            }
+            googleMap.moveCamera(CameraUpdateFactory.scrollBy(0, -padding));
             googleMap.getMaxZoomLevel();
             BitmapDescriptor bmDes ;
             if (selectedLocationItem.pinImage != null && !StringHelper.isEmpty(selectedLocationItem.pinImage.url)) {
                 bmDes = BitmapDescriptorFactory.fromBitmap(HttpImageHelper.getMapPinBitmap(selectedLocationItem.pinImage.url));
             }else {
-                bmDes = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
+                bmDes = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
             }
 
             MarkerOptions markerOpt = new MarkerOptions()
@@ -248,6 +262,7 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
 
             googleMap.addMarker(markerOpt).showInfoWindow();
             googleMap.setOnMapClickListener(onMapClickListener);
+            googleMap.setInfoWindowAdapter(new ECSceneLocationMapFragment.PopupAdapter(getActivity().getLayoutInflater()));
             googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
                 @Override
                 public void onCameraChange(CameraPosition camPos) {
