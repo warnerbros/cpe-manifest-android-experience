@@ -10,11 +10,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.activity.NextGenPlayer;
 import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;
+import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
 
 import java.util.List;
 
@@ -73,11 +78,12 @@ public class ActorDetailGalleryRecyclerAdapter extends RecyclerView.Adapter<Acto
             return 0;
     }
 
-    public static class ActorGalleryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ActorGalleryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         CardView cv;
         ImageView personPhoto;
         MovieMetaData.CastHeadShot headShot;
         ActorGalleryRecyclerSelectionListener listener;
+        FixedAspectRatioFrameLayout aspectRatioFrameLayout;
         int index = 0;
         ImageRedition redition = null;
 
@@ -86,6 +92,7 @@ public class ActorDetailGalleryRecyclerAdapter extends RecyclerView.Adapter<Acto
             this.listener = listener;
             cv = (CardView)itemView.findViewById(R.id.cv);
             personPhoto = (ImageView)itemView.findViewById(R.id.gallery_photo);
+            aspectRatioFrameLayout = (FixedAspectRatioFrameLayout)itemView.findViewById(R.id.actore_gallery_aspect_ratio_frame);
             itemView.setOnClickListener(this);
         }
 
@@ -109,7 +116,25 @@ public class ActorDetailGalleryRecyclerAdapter extends RecyclerView.Adapter<Acto
                 default:
                     imageUrl = headShot.mediumUrl;
             }
-            NextGenGlide.load(context, imageUrl).centerCrop().into(personPhoto);
+            NextGenGlide.load(context, imageUrl).listener(new RequestListener<GlideUrl, GlideDrawable>() {
+                @Override
+                public boolean onException(Exception e, GlideUrl model, Target<GlideDrawable> target, boolean isFirstResource) {
+                    return false;
+                }
+
+                @Override
+                public boolean onResourceReady(final GlideDrawable resource, GlideUrl model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                    if (mContext instanceof Activity) {
+                        ((Activity) mContext).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                aspectRatioFrameLayout.setAspectRatio(resource.getIntrinsicWidth(), resource.getIntrinsicHeight());
+                            }
+                        });
+                    }
+                    return false;
+                }
+            }).fitCenter().into(personPhoto);
 
         }
 

@@ -16,6 +16,7 @@
         android:duplicateParentState="true">
         <com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout
             xmlns:nextgen="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/actore_gallery_aspect_ratio_frame"
             android:layout_height="match_parent"
             android:layout_width="wrap_content"
             android:layout_gravity="center"
