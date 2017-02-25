@@ -1,12 +1,11 @@
 package com.wb.nextgenlibrary.fragment;
 
-import android.app.ProgressDialog;
 import android.media.MediaPlayer;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
-import com.wb.nextgenlibrary.interfaces.NextGenPlaybackStatusListener;
-import com.wb.nextgenlibrary.interfaces.NextGenPlayerInterface;
+import com.wb.nextgenlibrary.interfaces.NGEPlaybackStatusListener;
+import com.wb.nextgenlibrary.interfaces.NGEPlayerInterface;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.videoview.IVideoViewActionListener;
 import com.wb.nextgenlibrary.widget.CustomMediaController;
@@ -17,7 +16,7 @@ import java.util.List;
 /**
  * Created by gzcheng on 8/15/16.
  */
-public abstract class AbstractNextGenMainMovieFragment extends Fragment implements NextGenPlayerInterface{
+public abstract class AbstractNGEMainMovieFragment extends Fragment implements NGEPlayerInterface {
     protected IVideoViewActionListener nextGenVideoViewListener;
     protected MediaPlayer.OnCompletionListener completionListener;
     private View loadingView;
@@ -26,9 +25,9 @@ public abstract class AbstractNextGenMainMovieFragment extends Fragment implemen
     protected int activeCommentaryTrack = -1;
 
 
-    protected NextGenPlaybackStatusListener.NextGenPlaybackStatus playbackStatus = NextGenPlaybackStatusListener.NextGenPlaybackStatus.BUFFERING;
+    protected NGEPlaybackStatusListener.NextGenPlaybackStatus playbackStatus = NGEPlaybackStatusListener.NextGenPlaybackStatus.BUFFERING;
 
-    public NextGenPlaybackStatusListener.NextGenPlaybackStatus getPlaybackStatus(){     // only 1 of the 3 status will be returned;
+    public NGEPlaybackStatusListener.NextGenPlaybackStatus getPlaybackStatus(){     // only 1 of the 3 status will be returned;
         switch (playbackStatus){
 
             case PREPARED:
@@ -39,12 +38,12 @@ public abstract class AbstractNextGenMainMovieFragment extends Fragment implemen
             case RESUME:
             case SEEK:
             case TIMESTAMP_UPDATE:
-                return NextGenPlaybackStatusListener.NextGenPlaybackStatus.READY;
+                return NGEPlaybackStatusListener.NextGenPlaybackStatus.READY;
             case COMPLETED:
-                return NextGenPlaybackStatusListener.NextGenPlaybackStatus.COMPLETED;
+                return NGEPlaybackStatusListener.NextGenPlaybackStatus.COMPLETED;
             case BUFFERING:
             default:
-                return NextGenPlaybackStatusListener.NextGenPlaybackStatus.BUFFERING;
+                return NGEPlaybackStatusListener.NextGenPlaybackStatus.BUFFERING;
         }
 
     }

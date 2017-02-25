@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by gzcheng on 4/12/16.
  */
-public class TheTakeIMEEngine extends NextGenIMEEngine<TheTakeProductFrame>{
+public class TheTakeIMEEngine extends IMEEngine<TheTakeProductFrame> {
     long earliestTimecode = 0L;
     long lastTimecode = 0L;
     int currentStart = -1;

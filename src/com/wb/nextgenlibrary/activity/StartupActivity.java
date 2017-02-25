@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -18,9 +17,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.VideoView;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
@@ -30,11 +27,9 @@ import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.source.AdaptiveMediaSourceEventListener;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
@@ -50,7 +45,6 @@ import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DataSpec;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
@@ -58,10 +52,9 @@ import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
+import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.data.StyleData;
-import com.wb.nextgenlibrary.interfaces.NextGenPlaybackStatusListener;
 import com.wb.nextgenlibrary.parser.cpestyle.BackgroundOverlayAreaType;
 import com.wb.nextgenlibrary.testassets.TestItemsActivity;
 import com.wb.nextgenlibrary.util.Size;
@@ -72,14 +65,13 @@ import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
 
-import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
 /**
  * Created by gzcheng on 1/7/16.
  */
-public class NextGenActivity extends NextGenHideStatusBarActivity implements View.OnClickListener {
+public class StartupActivity extends NGEHideStatusBarActivity implements View.OnClickListener {
     SimpleExoPlayerView startupVideoView;
     ImageView startupImageView;
 
@@ -159,7 +151,7 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
         View.OnLongClickListener extraLongClickListener = new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Intent intent = new Intent(NextGenActivity.this, TestItemsActivity.class);
+                Intent intent = new Intent(StartupActivity.this, TestItemsActivity.class);
                 startActivity(intent);
                 return true;
             }
@@ -707,21 +699,21 @@ public class NextGenActivity extends NextGenHideStatusBarActivity implements Vie
     public void onClick(View v){
         if (v.getId() == R.id.next_gen_startup_play_button || v.getId() == R.id.next_gen_startup_play_text_button) {
 
-            Intent intent = new Intent(this, NextGenPlayer.class);
+            Intent intent = new Intent(this, InMovieExperience.class);
             intent.setDataAndType(Uri.parse(NextGenExperience.getMovieMetaData().getMainMovieUrl()), "video/*");
             startActivity(intent);
-            NextGenAnalyticData.reportEvent(this, null, NextGenAnalyticData.AnalyticAction.ACTION_PLAY_MOVIE, null, null);
+            NGEAnalyticData.reportEvent(this, null, NGEAnalyticData.AnalyticAction.ACTION_PLAY_MOVIE, null, null);
 
         } else if (v.getId() == R.id.next_gen_startup_extra_button || v.getId() == R.id.next_gen_startup_extra_text_button) {
-            Intent extraIntent = new Intent(this, NextGenExtraActivity.class);
+            Intent extraIntent = new Intent(this, OutOfMovieActivity.class);
             startActivity(extraIntent);
-            NextGenAnalyticData.reportEvent(this, null, NextGenAnalyticData.AnalyticAction.ACTION_EXTRAS, null, null);
+            NGEAnalyticData.reportEvent(this, null, NGEAnalyticData.AnalyticAction.ACTION_EXTRAS, null, null);
         } else if (v.getId() == R.id.next_gen_startup_purchase_button) {
             if (NextGenExperience.getNextGenEventHandler() != null)
                 NextGenExperience.getNextGenEventHandler().handlePurchaseButtonPressed(this, NextGenExperience.getNextgenPlaybackObject());
-            NextGenAnalyticData.reportEvent(this, null, NextGenAnalyticData.AnalyticAction.ACTION_BUY, null, null);
+            NGEAnalyticData.reportEvent(this, null, NGEAnalyticData.AnalyticAction.ACTION_BUY, null, null);
         } else if (v.getId() == R.id.nge_main_exit){
-            NextGenAnalyticData.reportEvent(this, null, NextGenAnalyticData.AnalyticAction.ACTION_EXIT, null, null);
+            NGEAnalyticData.reportEvent(this, null, NGEAnalyticData.AnalyticAction.ACTION_EXIT, null, null);
             finish();
         }
     }

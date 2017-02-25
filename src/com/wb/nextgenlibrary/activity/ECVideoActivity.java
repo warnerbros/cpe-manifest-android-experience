@@ -4,27 +4,18 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.gms.cast.framework.CastButtonFactory;
-import com.google.android.gms.cast.framework.CastContext;
-import com.google.android.gms.cast.framework.CastSession;
 import com.google.android.gms.cast.framework.CastState;
-import com.google.android.gms.cast.framework.CastStateListener;
-import com.google.android.gms.cast.framework.Session;
-import com.google.android.gms.cast.framework.SessionManager;
-import com.google.android.gms.cast.framework.SessionManagerListener;
-import com.google.android.gms.cast.framework.media.RemoteMediaClient;
-import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
+import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.fragment.ECCastPlayerFragment;
 import com.wb.nextgenlibrary.fragment.ECVideoViewFragment;
 import com.wb.nextgenlibrary.interfaces.ECVideoPlayerInterface;
-import com.wb.nextgenlibrary.util.utils.NextGenFragmentTransactionEngine;
+import com.wb.nextgenlibrary.util.utils.NGEFragmentTransactionEngine;
 
 
 /**
@@ -41,7 +32,7 @@ public class ECVideoActivity extends AbstractECView implements ECVideoViewFragme
 	protected TextView selectedECNameTextView;
 	protected TextView descriptionTextView;
 
-	private NextGenFragmentTransactionEngine fragmentTransactionEngine;
+	private NGEFragmentTransactionEngine fragmentTransactionEngine;
 	private Menu mOptionsMenu;
 
 
@@ -131,7 +122,7 @@ public class ECVideoActivity extends AbstractECView implements ECVideoViewFragme
 				selectedECNameTextView.setText(audioVisualItem.getTitle());
 			if (descriptionTextView != null)
 				descriptionTextView.setText(audioVisualItem.getSummary());
-            NextGenAnalyticData.reportEvent(this, null, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_VIDEO, audioVisualItem.videoId, null);
+            NGEAnalyticData.reportEvent(this, null, NGEAnalyticData.AnalyticAction.ACTION_SELECT_VIDEO, audioVisualItem.videoId, null);
         }
     }
 
@@ -216,10 +207,10 @@ public class ECVideoActivity extends AbstractECView implements ECVideoViewFragme
 				selectedECNameTextView.setText(audioVisualItem.getTitle());
 			if (descriptionTextView != null)
 				descriptionTextView.setText(audioVisualItem.getSummary());
-			NextGenAnalyticData.reportEvent(this, null, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_VIDEO, audioVisualItem.videoId, null);
+			NGEAnalyticData.reportEvent(this, null, NGEAnalyticData.AnalyticAction.ACTION_SELECT_VIDEO, audioVisualItem.videoId, null);
 		}
 
-		fragmentTransactionEngine = new NextGenFragmentTransactionEngine(this);
+		fragmentTransactionEngine = new NGEFragmentTransactionEngine(this);
 		fragmentTransactionEngine.replaceFragment(getSupportFragmentManager(), R.id.next_gen_ec_content_view, (Fragment)activePlayerInterface);
 	}
 }

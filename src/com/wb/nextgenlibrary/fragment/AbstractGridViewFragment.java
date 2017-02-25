@@ -21,7 +21,7 @@ import com.wb.nextgenlibrary.R;
 /**
  * Created by gzcheng on 1/12/16.
  */
-public abstract class NextGenGridViewFragment extends Fragment implements AdapterView.OnItemClickListener{
+public abstract class AbstractGridViewFragment extends Fragment implements AdapterView.OnItemClickListener{
 
     protected GridView gridView;
     protected NextGenGridViewAdapter listAdaptor;
@@ -102,7 +102,7 @@ public abstract class NextGenGridViewFragment extends Fragment implements Adapte
 
     public class NextGenGridViewAdapter extends BaseAdapter{
 
-        //protected NextGenExtraActivity activity;
+        //protected OutOfMovieActivity activity;
 
         protected int selectedIndex = getStartupSelectedIndex();
 

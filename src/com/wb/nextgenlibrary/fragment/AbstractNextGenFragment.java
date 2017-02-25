@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.util.utils.F;
 import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 
@@ -60,12 +59,12 @@ public abstract class AbstractNextGenFragment extends Fragment {
                 }
             });
         }
-        //NextGenAnalyticData.reportEvent(getActivity(), this, null, NextGenAnalyticData.AnalyticAction.ACTION_START, getReportContentName());
+        //NGEAnalyticData.reportEvent(getActivity(), this, null, NGEAnalyticData.AnalyticAction.ACTION_START, getReportContentName());
     }
 
     protected void onCloseButtonClick(){
         if (getActivity() != null) {
-            //NextGenAnalyticData.reportEvent(getActivity(), AbstractNextGenFragment.this, "Back Button", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
+            //NGEAnalyticData.reportEvent(getActivity(), AbstractNextGenFragment.this, "Back Button", NGEAnalyticData.AnalyticAction.ACTION_CLICK, null);
             getActivity().onBackPressed();
         }
     }

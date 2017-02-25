@@ -18,7 +18,7 @@ import com.wb.nextgenlibrary.R;
 /**
  * Created by gzcheng on 1/12/16.
  */
-public abstract class NextGenExtraLeftListFragment<T> extends Fragment implements AdapterView.OnItemClickListener{
+public abstract class ExtraLeftListFragment<T> extends Fragment implements AdapterView.OnItemClickListener{
 
     protected ListView listView;
     protected NextGenExtraLeftPanelAdapter listAdaptor;

@@ -1,12 +1,10 @@
 package com.wb.nextgenlibrary;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -21,26 +19,22 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.security.ProviderInstaller;
 import com.wb.nextgenlibrary.activity.LauncherActivity;
-import com.wb.nextgenlibrary.activity.NextGenActivity;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.fragment.AbstractCastMainMovieFragment;
-import com.wb.nextgenlibrary.fragment.AbstractNextGenMainMovieFragment;
-import com.wb.nextgenlibrary.interfaces.NextGenEventHandler;
+import com.wb.nextgenlibrary.fragment.AbstractNGEMainMovieFragment;
+import com.wb.nextgenlibrary.interfaces.NGEEventHandler;
 import com.wb.nextgenlibrary.network.BaselineApiDAO;
-import com.wb.nextgenlibrary.network.NextGenCacheManager;
+import com.wb.nextgenlibrary.network.NGECacheManager;
 import com.wb.nextgenlibrary.network.TheTakeApiDAO;
 import com.wb.nextgenlibrary.parser.ManifestXMLParser;
 import com.wb.nextgenlibrary.util.Size;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
-import com.wb.nextgenlibrary.util.concurrent.Worker;
 import com.wb.nextgenlibrary.util.utils.F;
 import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.Callable;
 
 /**
  * Created by gzcheng on 8/10/16.
@@ -86,14 +80,14 @@ public class NextGenExperience {
     private static int deviceScreenHeight = -1;
     private static Size deviceScreenSize = null;
     public static int sCachePolicy;
-    public static NextGenCacheManager sCacheManager;
+    public static NGECacheManager sCacheManager;
     private static String sVersionName = null;
     private static Locale clientLocale = null;
     private static boolean isDiagnosticMode = true;
-    private static Class<? extends AbstractNextGenMainMovieFragment> mainMovieFragmentClass;
+    private static Class<? extends AbstractNGEMainMovieFragment> mainMovieFragmentClass;
     private static Class<? extends AbstractCastMainMovieFragment> castMovieFragmentClass;
     private static Object nextgenPlaybackObject;
-    private static NextGenEventHandler nextGenEventHandler;
+    private static NGEEventHandler NGEEventHandler;
     private static String googleMapAPIKey = null;
     private static ManifestItem manifestItem = null;
     private static String studioXAPIKey = null;
@@ -101,9 +95,9 @@ public class NextGenExperience {
     private static String sUserAgent;
 
     public static void startNextGenExperience(Context appContext, final Activity launcherActivity, final ManifestItem item,
-                                              Object playbackObject, Class<? extends AbstractNextGenMainMovieFragment> fragmentClass,
+                                              Object playbackObject, Class<? extends AbstractNGEMainMovieFragment> fragmentClass,
                                               Class<? extends AbstractCastMainMovieFragment> castFragmentClass,
-                                              NextGenEventHandler eventHandler, Locale locale, @NonNull String studioStr) throws NextGenEmptyStudioStringException{
+                                              NGEEventHandler eventHandler, Locale locale, @NonNull String studioStr) throws NextGenEmptyStudioStringException{
 
         if (StringHelper.isEmpty(studioStr))
             throw new NextGenEmptyStudioStringException();
@@ -111,10 +105,10 @@ public class NextGenExperience {
         nextgenPlaybackObject = playbackObject;
 
         applicationContext = appContext;
-        sCacheManager = new NextGenCacheManager(applicationContext);
+        sCacheManager = new NGECacheManager(applicationContext);
         mainMovieFragmentClass = fragmentClass;
         castMovieFragmentClass = castFragmentClass;
-        nextGenEventHandler = eventHandler;
+        NGEEventHandler = eventHandler;
         clientLocale = locale == null? Locale.US : locale;
         manifestItem = item;
         studioXAPIKey = studioStr;
@@ -145,16 +139,16 @@ public class NextGenExperience {
     }
 
     public static void startNextGenExperience_prv(Context appContext, final Activity launcherActivity, final ManifestItem item,
-                                              Object playbackObject, Class<? extends AbstractNextGenMainMovieFragment> fragmentClass,
-                                              NextGenEventHandler eventHandler, Locale locale){
+                                                  Object playbackObject, Class<? extends AbstractNGEMainMovieFragment> fragmentClass,
+                                                  NGEEventHandler eventHandler, Locale locale){
         /*final ProgressDialog mDialog = ProgressDialog.show(launcherActivity, "", "Loading", false, false);
 
         nextgenPlaybackObject = playbackObject;
 
         applicationContext = appContext;
-        sCacheManager = new NextGenCacheManager(applicationContext);
+        sCacheManager = new NGECacheManager(applicationContext);
         mainMovieFragmentClass = fragmentClass;
-        nextGenEventHandler = eventHandler;
+        NGEEventHandler = eventHandler;
         clientLocale = locale == null? Locale.US : locale;
 
         sUserAgent = "Android/" + sVersionName + " (Linux; U; Android " + Build.VERSION.RELEASE + "; " + Build.MODEL + ")";
@@ -183,7 +177,7 @@ public class NextGenExperience {
 
                                 mDialog.dismiss();
                                 mDialog.cancel();
-                                Intent intent = new Intent(launcherActivity, NextGenActivity.class);
+                                Intent intent = new Intent(launcherActivity, StartupActivity.class);
                                 launcherActivity.startActivity(intent);
                             }
                         });
@@ -273,7 +267,7 @@ public class NextGenExperience {
         return movieMetaData;
     }
 
-    public static Class<? extends AbstractNextGenMainMovieFragment> getMainMovieFragmentClass(){
+    public static Class<? extends AbstractNGEMainMovieFragment> getMainMovieFragmentClass(){
         return mainMovieFragmentClass;
     }
 
@@ -285,8 +279,8 @@ public class NextGenExperience {
         return nextgenPlaybackObject;
     }
 
-    public static NextGenEventHandler getNextGenEventHandler() {
-        return nextGenEventHandler;
+    public static NGEEventHandler getNextGenEventHandler() {
+        return NGEEventHandler;
     }
 
     public static float getScreenDensity(Context ctx) {

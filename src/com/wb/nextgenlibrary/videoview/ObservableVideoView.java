@@ -5,11 +5,11 @@ import android.net.Uri;
 import android.util.AttributeSet;
 import android.widget.VideoView;
 
-import com.wb.nextgenlibrary.interfaces.NextGenPlayerInterface;
+import com.wb.nextgenlibrary.interfaces.NGEPlayerInterface;
 import com.wb.nextgenlibrary.widget.CustomMediaController;
 
 
-public final class ObservableVideoView extends VideoView implements NextGenPlayerInterface, CustomMediaController.MediaPlayerControl{
+public final class ObservableVideoView extends VideoView implements NGEPlayerInterface, CustomMediaController.MediaPlayerControl{
 	
 	private IVideoViewActionListener mVideoViewListener;
 	private boolean mIsOnPauseMode = false;

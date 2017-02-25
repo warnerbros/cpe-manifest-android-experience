@@ -8,24 +8,18 @@ import com.wb.nextgenlibrary.activity.ActorGalleryActivity;
 import com.wb.nextgenlibrary.activity.ECGalleryActivity;
 import com.wb.nextgenlibrary.activity.ECSceneLocationActivity;
 import com.wb.nextgenlibrary.activity.ECVideoActivity;
-import com.wb.nextgenlibrary.activity.NextGenActivity;
-import com.wb.nextgenlibrary.activity.NextGenExtraActivity;
-import com.wb.nextgenlibrary.activity.NextGenPlayer;
-import com.wb.nextgenlibrary.activity.phone.NextGenActorsActivity_Phone;
+import com.wb.nextgenlibrary.activity.OutOfMovieActivity;
+import com.wb.nextgenlibrary.activity.StartupActivity;
+import com.wb.nextgenlibrary.activity.InMovieExperience;
+import com.wb.nextgenlibrary.activity.phone.NGEActorsActivity_Phone;
+import com.wb.nextgenlibrary.fragment.ActorDetailFragment;
 import com.wb.nextgenlibrary.fragment.ECGalleryViewFragment;
 import com.wb.nextgenlibrary.fragment.ECSceneLocationMapFragment;
-import com.wb.nextgenlibrary.fragment.ECTrviaViewFragment;
-import com.wb.nextgenlibrary.fragment.ECTurnTableViewFragment;
 import com.wb.nextgenlibrary.fragment.ECVideoViewFragment;
 import com.wb.nextgenlibrary.fragment.IMEECMapViewFragment;
-import com.wb.nextgenlibrary.fragment.NextGenActorDetailFragment;
-import com.wb.nextgenlibrary.fragment.NextGenActorListFragment;
-import com.wb.nextgenlibrary.fragment.NextGenExtraMainTableFragment;
-import com.wb.nextgenlibrary.fragment.NextGenGridViewFragment;
+import com.wb.nextgenlibrary.fragment.ActorListFragment;
+import com.wb.nextgenlibrary.fragment.ExtraMainTableFragment;
 import com.wb.nextgenlibrary.fragment.ShareClipFragment;
-import com.wb.nextgenlibrary.fragment.ShopCategoryGridFragment;
-import com.wb.nextgenlibrary.fragment.TheTakeFrameProductsFragment;
-import com.wb.nextgenlibrary.fragment.TheTakeProductDetailFragment;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 
 import java.util.HashMap;
@@ -35,7 +29,7 @@ import java.util.Map;
  * Created by gzcheng on 9/27/16.
  */
 
-public class NextGenAnalyticData {
+public class NGEAnalyticData {
 
     public static enum AnalyticAction{
         // Home Screen
@@ -97,18 +91,18 @@ public class NextGenAnalyticData {
     public final static Map<Class<? extends Activity>, Map<Class<? extends Fragment>, String>> classObjectToReportNameMap = new HashMap<>();
     static{
         Map<Class<? extends Fragment>, String> map;
-        // NextGenActivity
+        // StartupActivity
         map = new HashMap<>() ;
         map.put(null, "home_action");
-        classObjectToReportNameMap.put(NextGenActivity.class, map);
+        classObjectToReportNameMap.put(StartupActivity.class, map);
 
-        // NextGenExtraActivity
+        // OutOfMovieActivity
         map = new HashMap<>() ;
         //map.put(null, "extras_action");
-        map.put(NextGenActorListFragment.class, "extras_action");
-        map.put(NextGenExtraMainTableFragment.class, "extras_action");
-        map.put(NextGenActorDetailFragment.class, "extras_talent_action");
-        classObjectToReportNameMap.put(NextGenExtraActivity.class, map);
+        map.put(ActorListFragment.class, "extras_action");
+        map.put(ExtraMainTableFragment.class, "extras_action");
+        map.put(ActorDetailFragment.class, "extras_talent_action");
+        classObjectToReportNameMap.put(OutOfMovieActivity.class, map);
 
         // ActorGalleryActivity
         map = new HashMap<>() ;
@@ -135,7 +129,7 @@ public class NextGenAnalyticData {
         map.put(ECGalleryViewFragment.class, "extras_scene_locations_action");
         classObjectToReportNameMap.put(ECSceneLocationActivity.class, map);
 
-        // NextGenPlayer
+        // InMovieExperience
         map = new HashMap<>() ;
         map.put(null, "ime_action");
         map.put(ECSceneLocationMapFragment.class, "ime_action");
@@ -143,13 +137,13 @@ public class NextGenAnalyticData {
         map.put(ECVideoViewFragment.class, "ime_action");
         map.put(IMEECMapViewFragment.class, "ime_action");
         map.put(ShareClipFragment.class, "ime_clipshare_action");
-        classObjectToReportNameMap.put(NextGenPlayer.class, map);
+        classObjectToReportNameMap.put(InMovieExperience.class, map);
 
-        // NextGenActorsActivity_Phone
+        // NGEActorsActivity_Phone
         map = new HashMap<>() ;
         map.put(null, "extras_talent_action");
-        map.put(NextGenActorDetailFragment.class, "extras_talent_action");
-        classObjectToReportNameMap.put(NextGenActorsActivity_Phone.class, map);
+        map.put(ActorDetailFragment.class, "extras_talent_action");
+        classObjectToReportNameMap.put(NGEActorsActivity_Phone.class, map);
 
     }
 

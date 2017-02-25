@@ -26,7 +26,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
+import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData.LocationItem;
 import com.wb.nextgenlibrary.util.HttpImageHelper;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
@@ -158,7 +158,7 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
                 });
             }
         }
-        NextGenAnalyticData.reportEvent(getActivity(), this, NextGenAnalyticData.AnalyticAction.ACTION_SET_MAP_TYPE, v.equals(mapButton) ? "road" : "satellite", null);
+        NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SET_MAP_TYPE, v.equals(mapButton) ? "road" : "satellite", null);
     }
 
     public void setOnSceneLocationSelectedListener(OnSceneLocationSelectedListener listener){

@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by gzcheng on 4/12/16.
  */
-public class AVGalleryIMEEngine extends NextGenIMEEngine<IMEElement<PresentationDataItem>> {
+public class AVGalleryIMEEngine extends IMEEngine<IMEElement<PresentationDataItem>> {
 
     public AVGalleryIMEEngine(List<IMEElement<PresentationDataItem>> elements){
         imeElements = elements;

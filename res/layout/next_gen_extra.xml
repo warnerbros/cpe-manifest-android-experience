@@ -6,9 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/next_gen_extra_right_view"
-    tools:context=".activity.NextGenExtraActivity">
+    tools:context=".activity.OutOfMovieActivity">
 
-    <fragment android:name="com.wb.nextgenlibrary.fragment.phone.NextGenExtraMainTableFragment_Phone"
+    <fragment android:name="com.wb.nextgenlibrary.fragment.phone.ExtraMainTableFragment_Phone"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

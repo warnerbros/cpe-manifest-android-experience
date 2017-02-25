@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import com.wb.nextgenlibrary.interfaces.ContentViewFullscreenRequestInterface;
-import com.wb.nextgenlibrary.interfaces.NextGenPlayerInterface;
+import com.wb.nextgenlibrary.interfaces.NGEPlayerInterface;
 import com.wb.nextgenlibrary.util.TabletUtils;
 
 /**
@@ -19,7 +19,7 @@ public class ECMediaController extends NextGenMediaController {
     int statupSystemUIView = 0;
 
     ImageButton maxminButton;
-    public ECMediaController(Context context, NextGenPlayerInterface player) {
+    public ECMediaController(Context context, NGEPlayerInterface player) {
         super(context, player, TabletUtils.isTablet());
         statupSystemUIView = mBaseSystemUIView.getSystemUiVisibility();
     }

@@ -7,23 +7,17 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.model.GlideUrl;
-import com.bumptech.glide.load.model.LazyHeaders;
 import com.google.android.gms.cast.framework.CastContext;
 import com.google.android.gms.cast.framework.CastSession;
-import com.google.android.gms.cast.framework.CastState;
 import com.google.android.gms.cast.framework.CastStateListener;
 import com.google.android.gms.cast.framework.Session;
 import com.google.android.gms.cast.framework.SessionManager;
@@ -31,17 +25,14 @@ import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.interfaces.ContentViewFullscreenRequestInterface;
-import com.wb.nextgenlibrary.util.utils.F;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;
-import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 
 /**
  * Created by gzcheng on 3/9/16.
  */
-public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivity implements ContentViewFullscreenRequestInterface, CastStateListener {
+public abstract class AbstractNGEActivity extends NGEHideStatusBarActivity implements ContentViewFullscreenRequestInterface, CastStateListener {
 
 	public abstract String getBackgroundImgUri();
     public abstract String getLeftButtonText();
@@ -264,7 +255,7 @@ public abstract class AbstractNextGenActivity extends NextGenHideStatusBarActivi
     }
 
     protected void onLeftTopActionBarButtonPressed(){
-        //NextGenAnalyticData.reportEvent(this, null, "Back Button", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
+        //NGEAnalyticData.reportEvent(this, null, "Back Button", NGEAnalyticData.AnalyticAction.ACTION_CLICK, null);
         onBackPressed();
     }
 

@@ -1,6 +1,5 @@
 package com.wb.nextgenlibrary.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -17,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.davemorrissey.labs.subscaleview.ImageSource;
@@ -27,7 +25,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.adapter.ActorDetailGalleryRecyclerAdapter;
-import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
+import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData.CastHeadShot;
 import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;
@@ -40,7 +38,7 @@ import java.util.List;
 /**
  * Created by gzcheng on 7/11/16.
  */
-public class ActorGalleryActivity extends AbstractNextGenActivity implements ActorDetailGalleryRecyclerAdapter.ActorGalleryRecyclerSelectionListener{
+public class ActorGalleryActivity extends AbstractNGEActivity implements ActorDetailGalleryRecyclerAdapter.ActorGalleryRecyclerSelectionListener{
 
     public static String HEAD_SHOTS_KEY = "HEAD_SHOTS";
     public static String CURRENT_INDEX_KEY = "CURRENT_INDEX";
@@ -85,7 +83,7 @@ public class ActorGalleryActivity extends AbstractNextGenActivity implements Act
             closeBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //NextGenAnalyticData.reportEvent(ActorGalleryActivity.this, null, "Back Button", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, null);
+                    //NGEAnalyticData.reportEvent(ActorGalleryActivity.this, null, "Back Button", NGEAnalyticData.AnalyticAction.ACTION_CLICK, null);
                     onBackPressed();
                 }
             });
@@ -188,7 +186,7 @@ public class ActorGalleryActivity extends AbstractNextGenActivity implements Act
 
     public void onItemSelected(int index){
         actorGalleryViewPager.setCurrentItem(index);
-        NextGenAnalyticData.reportEvent(this, null, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_IMAGE, actorGalleryItems.get(index).imageId, null);
+        NGEAnalyticData.reportEvent(this, null, NGEAnalyticData.AnalyticAction.ACTION_SELECT_IMAGE, actorGalleryItems.get(index).imageId, null);
 
     }
 

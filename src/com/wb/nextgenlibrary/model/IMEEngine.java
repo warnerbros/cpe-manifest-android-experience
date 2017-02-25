@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by gzcheng on 1/25/16.
  */
-public abstract class NextGenIMEEngine <T>{
+public abstract class IMEEngine<T>{
 
 
     //abstract void handleIMEUpdate(long timecode, T imeElement);
@@ -19,11 +19,11 @@ public abstract class NextGenIMEEngine <T>{
 
     protected long lastSearchedTime = 0L;
 
-    public NextGenIMEEngine(List<T> elements){
+    public IMEEngine(List<T> elements){
         imeElements = elements;
     }
 
-    public NextGenIMEEngine(){}
+    public IMEEngine(){}
 
     public void setImeElements(List<T> elements){
         imeElements = elements;

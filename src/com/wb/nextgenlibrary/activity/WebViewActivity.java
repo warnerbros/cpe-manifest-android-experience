@@ -8,27 +8,19 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.util.concurrent.ResultListener;
-import com.wb.nextgenlibrary.util.concurrent.Worker;
 import com.wb.nextgenlibrary.util.utils.F;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.concurrent.Callable;
 
 
 /**
  * Created by gzcheng on 8/8/16.
  */
-public class WebViewActivity extends NextGenHideStatusBarActivity {
+public class WebViewActivity extends NGEHideStatusBarActivity {
 
     protected WebView webView;
 

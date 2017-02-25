@@ -16,7 +16,7 @@ import java.lang.reflect.Constructor;
 /**
  * Created by gzcheng on 1/14/16.
  */
-public class NextGenActionBarFragmentActivity  extends AppCompatActivity{
+public class NGEActionBarFragmentActivity extends AppCompatActivity{
     //final Stack<Class<?>> fragmentClassStack = new Stack<Class<?>>();
     Fragment currentFragment;
 

@@ -10,8 +10,8 @@ import com.squareup.picasso.Picasso;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 
-import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
-import com.wb.nextgenlibrary.interfaces.NextGenFragmentTransactionInterface;
+import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
+import com.wb.nextgenlibrary.interfaces.NGEFragmentTransactionInterface;
 import com.wb.nextgenlibrary.interfaces.SensitiveFragmentInterface;
 import com.wb.nextgenlibrary.network.BaselineApiDAO;
 
@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * Created by gzcheng on 1/13/16.
  */
-public class NextGenActorListFragment extends NextGenExtraLeftListFragment<CastData> implements SensitiveFragmentInterface {
+public class ActorListFragment extends ExtraLeftListFragment<CastData> implements SensitiveFragmentInterface {
 
 
     @Override
@@ -78,15 +78,15 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment<CastD
     @Override
     protected void onListItemClick(int index, CastData selectedObject){
 
-        if (getActivity() instanceof NextGenFragmentTransactionInterface){
-            NextGenActorDetailFragment target = new NextGenActorDetailFragment();
+        if (getActivity() instanceof NGEFragmentTransactionInterface){
+            ActorDetailFragment target = new ActorDetailFragment();
             target.setDetailObject(selectedObject);
-            ((NextGenFragmentTransactionInterface)getActivity()).transitRightFragment(target);
-            ((NextGenFragmentTransactionInterface)getActivity()).resetUI(false);
+            ((NGEFragmentTransactionInterface)getActivity()).transitRightFragment(target);
+            ((NGEFragmentTransactionInterface)getActivity()).resetUI(false);
 
         }
         listAdaptor.notifyDataSetChanged();
-        NextGenAnalyticData.reportEvent(getActivity(), this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_TALENT, selectedObject.getId(), null);
+        NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_TALENT, selectedObject.getId(), null);
     }
 
     protected int getListItemCount() {
@@ -137,10 +137,10 @@ public class NextGenActorListFragment extends NextGenExtraLeftListFragment<CastD
 
 
     public void notifyCurrentSensitiveFragment(Fragment fragment){
-        if (!(fragment instanceof NextGenActorDetailFragment) ){
+        if (!(fragment instanceof ActorDetailFragment) ){
             resetSelectedItem();
             listAdaptor.notifyDataSetChanged();
-            ((NextGenFragmentTransactionInterface)getActivity()).resetUI(true);
+            ((NGEFragmentTransactionInterface)getActivity()).resetUI(true);
         }
     }
 }

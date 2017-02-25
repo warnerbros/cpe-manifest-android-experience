@@ -1,28 +1,22 @@
 package com.wb.nextgenlibrary.fragment;
 
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.activity.NextGenPlayer;
-import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
+import com.wb.nextgenlibrary.activity.InMovieExperience;
+import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.data.MovieMetaData.IMEElementsGroup;
-import com.wb.nextgenlibrary.data.TheTakeData;
 import com.wb.nextgenlibrary.data.TheTakeData.TheTakeProductFrame;
 import com.wb.nextgenlibrary.interfaces.IMEVideoStatusListener;
-import com.wb.nextgenlibrary.interfaces.NextGenPlaybackStatusListener;
+import com.wb.nextgenlibrary.interfaces.NGEPlaybackStatusListener;
 import com.wb.nextgenlibrary.model.AVGalleryIMEEngine;
-import com.wb.nextgenlibrary.model.NextGenIMEEngine;
+import com.wb.nextgenlibrary.model.IMEEngine;
 import com.wb.nextgenlibrary.model.TheTakeIMEEngine;
 import com.wb.nextgenlibrary.network.TheTakeApiDAO;
 import com.wb.nextgenlibrary.util.TabletUtils;
@@ -37,10 +31,10 @@ import java.util.List;
 /**
  * Created by gzcheng on 3/28/16.
  */
-public class IMEElementsGridFragment extends NextGenGridViewFragment implements NextGenPlaybackStatusListener, IMEVideoStatusListener {
+public class IMEElementsGridFragment extends AbstractGridViewFragment implements NGEPlaybackStatusListener, IMEVideoStatusListener {
 
 	List<IMEElementsGroup> imeGroups;
-    final List<NextGenIMEEngine> imeEngines = new ArrayList<NextGenIMEEngine>();
+    final List<IMEEngine> imeEngines = new ArrayList<IMEEngine>();
     long currentTimeCode = 0L;
     IVideoViewActionListener mainMovieListener = null;
 
@@ -89,9 +83,9 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
     /***********************IMEVideoStatusListener***********************/
     @Override
     public void onVideoStartPlaying(){
-        NextGenPlayer playerActivity = null;
-        if (getActivity() instanceof NextGenPlayer) {
-            playerActivity = (NextGenPlayer) getActivity();
+        InMovieExperience playerActivity = null;
+        if (getActivity() instanceof InMovieExperience) {
+            playerActivity = (InMovieExperience) getActivity();
             playerActivity.pauseMovieForImeECPiece();
         }
     }
@@ -103,9 +97,9 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
 
     @Override
     public void onVideoPause(){
-        NextGenPlayer playerActivity = null;
-        if (getActivity() instanceof NextGenPlayer) {
-            playerActivity = (NextGenPlayer) getActivity();
+        InMovieExperience playerActivity = null;
+        if (getActivity() instanceof InMovieExperience) {
+            playerActivity = (InMovieExperience) getActivity();
             playerActivity.resumeMovideForImeECPiece();
         }
     }
@@ -126,9 +120,9 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
         if (position < 0 || position >= activeIMEs.size())
             return;
         IMEDisplayObject activeObj = activeIMEs.get(position);
-        NextGenPlayer playerActivity = null;
-        if (getActivity() instanceof NextGenPlayer) {
-            playerActivity = (NextGenPlayer) getActivity();
+        InMovieExperience playerActivity = null;
+        if (getActivity() instanceof InMovieExperience) {
+            playerActivity = (InMovieExperience) getActivity();
         }
 
         if (activeObj.imeObject instanceof MovieMetaData.IMEElement) {
@@ -149,7 +143,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                         fragment.setCurrentGallery((MovieMetaData.ECGalleryItem) headElement);
                         mainMovieListener = null;
                         playerActivity.transitMainFragment(fragment);
-                        NextGenAnalyticData.reportEvent(getActivity(), this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_IMAGE_GALLERY, ((MovieMetaData.ECGalleryItem) headElement).galleryId, null);
+                        NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_IMAGE_GALLERY, ((MovieMetaData.ECGalleryItem) headElement).galleryId, null);
                         //playerActivity.pausMovieForImeECPiece();
 
 
@@ -165,7 +159,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                             fragment.setVideoStatusListener(this);
                             mainMovieListener = fragment;
                             playerActivity.transitMainFragment(fragment);
-                            NextGenAnalyticData.reportEvent(getActivity(), this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_CLIP_SHARE, ((MovieMetaData.AudioVisualItem) headElement).videoId, null);
+                            NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_CLIP_SHARE, ((MovieMetaData.AudioVisualItem) headElement).videoId, null);
                         }else {
 
                             ECVideoViewFragment fragment = new ECVideoViewFragment();
@@ -177,7 +171,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                             fragment.setVideoStatusListener(this);
                             mainMovieListener = fragment;
                             playerActivity.transitMainFragment(fragment);
-                            NextGenAnalyticData.reportEvent(getActivity(), this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_VIDEO, ((MovieMetaData.AudioVisualItem) headElement).videoId, null);
+                            NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_VIDEO, ((MovieMetaData.AudioVisualItem) headElement).videoId, null);
                         }
                     } else if (headElement instanceof MovieMetaData.LocationItem ||
                             (headElement instanceof AVGalleryIMEEngine.IMECombineItem && ((AVGalleryIMEEngine.IMECombineItem)headElement).isLocation() ) ){
@@ -191,7 +185,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                         fragment.setLocationItem(activeObj.title, (MovieMetaData.LocationItem)headElement);
                         playerActivity.transitMainFragment(fragment);
                         mainMovieListener = null;
-                        NextGenAnalyticData.reportEvent(getActivity(), this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_LOCATION, headElement.getId(), null);
+                        NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_LOCATION, headElement.getId(), null);
                     } else if (dataObj instanceof MovieMetaData.ShopItem) {
 
                         TheTakeProductDetailFragment fragment = new TheTakeProductDetailFragment();
@@ -228,7 +222,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
                         fragment.setTriviaItem(activeObj.title, (MovieMetaData.TriviaItem)dataObj);
                         playerActivity.transitMainFragment(fragment);
                         mainMovieListener = null;
-                        NextGenAnalyticData.reportEvent(getActivity(), this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_TRIVIA, headElement.getId(), null);
+                        NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_TRIVIA, headElement.getId(), null);
 
                     } else if (dataObj instanceof MovieMetaData.TextItem) {
 						ECTextViewFragment fragment = new ECTextViewFragment();
@@ -236,7 +230,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
 						fragment.setTextItem(activeObj.title, (MovieMetaData.TextItem)dataObj);
 						playerActivity.transitMainFragment(fragment);
                         mainMovieListener = null;
-                        NextGenAnalyticData.reportEvent(getActivity(), this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_TRIVIA, headElement.getId(), null);
+                        NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_TRIVIA, headElement.getId(), null);
 					}
                 }
             }
@@ -401,7 +395,7 @@ public class IMEElementsGridFragment extends NextGenGridViewFragment implements 
 
         List<IMEDisplayObject> objList = new ArrayList<IMEDisplayObject>();
         for(int i = 0 ; i< imeEngines.size(); i++){
-            NextGenIMEEngine engine = imeEngines.get(i);
+            IMEEngine engine = imeEngines.get(i);
             boolean hasChanged =  engine.computeCurrentIMEElement(currentTimeCode);
             List<Object> elements = engine.getCurrentIMEItems();
 

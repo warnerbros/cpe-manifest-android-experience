@@ -14,7 +14,7 @@ import android.widget.FrameLayout;
 
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.activity.NextGenHideStatusBarActivity;
+import com.wb.nextgenlibrary.activity.NGEHideStatusBarActivity;
 
 /**
  * Created by gzcheng on 3/10/16.
@@ -89,7 +89,7 @@ public class FixedAspectRatioFrameLayout extends FrameLayout
 
         int finalWidth, finalHeight;
 
-        int orientation = NextGenHideStatusBarActivity.getCurrentScreenOrientation();
+        int orientation = NGEHideStatusBarActivity.getCurrentScreenOrientation();
         if ((mOrientationFlag == PORTRAIT_ONLY && orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) ||
             (mOrientationFlag == LANDSCAPE_ONLY && orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) ){
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);

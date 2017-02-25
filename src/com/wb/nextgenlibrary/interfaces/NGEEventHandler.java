@@ -11,7 +11,7 @@ import org.json.JSONObject;
 /**
  * Created by stomata on 8/22/16.
  */
-public interface NextGenEventHandler {
+public interface NGEEventHandler {
     void handleMovieTitleSelection(Activity activity, String movieId);
     boolean isDebugBuild();
     void userEventLog(Object movieObject, String event, String action, String idValue, String nameValue);

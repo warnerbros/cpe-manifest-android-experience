@@ -71,7 +71,7 @@ public class ECInteractiveActivity extends AbstractECView implements AdapterView
 
 	public class NextGenInteractiveGridViewAdapter extends BaseAdapter {
 
-		//protected NextGenExtraActivity activity;
+		//protected OutOfMovieActivity activity;
 
 
 		private TextView headerTextView;

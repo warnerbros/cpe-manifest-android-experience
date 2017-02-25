@@ -4,12 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -21,16 +18,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
+import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;
-import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
 
@@ -137,7 +132,7 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
                     share.putExtra(Intent.EXTRA_TEXT, imageUrl);
 
                     startActivity(Intent.createChooser(share, ""));
-                    NextGenAnalyticData.reportEvent(getActivity(), ECGalleryViewFragment.this, NextGenAnalyticData.AnalyticAction.ACTION_SHARE_IMAGE, currentGallery.galleryId, null);
+                    NGEAnalyticData.reportEvent(getActivity(), ECGalleryViewFragment.this, NGEAnalyticData.AnalyticAction.ACTION_SHARE_IMAGE, currentGallery.galleryId, null);
                 }
             });
         }

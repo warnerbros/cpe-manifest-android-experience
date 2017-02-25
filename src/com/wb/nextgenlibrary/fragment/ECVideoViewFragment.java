@@ -14,11 +14,10 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
+import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.interfaces.ECVideoPlayerInterface;
 import com.wb.nextgenlibrary.interfaces.IMEVideoStatusListener;
@@ -132,7 +131,7 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
                     if (previewFrame != null)
                         previewFrame.setVisibility(View.GONE);
                     videoView.start();
-                    NextGenAnalyticData.reportEvent(getActivity(), ECVideoViewFragment.this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_VIDEO, selectedAVItem.videoId, null);
+                    NGEAnalyticData.reportEvent(getActivity(), ECVideoViewFragment.this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_VIDEO, selectedAVItem.videoId, null);
                 }
             });
         }

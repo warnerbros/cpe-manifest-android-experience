@@ -1,6 +1,5 @@
 package com.wb.nextgenlibrary.testassets;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,13 +7,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.activity.NextGenHideStatusBarActivity;
+import com.wb.nextgenlibrary.activity.NGEHideStatusBarActivity;
 import com.wb.nextgenlibrary.activity.WebViewActivity;
 import com.wb.nextgenlibrary.util.utils.F;
 
@@ -25,7 +21,7 @@ import java.util.List;
  * Created by gzcheng on 9/27/16.
  */
 
-public class TestItemsActivity extends NextGenHideStatusBarActivity {
+public class TestItemsActivity extends NGEHideStatusBarActivity {
     RecyclerView testItemsRecyclerView;
     final static List<TestItem> testItemList = new ArrayList<>();
     static{

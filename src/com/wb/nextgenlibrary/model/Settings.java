@@ -3,7 +3,7 @@ package com.wb.nextgenlibrary.model;
 /**
  * Created by gzcheng on 1/15/16.
  */
-public class NextGenSettings {
+public class Settings {
     boolean mSubtitleOn = false;
     String mAudioLang = "en_US";
     String mSubtitleLang = "en_US";

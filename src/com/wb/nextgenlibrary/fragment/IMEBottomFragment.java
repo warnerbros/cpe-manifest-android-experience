@@ -12,14 +12,14 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.interfaces.NextGenFragmentTransactionInterface;
-import com.wb.nextgenlibrary.interfaces.NextGenPlaybackStatusListener;
+import com.wb.nextgenlibrary.interfaces.NGEFragmentTransactionInterface;
+import com.wb.nextgenlibrary.interfaces.NGEPlaybackStatusListener;
 /**
  * Created by gzcheng on 1/19/16.
  */
-public class  NextGenPlayerBottomFragment extends Fragment implements NextGenPlaybackStatusListener {
+public class IMEBottomFragment extends Fragment implements NGEPlaybackStatusListener {
     IMEElementsGridFragment imeGridFragment;
-    NextGenIMEActorFragment imeActorsFragment;
+    IMEActorFragment imeActorsFragment;
 
     View view;
     @Override
@@ -47,14 +47,14 @@ public class  NextGenPlayerBottomFragment extends Fragment implements NextGenPla
             //Glide.with(getActivity()).load(NextGenExperience.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie)).into(backgroundImgView);
         }
         imeGridFragment = (IMEElementsGridFragment) getChildFragmentManager().findFragmentById(R.id.ime_grid_fragment);
-        imeActorsFragment = (NextGenIMEActorFragment) getChildFragmentManager().findFragmentById(R.id.ime_actor_fragment);
+        imeActorsFragment = (IMEActorFragment) getChildFragmentManager().findFragmentById(R.id.ime_actor_fragment);
     }
 
-    public void setFragmentTransactionInterface(NextGenFragmentTransactionInterface fragmentTransaction){
+    public void setFragmentTransactionInterface(NGEFragmentTransactionInterface fragmentTransaction){
 
     }
 
-    public void playbackStatusUpdate(final NextGenPlaybackStatusListener.NextGenPlaybackStatus playbackStatus, final long timecode){
+    public void playbackStatusUpdate(final NGEPlaybackStatusListener.NextGenPlaybackStatus playbackStatus, final long timecode){
 
         if (getActivity() == null)
             return;

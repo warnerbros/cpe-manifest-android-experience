@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
+import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.videoview.IVideoViewActionListener;
 import com.wb.nextgenlibrary.widget.CustomMediaController;
@@ -45,12 +45,12 @@ public class ShareClipFragment extends ECVideoViewFragment implements View.OnCli
         prevClipButton = (ImageButton) view.findViewById(R.id.prev_clip_btn);
         if (prevClipButton != null){
             prevClipButton.setOnClickListener(this);
-            //Glide.with(getActivity()).load(NextGenUtils.getPacakageImageUrl(R.drawable.back_logo)).into(prevClipButton);
+            //Glide.with(getActivity()).load(NGEUtils.getPacakageImageUrl(R.drawable.back_logo)).into(prevClipButton);
         }
         nextClipButton = (ImageButton) view.findViewById(R.id.next_clip_btn);
         if (nextClipButton != null){
             nextClipButton.setOnClickListener(this);
-            //Glide.with(getActivity()).load(NextGenUtils.getPacakageImageUrl(R.drawable.back_logo)).into(nextClipButton);
+            //Glide.with(getActivity()).load(NGEUtils.getPacakageImageUrl(R.drawable.back_logo)).into(nextClipButton);
         }
         shareClipTitleTextView = (TextView) view.findViewById(R.id.share_clip_title_txt);
         if (shareClipTitleTextView != null && shareClipExperience != null){
@@ -86,20 +86,20 @@ public class ShareClipFragment extends ECVideoViewFragment implements View.OnCli
             share.putExtra(Intent.EXTRA_TEXT, videoUrl);
 
             startActivity(Intent.createChooser(share, ""));
-            NextGenAnalyticData.reportEvent(getActivity(), ShareClipFragment.this, NextGenAnalyticData.AnalyticAction.ACTION_SHARE_VIDEO, selectedAVItem.videoId, null);
+            NGEAnalyticData.reportEvent(getActivity(), ShareClipFragment.this, NGEAnalyticData.AnalyticAction.ACTION_SHARE_VIDEO, selectedAVItem.videoId, null);
         } else if (v.getId() == R.id.prev_clip_btn){
                 if (itemIndex > 0){
                     setShouldAutoPlay(false);
                     setExperienceAndIndex(shareClipExperience, itemIndex - 1);
                     updateUI();
-                    NextGenAnalyticData.reportEvent(getActivity(), ShareClipFragment.this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_PREVIOUS, selectedAVItem.videoId, null);
+                    NGEAnalyticData.reportEvent(getActivity(), ShareClipFragment.this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_PREVIOUS, selectedAVItem.videoId, null);
                 }
         } else if (v.getId() == R.id.next_clip_btn){
                 if (itemIndex < shareClipExperience.getChildrenContents().size()){
                     setShouldAutoPlay(false);
                     setExperienceAndIndex(shareClipExperience, itemIndex + 1);
                     updateUI();
-                    NextGenAnalyticData.reportEvent(getActivity(), ShareClipFragment.this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_NEXT, selectedAVItem.videoId, null);
+                    NGEAnalyticData.reportEvent(getActivity(), ShareClipFragment.this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_NEXT, selectedAVItem.videoId, null);
                 }
 
 

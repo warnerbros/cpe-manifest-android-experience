@@ -5,24 +5,24 @@ import android.support.v4.app.Fragment;
 
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.activity.AbstractNextGenActivity;
-import com.wb.nextgenlibrary.fragment.NextGenActorDetailFragment;
-import com.wb.nextgenlibrary.fragment.NextGenActorListFragment;
-import com.wb.nextgenlibrary.interfaces.NextGenFragmentTransactionInterface;
+import com.wb.nextgenlibrary.activity.AbstractNGEActivity;
+import com.wb.nextgenlibrary.fragment.ActorDetailFragment;
+import com.wb.nextgenlibrary.fragment.ActorListFragment;
+import com.wb.nextgenlibrary.interfaces.NGEFragmentTransactionInterface;
 
 /**
  * Created by stomata on 8/25/16.
  */
-public class NextGenActorsActivity_Phone extends AbstractNextGenActivity implements NextGenFragmentTransactionInterface{
+public class NGEActorsActivity_Phone extends AbstractNGEActivity implements NGEFragmentTransactionInterface {
 
-    NextGenActorDetailFragment actorDetailFragment;
-    NextGenActorListFragment actorListFragment;
+    ActorDetailFragment actorDetailFragment;
+    ActorListFragment actorListFragment;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.actor_activity_phone);
-        actorListFragment = (NextGenActorListFragment)getSupportFragmentManager().findFragmentById(R.id.actor_list_fragment);
-        actorDetailFragment = (NextGenActorDetailFragment)getSupportFragmentManager().findFragmentById(R.id.actor_detail_fragment);
+        actorListFragment = (ActorListFragment)getSupportFragmentManager().findFragmentById(R.id.actor_list_fragment);
+        actorDetailFragment = (ActorDetailFragment)getSupportFragmentManager().findFragmentById(R.id.actor_detail_fragment);
         if (actorListFragment != null && actorDetailFragment != null) {
             actorDetailFragment.reloadDetail(actorListFragment.getActorInfos().get(0));
         }
@@ -56,8 +56,8 @@ public class NextGenActorsActivity_Phone extends AbstractNextGenActivity impleme
 
     @Override
     public void transitRightFragment(Fragment nextFragment){
-        if (nextFragment instanceof NextGenActorDetailFragment){
-            actorDetailFragment.reloadDetail(((NextGenActorDetailFragment)nextFragment).getDetailObject());
+        if (nextFragment instanceof ActorDetailFragment){
+            actorDetailFragment.reloadDetail(((ActorDetailFragment)nextFragment).getDetailObject());
         }
     }
 

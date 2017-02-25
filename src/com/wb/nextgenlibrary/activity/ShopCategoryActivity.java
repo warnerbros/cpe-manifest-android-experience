@@ -13,15 +13,14 @@ import android.widget.TextView;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.data.MovieMetaData;
-import com.wb.nextgenlibrary.data.TheTakeData;
 import com.wb.nextgenlibrary.data.TheTakeData.ShopCategory;
 import com.wb.nextgenlibrary.fragment.ShopCategoryGridFragment;
 import com.wb.nextgenlibrary.fragment.TheTakeProductDetailFragment;
-import com.wb.nextgenlibrary.interfaces.NextGenFragmentTransactionInterface;
+import com.wb.nextgenlibrary.interfaces.NGEFragmentTransactionInterface;
 import com.wb.nextgenlibrary.network.TheTakeApiDAO;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.util.utils.F;
-import com.wb.nextgenlibrary.util.utils.NextGenFragmentTransactionEngine;
+import com.wb.nextgenlibrary.util.utils.NGEFragmentTransactionEngine;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 
 import java.util.ArrayList;
@@ -31,7 +30,7 @@ import java.util.List;
 /**
  * Created by gzcheng on 4/8/16.
  */
-public class TheTakeShopCategoryActivity extends AbstractNextGenActivity implements NextGenFragmentTransactionInterface {
+public class ShopCategoryActivity extends AbstractNGEActivity implements NGEFragmentTransactionInterface {
 
     List<ShopCategory> categories = new ArrayList<ShopCategory>();
 
@@ -40,7 +39,7 @@ public class TheTakeShopCategoryActivity extends AbstractNextGenActivity impleme
     ShopCategoryGridFragment gridFrament;
 
     FrameLayout leftFrame;
-    NextGenFragmentTransactionEngine nextGenFragmentTransactionEngine;
+    NGEFragmentTransactionEngine fragmentTransactionEngine;
 
     String titleText = null;
 
@@ -75,7 +74,7 @@ public class TheTakeShopCategoryActivity extends AbstractNextGenActivity impleme
 
 
 
-        nextGenFragmentTransactionEngine = new NextGenFragmentTransactionEngine(this);
+        fragmentTransactionEngine = new NGEFragmentTransactionEngine(this);
         transitLeftFragment(gridFrament);
     }
 
@@ -390,22 +389,22 @@ public class TheTakeShopCategoryActivity extends AbstractNextGenActivity impleme
         return "";
     }
 
-    //*************** NextGenFragmentTransactionInterface ***************
+    //*************** NGEFragmentTransactionInterface ***************
     @Override
     public void transitRightFragment(Fragment nextFragment){
-        nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.category_left_frame, nextFragment);
+        fragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.category_left_frame, nextFragment);
 
     }
 
     @Override
     public void transitLeftFragment(Fragment nextFragment){
-        nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.category_left_frame, nextFragment);
+        fragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.category_left_frame, nextFragment);
 
     }
 
     @Override
     public void transitMainFragment(Fragment nextFragment){
-        nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.category_left_frame, nextFragment);
+        fragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.category_left_frame, nextFragment);
     }
 
     @Override

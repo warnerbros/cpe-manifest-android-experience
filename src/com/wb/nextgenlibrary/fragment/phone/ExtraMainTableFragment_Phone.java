@@ -6,10 +6,10 @@ import android.content.res.Configuration;
 import android.view.View;
 
 import com.wb.nextgenlibrary.NextGenExperience;
-import com.wb.nextgenlibrary.activity.NextGenHideStatusBarActivity;
-import com.wb.nextgenlibrary.activity.phone.NextGenActorsActivity_Phone;
+import com.wb.nextgenlibrary.activity.NGEHideStatusBarActivity;
+import com.wb.nextgenlibrary.activity.phone.NGEActorsActivity_Phone;
 import com.wb.nextgenlibrary.data.MovieMetaData;
-import com.wb.nextgenlibrary.fragment.NextGenExtraMainTableFragment;
+import com.wb.nextgenlibrary.fragment.ExtraMainTableFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Created by stomata on 8/24/16.
  */
-public class NextGenExtraMainTableFragment_Phone extends NextGenExtraMainTableFragment {
+public class ExtraMainTableFragment_Phone extends ExtraMainTableFragment {
 
     class ActorExperience extends MovieMetaData.ExperienceData{
 
@@ -37,7 +37,7 @@ public class NextGenExtraMainTableFragment_Phone extends NextGenExtraMainTableFr
 
     @Override
     protected int getNumberOfColumns(){
-        if (NextGenHideStatusBarActivity.getCurrentScreenOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
+        if (NGEHideStatusBarActivity.getCurrentScreenOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
             return 3;
         else
             return 2;
@@ -65,7 +65,7 @@ public class NextGenExtraMainTableFragment_Phone extends NextGenExtraMainTableFr
     protected void onListItemClick(View v, int position, long id) {
         MovieMetaData.ExperienceData selectedGroup = ecGroups.get(position);
         if (selectedGroup instanceof ActorExperience){
-            Intent intent = new Intent(getActivity(), NextGenActorsActivity_Phone.class);
+            Intent intent = new Intent(getActivity(), NGEActorsActivity_Phone.class);
             startActivity(intent);
 
         }else{

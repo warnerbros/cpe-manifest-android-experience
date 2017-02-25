@@ -10,21 +10,18 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.activity.ECShopItemDetailActivity;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.data.TheTakeData;
-import com.wb.nextgenlibrary.interfaces.NextGenFragmentTransactionInterface;
+import com.wb.nextgenlibrary.interfaces.NGEFragmentTransactionInterface;
 import com.wb.nextgenlibrary.network.TheTakeApiDAO;
 import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.widget.DotIndicatorImageView;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -112,7 +109,7 @@ public class ShopCategoryGridFragment extends AbstractNextGenFragment{
 
     public class TheTakeProductsGridViewAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
 
-        //protected NextGenExtraActivity activity;
+        //protected OutOfMovieActivity activity;
 
         public View getView(int position, View convertView, ViewGroup parent) {
             if (position >= getCount() || position < 0){
@@ -180,8 +177,8 @@ public class ShopCategoryGridFragment extends AbstractNextGenFragment{
                 //fragment.setContentViewId(R.layout.the_take_single_product_view);
 
                 fragment.setProduct(product);
-                if (getActivity() instanceof NextGenFragmentTransactionInterface) {
-                    ((NextGenFragmentTransactionInterface) getActivity()).transitMainFragment(fragment);
+                if (getActivity() instanceof NGEFragmentTransactionInterface) {
+                    ((NGEFragmentTransactionInterface) getActivity()).transitMainFragment(fragment);
                 }
             } else {
                 Intent intent = new Intent(getActivity(), ECShopItemDetailActivity.class);

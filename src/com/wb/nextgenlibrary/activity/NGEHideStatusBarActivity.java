@@ -10,13 +10,11 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.bumptech.glide.Glide;
-import com.wb.nextgenlibrary.NextGenExperience;
-import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 
 /**
  * Created by gzcheng on 7/20/16.
  */
-public class NextGenHideStatusBarActivity extends AppCompatActivity {
+public class NGEHideStatusBarActivity extends AppCompatActivity {
     private static int currentScreenOrientation = -1;
 
     static int DESIRE_VISIBILITY =
@@ -37,7 +35,7 @@ public class NextGenHideStatusBarActivity extends AppCompatActivity {
     @Override
     protected void onPostCreate( Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        //NextGenAnalyticData.reportEvent(this, null, null, NextGenAnalyticData.AnalyticAction.ACTION_START, getReportContentName());
+        //NGEAnalyticData.reportEvent(this, null, null, NGEAnalyticData.AnalyticAction.ACTION_START, getReportContentName());
     }
 
     String getReportContentName(){

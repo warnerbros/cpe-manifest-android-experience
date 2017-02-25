@@ -7,11 +7,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.squareup.picasso.Picasso;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.data.TheTakeData.TheTakeProduct;
 import com.wb.nextgenlibrary.data.TheTakeData.TheTakeProductDetail;
@@ -78,10 +75,10 @@ public class TheTakeProductDetailFragment extends AbstractNextGenFragment implem
                     NextGenExperience.launchChromeWithUrl(product.getPurchaseLinkUrl());
                 }
             });
-            //NextGenAnalyticData.reportEvent(getActivity(), TheTakeProductDetailFragment.this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_SHOPPING, product.productName);
+            //NGEAnalyticData.reportEvent(getActivity(), TheTakeProductDetailFragment.this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_SHOPPING, product.productName);
         }else if (v.getId() == R.id.send_link_button){
             NextGenExperience.launchChromeWithUrl(product.getShareLinkUrl());
-           // NextGenAnalyticData.reportEvent(getActivity(), TheTakeProductDetailFragment.this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_SHOPPING, product.productName);
+           // NGEAnalyticData.reportEvent(getActivity(), TheTakeProductDetailFragment.this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_SHOPPING, product.productName);
         }
     }
 

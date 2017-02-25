@@ -9,11 +9,6 @@ import android.os.Bundle;
 
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.util.concurrent.ResultListener;
-import com.wb.nextgenlibrary.util.concurrent.Worker;
-import com.wb.nextgenlibrary.util.utils.StringHelper;
-
-import java.util.concurrent.Callable;
 
 /**
  * Created by gzcheng on 11/1/16.
@@ -67,7 +62,7 @@ public class LauncherActivity extends Activity {
 
 		protected void onPostExecute(Boolean result) {
 			if (result){
-				Intent intent = new Intent(LauncherActivity.this, NextGenActivity.class);
+				Intent intent = new Intent(LauncherActivity.this, StartupActivity.class);
 				LauncherActivity.this.startActivity(intent);
 			}
 			mDialog.dismiss();

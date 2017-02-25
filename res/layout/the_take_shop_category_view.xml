@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/spacing_normal"
     android:paddingRight="@dimen/spacing_normal"
-    tools:context=".activity.NextGenExtraActivity">
+    tools:context=".activity.OutOfMovieActivity">
 
     <LinearLayout
         android:orientation="horizontal"

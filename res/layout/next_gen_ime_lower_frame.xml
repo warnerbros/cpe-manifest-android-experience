@@ -30,7 +30,7 @@
                     android:fontFamily="sans-serif-condensed"
                     android:textSize="@dimen/textSmall"
                     android:layout_height="wrap_content"/>
-                <fragment android:name="com.wb.nextgenlibrary.fragment.NextGenIMEActorFragment"
+                <fragment android:name="com.wb.nextgenlibrary.fragment.IMEActorFragment"
                     android:layout_width="match_parent"
                     android:layout_height="fill_parent"
                     android:id="@+id/ime_actor_fragment" />

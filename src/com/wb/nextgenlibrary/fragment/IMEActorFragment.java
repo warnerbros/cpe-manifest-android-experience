@@ -7,12 +7,12 @@ import android.widget.TextView;
 
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
+import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.data.MovieMetaData.CastData;
-import com.wb.nextgenlibrary.interfaces.NextGenFragmentTransactionInterface;
-import com.wb.nextgenlibrary.interfaces.NextGenPlaybackStatusListener;
-import com.wb.nextgenlibrary.model.NextGenIMEEngine;
+import com.wb.nextgenlibrary.interfaces.NGEFragmentTransactionInterface;
+import com.wb.nextgenlibrary.interfaces.NGEPlaybackStatusListener;
+import com.wb.nextgenlibrary.model.IMEEngine;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Created by gzcheng on 1/26/16.
  */
-public class NextGenIMEActorFragment extends NextGenActorListFragment implements NextGenPlaybackStatusListener{
+public class IMEActorFragment extends ActorListFragment implements NGEPlaybackStatusListener {
 
     List<CastIMEEngine> castIMEEngines = new ArrayList<CastIMEEngine>();
     List<CastData> currentActiveActorList = new ArrayList<CastData>();
@@ -38,15 +38,15 @@ public class NextGenIMEActorFragment extends NextGenActorListFragment implements
 
         if (index >= getActorInfos().size() ){
             fullListEnabled = !fullListEnabled;
-            //NextGenAnalyticData.reportEvent(getActivity(), this, "Show Less/More", NextGenAnalyticData.AnalyticAction.ACTION_CLICK, Boolean.toString(fullListEnabled));
-        } else if (getActivity() instanceof NextGenFragmentTransactionInterface){
-            NextGenActorDetailFragment target = new NextGenActorDetailFragment();
+            //NGEAnalyticData.reportEvent(getActivity(), this, "Show Less/More", NGEAnalyticData.AnalyticAction.ACTION_CLICK, Boolean.toString(fullListEnabled));
+        } else if (getActivity() instanceof NGEFragmentTransactionInterface){
+            ActorDetailFragment target = new ActorDetailFragment();
             target.setLayoutId(R.layout.nge_ime_actor_detail_view);
             target.setShouldShowCloseBtn(true);
             target.setDetailObject(selectedObject);
-            ((NextGenFragmentTransactionInterface)getActivity()).transitMainFragment( target);
-            ((NextGenFragmentTransactionInterface)getActivity()).resetUI(false);
-            NextGenAnalyticData.reportEvent(getActivity(), this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_TALENT, selectedObject.getId(), null);
+            ((NGEFragmentTransactionInterface)getActivity()).transitMainFragment( target);
+            ((NGEFragmentTransactionInterface)getActivity()).resetUI(false);
+            NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_TALENT, selectedObject.getId(), null);
 
         }
 
@@ -60,7 +60,7 @@ public class NextGenIMEActorFragment extends NextGenActorListFragment implements
         }
     }
 
-    private static class CastIMEEngine extends NextGenIMEEngine<MovieMetaData.IMEElement<MovieMetaData.CastData>>{
+    private static class CastIMEEngine extends IMEEngine<MovieMetaData.IMEElement<CastData>> {
         public CastIMEEngine(List<MovieMetaData.IMEElement<MovieMetaData.CastData>> elements){
             imeElements = elements;
         }

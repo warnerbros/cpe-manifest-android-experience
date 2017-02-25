@@ -1,6 +1,5 @@
 package com.wb.nextgenlibrary.activity;
 
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
@@ -14,9 +13,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
+import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.data.MovieMetaData.ExperienceData;
 import com.wb.nextgenlibrary.data.MovieMetaData.PresentationDataItem;
@@ -25,7 +23,7 @@ import com.wb.nextgenlibrary.fragment.ECSceneLocationMapFragment;
 import com.wb.nextgenlibrary.fragment.ECVideoViewFragment;
 import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.utils.F;
-import com.wb.nextgenlibrary.util.utils.NextGenFragmentTransactionEngine;
+import com.wb.nextgenlibrary.util.utils.NGEFragmentTransactionEngine;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
@@ -52,7 +50,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
     private LinearLayoutManager locationECLayoutManager;
     private SliderTextAdapter sliderTextAdapter;
     private LocationECsAdapter locationECsAdapter;
-    private NextGenFragmentTransactionEngine nextGenFragmentTransactionEngine;
+    private NGEFragmentTransactionEngine fragmentTransactionEngine;
     private View sliderFrame;
 
     private List<MovieMetaData.LocationItem> rootSceneLocations;
@@ -69,7 +67,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
 
         rootSceneLocations = ecGroupData.getSceneLocations();
 
-        nextGenFragmentTransactionEngine = new NextGenFragmentTransactionEngine(this);
+        fragmentTransactionEngine = new NGEFragmentTransactionEngine(this);
         if (mapViewFragment == null) {
             mapViewFragment = new ECSceneLocationMapFragment();
             mapViewFragment.setDefaultSceneLocations(rootSceneLocations);
@@ -98,7 +96,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
             locationECRecyclerView.setAdapter(locationECsAdapter);
         }
 
-        nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.map_frame, mapViewFragment);
+        fragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.map_frame, mapViewFragment);
 
 
     }
@@ -113,7 +111,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
             if (currentFragment != null && currentFragment != mapViewFragment) {
                 onBackPressed();
             }
-            nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), contentFrame.getId(), fragment);
+            fragmentTransactionEngine.transitFragment(getSupportFragmentManager(), contentFrame.getId(), fragment);
 
             currentFragment = fragment;
         }
@@ -352,7 +350,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
                     locationECsAdapter.setSceneLocation((MovieMetaData.LocationItem) currentItem);
                     locationECsAdapter.notifyDataSetChanged();
                     locationECRecyclerView.smoothScrollToPosition(0);
-                    NextGenAnalyticData.reportEvent(ECSceneLocationActivity.this, null, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_LOCATION_THUMBNAIL, ((MovieMetaData.LocationItem) currentItem).getId(), null);
+                    NGEAnalyticData.reportEvent(ECSceneLocationActivity.this, null, NGEAnalyticData.AnalyticAction.ACTION_SELECT_LOCATION_THUMBNAIL, ((MovieMetaData.LocationItem) currentItem).getId(), null);
                 } else if (currentItem instanceof MovieMetaData.AudioVisualItem) {
                     ECVideoViewFragment videoViewFragment;
                     if (currentFragment instanceof ECVideoViewFragment) {
@@ -370,7 +368,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
                     videoViewFragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) currentItem);
 
                     transitToFragment(videoViewFragment);
-                    NextGenAnalyticData.reportEvent(ECSceneLocationActivity.this, null, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_VIDEO, ((MovieMetaData.AudioVisualItem) currentItem).videoId, null);
+                    NGEAnalyticData.reportEvent(ECSceneLocationActivity.this, null, NGEAnalyticData.AnalyticAction.ACTION_SELECT_VIDEO, ((MovieMetaData.AudioVisualItem) currentItem).videoId, null);
 
                 } else if (currentItem instanceof MovieMetaData.ECGalleryItem) {
                     ECGalleryViewFragment galleryViewFragment;
@@ -385,7 +383,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
                     }
                     galleryViewFragment.setCurrentGallery((MovieMetaData.ECGalleryItem) currentItem);
                     transitToFragment(galleryViewFragment);
-                    NextGenAnalyticData.reportEvent(ECSceneLocationActivity.this, null, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_VIDEO, ((MovieMetaData.ECGalleryItem) currentItem).galleryId, null);
+                    NGEAnalyticData.reportEvent(ECSceneLocationActivity.this, null, NGEAnalyticData.AnalyticAction.ACTION_SELECT_VIDEO, ((MovieMetaData.ECGalleryItem) currentItem).galleryId, null);
                 }
 
             }

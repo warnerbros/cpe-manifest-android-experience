@@ -4,13 +4,13 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
+import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.fragment.AbstractECGalleryViewFragment;
 import com.wb.nextgenlibrary.fragment.ECGalleryViewFragment;
 import com.wb.nextgenlibrary.fragment.ECTurnTableViewFragment;
 import com.wb.nextgenlibrary.util.TabletUtils;
-import com.wb.nextgenlibrary.util.utils.NextGenFragmentTransactionEngine;
+import com.wb.nextgenlibrary.util.utils.NGEFragmentTransactionEngine;
 
 /**
  * Created by gzcheng on 3/7/16.
@@ -18,12 +18,12 @@ import com.wb.nextgenlibrary.util.utils.NextGenFragmentTransactionEngine;
 public class ECGalleryActivity extends AbstractECView {
 
     AbstractECGalleryViewFragment galleryFragment;
-    NextGenFragmentTransactionEngine nextGenFragmentTransactionEngine;
+    NGEFragmentTransactionEngine fragmentTransactionEngine;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        nextGenFragmentTransactionEngine = new NextGenFragmentTransactionEngine(this);
+        fragmentTransactionEngine = new NGEFragmentTransactionEngine(this);
         //galleryFrame = (ECGalleryViewFragment) getSupportFragmentManager().findFragmentById(R.id.ec_gallery_left_frame);
 
     }
@@ -72,25 +72,25 @@ public class ECGalleryActivity extends AbstractECView {
                 if (galleryFragment != null && galleryFragment instanceof ECGalleryViewFragment){
                     galleryFragment = new ECTurnTableViewFragment();
                     super.onBackPressed();
-                    nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.next_gen_gallery_content_view, galleryFragment);
+                    fragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.next_gen_gallery_content_view, galleryFragment);
                 } else if (galleryFragment == null){
                     galleryFragment = new ECTurnTableViewFragment();
-                    nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.next_gen_gallery_content_view, galleryFragment);
+                    fragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.next_gen_gallery_content_view, galleryFragment);
                 }
             } else {
                 if (galleryFragment != null && galleryFragment instanceof ECTurnTableViewFragment){
                     galleryFragment = new ECGalleryViewFragment();
                     super.onBackPressed();
-                    nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.next_gen_gallery_content_view, galleryFragment);
+                    fragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.next_gen_gallery_content_view, galleryFragment);
                 } else if (galleryFragment == null){
                     galleryFragment = new ECGalleryViewFragment();
-                    nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.next_gen_gallery_content_view, galleryFragment);
+                    fragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.next_gen_gallery_content_view, galleryFragment);
                 }
             }
             if (!TabletUtils.isTablet())
                 galleryFragment.setShouldShowFullScreenBtn(false);
             galleryFragment.setCurrentGallery(galleryItem);
-            NextGenAnalyticData.reportEvent(this, null, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_IMAGE_GALLERY, galleryItem.galleryId, null);
+            NGEAnalyticData.reportEvent(this, null, NGEAnalyticData.AnalyticAction.ACTION_SELECT_IMAGE_GALLERY, galleryItem.galleryId, null);
 
 
            //galleryFrame.setCurrentGallery(ec.galleryItems.get(0));

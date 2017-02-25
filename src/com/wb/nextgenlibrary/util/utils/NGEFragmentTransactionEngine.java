@@ -6,16 +6,16 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.fragment.NextGenActorDetailFragment;
+import com.wb.nextgenlibrary.fragment.ActorDetailFragment;
 
 /**
  * Created by gzcheng on 2/24/16.
  */
-public class NextGenFragmentTransactionEngine {
+public class NGEFragmentTransactionEngine {
 
     FragmentActivity activity;
 
-    public NextGenFragmentTransactionEngine(FragmentActivity activity){
+    public NGEFragmentTransactionEngine(FragmentActivity activity){
         this.activity = activity;
     }
 
@@ -66,8 +66,8 @@ public class NextGenFragmentTransactionEngine {
             Fragment currentFragment = fragmentManager.findFragmentByTag(rightFragment.getClass().toString());
             if (currentFragment != null && currentFragment.getClass().equals(nextFragment.getClass())){
                 //Fragment fragment = getSupportFragmentManager().findFragmentById(currentFragmentId);
-                if (currentFragment instanceof NextGenActorDetailFragment && nextFragment instanceof NextGenActorDetailFragment){
-                    ((NextGenActorDetailFragment) currentFragment).reloadDetail(((NextGenActorDetailFragment)nextFragment).getDetailObject());
+                if (currentFragment instanceof ActorDetailFragment && nextFragment instanceof ActorDetailFragment){
+                    ((ActorDetailFragment) currentFragment).reloadDetail(((ActorDetailFragment)nextFragment).getDetailObject());
                 }
             }else{
                 ftRight.replace(frameId, rightFragment, rightFragment.getClass().toString());

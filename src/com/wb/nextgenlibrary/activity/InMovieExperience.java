@@ -27,26 +27,19 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.cast.framework.CastButtonFactory;
-import com.google.android.gms.cast.framework.CastContext;
-import com.google.android.gms.cast.framework.CastSession;
 import com.google.android.gms.cast.framework.CastState;
-import com.google.android.gms.cast.framework.CastStateListener;
-import com.google.android.gms.cast.framework.SessionManager;
-import com.google.android.gms.cast.framework.SessionManagerListener;
-import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
+import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
 import com.wb.nextgenlibrary.fragment.AbstractCastMainMovieFragment;
-import com.wb.nextgenlibrary.fragment.AbstractNextGenMainMovieFragment;
-import com.wb.nextgenlibrary.fragment.NextGenPlayerBottomFragment;
-import com.wb.nextgenlibrary.interfaces.NextGenFragmentTransactionInterface;
-import com.wb.nextgenlibrary.interfaces.NextGenPlaybackStatusListener.NextGenPlaybackStatus;
+import com.wb.nextgenlibrary.fragment.AbstractNGEMainMovieFragment;
+import com.wb.nextgenlibrary.fragment.IMEBottomFragment;
+import com.wb.nextgenlibrary.interfaces.NGEFragmentTransactionInterface;
+import com.wb.nextgenlibrary.interfaces.NGEPlaybackStatusListener.NextGenPlaybackStatus;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.util.utils.F;
-import com.wb.nextgenlibrary.util.utils.NextGenFragmentTransactionEngine;
+import com.wb.nextgenlibrary.util.utils.NGEFragmentTransactionEngine;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
@@ -64,7 +57,7 @@ import java.util.TimerTask;
 /**
  * Created by gzcheng on 1/5/16.
  */
-public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFragmentTransactionInterface, DialogInterface.OnCancelListener {
+public class InMovieExperience extends AbstractNGEActivity implements NGEFragmentTransactionInterface, DialogInterface.OnCancelListener {
 
     private final static String IS_PLAYER_PLAYING = "IS PLAYING";
     private final static String RESUME_PLAYBACK_TIME = "RESUME_PLAYBACK_TIME";
@@ -85,9 +78,9 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
     private ProgressBar loadingView;
 
-    NextGenFragmentTransactionEngine nextGenFragmentTransactionEngine;
+    NGEFragmentTransactionEngine fragmentTransactionEngine;
 
-    NextGenPlayerBottomFragment imeBottomFragment;
+    IMEBottomFragment imeBottomFragment;
 
     private Uri INTERSTITIAL_VIDEO_URI = null;
 
@@ -100,7 +93,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
     private long lastTimeCode = -1;
     private NextGenPlaybackStatus lastPlaybackStatus = null;
 
-    AbstractNextGenMainMovieFragment mainMovieFragment;
+    AbstractNGEMainMovieFragment mainMovieFragment;
 
     int ecFragmentsCounter = 0;
 
@@ -149,7 +142,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
         INTERSTITIAL_VIDEO_URI = Uri.parse(NextGenExperience.getMovieMetaData().getInterstitialVideoURL());
 
-        nextGenFragmentTransactionEngine = new NextGenFragmentTransactionEngine(this);
+        fragmentTransactionEngine = new NGEFragmentTransactionEngine(this);
         setContentView(R.layout.next_gen_videoview);
         loadingView = (ProgressBar)findViewById(R.id.next_gen_loading_progress_bar);
         if (loadingView != null){
@@ -188,7 +181,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         });
         interstitialVideoView.requestFocus();
 
-        imeBottomFragment = new NextGenPlayerBottomFragment();
+        imeBottomFragment = new IMEBottomFragment();
 
 
         transitMainFragment(imeBottomFragment);
@@ -260,7 +253,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                 @Override
                 public void onCompletion(MediaPlayer mp) {
                     //launch extra
-                    Intent intent = new Intent(NextGenPlayer.this, NextGenExtraActivity.class);
+                    Intent intent = new Intent(InMovieExperience.this, OutOfMovieActivity.class);
                     startActivity(intent);
                     finish();
                 }
@@ -567,7 +560,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
 
 
-                    NextGenAnalyticData.reportEvent(NextGenPlayer.this, null, NextGenAnalyticData.AnalyticAction.ACTION_ROTATE_SCREEN_SHOW_EXTRAS, label, null);
+                    NGEAnalyticData.reportEvent(InMovieExperience.this, null, NGEAnalyticData.AnalyticAction.ACTION_ROTATE_SCREEN_SHOW_EXTRAS, label, null);
                     break;
                 case Configuration.ORIENTATION_LANDSCAPE:
                     nextGenView.setVisibility(View.GONE);
@@ -575,7 +568,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                     getSupportActionBar().hide();
                     if (mediaController != null)
                         mediaController.hideShowControls(false);
-                    NextGenAnalyticData.reportEvent(NextGenPlayer.this, null, NextGenAnalyticData.AnalyticAction.ACTION_ROTATE_SCREEN_HIDE_EXTRAS, label, null);
+                    NGEAnalyticData.reportEvent(InMovieExperience.this, null, NGEAnalyticData.AnalyticAction.ACTION_ROTATE_SCREEN_HIDE_EXTRAS, label, null);
                     imeBottomFragment.onOrientationChange(this.getResources().getConfiguration().orientation);
             }
     }
@@ -631,7 +624,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                             bInterstitialVideoComplete = true;
                             NextGenExperience.getNextGenEventHandler().setInterstitialSkippedForContent(NextGenExperience.getNextgenPlaybackObject());
                             playMainMovie();
-                            NextGenAnalyticData.reportEvent(NextGenPlayer.this, null, NextGenAnalyticData.AnalyticAction.ACTION_SKIP_INTERSTITIAL, null, null);
+                            NGEAnalyticData.reportEvent(InMovieExperience.this, null, NGEAnalyticData.AnalyticAction.ACTION_SKIP_INTERSTITIAL, null, null);
                         }
                     });
                 }
@@ -683,7 +676,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
         mainMovieFragment.hideLoadingView();
         //mDialog.hide();
 
-        nextGenFragmentTransactionEngine.replaceFragment(getSupportFragmentManager(), R.id.video_view_frame, mainMovieFragment);
+        fragmentTransactionEngine.replaceFragment(getSupportFragmentManager(), R.id.video_view_frame, mainMovieFragment);
         if (imeUpdateTimer == null){
             imeUpdateTimer = new Timer();
         }
@@ -754,7 +747,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (!NextGenPlayer.this.isDestroyed() && !NextGenPlayer.this.isFinishing())
+                        if (!InMovieExperience.this.isDestroyed() && !InMovieExperience.this.isFinishing())
                             playMainMovie();
                     }
                 });
@@ -830,18 +823,18 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
     @Override
     public void transitLeftFragment(Fragment nextFragment){
-        nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), getLeftFrameId(), nextFragment);
+        fragmentTransactionEngine.transitFragment(getSupportFragmentManager(), getLeftFrameId(), nextFragment);
     }
 
     @Override
     public void transitRightFragment(Fragment nextFragment){
-        nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), getRightFrameId(), nextFragment);
+        fragmentTransactionEngine.transitFragment(getSupportFragmentManager(), getRightFrameId(), nextFragment);
     }
 
     @Override
     public void transitMainFragment(Fragment nextFragment){
         ecFragmentsCounter = ecFragmentsCounter + 1;
-        nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), getMainFrameId(), nextFragment);
+        fragmentTransactionEngine.transitFragment(getSupportFragmentManager(), getMainFrameId(), nextFragment);
     }
 
     @Override
@@ -923,7 +916,7 @@ public class NextGenPlayer extends AbstractNextGenActivity implements NextGenFra
 
         @Override
         public boolean onInfo(MediaPlayer mp, int what, int extra) {
-            NextGenLogger.d(F.TAG_COMMENTARY,  "CommentaryPlayer " + NextGenPlayer.this.getClass().getSimpleName() + ".onInfo: " + what);
+            NextGenLogger.d(F.TAG_COMMENTARY,  "CommentaryPlayer " + InMovieExperience.this.getClass().getSimpleName() + ".onInfo: " + what);
 
             switch (what) {
                 case MediaPlayer.MEDIA_INFO_BUFFERING_START: // @since API Level 9

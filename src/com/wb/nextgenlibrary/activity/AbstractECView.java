@@ -18,7 +18,7 @@ import com.wb.nextgenlibrary.util.utils.F;
 /**
  * Created by gzcheng on 2/25/16.
  */
-public abstract class AbstractECView extends AbstractNextGenActivity {
+public abstract class AbstractECView extends AbstractNGEActivity {
 
     protected MovieMetaData.ExperienceData ecGroupData ;
     protected MovieMetaData.ExperienceData selectedEC = null;

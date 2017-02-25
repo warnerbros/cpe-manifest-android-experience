@@ -107,7 +107,7 @@ public class HttpImageHelper {
         else{
             /*if (theBitmap == null){
                 try{
-                    String uri = NextGenUtils.getPacakageImageUrl(R.drawable.mos_map_pin);
+                    String uri = NGEUtils.getPacakageImageUrl(R.drawable.mos_map_pin);
                     theBitmap = MediaStore.Images.Media.getBitmap(NextGenExperience.getContext().getContentResolver(), Uri.parse(uri));
                 }catch (Exception ex){
                     NextGenLogger.e(F.TAG, ex.getLocalizedMessage());

@@ -1,9 +1,7 @@
 package com.wb.nextgenlibrary.fragment;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.ListPopupWindow;
 import android.view.LayoutInflater;
@@ -20,23 +18,16 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.cast.MediaInfo;
-import com.google.android.gms.cast.MediaMetadata;
 import com.google.android.gms.cast.MediaStatus;
 import com.google.android.gms.cast.framework.CastContext;
 import com.google.android.gms.cast.framework.CastSession;
-import com.google.android.gms.cast.framework.CastStateListener;
-import com.google.android.gms.cast.framework.Session;
 import com.google.android.gms.cast.framework.SessionManager;
-import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
-import com.google.android.gms.common.images.WebImage;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.activity.NextGenPlayer;
+import com.wb.nextgenlibrary.activity.InMovieExperience;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.widget.CustomMediaController;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +40,7 @@ import java.util.concurrent.TimeUnit;
  * Created by gzcheng on 2/8/17.
  */
 
-public abstract class AbstractCastMainMovieFragment extends AbstractNextGenMainMovieFragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener/*, DialogBuilder.DialogListener*/ {
+public abstract class AbstractCastMainMovieFragment extends AbstractNGEMainMovieFragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener/*, DialogBuilder.DialogListener*/ {
 
 
 	private ImageView ivPoster, ivPlayPause, ivCcToggle;
@@ -132,8 +123,8 @@ public abstract class AbstractCastMainMovieFragment extends AbstractNextGenMainM
 	protected boolean isCasting(){
 		boolean isCasting = false;
 
-		if (getActivity() != null && getActivity() instanceof NextGenPlayer){
-			isCasting = ((NextGenPlayer) getActivity()).isCasting();
+		if (getActivity() != null && getActivity() instanceof InMovieExperience){
+			isCasting = ((InMovieExperience) getActivity()).isCasting();
 		}
 
 		return  isCasting;
@@ -279,7 +270,7 @@ public abstract class AbstractCastMainMovieFragment extends AbstractNextGenMainM
 
 		int timeCode = getCurrentPosition();
 		String posterUrl = getPosterUrl();
-		if (NextGenExperience.getMovieMetaData().hasShareClipExp() && getActivity() instanceof NextGenPlayer){
+		if (NextGenExperience.getMovieMetaData().hasShareClipExp() && getActivity() instanceof InMovieExperience){
 			posterUrl = NextGenExperience.getMovieMetaData().getClosestShareClipImage(timeCode);
 		}
 		if (!StringHelper.isEmpty(posterUrl) && ivPoster != null){

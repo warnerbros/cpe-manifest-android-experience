@@ -20,7 +20,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class NextGenCacheManager {
+public class NGECacheManager {
 	
 	public static final int STATE_INVALID = 0;
 	public static final int STATE_WRITING = 1;
@@ -49,7 +49,7 @@ public class NextGenCacheManager {
 	
 	private static boolean sIsActive = false;
 	
-	public NextGenCacheManager(Context applicationContext) {
+	public NGECacheManager(Context applicationContext) {
 		mContext = applicationContext;
 		sCacheHash = new LinkedHashMap<Integer, CacheItem>(100, (float) 0.5, true);
 		
@@ -58,23 +58,23 @@ public class NextGenCacheManager {
 		// sTimerTask = new TimerTask() {
 		// public void run() {
 		NextGenLogger.v(F.TAG,
-				"NextGenCacheManager MEDIA Mounted =" + Environment.getExternalStorageState().contentEquals(Environment.MEDIA_MOUNTED) + "");
+				"NGECacheManager MEDIA Mounted =" + Environment.getExternalStorageState().contentEquals(Environment.MEDIA_MOUNTED) + "");
 		
 		// create cache directory
 		NextGenLogger.d(F.TAG,
-				"NextGenCacheManager Environment.getExternalStorageState():" + Environment.getExternalStorageState() + " sCacheLimit:"
+				"NGECacheManager Environment.getExternalStorageState():" + Environment.getExternalStorageState() + " sCacheLimit:"
 						+ sCacheLimit);
 		boolean activeState = false;
 		if (Environment.getExternalStorageState().contentEquals(Environment.MEDIA_MOUNTED)) {
 			File sdDir = ExternalStorage.getExternalFilesDir(F.CACHE_DIR);
-			NextGenLogger.d(F.TAG, "NextGenCacheManager sdDir:" + sdDir);
+			NextGenLogger.d(F.TAG, "NGECacheManager sdDir:" + sdDir);
 			sCacheDir = new File(sdDir.toString());
 			if (sCacheDir.exists() && sCacheDir.isDirectory() && sCacheDir.canWrite()) {
-				NextGenLogger.v(F.TAG, "NextGenCacheManager  mCacheDir exists == true");
+				NextGenLogger.v(F.TAG, "NGECacheManager  mCacheDir exists == true");
 				buildCacheIndex();
 				activeState = true;
 			} else {
-				NextGenLogger.v(F.TAG, "NextGenCacheManager mCacheDir mkdirs()");
+				NextGenLogger.v(F.TAG, "NGECacheManager mCacheDir mkdirs()");
 				if (sCacheDir.mkdirs()) {
 					activeState = true;
 				}
@@ -83,10 +83,10 @@ public class NextGenCacheManager {
 			setCacheLimit();
 			// TrimCache(0L);
 			sIsActive = activeState;
-			NextGenLogger.v(F.TAG, "NextGenCacheManager active: " + sIsActive);
+			NextGenLogger.v(F.TAG, "NGECacheManager active: " + sIsActive);
 			
 		} else {
-			NextGenLogger.e(F.TAG, "NextGenCacheManager SDCARD not avalable!");
+			NextGenLogger.e(F.TAG, "NGECacheManager SDCARD not avalable!");
 		}
 		// }
 		// };
@@ -96,7 +96,7 @@ public class NextGenCacheManager {
 	}
 	
 	public static void setCacheLimit() {
-		NextGenLogger.v(F.TAG, "NextGenCacheManager SetCacheLimit() before sCacheLimit:" + sCacheLimit + " getCachePolicy:"
+		NextGenLogger.v(F.TAG, "NGECacheManager SetCacheLimit() before sCacheLimit:" + sCacheLimit + " getCachePolicy:"
 				+ NextGenExperience.getCachePolicy());
 		switch (NextGenExperience.getCachePolicy()) {
 		case POLICY_OFF:
@@ -114,22 +114,22 @@ public class NextGenCacheManager {
 		default:
 			sCacheLimit = 0;
 		}
-		NextGenLogger.v(F.TAG, "NextGenCacheManager SetCacheLimit() after sCacheLimit:" + sCacheLimit);
+		NextGenLogger.v(F.TAG, "NGECacheManager SetCacheLimit() after sCacheLimit:" + sCacheLimit);
 	}
 	
 	public void buildCacheIndex() {
-		NextGenLogger.v(F.TAG, "NextGenCacheManager.buildCacheIndex start");
+		NextGenLogger.v(F.TAG, "NGECacheManager.buildCacheIndex start");
 		
 		// sCacheDir = mContext.getFilesDir();
 		sCacheDir = ExternalStorage.getExternalFilesDir(F.CACHE_DIR);
 		File fileObj;
 		String files[] = sCacheDir.list();
 		
-		NextGenLogger.v(F.TAG, "NextGenCacheManager.buildCacheIndex files:" + files);
+		NextGenLogger.v(F.TAG, "NGECacheManager.buildCacheIndex files:" + files);
 		if (files != null) {
 			CacheItem tempItem;
 			for (String file : files) {
-				// Loggerflx.v(F.TAG, "NextGenCacheManager.buildCacheIndex file:" + file +
+				// Loggerflx.v(F.TAG, "NGECacheManager.buildCacheIndex file:" + file +
 				// " mCacheByteSize:"
 				// + sCacheByteSize + " mCacheItemSize:" + sCacheItemSize +" sCacheLimit:"+sCacheLimit);
 				if (file.startsWith("cache")) {
@@ -144,24 +144,24 @@ public class NextGenCacheManager {
 			}
 		}
 		
-		NextGenLogger.v(F.TAG, "NextGenCacheManager.buildCacheIndex mCacheByteSize:" + sCacheByteSize + " mCacheItemSize:"
+		NextGenLogger.v(F.TAG, "NGECacheManager.buildCacheIndex mCacheByteSize:" + sCacheByteSize + " mCacheItemSize:"
 				+ sCacheItemSize + " sCacheLimit:" + sCacheLimit);
 		
 	}
 	
 	public byte[] get(int urlHashCode) {
 		String filename = "cache" + Integer.toString(urlHashCode).replace('-', '_');
-		// Loggerflx.v(F.TAG, "NextGenCacheManager get filename:" + filename + " mCacheByteSize:" +
+		// Loggerflx.v(F.TAG, "NGECacheManager get filename:" + filename + " mCacheByteSize:" +
 		// sCacheByteSize
 		// + " mCacheItemSize:" + sCacheItemSize+" sCacheLimit:"+sCacheLimit);
 		if (!sIsActive) {
-			NextGenLogger.e(F.TAG, "NextGenCacheManager.get NOT ACTIVE YET");
+			NextGenLogger.e(F.TAG, "NGECacheManager.get NOT ACTIVE YET");
 			return null;
 		}
 		try {
 			if (sCacheHash.containsKey(urlHashCode)) {
-				// Loggerflx.v(F.TAG, "NextGenCacheManager.get hit urlHashCode:" + urlHashCode);
-				// Loggerflx.v(F.TAG, "NextGenCacheManager filename:" + filename);
+				// Loggerflx.v(F.TAG, "NGECacheManager.get hit urlHashCode:" + urlHashCode);
+				// Loggerflx.v(F.TAG, "NGECacheManager filename:" + filename);
 				File fileObj = new File(sCacheDir, filename);
 				if (!fileObj.exists()) {
 					fileObj.createNewFile();
@@ -176,10 +176,10 @@ public class NextGenCacheManager {
 				return results;
 			}
 		} catch (FileNotFoundException e) {
-			NextGenLogger.e(F.TAG, "NextGenCacheManager.get", e);
+			NextGenLogger.e(F.TAG, "NGECacheManager.get", e);
 			
 		} catch (IOException e) {
-			NextGenLogger.e(F.TAG, "NextGenCacheManager.get", e);
+			NextGenLogger.e(F.TAG, "NGECacheManager.get", e);
 		}
 		return null;
 	}
@@ -204,7 +204,7 @@ public class NextGenCacheManager {
 				// if successful, mange queue part...
 				DecapCacheItem(sHead);
 			}
-			NextGenLogger.v(F.TAG, "NextGenCacheManager.put TRIM, mCacheByteSize:" + sCacheByteSize + " mCacheItemSize:"
+			NextGenLogger.v(F.TAG, "NGECacheManager.put TRIM, mCacheByteSize:" + sCacheByteSize + " mCacheItemSize:"
 					+ sCacheItemSize + " sCacheLimit:" + sCacheLimit);
 		}
 	}
@@ -220,12 +220,12 @@ public class NextGenCacheManager {
 	
 	public synchronized void put(int urlHashCode, byte[] byteArray) {
 		String filename = "cache" + Integer.toString(urlHashCode).replace('-', '_');
-		// Loggerflx.v(F.TAG, "NextGenCacheManager put filename:" + filename + " byteArray.length:" +
+		// Loggerflx.v(F.TAG, "NGECacheManager put filename:" + filename + " byteArray.length:" +
 		// byteArray.length
 		// + " sCacheLimit:" + sCacheLimit);
 		
 		if (!sIsActive) {
-			NextGenLogger.v(F.TAG, "NextGenCacheManager.put NOT ACTIVE YET byteArray.length:" + byteArray.length);
+			NextGenLogger.v(F.TAG, "NGECacheManager.put NOT ACTIVE YET byteArray.length:" + byteArray.length);
 			return;
 		}
 		
@@ -253,12 +253,12 @@ public class NextGenCacheManager {
 			tempItem.size = byteArray.length;
 			AppendCacheItem(tempItem);
 			
-			// Loggerflx.v(F.TAG, "NextGenCacheManager put success. filename:" + filename);
+			// Loggerflx.v(F.TAG, "NGECacheManager put success. filename:" + filename);
 		} catch (FileNotFoundException e) {
-			NextGenLogger.v(F.TAG, "NextGenCacheManager put FileNotFoundException");
+			NextGenLogger.v(F.TAG, "NGECacheManager put FileNotFoundException");
 			e.printStackTrace();
 		} catch (IOException e) {
-			NextGenLogger.v(F.TAG, "NextGenCacheManager put IOException");
+			NextGenLogger.v(F.TAG, "NGECacheManager put IOException");
 			e.printStackTrace();
 		} finally {
 			if (sFileOutputStream != null) {
@@ -272,7 +272,7 @@ public class NextGenCacheManager {
 	}
 	
 	private void AppendCacheItem(CacheItem item) {
-		// Loggerflx.v(F.TAG, "NextGenCacheManager.AppendCacheItem item.size:" + item.size);
+		// Loggerflx.v(F.TAG, "NGECacheManager.AppendCacheItem item.size:" + item.size);
 		
 		if (sHead == null) {
 			sHead = item;
@@ -290,12 +290,12 @@ public class NextGenCacheManager {
 	
 	private static void DecapCacheItem(CacheItem topItem) {
 		// Loggerflx.v(F.TAG,
-		// "NextGenCacheManager.DecapCacheItem mHead:"+mHead+" mTail:"+mTail+"mCacheHash.size:"+mCacheHash.size());
+		// "NGECacheManager.DecapCacheItem mHead:"+mHead+" mTail:"+mTail+"mCacheHash.size:"+mCacheHash.size());
 		if (topItem == null) {
-			NextGenLogger.e(F.TAG, "NextGenCacheManager.DecapCacheItem topItem is null");
+			NextGenLogger.e(F.TAG, "NGECacheManager.DecapCacheItem topItem is null");
 			return;
 		} else if (sHead == sTail) { // special case of only one item
-			NextGenLogger.v(F.TAG, "NextGenCacheManager.DecapCacheItem empty? mHead:" + sHead + " tail:" + sTail);
+			NextGenLogger.v(F.TAG, "NGECacheManager.DecapCacheItem empty? mHead:" + sHead + " tail:" + sTail);
 			sHead = null;
 			sTail = null;
 		} else {

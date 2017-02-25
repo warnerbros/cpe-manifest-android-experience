@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.activity.AbstractECView;
 import com.wb.nextgenlibrary.data.MovieMetaData;
@@ -16,7 +15,7 @@ import com.wb.nextgenlibrary.widget.SelectedOverlayImageView;
 /**
  * Created by gzcheng on 3/7/16.
  */
-public class ECViewLeftListFragment extends NextGenExtraLeftListFragment<ExperienceData>{
+public class ECViewLeftListFragment extends ExtraLeftListFragment<ExperienceData> {
     MovieMetaData.ExperienceData listECGroupData;
     AbstractECView ecViewActivity;
 

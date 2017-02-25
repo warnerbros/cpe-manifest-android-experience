@@ -6,7 +6,7 @@ import java.util.Arrays;
 import android.os.Build;
 
 
-public class NextGenUtils {
+public class NGEUtils {
 
     // copy a String with a NEW tailored backing char[]
     public static String copyString(String string) {

@@ -5,14 +5,14 @@ import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageButton;
 
-import com.wb.nextgenlibrary.interfaces.NextGenPlayerInterface;
+import com.wb.nextgenlibrary.interfaces.NGEPlayerInterface;
 
 /**
  * Created by gzcheng on 3/28/16.
  */
 public class MainFeatureMediaController extends  NextGenMediaController {
     ImageButton shareClipButton;
-    public MainFeatureMediaController(Context context, NextGenPlayerInterface player) {
+    public MainFeatureMediaController(Context context, NGEPlayerInterface player) {
         super(context, player, false);
     }
 

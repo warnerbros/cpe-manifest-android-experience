@@ -2,8 +2,6 @@ package com.wb.nextgenlibrary.activity;
 
 import android.os.Bundle;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.data.MovieMetaData;
@@ -14,7 +12,7 @@ import com.wb.nextgenlibrary.util.utils.StringHelper;
  * Created by gzcheng on 2/17/17.
  */
 
-public class ECShopItemDetailActivity extends AbstractNextGenActivity {
+public class ECShopItemDetailActivity extends AbstractNGEActivity {
 
 	final static public String SHOP_ITEM_ID = "SHOP_ITEM_ID";
 

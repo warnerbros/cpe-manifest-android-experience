@@ -16,7 +16,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
@@ -27,7 +26,7 @@ import com.wb.nextgenlibrary.R;
 
 import com.wb.nextgenlibrary.activity.ActorGalleryActivity;
 import com.wb.nextgenlibrary.adapter.ActorDetailGalleryRecyclerAdapter;
-import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
+import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.data.MovieMetaData.Filmography;
 import com.wb.nextgenlibrary.data.MovieMetaData.CastData;
@@ -44,7 +43,7 @@ import java.util.List;
 /**
  * Created by gzcheng on 1/13/16.
  */
-public class NextGenActorDetailFragment extends AbstractNextGenFragment implements View.OnClickListener, ActorDetailGalleryRecyclerAdapter.ActorGalleryRecyclerSelectionListener{
+public class ActorDetailFragment extends AbstractNextGenFragment implements View.OnClickListener, ActorDetailGalleryRecyclerAdapter.ActorGalleryRecyclerSelectionListener{
 
     CastData actorOjbect;
     ImageView fullImageView;
@@ -364,8 +363,8 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
             if (NextGenExperience.getNextGenEventHandler() != null){
                 NextGenExperience.getNextGenEventHandler().handleMovieTitleSelection(getActivity(), filmInfo.title);
             }
-            NextGenAnalyticData.reportEvent(getActivity(), NextGenActorDetailFragment.this,
-                    NextGenAnalyticData.AnalyticAction.ACTION_SELECT_ACTOR_FILM, actorOjbect.getId(), filmInfo.title);
+            NGEAnalyticData.reportEvent(getActivity(), ActorDetailFragment.this,
+                    NGEAnalyticData.AnalyticAction.ACTION_SELECT_ACTOR_FILM, actorOjbect.getId(), filmInfo.title);
 
         }
     }
@@ -429,17 +428,17 @@ public class NextGenActorDetailFragment extends AbstractNextGenFragment implemen
                 getActivity().getPackageManager().getPackageInfo("com.facebook.katana", 0);
                 // http://stackoverflow.com/a/24547437/1048340
                 socialUrl = "fb://facewebmodal/f?href=" + socialUrl;
-                NextGenAnalyticData.reportEvent(getActivity(), this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_ACTOR_SOCIAL, actorOjbect.getId(), "Facebook");
+                NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_ACTOR_SOCIAL, actorOjbect.getId(), "Facebook");
             } catch (PackageManager.NameNotFoundException e) {
 
             }
 
         }else if (v.equals(twitterBtn)){
             socialUrl = actorOjbect.getBaselineCastData().getSocialMediaUrl(MovieMetaData.BaselineCastData.SOCIAL_MEDIA_KEY.TWITTER_KEY);
-            NextGenAnalyticData.reportEvent(getActivity(), this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_ACTOR_SOCIAL, actorOjbect.getId(), "Twitter");
+            NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_ACTOR_SOCIAL, actorOjbect.getId(), "Twitter");
         }else if (v.equals(instagramBtn)){
             socialUrl = actorOjbect.getBaselineCastData().getSocialMediaUrl(MovieMetaData.BaselineCastData.SOCIAL_MEDIA_KEY.INSTAGRAM_KEY);
-            NextGenAnalyticData.reportEvent(getActivity(), this, NextGenAnalyticData.AnalyticAction.ACTION_SELECT_ACTOR_SOCIAL, actorOjbect.getId(), "Instagram");
+            NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_ACTOR_SOCIAL, actorOjbect.getId(), "Instagram");
         }
 
         if (!StringHelper.isEmpty(socialUrl)){

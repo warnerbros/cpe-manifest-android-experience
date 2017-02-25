@@ -5,14 +5,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.activity.ECGalleryActivity;
 import com.wb.nextgenlibrary.activity.ECInteractiveActivity;
 import com.wb.nextgenlibrary.activity.ECSceneLocationActivity;
 import com.wb.nextgenlibrary.activity.ECVideoActivity;
-import com.wb.nextgenlibrary.activity.TheTakeShopCategoryActivity;
+import com.wb.nextgenlibrary.activity.ShopCategoryActivity;
 import com.wb.nextgenlibrary.activity.WebViewActivity;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.data.MovieMetaData.ExperienceData;
@@ -25,7 +24,7 @@ import java.util.List;
 /**
  * Created by gzcheng on 1/13/16.
  */
-public class NextGenExtraMainTableFragment extends NextGenGridViewFragment {
+public class ExtraMainTableFragment extends AbstractGridViewFragment {
 
 
     public final static int GRID_SPACING_DP = 10;
@@ -49,7 +48,7 @@ public class NextGenExtraMainTableFragment extends NextGenGridViewFragment {
         }else if (selectedGroup.getECGroupType() == MovieMetaData.ECGroupType.EXTERNAL_APP){
             if (selectedGroup.getExternalApp() != null){
                 if (selectedGroup.getExternalApp().externalApiName.equals(MovieMetaData.THE_TAKE_MANIFEST_IDENTIFIER)){
-                    intent = new Intent(getActivity(), TheTakeShopCategoryActivity.class);
+                    intent = new Intent(getActivity(), ShopCategoryActivity.class);
 
                 }
             }
@@ -64,7 +63,7 @@ public class NextGenExtraMainTableFragment extends NextGenGridViewFragment {
                 intent.putExtra(F.URL, selectedGroup.interactiveItems.get(0).assetLocation);
             }
         } else if (selectedGroup.getECGroupType() == MovieMetaData.ECGroupType.SHOP){
-            intent = new Intent(getActivity(), TheTakeShopCategoryActivity.class);
+            intent = new Intent(getActivity(), ShopCategoryActivity.class);
         }
 
         if (intent != null) {

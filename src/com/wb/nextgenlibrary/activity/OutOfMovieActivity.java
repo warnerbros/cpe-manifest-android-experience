@@ -7,19 +7,19 @@ import android.support.v4.app.Fragment;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.data.StyleData;
-import com.wb.nextgenlibrary.fragment.NextGenActorListFragment;
-import com.wb.nextgenlibrary.fragment.NextGenExtraMainTableFragment;
-import com.wb.nextgenlibrary.interfaces.NextGenFragmentTransactionInterface;
+import com.wb.nextgenlibrary.fragment.ActorListFragment;
+import com.wb.nextgenlibrary.fragment.ExtraMainTableFragment;
+import com.wb.nextgenlibrary.interfaces.NGEFragmentTransactionInterface;
 import com.wb.nextgenlibrary.interfaces.SensitiveFragmentInterface;
 import com.wb.nextgenlibrary.util.TabletUtils;
-import com.wb.nextgenlibrary.util.utils.NextGenFragmentTransactionEngine;
+import com.wb.nextgenlibrary.util.utils.NGEFragmentTransactionEngine;
 
 /**
  * Created by gzcheng on 1/7/16.
  */
-public class NextGenExtraActivity extends AbstractNextGenActivity implements NextGenFragmentTransactionInterface {
+public class OutOfMovieActivity extends AbstractNGEActivity implements NGEFragmentTransactionInterface {
 
-    NextGenFragmentTransactionEngine nextGenFragmentTransactionEngine;
+    NGEFragmentTransactionEngine fragmentTransactionEngine;
 
 
     StyleData.ExperienceStyle extraStyle = null;
@@ -41,14 +41,14 @@ public class NextGenExtraActivity extends AbstractNextGenActivity implements Nex
 
         extraStyle = NextGenExperience.getMovieMetaData().getExtraExperience().style;
 
-        nextGenFragmentTransactionEngine = new NextGenFragmentTransactionEngine(this);
+        fragmentTransactionEngine = new NGEFragmentTransactionEngine(this);
         initFragments();
     }
 
     protected void initFragments(){
         if (TabletUtils.isTablet()) {
-            transitLeftFragment(new NextGenActorListFragment());
-            transitRightFragment(new NextGenExtraMainTableFragment());
+            transitLeftFragment(new ActorListFragment());
+            transitRightFragment(new ExtraMainTableFragment());
         }
     }
 
@@ -67,23 +67,23 @@ public class NextGenExtraActivity extends AbstractNextGenActivity implements Nex
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
     }
 
-    //*************** NextGenFragmentTransactionInterface ***************
+    //*************** NGEFragmentTransactionInterface ***************
     @Override
     public void transitRightFragment(Fragment nextFragment){
-        nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.next_gen_extra_right_view, nextFragment);
+        fragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.next_gen_extra_right_view, nextFragment);
 
     }
 
     @Override
     public void transitLeftFragment(Fragment nextFragment){
         try {
-            nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.next_gen_extra_left_view, nextFragment);
+            fragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.next_gen_extra_left_view, nextFragment);
         } catch (Exception ex){}
     }
 
     @Override
     public void transitMainFragment(Fragment nextFragment){
-        //nextGenFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.next_gen_extra_main_frame, nextFragment);
+        //NGEFragmentTransactionEngine.transitFragment(getSupportFragmentManager(), R.id.next_gen_extra_main_frame, nextFragment);
     }
 
     @Override
@@ -135,7 +135,7 @@ public class NextGenExtraActivity extends AbstractNextGenActivity implements Nex
     @Override
     public String getRightTitleImageUri(){
         /*if (extraStyle != null) {
-            StyleData.NodeStyleData nodeStyleData = extraStyle.getNodeStyleData(NextGenHideStatusBarActivity.getCurrentScreenOrientation());
+            StyleData.NodeStyleData nodeStyleData = extraStyle.getNodeStyleData(NGEHideStatusBarActivity.getCurrentScreenOrientation());
             MovieMetaData.PictureImageData titleImageData = nodeStyleData.theme.getImageData();
             return ;
         }else

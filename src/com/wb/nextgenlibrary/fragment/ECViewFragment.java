@@ -3,10 +3,7 @@ package com.wb.nextgenlibrary.fragment;
 import android.os.Bundle;
 import android.view.View;
 
-import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.analytic.NextGenAnalyticData;
-import com.wb.nextgenlibrary.util.utils.StringHelper;
 
 /**
  * Created by gzcheng on 7/26/16.

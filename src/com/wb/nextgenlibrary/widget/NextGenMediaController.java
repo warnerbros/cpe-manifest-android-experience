@@ -11,7 +11,7 @@ import android.view.View;
 
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.interfaces.NextGenPlayerInterface;
+import com.wb.nextgenlibrary.interfaces.NGEPlayerInterface;
 
 /**
  * Created by gzcheng on 3/16/16.
@@ -20,9 +20,9 @@ public class NextGenMediaController extends CustomMediaController {
 
     protected Context mContext;
     protected View mBaseSystemUIView;
-    NextGenPlayerInterface player;
+    NGEPlayerInterface player;
 
-    public NextGenMediaController(Context context, NextGenPlayerInterface nextGenPlayer, boolean useFullScreenToggle) {
+    public NextGenMediaController(Context context, NGEPlayerInterface nextGenPlayer, boolean useFullScreenToggle) {
         super(new ContextThemeWrapper(context, R.style.NextGenMediaControllerStyle), false, useFullScreenToggle);
         player = nextGenPlayer;
 

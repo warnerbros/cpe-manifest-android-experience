@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.model.AVGalleryIMEEngine;
-import com.wb.nextgenlibrary.model.NextGenIMEEngine;
+import com.wb.nextgenlibrary.model.IMEEngine;
 import com.wb.nextgenlibrary.parser.LocalizableMetaDataInterface;
 import com.wb.nextgenlibrary.parser.ManifestXMLParser;
 import com.wb.nextgenlibrary.parser.appdata.AppDataLocationType;
@@ -18,7 +18,6 @@ import com.wb.nextgenlibrary.parser.cpestyle.ExperienceMenuMapType;
 import com.wb.nextgenlibrary.parser.cpestyle.NodeStyleType;
 import com.wb.nextgenlibrary.parser.cpestyle.ThemeType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.AppGroupType;
-import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.AudioClipRefType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.AudiovisualClipRefType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.AudiovisualType;
 import com.wb.nextgenlibrary.parser.manifest.schema.v1_4.ExperienceAppType;
@@ -47,7 +46,6 @@ import com.wb.nextgenlibrary.parser.md.schema.v2_3.BasicMetadataInfoType;
 import com.wb.nextgenlibrary.parser.md.schema.v2_3.BasicMetadataPeopleType;
 import com.wb.nextgenlibrary.parser.md.schema.v2_3.BasicMetadataType;
 import com.wb.nextgenlibrary.parser.md.schema.v2_3.ContentIdentifierType;
-import com.wb.nextgenlibrary.parser.md.schema.v2_3.NVPairType;
 import com.wb.nextgenlibrary.parser.md.schema.v2_3.PersonIdentifierType;
 import com.wb.nextgenlibrary.util.Size;
 import com.wb.nextgenlibrary.util.utils.F;
@@ -659,7 +657,7 @@ public class MovieMetaData {
         return false;
     }
 
-    NextGenIMEEngine shareClipIMEEngine;
+    IMEEngine shareClipIMEEngine;
 
     public String getClosestShareClipImage(int timeCode){
         if (hasShareClipExp()){
