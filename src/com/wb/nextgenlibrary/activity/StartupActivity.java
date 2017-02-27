@@ -216,7 +216,7 @@ public class StartupActivity extends NGEHideStatusBarActivity implements View.On
         View.OnClickListener showButtonOnClickLister = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                animateButtonsOn();
+                animateButtonsOn(true);
             }
         };
 
@@ -308,7 +308,7 @@ public class StartupActivity extends NGEHideStatusBarActivity implements View.On
                                     });
                                     player.setPlayWhenReady(true);
 
-                                    animateButtonsOn();
+                                    animateButtonsOn(false);
                                     isFreshloaded = false;
                                 }
                                 //added: tr 9/19
@@ -401,7 +401,40 @@ public class StartupActivity extends NGEHideStatusBarActivity implements View.On
         }
     }
 
-    private void animateButtonsOn(){
+    private void drawButtons(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (imageButtonsFrame.getVisibility() == View.VISIBLE ){
+                    return;
+                }
+                StyleData.NodeStyleData nodeStyleData = mainStyle.getNodeStyleData(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                StyleData.ThemeData buttonTheme = mainStyle.getNodeStyleData(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE).theme;
+                MovieMetaData.PictureImageData extraBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.EXTRA_BUTTON);
+                MovieMetaData.PictureImageData playBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.PLAY_BUTTON);
+                if (imageButtonsFrame != null && extraBtnImageData != null && playBtnImageData != null) {
+                    setPlayExtraButtonsVisibility(ButtonsMode.IMAGE_BUTTON_VISIBLE);
+                    imageButtonsFrame.setVisibility(View.VISIBLE);
+                    imageButtonsFrame.setAlpha(0.0f);
+
+                    // Start the animation
+                    imageButtonsFrame.animate().setDuration(1000).alpha(1.0f);
+
+                }
+                if (exitIcon != null){
+                    exitIcon.setVisibility(View.GONE);
+                    exitIcon.setVisibility(View.VISIBLE);
+                    exitIcon.setAlpha(0.0f);
+
+                    // Start the animation
+                    exitIcon.animate().setDuration(1000).alpha(1.0f);
+                }
+
+            }
+        });
+    }
+
+    private void animateButtonsOn(boolean bImmediate){
 
         if (startUpTimer == null) {
             startUpTimer = new Timer();
@@ -410,37 +443,15 @@ public class StartupActivity extends NGEHideStatusBarActivity implements View.On
             startUpTimerTask = new TimerTask() {
                 @Override
                 public void run() {
+                    drawButtons();
 
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            StyleData.NodeStyleData nodeStyleData = mainStyle.getNodeStyleData(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                            StyleData.ThemeData buttonTheme = mainStyle.getNodeStyleData(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE).theme;
-                            MovieMetaData.PictureImageData extraBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.EXTRA_BUTTON);
-                            MovieMetaData.PictureImageData playBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.PLAY_BUTTON);
-                            if (imageButtonsFrame != null && extraBtnImageData != null && playBtnImageData != null) {
-                                setPlayExtraButtonsVisibility(ButtonsMode.IMAGE_BUTTON_VISIBLE);
-                                imageButtonsFrame.setVisibility(View.VISIBLE);
-                                imageButtonsFrame.setAlpha(0.0f);
-
-                                // Start the animation
-                                imageButtonsFrame.animate().setDuration(1000).alpha(1.0f);
-
-                            }
-                            if (exitIcon != null){
-                                exitIcon.setVisibility(View.GONE);
-                                exitIcon.setVisibility(View.VISIBLE);
-                                exitIcon.setAlpha(0.0f);
-
-                                // Start the animation
-                                exitIcon.animate().setDuration(1000).alpha(1.0f);
-                            }
-
-                        }
-                    });
                 }
             };
             startUpTimer.schedule(startUpTimerTask, buttonAnimationStartTime);
+        }
+
+        if (bImmediate) {
+            drawButtons();
         }
 
 
