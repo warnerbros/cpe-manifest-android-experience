@@ -32,6 +32,7 @@ public class WebViewActivity extends NGEHideStatusBarActivity {
         webView = (WebView) findViewById(R.id.webView);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setDomStorageEnabled(true);
+        webView.getSettings().setUseWideViewPort(true);
         webView.setWebChromeClient(new WebChromeClient() {
             @Override public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
         /* Do whatever you need here */
