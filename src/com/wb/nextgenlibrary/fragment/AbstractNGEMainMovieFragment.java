@@ -112,20 +112,6 @@ public abstract class AbstractNGEMainMovieFragment extends Fragment implements N
         }
     }
 
-    public void startIME(){
-       streamStartPreparations(new ResultListener<Boolean>() {
-           @Override
-           public void onResult(Boolean result) {
-
-           }
-
-           @Override
-           public <E extends Exception> void onException(E e) {
-
-           }
-       });
-    }
-
     /*
         If your main movie fragment cannot handle switching commentary track.
         you must implement this function to mute/unmute main feature audio for NGE library to use

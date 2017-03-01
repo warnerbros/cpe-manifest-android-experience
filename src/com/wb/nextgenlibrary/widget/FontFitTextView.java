@@ -89,7 +89,7 @@ public class FontFitTextView extends TextView {
         while((hi - lo) > threshold) {
             float size = (hi+lo)/2;
             int textHeight = getTextHeight(text, getPaint(), boundarySize.getWidth(), size);
-            int singleLineHeight = getTextHeight(text.substring(0,1), getPaint(), boundarySize.getWidth(), size);
+            int singleLineHeight = getTextHeight("C", getPaint(), boundarySize.getWidth(), size);
 
             if (numberOfLinesAllowed != -1 && numberOfLinesAllowed != Integer.MAX_VALUE){
 

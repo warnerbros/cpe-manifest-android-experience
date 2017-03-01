@@ -347,8 +347,11 @@ public class HttpHelper {
 
 			if (checkCache) {
 				byte[] cacheResult = NextGenExperience.sCacheManager.get(new URL(url).hashCode());
-
-				return new String(cacheResult);
+				try {
+					return new String(cacheResult);
+				}catch (Exception ex){
+					// not valid cache
+				}
 				//Logger.v(F.TAG_API, "HttpHelper.fetchUrlBytes cache miss");
 			}
 
