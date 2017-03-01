@@ -27,6 +27,8 @@ import com.wb.nextgenlibrary.util.utils.F;
 import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -345,10 +347,8 @@ public class HttpHelper {
 
 			if (checkCache) {
 				byte[] cacheResult = NextGenExperience.sCacheManager.get(new URL(url).hashCode());
-				if (cacheResult != null && cacheResult.length > 0) {
-					//Logger.v(F.TAG_API, "HttpHelper.fetchUrlBytes cache hit");
-					return Arrays.toString(cacheResult);
-				}
+
+				return new String(cacheResult);
 				//Logger.v(F.TAG_API, "HttpHelper.fetchUrlBytes cache miss");
 			}
 
@@ -389,6 +389,7 @@ public class HttpHelper {
 
 
 			if (shouldCache) {
+
 				NextGenExperience.sCacheManager.put(new URL(url).hashCode(), result.getBytes());
 			}
 			return result;
@@ -526,44 +527,47 @@ public class HttpHelper {
 	/* Helper methods */
 	private static final int CHUNKSIZE = 8192; // size of fixed chunks
 	private static final int BUFFERSIZE = 1024; // size of reading buffer
-	
+
+	private static final Object syncObject = new Object();
 	public static byte[] streamToByteArray(InputStream is) throws IOException {
-		int bytesRead = 0;
-		byte[] buffer = new byte[BUFFERSIZE]; // initialize buffer
-		byte[] fixedChunk = new byte[CHUNKSIZE]; // initialize 1st chunk
-		ArrayList<byte[]> BufferChunkList = new ArrayList<byte[]>(); // List of chunk data
-		int spaceLeft = CHUNKSIZE;
-		int chunkIndex = 0;
-		
-		while ((bytesRead = is.read(buffer)) != -1) { // loop until the
-			// DataInputStream is completed
-			if (bytesRead > spaceLeft) {
-				// copy to end of current chunk
-				System.arraycopy(buffer, 0, fixedChunk, chunkIndex, spaceLeft);
-				BufferChunkList.add(fixedChunk);
-				
-				// create a new chunk, and fill in the leftover
-				fixedChunk = new byte[CHUNKSIZE];
-				chunkIndex = bytesRead - spaceLeft;
-				System.arraycopy(buffer, spaceLeft, fixedChunk, 0, chunkIndex);
-			} else {
-				// plenty of space, just copy it in
-				System.arraycopy(buffer, 0, fixedChunk, chunkIndex, bytesRead);
-				chunkIndex = chunkIndex + bytesRead;
+		synchronized (syncObject){
+			int bytesRead = 0;
+			byte[] buffer = new byte[BUFFERSIZE]; // initialize buffer
+			byte[] fixedChunk = new byte[CHUNKSIZE]; // initialize 1st chunk
+			ArrayList<byte[]> BufferChunkList = new ArrayList<byte[]>(); // List of chunk data
+			int spaceLeft = CHUNKSIZE;
+			int chunkIndex = 0;
+
+			while ((bytesRead = is.read(buffer)) != -1) { // loop until the
+				// DataInputStream is completed
+				if (bytesRead > spaceLeft) {
+					// copy to end of current chunk
+					System.arraycopy(buffer, 0, fixedChunk, chunkIndex, spaceLeft);
+					BufferChunkList.add(fixedChunk);
+
+					// create a new chunk, and fill in the leftover
+					fixedChunk = new byte[CHUNKSIZE];
+					chunkIndex = bytesRead - spaceLeft;
+					System.arraycopy(buffer, spaceLeft, fixedChunk, 0, chunkIndex);
+				} else {
+					// plenty of space, just copy it in
+					System.arraycopy(buffer, 0, fixedChunk, chunkIndex, bytesRead);
+					chunkIndex = chunkIndex + bytesRead;
+				}
+				spaceLeft = CHUNKSIZE - chunkIndex;
 			}
-			spaceLeft = CHUNKSIZE - chunkIndex;
+			is.close();
+
+			int responseSize = (BufferChunkList.size() * CHUNKSIZE) + chunkIndex;
+			byte[] responseBody = new byte[responseSize];
+			int index = 0;
+			for (byte[] b : BufferChunkList) {
+				System.arraycopy(b, 0, responseBody, index, CHUNKSIZE);
+				index = index + CHUNKSIZE;
+			}
+			System.arraycopy(fixedChunk, 0, responseBody, index, chunkIndex);
+			return responseBody;
 		}
-		is.close();
-		
-		int responseSize = (BufferChunkList.size() * CHUNKSIZE) + chunkIndex;
-		byte[] responseBody = new byte[responseSize];
-		int index = 0;
-		for (byte[] b : BufferChunkList) {
-			System.arraycopy(b, 0, responseBody, index, CHUNKSIZE);
-			index = index + CHUNKSIZE;
-		}
-		System.arraycopy(fixedChunk, 0, responseBody, index, chunkIndex);
-		return responseBody;
 	}
 	
 	private static final String SECURE_BASE_URL = "https://";
