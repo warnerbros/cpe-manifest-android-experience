@@ -3,6 +3,7 @@ package com.wb.nextgenlibrary.widget;
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -21,6 +22,9 @@ public class FontFitTextView extends TextView {
 	float mSpacingMult = 1.0f;
 	float mSpacingAdd = 0.0f;
 
+    private int numberOfLinesAllowed = Integer.MAX_VALUE;
+
+
     public FontFitTextView(Context context) {
         super(context);
         initialize();
@@ -38,6 +42,12 @@ public class FontFitTextView extends TextView {
 		maxTextSize = getTextSize();
     }
 
+    public void setNumberOfLinesAllowed(int lines){
+        numberOfLinesAllowed = lines;
+    }
+
+
+
     /* Re size the font so the specified text fits in the text box
      * assuming the text box is the specified width.
      */
@@ -45,6 +55,29 @@ public class FontFitTextView extends TextView {
     {
         if (boundarySize.getHeight() <= 0)
             return;
+
+        Drawable drawables[] = getCompoundDrawables();
+        int drawablePadding = getCompoundDrawablePadding();
+
+        if (drawables != null && drawables.length > 0){
+            int width = boundarySize.getWidth(), height = boundarySize.getHeight();
+            if (drawables.length > 1 && drawables[0] != null){      // left
+                width -= drawables[0].getBounds().width() + drawablePadding;
+            }
+            if (drawables.length > 2 && drawables[1] != null){      // top
+                height -= drawables[1].getBounds().height() + drawablePadding;
+
+            }
+            if (drawables.length > 3 && drawables[2] != null){      // right
+                width -= drawables[2].getBounds().width() + drawablePadding;
+
+            }
+            if (drawables.length > 4 && drawables[3] != null){      // bottom
+                height -= drawables[3].getBounds().height() + drawablePadding;
+            }
+            boundarySize = new Size(width, height);
+        }
+
 
         int targetHeight = boundarySize.getHeight() - this.getPaddingTop() - this.getPaddingBottom();
         float hi = maxTextSize;
@@ -56,11 +89,22 @@ public class FontFitTextView extends TextView {
         while((hi - lo) > threshold) {
             float size = (hi+lo)/2;
             int textHeight = getTextHeight(text, getPaint(), boundarySize.getWidth(), size);
+            int singleLineHeight = getTextHeight(text.substring(0,1), getPaint(), boundarySize.getWidth(), size);
 
-            if(textHeight >= targetHeight)
-                hi = size; // too big
-            else
-                lo = size; // too small
+            if (numberOfLinesAllowed != -1 && numberOfLinesAllowed != Integer.MAX_VALUE){
+
+                if (textHeight >= targetHeight || textHeight > (numberOfLinesAllowed * singleLineHeight))
+                    hi = size; // too big
+                else
+                    lo = size; // too small
+
+            } else {
+
+                if (textHeight >= targetHeight)
+                    hi = size; // too big
+                else
+                    lo = size; // too small
+            }
         }
         // Use lo so that we undershoot rather than overshoot
         this.setTextSize(TypedValue.COMPLEX_UNIT_PX, lo);
@@ -108,5 +152,11 @@ public class FontFitTextView extends TextView {
         StaticLayout layout = new StaticLayout(source, paintCopy, width, Layout.Alignment.ALIGN_NORMAL, mSpacingMult, mSpacingAdd, true);
 
         return layout.getHeight();
+    }
+
+    @Override
+    public void setCompoundDrawablesWithIntrinsicBounds(Drawable left, Drawable top, Drawable right, Drawable bottom) {
+        super.setCompoundDrawablesWithIntrinsicBounds(left, top, right, bottom);
+
     }
 }

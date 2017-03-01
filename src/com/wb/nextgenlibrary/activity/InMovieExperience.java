@@ -46,6 +46,7 @@ import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.videoview.IVideoViewActionListener;
 import com.wb.nextgenlibrary.videoview.ObservableVideoView;
 import com.wb.nextgenlibrary.widget.CustomMediaController;
+import com.wb.nextgenlibrary.widget.FontFitTextView;
 import com.wb.nextgenlibrary.widget.MainFeatureMediaController;
 
 import java.util.ArrayList;
@@ -335,7 +336,8 @@ public class InMovieExperience extends AbstractNGEActivity implements NGEFragmen
                 menu,
                 R.id.menuChromecast);
 
-
+        if (actionBarRightTextView != null && actionBarRightTextView instanceof FontFitTextView)
+            ((FontFitTextView)actionBarRightTextView).setNumberOfLinesAllowed(1);
 
         return true;
     }
