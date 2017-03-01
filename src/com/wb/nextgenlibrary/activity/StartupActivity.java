@@ -410,8 +410,15 @@ public class StartupActivity extends NGEHideStatusBarActivity implements View.On
                 }
                 StyleData.NodeStyleData nodeStyleData = mainStyle.getNodeStyleData(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                 StyleData.ThemeData buttonTheme = mainStyle.getNodeStyleData(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE).theme;
+
                 MovieMetaData.PictureImageData extraBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.EXTRA_BUTTON);
+                if (extraBtnImageData == null)
+                    extraBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.EXTRA_BUTTON.toLowerCase());
                 MovieMetaData.PictureImageData playBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.PLAY_BUTTON);
+                if (playBtnImageData == null)
+                    playBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.PLAY_BUTTON.toLowerCase());
+
+
                 if (imageButtonsFrame != null && extraBtnImageData != null && playBtnImageData != null) {
                     setPlayExtraButtonsVisibility(ButtonsMode.IMAGE_BUTTON_VISIBLE);
                     imageButtonsFrame.setVisibility(View.VISIBLE);
@@ -593,8 +600,14 @@ public class StartupActivity extends NGEHideStatusBarActivity implements View.On
             imageButtonsFrame.setLayoutParams(buttonsLayoutParams);
 
             MovieMetaData.PictureImageData extraBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.EXTRA_BUTTON);
+            if (extraBtnImageData == null)
+                extraBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.EXTRA_BUTTON.toLowerCase());
             MovieMetaData.PictureImageData playBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.PLAY_BUTTON);
+            if (playBtnImageData == null)
+                playBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.PLAY_BUTTON.toLowerCase());
             MovieMetaData.PictureImageData purchaseBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.PURCHASE_BUTTON);
+            if (purchaseBtnImageData == null)
+                purchaseBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.PURCHASE_BUTTON.toLowerCase());
 
             if (extraBtnImageData != null && playBtnImageData != null) {
                 double buttonRatio = (double) width / (double) playBtnImageData.width;

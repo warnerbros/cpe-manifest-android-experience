@@ -180,6 +180,9 @@ public class NGECacheManager {
 			
 		} catch (IOException e) {
 			NextGenLogger.e(F.TAG, "NGECacheManager.get", e);
+		} catch (Exception ex){
+			NextGenLogger.e(F.TAG, "NGECacheManager.get", ex);
+
 		}
 		return null;
 	}
