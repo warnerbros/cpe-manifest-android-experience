@@ -79,7 +79,7 @@ public class NextGenExperience {
     private static int deviceScreenWidth = -1;
     private static int deviceScreenHeight = -1;
     private static Size deviceScreenSize = null;
-    public static int sCachePolicy;
+    public static int sCachePolicy = NGECacheManager.POLICY_MEDIUM;
     public static NGECacheManager sCacheManager;
     private static String sVersionName = null;
     private static Locale clientLocale = null;
@@ -105,7 +105,8 @@ public class NextGenExperience {
         nextgenPlaybackObject = playbackObject;
 
         applicationContext = appContext;
-        sCacheManager = new NGECacheManager(applicationContext);
+        if (sCacheManager == null)
+            sCacheManager = new NGECacheManager(applicationContext);
         mainMovieFragmentClass = fragmentClass;
         castMovieFragmentClass = castFragmentClass;
         NGEEventHandler = eventHandler;

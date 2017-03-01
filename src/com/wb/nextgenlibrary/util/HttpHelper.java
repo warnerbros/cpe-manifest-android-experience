@@ -9,6 +9,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
@@ -321,11 +322,13 @@ public class HttpHelper {
 	}
 
 	public static String getFromUrl(String url, List <NameValuePair> params) throws IOException {
-
-		return  getFromUrl(url, params, null);
+		return  getFromUrl(url, params, null, true, true);
 	}
 	
-	public static String getFromUrl(String url, List <NameValuePair> params, List <NameValuePair> headerValues) throws IOException {
+	public static String getFromUrl(String url, List <NameValuePair> params, List <NameValuePair> headerValues, boolean checkCache, boolean shouldCache) throws IOException {
+		String result;
+
+
 		NextGenLogger.d(F.TAG_API, "HttpHelper.getFromUrl url:" + url);
 		InputStream content = null;
 		HttpClient httpClient = null;
@@ -339,6 +342,16 @@ public class HttpHelper {
 
 			if (params != null)
 				url += "?" + URLEncodedUtils.format(params, "utf-8");
+
+			if (checkCache) {
+				byte[] cacheResult = NextGenExperience.sCacheManager.get(new URL(url).hashCode());
+				if (cacheResult != null && cacheResult.length > 0) {
+					//Logger.v(F.TAG_API, "HttpHelper.fetchUrlBytes cache hit");
+					return Arrays.toString(cacheResult);
+				}
+				//Logger.v(F.TAG_API, "HttpHelper.fetchUrlBytes cache miss");
+			}
+
 			HttpGet get = new HttpGet(url);
 			//StringEntity entityJson = new StringEntity(json.toString());
 			//entityJson.setContentType("application/json");
@@ -372,7 +385,15 @@ public class HttpHelper {
 				//NextGenExperience.logout(true);
 	//			throw new HttpUnauthorizedException(responseBuilder.toString().trim());
 			}
-			return responseBuilder.toString().trim();
+			result =  responseBuilder.toString().trim();
+
+
+			if (shouldCache) {
+				NextGenExperience.sCacheManager.put(new URL(url).hashCode(), result.getBytes());
+			}
+			return result;
+
+
 		} finally {
 			if (content != null) {
 				try {
@@ -386,6 +407,7 @@ public class HttpHelper {
 			}
 		}
 	}
+
 	
 	public static String deleteFromUrl(String url) throws IOException {
 		return deleteFromUrl(url, false);

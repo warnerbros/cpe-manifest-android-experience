@@ -70,6 +70,8 @@ public abstract class AbstractCastMainMovieFragment extends AbstractNGEMainMovie
 	ListPopupWindow subtitleListPopupWindow = null;
 	AudioSubtitleListAdapter subtitleListAdapter = null;
 
+	private long lastRecordedPlaybackPosition = 0L;
+
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
 		return inflater.inflate(R.layout.cast_player_layout, container, false);
@@ -234,6 +236,7 @@ public abstract class AbstractCastMainMovieFragment extends AbstractNGEMainMovie
 		if (duration == position)
 			mPlaybackCompleted = true;
 
+		lastRecordedPlaybackPosition = remoteMediaClient.getApproximateStreamPosition();
 		if (duration > 0) {
 			if (mUpdateSeekbar) {
 				sbSeek.setProgress((int) position);
@@ -405,7 +408,7 @@ public abstract class AbstractCastMainMovieFragment extends AbstractNGEMainMovie
 		if (remoteMediaClient != null){
 			return (int)remoteMediaClient.getApproximateStreamPosition();
 		} else
-			return 0;
+			return (int)lastRecordedPlaybackPosition;
 	}
 
 	@Override

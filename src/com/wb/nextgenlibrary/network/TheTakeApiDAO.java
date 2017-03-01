@@ -100,7 +100,7 @@ public class TheTakeApiDAO {
     private static String getFromUrl(String url, List <NameValuePair> params) throws IOException {
         List<NameValuePair> headerValues = new ArrayList<NameValuePair>();
         headerValues.add(new BasicNameValuePair("X-Mashape-Key", theTakeAPIKey));
-        return HttpHelper.getFromUrl(url, params, headerValues);
+        return HttpHelper.getFromUrl(url, params, headerValues, true, true);
     }
 
     public static void fetchProductFrames(final long targetTimeCode, final int start, final int count, ResultListener<List<TheTakeProductFrame>> l) {

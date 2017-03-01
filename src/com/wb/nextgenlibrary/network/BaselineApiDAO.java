@@ -121,9 +121,26 @@ public class BaselineApiDAO {
             public Boolean call() throws Exception {
                 boolean success = true;
                 HashMap<String, BaselineCastData> castsInfoMap = new HashMap<String, BaselineCastData>();
-                for (MovieMetaData.CastData castData : castsDatas) {
+                for (final MovieMetaData.CastData castData : castsDatas) {
                     try {
-                        castData.baselineCastData = getFilmographyAndBioOfPersonSync(castData.getBaselineActorId());
+                        Worker.execute(new Callable<Boolean>() {
+                            @Override
+                            public Boolean call() throws Exception {
+                                castData.baselineCastData = getFilmographyAndBioOfPersonSync(castData.getBaselineActorId());
+                                return true;
+
+                            }
+                        }, new ResultListener<Boolean>() {
+                            @Override
+                            public void onResult(Boolean result) {
+
+                            }
+
+                            @Override
+                            public <E extends Exception> void onException(E e) {
+
+                            }
+                        });
 
 
                     } catch (Exception ex){
@@ -158,7 +175,7 @@ public class BaselineApiDAO {
         headers.add(new BasicNameValuePair(X_API_KEY_KEY, xAPIKey));
         headers.add(new BasicNameValuePair(X_STUDIO_KEY, NextGenExperience.getStudioXAPIKey()));
 
-        String userdataResult = HttpHelper.getFromUrl(X_API_DOMAIN + XEndpoints.GetTalentDetail, params, headers);
+        String userdataResult = HttpHelper.getFromUrl(X_API_DOMAIN + XEndpoints.GetTalentDetail, params, headers, true, true);
         //JSONObject json = new JSONObject(result);
 
         Gson gson = new GsonBuilder().create();
@@ -171,7 +188,7 @@ public class BaselineApiDAO {
 
         //castsInfoMap.put(castId, thisData);
 
-        String talentImageResult = HttpHelper.getFromUrl(X_API_DOMAIN + XEndpoints.GetTalentImages, params, headers);
+        String talentImageResult = HttpHelper.getFromUrl(X_API_DOMAIN + XEndpoints.GetTalentImages, params, headers, true, true);
         Type listType = new TypeToken<ArrayList<CastHeadShot>>() {
         }.getType();
 
