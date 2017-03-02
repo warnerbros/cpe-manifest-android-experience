@@ -23,9 +23,9 @@ import java.util.List;
 /**
  * Created by gzcheng on 4/19/16.
  */
-public class TheTakeFrameProductsFragment extends AbstractNextGenFragment {
+public class ShopFrameProductsFragment extends AbstractNextGenFragment {
 
-    TheTakeProductDetailFragment productDetailFragment;
+    ShopItemDetailFragment productDetailFragment;
     List<MovieMetaData.ShopItemInterface> productList = new ArrayList<MovieMetaData.ShopItemInterface>();
     RecyclerView frameProductsRecyclerView;
     LinearLayoutManager frameProductsLayoutManager;
@@ -46,7 +46,7 @@ public class TheTakeFrameProductsFragment extends AbstractNextGenFragment {
         titleTextView = (TextView)view.findViewById(R.id.ec_title_name);
 
         setTitleText(titleText);
-        productDetailFragment = (TheTakeProductDetailFragment)getChildFragmentManager().findFragmentById(R.id.frame_product_detail_fragment);
+        productDetailFragment = (ShopItemDetailFragment)getChildFragmentManager().findFragmentById(R.id.frame_product_detail_fragment);
         productDetailFragment.setContentViewId(R.layout.the_take_product_view);
 
         frameProductsRecyclerView = (RecyclerView) view.findViewById(R.id.frame_product_list);
@@ -143,7 +143,7 @@ public class TheTakeFrameProductsFragment extends AbstractNextGenFragment {
             loadProductIntoDetailFragment(product);
             frameProductsAdaptor.setSelectedIndex(position);
             frameProductsAdaptor.notifyDataSetChanged();
-            //NGEAnalyticData.reportEvent(getActivity(), TheTakeFrameProductsFragment.this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_SHOPPING, product.productName);
+            //NGEAnalyticData.reportEvent(getActivity(), ShopFrameProductsFragment.this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_SHOPPING, product.productName);
         }
     }
 

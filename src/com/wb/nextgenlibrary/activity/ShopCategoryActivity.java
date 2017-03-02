@@ -12,10 +12,11 @@ import android.widget.TextView;
 
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
+import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.data.TheTakeData.ShopCategory;
 import com.wb.nextgenlibrary.fragment.ShopCategoryGridFragment;
-import com.wb.nextgenlibrary.fragment.TheTakeProductDetailFragment;
+import com.wb.nextgenlibrary.fragment.ShopItemDetailFragment;
 import com.wb.nextgenlibrary.interfaces.NGEFragmentTransactionInterface;
 import com.wb.nextgenlibrary.network.TheTakeApiDAO;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
@@ -35,7 +36,7 @@ public class ShopCategoryActivity extends AbstractNGEActivity implements NGEFrag
     List<ShopCategory> categories = new ArrayList<ShopCategory>();
 
     ExpandableListView categoryListView;
-    TheTakeExpandableListAdapter categoryListAdaptor;
+    ShopCategoryExpandableListAdapter categoryListAdaptor;
     ShopCategoryGridFragment gridFrament;
 
     FrameLayout leftFrame;
@@ -61,7 +62,7 @@ public class ShopCategoryActivity extends AbstractNGEActivity implements NGEFrag
         categoryListView = (ExpandableListView)findViewById(R.id.the_take_category_list);
         if (categoryListView != null) {
 
-            categoryListAdaptor = new TheTakeExpandableListAdapter();
+            categoryListAdaptor = new ShopCategoryExpandableListAdapter();
             categoryListView.setAdapter(categoryListAdaptor);
             categoryListView.setOnChildClickListener(categoryListAdaptor);
             categoryListView.setOnGroupCollapseListener(categoryListAdaptor);
@@ -159,7 +160,7 @@ public class ShopCategoryActivity extends AbstractNGEActivity implements NGEFrag
 
     }
 
-    public class TheTakeExpandableListAdapter extends BaseExpandableListAdapter implements ExpandableListView.OnChildClickListener,
+    public class ShopCategoryExpandableListAdapter extends BaseExpandableListAdapter implements ExpandableListView.OnChildClickListener,
             ExpandableListView.OnGroupCollapseListener, ExpandableListView.OnGroupExpandListener, ExpandableListView.OnGroupClickListener {
 
 
@@ -264,6 +265,7 @@ public class ShopCategoryActivity extends AbstractNGEActivity implements NGEFrag
                 ShopCategory selectedCategory = categories.get(groupPosition);
                 if (selectedCategory.childCategories == null || selectedCategory.childCategories.size() == 0){
                     setItemChecked(groupPosition, -1);
+                    NGEAnalyticData.reportEvent(ShopCategoryActivity.this, null, NGEAnalyticData.AnalyticAction.ACTION_SELECT_CATEGORY, selectedCategory.categoryName, null);
                     return true;
                 }
             }
@@ -283,7 +285,7 @@ public class ShopCategoryActivity extends AbstractNGEActivity implements NGEFrag
                             currentLevelList = ((ShopCategory)currentItem).childCategories;
 
                         } else if (((ShopCategory)currentItem).products != null && ((ShopCategory)currentItem).products.size() > 0){
-                            Fragment f = getSupportFragmentManager().findFragmentByTag(TheTakeProductDetailFragment.class.toString());
+                            Fragment f = getSupportFragmentManager().findFragmentByTag(ShopItemDetailFragment.class.toString());
                             if (f != null)
                                 getSupportFragmentManager().popBackStack();
                             gridFrament.refreshWithCategory((ShopCategory)currentItem);
@@ -319,7 +321,7 @@ public class ShopCategoryActivity extends AbstractNGEActivity implements NGEFrag
             }
 
             if (selectedCategory != null){
-                Fragment f = getSupportFragmentManager().findFragmentByTag(TheTakeProductDetailFragment.class.toString());
+                Fragment f = getSupportFragmentManager().findFragmentByTag(ShopItemDetailFragment.class.toString());
                 if (f != null)
                     getSupportFragmentManager().popBackStack();
                 gridFrament.refreshWithCategory(selectedCategory);

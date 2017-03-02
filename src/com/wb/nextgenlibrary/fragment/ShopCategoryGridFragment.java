@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.activity.ECShopItemDetailActivity;
+import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.data.TheTakeData;
 import com.wb.nextgenlibrary.interfaces.NGEFragmentTransactionInterface;
@@ -172,8 +173,9 @@ public class ShopCategoryGridFragment extends AbstractNextGenFragment{
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id){
             MovieMetaData.ShopItemInterface product = getItem(position);
+            NGEAnalyticData.reportEvent(getActivity(), ShopCategoryGridFragment.this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_PRODUCT, product.getProductReportId(), null);
             if (TabletUtils.isTablet()) {
-                TheTakeProductDetailFragment fragment = new TheTakeProductDetailFragment();
+                ShopItemDetailFragment fragment = new ShopItemDetailFragment();
                 //fragment.setContentViewId(R.layout.the_take_single_product_view);
 
                 fragment.setProduct(product);

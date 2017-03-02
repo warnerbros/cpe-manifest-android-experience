@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
+import com.wb.nextgenlibrary.activity.ECSceneLocationActivity;
+import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.data.TheTakeData.TheTakeProduct;
 import com.wb.nextgenlibrary.data.TheTakeData.TheTakeProductDetail;
@@ -21,7 +23,7 @@ import com.wb.nextgenlibrary.util.utils.StringHelper;
 /**
  * Created by gzcheng on 4/11/16.
  */
-public class TheTakeProductDetailFragment extends AbstractNextGenFragment implements View.OnClickListener{
+public class ShopItemDetailFragment extends AbstractNextGenFragment implements View.OnClickListener{
 
     MovieMetaData.ShopItemInterface product;
     ImageView productPoster;
@@ -75,10 +77,10 @@ public class TheTakeProductDetailFragment extends AbstractNextGenFragment implem
                     NextGenExperience.launchChromeWithUrl(product.getPurchaseLinkUrl());
                 }
             });
-            //NGEAnalyticData.reportEvent(getActivity(), TheTakeProductDetailFragment.this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_SHOPPING, product.productName);
+            NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_SHOP_PRODUCT, product.getProductReportId(), null);
         }else if (v.getId() == R.id.send_link_button){
             NextGenExperience.launchChromeWithUrl(product.getShareLinkUrl());
-           // NGEAnalyticData.reportEvent(getActivity(), TheTakeProductDetailFragment.this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_SHOPPING, product.productName);
+            NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SHARE_PRODUCT_LINK, product.getProductReportId(), null);
         }
     }
 

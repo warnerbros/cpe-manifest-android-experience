@@ -1424,7 +1424,9 @@ public class MovieMetaData {
 
         String getPurchaseLinkUrl();
 
-        public abstract long getProductId();
+        long getProductId();
+
+        String getProductReportId();
 
         //public TheTakeData.TheTakeProductDetail getProductDetail();
     }
@@ -1456,6 +1458,13 @@ public class MovieMetaData {
             return -1;
         }
 
+
+        public String getProductReportId(){
+            if (!StringHelper.isEmpty(titleSort))
+                return titleSort;
+            else
+                return titleDisplayUnlimited;
+        }
 /*
         public ShopItem(String id, int displayOrder, String contentId, String externalUrl){
             super(id, "", null);

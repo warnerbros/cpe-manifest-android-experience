@@ -188,34 +188,13 @@ public class IMEElementsGridFragment extends AbstractGridViewFragment implements
                         NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_LOCATION, headElement.getId(), null);
                     } else if (dataObj instanceof MovieMetaData.ShopItem) {
 
-                        TheTakeProductDetailFragment fragment = new TheTakeProductDetailFragment();
+                        ShopItemDetailFragment fragment = new ShopItemDetailFragment();
                         fragment.setContentViewId(R.layout.the_take_product_view);
                         fragment.setProduct((MovieMetaData.ShopItem)dataObj);
                         fragment.setShouldShowCloseBtn(true);
-                        //fragment.setTitleText(activeObj.title.toUpperCase());
-                        //fragment.setFrameProductTime(((TheTakeProductFrame)activeObj.imeObject).frameTime);
                         mainMovieListener = null;
                         playerActivity.transitMainFragment(fragment);
-                        /*
-                        final String url = ((MovieMetaData.ShopItem) dataObj).externalUrl;
-                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-                        alertDialogBuilder.setTitle(getActivity().getResources().getString(com.wb.nextgenlibrary.R.string.dialog_leave_app));
-                        alertDialogBuilder.setMessage(getActivity().getResources().getString(com.wb.nextgenlibrary.R.string.dialog_follow_link));
-                        alertDialogBuilder.setPositiveButton(getActivity().getResources().getString(android.R.string.yes), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                                getActivity().startActivity(browserIntent);
-                            }
-                        });
-                        alertDialogBuilder.setNegativeButton(getActivity().getResources().getString(android.R.string.no), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                        alertDialogBuilder.show();*/
+                        NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_PRODUCT, ((MovieMetaData.ShopItem) headElement).getProductReportId(), null);
                     } else if (dataObj instanceof MovieMetaData.TriviaItem){
                         ECTrviaViewFragment fragment = new ECTrviaViewFragment();
                         fragment.setShouldShowCloseBtn(true);
@@ -236,7 +215,7 @@ public class IMEElementsGridFragment extends AbstractGridViewFragment implements
             }
         } else if (activeObj.imeObject instanceof TheTakeProductFrame){
             if (playerActivity != null){
-                TheTakeFrameProductsFragment fragment = new TheTakeFrameProductsFragment();
+                ShopFrameProductsFragment fragment = new ShopFrameProductsFragment();
                 fragment.setShouldShowCloseBtn(true);
                 fragment.setTitleText(activeObj.title.toUpperCase());
                 fragment.setFrameProductTime(((TheTakeProductFrame)activeObj.imeObject).frameTime);

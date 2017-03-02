@@ -132,6 +132,10 @@ public class TheTakeData{
             return productId;
         }
 
+        public String getProductReportId(){
+            return Long.toString(productId);
+        }
+
         public String getShareLinkUrl(){
             if (productDetail != null)
                 return productDetail.shareUrl;

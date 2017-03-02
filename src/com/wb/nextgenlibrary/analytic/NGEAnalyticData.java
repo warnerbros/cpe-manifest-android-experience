@@ -7,8 +7,10 @@ import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.activity.ActorGalleryActivity;
 import com.wb.nextgenlibrary.activity.ECGalleryActivity;
 import com.wb.nextgenlibrary.activity.ECSceneLocationActivity;
+import com.wb.nextgenlibrary.activity.ECShopItemDetailActivity;
 import com.wb.nextgenlibrary.activity.ECVideoActivity;
 import com.wb.nextgenlibrary.activity.OutOfMovieActivity;
+import com.wb.nextgenlibrary.activity.ShopCategoryActivity;
 import com.wb.nextgenlibrary.activity.StartupActivity;
 import com.wb.nextgenlibrary.activity.InMovieExperience;
 import com.wb.nextgenlibrary.activity.phone.NGEActorsActivity_Phone;
@@ -20,6 +22,8 @@ import com.wb.nextgenlibrary.fragment.IMEECMapViewFragment;
 import com.wb.nextgenlibrary.fragment.ActorListFragment;
 import com.wb.nextgenlibrary.fragment.ExtraMainTableFragment;
 import com.wb.nextgenlibrary.fragment.ShareClipFragment;
+import com.wb.nextgenlibrary.fragment.ShopCategoryGridFragment;
+import com.wb.nextgenlibrary.fragment.ShopItemDetailFragment;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 
 import java.util.HashMap;
@@ -66,6 +70,12 @@ public class NGEAnalyticData {
         ACTION_SET_MAP_TYPE("set_map_type"),
         ACTION_SELECT_LOCATION_MARKER("select_location_marker"),
         ACTION_SELECT_LOCATION_THUMBNAIL("select_location_thumbnail"),
+
+        // Shop Items
+        ACTION_SELECT_CATEGORY("select_category"),
+        ACTION_SELECT_PRODUCT("select_product"),
+        ACTION_SHARE_PRODUCT_LINK("select_share_product_link"),
+        ACTION_SELECT_SHOP_PRODUCT("select_shop_product"),
 
         // IME
         ACTION_SKIP_INTERSTITIAL("skip_interstitial"),
@@ -137,6 +147,7 @@ public class NGEAnalyticData {
         map.put(ECVideoViewFragment.class, "ime_action");
         map.put(IMEECMapViewFragment.class, "ime_action");
         map.put(ShareClipFragment.class, "ime_clipshare_action");
+        map.put(ShopItemDetailFragment.class, "ime_shop_action");
         classObjectToReportNameMap.put(InMovieExperience.class, map);
 
         // NGEActorsActivity_Phone
@@ -145,6 +156,16 @@ public class NGEAnalyticData {
         map.put(ActorDetailFragment.class, "extras_talent_action");
         classObjectToReportNameMap.put(NGEActorsActivity_Phone.class, map);
 
+        map = new HashMap<>() ;
+        map.put(null, "extras_shop_action");
+        map.put(ShopCategoryGridFragment.class, "extras_shop_action");
+        classObjectToReportNameMap.put(ShopCategoryActivity.class, map);
+
+        // ECShopItemDetailActivity
+        map = new HashMap<>() ;
+        map.put(null, "extras_shop_action");
+        map.put(ShopItemDetailFragment.class, "extras_shop_action");
+        classObjectToReportNameMap.put(ECShopItemDetailActivity.class, map);
     }
 
     public static void reportEvent(Activity activity, Fragment fragment, AnalyticAction action, String idValue, String nameValue){

@@ -4,7 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
     <fragment
-        android:name="com.wb.nextgenlibrary.fragment.TheTakeProductDetailFragment"
+        android:name="com.wb.nextgenlibrary.fragment.ShopItemDetailFragment"
         android:id="@+id/shop_item_detail_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
