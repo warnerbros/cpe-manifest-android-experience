@@ -301,6 +301,12 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
             setLocationItems(title, defaultSceneLocations);
     }
 
+    private interface SetLocationCallback {
+        void adjustProjectionToAvoidvOverlapping();
+    }
+
+    SetLocationCallback setLocationCallback = null;
+
     private void setLocationItems(String name, final List<LocationItem> sceneLocations){
         if (sceneLocations != null) {
             title = name;
@@ -310,6 +316,7 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
                 mapView.getMapAsync(new OnMapReadyCallback() {
                     @Override
                     public void onMapReady(final GoogleMap googleMap) {
+                        googleMap.setMaxZoomPreference(17);
 
 
                         LatLngBounds.Builder boundsBuilder = LatLngBounds.builder();
@@ -333,16 +340,32 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
                                 currentLevelview = null;
                         }
 
+                        final int paddingWhenReady = padding;
+
                         if (sceneLocations.size() == 1) {
-                            Projection projection = googleMap.getProjection();
-                            LatLng target = new LatLng(sceneLocations.get(0).latitude, sceneLocations.get(0).longitude);
-                            Point screenLocation = projection.toScreenLocation(target);
-                            screenLocation.y -= padding + 5;
-                            LatLng offsetTarget = projection.fromScreenLocation(screenLocation);
-                            googleMap.animateCamera(CameraUpdateFactory.newLatLng(offsetTarget));
+                            final LatLng target = new LatLng(sceneLocations.get(0).latitude, sceneLocations.get(0).longitude);
+                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(target, sceneLocations.get(0).zoom));
+
+                            setLocationCallback = new SetLocationCallback() {
+                                @Override
+                                public void adjustProjectionToAvoidvOverlapping() {
+                                    Projection projection = googleMap.getProjection();
+                                    Point screenLocation = projection.toScreenLocation(target);
+                                    screenLocation.y -= (paddingWhenReady + 5);
+                                    LatLng offsetTarget = projection.fromScreenLocation(screenLocation);
+                                    googleMap.animateCamera(CameraUpdateFactory.newLatLng(offsetTarget));
+                                }
+                            };
+
+
+
+
+                            //googleMap.animateCamera(CameraUpdateFactory.newLatLng(offsetTarget));
+
+                            //LatLng target = new LatLng(sceneLocations.get(0).latitude, sceneLocations.get(0).longitude);
                         } else {
 
-                            googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), padding + 5));
+                            googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 300));
                         }
 
 
@@ -358,6 +381,12 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
                                 googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
                                     @Override
                                     public void onCameraChange(CameraPosition camPos) {
+
+                                        if (setLocationCallback != null){
+                                            setLocationCallback.adjustProjectionToAvoidvOverlapping();
+                                            setLocationCallback = null;         //mark as consumed
+                                        }
+
                                         if (camPos.zoom > locationItem.zoom && location != null) {
                                             // set zoom 17 and disable zoom gestures so map can't be zoomed out
                                             // all the way
