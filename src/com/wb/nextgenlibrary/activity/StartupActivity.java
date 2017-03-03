@@ -528,7 +528,7 @@ public class StartupActivity extends NGEHideStatusBarActivity implements View.On
 
         }else /*if (orientation == Configuration.ORIENTATION_LANDSCAPE)*/{		// for tablets and Landscape mode
             nodeStyleData = mainStyle.getNodeStyleData(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-            if (!StringHelper.isEmpty(mainStyle.getBackgroundVideoUrl())) {
+            /*if (!StringHelper.isEmpty(mainStyle.getBackgroundVideoUrl())) {
                 Size videoSize = mainStyle.getBackgroundVideoSize();
                 Size screenSize = NextGenExperience.getScreenSize(NextGenExperience.getApplicationContext());
                 float videoAspectRatio = ((float) videoSize.getHeight()) /((float) videoSize.getWidth());
@@ -546,11 +546,11 @@ public class StartupActivity extends NGEHideStatusBarActivity implements View.On
                 buttonsReferenceFrameSize = new Size(videoParentFrame.getWidth(), videoParentFrame.getHeight());
                 buttonsReferenceFrame = videoParentFrame;
                 buttonsReferenceFrameSourceSize = startupVideoSize;
-            } else {
+            } else {*/
                 buttonsReferenceFrameSize = new Size(imageParentFrame.getWidth(), imageParentFrame.getHeight());
                 buttonsReferenceFrame = imageParentFrame;
                 buttonsReferenceFrameSourceSize = bgImageSize;
-            }
+            //}
         }
 
         if (nodeStyleData != null) {
