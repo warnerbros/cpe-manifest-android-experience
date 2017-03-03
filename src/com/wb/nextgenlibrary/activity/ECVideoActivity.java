@@ -59,7 +59,8 @@ public class ECVideoActivity extends AbstractECView implements ECVideoViewFragme
     public void onDestroy() {
         if (activePlayerInterface != null)
 			activePlayerInterface.setEcsAdaptor(null);
-
+		if (fragmentTransactionEngine != null)
+			fragmentTransactionEngine.onDestroy();
         super.onDestroy();
     }
 

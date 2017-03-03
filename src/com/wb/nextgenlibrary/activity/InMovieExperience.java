@@ -505,6 +505,8 @@ public class InMovieExperience extends AbstractNGEActivity implements NGEFragmen
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                if (InMovieExperience.this == null || InMovieExperience.this.isDestroyed() || InMovieExperience.this.isFinishing() )
+                    return;
                 if (imeBottomFragment != null)
                     imeBottomFragment.playbackStatusUpdate(playbackStatus, lastTimeCode);
 
@@ -686,7 +688,8 @@ public class InMovieExperience extends AbstractNGEActivity implements NGEFragmen
             imeUpdateTask = new TimerTask() {
                 @Override
                 public void run() {
-                    updateImeFragment(NextGenPlaybackStatus.TIMESTAMP_UPDATE, mainMovieFragment.getCurrentPosition());
+                    if (InMovieExperience.this != null && !InMovieExperience.this.isFinishing() && !InMovieExperience.this.isDestroyed())
+                        updateImeFragment(NextGenPlaybackStatus.TIMESTAMP_UPDATE, mainMovieFragment.getCurrentPosition());
                 }
             };
             imeUpdateTimer.scheduleAtFixedRate(imeUpdateTask, 0, 1000);
@@ -766,6 +769,7 @@ public class InMovieExperience extends AbstractNGEActivity implements NGEFragmen
 
     @Override
     public void onDestroy() {
+        super.onDestroy();
         if (mediaController != null){
             mediaController.onPlayerDestroy();
         }
@@ -777,13 +781,14 @@ public class InMovieExperience extends AbstractNGEActivity implements NGEFragmen
             imeUpdateTimer.cancel();
             imeUpdateTimer = null;
         }
+        if (fragmentTransactionEngine != null)
+            fragmentTransactionEngine.onDestroy();
         if (commentaryAudioPlayer != null){
             if (isCommentaryOn)
                 commentaryAudioPlayer.stop();
             commentaryAudioPlayer.release();
         }
 
-        super.onDestroy();
 
     }
 

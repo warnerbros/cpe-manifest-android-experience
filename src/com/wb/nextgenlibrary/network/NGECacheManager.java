@@ -176,12 +176,12 @@ public class NGECacheManager {
 				return results;
 			}
 		} catch (FileNotFoundException e) {
-			NextGenLogger.e(F.TAG, "NGECacheManager.get", e);
+		 	//NextGenLogger.e(F.TAG, "NGECacheManager.get", e);
 			
 		} catch (IOException e) {
-			NextGenLogger.e(F.TAG, "NGECacheManager.get", e);
+			//NextGenLogger.e(F.TAG, "NGECacheManager.get", e);
 		} catch (Exception ex){
-			NextGenLogger.e(F.TAG, "NGECacheManager.get", ex);
+			//NextGenLogger.e(F.TAG, "NGECacheManager.get", ex);
 
 		}
 		return null;

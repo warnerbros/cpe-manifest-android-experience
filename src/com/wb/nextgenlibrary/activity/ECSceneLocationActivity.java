@@ -159,6 +159,8 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
     public void onDestroy() {
         sliderTextAdapter = null;
         locationECsAdapter = null;
+        if (fragmentTransactionEngine != null)
+            fragmentTransactionEngine.onDestroy();
         if (sliderTitleText != null)
             sliderTitleText.setAdapter(null);
         if (locationECRecyclerView != null)

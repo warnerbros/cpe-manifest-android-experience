@@ -7,13 +7,43 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.source.dash.DashMediaSource;
+import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
+import com.google.android.exoplayer2.source.hls.HlsMediaSource;
+import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource;
+import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
+import com.google.android.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.google.android.exoplayer2.upstream.HttpDataSource;
+import com.google.android.exoplayer2.util.Util;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.wb.nextgenlibrary.R;
@@ -21,12 +51,13 @@ import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.interfaces.ECVideoPlayerInterface;
 import com.wb.nextgenlibrary.interfaces.IMEVideoStatusListener;
+import com.wb.nextgenlibrary.interfaces.NGEPlayerInterface;
+import com.wb.nextgenlibrary.util.Size;
 import com.wb.nextgenlibrary.util.utils.F;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.videoview.IVideoViewActionListener;
-import com.wb.nextgenlibrary.videoview.ObservableVideoView;
 import com.wb.nextgenlibrary.widget.ECMediaController;
 import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
 
@@ -34,8 +65,8 @@ import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
 /**
  * Created by gzcheng on 3/31/16.
  */
-public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayerInterface, IVideoViewActionListener {
-    protected ObservableVideoView videoView;
+public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayerInterface, IVideoViewActionListener{
+
 
     ECMediaController mediaController;
     //protected TextView selectedECNameTextView;
@@ -61,6 +92,11 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
     IMEVideoStatusListener videoStatusListener;
 
     FixedAspectRatioFrameLayout.Priority aspectFramePriority = null;
+
+    private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
+    private DataSource.Factory mediaDataSourceFactory;
+    protected SimpleExoPlayerView videoView;
+    private SimpleExoPlayer player;
 
     int resumeTime = -1;
 
@@ -99,12 +135,32 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        videoView = (ObservableVideoView) view.findViewById(R.id.ec_video_view);
-        mediaController = new ECMediaController(getActivity(), videoView);
-        //selectedECNameTextView = (TextView)view.findViewById(R.id.ec_content_name);
-        //descriptionTextView = (TextView)view.findViewById(R.id.ec_content_runtime);
+        videoView = (SimpleExoPlayerView) view.findViewById(R.id.ec_video_view);
+        mediaDataSourceFactory = buildDataSourceFactory(true);
+        if (videoView != null){
+            @SimpleExoPlayer.ExtensionRendererMode int extensionRendererMode = SimpleExoPlayer.EXTENSION_RENDERER_MODE_ON;//SimpleExoPlayer.EXTENSION_RENDERER_MODE_OFF;
+            TrackSelection.Factory videoTrackSelectionFactory =
+                            new AdaptiveVideoTrackSelection.Factory(BANDWIDTH_METER);
+            TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+            //trackSelectionHelper = new TrackSelectionHelper(trackSelector, videoTrackSelectionFactory);
+            player = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector, new DefaultLoadControl(),
+                    null, extensionRendererMode);
+            player.setPlayWhenReady(false);
+            videoView.setPlayer(player);
+            //videoView.setOnClickListener(showButtonOnClickLister);
+        }
+        mediaController = new ECMediaController(getActivity(), new NGEPlayerInterface() {
+            @Override
+            public boolean isPlaying() {
+                if (player != null) {
+                    return player.getPlaybackState() == ExoPlayer.STATE_READY && player.getPlayWhenReady();
+                }
+                return false;
+            }
+        });
+        mediaController.setMediaPlayer(playerControl);
         previewImageView = (ImageView)view.findViewById(R.id.ec_video_preview_image);
         previewFrame = (RelativeLayout)view.findViewById(R.id.ec_video_preview_image_frame);
         previewPlayBtn = (ImageButton)view.findViewById(R.id.ec_video_preview_playButton);
@@ -130,44 +186,98 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
                 public void onClick(View v) {
                     if (previewFrame != null)
                         previewFrame.setVisibility(View.GONE);
-                    videoView.start();
+                    playerControl.start();
                     NGEAnalyticData.reportEvent(getActivity(), ECVideoViewFragment.this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_VIDEO, selectedAVItem.videoId, null);
                 }
             });
         }
-        //videoView.setMediaController(mediaController);
-        videoView.setMediaController(mediaController);
-        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+
+        player.addListener(new ExoPlayer.EventListener() {
+            boolean isFreshloaded = true;
             private Handler mHandler = new Handler();
             int counter = COUNT_DOWN_SECONDS;
             @Override
-            public void onCompletion(MediaPlayer mp) {
-                onVideoComplete();
-                if (shouldExitWhenComplete){
-                    closeBtn.callOnClick();
-                }else if (ecsAdaptor != null) {
-                    if (ecsAdaptor.shouldStartCountDownForNext()){
-                        //new
-                        startRepeatingTask();
-                    }else {
-                        if (getActivity() != null) {                // only do this if the activity is still alive
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    videoView.seekTo(0);
-                                    if (previewFrame != null) {
-                                        if (!StringHelper.isEmpty(selectedAVItem.getPosterImgUrl())) {
-                                            Picasso.with(getActivity()).load(selectedAVItem.getPreviewImageUrl()).fit().into(previewImageView);
+            public void onTimelineChanged(Timeline timeline, Object manifest) {
+
+            }
+
+            @Override
+            public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+
+            }
+
+            @Override
+            public void onLoadingChanged(boolean isLoading) {
+
+            }
+
+            @Override
+            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+                switch(playbackState) {
+                    case ExoPlayer.STATE_ENDED:
+                        onVideoComplete();
+                        if (shouldExitWhenComplete){                                // exit this
+                            closeBtn.callOnClick();
+                        }else if (ecsAdaptor != null) {
+                            if (ecsAdaptor.shouldStartCountDownForNext()){          // try to play the next clip
+                                //new
+                                startRepeatingTask();
+                            }else {                                                 // show the preview thumbnail
+                                if (getActivity() != null) {                        // only do this if the activity is still alive
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            player.seekTo(0);
+                                            player.setPlayWhenReady(false);
+                                            shouldAutoPlay = false;
+                                            resumeTime = 0;
+                                            if (previewFrame != null) {
+                                                if (!StringHelper.isEmpty(selectedAVItem.getPosterImgUrl())) {
+                                                    Picasso.with(getActivity()).load(selectedAVItem.getPreviewImageUrl()).fit().into(previewImageView);
+                                                }
+                                                previewFrame.setVisibility(View.VISIBLE);
+                                            }
+                                            if (previewPlayBtn != null)
+                                                previewPlayBtn.setVisibility(View.VISIBLE);
                                         }
-                                        previewFrame.setVisibility(View.VISIBLE);
-                                    }
-                                    if (previewPlayBtn != null)
-                                        previewPlayBtn.setVisibility(View.VISIBLE);
+                                    });
                                 }
-                            });
+                            }
                         }
-                    }
+                        break;
+                    case ExoPlayer.STATE_READY:
+                        int startTime = previousPlaybackTime;
+                        if (resumeTime > 0)
+                            startTime = resumeTime;
+
+                        if (shouldAutoPlay || resumeTime > 0) {
+
+                            previewFrame.setVisibility(View.GONE);
+                            previewPlayBtn.setVisibility(View.GONE);
+                            if (player.getPlayWhenReady()) {
+                                if (startTime != 0) {
+                                    player.seekTo(startTime);
+                                }
+                                playerControl.start();
+                            }
+                        }else {
+                            if (previewPlayBtn != null){
+                                previewPlayBtn.setVisibility(View.VISIBLE);
+                            }
+                            shouldAutoPlay = true;
+                        }
+                        break;
                 }
+            }
+
+            @Override
+            public void onPlayerError(ExoPlaybackException error) {
+
+            }
+
+            @Override
+            public void onPositionDiscontinuity() {
+
             }
             Runnable mStatusChecker = new Runnable() {
                 @Override
@@ -209,7 +319,6 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
                     }
                 }
             };
-
             void startRepeatingTask() {
                 counter = 5;
                 mStatusChecker.run();
@@ -220,10 +329,7 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
             }
         });
 
-        videoView.setOnPreparedListener(new PreparedListener());
         videoView.requestFocus();
-
-        videoView.setVideoViewListener(getVideoViewActionListern());
 
         bgImageView = (ImageView) view.findViewById(R.id.ec_video_frame_bg);
 
@@ -237,7 +343,7 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
 
     boolean isClipPlaying;
     //******* Observe videoView Playback
-    protected IVideoViewActionListener getVideoViewActionListern(){
+    protected IVideoViewActionListener getVideoViewActionListerner(){
         return new IVideoViewActionListener() {
             @Override
             public void onVideoPause() {
@@ -279,19 +385,19 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
     @Override
     public void onVideoPause() {
         if (isClipPlaying)
-            videoView.start();
+            player.setPlayWhenReady(true);
     }
 
     @Override
     public void onVideoStart() {
         if (isClipPlaying)
-            videoView.pause();
+            player.setPlayWhenReady(false);
     }
 
     @Override
     public void onVideoResume() {
         if (isClipPlaying)
-            videoView.pause();
+            player.setPlayWhenReady(false);
 
     }
 
@@ -312,8 +418,8 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
 
     @Override
     public int getCurrentPlaybackTimeMillisecond(){
-        if (videoView != null)
-            return videoView.getCurrentPosition();
+        if (player != null)
+            return (int)player.getCurrentPosition();
         else
             return 0;
     }
@@ -324,49 +430,36 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
         aspectFramePriority = priority;
     }
 
-    private class PreparedListener implements MediaPlayer.OnPreparedListener {
-        @Override
-        public void onPrepared(MediaPlayer mp) {
-            int startTime = previousPlaybackTime;
-            if (resumeTime > 0)
-                startTime = resumeTime;
-
-            if (shouldAutoPlay || resumeTime > 0) {
-
-                previewFrame.setVisibility(View.GONE);
-                previewPlayBtn.setVisibility(View.GONE);
-                if (startTime != 0){
-                    videoView.seekTo(startTime);
-                    //added: tr 9/19
-                    mp.setOnSeekCompleteListener(new MediaPlayer.OnSeekCompleteListener() {
-                        @Override
-                        public void onSeekComplete(MediaPlayer mp) {
-                            videoView.start();
-                        }
-                    });
-                }else
-                    videoView.start();
-            }else {
-                if (previewPlayBtn != null){
-                    previewPlayBtn.setVisibility(View.VISIBLE);
-                }
-                shouldAutoPlay = true;
-            }
-        }
-    }
-
     @Override
     public void onPause(){
         super.onPause();
-        videoView.pause();
-        previousPlaybackTime = videoView.getCurrentPosition();
+        player.setPlayWhenReady(false);
+        previousPlaybackTime = (int)player.getCurrentPosition();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        videoView.setVisibility(View.VISIBLE);
-
+        if (videoView != null && mediaController != null) {
+            videoView.setVisibility(View.VISIBLE);
+            mediaController.setAnchorView(videoView);
+            videoView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                        if (mediaController.isShowing()) {
+                            mediaController.hide();
+                            //debugRootView.setVisibility(View.GONE);
+                        } else {
+                            mediaController.show();
+                        }
+                    } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                        view.performClick();
+                    }
+                    return true;
+                }
+            });
+        }
         if (bSetOnResume){
             bSetOnResume = false;
             setAudioVisualItem(selectedAVItem);
@@ -375,9 +468,13 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
 
     @Override
     public void onDestroyView(){
-        videoView.stopPlayback();
+        if (videoView != null){
+            player.stop();
+            videoView.setPlayer(null);
+        }
+        /*videoView.stopPlayback();
         videoView.setVideoURI(null);
-        videoView.setMediaController(null);
+        videoView.setMediaController(null);*/
         mediaController.onPlayerDestroy();
         mediaController = null;
 
@@ -425,8 +522,8 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
                 //    descriptionTextView.setText(avItem.getSummary());
                 //}
                 if (!shouldAutoPlay) {
-                    if(videoView.isPlaying())
-                        videoView.stopPlayback();
+                    if(playerControl.isPlaying())
+                        player.setPlayWhenReady(false);
                     if (previewFrame != null) {
                         previewFrame.setVisibility(View.VISIBLE);
                         previewPlayBtn.setVisibility(View.GONE);
@@ -442,7 +539,11 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
                         previewPlayBtn.setVisibility(View.GONE);
                     }
                 }
-                videoView.setVideoURI(Uri.parse(avItem.getVideoUrl()));
+                MediaSource mediaSource = buildMediaSource(Uri.parse(avItem.getVideoUrl()));
+                //new HlsMediaSource(Uri.parse(mainStyle.getBackgroundVideoUrl()), mediaDataSourceFactory, new Handler(),null);
+                //buildMediaSource(nonDRMPlaybackContent.contentUri, nonDRMPlaybackContent.contentType, EXTENSION_EXTRA);
+                player.prepare(mediaSource, true, true);
+                //videoView.setVideoURI(Uri.parse(avItem.getVideoUrl()));
                 if (mediaController != null) {
                     mediaController.reset();
                 }
@@ -465,7 +566,111 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
     }
 
     public void stopPlayback(){
-        videoView.stopPlayback();
+        playerControl.pause();
     }
 
+    MediaController.MediaPlayerControl playerControl = new MediaController.MediaPlayerControl() {
+        @Override
+        public void start() {
+            if (player != null)
+                player.setPlayWhenReady(true);
+            getVideoViewActionListerner().onVideoStart();
+
+        }
+
+        @Override
+        public void pause() {
+            if (player != null)
+                player.setPlayWhenReady(false);
+            getVideoViewActionListerner().onVideoPause();
+
+        }
+
+        @Override
+        public int getDuration() {
+            if (player != null)
+                return (int)player.getDuration();
+            return 0;
+        }
+
+        @Override
+        public int getCurrentPosition() {
+            if (player != null)
+                return (int)player.getCurrentPosition();
+            return 0;
+        }
+
+        @Override
+        public void seekTo(int pos) {
+            if (player != null)
+                player.seekTo(pos);
+        }
+
+        @Override
+        public boolean isPlaying() {
+            if (player != null)
+                return player.getPlaybackState() == ExoPlayer.STATE_READY && player.getPlayWhenReady();
+            return false;
+        }
+
+        @Override
+        public int getBufferPercentage() {
+            if (player != null)
+                return player.getBufferedPercentage();
+            return 0;
+        }
+
+        @Override
+        public boolean canPause() {
+            return true;
+        }
+
+        @Override
+        public boolean canSeekBackward() {
+            return false;
+        }
+
+        @Override
+        public boolean canSeekForward() {
+            return false;
+        }
+
+        @Override
+        public int getAudioSessionId() {
+            return 0;
+        }
+    };
+
+    private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
+        DefaultBandwidthMeter bandwidthMeter = useBandwidthMeter ? BANDWIDTH_METER : null;
+        return new DefaultDataSourceFactory(getActivity(), bandwidthMeter,
+                buildHttpDataSourceFactory(useBandwidthMeter));
+
+    }
+
+    private HttpDataSource.Factory buildHttpDataSourceFactory(boolean useBandwidthMeter) {
+        String userAgent = Util.getUserAgent(getActivity(), "NextGenExoPlayer");
+        DefaultBandwidthMeter bandwidthMeter = useBandwidthMeter ? BANDWIDTH_METER : null;
+        return new DefaultHttpDataSourceFactory(userAgent, bandwidthMeter);
+    }
+
+    private MediaSource buildMediaSource(Uri uri) {
+        int type = Util.inferContentType(uri.getLastPathSegment());
+        switch (type) {
+            case C.TYPE_SS:
+                return new SsMediaSource(uri, buildDataSourceFactory(false),
+                        new DefaultSsChunkSource.Factory(mediaDataSourceFactory), new Handler(), null);
+            case C.TYPE_DASH:
+                return new DashMediaSource(uri, buildDataSourceFactory(false),
+                        new DefaultDashChunkSource.Factory(mediaDataSourceFactory), new Handler(), null);
+            case C.TYPE_HLS:
+                return new HlsMediaSource(uri, mediaDataSourceFactory, new Handler(), null);
+            case C.TYPE_OTHER:
+                return new ExtractorMediaSource(uri, mediaDataSourceFactory, new DefaultExtractorsFactory(),
+                        new Handler(), null);
+            default: {
+                throw new IllegalStateException("Unsupported type: " + type);
+            }
+        }
+    }
 }

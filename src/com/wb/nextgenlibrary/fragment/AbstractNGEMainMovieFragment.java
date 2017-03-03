@@ -112,6 +112,14 @@ public abstract class AbstractNGEMainMovieFragment extends Fragment implements N
         }
     }
 
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        nextGenVideoViewListener = null;
+        completionListener = null;
+        loadingView = null;
+    }
+
     /*
         If your main movie fragment cannot handle switching commentary track.
         you must implement this function to mute/unmute main feature audio for NGE library to use

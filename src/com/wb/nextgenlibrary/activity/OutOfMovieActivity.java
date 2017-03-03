@@ -67,6 +67,13 @@ public class OutOfMovieActivity extends AbstractNGEActivity implements NGEFragme
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
     }
 
+    public void onDestroy(){
+        super.onDestroy();
+
+        if (fragmentTransactionEngine != null)
+            fragmentTransactionEngine.onDestroy();
+    }
+
     //*************** NGEFragmentTransactionInterface ***************
     @Override
     public void transitRightFragment(Fragment nextFragment){

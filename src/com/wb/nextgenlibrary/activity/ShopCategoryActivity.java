@@ -82,6 +82,9 @@ public class ShopCategoryActivity extends AbstractNGEActivity implements NGEFrag
     @Override
     public void onDestroy(){
         categoryListAdaptor = null;
+
+        if (fragmentTransactionEngine != null)
+            fragmentTransactionEngine.onDestroy();
         super.onDestroy();
     }
 

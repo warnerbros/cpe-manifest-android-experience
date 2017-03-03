@@ -60,6 +60,13 @@ public class ECGalleryActivity extends AbstractECView {
         galleryFragment.onFullScreenChange(bFullScreen);
     }
 
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        if (fragmentTransactionEngine != null)
+            fragmentTransactionEngine.onDestroy();
+    }
+
 
     void onFullScreenChange(boolean bFullscreen){
     }

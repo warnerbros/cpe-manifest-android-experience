@@ -74,7 +74,7 @@ public class ShareClipFragment extends ECVideoViewFragment implements View.OnCli
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.share_clip_button) {
-            videoView.pause();
+            playerControl.pause();
             String videoUrl = selectedAVItem.getVideoUrl();
 
             NextGenExperience.getNextGenEventHandler().handleShareLink(null, this, videoUrl);
@@ -149,7 +149,7 @@ public class ShareClipFragment extends ECVideoViewFragment implements View.OnCli
         if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
 
         } else if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
-            videoView.pause();
+            playerControl.pause();
         }
     }
 
