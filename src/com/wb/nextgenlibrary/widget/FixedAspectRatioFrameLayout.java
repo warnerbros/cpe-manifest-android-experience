@@ -173,6 +173,14 @@ public class FixedAspectRatioFrameLayout extends FrameLayout
         return priority;
     }
 
+    public int getAspectRatioWidth(){
+        return mAspectRatioWidth;
+    }
+
+    public int getAspectRatioHeight(){
+        return mAspectRatioHeight;
+    }
+
     public void copyFrameParams(FixedAspectRatioFrameLayout otherFixedFrame){
         if (otherFixedFrame != null){
             mAspectRatioHeight = otherFixedFrame.mAspectRatioHeight;

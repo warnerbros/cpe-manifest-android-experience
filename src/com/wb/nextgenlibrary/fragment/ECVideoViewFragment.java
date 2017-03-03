@@ -233,7 +233,8 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
                                             resumeTime = 0;
                                             if (previewFrame != null) {
                                                 if (!StringHelper.isEmpty(selectedAVItem.getPosterImgUrl())) {
-                                                    Picasso.with(getActivity()).load(selectedAVItem.getPreviewImageUrl()).fit().into(previewImageView);
+                                                    NextGenGlide.load(getActivity(), selectedAVItem.getPreviewImageUrl()).fitCenter().into(previewImageView);
+                                                    //Picasso.with(getActivity()).load(selectedAVItem.getPreviewImageUrl()).fit().into(previewImageView);
                                                 }
                                                 previewFrame.setVisibility(View.VISIBLE);
                                             }
@@ -252,9 +253,9 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
 
                         if (shouldAutoPlay || resumeTime > 0) {
 
-                            previewFrame.setVisibility(View.GONE);
-                            previewPlayBtn.setVisibility(View.GONE);
                             if (player.getPlayWhenReady()) {
+                                previewFrame.setVisibility(View.GONE);
+                                previewPlayBtn.setVisibility(View.GONE);
                                 if (startTime != 0) {
                                     player.seekTo(startTime);
                                 }
@@ -530,7 +531,8 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
                     }
                     if (!StringHelper.isEmpty(selectedAVItem.getPosterImgUrl())) {
 
-                        Picasso.with(getActivity()).load(selectedAVItem.getPreviewImageUrl()).fit().into(previewImageView);
+                        NextGenGlide.load(getActivity(), selectedAVItem.getPreviewImageUrl()).fitCenter().into(previewImageView);
+                        //Picasso.with(getActivity()).load(selectedAVItem.getPreviewImageUrl()).fit().into(previewImageView);
 
                     }
                 }else{
@@ -673,4 +675,13 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
             }
         }
     }
+
+    public void onFullScreenChange(boolean bFullscreen){
+        super.onFullScreenChange(shouldShowFullScreenBtn);
+        if (bFullscreen)
+            getView().setBackgroundColor(getActivity().getResources().getColor(android.R.color.black));
+        else
+            getView().setBackgroundColor(getActivity().getResources().getColor(android.R.color.transparent));
+    }
+
 }

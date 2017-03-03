@@ -25,6 +25,7 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
+import com.wb.nextgenlibrary.util.NGEUtils;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
@@ -47,6 +48,7 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
 
     String bgImageUrl = null;
     FixedAspectRatioFrameLayout.Priority aspectFramePriority = null;
+	int aspectWidth=1, aspectHeight=1;
 
     boolean bSetOnResume= false;
 
@@ -99,6 +101,8 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
 
 		aspectRatioFrame = (FixedAspectRatioFrameLayout) view.findViewById(R.id.gallery_aspect_ratio_frame);
         if (aspectRatioFrame != null){
+			aspectWidth = aspectRatioFrame.getAspectRatioWidth();
+			aspectHeight = aspectRatioFrame.getAspectRatioHeight();
             aspectRatioFrame.setAspectRatioPriority(aspectFramePriority);
         }
 
@@ -193,6 +197,12 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
     public void onFullScreenChange(boolean isContentFullScreen){
         super.onFullScreenChange(isContentFullScreen);
         adapter.notifyDataSetChanged();
+		if (aspectRatioFrame != null){
+			if (isContentFullScreen){
+				aspectRatioFrame.setAspectRatio(getActivity().getWindowManager().getDefaultDisplay().getWidth(), getActivity().getWindowManager().getDefaultDisplay().getHeight());
+			}else
+				aspectRatioFrame.setAspectRatio(aspectWidth, aspectHeight);
+		}
 
     }
 
