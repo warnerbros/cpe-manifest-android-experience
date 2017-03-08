@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.wb.nextgenlibrary"
 	android:installLocation="auto"
-	android:versionCode="19"
-	android:versionName="v1.1.2" >
+	android:versionCode="20"
+	android:versionName="v2.0.0" >
 	<uses-sdk
 		android:minSdkVersion="18"
 		android:targetSdkVersion="21" />
