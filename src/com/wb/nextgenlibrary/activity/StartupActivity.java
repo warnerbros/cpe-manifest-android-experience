@@ -611,6 +611,7 @@ public class StartupActivity extends NGEHideStatusBarActivity implements View.On
 
             if (extraBtnImageData != null && playBtnImageData != null) {
                 double buttonRatio = (double) width / (double) playBtnImageData.width;
+
                 ViewGroup.LayoutParams playBtnParams = null;
                 if (playMovieButton != null) {
                     playBtnParams = playMovieButton.getLayoutParams();
@@ -640,6 +641,12 @@ public class StartupActivity extends NGEHideStatusBarActivity implements View.On
                     ViewGroup.LayoutParams buttonsParams = extraButton.getLayoutParams();
 
                     int newWidth = (int) ((double) extraBtnImageData.width * buttonRatio);
+
+                    if (newWidth > width){
+                        newWidth = width - 20;
+                        buttonRatio = (double)newWidth / (double)extraBtnImageData.width;
+                    }
+
                     int newHeight = (int) ((double) extraBtnImageData.height * buttonRatio);
                     buttonsParams.height = newHeight;
                     buttonsParams.width = newWidth;

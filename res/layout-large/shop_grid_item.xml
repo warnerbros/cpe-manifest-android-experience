@@ -13,7 +13,7 @@
         nextgen:aspectRatioWidth="352"
         nextgen:priority="WIDTH_PRIORITY">
         <com.wb.nextgenlibrary.widget.DotIndicatorImageView
-            android:id="@+id/the_take_item_thumbnail"
+            android:id="@+id/shop_item_thumbnail"
             nextgen:indicatorDrawable="@drawable/shopping_bullseye"
             android:scaleType="centerInside"
             android:layout_width="fill_parent"
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <TextView
-            android:id="@+id/the_take_brand_name"
+            android:id="@+id/shop_brand_name"
             android:layout_width="wrap_content"
             android:text="brand"
             android:textColor="@android:color/darker_gray"
@@ -33,7 +33,7 @@
             android:fontFamily="sans-serif-condensed"
             android:layout_height="wrap_content"/>
         <TextView
-            android:id="@+id/the_take_product_name"
+            android:id="@+id/shop_product_name"
             android:layout_width="wrap_content"
             android:text="product"
             android:textColor="@android:color/white"

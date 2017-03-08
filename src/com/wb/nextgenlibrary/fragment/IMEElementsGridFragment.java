@@ -189,7 +189,7 @@ public class IMEElementsGridFragment extends AbstractGridViewFragment implements
                     } else if (dataObj instanceof MovieMetaData.ShopItem) {
 
                         ShopItemDetailFragment fragment = new ShopItemDetailFragment();
-                        fragment.setContentViewId(R.layout.the_take_product_view);
+                        fragment.setContentViewId(R.layout.ime_shop_product_view);
                         fragment.setProduct((MovieMetaData.ShopItem)dataObj);
                         fragment.setShouldShowCloseBtn(true);
                         mainMovieListener = null;

@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/white">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:background="@android:color/transparent"
-        android:padding="@dimen/spacing_normal">
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:weightSum="3"
+        android:padding="@dimen/spacing_normal"
+        android:orientation="horizontal">
         <ImageView
-            android:id="@+id/the_take_product_image_full"
             android:paddingTop="@dimen/spacing_normal"
+            android:id="@+id/shop_product_image_full"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:background="@android:color/transparent"
             android:scaleType="fitStart"
             android:layout_weight="1"/>
 
@@ -24,7 +25,7 @@
             android:layout_weight="1"
             android:orientation="vertical">
             <TextView
-                android:id="@+id/the_take_product_match"
+                android:id="@+id/shop_product_match"
                 android:textColor="@color/white"
                 android:textStyle="italic"
                 android:gravity="left"
@@ -34,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <TextView
-                android:id="@+id/the_take_product_brand_name"
+                android:id="@+id/shop_product_brand_name"
                 android:textColor="@android:color/darker_gray"
                 android:gravity="left"
                 android:fontFamily="sans-serif-condensed"
@@ -42,7 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <TextView
-                android:id="@+id/the_take_product_name"
+                android:id="@+id/shop_product_name"
                 android:textColor="@color/white"
                 android:gravity="left"
                 android:fontFamily="sans-serif-condensed"
@@ -51,7 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <TextView
-                android:id="@+id/the_take_product_price"
+                android:id="@+id/shop_product_price"
                 android:textColor="@color/white"
                 android:paddingBottom="@dimen/spacing_normal"
                 android:gravity="left"
@@ -63,7 +64,7 @@
                 android:layout_margin="@dimen/spacing_xsmall"
                 android:id="@+id/shop_at_the_take_button"
                 android:text="@string/shop_at_the_take"
-                android:textColor="@color/white"
+                android:textColor="@color/selectable_text_white_grey_color"
                 android:fontFamily="sans-serif-condensed"
                 android:textSize="@dimen/textMedium"
                 android:background="@drawable/red_rounded_corner_drawable"
@@ -81,26 +82,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"/>
-            <Button
-                android:layout_margin="@dimen/spacing_xsmall"
-                android:id="@+id/send_link_button2"
-                android:text="hehehaha"
-                android:background="@drawable/red_rounded_corner_drawable"
-                android:textColor="@color/selectable_text_white_grey_color"
-                android:fontFamily="sans-serif-condensed"
-                android:textSize="@dimen/textMedium"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="visible"/>
         </LinearLayout>
-        <ImageButton
-            android:id="@+id/close_button"
-            android:layout_width="@dimen/close_icon_dimen"
-            android:layout_height="@dimen/close_icon_dimen"
-            android:src="@drawable/close_x_circle"
-            android:scaleType="centerInside"
-            android:layout_alignParentRight="true"
-            android:visibility="gone"
-            android:background="@android:color/transparent"/>
     </LinearLayout>
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2">
+
+    </LinearLayout>
+</LinearLayout>

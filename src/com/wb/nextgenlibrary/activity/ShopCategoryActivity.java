@@ -50,7 +50,7 @@ public class ShopCategoryActivity extends AbstractNGEActivity implements NGEFrag
     public void onCreate(Bundle savedState) {
         super.onCreate(savedState);
 
-        setContentView(R.layout.the_take_shop_category_view);
+        setContentView(R.layout.shop_category_view);
 
         String groupId = getIntent().getStringExtra(F.ID);
         if (!StringHelper.isEmpty(F.ID)){
@@ -190,7 +190,7 @@ public class ShopCategoryActivity extends AbstractNGEActivity implements NGEFrag
 
             if (convertView == null) {
                 LayoutInflater infalInflater = getLayoutInflater();
-                convertView = infalInflater.inflate(R.layout.the_take_list_item_row, null);
+                convertView = infalInflater.inflate(R.layout.shop_list_item_row, null);
             }
 
             TextView txtListChild = (TextView) convertView
@@ -235,7 +235,7 @@ public class ShopCategoryActivity extends AbstractNGEActivity implements NGEFrag
             String headerTitle = getGroup(groupPosition).categoryName;
             if (convertView == null) {
                 LayoutInflater infalInflater = getLayoutInflater();
-                convertView = infalInflater.inflate(R.layout.the_take_list_group_row, null);
+                convertView = infalInflater.inflate(R.layout.shop_list_group_row, null);
             }
 
             TextView lblListHeader = (TextView) convertView

@@ -4,7 +4,7 @@
     android:layout_height="fill_parent">
     <GridView
         android:layout_width="fill_parent"
-        android:id="@+id/the_take_items_grid"
+        android:id="@+id/shop_items_grid"
         android:verticalSpacing="@dimen/spacing_normal"
         android:horizontalSpacing="@dimen/spacing_normal"
         android:layout_height="fill_parent"

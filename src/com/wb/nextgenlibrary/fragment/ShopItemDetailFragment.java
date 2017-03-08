@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.activity.ECSceneLocationActivity;
 import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.data.TheTakeData.TheTakeProduct;
@@ -32,7 +31,7 @@ public class ShopItemDetailFragment extends AbstractNextGenFragment implements V
 
     String titleText = "";
 
-    int contentViewId = R.layout.the_take_product_view;
+    int contentViewId = R.layout.shop_product_view;
 
     public void setContentViewId(int viewId){
         contentViewId = viewId;
@@ -52,11 +51,11 @@ public class ShopItemDetailFragment extends AbstractNextGenFragment implements V
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        productPoster = (ImageView)view.findViewById(R.id.the_take_product_image_full);
-        matchStatus = (TextView)view.findViewById(R.id.the_take_product_match);
-        brandText = (TextView)view.findViewById(R.id.the_take_product_brand_name);
-        nameText = (TextView)view.findViewById(R.id.the_take_product_name);
-        priceText = (TextView)view.findViewById(R.id.the_take_product_price);
+        productPoster = (ImageView)view.findViewById(R.id.shop_product_image_full);
+        matchStatus = (TextView)view.findViewById(R.id.shop_product_match);
+        brandText = (TextView)view.findViewById(R.id.shop_product_brand_name);
+        nameText = (TextView)view.findViewById(R.id.shop_product_name);
+        priceText = (TextView)view.findViewById(R.id.shop_product_price);
 
         shopAtTheTakeBtn = (Button)view.findViewById(R.id.shop_at_the_take_button);
         if (shopAtTheTakeBtn != null)
@@ -129,12 +128,14 @@ public class ShopItemDetailFragment extends AbstractNextGenFragment implements V
             brandText.setText(product.getProductBrand());
             nameText.setText(product.getProductName());
             priceText.setText("");
+            priceText.setVisibility(View.GONE);
             if (!StringHelper.isEmpty(product.getPurchaseLinkUrl())) {
                 shopAtTheTakeBtn.setVisibility(View.VISIBLE);
+                sendLinkBtn.setVisibility(View.VISIBLE);
             } else {
                 shopAtTheTakeBtn.setVisibility(View.GONE);
+                sendLinkBtn.setVisibility(View.GONE);
             }
-            sendLinkBtn.setVisibility(View.GONE);
         }
     }
 

@@ -37,7 +37,7 @@ public class ShopFrameProductsFragment extends AbstractNextGenFragment {
     long frameTime = 0L;
     @Override
     public int getContentViewId(){
-        return R.layout.the_take_frame_products_view;
+        return R.layout.shop_frame_products_view;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class ShopFrameProductsFragment extends AbstractNextGenFragment {
 
         setTitleText(titleText);
         productDetailFragment = (ShopItemDetailFragment)getChildFragmentManager().findFragmentById(R.id.frame_product_detail_fragment);
-        productDetailFragment.setContentViewId(R.layout.the_take_product_view);
+        productDetailFragment.setContentViewId(R.layout.shop_product_view);
 
         frameProductsRecyclerView = (RecyclerView) view.findViewById(R.id.frame_product_list);
         if (frameProductsRecyclerView != null){
@@ -160,7 +160,7 @@ public class ShopFrameProductsFragment extends AbstractNextGenFragment {
 
         @Override
         public FrameProductViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.the_take_fram_product_cardview, viewGroup, false);
+            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.shop_frame_product_cardview, viewGroup, false);
             FrameProductViewHolder pvh = new FrameProductViewHolder(v, productList.get(i));
             return pvh;
         }

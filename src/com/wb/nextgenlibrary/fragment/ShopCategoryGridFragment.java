@@ -34,7 +34,7 @@ public class ShopCategoryGridFragment extends AbstractNextGenFragment{
     TheTakeData.ShopCategory selectedCategory = null;
 
     public int getContentViewId(){
-        return R.layout.the_take_category_right_grid;
+        return R.layout.shop_category_right_grid;
     }
 
     public void refreshWithCategory(TheTakeData.ShopCategory category){
@@ -73,7 +73,7 @@ public class ShopCategoryGridFragment extends AbstractNextGenFragment{
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        itemsGridView = (GridView)view.findViewById(R.id.the_take_items_grid);
+        itemsGridView = (GridView)view.findViewById(R.id.shop_items_grid);
 
         if (itemsGridView != null){
             float density = NextGenExperience.getScreenDensity(getActivity());
@@ -127,9 +127,9 @@ public class ShopCategoryGridFragment extends AbstractNextGenFragment{
 
             }
 
-            DotIndicatorImageView productThumbnail = (DotIndicatorImageView) convertView.findViewById(R.id.the_take_item_thumbnail);
-            TextView brandName = (TextView) convertView.findViewById(R.id.the_take_brand_name);
-            TextView productName = (TextView) convertView.findViewById(R.id.the_take_product_name);
+            DotIndicatorImageView productThumbnail = (DotIndicatorImageView) convertView.findViewById(R.id.shop_item_thumbnail);
+            TextView brandName = (TextView) convertView.findViewById(R.id.shop_brand_name);
+            TextView productName = (TextView) convertView.findViewById(R.id.shop_product_name);
 
             MovieMetaData.ShopItemInterface product = getItem(position);
             if (product != null){
@@ -176,7 +176,7 @@ public class ShopCategoryGridFragment extends AbstractNextGenFragment{
             NGEAnalyticData.reportEvent(getActivity(), ShopCategoryGridFragment.this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_PRODUCT, product.getProductReportId(), null);
             if (TabletUtils.isTablet()) {
                 ShopItemDetailFragment fragment = new ShopItemDetailFragment();
-                //fragment.setContentViewId(R.layout.the_take_single_product_view);
+                //fragment.setContentViewId(R.layout.shop_single_product_view);
 
                 fragment.setProduct(product);
                 if (getActivity() instanceof NGEFragmentTransactionInterface) {
