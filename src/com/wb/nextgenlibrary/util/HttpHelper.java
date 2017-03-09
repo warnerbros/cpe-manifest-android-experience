@@ -348,7 +348,8 @@ public class HttpHelper {
 			if (checkCache) {
 				byte[] cacheResult = NextGenExperience.sCacheManager.get(new URL(url).hashCode());
 				try {
-					return new String(cacheResult);
+					if (cacheResult != null && cacheResult.length > 0)
+						return new String(cacheResult);
 				}catch (Exception ex){
 					// not valid cache
 				}

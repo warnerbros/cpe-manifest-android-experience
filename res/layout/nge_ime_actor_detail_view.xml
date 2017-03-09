@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:padding="@dimen/spacing_small">
+    android:background="@color/transparent_black"
+    android:layout_margin="@dimen/spacing_small">
     <ImageView
         android:id="@+id/actor_detail_bg_image"
         android:layout_width="match_parent"
@@ -189,5 +190,10 @@
         android:layout_alignParentTop="true"
         android:visibility="gone"
         android:background="@android:color/transparent"/>
+    <ProgressBar
+        android:id="@+id/actor_detail_loading_view"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
 </RelativeLayout>

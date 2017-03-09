@@ -210,4 +210,9 @@
         android:layout_alignParentRight="true"
         android:visibility="gone"
         android:background="@android:color/transparent"/>
+    <ProgressBar
+        android:id="@+id/actor_detail_loading_view"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 </RelativeLayout>

@@ -114,45 +114,72 @@ public class BaselineApiDAO {
         }
     }
 
-    public static void getCastActorsData(final List<MovieMetaData.CastData> castsDatas, ResultListener<Boolean> l) {
 
-        Worker.execute(new Callable<Boolean>() {
-            @Override
-            public Boolean call() throws Exception {
-                boolean success = true;
-                HashMap<String, BaselineCastData> castsInfoMap = new HashMap<String, BaselineCastData>();
-                for (final MovieMetaData.CastData castData : castsDatas) {
-                    try {
-                        Worker.execute(new Callable<Boolean>() {
-                            @Override
-                            public Boolean call() throws Exception {
-                                castData.baselineCastData = getFilmographyAndBioOfPersonSync(castData.getBaselineActorId());
-                                return true;
+    final static private List<ResultListener<Boolean>> actorsImagesListener = new ArrayList<>();
 
-                            }
-                        }, new ResultListener<Boolean>() {
-                            @Override
-                            public void onResult(Boolean result) {
+    public static void getCastActorsImages(final List<MovieMetaData.CastData> castsDatas, final ResultListener<Boolean> l) {        // to get actors images at NGE loading, adding listeners will be called when each actor's images returns
+        if (l != null){
+            if (!actorsImagesListener.contains(l))
+                actorsImagesListener.add(l);
+        }
+        if (actorsImagesListener.size() <= 1) {
 
-                            }
-
-                            @Override
-                            public <E extends Exception> void onException(E e) {
-
-                            }
-                        });
+            Worker.execute(new Callable<Boolean>() {
+                @Override
+                public Boolean call() throws Exception {
+                    for (MovieMetaData.CastData castData : castsDatas) {
 
 
-                    } catch (Exception ex){
-                        NextGenLogger.e(F.TAG_API, ex.getLocalizedMessage());
-                        success = false;
+                        List<NameValuePair> params = new ArrayList<NameValuePair>();
+                        params.add(new BasicNameValuePair("id", castData.getBaselineActorId()));
+
+
+                        List<NameValuePair> headers = new ArrayList<NameValuePair>();
+                        headers.add(new BasicNameValuePair(X_API_KEY_KEY, xAPIKey));
+                        headers.add(new BasicNameValuePair(X_STUDIO_KEY, NextGenExperience.getStudioXAPIKey()));
+
+                        String talentImageResult = HttpHelper.getFromUrl(X_API_DOMAIN + XEndpoints.GetTalentImages, params, headers, true, true);
+                        Type listType = new TypeToken<ArrayList<CastHeadShot>>() {
+                        }.getType();
+
+                        Gson gson = new GsonBuilder().create();
+
+                        List<CastHeadShot> headShots = gson.fromJson(talentImageResult, listType);
+
+                        if (castData.getBaselineCastData() == null) {
+                            castData.baselineCastData = new BaselineCastData();
+                        }
+                        castData.baselineCastData.headShots = headShots;
+                        for (ResultListener<Boolean> listener : actorsImagesListener){
+                            listener.onResult(true);
+                        }
+
                     }
+
+
+                    return true;
 
                 }
 
-                return success;
-            }
-        }, l);
+
+            }, new ResultListener<Boolean>() {
+                @Override
+                public void onResult(Boolean result) {
+                    for (ResultListener<Boolean> listener : actorsImagesListener){
+                        listener.onResult(result);
+                    }
+                    actorsImagesListener.removeAll(actorsImagesListener);
+                }
+
+                @Override
+                public <E extends Exception> void onException(E e) {
+                    for (ResultListener<Boolean> listener : actorsImagesListener){
+                        listener.onException(e);
+                    }
+                    actorsImagesListener.removeAll(actorsImagesListener);
+                }
+            });
+        }
     }
 
 
@@ -176,7 +203,6 @@ public class BaselineApiDAO {
         headers.add(new BasicNameValuePair(X_STUDIO_KEY, NextGenExperience.getStudioXAPIKey()));
 
         String userdataResult = HttpHelper.getFromUrl(X_API_DOMAIN + XEndpoints.GetTalentDetail, params, headers, true, true);
-        //JSONObject json = new JSONObject(result);
 
         Gson gson = new GsonBuilder().create();
         try {
@@ -186,16 +212,7 @@ public class BaselineApiDAO {
             castData = new BaselineCastData();
         }
 
-        //castsInfoMap.put(castId, thisData);
 
-        String talentImageResult = HttpHelper.getFromUrl(X_API_DOMAIN + XEndpoints.GetTalentImages, params, headers, true, true);
-        Type listType = new TypeToken<ArrayList<CastHeadShot>>() {
-        }.getType();
-
-
-        List<CastHeadShot> headShots = gson.fromJson(talentImageResult, listType);
-
-        castData.headShots = headShots;
 
         return castData;
     }

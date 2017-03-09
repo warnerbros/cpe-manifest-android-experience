@@ -135,14 +135,6 @@ public class MovieMetaData {
             return "";
     }
 
-    public boolean isHasCalledBaselineAPI(){
-        return hasCalledBaselineAPI;
-    }
-
-    public void setHasCalledBaselineAPI(boolean bCalled){
-        hasCalledBaselineAPI = bCalled;
-    }
-
     public ShopItem getShopItemByAppId(String appId){
         return appIdToShopItemMap.get(appId);
     }

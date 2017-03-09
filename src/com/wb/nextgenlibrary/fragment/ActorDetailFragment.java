@@ -64,7 +64,7 @@ public class ActorDetailFragment extends AbstractNextGenFragment implements View
     ImageButton twitterBtn;
     ImageButton instagramBtn;
 
-    View profileFrame, profileFrameNoImage;
+    View profileFrame, profileFrameNoImage, loadingView;
 
     int layoutId = R.layout.next_gen_actor_detail_view;
 
@@ -103,6 +103,10 @@ public class ActorDetailFragment extends AbstractNextGenFragment implements View
         actorGalleryFrame = view.findViewById(R.id.actor_gallery_recycler_frame);
 
         actorBiographyFrame = view.findViewById(R.id.actor_biography_frame);
+
+        loadingView = view.findViewById(R.id.actor_detail_loading_view);
+        if (loadingView != null)
+            loadingView.setVisibility(View.GONE);
 
 
         if (filmographyRecyclerView != null){
@@ -224,6 +228,8 @@ public class ActorDetailFragment extends AbstractNextGenFragment implements View
                 }
             });
             if (actorOjbect.getBaselineCastData().filmogrphies == null){
+                if (loadingView != null)
+                    loadingView.setVisibility(View.VISIBLE);
                 BaselineApiDAO.getFilmographyAndBioOfPerson(actorOjbect.getBaselineActorId(), new ResultListener<MovieMetaData.BaselineCastData>() {
                     @Override
                     public void onResult(MovieMetaData.BaselineCastData result) {
@@ -242,6 +248,8 @@ public class ActorDetailFragment extends AbstractNextGenFragment implements View
                                         }
                                         detailTextView.setText(actorOjbect.getBaselineCastData().biography);
                                         updateFilmographyList();
+                                        if (loadingView != null)
+                                            loadingView.setVisibility(View.GONE);
                                     }
                                 });
                             }

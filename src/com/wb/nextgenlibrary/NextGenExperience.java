@@ -139,70 +139,6 @@ public class NextGenExperience {
         return studioXAPIKey;
     }
 
-    public static void startNextGenExperience_prv(Context appContext, final Activity launcherActivity, final ManifestItem item,
-                                                  Object playbackObject, Class<? extends AbstractNGEMainMovieFragment> fragmentClass,
-                                                  NGEEventHandler eventHandler, Locale locale){
-        /*final ProgressDialog mDialog = ProgressDialog.show(launcherActivity, "", "Loading", false, false);
-
-        nextgenPlaybackObject = playbackObject;
-
-        applicationContext = appContext;
-        sCacheManager = new NGECacheManager(applicationContext);
-        mainMovieFragmentClass = fragmentClass;
-        NGEEventHandler = eventHandler;
-        clientLocale = locale == null? Locale.US : locale;
-
-        sUserAgent = "Android/" + sVersionName + " (Linux; U; Android " + Build.VERSION.RELEASE + "; " + Build.MODEL + ")";
-        try {
-            ApplicationInfo appInfo = appContext.getPackageManager().getApplicationInfo(
-                    appContext.getPackageName(), PackageManager.GET_META_DATA);
-            if (appInfo.metaData != null) {
-                googleMapAPIKey = appInfo.metaData.getString("com.google.android.geo.API_KEY");
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-        }
-
-
-
-        if (!StringHelper.isEmpty(item.getManifestFileUrl())) {
-            Worker.execute(new Callable<Boolean>() {
-                public Boolean call() throws Exception {
-                    return startNextGenParsing(item);
-                }
-            }, new ResultListener<Boolean>() {
-                public void onResult(Boolean result) {
-                    if (result) {
-                        launcherActivity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                mDialog.dismiss();
-                                mDialog.cancel();
-                                Intent intent = new Intent(launcherActivity, StartupActivity.class);
-                                launcherActivity.startActivity(intent);
-                            }
-                        });
-                    } else {
-                        // TODO error handling if startNextGenParsing returns false
-                        mDialog.dismiss();
-                        mDialog.cancel();
-                    }
-                }
-
-                public void onException(Exception e) {
-                    mDialog.dismiss();
-                    mDialog.cancel();
-
-                }
-            });
-        }else {
-            mDialog.dismiss();
-            mDialog.cancel();
-        }*/
-
-
-    }
-
     public static boolean startNextGenParsing(ManifestItem manifestItem) {
 		try {
 			// install security provider before calling getCastActorsData to avoid SSL errors on < Android 5.0 devices
@@ -233,17 +169,7 @@ public class NextGenExperience {
 			NextGenLogger.d("TIME_THIS", "Time to finish processing: " + currentTime);
 
 			BaselineApiDAO.init();
-			BaselineApiDAO.getCastActorsData(movieMetaData.getActorsList(), new ResultListener<Boolean>() {
-				@Override
-				public void onResult(Boolean result) {
-					movieMetaData.setHasCalledBaselineAPI(result);
-				}
-
-				@Override
-				public <E extends Exception> void onException(E e) {
-
-				}
-			});
+            BaselineApiDAO.getCastActorsImages(movieMetaData.getActorsList(), null);
 
 			TheTakeApiDAO.init();
 			return true;

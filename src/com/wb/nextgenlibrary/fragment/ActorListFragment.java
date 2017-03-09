@@ -33,30 +33,29 @@ public class ActorListFragment extends ExtraLeftListFragment<CastData> implement
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (!NextGenExperience.getMovieMetaData().isHasCalledBaselineAPI()) {
 
-            BaselineApiDAO.getCastActorsData(NextGenExperience.getMovieMetaData().getActorsList(), new ResultListener<Boolean>() {
-                @Override
-                public void onResult(Boolean result) {
-                    NextGenExperience.getMovieMetaData().setHasCalledBaselineAPI(result);
 
-                    if (getActivity() != null) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (listAdaptor != null)
-                                    listAdaptor.notifyDataSetChanged();
-                            }
-                        });
-                    }
+        BaselineApiDAO.getCastActorsImages(NextGenExperience.getMovieMetaData().getActorsList(), new ResultListener<Boolean>() {
+            @Override
+            public void onResult(Boolean result) {
+
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (listAdaptor != null)
+                                listAdaptor.notifyDataSetChanged();
+                        }
+                    });
                 }
+            }
 
-                @Override
-                public <E extends Exception> void onException(E e) {
+            @Override
+            public <E extends Exception> void onException(E e) {
 
-                }
-            });
-        }
+            }
+        });
+
     }
 
     @Override
