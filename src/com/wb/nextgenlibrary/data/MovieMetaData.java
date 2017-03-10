@@ -1993,7 +1993,7 @@ public class MovieMetaData {
                         return;
                     }
                 }
-                childrenExperience.add(ecContent);
+                childrenExperience.add(0, ecContent);
             }else{
                 childrenExperience.add(ecContent);
             }
