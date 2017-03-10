@@ -54,28 +54,7 @@ public class WebViewActivity extends NGEHideStatusBarActivity {
 
         webView.addJavascriptInterface(new JavascriptHandler(), "microHTMLInterface");
         webView.loadUrl(url);
-		/*Worker.execute(new Callable<String>() {
-			public String call() throws Exception {
-				String html = readHtml(url);
-				return html;
-			}
-		}, new ResultListener<String>() {
-			@Override
-			public void onResult(final String result) {
-				runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						webView.loadDataWithBaseURL("file:///android_asset/", result, "text/html", "utf-8", "");
-					}
-				});
 
-			}
-
-			@Override
-			public <E extends Exception> void onException(E e) {
-
-			}
-		});*/
     }
 
 
@@ -130,31 +109,26 @@ public class WebViewActivity extends NGEHideStatusBarActivity {
     }
 
     @Override
+    public void onDestroy(){
+        if (webView != null)
+            webView.destroy();
+        super.onDestroy();
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
         if (webView != null){
+            webView.pauseTimers();
             webView.onPause();
-        }/*
-        try {
-            Class.forName("android.webkit.WebView")
-                    .getMethod("onPause", (Class[]) null)
-                    .invoke(webView, (Object[]) null);
-
-        } catch(ClassNotFoundException cnfe) {
-
-        } catch(NoSuchMethodException nsme) {
-
-        } catch(InvocationTargetException ite) {
-
-        } catch (IllegalAccessException iae) {
-
-        }*/
+        }
     }
 
     @Override
     public void onResume(){
         super.onResume();
         if (webView != null){
+            webView.resumeTimers();
             webView.onResume();
         }
     }
