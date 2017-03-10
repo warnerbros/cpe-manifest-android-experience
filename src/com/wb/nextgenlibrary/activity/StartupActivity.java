@@ -547,10 +547,32 @@ public class StartupActivity extends NGEHideStatusBarActivity implements View.On
                 buttonsReferenceFrame = videoParentFrame;
                 buttonsReferenceFrameSourceSize = startupVideoSize;
             } else {*/
+
+            if (nodeStyleData.background.hasBGImage()) {
                 buttonsReferenceFrameSize = new Size(imageParentFrame.getWidth(), imageParentFrame.getHeight());
                 buttonsReferenceFrame = imageParentFrame;
                 buttonsReferenceFrameSourceSize = bgImageSize;
-            //}
+
+            }else {
+                Size videoSize = mainStyle.getBackgroundVideoSize();
+                Size screenSize = NextGenExperience.getScreenSize(NextGenExperience.getApplicationContext());
+                float videoAspectRatio = ((float) videoSize.getHeight()) /((float) videoSize.getWidth());
+                float screenAspectRatio = ((float) screenSize.getHeight()) /((float) screenSize.getWidth());
+                if (screenAspectRatio > 1)
+                    screenAspectRatio = 1/ screenAspectRatio;
+                if (screenAspectRatio >= videoAspectRatio) {
+                    videoParentFrame.setAspectRatioPriority(FixedAspectRatioFrameLayout.Priority.HEIGHT_PRIORITY);
+                    layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                } else {
+                    videoParentFrame.setAspectRatioPriority(FixedAspectRatioFrameLayout.Priority.WIDTH_PRIORITY);
+                    layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                }
+                videoParentFrame.setLayoutParams(layoutParams);
+                buttonsReferenceFrameSize = new Size(videoParentFrame.getWidth(), videoParentFrame.getHeight());
+                buttonsReferenceFrame = videoParentFrame;
+                buttonsReferenceFrameSourceSize = startupVideoSize;
+
+            }
         }
 
         if (nodeStyleData != null) {

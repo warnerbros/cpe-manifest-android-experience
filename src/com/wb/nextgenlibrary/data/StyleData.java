@@ -347,6 +347,10 @@ public class StyleData {
             else
                 return null;
         }
+
+        public boolean hasBGImage(){
+            return !StringHelper.isEmpty(imagePictureGroupID);
+        }
     }
 
 
