@@ -10,6 +10,7 @@ package com.wb.nextgenlibrary.parser.md.schema.v2_3;
 
 import com.wb.nextgenlibrary.parser.XmlAccessType;
 import com.wb.nextgenlibrary.parser.XmlAccessorType;
+import com.wb.nextgenlibrary.parser.XmlElement;
 import com.wb.nextgenlibrary.parser.XmlType;
 
 
@@ -52,7 +53,9 @@ import com.wb.nextgenlibrary.parser.XmlType;
 })
 public class RegionType {
 
+    @XmlElement(name = "country")
     protected String country;
+    @XmlElement(name = "countryRegion")
     protected String countryRegion;
 
     /**

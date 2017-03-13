@@ -25,7 +25,7 @@ public class IMEActorFragment extends ActorListFragment implements NGEPlaybackSt
     List<CastIMEEngine> castIMEEngines = new ArrayList<CastIMEEngine>();
     List<CastData> currentActiveActorList = new ArrayList<CastData>();
 
-    static final CastData showMoreLessDummyData = new CastData(null);
+    static final CastData showMoreLessDummyData = new CastData(null, NextGenExperience.getClientLocale());
 
     boolean fullListEnabled = false;
 

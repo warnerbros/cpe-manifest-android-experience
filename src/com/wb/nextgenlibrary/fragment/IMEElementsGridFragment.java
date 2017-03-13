@@ -374,14 +374,17 @@ public class IMEElementsGridFragment extends AbstractGridViewFragment implements
 
         List<IMEDisplayObject> objList = new ArrayList<IMEDisplayObject>();
         for(int i = 0 ; i< imeEngines.size(); i++){
-            IMEEngine engine = imeEngines.get(i);
-            boolean hasChanged =  engine.computeCurrentIMEElement(currentTimeCode);
-            List<Object> elements = engine.getCurrentIMEItems();
+            if (imeGroups.get(i).linkedExperience != null) {
+                IMEEngine engine = imeEngines.get(i);
+                boolean hasChanged = engine.computeCurrentIMEElement(currentTimeCode);
+                List<Object> elements = engine.getCurrentIMEItems();
 
 
-            if (elements != null && elements.size() > 0){
-                for (Object element : elements)
-                    objList.add(new IMEDisplayObject(imeGroups.get(i).linkedExperience, element));
+                if (elements != null && elements.size() > 0) {
+                    for (Object element : elements) {
+                        objList.add(new IMEDisplayObject(imeGroups.get(i).linkedExperience, element));
+                    }
+                }
             }
         }
         activeIMEs = objList;

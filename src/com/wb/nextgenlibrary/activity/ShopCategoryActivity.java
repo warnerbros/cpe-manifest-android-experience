@@ -150,7 +150,7 @@ public class ShopCategoryActivity extends AbstractNGEActivity implements NGEFrag
                         if (category == null){
                             category = new ShopCategory();
                             category.categoryId = categories.size();
-                            category.categoryName = MovieMetaData.getMatchingLocalizableObject(shopItem.categoryType.getBasicMetadata().getLocalizedInfo()).getTitleDisplayUnlimited();
+                            category.categoryName = MovieMetaData.getMatchingLocalizableObject(shopItem.categoryType.getBasicMetadata().getLocalizedInfo(), NextGenExperience.getClientLocale()).getTitleDisplayUnlimited();
                             categories.add(category);
                             category.products = new ArrayList<>();
                             shopCategoryHashMap.put(id, category);

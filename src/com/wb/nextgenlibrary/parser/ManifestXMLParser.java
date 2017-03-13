@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.CountDownLatch;
 import java.util.zip.GZIPInputStream;
 
@@ -50,15 +51,17 @@ public class ManifestXMLParser {
         public final MediaManifestType mainManifest;
         public final ManifestAppDataSetType appDataManifest;
         public final CPEStyleSetType cpeStyle;
+        public final Locale locale;
 
-        public NextGenManifestData(MediaManifestType mediaManifestType, ManifestAppDataSetType appDataFeedSetType, CPEStyleSetType style){
+        public NextGenManifestData(MediaManifestType mediaManifestType, ManifestAppDataSetType appDataFeedSetType, CPEStyleSetType style, Locale locale){
             mainManifest = mediaManifestType;
             appDataManifest = appDataFeedSetType;
             cpeStyle = style;
+            this.locale = locale;
         }
     }
 
-    public NextGenManifestData startParsing(final String manifestUrl, final String appDataUrl, final String styleDataUrl){
+    public NextGenManifestData startParsing(final String manifestUrl, final String appDataUrl, final String styleDataUrl, Locale locale){
         final CPEStyleSetType styleData[] = new CPEStyleSetType[1];
         final ManifestAppDataSetType[] appData = new ManifestAppDataSetType[1];
         final MediaManifestType[] mainManifest = new MediaManifestType[1];
@@ -208,7 +211,7 @@ public class ManifestXMLParser {
             e.printStackTrace();
         }
 
-        return new NextGenManifestData(mainManifest[0], appData[0], styleData[0]);
+        return new NextGenManifestData(mainManifest[0], appData[0], styleData[0], locale);
     }
 
     private Annotation[] getAllInheritedAnnotations(Class classObj){
@@ -370,10 +373,14 @@ public class ManifestXMLParser {
 
                         } else {
                             Object obj = toObject(thisFieldClass.field.getType(), readText(parser));
-                            String setterName = getSetterName(xmlElementName);
-                            Method setter = thisFieldClass.fieldClass.getDeclaredMethod(setterName, thisFieldClass.field.getType());
+                            try {
+                                String setterName = getSetterName(xmlElementName);
+                                Method setter = thisFieldClass.fieldClass.getDeclaredMethod(setterName, thisFieldClass.field.getType());
 
-                            setter.invoke(retObj, obj);
+                                setter.invoke(retObj, obj);
+                            }catch (Exception ex){
+                                obj = null;
+                            }
                         }
                     }catch (IllegalArgumentException iex){
                         System.out.println("PARSER VALUE ERROR " + iex.getLocalizedMessage());
@@ -395,9 +402,10 @@ public class ManifestXMLParser {
     }
 
     private static String getSetterName(String xmlElementName){  // to avoid calling setClass
-        if (xmlElementName.equalsIgnoreCase("class"))
+        if (xmlElementName.equalsIgnoreCase("class")) {
             xmlElementName = xmlElementName.replace("s", "z");
-        return "set" + xmlElementName;
+        }
+        return "set" + xmlElementName.substring(0,1).toUpperCase() + xmlElementName.substring(1, xmlElementName.length());
     }
 
     private Object toObject(Class targetClass, String stringValue) throws IOException, XmlPullParserException{

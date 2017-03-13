@@ -1,5 +1,6 @@
 package com.wb.nextgenlibrary.model;
 
+import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.data.MovieMetaData.PresentationDataItem;
 import com.wb.nextgenlibrary.data.MovieMetaData.IMEElement;
@@ -70,7 +71,7 @@ public class AVGalleryIMEEngine extends IMEEngine<IMEElement<PresentationDataIte
         MovieMetaData.TextItem textItem;
         boolean isLocation = false;
         public IMECombineItem(List<PresentationDataItem> items){
-            super(null, null);
+            super(null, null, NextGenExperience.getClientLocale());
             this.items = items;
             for(PresentationDataItem pItems : items){
                 if (pItems instanceof MovieMetaData.PictureItem){

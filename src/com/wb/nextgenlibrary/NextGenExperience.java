@@ -94,6 +94,15 @@ public class NextGenExperience {
 
     private static String sUserAgent;
 
+
+
+    public static void startNextGenExperience(Context appContext, final Activity launcherActivity, final ManifestItem item,
+                                              Object playbackObject, Class<? extends AbstractNGEMainMovieFragment> fragmentClass,
+                                              Class<? extends AbstractCastMainMovieFragment> castFragmentClass,
+                                              NGEEventHandler eventHandler, @NonNull String studioStr) throws NextGenEmptyStudioStringException{
+        startNextGenExperience(appContext, launcherActivity, item, playbackObject, fragmentClass, castFragmentClass, eventHandler, null, studioStr);
+    }
+
     public static void startNextGenExperience(Context appContext, final Activity launcherActivity, final ManifestItem item,
                                               Object playbackObject, Class<? extends AbstractNGEMainMovieFragment> fragmentClass,
                                               Class<? extends AbstractCastMainMovieFragment> castFragmentClass,
@@ -110,7 +119,7 @@ public class NextGenExperience {
         mainMovieFragmentClass = fragmentClass;
         castMovieFragmentClass = castFragmentClass;
         NGEEventHandler = eventHandler;
-        clientLocale = locale == null? Locale.US : locale;
+        clientLocale = locale == null? Locale.getDefault() : locale;
         manifestItem = item;
         studioXAPIKey = studioStr;
 
@@ -139,7 +148,7 @@ public class NextGenExperience {
         return studioXAPIKey;
     }
 
-    public static boolean startNextGenParsing(ManifestItem manifestItem) {
+    public static boolean startNextGenParsing(ManifestItem manifestItem, Locale locale) {
 		try {
 			// install security provider before calling getCastActorsData to avoid SSL errors on < Android 5.0 devices
 			ProviderInstaller.installIfNeeded(getApplicationContext());
@@ -157,7 +166,7 @@ public class NextGenExperience {
 
 			long systime = SystemClock.uptimeMillis();
 			ManifestXMLParser.NextGenManifestData manifest = new ManifestXMLParser().startParsing(manifestItem.getManifestFileUrl(),
-					manifestItem.getAppDataFileUrl(), manifestItem.getNgeStyleFileUrl());
+					manifestItem.getAppDataFileUrl(), manifestItem.getNgeStyleFileUrl(), locale);
 			long currentTime = SystemClock.uptimeMillis() - systime;
 			NextGenLogger.d("TIME_THIS", "Time to finish parsing: " + currentTime);
 

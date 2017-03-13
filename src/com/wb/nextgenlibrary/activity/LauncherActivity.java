@@ -53,7 +53,7 @@ public class LauncherActivity extends Activity {
 	private class NextGenLauncherTask extends AsyncTask<NextGenExperience.ManifestItem, Integer, Boolean> {
 		protected Boolean doInBackground(NextGenExperience.ManifestItem... manifestItems) {
 
-			return NextGenExperience.startNextGenParsing(manifestItems[0]);
+			return NextGenExperience.startNextGenParsing(manifestItems[0], NextGenExperience.getClientLocale());
 		}
 
 		protected void onProgressUpdate(Integer... progress) {
