@@ -273,13 +273,17 @@ public class ManifestXMLParser {
                     Field declaredFields[] = currentClass.getDeclaredFields();
                     for (Field field : declaredFields) {
 
+                        boolean bFoundAnnotations = false;
                         Annotation annotations[] = field.getAnnotations();
                         for (Annotation annotation : annotations) {
                             if (annotation instanceof XmlElement) {
+                                bFoundAnnotations = true;
                                 thisClassMap.classXmlNameToFieldMap.put(((XmlElement) annotation).name(), new FieldClassObject(field, currentClass));
                             } else if (annotation instanceof XmlValue) {
+                                bFoundAnnotations = true;
                                 thisClassMap.isValue = true;
                             } else if (annotation instanceof XmlAttribute) {
+                                bFoundAnnotations = true;
 
                                 Method setter = currentClass.getDeclaredMethod("set" + StringHelper.capitalize(((XmlAttribute) annotation).name()), field.getType());
                                 thisClassMap.setterMap.put(((XmlAttribute) annotation).name(), setter);
@@ -290,6 +294,18 @@ public class ManifestXMLParser {
                                     setter.invoke(retObj, obj);
                                 }
                             }
+                        }
+                        if (!bFoundAnnotations){
+                            try {
+                                thisClassMap.classXmlNameToFieldMap.put(field.getName(), new FieldClassObject(field, currentClass));
+                                /*Method setter = currentClass.getDeclaredMethod("set" + StringHelper.capitalize(field.getName()), field.getType());
+                                thisClassMap.setterMap.put(field.getName(), setter);
+                                String attributValue = parser.getAttributeValue("", field.getName());
+                                if (!StringHelper.isEmpty(attributValue)) {
+                                    Object obj = toObject(field.getType(), attributValue);
+                                    setter.invoke(retObj, obj);
+                                }*/
+                            }catch (Exception ex){}
                         }
                     }
                     currentClass = currentClass.getSuperclass();

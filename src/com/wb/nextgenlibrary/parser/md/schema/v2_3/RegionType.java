@@ -53,9 +53,7 @@ import com.wb.nextgenlibrary.parser.XmlType;
 })
 public class RegionType {
 
-    @XmlElement(name = "country")
     protected String country;
-    @XmlElement(name = "countryRegion")
     protected String countryRegion;
 
     /**
