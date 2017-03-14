@@ -353,12 +353,14 @@ public class ActorDetailFragment extends AbstractNextGenFragment implements View
 
                     @Override
                     public boolean onResourceReady(final GlideDrawable resource, GlideUrl model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                imageFrame.setAspectRatio(resource.getIntrinsicWidth(), resource.getIntrinsicHeight());
-                            }
-                        });
+                        if (getActivity() != null && !getActivity().isDestroyed() && !getActivity().isFinishing()) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    imageFrame.setAspectRatio(resource.getIntrinsicWidth(), resource.getIntrinsicHeight());
+                                }
+                            });
+                        }
                         return false;
                     }
                 }).fitCenter().into(personPhoto);
