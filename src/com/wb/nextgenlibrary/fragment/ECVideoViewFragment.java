@@ -248,18 +248,22 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
                         break;
                     case ExoPlayer.STATE_READY:
                         int startTime = previousPlaybackTime;
+
                         if (resumeTime > 0)
                             startTime = resumeTime;
 
-                        if (shouldAutoPlay || resumeTime > 0) {
+                        if (shouldAutoPlay || startTime > 0) {
 
                             if (player.getPlayWhenReady()) {
                                 previewFrame.setVisibility(View.GONE);
                                 previewPlayBtn.setVisibility(View.GONE);
-                                if (startTime != 0) {
+                                if (startTime > 0) {
                                     player.seekTo(startTime);
+                                    resumeTime = -1;
+                                    previousPlaybackTime = -1;
                                 }
-                                playerControl.start();
+                                if (!playerControl.isPlaying())
+                                    playerControl.start();
                             }
                         }else {
                             if (previewPlayBtn != null){
@@ -473,6 +477,8 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
             player.stop();
             videoView.setPlayer(null);
         }
+        videoView = null;
+
         /*videoView.stopPlayback();
         videoView.setVideoURI(null);
         videoView.setMediaController(null);*/
@@ -522,6 +528,10 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
                 //if (descriptionTextView != null) {
                 //    descriptionTextView.setText(avItem.getSummary());
                 //}
+                MediaSource mediaSource = buildMediaSource(Uri.parse(avItem.getVideoUrl()));
+                //new HlsMediaSource(Uri.parse(mainStyle.getBackgroundVideoUrl()), mediaDataSourceFactory, new Handler(),null);
+                //buildMediaSource(nonDRMPlaybackContent.contentUri, nonDRMPlaybackContent.contentType, EXTENSION_EXTRA);
+                player.prepare(mediaSource, true, true);
                 if (!shouldAutoPlay) {
                     if(playerControl.isPlaying())
                         player.setPlayWhenReady(false);
@@ -529,7 +539,7 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
                         previewFrame.setVisibility(View.VISIBLE);
                         previewPlayBtn.setVisibility(View.GONE);
                     }
-                    if (!StringHelper.isEmpty(selectedAVItem.getPosterImgUrl())) {
+                    if (!StringHelper.isEmpty(selectedAVItem.getPosterImgUrl()) && getActivity() != null) {
 
                         NextGenGlide.load(getActivity(), selectedAVItem.getPreviewImageUrl()).fitCenter().into(previewImageView);
                         //Picasso.with(getActivity()).load(selectedAVItem.getPreviewImageUrl()).fit().into(previewImageView);
@@ -540,11 +550,8 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
                         previewFrame.setVisibility(View.GONE);
                         previewPlayBtn.setVisibility(View.GONE);
                     }
+                    player.setPlayWhenReady(true);
                 }
-                MediaSource mediaSource = buildMediaSource(Uri.parse(avItem.getVideoUrl()));
-                //new HlsMediaSource(Uri.parse(mainStyle.getBackgroundVideoUrl()), mediaDataSourceFactory, new Handler(),null);
-                //buildMediaSource(nonDRMPlaybackContent.contentUri, nonDRMPlaybackContent.contentType, EXTENSION_EXTRA);
-                player.prepare(mediaSource, true, true);
                 //videoView.setVideoURI(Uri.parse(avItem.getVideoUrl()));
                 if (mediaController != null) {
                     mediaController.reset();
@@ -571,7 +578,7 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
         playerControl.pause();
     }
 
-    MediaController.MediaPlayerControl playerControl = new MediaController.MediaPlayerControl() {
+    final MediaController.MediaPlayerControl playerControl = new MediaController.MediaPlayerControl() {
         @Override
         public void start() {
             if (player != null)

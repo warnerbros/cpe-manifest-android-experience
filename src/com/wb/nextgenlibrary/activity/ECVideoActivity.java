@@ -178,12 +178,13 @@ public class ECVideoActivity extends AbstractECView implements ECVideoViewFragme
 	}
 
 	private void resetActivePlaybackFragment(){
+		boolean bShouldAutoPlay = false;
 		if (mSessionManager != null)
 			mCastSession = mSessionManager.getCurrentCastSession();
 		int currentPos = 0;
 		if (activePlayerInterface != null){
 			currentPos = activePlayerInterface.getCurrentPlaybackTimeMillisecond();
-
+			bShouldAutoPlay = true;
 		}
 
 		if (isCasting()) {
@@ -193,12 +194,12 @@ public class ECVideoActivity extends AbstractECView implements ECVideoViewFragme
 			activePlayerInterface = ecVideoFragment;
 		}
 
-		activePlayerInterface.setShouldAutoPlay(false);
+		activePlayerInterface.setShouldAutoPlay(bShouldAutoPlay);
 		activePlayerInterface.setEcsAdaptor(this);
 
-
+		MovieMetaData.AudioVisualItem audioVisualItem = null;
 		if (selectedEC != null && selectedEC.audioVisualItems.size() > 0) {
-			MovieMetaData.AudioVisualItem audioVisualItem = selectedEC.audioVisualItems.get(0);
+			audioVisualItem = selectedEC.audioVisualItems.get(0);
 			if (activePlayerInterface != null) {
 				activePlayerInterface.setAudioVisualItem(audioVisualItem);
 				activePlayerInterface.setResumeTimeMillisecond(currentPos);
@@ -213,5 +214,6 @@ public class ECVideoActivity extends AbstractECView implements ECVideoViewFragme
 
 		fragmentTransactionEngine = new NGEFragmentTransactionEngine(this);
 		fragmentTransactionEngine.replaceFragment(getSupportFragmentManager(), R.id.next_gen_ec_content_view, (Fragment)activePlayerInterface);
+		activePlayerInterface.setAudioVisualItem(audioVisualItem);
 	}
 }
