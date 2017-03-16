@@ -327,7 +327,8 @@ public class MovieMetaData {
                             }
                         }
                     }
-                }catch (Exception ex){}
+                } catch (Exception ex) {
+                }
 
                 if (!bShouldExcludeThisExp) {
 
@@ -491,8 +492,9 @@ public class MovieMetaData {
                     result.experienceIdToExperienceMap.put(experience.getExperienceID(), thisExperience);
                     List<ExperienceData> parentGroups = experienceChildrenToParentMap.get(experience.getExperienceID());
                     if (parentGroups != null && parentGroups.size() > 0) {
-                        for (ExperienceData parentGroup : parentGroups)
+                        for (ExperienceData parentGroup : parentGroups) {
                             parentGroup.addChild(thisExperience);
+                        }
                     }
 
                     if (isRootExperience) {
@@ -520,22 +522,20 @@ public class MovieMetaData {
 
                 }
 
-
-                if (rootData != null && rootData.childrenExperience.size() == 2) {
-                    result.extraECGroups.addAll(rootData.childrenExperience.get(0).childrenExperience);
-                    for (ExperienceData exp : result.extraECGroups) {
-                        if (exp.getECGroupType() == MovieMetaData.ECGroupType.LOCATIONS) {
-                            exp.computeSceneLocationFeature();
-                        }
-                    }
-                    result.imeECGroups.addAll(rootData.childrenExperience.get(1).childrenExperience);
-                    result.rootExperience = rootData;
-                    if (rootData.audioVisualItems != null && rootData.audioVisualItems.size() > 0) {
-                        String inter = rootData.audioVisualItems.get(0).getVideoUrl();
+            }
+            if (rootData != null && rootData.childrenExperience.size() == 2) {
+                result.extraECGroups.addAll(rootData.childrenExperience.get(0).childrenExperience);
+                for (ExperienceData exp : result.extraECGroups) {
+                    if (exp.getECGroupType() == MovieMetaData.ECGroupType.LOCATIONS) {
+                        exp.computeSceneLocationFeature();
                     }
                 }
+                result.imeECGroups.addAll(rootData.childrenExperience.get(1).childrenExperience);
+                result.rootExperience = rootData;
+                if (rootData.audioVisualItems != null && rootData.audioVisualItems.size() > 0) {
+                    String inter = rootData.audioVisualItems.get(0).getVideoUrl();
+                }
             }
-
 
         }
 
