@@ -108,10 +108,11 @@ public abstract class AbstractNGEActivity extends NGEHideStatusBarActivity imple
         }
 
         super.onCreate(savedInstanceState);
-
-        CastContext castContext = CastContext.getSharedInstance(this);
-        mSessionManager = castContext.getSessionManager();
-        mSessionManager.addCastStateListener(this);
+        try {
+            CastContext castContext = CastContext.getSharedInstance(this);
+            mSessionManager = castContext.getSessionManager();
+            mSessionManager.addCastStateListener(this);
+        }catch (Exception ex){}
     }
 
     @Override
@@ -187,22 +188,29 @@ public abstract class AbstractNGEActivity extends NGEHideStatusBarActivity imple
     @Override
     public void onResume(){
         super.onResume();
-        mCastSession = mSessionManager.getCurrentCastSession();
-        mSessionManager.addSessionManagerListener(mSessionManagerListener);
+        if (mSessionManager != null) {
+            mCastSession = mSessionManager.getCurrentCastSession();
+            mSessionManager.addSessionManagerListener(mSessionManagerListener);
+        }
     }
 
     @Override
     public void onPause(){
         super.onPause();
-        mSessionManager.removeSessionManagerListener(mSessionManagerListener);
-        mCastSession = null;
+        if (mSessionManager != null) {
+            mSessionManager.removeSessionManagerListener(mSessionManagerListener);
+            mCastSession = null;
+        }
     }
 
     @Override
     public void onDestroy() {
         if (castListener != null)
             remoteMediaClient.removeListener(castListener);
-        mSessionManager.removeCastStateListener(this);
+
+        if (mSessionManager != null) {
+            mSessionManager.removeCastStateListener(this);
+        }
         super.onDestroy();
     }
 
@@ -269,7 +277,8 @@ public abstract class AbstractNGEActivity extends NGEHideStatusBarActivity imple
     }
 
     public boolean isCasting(){
-        mCastSession = mSessionManager.getCurrentCastSession();
+        if (mSessionManager != null)
+            mCastSession = mSessionManager.getCurrentCastSession();
         return mSessionManager != null && mCastSession != null && mCastSession.isConnected();
     }
 

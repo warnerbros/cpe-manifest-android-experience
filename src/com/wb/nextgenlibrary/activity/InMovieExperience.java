@@ -332,10 +332,12 @@ public class InMovieExperience extends AbstractNGEActivity implements NGEFragmen
         mOptionsMenu = menu;
 
 
-        CastButtonFactory.setUpMediaRouteButton(getApplicationContext(),
-                menu,
-                R.id.menuChromecast);
+        try {
+            CastButtonFactory.setUpMediaRouteButton(getApplicationContext(),
+                    menu,
+                    R.id.menuChromecast);
 
+        }catch (Exception ex){}
         if (actionBarRightTextView != null && actionBarRightTextView instanceof FontFitTextView)
             ((FontFitTextView)actionBarRightTextView).setNumberOfLinesAllowed(1);
 
