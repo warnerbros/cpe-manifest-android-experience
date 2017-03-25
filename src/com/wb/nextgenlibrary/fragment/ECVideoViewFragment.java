@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.MediaController;
@@ -137,6 +138,7 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         videoView = (SimpleExoPlayerView) view.findViewById(R.id.ec_video_view);
         mediaDataSourceFactory = buildDataSourceFactory(true);
         if (videoView != null){
