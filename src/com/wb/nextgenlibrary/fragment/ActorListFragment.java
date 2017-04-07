@@ -131,7 +131,7 @@ public class ActorListFragment extends ExtraLeftListFragment<CastData> implement
     }
 
     protected String getHeaderText(){
-        return getResources().getString(R.string.actors);
+        return NextGenExperience.getMovieMetaData().getActorGroupText();
     }
 
 

@@ -408,7 +408,7 @@ public class StartupActivity extends NGEHideStatusBarActivity implements View.On
                 if (imageButtonsFrame.getVisibility() == View.VISIBLE ){
                     return;
                 }
-                StyleData.NodeStyleData nodeStyleData = mainStyle.getNodeStyleData(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
                 StyleData.ThemeData buttonTheme = mainStyle.getNodeStyleData(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE).theme;
 
                 MovieMetaData.PictureImageData extraBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.EXTRA_BUTTON);

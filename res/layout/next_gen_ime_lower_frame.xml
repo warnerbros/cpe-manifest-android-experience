@@ -25,6 +25,7 @@
                 <TextView
                     android:layout_width="fill_parent"
                     android:gravity="center"
+                    android:id="@+id/actor_list_title"
                     android:text="@string/actors"
                     android:textColor="@color/white"
                     android:fontFamily="sans-serif-condensed"

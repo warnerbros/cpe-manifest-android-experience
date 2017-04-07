@@ -101,7 +101,6 @@ public class MovieMetaData {
     private static String NVPAIR_TYPE = "type";
     private static String NVPAIR_TYPE_PRODUCT = "PRODUCT";
 
-
     //final private List<ECGroupData> movieExperiences = new ArrayList<ECGroupData>();
     final private List<ExperienceData> extraECGroups = new ArrayList<ExperienceData>();
     final private List<ExperienceData> imeECGroups = new ArrayList<ExperienceData>();
@@ -110,6 +109,7 @@ public class MovieMetaData {
     final private List<CastData> actorsList = new ArrayList<CastData>();
     final private HashMap<String, ExperienceData> experienceIdToExperienceMap = new HashMap<String, ExperienceData>();
     final private HashMap<String, ShopItem> appIdToShopItemMap = new HashMap<>();
+    private String actorGroupText = "ACTORS";
 
     private ExperienceData rootExperience;
     private boolean hasCalledBaselineAPI = false;
@@ -173,6 +173,8 @@ public class MovieMetaData {
         HashMap<String, AppDataType> appDataIdTpAppDataMap = new HashMap<String, AppDataType>();
 
         HashMap<String, LocationItem> appIdToLocationItemMap = new HashMap<>();
+
+        String castTSId = null;
 
         String mainMovieExperienceId = mediaManifest.getALIDExperienceMaps().getALIDExperienceMap().get(0).getExperienceID().get(0).getValue();
 
@@ -640,6 +642,7 @@ public class MovieMetaData {
 
 
                     if (isCast) {
+                        castTSId = timedEventSequence.getTimedSequenceID();
                         result.reGroupCastIMEEventGroup(imeGroup);
                     } else if (imeGroup.linkedExperience != null) {
                         result.imeElementGroups.add(imeGroup);
@@ -649,9 +652,20 @@ public class MovieMetaData {
             }
         }
 
+        if (!StringHelper.isEmpty(castTSId)){
+            ExperienceData expData =  timeSequenceIdToECGroup.get(castTSId);
+            if (expData != null){
+                result.actorGroupText = expData.title;
+            }
+        }
+
         /*****************End of Time Sequence Events****************************/
 
         return result;
+    }
+
+    public String getActorGroupText(){
+        return actorGroupText;
     }
 
     public boolean hasShareClipExp(){
@@ -1526,7 +1540,7 @@ public class MovieMetaData {
                         BasicMetadataInfoType localizedInfo = getMatchingLocalizableObject(basicMetadata.getLocalizedInfo(), locale);
                         titleDisplayUnlimited = localizedInfo.getTitleDisplayUnlimited();
                         titleSort = localizedInfo.getTitleSort();
-                        posterUrl = localizedInfo.getArtReference().get(0).getValue();
+                        posterUrl = localizedInfo.getArtReference().size() > 0 ? localizedInfo.getArtReference().get(0).getValue() : "";
                         if (localizedInfo.getSummary4000() != null){
                             summary = localizedInfo.getSummary4000().getValue();
                         } else if (localizedInfo.getSummary400() != null){
@@ -1534,7 +1548,7 @@ public class MovieMetaData {
                         } else if (localizedInfo.getSummary190() != null)
                             summary = localizedInfo.getSummary190().getValue();
 
-                        String dimensionStr = localizedInfo.getArtReference().get(0).getResolution();
+                        String dimensionStr = localizedInfo.getArtReference().size() > 0 ? localizedInfo.getArtReference().get(0).getResolution() : "";
                         try {
                             StringTokenizer tokenizer = new StringTokenizer(dimensionStr, "X");
                             posterSize = new Size(Integer.parseInt(tokenizer.nextToken()), Integer.parseInt(tokenizer.nextToken()));
