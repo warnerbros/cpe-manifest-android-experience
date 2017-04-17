@@ -234,7 +234,8 @@ public class ActorDetailFragment extends AbstractNextGenFragment implements View
                     @Override
                     public void onResult(MovieMetaData.BaselineCastData result) {
                         actorOjbect.getBaselineCastData().filmogrphies = result.filmogrphies;
-                        actorOjbect.getBaselineCastData().biography = result.biography;
+                        if (!StringHelper.isEmpty(result.biography))
+                            actorOjbect.getBaselineCastData().biography = result.biography;
                         if (getActivity() != null) {
                             synchronized (getActivity()) {
                                 getActivity().runOnUiThread(new Runnable() {

@@ -381,6 +381,13 @@ public class MovieMetaData {
                                     for (BasicMetadataPeopleType people : avMetaData.getBasicMetadata().getPeople()) {
                                         CastData cast = new CastData(people, manifest.locale);
 
+                                        if (!StringHelper.isEmpty(cast.getAppDataId())){
+                                            AppDataType appDataType = appDataIdTpAppDataMap.get(cast.getAppDataId());
+                                            cast.fillCastDataWithAppData(appDataType, pictureTypeAssetsMap, pictureImageMap);
+
+
+                                        }
+
                                         if (!StringHelper.isEmpty(cast.getOtherPeopleId()))
                                             peopleIdToCastData.put(cast.getOtherPeopleId(), cast);
 
@@ -1061,6 +1068,7 @@ public class MovieMetaData {
         final public int order;
         private String baselineApiActorId;
         private String peopleOtherId;
+        private String appDataId;
         final public String job;
         public BaselineCastData baselineCastData;
 
@@ -1069,9 +1077,10 @@ public class MovieMetaData {
             super(null, null, null, locale);
             if (castInfo != null && castInfo.getIdentifier() != null && castInfo.getIdentifier().size() > 0){
                 for (PersonIdentifierType identifierType : castInfo.getIdentifier()){
-                    if ("PeopleOtherID".equals(identifierType.getNamespace())){
+                    if (OTHER_PEOPLE_ID.equals(identifierType.getNamespace())){
                         id = identifierType.getIdentifier();
-                        break;
+                    } else if (OTHER_APP_DATA_ID.equals(identifierType.getNamespace())){
+                        appDataId = identifierType.getIdentifier();
                     }
                 }
             }
@@ -1147,6 +1156,68 @@ public class MovieMetaData {
 
         public String getPosterImgUrl(){
             return "";
+        }
+
+        public String getAppDataId() {
+            return  appDataId;
+        }
+
+        public void fillCastDataWithAppData(AppDataType appDataType, HashMap<String, PictureType> pictureTypeAssetsMap, HashMap<String, PictureImageData> pictureImageMap){
+
+            if (appDataType != null && appDataType.getNVPair() != null && appDataType.getNVPair().size() > 0){
+                PictureImageData fullImage = null;
+                PictureImageData thumbNailImage = null;
+                String appDataBiography = "";
+                for (AppNVPairType nvPairType : appDataType.getNVPair()){
+                    if ("picture_id".equals(nvPairType.getName())){
+
+                        PictureType picture = pictureTypeAssetsMap.get(nvPairType.getPictureID());
+                        fullImage = pictureImageMap.get(picture.getImageID());
+                        thumbNailImage = pictureImageMap.get(picture.getThumbnailImageID());
+
+                    } else if ("description".equals(nvPairType.getName())){
+                        appDataBiography = nvPairType.getText();
+                    }
+
+
+                }
+
+
+                final PictureImageData fullImageData = fullImage;
+                final PictureImageData thumbNailImageData = thumbNailImage;
+                baselineCastData = new BaselineCastData(){
+
+                    public String getThumbnailImageUrl(){
+                        if (thumbNailImageData != null && !StringHelper.isEmpty(thumbNailImageData.url))
+                            return thumbNailImageData.url;
+                        else
+                            return getFullImageUrl();
+                    }
+
+                    public String getIconImageUrl(){
+                        return getThumbnailImageUrl();
+                    }
+
+                    public String getFullImageUrl(){
+                        if (fullImageData != null)
+                            return fullImageData.url;
+                        else
+                            return "";
+                    }
+
+                    public List<CastHeadShot> getGallery(){
+                        return headShots;
+                    }
+
+                    public List<CastSocialMedia> getSocialMedium(){ return null;}
+
+                    public String getSocialMediaUrl(SOCIAL_MEDIA_KEY Key){
+                        return "";
+                    }
+                };
+                baselineCastData.biography = appDataBiography;
+            }
+
         }
 
     }
