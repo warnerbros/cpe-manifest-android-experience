@@ -59,6 +59,7 @@ public class ActorDetailFragment extends AbstractNextGenFragment implements View
     ActorDetailGalleryRecyclerAdapter actorGalleryAdaptor;
     View actorGalleryFrame;
     View actorBiographyFrame;
+    View actorFilmographyFrame;
 
     ImageButton facebookBtn;
     ImageButton twitterBtn;
@@ -103,6 +104,8 @@ public class ActorDetailFragment extends AbstractNextGenFragment implements View
         actorGalleryFrame = view.findViewById(R.id.actor_gallery_recycler_frame);
 
         actorBiographyFrame = view.findViewById(R.id.actor_biography_frame);
+
+        actorFilmographyFrame = view.findViewById(R.id.filmography_frame_layout);
 
         loadingView = view.findViewById(R.id.actor_detail_loading_view);
         if (loadingView != null)
@@ -251,6 +254,12 @@ public class ActorDetailFragment extends AbstractNextGenFragment implements View
                                         updateFilmographyList();
                                         if (loadingView != null)
                                             loadingView.setVisibility(View.GONE);
+
+                                        if (actorOjbect.getBaselineCastData().filmogrphies != null && actorOjbect.getBaselineCastData().filmogrphies.size() > 0){
+                                            actorFilmographyFrame.setVisibility(View.VISIBLE);
+                                        }else {
+                                            actorFilmographyFrame.setVisibility(View.GONE);
+                                        }
                                     }
                                 });
                             }
