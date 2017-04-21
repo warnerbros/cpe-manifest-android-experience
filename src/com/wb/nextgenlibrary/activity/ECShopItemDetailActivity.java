@@ -1,11 +1,15 @@
 package com.wb.nextgenlibrary.activity;
 
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.View;
 
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.fragment.ShopItemDetailFragment;
+import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 
 /**
@@ -45,6 +49,38 @@ public class ECShopItemDetailActivity extends AbstractNGEActivity {
 	}
 	public String getRightTitleText(){
 		return "";
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		if (!TabletUtils.isTablet()) {
+			if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+				switchFullScreen(true);
+			} else {
+				switchFullScreen(false);
+			}
+		}
+
+		//onRequestToggleFullscreen();
+	}
+	@Override
+	public void onStart() {
+		super.onStart();
+		if (TabletUtils.isTablet())
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+		else
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+	}
+	@Override
+	public void switchFullScreen(boolean bFullscreen){
+		super.switchFullScreen(bFullscreen);
+		if (!bFullscreen && getSupportActionBar() != null) {
+			getSupportActionBar().hide();
+		}
+		shopItemDetailFragment.setFullScreen(bFullscreen);
+
+
 	}
 
 }

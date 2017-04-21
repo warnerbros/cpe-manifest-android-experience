@@ -1,6 +1,7 @@
 package com.wb.nextgenlibrary.fragment;
 
 import android.content.DialogInterface;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +16,7 @@ import com.wb.nextgenlibrary.data.TheTakeData.TheTakeProduct;
 import com.wb.nextgenlibrary.data.TheTakeData.TheTakeProductDetail;
 import com.wb.nextgenlibrary.network.TheTakeApiDAO;
 import com.wb.nextgenlibrary.util.DialogUtils;
+import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
@@ -28,6 +30,8 @@ public class ShopItemDetailFragment extends AbstractNextGenFragment implements V
     ImageView productPoster;
     TextView matchStatus, brandText, nameText, priceText;
     Button shopAtTheTakeBtn, sendLinkBtn;
+    ECVideoViewFragment productVideoViewFragment;
+    View productVideoViewFragmentFrame;
 
     String titleText = "";
 
@@ -37,9 +41,23 @@ public class ShopItemDetailFragment extends AbstractNextGenFragment implements V
         contentViewId = viewId;
     }
 
+    public void setFullScreen(boolean bFullScreen){
+        if (bFullScreen){
+
+        }else{
+
+        }
+    }
 
     public void setProduct(MovieMetaData.ShopItemInterface product){
         this.product = product;
+        if (productVideoViewFragment != null && product instanceof MovieMetaData.ShopItem && ((MovieMetaData.ShopItem) product).getAVItem() != null) {
+            if (productVideoViewFragmentFrame != null)
+                productVideoViewFragmentFrame.setVisibility(View.VISIBLE);
+            productVideoViewFragment.setShouldAutoPlay(false);
+            productVideoViewFragment.setAudioVisualItem(((MovieMetaData.ShopItem) product).getAVItem());
+        } else if (productVideoViewFragmentFrame != null)
+            productVideoViewFragmentFrame.setVisibility(View.GONE);
     }
 
 
@@ -66,6 +84,13 @@ public class ShopItemDetailFragment extends AbstractNextGenFragment implements V
 
         if (product != null)
             getProductDetail();
+
+        productVideoViewFragment = (ECVideoViewFragment)getChildFragmentManager().findFragmentById(R.id.shop_product_video_fragment);
+        productVideoViewFragmentFrame = view.findViewById(R.id.shop_product_video_fragment_frame);
+
+        if (product != null)
+            setProduct(product);
+
     }
 
     public void onClick(View v){

@@ -92,6 +92,8 @@ public class MovieMetaData {
     private static String ITEM_GALLERY_ID = "gallery_id";
     private static String ITEM_GALLERY_THUMBNAIL = "gallery_thumbnail";
     private static String ITEM_EXPERIENCE_ID = "experience_id";
+    private static String ITEM_PRODUCT_VIDEO = "product_video";
+    private static String ITEM_PRODUCT_VIDEO_CID = "product_video_content_id";
 
 
     private static String ITEM_CONTENT_ID = "content_id";
@@ -173,6 +175,8 @@ public class MovieMetaData {
         HashMap<String, AppDataType> appDataIdTpAppDataMap = new HashMap<String, AppDataType>();
 
         HashMap<String, LocationItem> appIdToLocationItemMap = new HashMap<>();
+
+        List<ShopItem> shopItemsWithVideo = new ArrayList<>();
 
         String castTSId = null;
 
@@ -612,7 +616,12 @@ public class MovieMetaData {
                                 presentationData = new PictureItem(null, null, fullImageData, thumbNailImageData, manifest.locale);
                             } else if (otherID != null) {
                                 if (isShopItem(appDataIdTpAppDataMap.get(otherID.getIdentifier()))) {
-                                    presentationData = new ShopItem(otherID.getIdentifier(), appDataIdTpAppDataMap, metaDataAssetsMap, manifest.locale);
+                                    presentationData = getShopItemFromMap(result.appIdToShopItemMap, appDataIdTpAppDataMap, metaDataAssetsMap, otherID.getIdentifier(), manifest.locale);
+                                    //presentationData = new ShopItem(otherID.getIdentifier(), appDataIdTpAppDataMap, metaDataAssetsMap, manifest.locale);
+
+                                    if (!StringHelper.isEmpty(((ShopItem)presentationData).videoPresentationId) ){
+                                        shopItemsWithVideo.add(((ShopItem)presentationData));
+                                    }
 
                                 } else if (OTHER_APP_DATA_ID.equals(otherID.getNamespace())) {
                                     String locationId = otherID.getIdentifier();
@@ -656,6 +665,12 @@ public class MovieMetaData {
                     }
                 }
 
+            }
+        }
+        if (shopItemsWithVideo.size() > 0){
+            for (ShopItem shopItem : shopItemsWithVideo){
+                AudioVisualItem avItem = presentationIdToAVItemMap.get(shopItem.videoPresentationId);
+                shopItem.avItem = avItem;
             }
         }
 
@@ -1165,15 +1180,25 @@ public class MovieMetaData {
         public void fillCastDataWithAppData(AppDataType appDataType, HashMap<String, PictureType> pictureTypeAssetsMap, HashMap<String, PictureImageData> pictureImageMap){
 
             if (appDataType != null && appDataType.getNVPair() != null && appDataType.getNVPair().size() > 0){
-                PictureImageData fullImage = null;
-                PictureImageData thumbNailImage = null;
+
+                CastHeadShot firstHeadShot = null;
                 String appDataBiography = "";
+                List<CastHeadShot> castHeadShots = new ArrayList<>();
                 for (AppNVPairType nvPairType : appDataType.getNVPair()){
                     if ("picture_id".equals(nvPairType.getName())){
 
                         PictureType picture = pictureTypeAssetsMap.get(nvPairType.getPictureID());
-                        fullImage = pictureImageMap.get(picture.getImageID());
-                        thumbNailImage = pictureImageMap.get(picture.getThumbnailImageID());
+                        PictureImageData fullImage = pictureImageMap.get(picture.getImageID());
+                        PictureImageData thumbNailImage = pictureImageMap.get(picture.getThumbnailImageID());
+                        CastHeadShot imageHeadShot = new CastHeadShot();
+
+                        imageHeadShot.fullSizeUrl = fullImage != null ? fullImage.url : null;
+                        imageHeadShot.thumbnailUrl = thumbNailImage != null ? thumbNailImage.url : null;
+                        if (firstHeadShot == null)
+                            firstHeadShot = imageHeadShot;
+                        else
+                            castHeadShots.add(imageHeadShot);
+
 
                     } else if ("description".equals(nvPairType.getName())){
                         appDataBiography = nvPairType.getText();
@@ -1183,13 +1208,12 @@ public class MovieMetaData {
                 }
 
 
-                final PictureImageData fullImageData = fullImage;
-                final PictureImageData thumbNailImageData = thumbNailImage;
+                final CastHeadShot actorImageShot = firstHeadShot;
                 baselineCastData = new BaselineCastData(){
 
                     public String getThumbnailImageUrl(){
-                        if (thumbNailImageData != null && !StringHelper.isEmpty(thumbNailImageData.url))
-                            return thumbNailImageData.url;
+                        if (actorImageShot != null && !StringHelper.isEmpty(actorImageShot.thumbnailUrl))
+                            return actorImageShot.thumbnailUrl;
                         else
                             return getFullImageUrl();
                     }
@@ -1199,8 +1223,8 @@ public class MovieMetaData {
                     }
 
                     public String getFullImageUrl(){
-                        if (fullImageData != null)
-                            return fullImageData.url;
+                        if (actorImageShot != null && !StringHelper.isEmpty(actorImageShot.fullSizeUrl))
+                            return actorImageShot.fullSizeUrl;
                         else
                             return "";
                     }
@@ -1216,6 +1240,7 @@ public class MovieMetaData {
                     }
                 };
                 baselineCastData.biography = appDataBiography;
+                baselineCastData.headShots = castHeadShots;
             }
 
         }
@@ -1541,7 +1566,12 @@ public class MovieMetaData {
         public  String workType;
         public  String releaseYear;
 
+        String videoPresentationId = null;
+        String videoContentId = null;
+
         public  InventoryMetadataType categoryType;
+
+        private AudioVisualItem avItem;
 
         public String getShopItemText(Context context){
             return context.getResources().getString(R.string.shop_online);
@@ -1567,7 +1597,7 @@ public class MovieMetaData {
 
         }*/
 
-        public ShopItem(String id, HashMap<String, AppDataType> appDataMap, HashMap<String, InventoryMetadataType> metadataTypeHashMap, Locale locale){
+        public ShopItem(String id, HashMap<String, AppDataType> appDataMap, HashMap<String, InventoryMetadataType> metadataTypeHashMap, Locale locale ){
             super(id, "", null, locale);
             String cid = "";
             int order = 0;
@@ -1595,6 +1625,10 @@ public class MovieMetaData {
                         order = pair.getInteger().intValue();
                     else if (pair.getName().endsWith(ITEM_EXTERNAL_URL))
                         url = pair.getURL();
+                    else if (pair.getName().equalsIgnoreCase(ITEM_PRODUCT_VIDEO)) {
+                        videoPresentationId = pair.getPresentationID();
+                    }else if (pair.getName().equalsIgnoreCase(ITEM_PRODUCT_VIDEO_CID))
+                        videoContentId = pair.getContentID();
                     else if (pair.getName().endsWith(ITEM_PARENT_CID)) {
                         parentContentId = pair.getContentID();
                         categoryType = metadataTypeHashMap.get(parentContentId);
@@ -1650,6 +1684,10 @@ public class MovieMetaData {
             this.workType = workType;
             this.releaseYear = releaseYear;
             this.categoryType = categoryType;
+        }
+
+        public AudioVisualItem getAVItem(){
+            return avItem;
         }
 
         public String getPosterImgUrl(){
@@ -1744,7 +1782,7 @@ public class MovieMetaData {
         }
 
         public String getPosterImgUrl(){
-            return thumbnail.url;
+            return thumbnail != null ? thumbnail.url : null;
         }
     }
 
@@ -1769,7 +1807,7 @@ public class MovieMetaData {
         public String getPosterImgUrl(){
             if (StringHelper.isEmpty(posterImgUrl) ) {
                 if (galleryImages.size() > 0){
-                    posterImgUrl = galleryImages.get(0).thumbnail.url;
+                    posterImgUrl = galleryImages.get(0).thumbnail != null ? galleryImages.get(0).thumbnail.url : null;
                 }
             }
             return posterImgUrl;

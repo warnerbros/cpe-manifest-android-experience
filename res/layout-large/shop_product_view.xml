@@ -5,48 +5,56 @@
     android:layout_height="match_parent"
     android:background="@android:color/transparent">
     <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@android:color/transparent"
-        android:padding="@dimen/spacing_normal">
-        <com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            nextgen:allowLargerThanParent="false"
-            nextgen:aspectRatioHeight="9"
-            nextgen:aspectRatioWidth="16">
-            <ImageView
-                android:id="@+id/shop_product_image_full"
-                android:paddingTop="@dimen/spacing_normal"
-                android:layout_width="match_parent"
-                android:layout_height="fill_parent"
-                android:background="@android:color/transparent"
-                android:scaleType="fitStart"
-                android:layout_weight="1"/>
-
-        </com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout>
-        <com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout
-            android:id="@+id/shop_product_video_fragment_frame"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            nextgen:allowLargerThanParent="false"
-            nextgen:aspectRatioHeight="9"
-            nextgen:aspectRatioWidth="16">
-            <fragment
-                android:name="com.wb.nextgenlibrary.fragment.ECVideoViewFragment"
-                android:id="@+id/shop_product_video_fragment"
-                android:paddingTop="@dimen/spacing_normal"
-                android:layout_width="match_parent"
-                android:layout_height="fill_parent"
-                android:background="@android:color/transparent"
-                android:scaleType="fitStart"
-                android:layout_weight="1"/>
-
-        </com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout>
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@android:color/transparent"
+            android:padding="@dimen/spacing_normal">
+            <com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                nextgen:allowLargerThanParent="false"
+                nextgen:aspectRatioHeight="9"
+                nextgen:aspectRatioWidth="16">
+                <ImageView
+                    android:id="@+id/shop_product_image_full"
+                    android:paddingTop="@dimen/spacing_normal"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:background="@android:color/transparent"
+                    android:scaleType="fitStart"
+                    android:layout_weight="1"/>
+
+            </com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout>
+            <com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout
+                android:id="@+id/shop_product_video_fragment_frame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                nextgen:allowLargerThanParent="false"
+                nextgen:aspectRatioHeight="9"
+                nextgen:aspectRatioWidth="16">
+                <fragment
+                    android:name="com.wb.nextgenlibrary.fragment.ECVideoViewFragment"
+                    android:id="@+id/shop_product_video_fragment"
+                    android:paddingTop="@dimen/spacing_normal"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:background="@android:color/transparent"
+                    android:scaleType="fitStart"
+                    android:layout_weight="1"/>
+
+            </com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_weight="1"
             android:orientation="vertical">

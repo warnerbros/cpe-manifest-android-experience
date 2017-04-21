@@ -1,5 +1,6 @@
 package com.wb.nextgenlibrary.activity;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import com.wb.nextgenlibrary.fragment.ShopCategoryGridFragment;
 import com.wb.nextgenlibrary.fragment.ShopItemDetailFragment;
 import com.wb.nextgenlibrary.interfaces.NGEFragmentTransactionInterface;
 import com.wb.nextgenlibrary.network.TheTakeApiDAO;
+import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.util.utils.F;
 import com.wb.nextgenlibrary.util.utils.NGEFragmentTransactionEngine;
@@ -77,6 +79,15 @@ public class ShopCategoryActivity extends AbstractNGEActivity implements NGEFrag
 
         fragmentTransactionEngine = new NGEFragmentTransactionEngine(this);
         transitLeftFragment(gridFrament);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (TabletUtils.isTablet())
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+        else
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     @Override

@@ -94,7 +94,20 @@ public class NextGenExperience {
 
     private static String sUserAgent;
 
+    public static void exitExperience(){
+        manifestItems = null;
+        movieMetaData = null;
+        nextgenPlaybackObject = null;
+        applicationContext = null;
+        mainMovieFragmentClass = null;
+        castMovieFragmentClass = null;
+        NGEEventHandler = null;
+        clientLocale = null;
+        manifestItem = null;
+        studioXAPIKey = null;
 
+        sUserAgent = null;
+    }
 
     public static void startNextGenExperience(Context appContext, final Activity launcherActivity, final ManifestItem item,
                                               Object playbackObject, Class<? extends AbstractNGEMainMovieFragment> fragmentClass,

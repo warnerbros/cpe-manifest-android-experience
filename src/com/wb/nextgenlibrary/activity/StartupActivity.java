@@ -242,6 +242,12 @@ public class StartupActivity extends NGEHideStatusBarActivity implements View.On
     }
 
     @Override
+    public void onDestroy(){
+        super.onDestroy();
+        NextGenExperience.exitExperience();
+    }
+
+    @Override
     public void onStart(){
         super.onStart();
         if (TabletUtils.isTablet())
