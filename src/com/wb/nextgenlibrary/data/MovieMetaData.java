@@ -2150,8 +2150,10 @@ public class MovieMetaData {
                 posterImgUrl = galleryItems.get(0).getPosterImgUrl();
             }else if (audioVisualItems.size() > 0) {
                 posterImgUrl = audioVisualItems.get(0).getPosterImgUrl();
-            }else if (locationItems.size() > 0){
+            }else if (locationItems.size() > 0) {
                 posterImgUrl = locationItems.get(0).getPosterImgUrl();
+            }else if (shopItems.size() > 0){
+                posterImgUrl = shopItems.get(0).getPosterImgUrl();
             }else if (StringHelper.isEmpty(posterImgUrl) && childrenExperience.size() > 0) {
                 for (ExperienceData ec : childrenExperience) {
                     if (!StringHelper.isEmpty(ec.getPosterImgUrl())) {
