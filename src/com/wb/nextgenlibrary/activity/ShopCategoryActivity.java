@@ -3,6 +3,7 @@ package com.wb.nextgenlibrary.activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.data.TheTakeData.ShopCategory;
 import com.wb.nextgenlibrary.fragment.ShopCategoryGridFragment;
 import com.wb.nextgenlibrary.fragment.ShopItemDetailFragment;
+import com.wb.nextgenlibrary.interfaces.ContentViewFullscreenRequestInterface;
 import com.wb.nextgenlibrary.interfaces.NGEFragmentTransactionInterface;
 import com.wb.nextgenlibrary.network.TheTakeApiDAO;
 import com.wb.nextgenlibrary.util.TabletUtils;
@@ -33,7 +35,7 @@ import java.util.List;
 /**
  * Created by gzcheng on 4/8/16.
  */
-public class ShopCategoryActivity extends AbstractNGEActivity implements NGEFragmentTransactionInterface {
+public class ShopCategoryActivity extends AbstractNGEActivity implements NGEFragmentTransactionInterface, ContentViewFullscreenRequestInterface {
 
     List<ShopCategory> categories = new ArrayList<ShopCategory>();
 
@@ -448,5 +450,40 @@ public class ShopCategoryActivity extends AbstractNGEActivity implements NGEFrag
                 titleText = "";
         }
         return titleText;
+    }
+
+    boolean isContentFullScreen = false;
+
+    public void onRequestToggleFullscreen(){
+        switchFullScreen(!isContentFullScreen);
+        isContentFullScreen = !isContentFullScreen;
+        if (categoryListView != null) {
+
+            ActionBar bar = getSupportActionBar();
+            if (isContentFullScreen){    // make it full screen
+
+                if (bar != null)
+                    bar.hide();
+                if (backgroundImageView != null)
+                    backgroundImageView.setImageDrawable(null);
+
+
+            } else {                     // shrink it
+
+                if (bar != null)
+                    bar.show();
+                loadBGImage();
+            }
+            if (isContentFullScreen) {
+
+                categoryListView.setVisibility(View.GONE);
+            }else
+                categoryListView.setVisibility(View.VISIBLE);
+        }
+        Fragment f = getSupportFragmentManager().findFragmentByTag(ShopItemDetailFragment.class.toString());
+        if (f != null){
+            ((ShopItemDetailFragment)f).setFullScreen(isContentFullScreen);
+        }
+
     }
 }

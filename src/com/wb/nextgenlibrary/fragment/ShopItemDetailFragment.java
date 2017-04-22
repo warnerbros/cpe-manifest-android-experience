@@ -31,7 +31,7 @@ public class ShopItemDetailFragment extends AbstractNextGenFragment implements V
     TextView matchStatus, brandText, nameText, priceText;
     Button shopAtTheTakeBtn, sendLinkBtn;
     ECVideoViewFragment productVideoViewFragment;
-    View productVideoViewFragmentFrame;
+    View productVideoViewFragmentFrame, productImageFrame, productMetaFrame;
 
     String titleText = "";
 
@@ -42,10 +42,16 @@ public class ShopItemDetailFragment extends AbstractNextGenFragment implements V
     }
 
     public void setFullScreen(boolean bFullScreen){
-        if (bFullScreen){
+        if (productImageFrame != null && productMetaFrame != null){
+            if (bFullScreen){
+                productImageFrame.setVisibility(View.GONE);
+                productMetaFrame.setVisibility(View.GONE);
+            }else {
+                productImageFrame.setVisibility(View.VISIBLE);
+                productMetaFrame.setVisibility(View.VISIBLE);
 
-        }else{
 
+            }
         }
     }
 
@@ -55,6 +61,7 @@ public class ShopItemDetailFragment extends AbstractNextGenFragment implements V
             if (productVideoViewFragmentFrame != null)
                 productVideoViewFragmentFrame.setVisibility(View.VISIBLE);
             productVideoViewFragment.setShouldAutoPlay(false);
+            productVideoViewFragment.setShouldShowFullScreenBtn(true);
             productVideoViewFragment.setAudioVisualItem(((MovieMetaData.ShopItem) product).getAVItem());
         } else if (productVideoViewFragmentFrame != null)
             productVideoViewFragmentFrame.setVisibility(View.GONE);
@@ -87,6 +94,9 @@ public class ShopItemDetailFragment extends AbstractNextGenFragment implements V
 
         productVideoViewFragment = (ECVideoViewFragment)getChildFragmentManager().findFragmentById(R.id.shop_product_video_fragment);
         productVideoViewFragmentFrame = view.findViewById(R.id.shop_product_video_fragment_frame);
+
+        productImageFrame = view.findViewById(R.id.shop_product_thumbnail_frame);
+        productMetaFrame = view.findViewById(R.id.shop_product_meta_frame);
 
         if (product != null)
             setProduct(product);

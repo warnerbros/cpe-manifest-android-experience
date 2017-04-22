@@ -11,6 +11,7 @@
         android:background="@android:color/transparent"
         android:padding="@dimen/spacing_normal">
         <com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout
+            android:id="@+id/shop_product_thumbnail_frame"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             nextgen:allowLargerThanParent="false"
@@ -46,6 +47,7 @@
         </com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout>
 
         <LinearLayout
+            android:id="@+id/shop_product_meta_frame"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"

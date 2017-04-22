@@ -56,7 +56,7 @@ public abstract class AbstractECView extends AbstractNGEActivity {
     public void onStart() {
         super.onStart();
         if (TabletUtils.isTablet())
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
         if (listFragment != null && listFragment.getSelectedIndex() <= 0 && ecGroupData.getChildrenContents().size() > 0){
             listFragment.onListItemClick(0, ecGroupData.getChildrenContents().get(0));
             listFragment.scrollToTop();
