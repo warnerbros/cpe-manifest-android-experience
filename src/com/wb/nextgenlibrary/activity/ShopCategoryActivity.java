@@ -154,6 +154,13 @@ public class ShopCategoryActivity extends AbstractNGEActivity implements NGEFrag
                 }
 
             }
+            if ( categories.size() == 0){
+                ShopCategory allCategory = new ShopCategory();
+                allCategory.categoryId = 0;
+                allCategory.categoryName = getResources().getString(R.string.label_all);
+                allCategory.products = new ArrayList<>();
+                categories.add(allCategory);
+            }
 
             if (experienceData.shopItems.size() > 0){
                 for (MovieMetaData.ShopItem shopItem : experienceData.shopItems){
@@ -169,6 +176,7 @@ public class ShopCategoryActivity extends AbstractNGEActivity implements NGEFrag
                             shopCategoryHashMap.put(id, category);
                         }
                         category.products.add(shopItem);
+                        categories.get(0).products.add(shopItem);   // add to "All" category
                     }
                 }
             }
