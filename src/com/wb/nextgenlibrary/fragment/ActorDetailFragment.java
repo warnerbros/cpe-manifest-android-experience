@@ -255,10 +255,12 @@ public class ActorDetailFragment extends AbstractNextGenFragment implements View
                                         if (loadingView != null)
                                             loadingView.setVisibility(View.GONE);
 
-                                        if (actorOjbect.getBaselineCastData().filmogrphies != null && actorOjbect.getBaselineCastData().filmogrphies.size() > 0){
-                                            actorFilmographyFrame.setVisibility(View.VISIBLE);
-                                        }else {
-                                            actorFilmographyFrame.setVisibility(View.GONE);
+                                        if (actorFilmographyFrame != null) {
+                                            if (actorOjbect.getBaselineCastData().filmogrphies != null && actorOjbect.getBaselineCastData().filmogrphies.size() > 0) {
+                                                actorFilmographyFrame.setVisibility(View.VISIBLE);
+                                            } else {
+                                                actorFilmographyFrame.setVisibility(View.GONE);
+                                            }
                                         }
                                     }
                                 });
