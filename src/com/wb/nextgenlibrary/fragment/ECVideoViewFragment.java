@@ -74,7 +74,7 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
     //protected TextView descriptionTextView;
     protected TextView countDownTextView;
     protected View countDownCountainer;
-    protected ProgressBar countDownProgressBar;
+    protected ProgressBar countDownProgressBar, loadingView;
 
     ImageView previewImageView = null;
     RelativeLayout previewFrame = null;
@@ -171,6 +171,12 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
         countDownTextView = (TextView) view.findViewById(R.id.count_down_text_view);
         countDownProgressBar = (ProgressBar) view.findViewById(R.id.count_down_progressBar);
 
+        loadingView = (ProgressBar)view.findViewById(R.id.next_gen_loading_progress_bar);
+        if (loadingView != null){
+            loadingView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+
+        }
+
         if (countDownCountainer != null)
             countDownCountainer.setVisibility(View.INVISIBLE);
         if (countDownProgressBar != null){
@@ -249,6 +255,8 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
                         }
                         break;
                     case ExoPlayer.STATE_READY:
+                        if (loadingView != null)
+                            loadingView.setVisibility(View.GONE);
                         int startTime = previousPlaybackTime;
 
                         if (resumeTime > 0)
@@ -520,6 +528,7 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
     };
 
     public void setAudioVisualItem(MovieMetaData.AudioVisualItem avItem){
+
         if (avItem != null) {
             selectedAVItem = avItem;
             if (countDownCountainer != null)
@@ -534,6 +543,8 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
                 //new HlsMediaSource(Uri.parse(mainStyle.getBackgroundVideoUrl()), mediaDataSourceFactory, new Handler(),null);
                 //buildMediaSource(nonDRMPlaybackContent.contentUri, nonDRMPlaybackContent.contentType, EXTENSION_EXTRA);
                 player.prepare(mediaSource, true, true);
+                if (loadingView != null)
+                    loadingView.setVisibility(View.VISIBLE);
                 if (!shouldAutoPlay) {
                     if(playerControl.isPlaying())
                         player.setPlayWhenReady(false);
