@@ -40,7 +40,7 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
     FixedAspectRatioFrameLayout aspectRatioFrame = null;
     ImageView bgImageView;
     Button shareImageButton;
-    private TextView countText;
+    private TextView countText, galleryDescriptionText;
     boolean shouldShowShareBtn = true;
 	ImageButton prevClipButton, nextClipButton;
 	int itemIndex = 0;
@@ -60,10 +60,16 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
 		bgColor = color;
 	}
 
+	int contentViewId = R.layout.ec_gallery_frame_view;
+
     @Override
     public int getContentViewId(){
-        return R.layout.ec_gallery_frame_view;
+        return contentViewId;
     }
+
+    public void setContentViewId(int contentViewId){
+		this.contentViewId = contentViewId;
+	}
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -72,6 +78,8 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
         adapter = new GalleryPagerAdapter(getActivity());
 
         galleryViewPager.setAdapter(adapter);
+
+		galleryDescriptionText = (TextView)view.findViewById(R.id.gallery_description);
 
 		countText = (TextView) view.findViewById(R.id.count_text);
 		countText.setVisibility(View.GONE);
@@ -176,6 +184,10 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
         }else{
             bSetOnResume = true;
         }
+
+        if (galleryDescriptionText != null && gallery != null && !StringHelper.isEmpty(gallery.getSummary()) ){
+			galleryDescriptionText.setText(gallery.getSummary());
+		}
     }
 
     public void setAspectRatioFramePriority(FixedAspectRatioFrameLayout.Priority priority){

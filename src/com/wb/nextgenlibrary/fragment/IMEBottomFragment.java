@@ -42,11 +42,6 @@ public class IMEBottomFragment extends Fragment implements NGEPlaybackStatusList
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ImageView backgroundImgView = (ImageView)view.findViewById(R.id.next_gen_ime_bottom_background);
-        if (backgroundImgView != null && NextGenExperience.getMovieMetaData().getInMovieExperience().style != null){
-            Picasso.with(getActivity()).load(NextGenExperience.getMovieMetaData().getInMovieExperience().style.getBackground().getImage().url).fit().into(backgroundImgView);
-            //Glide.with(getActivity()).load(NextGenExperience.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.InMovie)).into(backgroundImgView);
-        }
 
         TextView actorsTitle = (TextView)view.findViewById(R.id.actor_list_title);
         if (actorsTitle != null)

@@ -137,9 +137,10 @@ public class IMEElementsGridFragment extends AbstractGridViewFragment implements
                 if (playerActivity != null) {
                     if (headElement instanceof MovieMetaData.ECGalleryItem) {
                         ECGalleryViewFragment fragment = new ECGalleryViewFragment();
+                        fragment.setContentViewId(R.layout.ime_gallery_frame_view);
                         fragment.setShouldShowCloseBtn(true);
-                        if (NextGenExperience.getMovieMetaData().getInMovieExperience().style != null)
-                            fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getInMovieExperience().style.getBackground().getImage().url);
+                        /*if (NextGenExperience.getMovieMetaData().getInMovieExperience().style != null)
+                            fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getInMovieExperience().style.getBackground().getImage().url);*/
                         fragment.setCurrentGallery((MovieMetaData.ECGalleryItem) headElement);
                         mainMovieListener = null;
                         playerActivity.transitMainFragment(fragment);
@@ -154,8 +155,8 @@ public class IMEElementsGridFragment extends AbstractGridViewFragment implements
                             fragment.setShouldAutoPlay(false);
                             fragment.setShouldShowCloseBtn(true);
                             fragment.setExperienceAndIndex(activeObj.imeExperience, ((MovieMetaData.IMEElement) activeObj.imeObject).itemIndex);
-                            if (NextGenExperience.getMovieMetaData().getInMovieExperience().style != null)
-                                fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getInMovieExperience().style.getBackground().getImage().url);
+                            /*if (NextGenExperience.getMovieMetaData().getInMovieExperience().style != null)
+                                fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getInMovieExperience().style.getBackground().getImage().url);*/
                             fragment.setVideoStatusListener(this);
                             mainMovieListener = fragment;
                             playerActivity.transitMainFragment(fragment);
@@ -165,8 +166,8 @@ public class IMEElementsGridFragment extends AbstractGridViewFragment implements
                             ECVideoViewFragment fragment = new ECVideoViewFragment();
                             fragment.setShouldShowCloseBtn(true);
                             fragment.setShouldAutoPlay(false);
-                            if (NextGenExperience.getMovieMetaData().getInMovieExperience().style != null)
-                                fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getInMovieExperience().style.getBackground().getImage().url);
+                            /*if (NextGenExperience.getMovieMetaData().getInMovieExperience().style != null)
+                                fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getInMovieExperience().style.getBackground().getImage().url);*/
                             fragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) headElement);
                             fragment.setVideoStatusListener(this);
                             mainMovieListener = fragment;
