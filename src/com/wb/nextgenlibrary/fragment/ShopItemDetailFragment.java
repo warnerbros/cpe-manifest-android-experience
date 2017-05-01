@@ -113,7 +113,11 @@ public class ShopItemDetailFragment extends AbstractNextGenFragment implements V
             });
             NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_SHOP_PRODUCT, product.getProductReportId(), null);
         }else if (v.getId() == R.id.send_link_button){
-            NextGenExperience.launchChromeWithUrl(product.getShareLinkUrl());
+            if (!StringHelper.isEmpty(product.getShareLinkUrl()))
+                NextGenExperience.launchChromeWithUrl(product.getShareLinkUrl());
+            else if (!StringHelper.isEmpty(product.getPurchaseLinkUrl())){
+                NextGenExperience.launchSocialSharingWithUrl(getActivity(), product.getPurchaseLinkUrl());
+            }
             NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SHARE_PRODUCT_LINK, product.getProductReportId(), null);
         }
     }

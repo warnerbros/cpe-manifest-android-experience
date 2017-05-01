@@ -274,6 +274,8 @@ public class NextGenExperience {
     }
 
     public static void launchChromeWithUrl(String urlString){
+        if (StringHelper.isEmpty(urlString))
+            return;
 
         Intent intent=new Intent(Intent.ACTION_VIEW, Uri.parse(urlString));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -285,6 +287,19 @@ public class NextGenExperience {
         } catch (ActivityNotFoundException ex) {
             intent.setPackage(null);
             applicationContext.startActivity(intent);
+        }
+    }
+
+    public static void launchSocialSharingWithUrl(Activity activity, String urlString){
+        try {
+            Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+            sharingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            sharingIntent.setType("text/plain");
+            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, urlString);
+
+            activity.startActivity(Intent.createChooser(sharingIntent, "Share using"));
+        }catch (Exception ex){
+            NextGenLogger.e(F.TAG, ex.getLocalizedMessage());
         }
     }
 
