@@ -146,7 +146,7 @@ public class ECTurnTableViewFragment extends AbstractECGalleryViewFragment{
             if (getActivity() == null)
                 return null;
 
-            double fractionNumber = count > 50 ? (double)count / 50.0 : count;
+            double fractionNumber = count > 50 ? (double)count / 50.0 : 1;
 
             ActivityManager actManager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
             ActivityManager.MemoryInfo memInfo = new ActivityManager.MemoryInfo();
