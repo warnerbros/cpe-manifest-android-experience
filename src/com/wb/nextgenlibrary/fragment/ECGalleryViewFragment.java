@@ -16,6 +16,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -310,8 +311,18 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
             int borderSize = 0;//_thumbnails.getPaddingTop();
 
             // Get the size of the actual thumbnail image
-            int thumbnailSize = ((FrameLayout.LayoutParams)
-                    galleryViewPager.getLayoutParams()).bottomMargin - (borderSize*2);
+			int bottomMargin = 0;
+			if (galleryViewPager.getLayoutParams() instanceof FrameLayout.LayoutParams){
+				bottomMargin = ((FrameLayout.LayoutParams) galleryViewPager.getLayoutParams()).bottomMargin;
+			} else if (galleryViewPager.getLayoutParams() instanceof RelativeLayout.LayoutParams){
+				bottomMargin = ((RelativeLayout.LayoutParams) galleryViewPager.getLayoutParams()).bottomMargin;
+
+			} else if (galleryViewPager.getLayoutParams() instanceof LinearLayout.LayoutParams){
+				bottomMargin = ((LinearLayout.LayoutParams) galleryViewPager.getLayoutParams()).bottomMargin;
+
+			}
+
+            int thumbnailSize = bottomMargin - (borderSize*2);
 
             // Set the thumbnail layout parameters. Adjust as required
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(thumbnailSize, thumbnailSize);
