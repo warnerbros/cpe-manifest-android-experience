@@ -36,6 +36,8 @@ public class ECTurnTableViewFragment extends AbstractECGalleryViewFragment{
 
     private static DownloadImagesFilesTask downloadImagesFilesTask = null;
 
+    private int totalImagesCount = 50;
+
     List<Bitmap> turntableBitmaps = new ArrayList<Bitmap>();
     @Override
     public int getContentViewId(){
@@ -63,7 +65,7 @@ public class ECTurnTableViewFragment extends AbstractECGalleryViewFragment{
 
     void nextPic(){
         int currentIndex = turnTableSeekBar.getProgress();
-        if (currentIndex < 49)
+        if (currentIndex < totalImagesCount - 1)
             turnTableSeekBar.setProgress(currentIndex + 1);
         else{
             turnTableSeekBar.setProgress(0);
@@ -75,7 +77,7 @@ public class ECTurnTableViewFragment extends AbstractECGalleryViewFragment{
         if (currentIndex > 0)
             turnTableSeekBar.setProgress(currentIndex - 1);
         else
-            turnTableSeekBar.setProgress(50);
+            turnTableSeekBar.setProgress(totalImagesCount);
     }
 
     SeekBar.OnSeekBarChangeListener seekBarListener = new SeekBar.OnSeekBarChangeListener() {
@@ -146,7 +148,16 @@ public class ECTurnTableViewFragment extends AbstractECGalleryViewFragment{
             if (getActivity() == null)
                 return null;
 
-            double fractionNumber = count > 50 ? (double)count / 50.0 : 1;
+            double fractionNumber = 1.0;
+
+            if (count > 50){
+                totalImagesCount = 50;
+                fractionNumber = (double)count / 50.0;
+            } else{
+                totalImagesCount = count;
+                fractionNumber = 1;
+            }
+
 
             ActivityManager actManager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
             ActivityManager.MemoryInfo memInfo = new ActivityManager.MemoryInfo();
