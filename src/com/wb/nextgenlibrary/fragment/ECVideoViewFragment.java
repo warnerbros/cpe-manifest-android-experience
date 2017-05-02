@@ -200,7 +200,21 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
             });
         }
 
-        player.addListener(new ExoPlayer.EventListener() {
+        player.addListener(ecVideoViewListener);
+
+        videoView.requestFocus();
+
+        bgImageView = (ImageView) view.findViewById(R.id.ec_video_frame_bg);
+
+        if (bgImageView != null && !StringHelper.isEmpty(bgImageUrl)){
+            NextGenGlide.load(getActivity(), bgImageUrl).fitCenter().into(bgImageView);
+        }
+        if (selectedAVItem != null){
+            setAudioVisualItem(selectedAVItem);
+        }
+    }
+    private ECVideoEventListner ecVideoViewListener = new ECVideoEventListner();
+    class ECVideoEventListner implements ExoPlayer.EventListener{
             boolean isFreshloaded = true;
             private Handler mHandler = new Handler();
             int counter = COUNT_DOWN_SECONDS;
@@ -334,27 +348,20 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
                     }
                 }
             };
-            void startRepeatingTask() {
-                counter = 5;
-                mStatusChecker.run();
-            }
-
-            void stopRepeatingTask() {
-                mHandler.removeCallbacks(mStatusChecker);
-            }
-        });
-
-        videoView.requestFocus();
-
-        bgImageView = (ImageView) view.findViewById(R.id.ec_video_frame_bg);
-
-        if (bgImageView != null && !StringHelper.isEmpty(bgImageUrl)){
-            NextGenGlide.load(getActivity(), bgImageUrl).fitCenter().into(bgImageView);
+        public void startRepeatingTask() {
+            counter = 5;
+            mStatusChecker.run();
         }
-        if (selectedAVItem != null){
-            setAudioVisualItem(selectedAVItem);
+
+        public void stopRepeatingTask() {
+            mHandler.removeCallbacks(mStatusChecker);
+            if (countDownTextView != null)
+                countDownTextView.setText("");
+            if (countDownCountainer != null)
+                countDownCountainer.setVisibility(View.GONE);
+
         }
-    }
+    };
 
     boolean isClipPlaying;
     //******* Observe videoView Playback
@@ -528,7 +535,8 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
     };
 
     public void setAudioVisualItem(MovieMetaData.AudioVisualItem avItem){
-
+        if (ecVideoViewListener != null)
+            ecVideoViewListener.stopRepeatingTask();
         if (avItem != null) {
             selectedAVItem = avItem;
             if (countDownCountainer != null)
