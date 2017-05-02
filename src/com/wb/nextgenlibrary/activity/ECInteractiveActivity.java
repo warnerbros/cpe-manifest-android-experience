@@ -1,6 +1,7 @@
 package com.wb.nextgenlibrary.activity;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +44,11 @@ public class ECInteractiveActivity extends AbstractECView implements AdapterView
 			gridView.setAdapter(listAdaptor);
 			gridView.setOnItemClickListener(this);
 		}
+	}
+	public void onStart() {
+		super.onStart();
+		if (!TabletUtils.isTablet())
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 	}
 
 	@Override
