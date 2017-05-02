@@ -209,7 +209,8 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
     @Override
     public void onFullScreenChange(boolean isContentFullScreen){
         super.onFullScreenChange(isContentFullScreen);
-        adapter.notifyDataSetChanged();
+		if (adapter != null)
+	        adapter.notifyDataSetChanged();
 		if (aspectRatioFrame != null){
 			if (isContentFullScreen){
 				aspectRatioFrame.setAspectRatio(getActivity().getWindowManager().getDefaultDisplay().getWidth(), getActivity().getWindowManager().getDefaultDisplay().getHeight());

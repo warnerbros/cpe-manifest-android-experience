@@ -57,6 +57,7 @@ public abstract class AbstractECView extends AbstractNGEActivity {
         super.onStart();
         if (TabletUtils.isTablet())
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+
         if (listFragment != null && listFragment.getSelectedIndex() <= 0 && ecGroupData.getChildrenContents().size() > 0){
             listFragment.onListItemClick(0, ecGroupData.getChildrenContents().get(0));
             listFragment.scrollToTop();
@@ -114,7 +115,7 @@ public abstract class AbstractECView extends AbstractNGEActivity {
         if (bFullScreen){    // make it full screen
             getFullScreenDisappearView().setVisibility(View.GONE);
             onFullScreenChange(true);
-
+            loadBGImage();
             if (bar != null)
                 bar.hide();
 
@@ -122,6 +123,7 @@ public abstract class AbstractECView extends AbstractNGEActivity {
         } else {                     // shrink it
             getFullScreenDisappearView().setVisibility(View.VISIBLE);
             onFullScreenChange(false);
+            loadBGImage();
             if (bar != null)
                 bar.show();
 

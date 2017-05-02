@@ -1,5 +1,6 @@
 package com.wb.nextgenlibrary.activity;
 
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
@@ -35,6 +36,16 @@ public class ECGalleryActivity extends AbstractECView {
     @Override
     public int getListItemViewLayoutId(){
         return R.layout.ec_gallery_list_item;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (getCurrentScreenOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
+            Configuration newConf = new Configuration();
+            newConf.orientation = Configuration.ORIENTATION_LANDSCAPE;
+            onConfigurationChanged(newConf);
+        }
     }
 
     @Override
