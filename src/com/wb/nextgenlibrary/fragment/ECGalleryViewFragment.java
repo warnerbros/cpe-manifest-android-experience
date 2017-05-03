@@ -23,6 +23,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
+import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
@@ -138,14 +139,13 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
                     }
 
                     String imageUrl = currentGallery.galleryImages.get(currentPos).fullImage.url;
-                    Intent share = new Intent(Intent.ACTION_SEND);
-                    share.setType("text/plain");
-                    share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-                    share.putExtra(Intent.EXTRA_SUBJECT, "Next Gen Share");
-                    share.putExtra(Intent.EXTRA_TEXT, imageUrl);
 
-                    startActivity(Intent.createChooser(share, ""));
-                    NGEAnalyticData.reportEvent(getActivity(), ECGalleryViewFragment.this, NGEAnalyticData.AnalyticAction.ACTION_SHARE_IMAGE, currentGallery.galleryId, null);
+					String shareString = imageUrl;
+					if (NextGenExperience.getManifestItem() != null){
+						shareString = getResources().getString(R.string.share_image_text,NextGenExperience.getManifestItem().movieName) + imageUrl;
+					}
+
+					NextGenExperience.launchSocialSharingWithUrl(getActivity(), shareString);
                 }
             });
         }
