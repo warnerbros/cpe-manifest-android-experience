@@ -21,6 +21,7 @@ import com.wb.nextgenlibrary.network.TheTakeApiDAO;
 import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;
+import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.widget.DotIndicatorImageView;
 
 import java.util.List;
@@ -138,8 +139,14 @@ public class ShopCategoryGridFragment extends AbstractNextGenFragment{
                     NextGenGlide.load(getActivity(), product.getThumbnailUrl()).asBitmap().fitCenter().into(productThumbnail);
                     //PicassoTrustAll.loadImageIntoView(getActivity(), product.getThumbnailUrl(), productThumbnail);
                 }
-                if (brandName != null)
-                    brandName.setText(product.getProductBrand());
+                if (brandName != null) {
+                    if (!StringHelper.isEmpty(product.getProductBrand())) {
+                        brandName.setVisibility(View.VISIBLE);
+                        brandName.setText(product.getProductBrand());
+                    } else {
+                        brandName.setVisibility(View.GONE);
+                    }
+                }
                 if (productName != null)
                     productName.setText(product.getProductName());
             }

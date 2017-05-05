@@ -670,6 +670,11 @@ public class MovieMetaData {
         if (shopItemsWithVideo.size() > 0){
             for (ShopItem shopItem : shopItemsWithVideo){
                 AudioVisualItem avItem = presentationIdToAVItemMap.get(shopItem.videoPresentationId);
+                if (avItem == null){
+                    PresentationType pItem = presentationAssetMap.get(shopItem.videoPresentationId);
+
+                    avItem = generalAudioVisualItem(pItem.getPresentationID(), metaDataAssetsMap, videoAssetsMap, pItem, audioAssetsMap, null, "", shopItem.videoContentId, manifest.locale);
+                }
                 shopItem.avItem = avItem;
             }
         }
@@ -685,6 +690,53 @@ public class MovieMetaData {
 
         return result;
     }
+
+    static AudioVisualItem generalAudioVisualItem(String experienceId, HashMap<String, InventoryMetadataType> metaDataAssetsMap, HashMap<String, InventoryVideoType> videoAssetsMap,
+                                                  PresentationType presentation, HashMap<String, InventoryAudioType> audioAssetsMap, List<ExternalApiData> externalApiDatas, String subType,
+                                                  String avContentId, Locale locale){
+        AudioVisualItem item = null;
+
+        InventoryMetadataType avMetaData = metaDataAssetsMap.get(avContentId);        // get Video asset by ContentID of its AudioVisual
+
+
+            List<AudioVisualTrack> tracks = new ArrayList<>();
+            boolean isValidAVItem = false;
+            if (presentation != null) {
+                if (presentation.getTrackMetadata() != null && presentation.getTrackMetadata().size() > 0) {
+                    for (TrackMetadataType trackMetadataType : presentation.getTrackMetadata()) {
+
+                        InventoryVideoType video = null;
+                        InventoryAudioType audio = null;
+
+                        if (trackMetadataType.getVideoTrackReference() != null &&
+                                trackMetadataType.getVideoTrackReference().size() > 0 &&
+                                trackMetadataType.getVideoTrackReference().get(0).getVideoTrackID().size() > 0)                                          // get the video id from presentation
+                            video = videoAssetsMap.get(trackMetadataType.getVideoTrackReference().get(0).getVideoTrackID().get(0));
+                        if (trackMetadataType.getAudioTrackReference() != null &&
+                                trackMetadataType.getAudioTrackReference().size() > 0 &&
+                                trackMetadataType.getAudioTrackReference().get(0).getAudioTrackID().size() > 0)                                          // get the video id from presentation
+                            audio = audioAssetsMap.get(trackMetadataType.getAudioTrackReference().get(0).getAudioTrackID().get(0));
+                        if (video != null) {
+                            isValidAVItem = true;
+                        }
+                        tracks.add(new AudioVisualTrack(video, audio));
+                    }
+
+
+                }
+            }
+
+            if (!StringHelper.isEmpty(presentation.getPresentationID()) && tracks.size() > 0 && isValidAVItem) {
+                //ExperienceData ecData = new ExperienceData(experience, metaData, video, null);
+                /*if (audioVisual.getSubType() != null && audioVisual.getSubType().size() > 0)
+                    subtype = audioVisual.getSubType().get(0);*/
+                item = new AudioVisualItem(experienceId, presentation.getPresentationID(), avMetaData, tracks, externalApiDatas, subType, locale);
+            }
+            return item;
+
+    }
+
+
 
     public String getActorGroupText(){
         return actorGroupText;
@@ -2321,7 +2373,8 @@ public class MovieMetaData {
     }
 
     public String getCommentaryTrackURL(){
-        if (rootExperience.audioVisualItems != null && rootExperience.audioVisualItems.size() > 0){
+        return "http://wb-extras.warnerbros.com/extrasplus/prod/Manifest/Lego_Batman/Assets/Audio/WB_LegoBatmanMovieThe_VAM_DirectorAndCrewCommentary_V1.mp3";
+        /*if (rootExperience.audioVisualItems != null && rootExperience.audioVisualItems.size() > 0){
             List<AudioVisualTrack> tracks = rootExperience.audioVisualItems.get(rootExperience.audioVisualItems.size() -1 ).tracksList;
             if (tracks.size() > 1){
                 AudioVisualTrack commentaryTrack = tracks.get(tracks.size() - 1);
@@ -2330,7 +2383,7 @@ public class MovieMetaData {
                 return "";
         }else{
             return "";
-        }
+        }*/
     }
 
     public StyleData.ExperienceStyle getRootExperienceStyle(){
