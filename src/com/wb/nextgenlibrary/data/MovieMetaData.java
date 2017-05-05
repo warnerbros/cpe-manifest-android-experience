@@ -2373,8 +2373,7 @@ public class MovieMetaData {
     }
 
     public String getCommentaryTrackURL(){
-        return "http://wb-extras.warnerbros.com/extrasplus/prod/Manifest/Lego_Batman/Assets/Audio/WB_LegoBatmanMovieThe_VAM_DirectorAndCrewCommentary_V1.mp3";
-        /*if (rootExperience.audioVisualItems != null && rootExperience.audioVisualItems.size() > 0){
+        if (rootExperience.audioVisualItems != null && rootExperience.audioVisualItems.size() > 0){
             List<AudioVisualTrack> tracks = rootExperience.audioVisualItems.get(rootExperience.audioVisualItems.size() -1 ).tracksList;
             if (tracks.size() > 1){
                 AudioVisualTrack commentaryTrack = tracks.get(tracks.size() - 1);
@@ -2383,7 +2382,7 @@ public class MovieMetaData {
                 return "";
         }else{
             return "";
-        }*/
+        }
     }
 
     public StyleData.ExperienceStyle getRootExperienceStyle(){
