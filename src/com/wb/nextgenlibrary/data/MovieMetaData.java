@@ -479,6 +479,9 @@ public class MovieMetaData {
                                     ShopItem shopItem = getShopItemFromMap(result.appIdToShopItemMap, appDataIdTpAppDataMap, metaDataAssetsMap, appId, manifest.locale);
                                     if (shopItem != null)
                                         shopItems.add(shopItem);
+                                    if (!StringHelper.isEmpty(shopItem.videoPresentationId) && !shopItemsWithVideo.contains(shopItem)){
+                                        shopItemsWithVideo.add(shopItem);
+                                    }
                                 } else {
                                     LocationItem locationItem = getLocationItemfromMap(appIdToLocationItemMap, appDataIdTpAppDataMap, pictureImageMap, appId, manifest.locale);
                                     if (locationItem != null)
@@ -619,7 +622,7 @@ public class MovieMetaData {
                                     presentationData = getShopItemFromMap(result.appIdToShopItemMap, appDataIdTpAppDataMap, metaDataAssetsMap, otherID.getIdentifier(), manifest.locale);
                                     //presentationData = new ShopItem(otherID.getIdentifier(), appDataIdTpAppDataMap, metaDataAssetsMap, manifest.locale);
 
-                                    if (!StringHelper.isEmpty(((ShopItem)presentationData).videoPresentationId) ){
+                                    if (!StringHelper.isEmpty(((ShopItem)presentationData).videoPresentationId) && !shopItemsWithVideo.contains(((ShopItem)presentationData))){
                                         shopItemsWithVideo.add(((ShopItem)presentationData));
                                     }
 
