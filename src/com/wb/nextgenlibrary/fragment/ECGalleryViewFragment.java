@@ -173,6 +173,7 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
 
 	@Override
     public void onDestroy(){
+		adapter.viewHashMap = null;
         adapter = null;
         if (galleryViewPager != null)
             galleryViewPager.setAdapter(null);

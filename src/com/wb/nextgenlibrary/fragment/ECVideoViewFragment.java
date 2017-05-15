@@ -599,6 +599,10 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
         playerControl.pause();
     }
 
+    public MediaController.MediaPlayerControl getPlayerControl(){
+        return playerControl;
+    }
+
     final MediaController.MediaPlayerControl playerControl = new MediaController.MediaPlayerControl() {
         @Override
         public void start() {

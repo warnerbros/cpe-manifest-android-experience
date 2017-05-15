@@ -3,6 +3,7 @@ package com.wb.nextgenlibrary.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.MediaController;
 import android.widget.TextView;
 
 import com.wb.nextgenlibrary.R;
@@ -18,6 +19,7 @@ import com.wb.nextgenlibrary.widget.SelectedOverlayImageView;
 public class ECViewLeftListFragment extends ExtraLeftListFragment<ExperienceData> {
     MovieMetaData.ExperienceData listECGroupData;
     AbstractECView ecViewActivity;
+    MediaController.MediaPlayerControl playerControl = null;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -77,8 +79,12 @@ public class ECViewLeftListFragment extends ExtraLeftListFragment<ExperienceData
         TextView ecDurationText = (TextView)rowView.findViewById(R.id.ec_duration_text);
         if (ecDurationText != null){
             if (rowView.isActivated() && thisEC.audioVisualItems != null && thisEC.audioVisualItems.size() > 0){
-                ecDurationText.setText(getResources().getString(R.string.playing));
-                thisEC.setWatched();
+                if (playerControl != null && playerControl.isPlaying()) {
+                    ecDurationText.setText(getResources().getString(R.string.playing));
+                    thisEC.setWatched();
+                } else {
+                    ecDurationText.setText(thisEC.getDuration());
+                }
             }else if (thisEC.getIsWatched()){
                 ecDurationText.setText(getResources().getString(R.string.watched));
             }else if (thisEC.getDuration() != null)
@@ -122,5 +128,16 @@ public class ECViewLeftListFragment extends ExtraLeftListFragment<ExperienceData
             return listAdaptor.selectedIndex;
         else
             return -1;
+    }
+
+    public void setObserveVideoPlayerCotrol(MediaController.MediaPlayerControl playerCotrol){
+        this.playerControl = playerCotrol;
+    }
+
+    public void onDestroy(){
+        super.onDestroy();
+        playerControl = null;
+        ecViewActivity = null;
+        listECGroupData = null;
     }
 }
