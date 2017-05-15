@@ -8,6 +8,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -212,8 +213,8 @@ public class ActorDetailFragment extends AbstractNextGenFragment implements View
                     relayoutProfilePortion(true);
                 fullImageView.setVisibility(View.GONE);
             }
-
-            detailTextView.setText(actorOjbect.getBaselineCastData().biography);
+            if (!StringHelper.isEmpty(actorOjbect.getBaselineCastData().biography))
+                detailTextView.setText(Html.fromHtml(actorOjbect.getBaselineCastData().biography));
             if (!StringHelper.isEmpty(actorOjbect.getBaselineCastData().biography)) {
                 actorBiographyFrame.setVisibility(View.VISIBLE);
             } else {
@@ -250,7 +251,8 @@ public class ActorDetailFragment extends AbstractNextGenFragment implements View
                                         } else {
                                             actorBiographyFrame.setVisibility(View.GONE);
                                         }
-                                        detailTextView.setText(actorOjbect.getBaselineCastData().biography);
+                                        if (!StringHelper.isEmpty(actorOjbect.getBaselineCastData().biography))
+                                            detailTextView.setText(Html.fromHtml(actorOjbect.getBaselineCastData().biography));
                                         updateFilmographyList();
                                         if (loadingView != null)
                                             loadingView.setVisibility(View.GONE);
