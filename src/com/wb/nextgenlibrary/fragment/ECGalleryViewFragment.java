@@ -237,10 +237,10 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
 
 	public void updateUI(boolean userTriggerd) {
 		if (adapter != null && adapter.getCount() > 1) {
+			countText.setText((itemIndex + 1) + "/" + adapter.getCount());
 			if (userTriggerd) {
 				countText.clearAnimation();
 				if (countText.getVisibility() == View.GONE) {
-					countText.setText((itemIndex + 1) + "/" + adapter.getCount());
 					countText.setVisibility(View.VISIBLE);
 				}
 			}
