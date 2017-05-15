@@ -178,6 +178,7 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
 
     public void setCurrentGallery(MovieMetaData.ECGalleryItem gallery){
         super.setCurrentGallery(gallery);
+		itemIndex = 0;
         if (adapter != null) {
             adapter.notifyDataSetChanged();
             galleryViewPager.setCurrentItem(0);
