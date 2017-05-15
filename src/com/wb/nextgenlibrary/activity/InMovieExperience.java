@@ -715,9 +715,6 @@ public class InMovieExperience extends AbstractNGEActivity implements NGEFragmen
         if (isCommentaryOn && commentaryAudioPlayer != null){
                 commentaryAudioPlayer.pause();
         }
-        if (!bInterstitialVideoComplete && interstitialVideoView.isPlaying()){
-            interstitialVideoView.pause();
-        }
         super.onPause();
 
     }
@@ -749,9 +746,6 @@ public class InMovieExperience extends AbstractNGEActivity implements NGEFragmen
             skipThisView.setVisibility(View.GONE);
             skipThisView.setOnClickListener(null);
             currentUri = Uri.parse("");
-        }
-        if (!bInterstitialVideoComplete && interstitialVideoView.getVisibility() == View.VISIBLE){
-            interstitialVideoView.resume();
         }
         hideShowNextGenView();
 
