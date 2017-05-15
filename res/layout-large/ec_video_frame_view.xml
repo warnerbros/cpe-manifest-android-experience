@@ -73,6 +73,7 @@
                         android:visibility="gone">
                         <ImageView
                             android:id="@+id/ec_video_preview_image"
+                            android:background="@android:color/black"
                             android:layout_width="fill_parent"
                             android:layout_height="fill_parent"/>
                         <ImageButton
