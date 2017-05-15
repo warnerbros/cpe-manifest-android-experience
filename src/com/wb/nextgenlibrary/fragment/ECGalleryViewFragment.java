@@ -29,8 +29,11 @@ import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.util.NGEUtils;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;
+import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
+
+import java.util.HashMap;
 
 /**
  * Created by gzcheng on 3/31/16.
@@ -282,6 +285,7 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
     class GalleryPagerAdapter extends PagerAdapter {
 
         LayoutInflater mInflater;
+		HashMap<String, View> viewHashMap = new HashMap<>();
 
         public GalleryPagerAdapter(Context context) {
             mInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -297,17 +301,19 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
 
         @Override
         public boolean isViewFromObject(View view, Object object) {
-            return view == ((LinearLayout) object);
+			View itemView = viewHashMap.get(object);
+			if (itemView != null && itemView.equals(view)){
+				return true;
+			}
+            return false;
         }
 
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
-            View itemView = mInflater.inflate(R.layout.pager_gallery_item, container, false);
-            container.addView(itemView);
+			View itemView = mInflater.inflate(R.layout.pager_gallery_item, container, false);
+			container.addView(itemView);
 
             MovieMetaData.ECGalleryItem currentItem = currentGallery;
-
-            itemView.setTag(currentItem.getTitle());
 
             // Get the border size to show around each image
             int borderSize = 0;//_thumbnails.getPaddingTop();
@@ -334,31 +340,42 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
                     (SubsamplingScaleImageView) itemView.findViewById(R.id.image);
 
             // Asynchronously load the image and set the thumbnail and pager view
-            NextGenGlide.load(getActivity(), currentItem.galleryImages.get(position).fullImage.url)
-                    .asBitmap()
-                    .into(new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
-                            imageView.setImage(ImageSource.bitmap(bitmap));
-                            //thumbView.setImageBitmap(bitmap);
-                        }
-                    });
+			String imageUrl = currentItem.galleryImages.get(position).fullImage.url;
 
-            return itemView;
+			NextGenLogger.d("ImageUrl: ", imageUrl);
+			NextGenGlide.load(getActivity(), imageUrl)
+					.asBitmap()
+					.into(new SimpleTarget<Bitmap>() {
+						@Override
+						public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
+							imageView.setImage(ImageSource.bitmap(bitmap));
+							//thumbView.setImageBitmap(bitmap);
+						}
+					});
+
+			viewHashMap.put(imageUrl, itemView);
+
+            return imageUrl;
         }
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView((LinearLayout) object);
+			if (viewHashMap.containsKey(object)) {
+				View itemView = viewHashMap.get(object);
+				viewHashMap.remove(object);
+				container.removeView(itemView);
+			}
         }
 
         @Override
         public int getItemPosition(Object object) {
-            int position = super.getItemPosition(object);
-            if (position >= 0)
-                return  position;
-            else
-                return POSITION_NONE;
+
+            for (int i = 0; i< currentGallery.galleryImages.size(); i ++){
+				if (object.equals(currentGallery.galleryImages.get(i).fullImage.url)){
+					return i;
+				}
+			}
+            return POSITION_NONE;
         }
     }
 }
