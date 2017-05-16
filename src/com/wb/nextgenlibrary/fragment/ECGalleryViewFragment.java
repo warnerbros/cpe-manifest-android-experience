@@ -173,7 +173,6 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
 
 	@Override
     public void onDestroy(){
-		adapter.viewHashMap = null;
         adapter = null;
         if (galleryViewPager != null)
             galleryViewPager.setAdapter(null);
@@ -361,7 +360,7 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-			if (viewHashMap.containsKey(object)) {
+			if (viewHashMap != null && object != null && viewHashMap.containsKey(object)) {
 				View itemView = viewHashMap.get(object);
 				viewHashMap.remove(object);
 				container.removeView(itemView);
