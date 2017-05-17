@@ -725,7 +725,7 @@ public class InMovieExperience extends AbstractNGEActivity implements NGEFragmen
     public void onResume() {
         if (resumePlayTime != -1){
             mainMovieFragment.setResumeTime(resumePlayTime);
-            if (!shouldStartAfterResume)
+            if (!shouldStartAfterResume && !isCasting())
                 mainMovieFragment.pause();
         }
         super.onResume();

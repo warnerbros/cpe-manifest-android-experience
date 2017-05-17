@@ -451,10 +451,12 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
             aspectRatioFrame.setAspectRatioPriority(priority);
         aspectFramePriority = priority;
     }
+    boolean shouldResumePlayback = false;
 
     @Override
     public void onPause(){
         super.onPause();
+        shouldResumePlayback = playerControl.isPlaying();
         player.setPlayWhenReady(false);
         previousPlaybackTime = (int)player.getCurrentPosition();
     }
@@ -485,6 +487,14 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
         if (bSetOnResume){
             bSetOnResume = false;
             setAudioVisualItem(selectedAVItem);
+        }
+        if (playerControl != null) {
+            if (shouldResumePlayback) {
+                playerControl.start();
+            } else {
+                playerControl.pause();
+            }
+            shouldResumePlayback = false;
         }
     }
 
