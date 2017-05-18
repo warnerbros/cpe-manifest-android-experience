@@ -573,11 +573,19 @@ public class InMovieExperience extends AbstractNGEActivity implements NGEFragmen
                     NGEAnalyticData.reportEvent(InMovieExperience.this, null, NGEAnalyticData.AnalyticAction.ACTION_ROTATE_SCREEN_SHOW_EXTRAS, label, null);
                     break;
                 case Configuration.ORIENTATION_LANDSCAPE:
+                    try {
+                        Fragment fragment = getSupportFragmentManager().findFragmentById(getMainFrameId());
+                        if (!(fragment instanceof IMEBottomFragment) ){
+                            onBackPressed();
+                        }
+                    }catch (Exception ex){}
                     nextGenView.setVisibility(View.GONE);
                     actionbarPlaceHolder.setVisibility(View.GONE);
                     getSupportActionBar().hide();
                     if (mediaController != null)
                         mediaController.hideShowControls(false);
+
+
                     NGEAnalyticData.reportEvent(InMovieExperience.this, null, NGEAnalyticData.AnalyticAction.ACTION_ROTATE_SCREEN_HIDE_EXTRAS, label, null);
                     imeBottomFragment.onOrientationChange(this.getResources().getConfiguration().orientation);
             }
