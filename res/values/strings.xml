@@ -87,4 +87,6 @@
 
 	<string name="share_clip_text">Check out this clip from %s: </string>
 	<string name="share_image_text">Check out this image from %s: </string>
+
+	<string name="share_clip_sub_text">Share this clip with friends!</string>
 </resources>

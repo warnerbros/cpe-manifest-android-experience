@@ -2072,6 +2072,15 @@ public class MovieMetaData {
 				return false;
 			}
         }
+
+        @Override
+        public String getGridItemDisplayName(){
+            if (isShareClip()){
+                return NextGenExperience.getApplicationContext().getResources().getString(R.string.share_clip_sub_text);
+            }else {
+                return super.getGridItemDisplayName();
+            }
+        }
     }
 
     static public class ExperienceData {

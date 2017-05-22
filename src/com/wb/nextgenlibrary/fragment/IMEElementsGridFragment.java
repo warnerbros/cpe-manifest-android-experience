@@ -278,7 +278,7 @@ public class IMEElementsGridFragment extends AbstractGridViewFragment implements
         return retId;
     }
 
-
+    static private int posterWidth = 0, posterHeight= 0;
     protected void fillListRowWithObjectInfo(int position, View rowView, Object item, boolean isSelected){
         IMEDisplayObject activeObj = (IMEDisplayObject)item;
 
@@ -288,36 +288,45 @@ public class IMEElementsGridFragment extends AbstractGridViewFragment implements
 
         titleText.setText(activeObj.title.toUpperCase());      // set a tag with the linked Experience Id
 
+        if (posterHeight == 0 && posterWidth == 0){
+            posterHeight = poster.getHeight() / 2;
+            posterWidth = poster.getWidth() / 2;
+        }
+
         if (activeObj.imeObject instanceof MovieMetaData.IMEElement) {
             Object dataObj = ((MovieMetaData.IMEElement) activeObj.imeObject).imeObject;
             if (dataObj instanceof MovieMetaData.PresentationDataItem) {
                 Object tag = rowView.getTag(R.id.ime_title);
-                boolean isSameItem = tag != null && tag.equals(((MovieMetaData.PresentationDataItem) dataObj).getId());
+                //boolean isSameItem = tag != null && tag.equals(((MovieMetaData.PresentationDataItem) dataObj).getId());
 
                 rowView.setTag(R.id.ime_title, ((MovieMetaData.PresentationDataItem) dataObj).getId());
                 if (dataObj instanceof MovieMetaData.LocationItem ){
 
                     MovieMetaData.LocationItem locationItem = (MovieMetaData.LocationItem) dataObj;
-                    if (locationItem != null && poster.getHeight() > 0 && poster.getWidth() > 0){
-                         //if (!isSameItem) {
-                            poster.setImageDrawable(null);
-                            String imageUrl = locationItem.getGoogleMapImageUrl(poster.getWidth() / 2, poster.getHeight() / 2);
-                            NextGenGlide.load(getActivity(), imageUrl).centerCrop().into(poster);
-                        //}
+                    if (locationItem != null ){
+                        poster.setImageDrawable(null);
+                        String imageUrl = "";
+                        if (posterHeight > 0 && posterWidth > 0){
+                            imageUrl = locationItem.getGoogleMapImageUrl(posterWidth, posterHeight);
+                        } else {
+                            imageUrl = locationItem.getGoogleMapImageUrl(320, 180);
+
+                        }
+                        NextGenGlide.load(getActivity(), imageUrl).centerCrop().into(poster);
+                        
                     }
 
                 } else if (poster != null) {
                     String imageUrl = ((MovieMetaData.PresentationDataItem) dataObj).getPosterImgUrl();
-                    if (!isSameItem){
-                        //poster.setImageDrawable(null);
-                        if (!StringHelper.isEmpty(imageUrl)) {
-                            NextGenGlide.load(getActivity(), imageUrl).centerCrop()
-                                    .into(poster);
-                            poster.setVisibility(View.VISIBLE);
-                        } else {
-                            poster.setVisibility(View.GONE);
-                        }
+
+                    if (!StringHelper.isEmpty(imageUrl)) {
+                        NextGenGlide.load(getActivity(), imageUrl).centerCrop()
+                                .into(poster);
+                        poster.setVisibility(View.VISIBLE);
+                    } else {
+                        poster.setVisibility(View.GONE);
                     }
+
                 }
 
                 ImageView playbutton = (ImageView)rowView.findViewById(R.id.ime_item_play_logo);
@@ -325,7 +334,7 @@ public class IMEElementsGridFragment extends AbstractGridViewFragment implements
                     playbutton.setVisibility((dataObj instanceof MovieMetaData.AudioVisualItem) ? View.VISIBLE : View.INVISIBLE);
                 }
 
-                if (subText1 != null && !subText1.getText().equals(((MovieMetaData.PresentationDataItem) dataObj).getTitle())) {
+                if (subText1 != null && !subText1.getText().equals(((MovieMetaData.PresentationDataItem) dataObj).getGridItemDisplayName())) {
                     subText1.setText(((MovieMetaData.PresentationDataItem) dataObj).getGridItemDisplayName());
                     subText1.setTag(R.id.ime_title, "");
                 }
