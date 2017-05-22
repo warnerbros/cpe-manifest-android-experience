@@ -664,7 +664,31 @@ public class MovieMetaData {
                         castTSId = timedEventSequence.getTimedSequenceID();
                         result.reGroupCastIMEEventGroup(imeGroup);
                     } else if (imeGroup.linkedExperience != null) {
-                        result.imeElementGroups.add(imeGroup);
+                        int order = 10;
+                        ExperienceData imeExp = result.getInMovieExperience();
+                        if (imeExp != null) {
+                            boolean bInserted = false;
+                            try {
+                                order = imeExp.childIdToSequenceNumber.get(imeGroup.linkedExperience.experienceId);
+
+                                for (int j = 0; j < result.imeElementGroups.size(); j++) {
+                                    Integer thisOrder = imeExp.childIdToSequenceNumber.get(result.imeElementGroups.get(j).linkedExperience.experienceId);
+                                    if (thisOrder == null){
+                                        break;
+                                    }else if (order < thisOrder){
+                                        result.imeElementGroups.add(j, imeGroup);
+                                        bInserted = true;
+                                        break;
+                                    }
+                                }
+                            } catch (Exception ex) {}
+
+                            if (!bInserted)
+                                result.imeElementGroups.add(imeGroup);
+
+                        } else {
+                            result.imeElementGroups.add(imeGroup);
+                        }
                     }
                 }
 
@@ -1408,6 +1432,10 @@ public class MovieMetaData {
         public String getSummary(){
             return  summary;
         }
+
+        public String getGridItemDisplayName(){
+            return getTitle();
+        }
     }
 
     static public class TextItem extends PresentationDataItem{
@@ -1483,6 +1511,11 @@ public class MovieMetaData {
             this.pinImage = pinImage;
             this.experienceId = experienceId;
 
+        }
+
+        @Override
+        public String getGridItemDisplayName(){
+            return "";
         }
 
         public String getPosterImgUrl(){

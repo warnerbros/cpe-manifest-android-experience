@@ -299,17 +299,17 @@ public class IMEElementsGridFragment extends AbstractGridViewFragment implements
 
                     MovieMetaData.LocationItem locationItem = (MovieMetaData.LocationItem) dataObj;
                     if (locationItem != null && poster.getHeight() > 0 && poster.getWidth() > 0){
-                        if (!isSameItem) {
+                         //if (!isSameItem) {
                             poster.setImageDrawable(null);
                             String imageUrl = locationItem.getGoogleMapImageUrl(poster.getWidth() / 2, poster.getHeight() / 2);
                             NextGenGlide.load(getActivity(), imageUrl).centerCrop().into(poster);
-                        }
+                        //}
                     }
 
                 } else if (poster != null) {
                     String imageUrl = ((MovieMetaData.PresentationDataItem) dataObj).getPosterImgUrl();
                     if (!isSameItem){
-                        poster.setImageDrawable(null);
+                        //poster.setImageDrawable(null);
                         if (!StringHelper.isEmpty(imageUrl)) {
                             NextGenGlide.load(getActivity(), imageUrl).centerCrop()
                                     .into(poster);
@@ -326,7 +326,7 @@ public class IMEElementsGridFragment extends AbstractGridViewFragment implements
                 }
 
                 if (subText1 != null && !subText1.getText().equals(((MovieMetaData.PresentationDataItem) dataObj).getTitle())) {
-                    subText1.setText(((MovieMetaData.PresentationDataItem) dataObj).getTitle());
+                    subText1.setText(((MovieMetaData.PresentationDataItem) dataObj).getGridItemDisplayName());
                     subText1.setTag(R.id.ime_title, "");
                 }
             }
