@@ -1513,11 +1513,6 @@ public class MovieMetaData {
 
         }
 
-        @Override
-        public String getGridItemDisplayName(){
-            return "";
-        }
-
         public String getPosterImgUrl(){
             String retImgUrl = null;
             if (locationThumbnail != null)

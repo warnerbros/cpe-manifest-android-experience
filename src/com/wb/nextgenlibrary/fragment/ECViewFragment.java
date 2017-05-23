@@ -26,6 +26,9 @@ public abstract class ECViewFragment extends AbstractNextGenFragment{
 
     public void setShouldHideMetaData(boolean bHide){
         shouldHideMetaData = bHide;
+        if (contentMetaFrame != null){
+            contentMetaFrame.setVisibility(shouldHideMetaData ? View.GONE : View.VISIBLE);
+        }
     }
 
     public void onFullScreenChange(boolean bFullscreen){
