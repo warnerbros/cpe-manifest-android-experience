@@ -152,7 +152,7 @@ public class IMEElementsGridFragment extends AbstractGridViewFragment implements
 
                         if (((MovieMetaData.AudioVisualItem) headElement).isShareClip()){
                             ShareClipFragment fragment = new ShareClipFragment();
-                            fragment.setShouldAutoPlay(false);
+                            fragment.setShouldAutoPlay(playerActivity.isPlaying() ? false : true);
                             fragment.setShouldShowCloseBtn(true);
                             fragment.setExperienceAndIndex(activeObj.imeExperience, ((MovieMetaData.IMEElement) activeObj.imeObject).itemIndex);
                             /*if (NextGenExperience.getMovieMetaData().getInMovieExperience().style != null)
@@ -163,9 +163,10 @@ public class IMEElementsGridFragment extends AbstractGridViewFragment implements
                             NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_CLIP_SHARE, ((MovieMetaData.AudioVisualItem) headElement).videoId, null);
                         }else {
 
-                            ECVideoViewFragment fragment = new ECVideoViewFragment();
+							IMEDeletedSceneVideoFragment fragment = new IMEDeletedSceneVideoFragment();
+							fragment.setShouldAutoPlay(playerActivity.isPlaying() ? false : true);
                             fragment.setShouldShowCloseBtn(true);
-                            fragment.setShouldAutoPlay(false);
+							fragment.setExperience(activeObj.imeExperience);
                             /*if (NextGenExperience.getMovieMetaData().getInMovieExperience().style != null)
                                 fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getInMovieExperience().style.getBackground().getImage().url);*/
                             fragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) headElement);

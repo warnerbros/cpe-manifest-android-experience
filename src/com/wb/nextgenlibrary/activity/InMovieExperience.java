@@ -1120,4 +1120,11 @@ public class InMovieExperience extends AbstractNGEActivity implements NGEFragmen
             }
         }, delay);
     }
+
+    public boolean isPlaying(){
+        if (mainMovieFragment != null)
+            return mainMovieFragment.isPlaying();
+        else
+            return false;
+    }
 }

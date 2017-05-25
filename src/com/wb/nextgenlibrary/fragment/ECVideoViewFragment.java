@@ -603,6 +603,7 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
 
     public void setShouldAutoPlay(boolean shouldAutoPlay){
         this.shouldAutoPlay = shouldAutoPlay;
+        shouldResumePlayback = shouldAutoPlay;
     }
 
     public void stopPlayback(){
