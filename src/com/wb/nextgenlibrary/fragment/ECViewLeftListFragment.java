@@ -112,6 +112,7 @@ public class ECViewLeftListFragment extends ExtraLeftListFragment<ExperienceData
             int currentSelection = listAdaptor.selectedIndex;
             if (listAdaptor.getCount() -1  > currentSelection) {
                 onItemClick(null, listView, currentSelection + 1, 0);
+                listView.smoothScrollToPositionFromTop(currentSelection + 1, 0);
             }
         }
     }
