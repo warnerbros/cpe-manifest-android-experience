@@ -180,6 +180,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/filmography_frame_layout"
             android:layout_weight="3"
             android:orientation="vertical"
             android:layout_width="fill_parent"

@@ -73,6 +73,7 @@
                         android:visibility="gone">
                         <ImageView
                             android:id="@+id/ec_video_preview_image"
+                            android:background="@android:color/black"
                             android:layout_width="fill_parent"
                             android:layout_height="fill_parent"/>
                         <ImageButton
@@ -97,6 +98,18 @@
                 android:scaleType="centerInside"
                 android:layout_alignParentRight="true"
                 android:background="@android:color/transparent"/>
+
+            <ProgressBar
+                android:background="@color/transparent_gray"
+                android:id="@+id/next_gen_loading_progress_bar"
+                style="?android:attr/progressBarStyleLarge"
+                android:progressBackgroundTint="@android:color/transparent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
+                android:padding="@dimen/spacing_xsmall"
+                android:visibility="gone"/>
         </RelativeLayout>
     </LinearLayout>
 </RelativeLayout>

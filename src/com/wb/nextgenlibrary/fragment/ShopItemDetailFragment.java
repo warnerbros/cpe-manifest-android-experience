@@ -1,6 +1,7 @@
 package com.wb.nextgenlibrary.fragment;
 
 import android.content.DialogInterface;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +16,7 @@ import com.wb.nextgenlibrary.data.TheTakeData.TheTakeProduct;
 import com.wb.nextgenlibrary.data.TheTakeData.TheTakeProductDetail;
 import com.wb.nextgenlibrary.network.TheTakeApiDAO;
 import com.wb.nextgenlibrary.util.DialogUtils;
+import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
@@ -28,6 +30,8 @@ public class ShopItemDetailFragment extends AbstractNextGenFragment implements V
     ImageView productPoster;
     TextView matchStatus, brandText, nameText, priceText;
     Button shopAtTheTakeBtn, sendLinkBtn;
+    ECVideoViewFragment productVideoViewFragment;
+    View productVideoViewFragmentFrame, productImageFrame, productMetaFrame;
 
     String titleText = "";
 
@@ -37,9 +41,30 @@ public class ShopItemDetailFragment extends AbstractNextGenFragment implements V
         contentViewId = viewId;
     }
 
+    public void setFullScreen(boolean bFullScreen){
+        if (productImageFrame != null && productMetaFrame != null){
+            if (bFullScreen){
+                productImageFrame.setVisibility(View.GONE);
+                productMetaFrame.setVisibility(View.GONE);
+            }else {
+                productImageFrame.setVisibility(View.VISIBLE);
+                productMetaFrame.setVisibility(View.VISIBLE);
+
+
+            }
+        }
+    }
 
     public void setProduct(MovieMetaData.ShopItemInterface product){
         this.product = product;
+        if (productVideoViewFragment != null && product instanceof MovieMetaData.ShopItem && ((MovieMetaData.ShopItem) product).getAVItem() != null) {
+            if (productVideoViewFragmentFrame != null)
+                productVideoViewFragmentFrame.setVisibility(View.VISIBLE);
+            productVideoViewFragment.setShouldAutoPlay(false);
+            productVideoViewFragment.setShouldShowFullScreenBtn(true);
+            productVideoViewFragment.setAudioVisualItem(((MovieMetaData.ShopItem) product).getAVItem());
+        } else if (productVideoViewFragmentFrame != null)
+            productVideoViewFragmentFrame.setVisibility(View.GONE);
     }
 
 
@@ -66,6 +91,16 @@ public class ShopItemDetailFragment extends AbstractNextGenFragment implements V
 
         if (product != null)
             getProductDetail();
+
+        productVideoViewFragment = (ECVideoViewFragment)getChildFragmentManager().findFragmentById(R.id.shop_product_video_fragment);
+        productVideoViewFragmentFrame = view.findViewById(R.id.shop_product_video_fragment_frame);
+
+        productImageFrame = view.findViewById(R.id.shop_product_thumbnail_frame);
+        productMetaFrame = view.findViewById(R.id.shop_product_meta_frame);
+
+        if (product != null)
+            setProduct(product);
+
     }
 
     public void onClick(View v){
@@ -78,7 +113,11 @@ public class ShopItemDetailFragment extends AbstractNextGenFragment implements V
             });
             NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_SHOP_PRODUCT, product.getProductReportId(), null);
         }else if (v.getId() == R.id.send_link_button){
-            NextGenExperience.launchChromeWithUrl(product.getShareLinkUrl());
+            if (!StringHelper.isEmpty(product.getShareLinkUrl()))
+                NextGenExperience.launchChromeWithUrl(product.getShareLinkUrl());
+            else if (!StringHelper.isEmpty(product.getPurchaseLinkUrl())){
+                NextGenExperience.launchSocialSharingWithUrl(getActivity(), product.getPurchaseLinkUrl());
+            }
             NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SHARE_PRODUCT_LINK, product.getProductReportId(), null);
         }
     }

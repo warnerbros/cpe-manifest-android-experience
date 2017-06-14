@@ -13,6 +13,30 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical">
+        <RelativeLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/deleted_scene_title_txt"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/spacing_normal"
+                android:background="@color/transparent_black2"
+                android:fontFamily="sans-serif-condensed"
+                android:layout_toLeftOf="@+id/close_button"
+                android:layout_centerVertical="true"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/textMedium" />
+
+            <ImageButton
+                android:id="@+id/close_button"
+                android:layout_width="@dimen/close_icon_dimen"
+                android:layout_height="@dimen/close_icon_dimen"
+                android:src="@drawable/close_x_circle"
+                android:scaleType="centerInside"
+                android:layout_alignParentRight="true"
+                android:background="@android:color/transparent"/>
+
+        </RelativeLayout>
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
@@ -89,14 +113,7 @@
                 </RelativeLayout>
             </com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout>
 
-            <ImageButton
-                android:id="@+id/close_button"
-                android:layout_width="@dimen/close_icon_dimen"
-                android:layout_height="@dimen/close_icon_dimen"
-                android:src="@drawable/close_x_circle"
-                android:scaleType="centerInside"
-                android:layout_alignParentRight="true"
-                android:background="@android:color/transparent"/>
+
 
             <ProgressBar
                 android:background="@color/transparent_gray"
@@ -111,5 +128,14 @@
                 android:visibility="gone"/>
         </RelativeLayout>
 
+        <TextView
+            android:id="@+id/deleted_scene_detail_txt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/spacing_normal"
+            android:background="@color/transparent_black2"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/textMedium" />
     </LinearLayout>
 </RelativeLayout>

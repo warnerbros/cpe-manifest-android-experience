@@ -15,6 +15,7 @@ import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.fragment.ECCastPlayerFragment;
 import com.wb.nextgenlibrary.fragment.ECVideoViewFragment;
 import com.wb.nextgenlibrary.interfaces.ECVideoPlayerInterface;
+import com.wb.nextgenlibrary.interfaces.IMEVideoStatusListener;
 import com.wb.nextgenlibrary.util.utils.NGEFragmentTransactionEngine;
 
 
@@ -41,6 +42,31 @@ public class ECVideoActivity extends AbstractECView implements ECVideoViewFragme
 
 		//rightVideoFrame = (ECVideoViewFragment) getSupportFragmentManager().findFragmentById(R.id.ec_video_view_fragment);
 		ecVideoFragment = new ECVideoViewFragment();
+		ecVideoFragment.setVideoStatusListener(new IMEVideoStatusListener(){
+			public void onVideoStartPlaying(){
+				if (listFragment != null)
+					listFragment.notifyDataSetChanged();
+			}
+
+			public void onFragmentDestroyed(){
+
+			}
+
+			public void onVideoPause(){
+
+			}
+
+			public void onVideoResume(){
+
+			}
+
+			public void onVideoComplete(){
+
+			}
+
+		});
+
+		listFragment.setObserveVideoPlayerCotrol(ecVideoFragment.getPlayerControl());
 
 		castFragment = new ECCastPlayerFragment();
 

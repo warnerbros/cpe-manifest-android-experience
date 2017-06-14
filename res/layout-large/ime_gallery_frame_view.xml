@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/transparent"
+    android:paddingTop="@dimen/spacing_small">
+    <TextView
+        android:id="@+id/ec_content_name"
+        android:padding="@dimen/spacing_normal"
+        android:background="@color/black"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="@dimen/textXLarge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/share_image_button"
+        android:layout_below="@+id/ec_content_name">
+        <RelativeLayout
+            android:layout_above="@+id/gallery_description"
+            android:background="@android:color/black"
+            android:layout_centerInParent="true"
+            android:layout_height="fill_parent"
+            android:layout_width="fill_parent"
+            android:layout_gravity="center">
+            <android.support.v4.view.ViewPager
+                android:id="@+id/next_gen_gallery_view_pager"
+                android:background="@android:color/transparent"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/gallery_fullscreen_toggle">
+            </android.support.v4.view.ViewPager>
+            <!--<ImageButton
+                android:id="@+id/gallery_fullscreen_toggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:src="@drawable/expand_shrink"
+                android:visibility="gone"
+                android:background="@android:color/transparent"
+                android:text="TEST"/>-->
+            <TextView
+                android:layout_margin="@dimen/spacing_normal"
+                android:padding="@dimen/spacing_normal"
+                android:id="@+id/count_text"
+                android:layout_gravity="bottom|left"
+                android:background="@drawable/count_text_bg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:visibility="gone"/>
+        </RelativeLayout>
+        <TextView
+            android:background="@color/black"
+            android:padding="@dimen/spacing_normal"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/gallery_description"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:fontFamily="sans-serif-condensed"
+            android:textSize="@dimen/textMedium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <ImageButton
+            android:layout_alignParentLeft="true"
+            android:id="@+id/prev_clip_btn"
+            android:layout_width="@dimen/close_icon_dimen"
+            android:layout_height="@dimen/close_icon_dimen"
+            android:layout_centerVertical="true"
+            android:scaleType="fitCenter"
+            android:background="@color/transparent_black"
+            android:src="@drawable/back_logo"
+            android:visibility="invisible"/>
+
+        <ImageButton
+            android:layout_alignParentRight="true"
+            android:id="@+id/next_clip_btn"
+            android:layout_width="@dimen/close_icon_dimen"
+            android:layout_height="@dimen/close_icon_dimen"
+            android:layout_centerVertical="true"
+            android:scaleType="fitCenter"
+            android:rotation="180"
+            android:background="@color/transparent_black"
+            android:src="@drawable/back_logo"
+            android:visibility="invisible"/>
+    </RelativeLayout>
+
+    <ImageButton
+        android:id="@+id/close_button"
+        android:layout_width="@dimen/close_icon_dimen"
+        android:layout_height="@dimen/close_icon_dimen"
+        android:src="@drawable/close_x_circle"
+        android:scaleType="centerInside"
+        android:layout_alignParentRight="true"
+        android:background="@android:color/transparent"/>
+
+
+
+
+        <Button
+            android:padding="@dimen/spacing_normal"
+            android:layout_marginBottom="@dimen/spacing_large"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/share_image_button"
+            android:text="@string/share_this_image"
+            android:textColor="@color/white"
+            android:fontFamily="sans-serif-condensed"
+            android:textSize="@dimen/textMedium"
+            android:background="@drawable/red_rounded_corner_drawable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+</RelativeLayout>

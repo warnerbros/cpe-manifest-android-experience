@@ -8,6 +8,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,6 +60,7 @@ public class ActorDetailFragment extends AbstractNextGenFragment implements View
     ActorDetailGalleryRecyclerAdapter actorGalleryAdaptor;
     View actorGalleryFrame;
     View actorBiographyFrame;
+    View actorFilmographyFrame;
 
     ImageButton facebookBtn;
     ImageButton twitterBtn;
@@ -103,6 +105,8 @@ public class ActorDetailFragment extends AbstractNextGenFragment implements View
         actorGalleryFrame = view.findViewById(R.id.actor_gallery_recycler_frame);
 
         actorBiographyFrame = view.findViewById(R.id.actor_biography_frame);
+
+        actorFilmographyFrame = view.findViewById(R.id.filmography_frame_layout);
 
         loadingView = view.findViewById(R.id.actor_detail_loading_view);
         if (loadingView != null)
@@ -209,8 +213,8 @@ public class ActorDetailFragment extends AbstractNextGenFragment implements View
                     relayoutProfilePortion(true);
                 fullImageView.setVisibility(View.GONE);
             }
-
-            detailTextView.setText(actorOjbect.getBaselineCastData().biography);
+            if (!StringHelper.isEmpty(actorOjbect.getBaselineCastData().biography))
+                detailTextView.setText(Html.fromHtml(actorOjbect.getBaselineCastData().biography));
             if (!StringHelper.isEmpty(actorOjbect.getBaselineCastData().biography)) {
                 actorBiographyFrame.setVisibility(View.VISIBLE);
             } else {
@@ -234,7 +238,8 @@ public class ActorDetailFragment extends AbstractNextGenFragment implements View
                     @Override
                     public void onResult(MovieMetaData.BaselineCastData result) {
                         actorOjbect.getBaselineCastData().filmogrphies = result.filmogrphies;
-                        actorOjbect.getBaselineCastData().biography = result.biography;
+                        if (!StringHelper.isEmpty(result.biography))
+                            actorOjbect.getBaselineCastData().biography = result.biography;
                         if (getActivity() != null) {
                             synchronized (getActivity()) {
                                 getActivity().runOnUiThread(new Runnable() {
@@ -246,10 +251,19 @@ public class ActorDetailFragment extends AbstractNextGenFragment implements View
                                         } else {
                                             actorBiographyFrame.setVisibility(View.GONE);
                                         }
-                                        detailTextView.setText(actorOjbect.getBaselineCastData().biography);
+                                        if (!StringHelper.isEmpty(actorOjbect.getBaselineCastData().biography))
+                                            detailTextView.setText(Html.fromHtml(actorOjbect.getBaselineCastData().biography));
                                         updateFilmographyList();
                                         if (loadingView != null)
                                             loadingView.setVisibility(View.GONE);
+
+                                        if (actorFilmographyFrame != null) {
+                                            if (actorOjbect.getBaselineCastData().filmogrphies != null && actorOjbect.getBaselineCastData().filmogrphies.size() > 0) {
+                                                actorFilmographyFrame.setVisibility(View.VISIBLE);
+                                            } else {
+                                                actorFilmographyFrame.setVisibility(View.GONE);
+                                            }
+                                        }
                                     }
                                 });
                             }

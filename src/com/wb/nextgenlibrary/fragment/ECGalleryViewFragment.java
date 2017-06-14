@@ -16,19 +16,24 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
+import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
 import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.util.NGEUtils;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;
+import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
+
+import java.util.HashMap;
 
 /**
  * Created by gzcheng on 3/31/16.
@@ -40,7 +45,7 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
     FixedAspectRatioFrameLayout aspectRatioFrame = null;
     ImageView bgImageView;
     Button shareImageButton;
-    private TextView countText;
+    private TextView countText, galleryDescriptionText;
     boolean shouldShowShareBtn = true;
 	ImageButton prevClipButton, nextClipButton;
 	int itemIndex = 0;
@@ -60,10 +65,16 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
 		bgColor = color;
 	}
 
+	int contentViewId = R.layout.ec_gallery_frame_view;
+
     @Override
     public int getContentViewId(){
-        return R.layout.ec_gallery_frame_view;
+        return contentViewId;
     }
+
+    public void setContentViewId(int contentViewId){
+		this.contentViewId = contentViewId;
+	}
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -72,6 +83,8 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
         adapter = new GalleryPagerAdapter(getActivity());
 
         galleryViewPager.setAdapter(adapter);
+
+		galleryDescriptionText = (TextView)view.findViewById(R.id.gallery_description);
 
 		countText = (TextView) view.findViewById(R.id.count_text);
 		countText.setVisibility(View.GONE);
@@ -129,14 +142,13 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
                     }
 
                     String imageUrl = currentGallery.galleryImages.get(currentPos).fullImage.url;
-                    Intent share = new Intent(Intent.ACTION_SEND);
-                    share.setType("text/plain");
-                    share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-                    share.putExtra(Intent.EXTRA_SUBJECT, "Next Gen Share");
-                    share.putExtra(Intent.EXTRA_TEXT, imageUrl);
 
-                    startActivity(Intent.createChooser(share, ""));
-                    NGEAnalyticData.reportEvent(getActivity(), ECGalleryViewFragment.this, NGEAnalyticData.AnalyticAction.ACTION_SHARE_IMAGE, currentGallery.galleryId, null);
+					String shareString = imageUrl;
+					if (NextGenExperience.getManifestItem() != null){
+						shareString = getResources().getString(R.string.share_image_text,NextGenExperience.getManifestItem().movieName) + imageUrl;
+					}
+
+					NextGenExperience.launchSocialSharingWithUrl(getActivity(), shareString);
                 }
             });
         }
@@ -169,6 +181,7 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
 
     public void setCurrentGallery(MovieMetaData.ECGalleryItem gallery){
         super.setCurrentGallery(gallery);
+		itemIndex = 0;
         if (adapter != null) {
             adapter.notifyDataSetChanged();
             galleryViewPager.setCurrentItem(0);
@@ -176,6 +189,10 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
         }else{
             bSetOnResume = true;
         }
+
+        if (galleryDescriptionText != null && gallery != null && !StringHelper.isEmpty(gallery.getSummary()) ){
+			galleryDescriptionText.setText(gallery.getSummary());
+		}
     }
 
     public void setAspectRatioFramePriority(FixedAspectRatioFrameLayout.Priority priority){
@@ -196,7 +213,8 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
     @Override
     public void onFullScreenChange(boolean isContentFullScreen){
         super.onFullScreenChange(isContentFullScreen);
-        adapter.notifyDataSetChanged();
+		if (adapter != null)
+	        adapter.notifyDataSetChanged();
 		if (aspectRatioFrame != null){
 			if (isContentFullScreen){
 				aspectRatioFrame.setAspectRatio(getActivity().getWindowManager().getDefaultDisplay().getWidth(), getActivity().getWindowManager().getDefaultDisplay().getHeight());
@@ -222,10 +240,10 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
 
 	public void updateUI(boolean userTriggerd) {
 		if (adapter != null && adapter.getCount() > 1) {
+			countText.setText((itemIndex + 1) + "/" + adapter.getCount());
 			if (userTriggerd) {
 				countText.clearAnimation();
 				if (countText.getVisibility() == View.GONE) {
-					countText.setText((itemIndex + 1) + "/" + adapter.getCount());
 					countText.setVisibility(View.VISIBLE);
 				}
 			}
@@ -267,6 +285,7 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
     class GalleryPagerAdapter extends PagerAdapter {
 
         LayoutInflater mInflater;
+		HashMap<String, View> viewHashMap = new HashMap<>();
 
         public GalleryPagerAdapter(Context context) {
             mInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -282,24 +301,36 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
 
         @Override
         public boolean isViewFromObject(View view, Object object) {
-            return view == ((LinearLayout) object);
+			View itemView = viewHashMap.get(object);
+			if (itemView != null && itemView.equals(view)){
+				return true;
+			}
+            return false;
         }
 
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
-            View itemView = mInflater.inflate(R.layout.pager_gallery_item, container, false);
-            container.addView(itemView);
+			View itemView = mInflater.inflate(R.layout.pager_gallery_item, container, false);
+			container.addView(itemView);
 
             MovieMetaData.ECGalleryItem currentItem = currentGallery;
-
-            itemView.setTag(currentItem.getTitle());
 
             // Get the border size to show around each image
             int borderSize = 0;//_thumbnails.getPaddingTop();
 
             // Get the size of the actual thumbnail image
-            int thumbnailSize = ((FrameLayout.LayoutParams)
-                    galleryViewPager.getLayoutParams()).bottomMargin - (borderSize*2);
+			int bottomMargin = 0;
+			if (galleryViewPager.getLayoutParams() instanceof FrameLayout.LayoutParams){
+				bottomMargin = ((FrameLayout.LayoutParams) galleryViewPager.getLayoutParams()).bottomMargin;
+			} else if (galleryViewPager.getLayoutParams() instanceof RelativeLayout.LayoutParams){
+				bottomMargin = ((RelativeLayout.LayoutParams) galleryViewPager.getLayoutParams()).bottomMargin;
+
+			} else if (galleryViewPager.getLayoutParams() instanceof LinearLayout.LayoutParams){
+				bottomMargin = ((LinearLayout.LayoutParams) galleryViewPager.getLayoutParams()).bottomMargin;
+
+			}
+
+            int thumbnailSize = bottomMargin - (borderSize*2);
 
             // Set the thumbnail layout parameters. Adjust as required
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(thumbnailSize, thumbnailSize);
@@ -309,31 +340,42 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
                     (SubsamplingScaleImageView) itemView.findViewById(R.id.image);
 
             // Asynchronously load the image and set the thumbnail and pager view
-            NextGenGlide.load(getActivity(), currentItem.galleryImages.get(position).fullImage.url)
-                    .asBitmap()
-                    .into(new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
-                            imageView.setImage(ImageSource.bitmap(bitmap));
-                            //thumbView.setImageBitmap(bitmap);
-                        }
-                    });
+			String imageUrl = currentItem.galleryImages.get(position).fullImage.url;
 
-            return itemView;
+			NextGenLogger.d("ImageUrl: ", imageUrl);
+			NextGenGlide.load(getActivity(), imageUrl)
+					.asBitmap()
+					.into(new SimpleTarget<Bitmap>() {
+						@Override
+						public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
+							imageView.setImage(ImageSource.bitmap(bitmap));
+							//thumbView.setImageBitmap(bitmap);
+						}
+					});
+
+			viewHashMap.put(imageUrl, itemView);
+
+            return imageUrl;
         }
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView((LinearLayout) object);
+			if (viewHashMap != null && object != null && viewHashMap.containsKey(object)) {
+				View itemView = viewHashMap.get(object);
+				viewHashMap.remove(object);
+				container.removeView(itemView);
+			}
         }
 
         @Override
         public int getItemPosition(Object object) {
-            int position = super.getItemPosition(object);
-            if (position >= 0)
-                return  position;
-            else
-                return POSITION_NONE;
+
+            for (int i = 0; i< currentGallery.galleryImages.size(); i ++){
+				if (object.equals(currentGallery.galleryImages.get(i).fullImage.url)){
+					return i;
+				}
+			}
+            return POSITION_NONE;
         }
     }
 }

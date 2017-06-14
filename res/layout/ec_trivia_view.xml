@@ -2,20 +2,24 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/spacing_small">
+    android:paddingTop="@dimen/spacing_small">
+    <TextView
+        android:id="@+id/ec_title_name"
+        android:background="@android:color/black"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/textXLarge"
+        android:fontFamily="sans-serif-condensed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <LinearLayout
+        android:layout_below="@+id/ec_title_name"
         android:id="@+id/next_gen_ec_content_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/ec_title_name"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/textXLarge"
-            android:fontFamily="sans-serif-condensed"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/spacing_small"
+        android:paddingRight="@dimen/spacing_small">
 
         <com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout
             xmlns:nextgen="http://schemas.android.com/apk/res-auto"

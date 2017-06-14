@@ -44,7 +44,7 @@
 	<string name="menu">Menu</string>
 
 	<string name="shop_at_the_take">SHOP ON THE TAKE.COM</string>
-	<string name="shop_online">SHOP ONLINE</string>
+	<string name="shop_online">SHOP NOW</string>
 	<string name="send_the_link">SEND THE LINK</string>
 	<string name="share_this_clip">SHARE THIS CLIP</string>
 	<string name="share_this_image">SHARE THIS IMAGE</string>
@@ -84,4 +84,9 @@
 	<string name="playing_on_str">Casting to %s</string>
 	<string name="loading_on_str">Loading on %s</string>
 	<string name="subtitle_off">OFF</string>
+
+	<string name="share_clip_text">Check out this clip from %s: </string>
+	<string name="share_image_text">Check out this image from %s: </string>
+
+	<string name="share_clip_sub_text">Share this clip with friends!</string>
 </resources>

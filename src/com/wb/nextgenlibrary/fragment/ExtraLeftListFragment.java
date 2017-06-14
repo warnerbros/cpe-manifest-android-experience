@@ -107,6 +107,11 @@ public abstract class ExtraLeftListFragment<T> extends Fragment implements Adapt
         listAdaptor.notifyDataSetChanged();
     }
 
+    public void notifyDataSetChanged(){
+        if (listAdaptor != null)
+            listAdaptor.notifyDataSetChanged();
+    }
+
     public class NextGenExtraLeftPanelAdapter extends BaseAdapter {
 
         protected int selectedIndex = getStartupSelectedIndex();

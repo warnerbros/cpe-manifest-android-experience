@@ -245,6 +245,9 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
                 locationECsAdapter.notifyDataSetChanged();
             }
             locationECRecyclerView.smoothScrollToPosition(0);
+            if (currentFragment != null && !(currentFragment instanceof ECSceneLocationMapFragment)){
+                onBackPressed();
+            }
         }
     }
 

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.MediaController;
@@ -73,7 +74,7 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
     //protected TextView descriptionTextView;
     protected TextView countDownTextView;
     protected View countDownCountainer;
-    protected ProgressBar countDownProgressBar;
+    protected ProgressBar countDownProgressBar, loadingView;
 
     ImageView previewImageView = null;
     RelativeLayout previewFrame = null;
@@ -137,6 +138,7 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         videoView = (SimpleExoPlayerView) view.findViewById(R.id.ec_video_view);
         mediaDataSourceFactory = buildDataSourceFactory(true);
         if (videoView != null){
@@ -169,6 +171,12 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
         countDownTextView = (TextView) view.findViewById(R.id.count_down_text_view);
         countDownProgressBar = (ProgressBar) view.findViewById(R.id.count_down_progressBar);
 
+        loadingView = (ProgressBar)view.findViewById(R.id.next_gen_loading_progress_bar);
+        if (loadingView != null){
+            loadingView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+
+        }
+
         if (countDownCountainer != null)
             countDownCountainer.setVisibility(View.INVISIBLE);
         if (countDownProgressBar != null){
@@ -192,7 +200,21 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
             });
         }
 
-        player.addListener(new ExoPlayer.EventListener() {
+        player.addListener(ecVideoViewListener);
+
+        videoView.requestFocus();
+
+        bgImageView = (ImageView) view.findViewById(R.id.ec_video_frame_bg);
+
+        if (bgImageView != null && !StringHelper.isEmpty(bgImageUrl)){
+            NextGenGlide.load(getActivity(), bgImageUrl).fitCenter().into(bgImageView);
+        }
+        if (selectedAVItem != null){
+            setAudioVisualItem(selectedAVItem);
+        }
+    }
+    private ECVideoEventListner ecVideoViewListener = new ECVideoEventListner();
+    class ECVideoEventListner implements ExoPlayer.EventListener{
             boolean isFreshloaded = true;
             private Handler mHandler = new Handler();
             int counter = COUNT_DOWN_SECONDS;
@@ -247,6 +269,8 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
                         }
                         break;
                     case ExoPlayer.STATE_READY:
+                        if (loadingView != null)
+                            loadingView.setVisibility(View.GONE);
                         int startTime = previousPlaybackTime;
 
                         if (resumeTime > 0)
@@ -324,27 +348,20 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
                     }
                 }
             };
-            void startRepeatingTask() {
-                counter = 5;
-                mStatusChecker.run();
-            }
-
-            void stopRepeatingTask() {
-                mHandler.removeCallbacks(mStatusChecker);
-            }
-        });
-
-        videoView.requestFocus();
-
-        bgImageView = (ImageView) view.findViewById(R.id.ec_video_frame_bg);
-
-        if (bgImageView != null && !StringHelper.isEmpty(bgImageUrl)){
-            NextGenGlide.load(getActivity(), bgImageUrl).fitCenter().into(bgImageView);
+        public void startRepeatingTask() {
+            counter = 5;
+            mStatusChecker.run();
         }
-        if (selectedAVItem != null){
-            setAudioVisualItem(selectedAVItem);
+
+        public void stopRepeatingTask() {
+            mHandler.removeCallbacks(mStatusChecker);
+            if (countDownTextView != null)
+                countDownTextView.setText("");
+            if (countDownCountainer != null)
+                countDownCountainer.setVisibility(View.GONE);
+
         }
-    }
+    };
 
     boolean isClipPlaying;
     //******* Observe videoView Playback
@@ -434,10 +451,12 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
             aspectRatioFrame.setAspectRatioPriority(priority);
         aspectFramePriority = priority;
     }
+    boolean shouldResumePlayback = false;
 
     @Override
     public void onPause(){
         super.onPause();
+        shouldResumePlayback = playerControl.isPlaying();
         player.setPlayWhenReady(false);
         previousPlaybackTime = (int)player.getCurrentPosition();
     }
@@ -468,6 +487,14 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
         if (bSetOnResume){
             bSetOnResume = false;
             setAudioVisualItem(selectedAVItem);
+        }
+        if (playerControl != null) {
+            if (shouldResumePlayback) {
+                playerControl.start();
+            } else {
+                playerControl.pause();
+            }
+            shouldResumePlayback = false;
         }
     }
 
@@ -518,6 +545,8 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
     };
 
     public void setAudioVisualItem(MovieMetaData.AudioVisualItem avItem){
+        if (ecVideoViewListener != null)
+            ecVideoViewListener.stopRepeatingTask();
         if (avItem != null) {
             selectedAVItem = avItem;
             if (countDownCountainer != null)
@@ -532,6 +561,8 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
                 //new HlsMediaSource(Uri.parse(mainStyle.getBackgroundVideoUrl()), mediaDataSourceFactory, new Handler(),null);
                 //buildMediaSource(nonDRMPlaybackContent.contentUri, nonDRMPlaybackContent.contentType, EXTENSION_EXTRA);
                 player.prepare(mediaSource, true, true);
+                if (loadingView != null)
+                    loadingView.setVisibility(View.VISIBLE);
                 if (!shouldAutoPlay) {
                     if(playerControl.isPlaying())
                         player.setPlayWhenReady(false);
@@ -572,10 +603,15 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
 
     public void setShouldAutoPlay(boolean shouldAutoPlay){
         this.shouldAutoPlay = shouldAutoPlay;
+        shouldResumePlayback = shouldAutoPlay;
     }
 
     public void stopPlayback(){
         playerControl.pause();
+    }
+
+    public MediaController.MediaPlayerControl getPlayerControl(){
+        return playerControl;
     }
 
     final MediaController.MediaPlayerControl playerControl = new MediaController.MediaPlayerControl() {

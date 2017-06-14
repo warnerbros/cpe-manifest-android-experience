@@ -1,5 +1,6 @@
 package com.wb.nextgenlibrary.activity;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,6 +10,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.ListPopupWindow;
 import android.view.LayoutInflater;
@@ -26,6 +29,7 @@ import android.widget.ListAdapter;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.cast.framework.CastButtonFactory;
 import com.google.android.gms.cast.framework.CastState;
@@ -137,7 +141,7 @@ public class InMovieExperience extends AbstractNGEActivity implements NGEFragmen
         supportRequestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         super.onCreate(savedInstanceState);
 
-
+        detectScreenShotService();
         if (NextGenExperience.getMovieMetaData() == null)
             finish();
 
@@ -569,11 +573,19 @@ public class InMovieExperience extends AbstractNGEActivity implements NGEFragmen
                     NGEAnalyticData.reportEvent(InMovieExperience.this, null, NGEAnalyticData.AnalyticAction.ACTION_ROTATE_SCREEN_SHOW_EXTRAS, label, null);
                     break;
                 case Configuration.ORIENTATION_LANDSCAPE:
+                    try {
+                        Fragment fragment = getSupportFragmentManager().findFragmentById(getMainFrameId());
+                        if (!(fragment instanceof IMEBottomFragment) ){
+                            onBackPressed();
+                        }
+                    }catch (Exception ex){}
                     nextGenView.setVisibility(View.GONE);
                     actionbarPlaceHolder.setVisibility(View.GONE);
                     getSupportActionBar().hide();
                     if (mediaController != null)
                         mediaController.hideShowControls(false);
+
+
                     NGEAnalyticData.reportEvent(InMovieExperience.this, null, NGEAnalyticData.AnalyticAction.ACTION_ROTATE_SCREEN_HIDE_EXTRAS, label, null);
                     imeBottomFragment.onOrientationChange(this.getResources().getConfiguration().orientation);
             }
@@ -711,6 +723,9 @@ public class InMovieExperience extends AbstractNGEActivity implements NGEFragmen
         if (isCommentaryOn && commentaryAudioPlayer != null){
                 commentaryAudioPlayer.pause();
         }
+        if (!bInterstitialVideoComplete && interstitialVideoView.isPlaying()){
+            interstitialVideoView.pause();
+        }
         super.onPause();
 
     }
@@ -718,6 +733,8 @@ public class InMovieExperience extends AbstractNGEActivity implements NGEFragmen
     public void onResume() {
         if (resumePlayTime != -1){
             mainMovieFragment.setResumeTime(resumePlayTime);
+            if (!shouldStartAfterResume && !isCasting())
+                mainMovieFragment.pause();
         }
         super.onResume();
 
@@ -740,6 +757,9 @@ public class InMovieExperience extends AbstractNGEActivity implements NGEFragmen
             skipThisView.setVisibility(View.GONE);
             skipThisView.setOnClickListener(null);
             currentUri = Uri.parse("");
+        }
+        if (!bInterstitialVideoComplete && interstitialVideoView.getVisibility() == View.VISIBLE){
+            interstitialVideoView.resume();
         }
         hideShowNextGenView();
 
@@ -1045,7 +1065,7 @@ public class InMovieExperience extends AbstractNGEActivity implements NGEFragmen
                         bPausedForCommentaryBuffering = false;
                         mainMovieFragment.resumePlayback();
                         commentaryAudioPlayer.start();
-                    } else if (commentaryAudioPlayer.isPlaying()){                                        // if main movie is paused.
+                    } else if (commentaryAudioPlayer.isPlaying()){                                        // if main movie is paused.弓
                         commentaryAudioPlayer.pause();
                     }
                 } else if (commentaryPlayersStatusListener.getPlayerStatus() == NextGenPlaybackStatus.BUFFERING || mainMovieFragment.getPlaybackStatus() == NextGenPlaybackStatus.BUFFERING){     // show loading progress bar and pause and wait for buffering completion
@@ -1066,5 +1086,45 @@ public class InMovieExperience extends AbstractNGEActivity implements NGEFragmen
                     commentaryAudioPlayer.pause();
             }
         }
+    }
+
+    private android.os.Handler mHandler = null;
+
+    private HandlerThread mHandlerThread = null;
+
+    public void startHandlerThread(){
+        mHandlerThread = new HandlerThread("HandlerThread");
+        mHandlerThread.start();
+        mHandler = new Handler(mHandlerThread.getLooper());
+    }
+
+    public void detectScreenShotService() {
+        mHandlerThread = new HandlerThread("HandlerThread");
+        mHandlerThread.start();
+        mHandler = new Handler(mHandlerThread.getLooper());
+
+        final int delay = 3000; //milliseconds
+        final ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+
+        mHandler.postDelayed(new Runnable() {
+            public void run() {
+
+                List<ActivityManager.RunningServiceInfo> rs = am.getRunningServices(200);
+
+                for (ActivityManager.RunningServiceInfo ar : rs) {
+                    if (ar.process.equals("com.android.systemui:screenshot")) {
+                        Toast.makeText(InMovieExperience.this, "Screenshot captured!!", Toast.LENGTH_LONG).show();
+                    }
+                }
+                mHandler.postDelayed(this, delay);
+            }
+        }, delay);
+    }
+
+    public boolean isPlaying(){
+        if (mainMovieFragment != null)
+            return mainMovieFragment.isPlaying();
+        else
+            return false;
     }
 }

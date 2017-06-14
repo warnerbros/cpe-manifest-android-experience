@@ -22,7 +22,7 @@ public class ExtraMainTableFragment_Phone extends ExtraMainTableFragment {
     class ActorExperience extends MovieMetaData.ExperienceData{
 
         public ActorExperience(){
-            super("ACTORS", "ACTORS", null);
+            super(NextGenExperience.getMovieMetaData().getActorGroupText(), "ACTORS", null);
             type = MovieMetaData.ECGroupType.ACTORS;
         }
 

@@ -159,7 +159,8 @@ public abstract class AbstractNGEActivity extends NGEHideStatusBarActivity imple
 
         if (backgroundImageView == null){
             backgroundImageView = new ImageView(this);
-            backgroundImageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            backgroundImageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
+            backgroundImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             ViewGroup contentView = (ViewGroup)this.getWindow().getDecorView().findViewById(android.R.id.content);
             if (contentView != null){
                 contentView.addView(backgroundImageView, 0);
@@ -215,6 +216,7 @@ public abstract class AbstractNGEActivity extends NGEHideStatusBarActivity imple
     }
 
     protected void loadBGImage(){
+        backgroundImageView.setImageDrawable(null);
         if (!StringHelper.isEmpty(getBackgroundImgUri())){
             NextGenGlide.load(this, getBackgroundImgUri()).centerCrop().into(backgroundImageView);
         }

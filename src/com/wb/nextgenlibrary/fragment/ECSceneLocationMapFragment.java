@@ -44,20 +44,17 @@ import java.util.List;
  */
 public class ECSceneLocationMapFragment extends Fragment implements /*AdapterView.OnItemSelectedListener,*/ View.OnClickListener, GoogleMap.OnMarkerClickListener{
 
-    public static interface OnSceneLocationSelectedListener{
+    public interface OnSceneLocationSelectedListener{
         void onSceneLocationIndexSelected(int selectedIndex);
         void onSceneLocationSelected(LocationItem location);
     }
 
     protected MapView mapView;
 
-    //private Spinner locationSpinner;
     private Button mapButton;
     private Button satelliteButton;
 
     private List<LocationItem> defaultSceneLocations;
-    //private List<SceneLocation> sceneLocations;
-    //private ArrayAdapter<String> spinnerAdaptor;
     private OnSceneLocationSelectedListener onSceneLocationSelectedListener;
     private HashMap<Marker, LocationItem> markerLocationMap = new HashMap<Marker, LocationItem>();
 
@@ -76,7 +73,6 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
         mapView = (MapView) view.findViewById(R.id.ec_mapview);
         if(mapView != null) {
             mapView.onCreate(savedInstanceState);
-            //mapView.setOn
         }
 
         if (defaultSceneLocations != null) {
@@ -117,7 +113,6 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
         if (mapView != null) {
             mapView.onPause();
         }
-        //locationSpinner.setOnItemSelectedListener(null);
 
     }
 
@@ -126,7 +121,6 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
         super.onResume();
         if(mapView != null)
             mapView.onResume();
-        //locationSpinner.setOnItemSelectedListener(this);
     }
 
     @Override
@@ -135,7 +129,6 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
 
 
             if (mapView != null) {
-                //final LatLng location = new LatLng(selectedLocationItem.latitude, selectedLocationItem.longitude);
                 mapView.getMapAsync(new OnMapReadyCallback() {
                     @Override
                     public void onMapReady(final GoogleMap googleMap) {
@@ -190,15 +183,12 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
                     @Override
                     public void run() {
                         if (mapView != null) {
-                            //final LatLng location = new LatLng(selectedLocationItem.latitude, selectedLocationItem.longitude);
                             mapView.getMapAsync(new OnMapReadyCallback() {
                                 @Override
                                 public void onMapReady(final GoogleMap googleMap) {
 
-                                    //googleMap.getUiSettings().setMapToolbarEnabled(true);
                                     googleMap.getUiSettings().setCompassEnabled(true);
                                     googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-                                    //googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
                                     googleMap.setOnMarkerClickListener(ECSceneLocationMapFragment.this);
 
                                     googleMap.getMaxZoomLevel();
@@ -357,12 +347,6 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
                                 }
                             };
 
-
-
-
-                            //googleMap.animateCamera(CameraUpdateFactory.newLatLng(offsetTarget));
-
-                            //LatLng target = new LatLng(sceneLocations.get(0).latitude, sceneLocations.get(0).longitude);
                         } else {
 
                             googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 300));
@@ -402,7 +386,6 @@ public class ECSceneLocationMapFragment extends Fragment implements /*AdapterVie
                                 });
                             }
                         }
-                        //googleMap.addMarker(new MarkerOptions().position(new LatLng(locationItem.latitude, locationItem.longitude)).title("Marker"));
                     }
                 });
             }

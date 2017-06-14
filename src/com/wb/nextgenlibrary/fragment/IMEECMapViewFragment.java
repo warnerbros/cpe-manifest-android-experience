@@ -53,7 +53,6 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
     private RecyclerView.LayoutManager recyclerViewLayoutManager;
 
     private FrameLayout videoFrame, galleryFrame;
-    private LinearLayout mapFrame;
 
     MovieMetaData.LocationItem selectedLocationItem = null;
     String title = null;
@@ -81,7 +80,6 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
 
         videoFrame = (FrameLayout) view.findViewById(R.id.map_video_frame);
         galleryFrame = (FrameLayout) view.findViewById(R.id.map_gallery_frame);
-        mapFrame = (LinearLayout) view.findViewById(R.id.map_map_frame);
 
         recyclerViewLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         sceneLocationECRecyclerView = (RecyclerView) view.findViewById(R.id.map_associate_ecs_list);

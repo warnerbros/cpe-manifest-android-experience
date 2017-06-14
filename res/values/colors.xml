@@ -102,4 +102,7 @@
 
     <color name="location_spinner_red">#b7141a</color>
     <color name="button_gray">#7f7f7f</color>
+
+    <color name="extra_left_panel_bg_color">#4D35363F</color>
+    <color name="extra_right_grid_bg_color">#4D000000</color>
 </resources>

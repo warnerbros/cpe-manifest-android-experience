@@ -88,6 +88,7 @@
                     android:id="@+id/map_gallery_frame"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@android:color/black"
                     android:visibility="gone">
 
                 </FrameLayout>
@@ -95,6 +96,7 @@
                     android:id="@+id/map_video_frame"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@android:color/black"
                     android:visibility="gone">
                 </FrameLayout>
 

@@ -137,9 +137,10 @@ public class IMEElementsGridFragment extends AbstractGridViewFragment implements
                 if (playerActivity != null) {
                     if (headElement instanceof MovieMetaData.ECGalleryItem) {
                         ECGalleryViewFragment fragment = new ECGalleryViewFragment();
+                        fragment.setContentViewId(R.layout.ime_gallery_frame_view);
                         fragment.setShouldShowCloseBtn(true);
-                        if (NextGenExperience.getMovieMetaData().getInMovieExperience().style != null)
-                            fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getInMovieExperience().style.getBackground().getImage().url);
+                        /*if (NextGenExperience.getMovieMetaData().getInMovieExperience().style != null)
+                            fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getInMovieExperience().style.getBackground().getImage().url);*/
                         fragment.setCurrentGallery((MovieMetaData.ECGalleryItem) headElement);
                         mainMovieListener = null;
                         playerActivity.transitMainFragment(fragment);
@@ -151,22 +152,23 @@ public class IMEElementsGridFragment extends AbstractGridViewFragment implements
 
                         if (((MovieMetaData.AudioVisualItem) headElement).isShareClip()){
                             ShareClipFragment fragment = new ShareClipFragment();
-                            fragment.setShouldAutoPlay(false);
+                            fragment.setShouldAutoPlay(playerActivity.isPlaying() ? false : true);
                             fragment.setShouldShowCloseBtn(true);
                             fragment.setExperienceAndIndex(activeObj.imeExperience, ((MovieMetaData.IMEElement) activeObj.imeObject).itemIndex);
-                            if (NextGenExperience.getMovieMetaData().getInMovieExperience().style != null)
-                                fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getInMovieExperience().style.getBackground().getImage().url);
+                            /*if (NextGenExperience.getMovieMetaData().getInMovieExperience().style != null)
+                                fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getInMovieExperience().style.getBackground().getImage().url);*/
                             fragment.setVideoStatusListener(this);
                             mainMovieListener = fragment;
                             playerActivity.transitMainFragment(fragment);
                             NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_CLIP_SHARE, ((MovieMetaData.AudioVisualItem) headElement).videoId, null);
                         }else {
 
-                            ECVideoViewFragment fragment = new ECVideoViewFragment();
+							IMEDeletedSceneVideoFragment fragment = new IMEDeletedSceneVideoFragment();
+							fragment.setShouldAutoPlay(playerActivity.isPlaying() ? false : true);
                             fragment.setShouldShowCloseBtn(true);
-                            fragment.setShouldAutoPlay(false);
-                            if (NextGenExperience.getMovieMetaData().getInMovieExperience().style != null)
-                                fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getInMovieExperience().style.getBackground().getImage().url);
+							fragment.setExperience(activeObj.imeExperience);
+                            /*if (NextGenExperience.getMovieMetaData().getInMovieExperience().style != null)
+                                fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getInMovieExperience().style.getBackground().getImage().url);*/
                             fragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) headElement);
                             fragment.setVideoStatusListener(this);
                             mainMovieListener = fragment;
@@ -277,7 +279,7 @@ public class IMEElementsGridFragment extends AbstractGridViewFragment implements
         return retId;
     }
 
-
+    static private int posterWidth = 0, posterHeight= 0;
     protected void fillListRowWithObjectInfo(int position, View rowView, Object item, boolean isSelected){
         IMEDisplayObject activeObj = (IMEDisplayObject)item;
 
@@ -287,28 +289,45 @@ public class IMEElementsGridFragment extends AbstractGridViewFragment implements
 
         titleText.setText(activeObj.title.toUpperCase());      // set a tag with the linked Experience Id
 
+        if (posterHeight == 0 && posterWidth == 0){
+            posterHeight = poster.getHeight() / 2;
+            posterWidth = poster.getWidth() / 2;
+        }
+
         if (activeObj.imeObject instanceof MovieMetaData.IMEElement) {
             Object dataObj = ((MovieMetaData.IMEElement) activeObj.imeObject).imeObject;
             if (dataObj instanceof MovieMetaData.PresentationDataItem) {
+                Object tag = rowView.getTag(R.id.ime_title);
+                //boolean isSameItem = tag != null && tag.equals(((MovieMetaData.PresentationDataItem) dataObj).getId());
 
                 rowView.setTag(R.id.ime_title, ((MovieMetaData.PresentationDataItem) dataObj).getId());
                 if (dataObj instanceof MovieMetaData.LocationItem ){
 
                     MovieMetaData.LocationItem locationItem = (MovieMetaData.LocationItem) dataObj;
-                    if (locationItem != null && poster.getHeight() > 0 && poster.getWidth() > 0){
-                        String imageUrl = locationItem.getGoogleMapImageUrl(poster.getWidth() / 2, poster.getHeight() / 2);
+                    if (locationItem != null ){
+                        poster.setImageDrawable(null);
+                        String imageUrl = "";
+                        if (posterHeight > 0 && posterWidth > 0){
+                            imageUrl = locationItem.getGoogleMapImageUrl(posterWidth, posterHeight);
+                        } else {
+                            imageUrl = locationItem.getGoogleMapImageUrl(320, 180);
+
+                        }
                         NextGenGlide.load(getActivity(), imageUrl).centerCrop().into(poster);
+                        
                     }
 
                 } else if (poster != null) {
                     String imageUrl = ((MovieMetaData.PresentationDataItem) dataObj).getPosterImgUrl();
-					if (!StringHelper.isEmpty(imageUrl)) {
+
+                    if (!StringHelper.isEmpty(imageUrl)) {
                         NextGenGlide.load(getActivity(), imageUrl).centerCrop()
-								.into(poster);
-						poster.setVisibility(View.VISIBLE);
-					} else {
-						poster.setVisibility(View.GONE);
-					}
+                                .into(poster);
+                        poster.setVisibility(View.VISIBLE);
+                    } else {
+                        poster.setVisibility(View.GONE);
+                    }
+
                 }
 
                 ImageView playbutton = (ImageView)rowView.findViewById(R.id.ime_item_play_logo);
@@ -316,8 +335,8 @@ public class IMEElementsGridFragment extends AbstractGridViewFragment implements
                     playbutton.setVisibility((dataObj instanceof MovieMetaData.AudioVisualItem) ? View.VISIBLE : View.INVISIBLE);
                 }
 
-                if (subText1 != null && !subText1.getText().equals(((MovieMetaData.PresentationDataItem) dataObj).getTitle())) {
-                    subText1.setText(((MovieMetaData.PresentationDataItem) dataObj).getTitle());
+                if (subText1 != null && !subText1.getText().equals(((MovieMetaData.PresentationDataItem) dataObj).getGridItemDisplayName())) {
+                    subText1.setText(((MovieMetaData.PresentationDataItem) dataObj).getGridItemDisplayName());
                     subText1.setTag(R.id.ime_title, "");
                 }
             }

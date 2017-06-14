@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@android:color/transparent"
-    android:paddingTop="@dimen/spacing_small">
+    android:background="@android:color/transparent">
 
     <ImageView
         android:id="@+id/ec_gallery_frame_bg"
@@ -79,6 +78,7 @@
 
             <ImageButton
                 android:id="@+id/close_button"
+                android:layout_marginTop="@dimen/spacing_small"
                 android:layout_width="@dimen/close_icon_dimen"
                 android:layout_height="@dimen/close_icon_dimen"
                 android:src="@drawable/close_x_circle"
