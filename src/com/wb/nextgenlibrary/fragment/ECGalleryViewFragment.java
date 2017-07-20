@@ -3,6 +3,7 @@ package com.wb.nextgenlibrary.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.PointF;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -67,6 +68,8 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
 
 	int contentViewId = R.layout.ec_gallery_frame_view;
 
+	View.OnLayoutChangeListener onLayoutChangeListener = null;
+
     @Override
     public int getContentViewId(){
         return contentViewId;
@@ -112,6 +115,15 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
 			}
 		});
 
+		onLayoutChangeListener = new View.OnLayoutChangeListener() {
+			@Override
+			public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+				if (v instanceof SubsamplingScaleImageView){
+					((SubsamplingScaleImageView)v).setScaleAndCenter(0, new PointF(0f, 0f));
+				}
+			}
+		};
+
 		aspectRatioFrame = (FixedAspectRatioFrameLayout) view.findViewById(R.id.gallery_aspect_ratio_frame);
         if (aspectRatioFrame != null){
 			aspectWidth = aspectRatioFrame.getAspectRatioWidth();
@@ -123,7 +135,6 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
 
         if (bgImageView != null && !StringHelper.isEmpty(bgImageUrl)){
 			NextGenGlide.load(getActivity(), bgImageUrl).fitCenter().into(bgImageView);
-            //PicassoTrustAll.loadImageIntoView(getActivity(), bgImageUrl, bgImageView);
         }
 		if (bgColor != -1){
 			bgImageView.setBackgroundColor(bgColor);
@@ -174,8 +185,9 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
 	@Override
     public void onDestroy(){
         adapter = null;
-        if (galleryViewPager != null)
-            galleryViewPager.setAdapter(null);
+        if (galleryViewPager != null) {
+			galleryViewPager.setAdapter(null);
+		}
         super.onDestroy();
     }
 
@@ -339,21 +351,27 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
             final SubsamplingScaleImageView imageView =
                     (SubsamplingScaleImageView) itemView.findViewById(R.id.image);
 
+			imageView.addOnLayoutChangeListener(onLayoutChangeListener);
+
             // Asynchronously load the image and set the thumbnail and pager view
-			String imageUrl = currentItem.galleryImages.get(position).fullImage.url;
+			final String imageUrl = currentItem.galleryImages.get(position).fullImage.url;
 
 			NextGenLogger.d("ImageUrl: ", imageUrl);
+			viewHashMap.put(imageUrl, itemView);
 			NextGenGlide.load(getActivity(), imageUrl)
 					.asBitmap()
 					.into(new SimpleTarget<Bitmap>() {
 						@Override
 						public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
-							imageView.setImage(ImageSource.bitmap(bitmap));
+							if (imageView != null && !ECGalleryViewFragment.this.isDetached() && getActivity() != null && viewHashMap.containsKey(imageUrl)) {
+								imageView.setImage(ImageSource.cachedBitmap(bitmap));
+							}else {
+								NextGenLogger.d("this image is being ignored: ", imageUrl);
+							}
 							//thumbView.setImageBitmap(bitmap);
 						}
 					});
 
-			viewHashMap.put(imageUrl, itemView);
 
             return imageUrl;
         }
@@ -364,6 +382,9 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
 				View itemView = viewHashMap.get(object);
 				viewHashMap.remove(object);
 				container.removeView(itemView);
+				View imageView = itemView.findViewById(R.id.image);
+				if (imageView  != null)
+					imageView.removeOnLayoutChangeListener(onLayoutChangeListener);
 			}
         }
 
