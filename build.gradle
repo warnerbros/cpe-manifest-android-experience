@@ -22,11 +22,6 @@ android {
 		minSdkVersion 18
 		targetSdkVersion 21
     }
-	/*
-	compileOptions {
-		sourceCompatibility JavaVersion.VERSION_1_6
-		targetCompatibility JavaVersion.VERSION_1_6
-	}*/
         
 	sourceSets {
 		main {
@@ -39,41 +34,10 @@ android {
 			assets.srcDirs = ['assets']
 			jni.srcDirs = []		//disable automatic ndk-build call
 		}
-		/*
-		debug{
-			jniLibs.srcDirs = ['lib/widevine_android_50012210/dev']
 
-		}
-
-		release{
-			jniLibs.srcDirs = ['lib/widevine_android_50012210/rel']
-
-		}
-
-		rc{
-			jniLibs.srcDirs = ['lib/widevine_android_50012210/rel']
-
-		}*/
 
 		androidTest.setRoot('test')
 	}
-
-	/*
-	buildTypes {
-		debug {
-			//signingConfig signingConfigs.debug
-		}
-		
-		rc {
-			zipAlignEnabled true
-			//signingConfig signingConfigs.release
-		}
-		
-		release {
-			zipAlignEnabled true
-			//signingConfig signingConfigs.release
-		}
-	}*/
 	
 	lintOptions {
         abortOnError false

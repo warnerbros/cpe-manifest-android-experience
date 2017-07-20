@@ -22,7 +22,7 @@ import com.wb.nextgenlibrary.widget.CustomMediaController;
  * Created by gzcheng on 3/31/16.
  */
 public class ShareClipFragment extends ECVideoViewFragment implements View.OnClickListener{
-    TextView shareClipTitleTextView;
+    TextView shareClipTitleTextView, ecContentNameTextView;
     Button shareClipButton;
     ImageButton prevClipButton, nextClipButton;
     MovieMetaData.ExperienceData shareClipExperience;
@@ -56,7 +56,14 @@ public class ShareClipFragment extends ECVideoViewFragment implements View.OnCli
         if (shareClipTitleTextView != null && shareClipExperience != null){
             shareClipTitleTextView.setText(shareClipExperience.title);
         }
-        updateUI();
+
+        ecContentNameTextView = (TextView) view.findViewById(R.id.ec_content_name);
+        if (ecContentNameTextView != null && selectedAVItem != null){
+            ecContentNameTextView.setText(selectedAVItem.getTitle());
+        }
+
+
+        updateUI(true);
         mediaController.setVisibilityChangeListener(new CustomMediaController.MediaControllerVisibilityChangeListener() {
             @Override
             public void onVisibilityChange(boolean bShow) {
@@ -64,8 +71,9 @@ public class ShareClipFragment extends ECVideoViewFragment implements View.OnCli
                     prevClipButton.setVisibility( View.INVISIBLE);
                     nextClipButton.setVisibility( View.INVISIBLE);
                 } else {
-                    prevClipButton.setVisibility( View.VISIBLE);
-                    nextClipButton.setVisibility( View.VISIBLE);
+                    updateUI(false);
+                    /*prevClipButton.setVisibility( View.VISIBLE);
+                    nextClipButton.setVisibility( View.VISIBLE);*/
                 }
             }
         });
@@ -91,14 +99,14 @@ public class ShareClipFragment extends ECVideoViewFragment implements View.OnCli
                 if (itemIndex > 0){
                     setShouldAutoPlay(false);
                     setExperienceAndIndex(shareClipExperience, itemIndex - 1);
-                    updateUI();
+                    updateUI(true);
                     NGEAnalyticData.reportEvent(getActivity(), ShareClipFragment.this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_PREVIOUS, selectedAVItem.videoId, null);
                 }
         } else if (v.getId() == R.id.next_clip_btn){
                 if (itemIndex < shareClipExperience.getChildrenContents().size()){
                     setShouldAutoPlay(false);
                     setExperienceAndIndex(shareClipExperience, itemIndex + 1);
-                    updateUI();
+                    updateUI(true);
                     NGEAnalyticData.reportEvent(getActivity(), ShareClipFragment.this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_NEXT, selectedAVItem.videoId, null);
                 }
 
@@ -110,11 +118,13 @@ public class ShareClipFragment extends ECVideoViewFragment implements View.OnCli
         this.shareClipExperience = shareClipExperience;
         this.itemIndex = itemIndex;
         MovieMetaData.AudioVisualItem presentationDataItem = shareClipExperience.getChildrenContents().get(itemIndex).audioVisualItems.get(0);
-
+        if (ecContentNameTextView != null && presentationDataItem != null){
+            ecContentNameTextView.setText(presentationDataItem.getTitle());
+        }
         setAudioVisualItem(presentationDataItem);
     }
 
-    public void updateUI(){
+    public void updateUI(boolean bHideController){
         int prevBtnVisibility = View.VISIBLE;
         int nextBtnVisibility = View.VISIBLE;
 
@@ -126,7 +136,8 @@ public class ShareClipFragment extends ECVideoViewFragment implements View.OnCli
         }
         prevClipButton.setVisibility(prevBtnVisibility);
         nextClipButton.setVisibility(nextBtnVisibility);
-        mediaController.hide();
+        if (bHideController)
+            mediaController.hide();
 
     }
 

@@ -564,12 +564,12 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
                 if (loadingView != null)
                     loadingView.setVisibility(View.VISIBLE);
                 if (!shouldAutoPlay) {
-                    if(playerControl.isPlaying())
-                        player.setPlayWhenReady(false);
                     if (previewFrame != null) {
                         previewFrame.setVisibility(View.VISIBLE);
                         previewPlayBtn.setVisibility(View.GONE);
                     }
+                    if(playerControl.isPlaying())
+                        player.setPlayWhenReady(false);
                     if (!StringHelper.isEmpty(selectedAVItem.getPosterImgUrl()) && getActivity() != null) {
 
                         NextGenGlide.load(getActivity(), selectedAVItem.getPreviewImageUrl()).fitCenter().into(previewImageView);
