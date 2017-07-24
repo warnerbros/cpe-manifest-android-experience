@@ -51,7 +51,7 @@ public class WebViewActivity extends NGEHideStatusBarActivity {
             }
         };
         webView.setWebViewClient(webViewMainWebClient);
-
+        webView.getSettings().setMediaPlaybackRequiresUserGesture(false);
         webView.addJavascriptInterface(new JavascriptHandler(), "microHTMLInterface");
         webView.loadUrl(url);
 
