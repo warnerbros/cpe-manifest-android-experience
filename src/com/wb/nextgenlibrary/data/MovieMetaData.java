@@ -1233,8 +1233,8 @@ public class MovieMetaData {
         }
 
         public boolean isActor(){
-            return "Actor".equalsIgnoreCase(job);
-        }
+			return "Actor".equalsIgnoreCase(job) || "Key Character".equalsIgnoreCase(job);
+		}
 
         public BaselineCastData getBaselineCastData() {
             return baselineCastData;
