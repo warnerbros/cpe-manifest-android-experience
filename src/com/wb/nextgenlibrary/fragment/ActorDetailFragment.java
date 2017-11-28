@@ -240,6 +240,7 @@ public class ActorDetailFragment extends AbstractNextGenFragment implements View
                         actorOjbect.getBaselineCastData().filmogrphies = result.filmogrphies;
                         if (!StringHelper.isEmpty(result.biography))
                             actorOjbect.getBaselineCastData().biography = result.biography;
+                        actorOjbect.getBaselineCastData().setSocialMedium(result.getSocialMedium());
                         if (getActivity() != null) {
                             synchronized (getActivity()) {
                                 getActivity().runOnUiThread(new Runnable() {
@@ -253,6 +254,7 @@ public class ActorDetailFragment extends AbstractNextGenFragment implements View
                                         }
                                         if (!StringHelper.isEmpty(actorOjbect.getBaselineCastData().biography))
                                             detailTextView.setText(Html.fromHtml(actorOjbect.getBaselineCastData().biography));
+                                        resetSocialMediaIcons();
                                         updateFilmographyList();
                                         if (loadingView != null)
                                             loadingView.setVisibility(View.GONE);
@@ -279,23 +281,7 @@ public class ActorDetailFragment extends AbstractNextGenFragment implements View
                 updateFilmographyList();
             }
 
-            String facebookUrl = actorOjbect.getBaselineCastData().getSocialMediaUrl(MovieMetaData.BaselineCastData.SOCIAL_MEDIA_KEY.FACEBOOK_KEY);
-            if (!StringHelper.isEmpty(facebookUrl)){
-                facebookBtn.setVisibility(View.VISIBLE);
-            }else
-                facebookBtn.setVisibility(View.GONE);
-
-            String instagramUrl = actorOjbect.getBaselineCastData().getSocialMediaUrl(MovieMetaData.BaselineCastData.SOCIAL_MEDIA_KEY.INSTAGRAM_KEY);
-            if (!StringHelper.isEmpty(instagramUrl)){
-                instagramBtn.setVisibility(View.VISIBLE);
-            }else
-                instagramBtn.setVisibility(View.GONE);
-
-            String twitterUrl = actorOjbect.getBaselineCastData().getSocialMediaUrl(MovieMetaData.BaselineCastData.SOCIAL_MEDIA_KEY.TWITTER_KEY);
-            if (!StringHelper.isEmpty(twitterUrl)){
-                twitterBtn.setVisibility(View.VISIBLE);
-            }else
-                twitterBtn.setVisibility(View.GONE);
+           resetSocialMediaIcons();
 
             if (actorGalleryFrame != null ) {
                 if (actorOjbect.getBaselineCastData().getGallery() != null && actorGalleryAdaptor != null) {
@@ -317,6 +303,26 @@ public class ActorDetailFragment extends AbstractNextGenFragment implements View
                 }
             }
         }
+    }
+
+    private void resetSocialMediaIcons(){
+        String facebookUrl = actorOjbect.getBaselineCastData().getSocialMediaUrl(MovieMetaData.BaselineCastData.SOCIAL_MEDIA_KEY.FACEBOOK_KEY);
+        if (!StringHelper.isEmpty(facebookUrl)){
+            facebookBtn.setVisibility(View.VISIBLE);
+        }else
+            facebookBtn.setVisibility(View.GONE);
+
+        String instagramUrl = actorOjbect.getBaselineCastData().getSocialMediaUrl(MovieMetaData.BaselineCastData.SOCIAL_MEDIA_KEY.INSTAGRAM_KEY);
+        if (!StringHelper.isEmpty(instagramUrl)){
+            instagramBtn.setVisibility(View.VISIBLE);
+        }else
+            instagramBtn.setVisibility(View.GONE);
+
+        String twitterUrl = actorOjbect.getBaselineCastData().getSocialMediaUrl(MovieMetaData.BaselineCastData.SOCIAL_MEDIA_KEY.TWITTER_KEY);
+        if (!StringHelper.isEmpty(twitterUrl)){
+            twitterBtn.setVisibility(View.VISIBLE);
+        }else
+            twitterBtn.setVisibility(View.GONE);
     }
 
     private void updateFilmographyList(){
