@@ -5,7 +5,10 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -30,6 +33,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.util.utils.F;
 import com.wb.nextgenlibrary.util.utils.NextGenLogger;
@@ -56,6 +60,12 @@ public class WebViewActivity extends NGEHideStatusBarActivity {
     private ValueCallback<Uri[]> mUMA;
     private final static int FCR=1;
     private final static int NGE_PERMISSIONS_REQUEST = 2918;
+
+    private static final BroadcastReceiver onDownloadComplete = new BroadcastReceiver() {
+        public void onReceive(Context ctxt, Intent intent) {
+            Toast.makeText(NextGenExperience.getApplicationContext(), "Download Completed", Toast.LENGTH_SHORT).show();
+        }
+    };
 
     private WebChromeClient webChromeClient = new WebChromeClient() {
         @Override public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
@@ -186,14 +196,15 @@ public class WebViewActivity extends NGEHideStatusBarActivity {
                 request.addRequestHeader("cookie", cookies);
                 //------------------------COOKIE!!------------------------
                 request.addRequestHeader("User-Agent", userAgent);
-                request.setDescription(" Downloading file...");
+                request.setDescription(URLUtil.guessFileName(url, contentDisposition, mimeType));
                 request.setTitle(URLUtil.guessFileName(url, contentDisposition, mimeType));
                 request.allowScanningByMediaScanner();
-                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
                 request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, URLUtil.guessFileName(url, contentDisposition, mimeType));
                 DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
                 dm.enqueue(request);
+                registerReceiver(onDownloadComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
                 Toast.makeText(getApplicationContext(), "Downloading File", Toast.LENGTH_LONG).show();
+
             }
         });
     }
@@ -357,7 +368,6 @@ public class WebViewActivity extends NGEHideStatusBarActivity {
                 }
             }
 
-            //ActivityCompat.requestPermissions(WebViewActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, 1);
         }
     }
 
