@@ -4,6 +4,18 @@
     android:divider="@android:color/transparent"
     android:layout_width="match_parent"
     android:layout_height="fill_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ToggleButton
+            android:id="@+id/actor_mode_switch"
+            android:textOff="Actors"
+            android:textOn="Charaters"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
     <ListView
         android:id="@+id/next_gen_lists"
         android:layout_width="match_parent"

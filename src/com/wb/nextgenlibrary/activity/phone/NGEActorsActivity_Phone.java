@@ -9,19 +9,26 @@ import com.wb.nextgenlibrary.activity.AbstractNGEActivity;
 import com.wb.nextgenlibrary.fragment.ActorDetailFragment;
 import com.wb.nextgenlibrary.fragment.ActorListFragment;
 import com.wb.nextgenlibrary.interfaces.NGEFragmentTransactionInterface;
+import com.wb.nextgenlibrary.util.utils.StringHelper;
 
 /**
  * Created by stomata on 8/25/16.
  */
 public class NGEActorsActivity_Phone extends AbstractNGEActivity implements NGEFragmentTransactionInterface {
 
+    public static String TALENT_LIST_MODE = "TALENT_LIST_MODE";
     ActorDetailFragment actorDetailFragment;
     ActorListFragment actorListFragment;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.actor_activity_phone);
+        String talentListMode = getIntent().getStringExtra(TALENT_LIST_MODE);
         actorListFragment = (ActorListFragment)getSupportFragmentManager().findFragmentById(R.id.actor_list_fragment);
+        if (!StringHelper.isEmpty(talentListMode)){
+            ActorListFragment.TalentListMode mode = ActorListFragment.TalentListMode.valueOf(talentListMode);
+            actorListFragment.setForcedMode(mode);
+        }
         actorDetailFragment = (ActorDetailFragment)getSupportFragmentManager().findFragmentById(R.id.actor_detail_fragment);
         if (actorListFragment != null && actorDetailFragment != null) {
             actorDetailFragment.reloadDetail(actorListFragment.getActorInfos().get(0));

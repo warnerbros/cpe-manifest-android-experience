@@ -36,9 +36,6 @@ public class OutOfMovieActivity extends AbstractNGEActivity implements NGEFragme
         float density = NextGenExperience.getScreenDensity(this);
         int spacing = (int)(10 *density);
 
-        //leftPanelFrame = (LinearLayout)findViewById(R.id.next_gen_extra_left_view);
-        //rightMainFrame = (LinearLayout)findViewById(R.id.next_gen_extra_right_view);
-
         extraStyle = NextGenExperience.getMovieMetaData().getExtraExperience().style;
 
         fragmentTransactionEngine = new NGEFragmentTransactionEngine(this);

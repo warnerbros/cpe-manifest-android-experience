@@ -2,6 +2,7 @@ package com.wb.nextgenlibrary.data;
 
 import android.content.Context;
 
+import com.google.android.gms.cast.Cast;
 import com.google.gson.annotations.SerializedName;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
@@ -109,9 +110,14 @@ public class MovieMetaData {
     final private List<IMEElementsGroup> imeElementGroups = new ArrayList<IMEElementsGroup>();
     final private List<CastData> castsList = new ArrayList<CastData>();
     final private List<CastData> actorsList = new ArrayList<CastData>();
+    final private List<CastData> charactersList = new ArrayList<CastData>();
     final private HashMap<String, ExperienceData> experienceIdToExperienceMap = new HashMap<String, ExperienceData>();
     final private HashMap<String, ShopItem> appIdToShopItemMap = new HashMap<>();
-    private String actorGroupText = "ACTORS";
+    private String actorGroupText = null;
+    private String characterGroupText = null;
+
+    final static private String KEY_CHARACTER_TEXT = "Key Character";
+    final static private String ACTOR_TEXT = "Actor";
 
     private ExperienceData rootExperience;
     private boolean hasCalledBaselineAPI = false;
@@ -398,11 +404,18 @@ public class MovieMetaData {
                                         result.castsList.add(cast);
                                         if (cast.isActor())
                                             result.actorsList.add(cast);
+                                        else if (cast.isCharacter())
+                                            result.charactersList.add(cast);
                                     }
                                     Collections.sort(result.actorsList, new Comparator<CastData>() {
                                         @Override
                                         public int compare(CastData lhs, CastData rhs) {
-
+                                            return (int) (lhs.order - rhs.order);
+                                        }
+                                    });
+                                    Collections.sort(result.charactersList, new Comparator<CastData>() {
+                                        @Override
+                                        public int compare(CastData lhs, CastData rhs) {
                                             return (int) (lhs.order - rhs.order);
                                         }
                                     });
@@ -706,12 +719,6 @@ public class MovieMetaData {
             }
         }
 
-        if (!StringHelper.isEmpty(castTSId)){
-            ExperienceData expData =  timeSequenceIdToECGroup.get(castTSId);
-            if (expData != null){
-                result.actorGroupText = expData.title;
-            }
-        }
 
         /*****************End of Time Sequence Events****************************/
 
@@ -763,10 +770,36 @@ public class MovieMetaData {
 
     }
 
-
+    // private String actorGroupText = "ACTORS";
+    // private String characterGroupText = "CHARACTERS";
 
     public String getActorGroupText(){
+        if (StringHelper.isEmpty(actorGroupText)){
+            actorGroupText = getTalenGroupText(getActorsList(), "ACTORS");
+        }
+
         return actorGroupText;
+    }
+
+    public String getCharacterGroupText(){
+        if (StringHelper.isEmpty(characterGroupText)){
+            characterGroupText = getTalenGroupText(getCharactersList(), "CHARACTERS");
+        }
+
+        return characterGroupText;
+    }
+
+    private String getTalenGroupText(List<CastData> talentList, String defaultText){
+        String titleText = "";
+
+        if (!talentList.isEmpty()){
+            titleText = peopleIdToTalentGroupNameMap.get(talentList.get(0).getOtherPeopleId());
+        }
+
+        if (StringHelper.isEmpty(titleText)){
+            titleText = defaultText;
+        }
+        return titleText;
     }
 
     public boolean hasShareClipExp(){
@@ -947,8 +980,29 @@ public class MovieMetaData {
         return imeElementGroups;
     }
 
+    public boolean hasActorCharacterMode(){
+        return !charactersList.isEmpty() && !actorsList.isEmpty();
+    }
+
     public List<CastData> getActorsList(){
-        return  actorsList;
+        if (actorsList.isEmpty())   // that means this movie only have 1 actor list
+            return charactersList;
+        else
+            return  actorsList;
+    }
+
+    public List<CastData> getCharactersList(){
+        if (actorsList.isEmpty())   // that means this movie only have 1 actor list
+            return actorsList;      // return empty
+        else
+            return charactersList;
+    }
+
+    public List<CastData> getActorsAndCharactersList(){
+        ArrayList<CastData> combineList = new ArrayList();
+        combineList.addAll(actorsList);
+        combineList.addAll(charactersList);
+        return combineList;
     }
 
     public ExperienceData findExperienceDataById(String id){
@@ -1233,8 +1287,12 @@ public class MovieMetaData {
         }
 
         public boolean isActor(){
-			return "Actor".equalsIgnoreCase(job) || "Key Character".equalsIgnoreCase(job);
+			return ACTOR_TEXT.equalsIgnoreCase(job);
 		}
+
+		public boolean isCharacter(){
+            return KEY_CHARACTER_TEXT.equalsIgnoreCase(job);
+        }
 
         public BaselineCastData getBaselineCastData() {
             return baselineCastData;
@@ -2372,6 +2430,7 @@ public class MovieMetaData {
         }
         return null;
     }
+    HashMap<String, String> peopleIdToTalentGroupNameMap = new HashMap<>();
 
     private void reGroupCastIMEEventGroup(IMEElementsGroup<CastData> castCombinedGroup){
         if (castCombinedGroup == null || castCombinedGroup.getIMEElementesList() == null || castCombinedGroup.getIMEElementesList().size() == 0)
@@ -2388,6 +2447,7 @@ public class MovieMetaData {
                     peopleIDToImeListMap.put(peopleId, thisIMEList);
                     castIMEElements.add(thisIMEList);
                 }
+                peopleIdToTalentGroupNameMap.put(peopleId, castCombinedGroup.linkedExperience.title);
                 thisIMEList.add(castIMEElement);
             }
         }

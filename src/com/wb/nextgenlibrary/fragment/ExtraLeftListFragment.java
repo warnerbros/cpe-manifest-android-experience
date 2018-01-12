@@ -24,6 +24,11 @@ public abstract class ExtraLeftListFragment<T> extends Fragment implements Adapt
     protected NextGenExtraLeftPanelAdapter listAdaptor;
     protected TextView titleTextView;
     View view;
+
+    protected int getLayoutId(){
+        return R.layout.next_gen_list_view;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -33,7 +38,7 @@ public abstract class ExtraLeftListFragment<T> extends Fragment implements Adapt
                 parent.removeView(view);
         }
         try {
-            view = inflater.inflate(R.layout.next_gen_list_view, container, false);
+            view = inflater.inflate(getLayoutId(), container, false);
         } catch (InflateException e) {
         /* map is already there, just return view as it is */
         }

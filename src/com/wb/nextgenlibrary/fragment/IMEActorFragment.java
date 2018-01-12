@@ -24,6 +24,7 @@ public class IMEActorFragment extends ActorListFragment implements NGEPlaybackSt
 
     List<CastIMEEngine> castIMEEngines = new ArrayList<CastIMEEngine>();
     List<CastData> currentActiveActorList = new ArrayList<CastData>();
+    List<CastData> modeCorrectedActiveActorList = new ArrayList<CastData>();
 
     static final CastData showMoreLessDummyData = new CastData(null, NextGenExperience.getClientLocale());
 
@@ -71,11 +72,24 @@ public class IMEActorFragment extends ActorListFragment implements NGEPlaybackSt
     }
 
     @Override
+    protected void onModeChanged(){
+        modeCorrectedActiveActorList.removeAll(modeCorrectedActiveActorList);
+        for (CastData castData: currentActiveActorList){
+            if (listMode == TalentListMode.CHARACTER_MODE && castData.isCharacter()){
+                modeCorrectedActiveActorList.add(castData);
+            } else if (listMode == TalentListMode.ACTOR_MODE && castData.isActor()){
+                modeCorrectedActiveActorList.add(castData);
+            }
+        }
+
+    }
+
+    @Override
     public List<MovieMetaData.CastData> getActorInfos(){
         if (fullListEnabled ){
             return super.getActorInfos();
         }else
-            return currentActiveActorList;
+            return modeCorrectedActiveActorList;
 
     }
     @Override
@@ -97,12 +111,12 @@ public class IMEActorFragment extends ActorListFragment implements NGEPlaybackSt
                     @Override
                     public void run() {
                         currentActiveActorList = newList;
+                        onModeChanged();
                         listAdaptor.notifyDataSetChanged();
                     }
                 });
             }
         }
-
     }
 
     private void setCastIMEElementLists(List<List<MovieMetaData.IMEElement<MovieMetaData.CastData>>> castIMEElementLists){
