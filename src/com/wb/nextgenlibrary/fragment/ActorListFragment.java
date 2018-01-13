@@ -1,10 +1,13 @@
 package com.wb.nextgenlibrary.fragment;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -13,6 +16,7 @@ import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 
 import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
+import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.interfaces.NGEFragmentTransactionInterface;
 import com.wb.nextgenlibrary.interfaces.SensitiveFragmentInterface;
 import com.wb.nextgenlibrary.network.BaselineApiDAO;
@@ -30,20 +34,15 @@ import java.util.List;
  */
 public class ActorListFragment extends ExtraLeftListFragment<CastData> implements SensitiveFragmentInterface {
 
-
-    public static enum TalentListMode{
-        ACTOR_MODE, CHARACTER_MODE;
-    }
-
-    protected TalentListMode listMode = TalentListMode.ACTOR_MODE;
-    private ToggleButton actorModeSwitch = null;
+    protected String listMode = "";
     private boolean bFixedMode = false;
+    private TabLayout castGroupTabLayout = null;
 
-    public void setForcedMode(TalentListMode mode){
+    public void setForcedMode(String mode){
         listMode = mode;
         bFixedMode = true;
-        if (actorModeSwitch != null)
-            actorModeSwitch.setVisibility(View.GONE);
+        if (castGroupTabLayout != null)
+            castGroupTabLayout.setVisibility(View.GONE);
     }
 
 
@@ -59,31 +58,58 @@ public class ActorListFragment extends ExtraLeftListFragment<CastData> implement
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        actorModeSwitch = (ToggleButton)view.findViewById(R.id.actor_mode_switch);
-        if (actorModeSwitch != null) {
-            if (NextGenExperience.getMovieMetaData().hasActorCharacterMode() && !bFixedMode) {
-                actorModeSwitch.setVisibility(View.VISIBLE);
-                actorModeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (isChecked) {
-                            listMode = TalentListMode.CHARACTER_MODE;
-                        } else {
-                            listMode = TalentListMode.ACTOR_MODE;
-                        }
+        castGroupTabLayout = (TabLayout) view.findViewById(R.id.cast_group_tab);
+        if (castGroupTabLayout != null) {
+            if (StringHelper.isEmpty(listMode) && NextGenExperience.getMovieMetaData().getCastGroups().size() > 0){
+                listMode = NextGenExperience.getMovieMetaData().getCastGroups().get(0).getGroupTitle();
+            }
+            if (NextGenExperience.getMovieMetaData().hasMultipleCastMode() && !bFixedMode) {
+                castGroupTabLayout.setVisibility(View.VISIBLE);
+                for (MovieMetaData.CastGroup group : NextGenExperience.getMovieMetaData().getCastGroups()){
+                    TabLayout.Tab tab = castGroupTabLayout.newTab().setText(group.getGroupTitle());
+
+                    castGroupTabLayout.addTab(tab);
+                }
+
+                for (int i = 0; i<NextGenExperience.getMovieMetaData().getCastGroups().size(); i++) {
+                    LinearLayout layout = ((LinearLayout) ((LinearLayout) castGroupTabLayout.getChildAt(0)).getChildAt(i));
+                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) layout.getLayoutParams();
+                    layoutParams.weight = 0.0f; // e.g. 0.5f
+                    //layoutParams.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+                    layoutParams.width = LinearLayout.LayoutParams.WRAP_CONTENT;
+                    layout.setLayoutParams(layoutParams);
+                }
+
+
+                castGroupTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                    @Override
+                    public void onTabSelected(TabLayout.Tab tab) {
+                        listMode = tab.getText().toString();
                         onModeChanged();
                         listAdaptor.notifyDataSetChanged();
                         if (listAdaptor.selectedIndex >= 0){
                             onItemClick(null,listView, listAdaptor.selectedIndex, 0);
                         }
                     }
+
+                    @Override
+                    public void onTabUnselected(TabLayout.Tab tab) {
+
+                    }
+
+                    @Override
+                    public void onTabReselected(TabLayout.Tab tab) {
+
+                    }
                 });
+
             } else
-                actorModeSwitch.setVisibility(View.GONE);
+                castGroupTabLayout.setVisibility(View.GONE);
         }
 
 
 
-        BaselineApiDAO.getCastActorsImages(NextGenExperience.getMovieMetaData().getActorsAndCharactersList(), new ResultListener<Boolean>() {
+        BaselineApiDAO.getCastActorsImages(NextGenExperience.getMovieMetaData().getAllCastsList(), new ResultListener<Boolean>() {
             @Override
             public void onResult(Boolean result) {
 
@@ -115,14 +141,11 @@ public class ActorListFragment extends ExtraLeftListFragment<CastData> implement
 
 
     public List<CastData> getActorInfos(){
-        if (listMode == TalentListMode.ACTOR_MODE) {
-            if (NextGenExperience.getMovieMetaData().getActorsList() != null)
-                return NextGenExperience.getMovieMetaData().getActorsList();
-        } else {
-            if (NextGenExperience.getMovieMetaData().getCharactersList() != null)
-                return NextGenExperience.getMovieMetaData().getCharactersList();
-        }
-        return new ArrayList<CastData>();
+        MovieMetaData.CastGroup group =  NextGenExperience.getMovieMetaData().getCastGroupByTitle(listMode);
+        if (group != null)
+            return group.getCastsList();
+        else
+            return new ArrayList<CastData>();
     }
 
 
@@ -183,10 +206,11 @@ public class ActorListFragment extends ExtraLeftListFragment<CastData> implement
     }
 
     protected String getHeaderText(){
-        if (listMode == TalentListMode.ACTOR_MODE)
-            return NextGenExperience.getMovieMetaData().getActorGroupText();
+        MovieMetaData.CastGroup group =  NextGenExperience.getMovieMetaData().getCastGroupByTitle(listMode);
+        if (group != null)
+            return group.getGroupTitle();
         else
-            return NextGenExperience.getMovieMetaData().getCharacterGroupText();
+            return "Actors & Crews";
     }
 
 

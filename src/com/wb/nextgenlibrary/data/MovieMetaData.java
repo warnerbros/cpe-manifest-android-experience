@@ -108,16 +108,9 @@ public class MovieMetaData {
     final private List<ExperienceData> extraECGroups = new ArrayList<ExperienceData>();
     final private List<ExperienceData> imeECGroups = new ArrayList<ExperienceData>();
     final private List<IMEElementsGroup> imeElementGroups = new ArrayList<IMEElementsGroup>();
-    final private List<CastData> castsList = new ArrayList<CastData>();
-    final private List<CastData> actorsList = new ArrayList<CastData>();
-    final private List<CastData> charactersList = new ArrayList<CastData>();
+
     final private HashMap<String, ExperienceData> experienceIdToExperienceMap = new HashMap<String, ExperienceData>();
     final private HashMap<String, ShopItem> appIdToShopItemMap = new HashMap<>();
-    private String actorGroupText = null;
-    private String characterGroupText = null;
-
-    final static private String KEY_CHARACTER_TEXT = "Key Character";
-    final static private String ACTOR_TEXT = "Actor";
 
     private ExperienceData rootExperience;
     private boolean hasCalledBaselineAPI = false;
@@ -146,6 +139,91 @@ public class MovieMetaData {
 
     public ShopItem getShopItemByAppId(String appId){
         return appIdToShopItemMap.get(appId);
+    }
+
+    final List<CastData> allCastsList = new ArrayList<CastData>();
+    /*************** Casts ***************/
+    public static class CastGroup{
+        final List<CastData> castsList = new ArrayList<CastData>();
+        private String groupTitle;
+        final public String groupJob;
+        public CastGroup(String job){
+            groupJob = job;
+        }
+
+        public String getGroupTitle(){
+            if (!StringHelper.isEmpty(groupTitle))
+                return groupTitle;
+            if (!castsList.isEmpty()){
+                groupTitle = NextGenExperience.getMovieMetaData().peopleIdToTalentGroupNameMap.get(castsList.get(0).getOtherPeopleId());
+            }
+
+            if (StringHelper.isEmpty(groupTitle)){
+                groupTitle = "Cast & Crew";
+            }
+            return groupTitle;
+        }
+
+        public List<CastData> getCastsList(){
+            return castsList;
+        }
+    }
+
+    final private List<CastGroup> castGroupsList = new ArrayList<CastGroup>();
+
+    private void addCastToGroup(CastData castData){
+        allCastsList.add(castData);
+        for (CastGroup group: castGroupsList){
+            if (group.groupJob.equals(castData.job)){
+                group.castsList.add(castData);
+                return;
+            }
+        }
+        CastGroup newGroup = new CastGroup(castData.job);
+        newGroup.castsList.add(castData);
+        castGroupsList.add(newGroup);
+    }
+
+    private void sortCastGroups(){
+        for (CastGroup group: castGroupsList) {
+            Collections.sort(group.castsList, new Comparator<CastData>() {
+                @Override
+                public int compare(CastData lhs, CastData rhs) {
+                    return (int) (lhs.order - rhs.order);
+                }
+            });
+        }
+    }
+
+    public CastGroup getCastGroupByTitle(String title){
+        if (castGroupsList.size() > 0) {
+            if (StringHelper.isEmpty(title)){
+                return castGroupsList.get(0);
+            }
+            for (CastGroup group : castGroupsList) {
+                if (group.getGroupTitle().equals(title)) {
+                    return group;
+                }
+            }
+        }
+        return null;
+    }
+
+    public String findJobByCastGroupName(String castGroupName) {
+        for (CastGroup group : castGroupsList) {
+            if (group.getGroupTitle().equals(castGroupName)) {
+                return group.groupJob;
+            }
+        }
+        return "";
+    }
+
+    public List<CastGroup> getCastGroups(){
+        return castGroupsList;
+    }
+
+    public List<CastData> getAllCastsList(){
+        return allCastsList;
     }
 
     public static MovieMetaData process(ManifestXMLParser.NextGenManifestData manifest){
@@ -401,24 +479,9 @@ public class MovieMetaData {
                                         if (!StringHelper.isEmpty(cast.getOtherPeopleId()))
                                             peopleIdToCastData.put(cast.getOtherPeopleId(), cast);
 
-                                        result.castsList.add(cast);
-                                        if (cast.isActor())
-                                            result.actorsList.add(cast);
-                                        else if (cast.isCharacter())
-                                            result.charactersList.add(cast);
+                                        result.addCastToGroup(cast);
                                     }
-                                    Collections.sort(result.actorsList, new Comparator<CastData>() {
-                                        @Override
-                                        public int compare(CastData lhs, CastData rhs) {
-                                            return (int) (lhs.order - rhs.order);
-                                        }
-                                    });
-                                    Collections.sort(result.charactersList, new Comparator<CastData>() {
-                                        @Override
-                                        public int compare(CastData lhs, CastData rhs) {
-                                            return (int) (lhs.order - rhs.order);
-                                        }
-                                    });
+                                    result.sortCastGroups();
                                 }
 
                                 List<String> presentationIds = new ArrayList<>();
@@ -770,37 +833,6 @@ public class MovieMetaData {
 
     }
 
-    // private String actorGroupText = "ACTORS";
-    // private String characterGroupText = "CHARACTERS";
-
-    public String getActorGroupText(){
-        if (StringHelper.isEmpty(actorGroupText)){
-            actorGroupText = getTalenGroupText(getActorsList(), "ACTORS");
-        }
-
-        return actorGroupText;
-    }
-
-    public String getCharacterGroupText(){
-        if (StringHelper.isEmpty(characterGroupText)){
-            characterGroupText = getTalenGroupText(getCharactersList(), "CHARACTERS");
-        }
-
-        return characterGroupText;
-    }
-
-    private String getTalenGroupText(List<CastData> talentList, String defaultText){
-        String titleText = "";
-
-        if (!talentList.isEmpty()){
-            titleText = peopleIdToTalentGroupNameMap.get(talentList.get(0).getOtherPeopleId());
-        }
-
-        if (StringHelper.isEmpty(titleText)){
-            titleText = defaultText;
-        }
-        return titleText;
-    }
 
     public boolean hasShareClipExp(){
         if (imeElementGroups != null && imeElementGroups.size() > 0){
@@ -980,29 +1012,8 @@ public class MovieMetaData {
         return imeElementGroups;
     }
 
-    public boolean hasActorCharacterMode(){
-        return !charactersList.isEmpty() && !actorsList.isEmpty();
-    }
-
-    public List<CastData> getActorsList(){
-        if (actorsList.isEmpty())   // that means this movie only have 1 actor list
-            return charactersList;
-        else
-            return  actorsList;
-    }
-
-    public List<CastData> getCharactersList(){
-        if (actorsList.isEmpty())   // that means this movie only have 1 actor list
-            return actorsList;      // return empty
-        else
-            return charactersList;
-    }
-
-    public List<CastData> getActorsAndCharactersList(){
-        ArrayList<CastData> combineList = new ArrayList();
-        combineList.addAll(actorsList);
-        combineList.addAll(charactersList);
-        return combineList;
+    public boolean hasMultipleCastMode(){
+        return castGroupsList.size() > 1;
     }
 
     public ExperienceData findExperienceDataById(String id){
@@ -1284,14 +1295,6 @@ public class MovieMetaData {
             id = peopleOtherId;
             title = displayName;
             parentExperienceId = null;
-        }
-
-        public boolean isActor(){
-			return ACTOR_TEXT.equalsIgnoreCase(job);
-		}
-
-		public boolean isCharacter(){
-            return KEY_CHARACTER_TEXT.equalsIgnoreCase(job);
         }
 
         public BaselineCastData getBaselineCastData() {
@@ -2517,4 +2520,6 @@ public class MovieMetaData {
     public StyleData.ExperienceStyle getStyleData(String experienceId){
         return experienceStyleMap.get(experienceId);
     }
+
+
 }

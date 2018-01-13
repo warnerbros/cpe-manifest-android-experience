@@ -191,7 +191,7 @@ public class NextGenExperience {
 			NextGenLogger.d("TIME_THIS", "Time to finish processing: " + currentTime);
 
 			BaselineApiDAO.init();
-            BaselineApiDAO.getCastActorsImages(movieMetaData.getActorsList(), null);
+            BaselineApiDAO.getCastActorsImages(movieMetaData.getAllCastsList(), null);
 
 			TheTakeApiDAO.init();
 			return true;

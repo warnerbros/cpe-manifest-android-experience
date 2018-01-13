@@ -44,10 +44,10 @@ public class IMEBottomFragment extends Fragment implements NGEPlaybackStatusList
         super.onViewCreated(view, savedInstanceState);
 
         TextView actorsTitle = (TextView)view.findViewById(R.id.actor_list_title);
-        if (actorsTitle != null)
-            actorsTitle.setText(NextGenExperience.getMovieMetaData().getActorGroupText());
         imeGridFragment = (IMEElementsGridFragment) getChildFragmentManager().findFragmentById(R.id.ime_grid_fragment);
         imeActorsFragment = (IMEActorFragment) getChildFragmentManager().findFragmentById(R.id.ime_actor_fragment);
+        if (actorsTitle != null)
+            actorsTitle.setText(imeActorsFragment.getHeaderText());
     }
 
     public void setFragmentTransactionInterface(NGEFragmentTransactionInterface fragmentTransaction){
@@ -91,7 +91,8 @@ public class IMEBottomFragment extends Fragment implements NGEPlaybackStatusList
     @Override
     public void onResume(){
         super.onResume();
-        imeActorsFragment.resetSelectedItem();
+        if (imeActorsFragment != null)
+            imeActorsFragment.resetSelectedItem();
     }
 
     public void onOrientationChange(int orientation){

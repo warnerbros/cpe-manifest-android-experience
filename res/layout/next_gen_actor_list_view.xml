@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:divider="@android:color/transparent"
     android:layout_width="match_parent"
     android:layout_height="fill_parent">
-    <LinearLayout
+    <android.support.design.widget.TabLayout
+        android:id="@+id/cast_group_tab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <ToggleButton
-            android:id="@+id/actor_mode_switch"
-            android:textOff="Actors"
-            android:textOn="Charaters"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-    </LinearLayout>
+        style="@style/AppTabLayout"
+        app:tabTextAppearance="@style/AppTabTextAppearance"
+        app:tabBackground="@drawable/actor_tab_bg"
+        app:tabMinWidth="0dp"
+        app:tabMode="scrollable"
+        app:tabGravity="fill" >
+    </android.support.design.widget.TabLayout>
     <ListView
         android:id="@+id/next_gen_lists"
         android:layout_width="match_parent"

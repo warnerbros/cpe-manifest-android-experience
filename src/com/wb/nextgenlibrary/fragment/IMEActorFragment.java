@@ -73,11 +73,11 @@ public class IMEActorFragment extends ActorListFragment implements NGEPlaybackSt
 
     @Override
     protected void onModeChanged(){
+
         modeCorrectedActiveActorList.removeAll(modeCorrectedActiveActorList);
+        String job = NextGenExperience.getMovieMetaData().findJobByCastGroupName(listMode);
         for (CastData castData: currentActiveActorList){
-            if (listMode == TalentListMode.CHARACTER_MODE && castData.isCharacter()){
-                modeCorrectedActiveActorList.add(castData);
-            } else if (listMode == TalentListMode.ACTOR_MODE && castData.isActor()){
+            if (castData.job.equals(job)){
                 modeCorrectedActiveActorList.add(castData);
             }
         }

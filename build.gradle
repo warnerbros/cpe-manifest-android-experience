@@ -72,5 +72,6 @@ dependencies {
 	compile 'com.google.api-client:google-api-client-gson:+'
 	compile 'com.google.code.gson:gson:2.2.4'
 	compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
+	compile 'com.android.support:design:24.0.0'
 }
 
