@@ -9,7 +9,7 @@
         android:id="@+id/cast_group_segmented_control"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="3dp"
+        android:layout_margin="1dp"
         android:orientation="horizontal"
         app:sc_border_width="1dp"
         app:sc_corner_radius="5dp"

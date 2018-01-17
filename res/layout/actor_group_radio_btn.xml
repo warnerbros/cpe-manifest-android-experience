@@ -7,4 +7,5 @@
              android:textSize="@dimen/textSmall"
              android:fontFamily="sans-serif-condensed"
              android:textColor="@color/white"
+             android:lines="1"
              style="@style/CastRadioButton" />
