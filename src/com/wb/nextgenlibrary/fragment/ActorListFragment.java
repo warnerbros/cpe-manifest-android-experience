@@ -1,15 +1,14 @@
 package com.wb.nextgenlibrary.fragment;
 
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.PagerAdapter;
 import android.view.View;
-import android.widget.CompoundButton;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import com.squareup.picasso.Picasso;
 import com.wb.nextgenlibrary.NextGenExperience;
@@ -29,6 +28,8 @@ import com.wb.nextgenlibrary.widget.FontFitTextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import info.hoang8f.android.segmented.SegmentedGroup;
+
 /**
  * Created by gzcheng on 1/13/16.
  */
@@ -36,13 +37,14 @@ public class ActorListFragment extends ExtraLeftListFragment<CastData> implement
 
     protected String listMode = "";
     private boolean bFixedMode = false;
-    private TabLayout castGroupTabLayout = null;
+
+    protected SegmentedGroup castGroupSegmentedControl = null;
 
     public void setForcedMode(String mode){
         listMode = mode;
         bFixedMode = true;
-        if (castGroupTabLayout != null)
-            castGroupTabLayout.setVisibility(View.GONE);
+        if (castGroupSegmentedControl != null)
+            castGroupSegmentedControl.setVisibility(View.GONE);
     }
 
 
@@ -58,53 +60,56 @@ public class ActorListFragment extends ExtraLeftListFragment<CastData> implement
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        castGroupTabLayout = (TabLayout) view.findViewById(R.id.cast_group_tab);
-        if (castGroupTabLayout != null) {
+        castGroupSegmentedControl = (SegmentedGroup) view.findViewById(R.id.cast_group_segmented_control);
+
+        if (castGroupSegmentedControl != null){
             if (StringHelper.isEmpty(listMode) && NextGenExperience.getMovieMetaData().getCastGroups().size() > 0){
                 listMode = NextGenExperience.getMovieMetaData().getCastGroups().get(0).getGroupTitle();
             }
             if (NextGenExperience.getMovieMetaData().hasMultipleCastMode() && !bFixedMode) {
-                castGroupTabLayout.setVisibility(View.VISIBLE);
+                castGroupSegmentedControl.setVisibility(View.VISIBLE);
+                int defaultId = -1;
                 for (MovieMetaData.CastGroup group : NextGenExperience.getMovieMetaData().getCastGroups()){
-                    TabLayout.Tab tab = castGroupTabLayout.newTab().setText(group.getGroupTitle());
+                    RadioButton radioButton = (RadioButton) getActivity().getLayoutInflater().inflate(R.layout.actor_group_radio_btn, null);
+                    radioButton.setText(group.getGroupTitle());
+                    castGroupSegmentedControl.addView(radioButton);
+                    try {
+                        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) radioButton.getLayoutParams();
+                        params.weight = 1;
+                        params.width = 0;
+                        radioButton.setLayoutParams(params);
+                    } catch (Exception ex){}
+                    if (defaultId == -1){
+                        defaultId = radioButton.getId();
+                    }
+                }
+                castGroupSegmentedControl.setTintColor(getResources().getColor(R.color.red));
 
-                    castGroupTabLayout.addTab(tab);
+                castGroupSegmentedControl.check(defaultId);
+
+                int count = castGroupSegmentedControl.getChildCount();
+
+                for(int i = 0; i < count; ++i) {
+                    View child = castGroupSegmentedControl.getChildAt(i);
+
+                    ((Button)child).setTextColor(getResources().getColor(android.R.color.white));
                 }
 
-                for (int i = 0; i<NextGenExperience.getMovieMetaData().getCastGroups().size(); i++) {
-                    LinearLayout layout = ((LinearLayout) ((LinearLayout) castGroupTabLayout.getChildAt(0)).getChildAt(i));
-                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) layout.getLayoutParams();
-                    layoutParams.weight = 0.0f; // e.g. 0.5f
-                    //layoutParams.height = LinearLayout.LayoutParams.WRAP_CONTENT;
-                    layoutParams.width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                    layout.setLayoutParams(layoutParams);
-                }
-
-
-                castGroupTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                castGroupSegmentedControl.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                     @Override
-                    public void onTabSelected(TabLayout.Tab tab) {
-                        listMode = tab.getText().toString();
+                    public void onCheckedChanged(RadioGroup group, int checkedId) {
+                        RadioButton radioButton = (RadioButton) group.findViewById(checkedId);
+                        listMode = radioButton.getText().toString();
                         onModeChanged();
                         listAdaptor.notifyDataSetChanged();
                         if (listAdaptor.selectedIndex >= 0){
                             onItemClick(null,listView, listAdaptor.selectedIndex, 0);
                         }
                     }
-
-                    @Override
-                    public void onTabUnselected(TabLayout.Tab tab) {
-
-                    }
-
-                    @Override
-                    public void onTabReselected(TabLayout.Tab tab) {
-
-                    }
                 });
 
             } else
-                castGroupTabLayout.setVisibility(View.GONE);
+                castGroupSegmentedControl.setVisibility(View.GONE);
         }
 
 

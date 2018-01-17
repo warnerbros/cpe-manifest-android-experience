@@ -42,12 +42,8 @@ public class IMEBottomFragment extends Fragment implements NGEPlaybackStatusList
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        TextView actorsTitle = (TextView)view.findViewById(R.id.actor_list_title);
         imeGridFragment = (IMEElementsGridFragment) getChildFragmentManager().findFragmentById(R.id.ime_grid_fragment);
         imeActorsFragment = (IMEActorFragment) getChildFragmentManager().findFragmentById(R.id.ime_actor_fragment);
-        if (actorsTitle != null)
-            actorsTitle.setText(imeActorsFragment.getHeaderText());
     }
 
     public void setFragmentTransactionInterface(NGEFragmentTransactionInterface fragmentTransaction){

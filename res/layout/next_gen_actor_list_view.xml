@@ -5,26 +5,29 @@
     android:divider="@android:color/transparent"
     android:layout_width="match_parent"
     android:layout_height="fill_parent">
-    <android.support.design.widget.TabLayout
-        android:id="@+id/cast_group_tab"
+    <info.hoang8f.android.segmented.SegmentedGroup
+        android:id="@+id/cast_group_segmented_control"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/AppTabLayout"
-        app:tabTextAppearance="@style/AppTabTextAppearance"
-        app:tabBackground="@drawable/actor_tab_bg"
-        app:tabMinWidth="0dp"
-        app:tabMode="scrollable"
-        app:tabGravity="fill" >
-    </android.support.design.widget.TabLayout>
-    <ListView
-        android:id="@+id/next_gen_lists"
+        android:layout_margin="3dp"
+        android:orientation="horizontal"
+        app:sc_border_width="1dp"
+        app:sc_corner_radius="5dp"
+        app:sc_tint_color="@color/red"
+        app:sc_checked_text_color="@color/white"/>
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:choiceMode="singleChoice"
-        android:stretchMode="columnWidth"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="@dimen/list_item_spacing" >
-    </ListView>
+        android:layout_height="wrap_content">
+        <ListView
+            android:id="@+id/next_gen_lists"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:choiceMode="singleChoice"
+            android:stretchMode="columnWidth"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="@dimen/list_item_spacing" >
+        </ListView>
+    </LinearLayout>
 
 </LinearLayout>

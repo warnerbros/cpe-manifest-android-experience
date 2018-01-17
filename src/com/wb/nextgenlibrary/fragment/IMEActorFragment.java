@@ -34,6 +34,10 @@ public class IMEActorFragment extends ActorListFragment implements NGEPlaybackSt
         return R.layout.ime_actor_row;
     }
 
+    protected int getLayoutId(){
+        return R.layout.next_gen_ime_actor_list_view;
+    }
+
     @Override
     protected void onListItemClick(int index, CastData selectedObject){
 
@@ -130,6 +134,17 @@ public class IMEActorFragment extends ActorListFragment implements NGEPlaybackSt
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        TextView actorsTitle = (TextView)view.findViewById(R.id.actor_list_title);
+
+        if (actorsTitle != null ) {
+            if (!NextGenExperience.getMovieMetaData().hasMultipleCastMode()) {
+                actorsTitle.setText(getHeaderText());
+                actorsTitle.setVisibility(View.VISIBLE);
+            } else {
+                actorsTitle.setVisibility(View.GONE);
+            }
+        }
+
         setCastIMEElementLists(NextGenExperience.getMovieMetaData().getCastIMEElements());
 
     }
