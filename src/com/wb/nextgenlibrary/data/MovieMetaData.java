@@ -1886,6 +1886,7 @@ public class MovieMetaData {
         final public String encoding;
         final public String assetLocation;
         final public String runtimeEnvironment;
+        final public List<String> environmentAttribute = new ArrayList<>();
 
         public InteractiveItem(AppGroupType appGroupType, HashMap<String, InventoryInteractiveType> inventoryAssetsMap) {
             if (appGroupType.getInteractiveTrackReference() != null &&
@@ -1900,8 +1901,12 @@ public class MovieMetaData {
 
                 if (appGroupType.getInteractiveTrackReference().get(0).getCompatibility().size() > 0) {
                     runtimeEnvironment = appGroupType.getInteractiveTrackReference().get(0).getCompatibility().get(0).getRuntimeEnvironment();
+                    if ( appGroupType.getInteractiveTrackReference().get(0).getCompatibility().get(0).getEnvironmentAttribute() != null){
+                        environmentAttribute.addAll(appGroupType.getInteractiveTrackReference().get(0).getCompatibility().get(0).getEnvironmentAttribute());
+                    }
                 } else
                     runtimeEnvironment = "";
+
             } else {
                 type = "";
                 encoding = "";
@@ -1912,6 +1917,13 @@ public class MovieMetaData {
 
         public boolean isAppDataItem(){
             return "other".equals(type);
+        }
+
+        public String[] getOrientations(){
+            if (environmentAttribute.size() > 0){
+                return environmentAttribute.toArray(new String[environmentAttribute.size()]);
+            }
+            return new String[0];
         }
     }
 

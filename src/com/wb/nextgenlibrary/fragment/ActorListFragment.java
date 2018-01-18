@@ -83,7 +83,7 @@ public class ActorListFragment extends ExtraLeftListFragment<CastData> implement
                         defaultId = radioButton.getId();
                     }
                 }
-                castGroupSegmentedControl.setTintColor(getResources().getColor(R.color.red));
+                castGroupSegmentedControl.setTintColor(getResources().getColor(R.color.nge_cast_group_segmented_tint_color));
 
                 castGroupSegmentedControl.check(defaultId);
 
@@ -91,8 +91,9 @@ public class ActorListFragment extends ExtraLeftListFragment<CastData> implement
 
                 for(int i = 0; i < count; ++i) {
                     View child = castGroupSegmentedControl.getChildAt(i);
-
-                    ((Button)child).setTextColor(getResources().getColor(android.R.color.white));
+                    try {
+                        ((Button) child).setTextColor(getResources().getColor(android.R.color.white));
+                    }catch (Exception ex){} // just in case if the radiagroup has non-button children
                 }
 
                 castGroupSegmentedControl.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
