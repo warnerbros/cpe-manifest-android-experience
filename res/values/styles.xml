@@ -279,4 +279,16 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
+    <style name="CastRadioButton" parent="@android:style/Widget.CompoundButton.RadioButton">
+        <item name="android:textColor">@drawable/button_text_color</item>
+        <item name="android:minHeight">30dp</item>
+        <item name="android:minWidth">8dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:button">@null</item>
+        <item name="android:paddingLeft">1dp</item>
+        <item name="android:paddingRight">1dp</item>
+    </style>
+
+
+
 </resources>

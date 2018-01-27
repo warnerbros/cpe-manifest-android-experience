@@ -105,4 +105,5 @@
 
     <color name="extra_left_panel_bg_color">#4D35363F</color>
     <color name="extra_right_grid_bg_color">#4D000000</color>
+    <color name="nge_cast_group_segmented_tint_color">#FFBA0F0F</color>
 </resources>

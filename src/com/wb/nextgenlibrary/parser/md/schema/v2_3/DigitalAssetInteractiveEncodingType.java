@@ -54,6 +54,8 @@ public class DigitalAssetInteractiveEncodingType {
     protected String firstVersion;
     @XmlElement(name = "LastVersion")
     protected String lastVersion;
+    @XmlElement(name = "EnvironmentAttribute")
+    protected List<String> environmentAttribute;
     @XmlAnyElement(lax = true)
     protected List<Object> any;
 
@@ -127,6 +129,21 @@ public class DigitalAssetInteractiveEncodingType {
      */
     public void setLastVersion(String value) {
         this.lastVersion = value;
+    }
+
+    /**
+     * Gets the value of the environmentAttribute property.
+     *
+     * @return
+     *     possible object is
+     *     {@link List<String> }
+     *
+     */
+    public List<String> getEnvironmentAttribute() {
+        if (environmentAttribute == null) {
+            environmentAttribute = new ArrayList<String>();
+        }
+        return this.environmentAttribute;
     }
 
     /**

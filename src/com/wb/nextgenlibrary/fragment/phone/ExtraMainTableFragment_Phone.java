@@ -9,6 +9,7 @@ import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.activity.NGEHideStatusBarActivity;
 import com.wb.nextgenlibrary.activity.phone.NGEActorsActivity_Phone;
 import com.wb.nextgenlibrary.data.MovieMetaData;
+import com.wb.nextgenlibrary.fragment.ActorListFragment;
 import com.wb.nextgenlibrary.fragment.ExtraMainTableFragment;
 
 import java.util.ArrayList;
@@ -20,19 +21,23 @@ import java.util.List;
 public class ExtraMainTableFragment_Phone extends ExtraMainTableFragment {
 
     class ActorExperience extends MovieMetaData.ExperienceData{
-
-        public ActorExperience(){
-            super(NextGenExperience.getMovieMetaData().getActorGroupText(), "ACTORS", null);
+        MovieMetaData.CastGroup castGroup = null;
+        public ActorExperience(MovieMetaData.CastGroup castGroup){
+            super(castGroup.getGroupTitle(), castGroup.groupJob,
+                    null);
+            this.castGroup = castGroup;
             type = MovieMetaData.ECGroupType.ACTORS;
         }
 
         public String getPosterImgUrl(){
-            if (NextGenExperience.getMovieMetaData().getActorsList() != null && NextGenExperience.getMovieMetaData().getActorsList().size() > 0){
-                if (NextGenExperience.getMovieMetaData().getActorsList().get(0).getBaselineCastData() != null)
-                    return NextGenExperience.getMovieMetaData().getActorsList().get(0).getBaselineCastData().getFullImageUrl();
+            if (castGroup != null && castGroup.getCastsList().size() > 0) {
+                if (castGroup.getCastsList().get(0).getBaselineCastData() != null)
+                    return castGroup.getCastsList().get(0).getBaselineCastData().getFullImageUrl();
             }
+
             return null;
         }
+
     }
 
     @Override
@@ -54,9 +59,13 @@ public class ExtraMainTableFragment_Phone extends ExtraMainTableFragment {
     @Override
     protected List<MovieMetaData.ExperienceData> getSourceData(){
         List<MovieMetaData.ExperienceData> ecList = new ArrayList<MovieMetaData.ExperienceData>();
-        if (NextGenExperience.getMovieMetaData().getActorsList() != null && NextGenExperience.getMovieMetaData().getActorsList().size() > 0){
-            ecList.add(new ActorExperience());
+
+        if (NextGenExperience.getMovieMetaData().getCastGroups().size() > 0) {
+            for (MovieMetaData.CastGroup group : NextGenExperience.getMovieMetaData().getCastGroups()){
+                ecList.add(new ActorExperience(group));
+            }
         }
+
         ecList.addAll(NextGenExperience.getMovieMetaData().getExtraECGroups());
         return ecList;
     }
@@ -66,6 +75,7 @@ public class ExtraMainTableFragment_Phone extends ExtraMainTableFragment {
         MovieMetaData.ExperienceData selectedGroup = ecGroups.get(position);
         if (selectedGroup instanceof ActorExperience){
             Intent intent = new Intent(getActivity(), NGEActorsActivity_Phone.class);
+            intent.putExtra(NGEActorsActivity_Phone.TALENT_LIST_MODE, ((ActorExperience)selectedGroup).castGroup.getGroupTitle());
             startActivity(intent);
 
         }else{

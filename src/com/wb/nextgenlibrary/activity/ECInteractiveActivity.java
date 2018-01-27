@@ -54,9 +54,12 @@ public class ECInteractiveActivity extends AbstractECView implements AdapterView
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id){
 		Intent intent = new Intent(this, WebViewActivity.class);
+		String[] orientations = ecGroupData.getChildrenContents().get(position).interactiveItems.get(0).getOrientations();
 		intent.putExtra(F.URL, ecGroupData.getChildrenContents().get(position).interactiveItems.get(0).assetLocation);
 		intent.setAction(Intent.ACTION_VIEW);
 		intent.putExtra(F.ID, ecGroupData.getChildrenContents().get(position).experienceId);
+		if (orientations.length > 0)
+			intent.putExtra(WebViewActivity.ORIENTATION, orientations);
 		//intent.putExtra(F.TITLE, selectedGroup.title);
 		startActivity(intent);
 	}
