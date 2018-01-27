@@ -24,6 +24,7 @@ public class IMEActorFragment extends ActorListFragment implements NGEPlaybackSt
 
     List<CastIMEEngine> castIMEEngines = new ArrayList<CastIMEEngine>();
     List<CastData> currentActiveActorList = new ArrayList<CastData>();
+    List<CastData> modeCorrectedActiveActorList = new ArrayList<CastData>();
 
     static final CastData showMoreLessDummyData = new CastData(null, NextGenExperience.getClientLocale());
 
@@ -31,6 +32,10 @@ public class IMEActorFragment extends ActorListFragment implements NGEPlaybackSt
 
     protected int getListItemViewId() {
         return R.layout.ime_actor_row;
+    }
+
+    protected int getLayoutId(){
+        return R.layout.next_gen_ime_actor_list_view;
     }
 
     @Override
@@ -71,11 +76,24 @@ public class IMEActorFragment extends ActorListFragment implements NGEPlaybackSt
     }
 
     @Override
+    protected void onModeChanged(){
+
+        modeCorrectedActiveActorList.removeAll(modeCorrectedActiveActorList);
+        String job = NextGenExperience.getMovieMetaData().findJobByCastGroupName(listMode);
+        for (CastData castData: currentActiveActorList){
+            if (castData.job.equals(job)){
+                modeCorrectedActiveActorList.add(castData);
+            }
+        }
+
+    }
+
+    @Override
     public List<MovieMetaData.CastData> getActorInfos(){
         if (fullListEnabled ){
             return super.getActorInfos();
         }else
-            return currentActiveActorList;
+            return modeCorrectedActiveActorList;
 
     }
     @Override
@@ -97,12 +115,12 @@ public class IMEActorFragment extends ActorListFragment implements NGEPlaybackSt
                     @Override
                     public void run() {
                         currentActiveActorList = newList;
+                        onModeChanged();
                         listAdaptor.notifyDataSetChanged();
                     }
                 });
             }
         }
-
     }
 
     private void setCastIMEElementLists(List<List<MovieMetaData.IMEElement<MovieMetaData.CastData>>> castIMEElementLists){
@@ -116,6 +134,17 @@ public class IMEActorFragment extends ActorListFragment implements NGEPlaybackSt
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        TextView actorsTitle = (TextView)view.findViewById(R.id.actor_list_title);
+
+        if (actorsTitle != null ) {
+            if (!NextGenExperience.getMovieMetaData().hasMultipleCastMode()) {
+                actorsTitle.setText(getHeaderText());
+                actorsTitle.setVisibility(View.VISIBLE);
+            } else {
+                actorsTitle.setVisibility(View.GONE);
+            }
+        }
+
         setCastIMEElementLists(NextGenExperience.getMovieMetaData().getCastIMEElements());
 
     }

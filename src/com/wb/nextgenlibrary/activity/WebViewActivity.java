@@ -9,6 +9,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -53,6 +54,8 @@ import java.util.Date;
  */
 public class WebViewActivity extends NGEHideStatusBarActivity {
 
+    final static public String ORIENTATION = "ORIENTATION";
+
     protected WebView webView;
     private static final String TAG = WebViewActivity.class.getSimpleName();
     private String mCM;
@@ -60,6 +63,7 @@ public class WebViewActivity extends NGEHideStatusBarActivity {
     private ValueCallback<Uri[]> mUMA;
     private final static int FCR=1;
     private final static int NGE_PERMISSIONS_REQUEST = 2918;
+    private String[] screenOrientations;
 
     private static final BroadcastReceiver onDownloadComplete = new BroadcastReceiver() {
         public void onReceive(Context ctxt, Intent intent) {
@@ -146,6 +150,7 @@ public class WebViewActivity extends NGEHideStatusBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.web_view);
         final String url = getIntent().getStringExtra(F.URL);
+        screenOrientations = getIntent().getStringArrayExtra(ORIENTATION);
 
         requestPermissions();
 
@@ -319,6 +324,47 @@ public class WebViewActivity extends NGEHideStatusBarActivity {
             webView.resumeTimers();
             webView.onResume();
         }
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        checkOrientation();
+
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);   // reset orientation restriction
+    }
+
+    enum ScreenOrientation {
+        PORTRAIT, LANDSCAPE;
+    };
+    private void checkOrientation(){
+        boolean bAllowLandscape = false;
+        boolean bAllowPortrait = false;
+        if (screenOrientations != null && screenOrientations.length > 0){
+            for (String var: screenOrientations){
+                if (ScreenOrientation.PORTRAIT.toString().equalsIgnoreCase(var)){
+                    bAllowPortrait = true;
+                } else if (ScreenOrientation.LANDSCAPE.toString().equalsIgnoreCase(var)){
+                    bAllowLandscape = true;
+                }
+            }
+        }
+
+        if ((bAllowLandscape && bAllowPortrait) || (!bAllowLandscape && !bAllowPortrait)){
+
+        } else if (bAllowLandscape){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+        } else if (bAllowPortrait) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
+        } else {
+
+        }
+
     }
 
     // Create an image file
