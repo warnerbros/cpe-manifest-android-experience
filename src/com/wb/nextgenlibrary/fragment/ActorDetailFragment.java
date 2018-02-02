@@ -50,6 +50,7 @@ public class ActorDetailFragment extends AbstractNextGenFragment implements View
     ImageView fullImageView;
     TextView detailTextView;
     TextView actorNameTextView;
+    TextView biographyTitleTextView;
 
     RecyclerView filmographyRecyclerView;
     LinearLayoutManager filmographyLayoutManager;
@@ -92,6 +93,7 @@ public class ActorDetailFragment extends AbstractNextGenFragment implements View
 
         profileFrame = view.findViewById(R.id.actor_profile_frame);
         profileFrameNoImage = view.findViewById(R.id.actor_profile_frame_no_profile_pic);
+        biographyTitleTextView = (TextView)view.findViewById(R.id.actor_biography_title);
 
         relayoutProfilePortion(true);
 
@@ -200,7 +202,9 @@ public class ActorDetailFragment extends AbstractNextGenFragment implements View
         if (object != null && object.getBaselineCastData() != null && !object.equals(actorOjbect)){
             actorOjbect = object;
             detailTextView.scrollTo(0,0);
-
+            if (actorOjbect.getBiographyText() != null) {
+                biographyTitleTextView.setText(actorOjbect.getBiographyText().toUpperCase());
+            }
 
             if (!StringHelper.isEmpty(actorOjbect.getBaselineCastData().getFullImageUrl())) {
                 relayoutProfilePortion(true);

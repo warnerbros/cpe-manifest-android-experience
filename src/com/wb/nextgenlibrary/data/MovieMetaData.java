@@ -1228,6 +1228,7 @@ public class MovieMetaData {
         private String baselineApiActorId;
         private String peopleOtherId;
         private String appDataId;
+        private String biographyText = null;
         final public String job;
         public BaselineCastData baselineCastData;
 
@@ -1317,6 +1318,10 @@ public class MovieMetaData {
             return  appDataId;
         }
 
+        public String getBiographyText() {
+            return biographyText;
+        }
+
         public void fillCastDataWithAppData(AppDataType appDataType, HashMap<String, PictureType> pictureTypeAssetsMap, HashMap<String, PictureImageData> pictureImageMap){
 
             if (appDataType != null && appDataType.getNVPair() != null && appDataType.getNVPair().size() > 0){
@@ -1342,6 +1347,8 @@ public class MovieMetaData {
 
                     } else if ("description".equals(nvPairType.getName())){
                         appDataBiography = nvPairType.getText();
+                    } else if ("description_header".equals(nvPairType.getName())){
+                        biographyText = nvPairType.getText();
                     }
 
 
