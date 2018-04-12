@@ -79,7 +79,10 @@ public abstract class ExtraLeftListFragment<T> extends Fragment implements Adapt
 
     @Override
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-        listAdaptor.selectedIndex = position - listView.getHeaderViewsCount();;
+        if (position > listAdaptor.getCount()){
+            position = listAdaptor.getCount() - 1;
+        }
+        listAdaptor.selectedIndex = position - listView.getHeaderViewsCount();
         listView.setSelection(position);
         listView.setItemChecked(position, true);
         onListItemClick(position, listAdaptor.getItem(listAdaptor.selectedIndex));

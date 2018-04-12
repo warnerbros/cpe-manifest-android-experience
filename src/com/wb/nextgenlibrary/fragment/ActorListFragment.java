@@ -3,6 +3,7 @@ package com.wb.nextgenlibrary.fragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -57,6 +58,17 @@ public class ActorListFragment extends ExtraLeftListFragment<CastData> implement
     }
 
     @Override
+    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+        if (position == -1 && listAdaptor.selectedIndex > -1){
+            listAdaptor.selectedIndex = -1;
+            getActivity().onBackPressed();
+            return;
+        } else {
+            super.onItemClick(parent, v, position, id);
+        }
+    }
+
+    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -103,8 +115,9 @@ public class ActorListFragment extends ExtraLeftListFragment<CastData> implement
                         listMode = radioButton.getText().toString();
                         onModeChanged();
                         listAdaptor.notifyDataSetChanged();
+                        listView.smoothScrollToPosition(0);
                         if (listAdaptor.selectedIndex >= 0){
-                            onItemClick(null,listView, listAdaptor.selectedIndex, 0);
+                            onItemClick(null, listView, -1, 0);
                         }
                     }
                 });

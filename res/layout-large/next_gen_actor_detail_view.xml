@@ -130,6 +130,16 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/actor_biography_title"
+                        android:textColor="@android:color/white"
+                        android:text="@string/biography"
+                        android:textSize="@dimen/textLarge"
+                        android:paddingTop="@dimen/spacing_normal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:layout_marginTop="@dimen/spacing_small"
                         android:id="@+id/actor_biography_text"
                         android:textColor="@android:color/white"
                         android:scrollbars="vertical"
@@ -137,15 +147,6 @@
                         android:fontFamily="sans-serif-condensed"
                         android:layout_width="match_parent"
                         android:layout_height="fill_parent" />
-
-                    <TextView
-                        android:id="@+id/actor_biography_title"
-                        android:textColor="@android:color/white"
-                        android:text="@string/biography"
-                        android:textSize="@dimen/textMedium"
-                        android:paddingTop="@dimen/spacing_normal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
             </LinearLayout>
