@@ -112,11 +112,11 @@ public class ECVideoActivity extends AbstractECView implements ECVideoViewFragme
 
 		mOptionsMenu = menu;
 
-
+		try {
 			CastButtonFactory.setUpMediaRouteButton(getApplicationContext(),
 					menu,
 					R.id.menuChromecast);
-
+		} catch (Exception ex){}
 
 
 		return true;
