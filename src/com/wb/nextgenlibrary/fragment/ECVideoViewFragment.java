@@ -22,6 +22,8 @@ import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.PlaybackParameters;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
@@ -33,7 +35,7 @@ import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource;
 import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
-import com.google.android.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
@@ -142,13 +144,11 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
         videoView = (SimpleExoPlayerView) view.findViewById(R.id.ec_video_view);
         mediaDataSourceFactory = buildDataSourceFactory(true);
         if (videoView != null){
-            @SimpleExoPlayer.ExtensionRendererMode int extensionRendererMode = SimpleExoPlayer.EXTENSION_RENDERER_MODE_ON;//SimpleExoPlayer.EXTENSION_RENDERER_MODE_OFF;
             TrackSelection.Factory videoTrackSelectionFactory =
-                            new AdaptiveVideoTrackSelection.Factory(BANDWIDTH_METER);
+                            new AdaptiveTrackSelection.Factory(BANDWIDTH_METER);
             TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
             //trackSelectionHelper = new TrackSelectionHelper(trackSelector, videoTrackSelectionFactory);
-            player = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector, new DefaultLoadControl(),
-                    null, extensionRendererMode);
+            player = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector, new DefaultLoadControl());
             player.setPlayWhenReady(false);
             videoView.setPlayer(player);
             //videoView.setOnClickListener(showButtonOnClickLister);
@@ -230,6 +230,16 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
 
             @Override
             public void onLoadingChanged(boolean isLoading) {
+
+            }
+
+            @Override
+            public void onPlaybackParametersChanged(PlaybackParameters playbackParameters){
+
+            }
+
+            @Override
+            public void onRepeatModeChanged(@Player.RepeatMode int repeatMode){
 
             }
 
