@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.cast.framework.CastContext;
 import com.google.android.gms.cast.framework.CastSession;
+import com.google.android.gms.cast.framework.CastState;
 import com.google.android.gms.cast.framework.CastStateListener;
 import com.google.android.gms.cast.framework.Session;
 import com.google.android.gms.cast.framework.SessionManager;
@@ -111,7 +112,6 @@ public abstract class AbstractNGEActivity extends NGEHideStatusBarActivity imple
         try {
             CastContext castContext = CastContext.getSharedInstance(this);
             mSessionManager = castContext.getSessionManager();
-            mSessionManager.addCastStateListener(this);
         }catch (Exception ex){}
     }
 
@@ -209,9 +209,6 @@ public abstract class AbstractNGEActivity extends NGEHideStatusBarActivity imple
         if (castListener != null)
             remoteMediaClient.removeListener(castListener);
 
-        if (mSessionManager != null) {
-            mSessionManager.removeCastStateListener(this);
-        }
         super.onDestroy();
     }
 
@@ -287,21 +284,28 @@ public abstract class AbstractNGEActivity extends NGEHideStatusBarActivity imple
     private class SessionManagerListenerImpl implements SessionManagerListener {
         @Override
         public void onSessionStarted(Session session, String sessionId) {
-
+            onCastStateChanged(CastState.CONNECTED);
         }
         @Override
         public void onSessionResumed(Session session, boolean wasSuspended) {
-
+            onCastStateChanged(CastState.CONNECTED);
         }
         @Override
         public void onSessionEnded(Session session, int error) {
+            onCastStateChanged(CastState.NOT_CONNECTED);
 
         }
 
-        public void onSessionResuming(Session var1, String str){}
-        public void onSessionStarting(Session var1){}
+        public void onSessionResuming(Session var1, String str){
+            onCastStateChanged(CastState.CONNECTING);
+        }
 
-        public void onSessionStartFailed(Session var1, int var2){}
+        public void onSessionStarting(Session var1){
+            onCastStateChanged(CastState.CONNECTING);
+        }
+
+        public void onSessionStartFailed(Session var1, int var2){
+            onCastStateChanged(CastState.NOT_CONNECTED);}
 
         public void onSessionEnding(Session var1){}
 
