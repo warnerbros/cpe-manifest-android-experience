@@ -2,7 +2,6 @@ package com.wb.nextgenlibrary.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
@@ -19,17 +18,17 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.view.ContextMenu;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
 import android.webkit.JavascriptInterface;
 import android.webkit.JsResult;
-import android.webkit.PermissionRequest;
 import android.webkit.URLUtil;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
@@ -146,6 +145,52 @@ public class WebViewActivity extends NGEHideStatusBarActivity {
 
     };
 
+    // To save image from web view
+    @Override
+    public void onCreateContextMenu(ContextMenu menu,View v,ContextMenu.ContextMenuInfo menuInfo){
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        // Get the web view hit test result
+        final WebView.HitTestResult result = webView.getHitTestResult();
+
+        /*
+            WebView.HitTestResult
+
+                IMAGE_TYPE
+                    HitTestResult for hitting an HTML::img tag.
+
+                SRC_IMAGE_ANCHOR_TYPE
+                    HitTestResult for hitting a HTML::a tag with src=http + HTML::img.
+        */
+
+        // If user long press on an image
+        if (result.getType() == WebView.HitTestResult.IMAGE_TYPE ||
+                result.getType() == WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE) {
+
+            // Set the title for context menu
+            //menu.setHeaderTitle("CONTEXT MENU");
+
+            // Add an item to the menu
+            menu.add(0, 1, 0, "Save Image")
+                .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        // Get the image url
+                        final String imgUrl = result.getExtra();
+                        String fileName = imgUrl.substring(imgUrl.lastIndexOf('/') + 1, imgUrl.length());
+                        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(imgUrl));
+                        request.allowScanningByMediaScanner();
+                        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,fileName);
+                        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                        DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+                        downloadManager.enqueue(request);
+
+                        return false;
+                    }
+                });
+        }
+    }
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.web_view);
@@ -161,6 +206,8 @@ public class WebViewActivity extends NGEHideStatusBarActivity {
         webView.getSettings().setAllowFileAccessFromFileURLs(true);
         webView.getSettings().setAllowUniversalAccessFromFileURLs(true);
         webView.getSettings().setAllowFileAccess(true);
+
+        this.registerForContextMenu(webView);	// enabling context menu
 
         if(Build.VERSION.SDK_INT >= 21){
             webView.getSettings().setMixedContentMode(0);
