@@ -39,6 +39,10 @@ public class ExtraMainTableFragment extends AbstractGridViewFragment {
         Intent intent = null;
         boolean bHasChildren = selectedGroup.getChildrenContents() != null && selectedGroup.getChildrenContents().size() > 0;
 
+        if (selectedGroup.getChildrenContents().size() == 1) {
+            selectedGroup = selectedGroup.getChildrenContents().get(0);
+        }
+
         if (selectedGroup.getECGroupType() == MovieMetaData.ECGroupType.FEATURETTES) {
             if (!bHasChildren)
                 return;
