@@ -7,9 +7,10 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.view.View;
 
+import com.wb.cpedata.data.manifest.ShopItem;
+import com.wb.cpedata.data.manifest.ShopItemInterface;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.fragment.ShopItemDetailFragment;
 import com.wb.nextgenlibrary.interfaces.ContentViewFullscreenRequestInterface;
 import com.wb.nextgenlibrary.util.TabletUtils;
@@ -34,10 +35,10 @@ public class ECShopItemDetailActivity extends AbstractNGEActivity implements Con
 		shopItemDetailFragment = (ShopItemDetailFragment) getSupportFragmentManager().findFragmentById(R.id.shop_item_detail_fragment);
 
 		String shopItemId = getIntent().getStringExtra(SHOP_ITEM_ID);
-		MovieMetaData.ShopItemInterface shopItem = null;
+		ShopItemInterface shopItem = null;
 		if (!StringHelper.isEmpty(shopItemId)){
 			shopItem = NextGenExperience.getMovieMetaData().getShopItemByAppId(shopItemId);
-			bShopItemHasVideo = shopItem instanceof MovieMetaData.ShopItem && ((MovieMetaData.ShopItem)shopItem).getAVItem() != null;
+			bShopItemHasVideo = shopItem instanceof ShopItem && ((ShopItem)shopItem).getAVItem() != null;
 		}
 
 		shopItemDetailFragment.setProduct(shopItem);

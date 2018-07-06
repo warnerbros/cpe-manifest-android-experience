@@ -1,6 +1,6 @@
 package com.wb.nextgenlibrary.interfaces;
 
-import com.wb.nextgenlibrary.data.MovieMetaData;
+import com.wb.cpedata.data.manifest.AudioVisualItem;
 import com.wb.nextgenlibrary.fragment.ECVideoViewFragment;
 
 /**
@@ -15,7 +15,7 @@ public interface ECVideoPlayerInterface {
 
 	void stopPlayback();
 
-	void setAudioVisualItem(MovieMetaData.AudioVisualItem avItem);
+	void setAudioVisualItem(AudioVisualItem avItem);
 
 	void onFullScreenChange(boolean bFullscreen);
 

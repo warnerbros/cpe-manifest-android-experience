@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import com.wb.cpedata.ManifestItem;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 
@@ -50,8 +51,8 @@ public class LauncherActivity extends Activity {
 	}
 
 
-	private class NextGenLauncherTask extends AsyncTask<NextGenExperience.ManifestItem, Integer, Boolean> {
-		protected Boolean doInBackground(NextGenExperience.ManifestItem... manifestItems) {
+	private class NextGenLauncherTask extends AsyncTask<ManifestItem, Integer, Boolean> {
+		protected Boolean doInBackground(ManifestItem... manifestItems) {
 
 			return NextGenExperience.startNextGenParsing(manifestItems[0], NextGenExperience.getClientLocale());
 		}

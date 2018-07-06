@@ -12,18 +12,21 @@ import android.widget.ExpandableListView;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.wb.cpedata.data.manifest.ExperienceData;
+import com.wb.cpedata.data.manifest.MovieMetaData;
+import com.wb.cpedata.data.manifest.ShopItem;
+import com.wb.cpedata.data.manifest.ShopItemInterface;
+import com.wb.cpedata.data.theTake.ShopCategory;
+import com.wb.cpedata.network.TheTakeApiDAO;
+import com.wb.cpedata.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
-import com.wb.nextgenlibrary.data.MovieMetaData;
-import com.wb.nextgenlibrary.data.TheTakeData.ShopCategory;
 import com.wb.nextgenlibrary.fragment.ShopCategoryGridFragment;
 import com.wb.nextgenlibrary.fragment.ShopItemDetailFragment;
 import com.wb.nextgenlibrary.interfaces.ContentViewFullscreenRequestInterface;
 import com.wb.nextgenlibrary.interfaces.NGEFragmentTransactionInterface;
-import com.wb.nextgenlibrary.network.TheTakeApiDAO;
 import com.wb.nextgenlibrary.util.TabletUtils;
-import com.wb.nextgenlibrary.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.util.utils.F;
 import com.wb.nextgenlibrary.util.utils.NGEFragmentTransactionEngine;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
@@ -48,7 +51,7 @@ public class ShopCategoryActivity extends AbstractNGEActivity implements NGEFrag
 
     String titleText = null;
 
-    MovieMetaData.ExperienceData ecGroupData;
+    ExperienceData ecGroupData;
 
     @Override
     public void onCreate(Bundle savedState) {
@@ -105,7 +108,7 @@ public class ShopCategoryActivity extends AbstractNGEActivity implements NGEFrag
         if (ecGroupData != null && ecGroupData.getECGroupType() == MovieMetaData.ECGroupType.SHOP){
             HashMap<String, ShopCategory> shopCategoryHashMap = new HashMap<>();
             if (categories.size() == 0){
-                for (MovieMetaData.ExperienceData child : ecGroupData.getChildrenContents()){
+                for (ExperienceData child : ecGroupData.getChildrenContents()){
                     buildCategorieyFromExperience(child, shopCategoryHashMap);
                 }
             }
@@ -145,11 +148,11 @@ public class ShopCategoryActivity extends AbstractNGEActivity implements NGEFrag
         }
     }
 
-    private void buildCategorieyFromExperience(MovieMetaData.ExperienceData experienceData, HashMap<String, ShopCategory> shopCategoryHashMap){
+    private void buildCategorieyFromExperience(ExperienceData experienceData, HashMap<String, ShopCategory> shopCategoryHashMap){
 
         if (experienceData != null){
             if (experienceData.getChildrenContents() != null && experienceData.getChildrenContents().size() > 0){
-                for (MovieMetaData.ExperienceData child : experienceData.getChildrenContents()){
+                for (ExperienceData child : experienceData.getChildrenContents()){
                     buildCategorieyFromExperience(child, shopCategoryHashMap);
                 }
 
@@ -163,7 +166,7 @@ public class ShopCategoryActivity extends AbstractNGEActivity implements NGEFrag
             }
 
             if (experienceData.shopItems.size() > 0){
-                for (MovieMetaData.ShopItem shopItem : experienceData.shopItems){
+                for (ShopItem shopItem : experienceData.shopItems){
                     if (shopItem.categoryType != null){
                         String id = shopItem.categoryType.getContentID();
                         ShopCategory category = shopCategoryHashMap.get(id);
@@ -315,73 +318,18 @@ public class ShopCategoryActivity extends AbstractNGEActivity implements NGEFrag
                             gridFrament.refreshWithCategory((ShopCategory)currentItem);
                             categoryListView.setItemChecked(selectedIndex,true);
                         }
-                    } else if (currentItem instanceof MovieMetaData.ShopItemInterface){
+                    } else if (currentItem instanceof ShopItemInterface){
 
                     }
                 }
 
 
             }
-/*
-            if (groupPosition >= categories.size()) {
 
-            }else if (groupPosition != -1) {
-                if (selectedGroupIndex != groupPosition)
-                    selectedGroupIndex = groupPosition;
-
-                if (childPosition != -1) {
-                     if (selectedItemIndex != childPosition) {
-                        selectedItemIndex = childPosition;
-                        if (!categoryListView.isGroupExpanded(selectedGroupIndex)) {
-                            categoryListView.expandGroup(selectedGroupIndex);
-                        }
-
-                    }
-                } else {
-                    selectedItemIndex = -1;
-                }
-                reComputeCheckedItem();
-                selectedCategory = getSelectedCategory();
-            }
-
-            if (selectedCategory != null){
-                Fragment f = getSupportFragmentManager().findFragmentByTag(ShopItemDetailFragment.class.toString());
-                if (f != null)
-                    getSupportFragmentManager().popBackStack();
-                gridFrament.refreshWithCategory(selectedCategory);
-            }*/
-
-
-        }
-
-        public ShopCategory getSelectedCategory(){
-            /*if (selectedGroupIndex != -1){
-                if (selectedItemIndex != -1) {
-                    return getChild(selectedGroupIndex, selectedItemIndex);
-                }else if (categories != null && selectedItemIndex < categories.size()){
-                    return categories.get(selectedGroupIndex);
-                }
-
-            }*/
-            return null;
         }
 
         public void reComputeCheckedItem(){
-            /*if (selectedGroupIndex != -1){
-                ShopCategory selectedCategory = categories.get(selectedGroupIndex);
-                if (selectedCategory.childCategories == null || selectedCategory.childCategories.size() == 0) {
-                    selectedFlatIndex = categoryListView.getFlatListPosition(ExpandableListView.getPackedPositionForGroup(selectedGroupIndex));
-                    categoryListView.setItemChecked(selectedFlatIndex, true);
-                }else if (selectedItemIndex != -1) {
-                    if (categoryListView.isGroupExpanded(selectedGroupIndex)) {
 
-                        selectedFlatIndex = categoryListView.getFlatListPosition(ExpandableListView.getPackedPositionForChild(selectedGroupIndex, selectedItemIndex));
-                        categoryListView.setItemChecked(selectedFlatIndex, true);
-                    } else if (selectedFlatIndex != -1) {
-                        categoryListView.setItemChecked(selectedFlatIndex, false);
-                    }
-                }
-            }*/
         }
 
         @Override

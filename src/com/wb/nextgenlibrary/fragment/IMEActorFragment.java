@@ -5,14 +5,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
+import com.wb.cpedata.data.manifest.CastData;
+import com.wb.cpedata.data.manifest.IMEElement;
+import com.wb.cpedata.model.IMEEngine;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
-import com.wb.nextgenlibrary.data.MovieMetaData;
-import com.wb.nextgenlibrary.data.MovieMetaData.CastData;
 import com.wb.nextgenlibrary.interfaces.NGEFragmentTransactionInterface;
 import com.wb.nextgenlibrary.interfaces.NGEPlaybackStatusListener;
-import com.wb.nextgenlibrary.model.IMEEngine;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,8 +65,8 @@ public class IMEActorFragment extends ActorListFragment implements NGEPlaybackSt
         }
     }
 
-    private static class CastIMEEngine extends IMEEngine<MovieMetaData.IMEElement<CastData>> {
-        public CastIMEEngine(List<MovieMetaData.IMEElement<MovieMetaData.CastData>> elements){
+    private static class CastIMEEngine extends IMEEngine<IMEElement<CastData>> {
+        public CastIMEEngine(List<IMEElement<CastData>> elements){
             imeElements = elements;
         }
 
@@ -89,7 +89,7 @@ public class IMEActorFragment extends ActorListFragment implements NGEPlaybackSt
     }
 
     @Override
-    public List<MovieMetaData.CastData> getActorInfos(){
+    public List<CastData> getActorInfos(){
         if (fullListEnabled ){
             return super.getActorInfos();
         }else
@@ -99,13 +99,13 @@ public class IMEActorFragment extends ActorListFragment implements NGEPlaybackSt
     @Override
     public void playbackStatusUpdate(NextGenPlaybackStatus playbackStatus, long timecode){
 
-        final List<MovieMetaData.CastData> newList = new ArrayList<MovieMetaData.CastData>();
+        final List<CastData> newList = new ArrayList<CastData>();
         if (timecode != -1){
             for(CastIMEEngine thisEngine: castIMEEngines){
                 thisEngine.linearSearch(timecode);
-                List<MovieMetaData.IMEElement<MovieMetaData.CastData>> thisData = thisEngine.getCurrentIMEItems();
+                List<IMEElement<CastData>> thisData = thisEngine.getCurrentIMEItems();
                 if (thisData.size() > 0) {
-                    for (MovieMetaData.IMEElement<MovieMetaData.CastData> imeObject : thisEngine.getCurrentIMEItems())
+                    for (IMEElement<CastData> imeObject : thisEngine.getCurrentIMEItems())
                         newList.add(imeObject.imeObject);
                 }
 
@@ -123,9 +123,9 @@ public class IMEActorFragment extends ActorListFragment implements NGEPlaybackSt
         }
     }
 
-    private void setCastIMEElementLists(List<List<MovieMetaData.IMEElement<MovieMetaData.CastData>>> castIMEElementLists){
+    private void setCastIMEElementLists(List<List<IMEElement<CastData>>> castIMEElementLists){
         if (castIMEElementLists != null && castIMEElementLists.size() > 0){
-            for(List<MovieMetaData.IMEElement<MovieMetaData.CastData>> imeList : castIMEElementLists){
+            for(List<IMEElement<CastData>> imeList : castIMEElementLists){
                 castIMEEngines.add(new CastIMEEngine(imeList));
             }
         }

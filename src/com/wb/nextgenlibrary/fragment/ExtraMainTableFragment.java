@@ -5,6 +5,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.wb.cpedata.data.manifest.ExperienceData;
+import com.wb.cpedata.data.manifest.MovieMetaData;
+import com.wb.cpedata.data.manifest.MovieMetaData.ECGroupType;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.activity.ECGalleryActivity;
@@ -13,8 +16,6 @@ import com.wb.nextgenlibrary.activity.ECSceneLocationActivity;
 import com.wb.nextgenlibrary.activity.ECVideoActivity;
 import com.wb.nextgenlibrary.activity.ShopCategoryActivity;
 import com.wb.nextgenlibrary.activity.WebViewActivity;
-import com.wb.nextgenlibrary.data.MovieMetaData;
-import com.wb.nextgenlibrary.data.MovieMetaData.ExperienceData;
 import com.wb.nextgenlibrary.util.utils.F;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
@@ -43,22 +44,22 @@ public class ExtraMainTableFragment extends AbstractGridViewFragment {
             selectedGroup = selectedGroup.getChildrenContents().get(0);
         }
 
-        if (selectedGroup.getECGroupType() == MovieMetaData.ECGroupType.FEATURETTES) {
+        if (selectedGroup.getECGroupType() == ECGroupType.FEATURETTES) {
             if (!bHasChildren)
                 return;
             intent = new Intent(getActivity(), ECVideoActivity.class);
-        }else if (selectedGroup.getECGroupType() == MovieMetaData.ECGroupType.LOCATIONS){
+        }else if (selectedGroup.getECGroupType() == ECGroupType.LOCATIONS){
             intent = new Intent(getActivity(), ECSceneLocationActivity.class);
-        }else if (selectedGroup.getECGroupType() == MovieMetaData.ECGroupType.EXTERNAL_APP){
+        }else if (selectedGroup.getECGroupType() == ECGroupType.EXTERNAL_APP){
             if (selectedGroup.getExternalApp() != null){
                 if (selectedGroup.getExternalApp().externalApiName.equals(MovieMetaData.THE_TAKE_MANIFEST_IDENTIFIER)){
                     intent = new Intent(getActivity(), ShopCategoryActivity.class);
 
                 }
             }
-        }else if (selectedGroup.getECGroupType() == MovieMetaData.ECGroupType.GALLERY){
+        }else if (selectedGroup.getECGroupType() == ECGroupType.GALLERY){
             intent = new Intent(getActivity(), ECGalleryActivity.class);
-        }else if (selectedGroup.getECGroupType() == MovieMetaData.ECGroupType.INTERACTIVE){
+        }else if (selectedGroup.getECGroupType() == ECGroupType.INTERACTIVE){
             if (selectedGroup.interactiveItems.size() == 0 && selectedGroup.getChildrenContents().size() > 0){        // launch grid
 
                 intent = new Intent(getActivity(), ECInteractiveActivity.class);
@@ -66,7 +67,7 @@ public class ExtraMainTableFragment extends AbstractGridViewFragment {
                 intent = new Intent(getActivity(), WebViewActivity.class);
                 intent.putExtra(F.URL, selectedGroup.interactiveItems.get(0).assetLocation);
             }
-        } else if (selectedGroup.getECGroupType() == MovieMetaData.ECGroupType.SHOP){
+        } else if (selectedGroup.getECGroupType() == ECGroupType.SHOP){
             intent = new Intent(getActivity(), ShopCategoryActivity.class);
         }
 

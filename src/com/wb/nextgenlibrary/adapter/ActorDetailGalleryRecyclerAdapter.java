@@ -13,8 +13,8 @@ import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.wb.cpedata.data.manifest.CastHeadShot;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
 
@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class ActorDetailGalleryRecyclerAdapter extends RecyclerView.Adapter<ActorDetailGalleryRecyclerAdapter.ActorGalleryViewHolder>{
 
-    List<MovieMetaData.CastHeadShot> headShots = null;
+    List<CastHeadShot> headShots = null;
     ActorGalleryRecyclerSelectionListener listener;
     Context mContext;
     int selectedIndex = -1;
@@ -41,7 +41,7 @@ public class ActorDetailGalleryRecyclerAdapter extends RecyclerView.Adapter<Acto
         this.listener = listener;
     }
 
-    public void setCastHeadShots(List<MovieMetaData.CastHeadShot> headShots){
+    public void setCastHeadShots(List<CastHeadShot> headShots){
         this.headShots = headShots;
     }
 
@@ -61,7 +61,7 @@ public class ActorDetailGalleryRecyclerAdapter extends RecyclerView.Adapter<Acto
 
     public void onBindViewHolder(ActorGalleryViewHolder holder, int position){
 
-        MovieMetaData.CastHeadShot headShot = headShots.get(position );
+        CastHeadShot headShot = headShots.get(position );
         holder.setCastHeadShot(mContext, headShot, redition, position);
 
         holder.itemView.setSelected(position == selectedIndex);
@@ -78,7 +78,7 @@ public class ActorDetailGalleryRecyclerAdapter extends RecyclerView.Adapter<Acto
     public class ActorGalleryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         CardView cv;
         ImageView personPhoto;
-        MovieMetaData.CastHeadShot headShot;
+        CastHeadShot headShot;
         ActorGalleryRecyclerSelectionListener listener;
         FixedAspectRatioFrameLayout aspectRatioFrameLayout;
         int index = 0;
@@ -93,7 +93,7 @@ public class ActorDetailGalleryRecyclerAdapter extends RecyclerView.Adapter<Acto
             itemView.setOnClickListener(this);
         }
 
-        public void setCastHeadShot(Context context, MovieMetaData.CastHeadShot headShot, ImageRedition redition, int position){
+        public void setCastHeadShot(Context context, CastHeadShot headShot, ImageRedition redition, int position){
             this.headShot = headShot;
             index = position;
             //Picasso.with(getActivity()).load(headShot.mediumUrl).fit().centerCrop().into(personPhoto);

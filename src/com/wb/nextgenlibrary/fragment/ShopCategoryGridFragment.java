@@ -10,16 +10,18 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import com.wb.cpedata.data.manifest.MovieMetaData;
+import com.wb.cpedata.data.manifest.ShopItem;
+import com.wb.cpedata.data.manifest.ShopItemInterface;
+import com.wb.cpedata.data.theTake.ShopCategory;
+import com.wb.cpedata.network.TheTakeApiDAO;
+import com.wb.cpedata.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.activity.ECShopItemDetailActivity;
 import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
-import com.wb.nextgenlibrary.data.MovieMetaData;
-import com.wb.nextgenlibrary.data.TheTakeData;
 import com.wb.nextgenlibrary.interfaces.NGEFragmentTransactionInterface;
-import com.wb.nextgenlibrary.network.TheTakeApiDAO;
 import com.wb.nextgenlibrary.util.TabletUtils;
-import com.wb.nextgenlibrary.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.widget.DotIndicatorImageView;
@@ -32,21 +34,21 @@ import java.util.List;
 public class ShopCategoryGridFragment extends AbstractNextGenFragment{
     GridView itemsGridView;
     TheTakeProductsGridViewAdapter itemsGridViewAdaptor;
-    TheTakeData.ShopCategory selectedCategory = null;
+    ShopCategory selectedCategory = null;
 
     public int getContentViewId(){
         return R.layout.shop_category_right_grid;
     }
 
-    public void refreshWithCategory(TheTakeData.ShopCategory category){
+    public void refreshWithCategory(ShopCategory category){
         selectedCategory = category;
 
         if (selectedCategory.products == null) {
 
 
-            TheTakeApiDAO.getCategoryProducts(selectedCategory.categoryId, new ResultListener<List<MovieMetaData.ShopItemInterface>>() {
+            TheTakeApiDAO.getCategoryProducts(selectedCategory.categoryId, new ResultListener<List<ShopItemInterface>>() {
                 @Override
-                public void onResult(List<MovieMetaData.ShopItemInterface> result) {
+                public void onResult(List<ShopItemInterface> result) {
                     selectedCategory.products = result;
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -132,7 +134,7 @@ public class ShopCategoryGridFragment extends AbstractNextGenFragment{
             TextView brandName = (TextView) convertView.findViewById(R.id.shop_brand_name);
             TextView productName = (TextView) convertView.findViewById(R.id.shop_product_name);
 
-            MovieMetaData.ShopItemInterface product = getItem(position);
+            ShopItemInterface product = getItem(position);
             if (product != null){
                 if (productThumbnail != null){
                     productThumbnail.setKeyCropXY(product.getKeyCropProductX(), product.getKeyCropProductY());
@@ -163,7 +165,7 @@ public class ShopCategoryGridFragment extends AbstractNextGenFragment{
                 return 0;
         }
 
-        public MovieMetaData.ShopItemInterface getItem(int position) {
+        public ShopItemInterface getItem(int position) {
             if (selectedCategory != null && selectedCategory.products != null && position < selectedCategory.products.size())
                 return selectedCategory.products.get(position);
             else
@@ -179,7 +181,7 @@ public class ShopCategoryGridFragment extends AbstractNextGenFragment{
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id){
-            MovieMetaData.ShopItemInterface product = getItem(position);
+            ShopItemInterface product = getItem(position);
             NGEAnalyticData.reportEvent(getActivity(), ShopCategoryGridFragment.this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_PRODUCT, product.getProductReportId(), null);
             if (TabletUtils.isTablet()) {
                 ShopItemDetailFragment fragment = new ShopItemDetailFragment();
@@ -192,8 +194,8 @@ public class ShopCategoryGridFragment extends AbstractNextGenFragment{
             } else {
                 Intent intent = new Intent(getActivity(), ECShopItemDetailActivity.class);
 
-                if (product instanceof MovieMetaData.ShopItem)
-                    intent.putExtra(ECShopItemDetailActivity.SHOP_ITEM_ID, ((MovieMetaData.ShopItem)product).getId());
+                if (product instanceof ShopItem)
+                    intent.putExtra(ECShopItemDetailActivity.SHOP_ITEM_ID, ((ShopItem)product).getId());
                 startActivity(intent);
             }
         }

@@ -24,11 +24,9 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
+import com.wb.cpedata.data.manifest.ECGalleryItem;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
-import com.wb.nextgenlibrary.data.MovieMetaData;
-import com.wb.nextgenlibrary.util.NGEUtils;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
@@ -191,7 +189,7 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
         super.onDestroy();
     }
 
-    public void setCurrentGallery(MovieMetaData.ECGalleryItem gallery){
+    public void setCurrentGallery(ECGalleryItem gallery){
         super.setCurrentGallery(gallery);
 		itemIndex = 0;
         if (adapter != null) {
@@ -325,7 +323,7 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
 			View itemView = mInflater.inflate(R.layout.pager_gallery_item, container, false);
 			container.addView(itemView);
 
-            MovieMetaData.ECGalleryItem currentItem = currentGallery;
+            ECGalleryItem currentItem = currentGallery;
 
             // Get the border size to show around each image
             int borderSize = 0;//_thumbnails.getPaddingTop();

@@ -50,14 +50,18 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
+import com.wb.cpedata.data.manifest.PictureImageData;
+import com.wb.cpedata.data.style.ExperienceStyle;
+import com.wb.cpedata.data.style.NodeBackground;
+import com.wb.cpedata.data.style.NodeStyleData;
+import com.wb.cpedata.data.style.StyleData;
+import com.wb.cpedata.data.style.ThemeData;
+import com.wb.cpedata.parser.cpestyle.BackgroundOverlayAreaType;
+import com.wb.cpedata.util.Size;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
-import com.wb.nextgenlibrary.data.MovieMetaData;
-import com.wb.nextgenlibrary.data.StyleData;
-import com.wb.nextgenlibrary.parser.cpestyle.BackgroundOverlayAreaType;
 import com.wb.nextgenlibrary.testassets.TestItemsActivity;
-import com.wb.nextgenlibrary.util.Size;
 import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.utils.F;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;
@@ -108,7 +112,7 @@ public class StartupActivity extends NGEHideStatusBarActivity implements View.On
 
     //private SimpleExoPlayerView exoStartupVideoView;
 
-    StyleData.ExperienceStyle mainStyle = NextGenExperience.getMovieMetaData() != null ? NextGenExperience.getMovieMetaData().getRootExperienceStyle() : null;
+    ExperienceStyle mainStyle = NextGenExperience.getMovieMetaData() != null ? NextGenExperience.getMovieMetaData().getRootExperienceStyle() : null;
     @Override
     public void onCreate(Bundle savedState) {
         super.onCreate(savedState);
@@ -172,7 +176,7 @@ public class StartupActivity extends NGEHideStatusBarActivity implements View.On
             purchaseButton.setOnClickListener(this);
         }
 
-        StyleData.NodeBackground nodeBackground = (mainStyle != null ) ? mainStyle.getBackground() : null;
+        NodeBackground nodeBackground = (mainStyle != null ) ? mainStyle.getBackground() : null;
 
         if (nodeBackground != null && !StringHelper.isEmpty(nodeBackground.getVideoUrl())) {
             videoLoopPoint = nodeBackground.getVideoLoopingPoint();
@@ -180,7 +184,7 @@ public class StartupActivity extends NGEHideStatusBarActivity implements View.On
                 buttonAnimationStartTime = nodeBackground.getVideoLoopingPoint() - 500;
         }
 
-        MovieMetaData.PictureImageData bgImageData = (mainStyle != null ) ? mainStyle.getBackgroundImage() : null;
+        PictureImageData bgImageData = (mainStyle != null ) ? mainStyle.getBackgroundImage() : null;
         if (bgImageData != null && !StringHelper.isEmpty(bgImageData.url)){
             String bgImageUrl = bgImageData.url;
             imageParentFrame.setAspectRatio(bgImageData.width, bgImageData.height);
@@ -415,14 +419,14 @@ public class StartupActivity extends NGEHideStatusBarActivity implements View.On
                     return;
                 }
 
-                StyleData.ThemeData buttonTheme = mainStyle.getNodeStyleData(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE).theme;
+                ThemeData buttonTheme = mainStyle.getNodeStyleData(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE, TabletUtils.isTablet()).theme;
 
-                MovieMetaData.PictureImageData extraBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.EXTRA_BUTTON);
+                PictureImageData extraBtnImageData = buttonTheme.getImageData(ThemeData.EXTRA_BUTTON);
                 if (extraBtnImageData == null)
-                    extraBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.EXTRA_BUTTON.toLowerCase());
-                MovieMetaData.PictureImageData playBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.PLAY_BUTTON);
+                    extraBtnImageData = buttonTheme.getImageData(ThemeData.EXTRA_BUTTON.toLowerCase());
+                PictureImageData playBtnImageData = buttonTheme.getImageData(ThemeData.PLAY_BUTTON);
                 if (playBtnImageData == null)
-                    playBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.PLAY_BUTTON.toLowerCase());
+                    playBtnImageData = buttonTheme.getImageData(ThemeData.PLAY_BUTTON.toLowerCase());
 
 
                 if (imageButtonsFrame != null && extraBtnImageData != null && playBtnImageData != null) {
@@ -514,7 +518,7 @@ public class StartupActivity extends NGEHideStatusBarActivity implements View.On
         FixedAspectRatioFrameLayout buttonsReferenceFrame;
         Size buttonsReferenceFrameSize;
         Size buttonsReferenceFrameSourceSize;
-        StyleData.NodeStyleData nodeStyleData;
+        NodeStyleData nodeStyleData;
         boolean isPortrait = false;
         if (mainStyle == null)		// if there's no main style, no calculations of button positions will be needed
             return;
@@ -523,7 +527,7 @@ public class StartupActivity extends NGEHideStatusBarActivity implements View.On
             buttonsReferenceFrameSize = new Size(imageParentFrame.getWidth(), imageParentFrame.getHeight());
             buttonsReferenceFrame = imageParentFrame;
             buttonsReferenceFrameSourceSize = bgImageSize;
-            nodeStyleData = mainStyle.getNodeStyleData(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            nodeStyleData = mainStyle.getNodeStyleData(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT, TabletUtils.isTablet());
             if (!StringHelper.isEmpty(mainStyle.getBackgroundVideoUrl())) {
                 videoParentFrame.setAspectRatioPriority(FixedAspectRatioFrameLayout.Priority.WIDTH_PRIORITY);
                 layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -533,26 +537,7 @@ public class StartupActivity extends NGEHideStatusBarActivity implements View.On
             }
 
         }else /*if (orientation == Configuration.ORIENTATION_LANDSCAPE)*/{		// for tablets and Landscape mode
-            nodeStyleData = mainStyle.getNodeStyleData(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-            /*if (!StringHelper.isEmpty(mainStyle.getBackgroundVideoUrl())) {
-                Size videoSize = mainStyle.getBackgroundVideoSize();
-                Size screenSize = NextGenExperience.getScreenSize(NextGenExperience.getApplicationContext());
-                float videoAspectRatio = ((float) videoSize.getHeight()) /((float) videoSize.getWidth());
-                float screenAspectRatio = ((float) screenSize.getHeight()) /((float) screenSize.getWidth());
-                if (screenAspectRatio > 1)
-                    screenAspectRatio = 1/ screenAspectRatio;
-                if (screenAspectRatio >= videoAspectRatio) {
-                    videoParentFrame.setAspectRatioPriority(FixedAspectRatioFrameLayout.Priority.HEIGHT_PRIORITY);
-                    layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
-                } else {
-                    videoParentFrame.setAspectRatioPriority(FixedAspectRatioFrameLayout.Priority.WIDTH_PRIORITY);
-                    layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
-                }
-                videoParentFrame.setLayoutParams(layoutParams);
-                buttonsReferenceFrameSize = new Size(videoParentFrame.getWidth(), videoParentFrame.getHeight());
-                buttonsReferenceFrame = videoParentFrame;
-                buttonsReferenceFrameSourceSize = startupVideoSize;
-            } else {*/
+            nodeStyleData = mainStyle.getNodeStyleData(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE, TabletUtils.isTablet());
 
             if (nodeStyleData.background.hasBGImage()) {
                 buttonsReferenceFrameSize = new Size(imageParentFrame.getWidth(), imageParentFrame.getHeight());
@@ -583,7 +568,7 @@ public class StartupActivity extends NGEHideStatusBarActivity implements View.On
 
         if (nodeStyleData != null) {
             textButtonsFrame.setVisibility(View.GONE);
-            StyleData.ThemeData buttonTheme = nodeStyleData.theme;
+            ThemeData buttonTheme = nodeStyleData.theme;
             BackgroundOverlayAreaType buttonLayoutArea = nodeStyleData.getButtonOverlayArea();
             BackgroundOverlayAreaType titleLayoutArea = nodeStyleData.getTitleOverlayArea();
 
@@ -627,15 +612,15 @@ public class StartupActivity extends NGEHideStatusBarActivity implements View.On
 
             imageButtonsFrame.setLayoutParams(buttonsLayoutParams);
 
-            MovieMetaData.PictureImageData extraBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.EXTRA_BUTTON);
+            PictureImageData extraBtnImageData = buttonTheme.getImageData(ThemeData.EXTRA_BUTTON);
             if (extraBtnImageData == null)
-                extraBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.EXTRA_BUTTON.toLowerCase());
-            MovieMetaData.PictureImageData playBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.PLAY_BUTTON);
+                extraBtnImageData = buttonTheme.getImageData(ThemeData.EXTRA_BUTTON.toLowerCase());
+            PictureImageData playBtnImageData = buttonTheme.getImageData(ThemeData.PLAY_BUTTON);
             if (playBtnImageData == null)
-                playBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.PLAY_BUTTON.toLowerCase());
-            MovieMetaData.PictureImageData purchaseBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.PURCHASE_BUTTON);
+                playBtnImageData = buttonTheme.getImageData(ThemeData.PLAY_BUTTON.toLowerCase());
+            PictureImageData purchaseBtnImageData = buttonTheme.getImageData(ThemeData.PURCHASE_BUTTON);
             if (purchaseBtnImageData == null)
-                purchaseBtnImageData = buttonTheme.getImageData(StyleData.ThemeData.PURCHASE_BUTTON.toLowerCase());
+                purchaseBtnImageData = buttonTheme.getImageData(ThemeData.PURCHASE_BUTTON.toLowerCase());
 
             if (extraBtnImageData != null && playBtnImageData != null) {
                 double buttonRatio = (double) width / (double) playBtnImageData.width;

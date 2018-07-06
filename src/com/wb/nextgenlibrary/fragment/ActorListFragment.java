@@ -12,17 +12,18 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.wb.cpedata.data.manifest.CastData;
+import com.wb.cpedata.data.manifest.CastGroup;
+import com.wb.cpedata.data.manifest.MovieMetaData;
+import com.wb.cpedata.network.BaselineApiDAO;
+import com.wb.cpedata.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 
 import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
-import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.interfaces.NGEFragmentTransactionInterface;
 import com.wb.nextgenlibrary.interfaces.SensitiveFragmentInterface;
-import com.wb.nextgenlibrary.network.BaselineApiDAO;
 
-import com.wb.nextgenlibrary.data.MovieMetaData.CastData;
-import com.wb.nextgenlibrary.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.widget.FontFitTextView;
 
@@ -81,7 +82,7 @@ public class ActorListFragment extends ExtraLeftListFragment<CastData> implement
             if (NextGenExperience.getMovieMetaData().hasMultipleCastMode() && !bFixedMode) {
                 castGroupSegmentedControl.setVisibility(View.VISIBLE);
                 int defaultId = -1;
-                for (MovieMetaData.CastGroup group : NextGenExperience.getMovieMetaData().getCastGroups()){
+                for (CastGroup group : NextGenExperience.getMovieMetaData().getCastGroups()){
                     RadioButton radioButton = (RadioButton) getActivity().getLayoutInflater().inflate(R.layout.actor_group_radio_btn, null);
                     radioButton.setText(group.getGroupTitle());
                     castGroupSegmentedControl.addView(radioButton);
@@ -160,7 +161,7 @@ public class ActorListFragment extends ExtraLeftListFragment<CastData> implement
 
 
     public List<CastData> getActorInfos(){
-        MovieMetaData.CastGroup group =  NextGenExperience.getMovieMetaData().getCastGroupByTitle(listMode);
+        CastGroup group =  NextGenExperience.getMovieMetaData().getCastGroupByTitle(listMode);
         if (group != null)
             return group.getCastsList();
         else
@@ -225,7 +226,7 @@ public class ActorListFragment extends ExtraLeftListFragment<CastData> implement
     }
 
     protected String getHeaderText(){
-        MovieMetaData.CastGroup group =  NextGenExperience.getMovieMetaData().getCastGroupByTitle(listMode);
+        CastGroup group =  NextGenExperience.getMovieMetaData().getCastGroupByTitle(listMode);
         if (group != null)
             return group.getGroupTitle();
         else

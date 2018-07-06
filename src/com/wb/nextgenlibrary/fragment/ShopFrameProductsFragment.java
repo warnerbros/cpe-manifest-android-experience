@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.wb.cpedata.data.manifest.ShopItemInterface;
+import com.wb.cpedata.network.TheTakeApiDAO;
+import com.wb.cpedata.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.data.MovieMetaData;
-import com.wb.nextgenlibrary.network.TheTakeApiDAO;
-import com.wb.nextgenlibrary.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 
@@ -26,7 +26,7 @@ import java.util.List;
 public class ShopFrameProductsFragment extends AbstractNextGenFragment {
 
     ShopItemDetailFragment productDetailFragment;
-    List<MovieMetaData.ShopItemInterface> productList = new ArrayList<MovieMetaData.ShopItemInterface>();
+    List<ShopItemInterface> productList = new ArrayList<ShopItemInterface>();
     RecyclerView frameProductsRecyclerView;
     LinearLayoutManager frameProductsLayoutManager;
     FrameProductsAdapter frameProductsAdaptor;
@@ -86,9 +86,9 @@ public class ShopFrameProductsFragment extends AbstractNextGenFragment {
     @Override
     public void onStart(){
         super.onStart();
-        TheTakeApiDAO.getFrameProducts((double) frameTime, new ResultListener<List<MovieMetaData.ShopItemInterface>>() {
+        TheTakeApiDAO.getFrameProducts((double) frameTime, new ResultListener<List<ShopItemInterface>>() {
             @Override
-            public void onResult(final List<MovieMetaData.ShopItemInterface> result) {
+            public void onResult(final List<ShopItemInterface> result) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -108,7 +108,7 @@ public class ShopFrameProductsFragment extends AbstractNextGenFragment {
         });
     }
 
-    public void loadProductIntoDetailFragment(MovieMetaData.ShopItemInterface product){
+    public void loadProductIntoDetailFragment(ShopItemInterface product){
         if (productDetailFragment != null) {
             productDetailFragment.setProduct(product);
             productDetailFragment.getProductDetail();
@@ -120,10 +120,10 @@ public class ShopFrameProductsFragment extends AbstractNextGenFragment {
         TextView productBrand;
         TextView productName;
         ImageView personPhoto;
-        MovieMetaData.ShopItemInterface product;
+        ShopItemInterface product;
         int position;
 
-        FrameProductViewHolder(View itemView, MovieMetaData.ShopItemInterface product) {
+        FrameProductViewHolder(View itemView, ShopItemInterface product) {
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.product_cv);
             productBrand = (TextView)itemView.findViewById(R.id.cv_product_brand_name);
@@ -133,7 +133,7 @@ public class ShopFrameProductsFragment extends AbstractNextGenFragment {
             itemView.setOnClickListener(this);
         }
 
-        public void setTheTakeProduct(MovieMetaData.ShopItemInterface product, int position){
+        public void setTheTakeProduct(ShopItemInterface product, int position){
             this.position = position;
             this.product = product;
         }
@@ -170,7 +170,7 @@ public class ShopFrameProductsFragment extends AbstractNextGenFragment {
 
 
             if (productList != null && productList.size() > position) {
-                MovieMetaData.ShopItemInterface thisProduct = productList.get(position);
+                ShopItemInterface thisProduct = productList.get(position);
                 holder.setTheTakeProduct(thisProduct, position);
                 if (!StringHelper.isEmpty(thisProduct.getProductThumbnailUrl())) {
                     NextGenGlide.load(getActivity(), thisProduct.getProductThumbnailUrl()).into(holder.personPhoto);

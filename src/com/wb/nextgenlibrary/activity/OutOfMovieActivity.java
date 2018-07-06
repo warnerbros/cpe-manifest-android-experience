@@ -4,9 +4,9 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
+import com.wb.cpedata.data.style.ExperienceStyle;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.data.StyleData;
 import com.wb.nextgenlibrary.fragment.ActorListFragment;
 import com.wb.nextgenlibrary.fragment.ExtraMainTableFragment;
 import com.wb.nextgenlibrary.interfaces.NGEFragmentTransactionInterface;
@@ -22,7 +22,7 @@ public class OutOfMovieActivity extends AbstractNGEActivity implements NGEFragme
     NGEFragmentTransactionEngine fragmentTransactionEngine;
 
 
-    StyleData.ExperienceStyle extraStyle = null;
+    ExperienceStyle extraStyle = null;
     private int startupStackCount = 2;
 
     @Override

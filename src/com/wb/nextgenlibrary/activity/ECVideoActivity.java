@@ -9,9 +9,10 @@ import android.widget.TextView;
 
 import com.google.android.gms.cast.framework.CastButtonFactory;
 import com.google.android.gms.cast.framework.CastState;
+import com.wb.cpedata.data.manifest.AudioVisualItem;
+import com.wb.cpedata.data.manifest.ExperienceData;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
-import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.fragment.ECCastPlayerFragment;
 import com.wb.nextgenlibrary.fragment.ECVideoViewFragment;
 import com.wb.nextgenlibrary.interfaces.ECVideoPlayerInterface;
@@ -134,13 +135,13 @@ public class ECVideoActivity extends AbstractECView implements ECVideoViewFragme
     }
 
     @Override
-    public void onLeftListItemSelected(MovieMetaData.ExperienceData ec){
+    public void onLeftListItemSelected(ExperienceData ec){
         if (selectedEC == ec)      // avoid video reload
             return;
         else
             selectedEC = ec;
         if (ec != null && ec.audioVisualItems.size() > 0) {
-			MovieMetaData.AudioVisualItem audioVisualItem = ec.audioVisualItems.get(0);
+			AudioVisualItem audioVisualItem = ec.audioVisualItems.get(0);
 			if (activePlayerInterface != null)
 				activePlayerInterface.setAudioVisualItem(audioVisualItem);
 			activePlayerInterface.setResumeTimeMillisecond(-1);
@@ -223,7 +224,7 @@ public class ECVideoActivity extends AbstractECView implements ECVideoViewFragme
 		activePlayerInterface.setShouldAutoPlay(bShouldAutoPlay);
 		activePlayerInterface.setEcsAdaptor(this);
 
-		MovieMetaData.AudioVisualItem audioVisualItem = null;
+		AudioVisualItem audioVisualItem = null;
 		if (selectedEC != null && selectedEC.audioVisualItems.size() > 0) {
 			audioVisualItem = selectedEC.audioVisualItems.get(0);
 			if (activePlayerInterface != null) {

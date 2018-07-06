@@ -5,10 +5,12 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.view.View;
 
+import com.wb.cpedata.data.manifest.CastGroup;
+import com.wb.cpedata.data.manifest.ExperienceData;
+import com.wb.cpedata.data.manifest.MovieMetaData;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.activity.NGEHideStatusBarActivity;
 import com.wb.nextgenlibrary.activity.phone.NGEActorsActivity_Phone;
-import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.fragment.ActorListFragment;
 import com.wb.nextgenlibrary.fragment.ExtraMainTableFragment;
 
@@ -20,9 +22,9 @@ import java.util.List;
  */
 public class ExtraMainTableFragment_Phone extends ExtraMainTableFragment {
 
-    class ActorExperience extends MovieMetaData.ExperienceData{
-        MovieMetaData.CastGroup castGroup = null;
-        public ActorExperience(MovieMetaData.CastGroup castGroup){
+    class ActorExperience extends ExperienceData{
+        CastGroup castGroup = null;
+        public ActorExperience(CastGroup castGroup){
             super(castGroup.getGroupTitle(), castGroup.groupJob,
                     null);
             this.castGroup = castGroup;
@@ -57,11 +59,11 @@ public class ExtraMainTableFragment_Phone extends ExtraMainTableFragment {
 
 
     @Override
-    protected List<MovieMetaData.ExperienceData> getSourceData(){
-        List<MovieMetaData.ExperienceData> ecList = new ArrayList<MovieMetaData.ExperienceData>();
+    protected List<ExperienceData> getSourceData(){
+        List<ExperienceData> ecList = new ArrayList<ExperienceData>();
 
         if (NextGenExperience.getMovieMetaData().getCastGroups().size() > 0) {
-            for (MovieMetaData.CastGroup group : NextGenExperience.getMovieMetaData().getCastGroups()){
+            for (CastGroup group : NextGenExperience.getMovieMetaData().getCastGroups()){
                 ecList.add(new ActorExperience(group));
             }
         }
@@ -72,7 +74,7 @@ public class ExtraMainTableFragment_Phone extends ExtraMainTableFragment {
 
     @Override
     protected void onListItemClick(View v, int position, long id) {
-        MovieMetaData.ExperienceData selectedGroup = ecGroups.get(position);
+        ExperienceData selectedGroup = ecGroups.get(position);
         if (selectedGroup instanceof ActorExperience){
             Intent intent = new Intent(getActivity(), NGEActorsActivity_Phone.class);
             intent.putExtra(NGEActorsActivity_Phone.TALENT_LIST_MODE, ((ActorExperience)selectedGroup).castGroup.getGroupTitle());

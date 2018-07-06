@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import com.bumptech.glide.Glide;
+import com.wb.cpedata.data.manifest.LocationItem;
+import com.wb.cpedata.util.concurrent.ResultListener;
+import com.wb.cpedata.util.concurrent.Worker;
 import com.wb.nextgenlibrary.NextGenExperience;
-import com.wb.nextgenlibrary.data.MovieMetaData;
-import com.wb.nextgenlibrary.util.concurrent.ResultListener;
-import com.wb.nextgenlibrary.util.concurrent.Worker;
 import com.wb.nextgenlibrary.util.utils.F;
 import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
@@ -47,12 +47,12 @@ public class HttpImageHelper {
     }
 
     private static HashMap<String, Bitmap> pinHash = new HashMap<String, Bitmap>();
-    public static void getAllMapPins(final List<MovieMetaData.LocationItem> locationItems, ResultListener<Boolean> l){
+    public static void getAllMapPins(final List<LocationItem> locationItems, ResultListener<Boolean> l){
         Worker.execute(new Callable<Boolean>() {
             @Override
             public Boolean call() throws Exception {
 
-                for (MovieMetaData.LocationItem item : locationItems) {
+                for (LocationItem item : locationItems) {
                     if (item.pinImage!= null && !pinHash.containsKey(item.pinImage.url)) {
                         try {
                             Bitmap theBitmap = Glide.
@@ -72,12 +72,12 @@ public class HttpImageHelper {
             }
         }, l);
     }
-    public static void getAllMapPinsBySceneLocation(final List<MovieMetaData.LocationItem> sceneLocations, ResultListener<Boolean> l){
+    public static void getAllMapPinsBySceneLocation(final List<LocationItem> sceneLocations, ResultListener<Boolean> l){
         Worker.execute(new Callable<Boolean>() {
             @Override
             public Boolean call() throws Exception {
 
-                for (MovieMetaData.LocationItem sceneLocation : sceneLocations) {
+                for (LocationItem sceneLocation : sceneLocations) {
                     if (sceneLocation.pinImage != null && !pinHash.containsKey(sceneLocation.pinImage.url)) {
                         try {
                             if (!StringHelper.isEmpty(sceneLocation.pinImage.url)) {

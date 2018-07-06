@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.cast.framework.CastButtonFactory;
 import com.google.android.gms.cast.framework.CastState;
+import com.wb.cpedata.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
@@ -41,7 +42,6 @@ import com.wb.nextgenlibrary.fragment.AbstractNGEMainMovieFragment;
 import com.wb.nextgenlibrary.fragment.IMEBottomFragment;
 import com.wb.nextgenlibrary.interfaces.NGEFragmentTransactionInterface;
 import com.wb.nextgenlibrary.interfaces.NGEPlaybackStatusListener.NextGenPlaybackStatus;
-import com.wb.nextgenlibrary.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.util.utils.F;
 import com.wb.nextgenlibrary.util.utils.NGEFragmentTransactionEngine;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;

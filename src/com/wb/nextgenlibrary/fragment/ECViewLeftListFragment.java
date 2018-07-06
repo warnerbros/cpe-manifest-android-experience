@@ -6,10 +6,9 @@ import android.view.View;
 import android.widget.MediaController;
 import android.widget.TextView;
 
+import com.wb.cpedata.data.manifest.ExperienceData;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.activity.AbstractECView;
-import com.wb.nextgenlibrary.data.MovieMetaData;
-import com.wb.nextgenlibrary.data.MovieMetaData.ExperienceData;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.widget.SelectedOverlayImageView;
 
@@ -17,7 +16,7 @@ import com.wb.nextgenlibrary.widget.SelectedOverlayImageView;
  * Created by gzcheng on 3/7/16.
  */
 public class ECViewLeftListFragment extends ExtraLeftListFragment<ExperienceData> {
-    MovieMetaData.ExperienceData listECGroupData;
+    ExperienceData listECGroupData;
     AbstractECView ecViewActivity;
     MediaController.MediaPlayerControl playerControl = null;
 

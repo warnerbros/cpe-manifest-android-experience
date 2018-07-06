@@ -10,10 +10,11 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.wb.cpedata.data.manifest.AudioVisualItem;
+import com.wb.cpedata.data.manifest.ExperienceData;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
-import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.videoview.IVideoViewActionListener;
 import com.wb.nextgenlibrary.widget.CustomMediaController;
 
@@ -25,7 +26,7 @@ public class ShareClipFragment extends ECVideoViewFragment implements View.OnCli
     TextView shareClipTitleTextView, ecContentNameTextView;
     Button shareClipButton;
     ImageButton prevClipButton, nextClipButton;
-    MovieMetaData.ExperienceData shareClipExperience;
+    ExperienceData shareClipExperience;
     int itemIndex;
 
     @Override
@@ -114,10 +115,10 @@ public class ShareClipFragment extends ECVideoViewFragment implements View.OnCli
         }
     }
 
-    public void setExperienceAndIndex(MovieMetaData.ExperienceData shareClipExperience, int itemIndex){
+    public void setExperienceAndIndex(ExperienceData shareClipExperience, int itemIndex){
         this.shareClipExperience = shareClipExperience;
         this.itemIndex = itemIndex;
-        MovieMetaData.AudioVisualItem presentationDataItem = shareClipExperience.getChildrenContents().get(itemIndex).audioVisualItems.get(0);
+        AudioVisualItem presentationDataItem = shareClipExperience.getChildrenContents().get(itemIndex).audioVisualItems.get(0);
         if (ecContentNameTextView != null && presentationDataItem != null){
             ecContentNameTextView.setText(presentationDataItem.getTitle());
         }

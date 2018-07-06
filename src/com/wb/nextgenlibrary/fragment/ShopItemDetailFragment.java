@@ -8,16 +8,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.wb.cpedata.data.manifest.ShopItem;
+import com.wb.cpedata.data.manifest.ShopItemInterface;
+import com.wb.cpedata.data.theTake.TheTakeProduct;
+import com.wb.cpedata.data.theTake.TheTakeProductDetail;
+import com.wb.cpedata.network.TheTakeApiDAO;
+import com.wb.cpedata.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
-import com.wb.nextgenlibrary.data.MovieMetaData;
-import com.wb.nextgenlibrary.data.TheTakeData.TheTakeProduct;
-import com.wb.nextgenlibrary.data.TheTakeData.TheTakeProductDetail;
-import com.wb.nextgenlibrary.network.TheTakeApiDAO;
 import com.wb.nextgenlibrary.util.DialogUtils;
-import com.wb.nextgenlibrary.util.TabletUtils;
-import com.wb.nextgenlibrary.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 
@@ -26,7 +26,7 @@ import com.wb.nextgenlibrary.util.utils.StringHelper;
  */
 public class ShopItemDetailFragment extends AbstractNextGenFragment implements View.OnClickListener{
 
-    MovieMetaData.ShopItemInterface product;
+    ShopItemInterface product;
     ImageView productPoster;
     TextView matchStatus, brandText, nameText, priceText;
     Button shopAtTheTakeBtn, sendLinkBtn;
@@ -55,14 +55,14 @@ public class ShopItemDetailFragment extends AbstractNextGenFragment implements V
         }
     }
 
-    public void setProduct(MovieMetaData.ShopItemInterface product){
+    public void setProduct(ShopItemInterface product){
         this.product = product;
-        if (productVideoViewFragment != null && product instanceof MovieMetaData.ShopItem && ((MovieMetaData.ShopItem) product).getAVItem() != null) {
+        if (productVideoViewFragment != null && product instanceof ShopItem && ((ShopItem) product).getAVItem() != null) {
             if (productVideoViewFragmentFrame != null)
                 productVideoViewFragmentFrame.setVisibility(View.VISIBLE);
             productVideoViewFragment.setShouldAutoPlay(false);
             productVideoViewFragment.setShouldShowFullScreenBtn(true);
-            productVideoViewFragment.setAudioVisualItem(((MovieMetaData.ShopItem) product).getAVItem());
+            productVideoViewFragment.setAudioVisualItem(((ShopItem) product).getAVItem());
         } else if (productVideoViewFragmentFrame != null)
             productVideoViewFragmentFrame.setVisibility(View.GONE);
     }
@@ -131,9 +131,9 @@ public class ShopItemDetailFragment extends AbstractNextGenFragment implements V
             return null;
     }
 
-    private void populateProductDetail(MovieMetaData.ShopItemInterface shopItem){
+    private void populateProductDetail(ShopItemInterface shopItem){
         shopAtTheTakeBtn.setText(shopItem.getShopItemText(getContext()));
-        if (shopItem instanceof  TheTakeProduct) {
+        if (shopItem instanceof TheTakeProduct) {
             TheTakeProduct product = (TheTakeProduct)shopItem;
             if (product.getProductDetail() != null) {
                 NextGenGlide.load(getActivity(),product.getProductDetail().getProductImage()).fitCenter().into(productPoster);

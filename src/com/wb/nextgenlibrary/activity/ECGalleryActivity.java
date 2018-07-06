@@ -4,9 +4,10 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
+import com.wb.cpedata.data.manifest.ECGalleryItem;
+import com.wb.cpedata.data.manifest.ExperienceData;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
-import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.fragment.AbstractECGalleryViewFragment;
 import com.wb.nextgenlibrary.fragment.ECGalleryViewFragment;
 import com.wb.nextgenlibrary.fragment.ECTurnTableViewFragment;
@@ -83,9 +84,9 @@ public class ECGalleryActivity extends AbstractECView {
     }
 
     @Override
-    public void onLeftListItemSelected(MovieMetaData.ExperienceData ec){
+    public void onLeftListItemSelected(ExperienceData ec){
         if (ec != null){
-            MovieMetaData.ECGalleryItem galleryItem = ec.galleryItems.get(0);
+            ECGalleryItem galleryItem = ec.galleryItems.get(0);
             if (galleryItem.isTurnTable()){
                 if (galleryFragment != null && galleryFragment instanceof ECGalleryViewFragment){
                     galleryFragment = new ECTurnTableViewFragment();

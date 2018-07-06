@@ -6,21 +6,19 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.wb.cpedata.data.manifest.*;
+import com.wb.cpedata.data.theTake.TheTakeProductFrame;
+import com.wb.cpedata.model.IMEEngine;
+import com.wb.cpedata.model.*;
+import com.wb.cpedata.network.TheTakeApiDAO;
+import com.wb.cpedata.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.activity.InMovieExperience;
 import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
-import com.wb.nextgenlibrary.data.MovieMetaData;
-import com.wb.nextgenlibrary.data.MovieMetaData.IMEElementsGroup;
-import com.wb.nextgenlibrary.data.TheTakeData.TheTakeProductFrame;
 import com.wb.nextgenlibrary.interfaces.IMEVideoStatusListener;
 import com.wb.nextgenlibrary.interfaces.NGEPlaybackStatusListener;
-import com.wb.nextgenlibrary.model.AVGalleryIMEEngine;
-import com.wb.nextgenlibrary.model.IMEEngine;
-import com.wb.nextgenlibrary.model.TheTakeIMEEngine;
-import com.wb.nextgenlibrary.network.TheTakeApiDAO;
 import com.wb.nextgenlibrary.util.TabletUtils;
-import com.wb.nextgenlibrary.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.videoview.IVideoViewActionListener;
@@ -41,11 +39,11 @@ public class IMEElementsGridFragment extends AbstractGridViewFragment implements
     List<IMEDisplayObject> activeIMEs = new ArrayList<IMEDisplayObject>();
 
     private class IMEDisplayObject{
-        final MovieMetaData.ExperienceData imeExperience;
+        final ExperienceData imeExperience;
         final Object imeObject;
         final String title;
 
-        public IMEDisplayObject(MovieMetaData.ExperienceData experienceData, Object imeObject){
+        public IMEDisplayObject(ExperienceData experienceData, Object imeObject){
             if (experienceData.title != null)
                 this.title = experienceData.title;
             else
@@ -125,42 +123,42 @@ public class IMEElementsGridFragment extends AbstractGridViewFragment implements
             playerActivity = (InMovieExperience) getActivity();
         }
 
-        if (activeObj.imeObject instanceof MovieMetaData.IMEElement) {
-            Object dataObj = ((MovieMetaData.IMEElement)activeObj.imeObject).imeObject ;
-            if (dataObj instanceof MovieMetaData.PresentationDataItem) {
-                MovieMetaData.PresentationDataItem headElement = (MovieMetaData.PresentationDataItem) dataObj;
+        if (activeObj.imeObject instanceof IMEElement) {
+            Object dataObj = ((IMEElement)activeObj.imeObject).imeObject ;
+            if (dataObj instanceof PresentationDataItem) {
+                PresentationDataItem headElement = (PresentationDataItem) dataObj;
 
                 if (dataObj instanceof AVGalleryIMEEngine.IMECombineItem){
                     headElement = ((AVGalleryIMEEngine.IMECombineItem)dataObj).getAllPresentationItems().get(0);
                 }
 
                 if (playerActivity != null) {
-                    if (headElement instanceof MovieMetaData.ECGalleryItem) {
+                    if (headElement instanceof ECGalleryItem) {
                         ECGalleryViewFragment fragment = new ECGalleryViewFragment();
                         fragment.setContentViewId(R.layout.ime_gallery_frame_view);
                         fragment.setShouldShowCloseBtn(true);
                         /*if (NextGenExperience.getMovieMetaData().getInMovieExperience().style != null)
                             fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getInMovieExperience().style.getBackground().getImage().url);*/
-                        fragment.setCurrentGallery((MovieMetaData.ECGalleryItem) headElement);
+                        fragment.setCurrentGallery((ECGalleryItem) headElement);
                         mainMovieListener = null;
                         playerActivity.transitMainFragment(fragment);
-                        NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_IMAGE_GALLERY, ((MovieMetaData.ECGalleryItem) headElement).galleryId, null);
+                        NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_IMAGE_GALLERY, ((ECGalleryItem) headElement).galleryId, null);
                         //playerActivity.pausMovieForImeECPiece();
 
 
-                    } else if (headElement instanceof MovieMetaData.AudioVisualItem) {
+                    } else if (headElement instanceof AudioVisualItem) {
 
-                        if (((MovieMetaData.AudioVisualItem) headElement).isShareClip()){
+                        if (((AudioVisualItem) headElement).isShareClip()){
                             ShareClipFragment fragment = new ShareClipFragment();
                             fragment.setShouldAutoPlay(playerActivity.isPlaying() ? false : true);
                             fragment.setShouldShowCloseBtn(true);
-                            fragment.setExperienceAndIndex(activeObj.imeExperience, ((MovieMetaData.IMEElement) activeObj.imeObject).itemIndex);
+                            fragment.setExperienceAndIndex(activeObj.imeExperience, ((IMEElement) activeObj.imeObject).itemIndex);
                             /*if (NextGenExperience.getMovieMetaData().getInMovieExperience().style != null)
                                 fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getInMovieExperience().style.getBackground().getImage().url);*/
                             fragment.setVideoStatusListener(this);
                             mainMovieListener = fragment;
                             playerActivity.transitMainFragment(fragment);
-                            NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_CLIP_SHARE, ((MovieMetaData.AudioVisualItem) headElement).videoId, null);
+                            NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_CLIP_SHARE, ((AudioVisualItem) headElement).videoId, null);
                         }else {
 
 							IMEDeletedSceneVideoFragment fragment = new IMEDeletedSceneVideoFragment();
@@ -169,13 +167,13 @@ public class IMEElementsGridFragment extends AbstractGridViewFragment implements
 							fragment.setExperience(activeObj.imeExperience);
                             /*if (NextGenExperience.getMovieMetaData().getInMovieExperience().style != null)
                                 fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getInMovieExperience().style.getBackground().getImage().url);*/
-                            fragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) headElement);
+                            fragment.setAudioVisualItem((AudioVisualItem) headElement);
                             fragment.setVideoStatusListener(this);
                             mainMovieListener = fragment;
                             playerActivity.transitMainFragment(fragment);
-                            NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_VIDEO, ((MovieMetaData.AudioVisualItem) headElement).videoId, null);
+                            NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_VIDEO, ((AudioVisualItem) headElement).videoId, null);
                         }
-                    } else if (headElement instanceof MovieMetaData.LocationItem ||
+                    } else if (headElement instanceof LocationItem ||
                             (headElement instanceof AVGalleryIMEEngine.IMECombineItem && ((AVGalleryIMEEngine.IMECombineItem)headElement).isLocation() ) ){
 
                         // TODO: deal with multiple locations at the same timecode later on.
@@ -184,31 +182,31 @@ public class IMEElementsGridFragment extends AbstractGridViewFragment implements
                         }
                         IMEECMapViewFragment fragment = new IMEECMapViewFragment();
                         fragment.setShouldShowCloseBtn(true);
-                        fragment.setLocationItem(activeObj.title, (MovieMetaData.LocationItem)headElement);
+                        fragment.setLocationItem(activeObj.title, (LocationItem)headElement);
                         playerActivity.transitMainFragment(fragment);
                         mainMovieListener = null;
                         NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_LOCATION, headElement.getId(), null);
-                    } else if (dataObj instanceof MovieMetaData.ShopItem) {
+                    } else if (dataObj instanceof ShopItem) {
 
                         ShopItemDetailFragment fragment = new ShopItemDetailFragment();
                         fragment.setContentViewId(R.layout.ime_shop_product_view);
-                        fragment.setProduct((MovieMetaData.ShopItem)dataObj);
+                        fragment.setProduct((ShopItem)dataObj);
                         fragment.setShouldShowCloseBtn(true);
                         mainMovieListener = null;
                         playerActivity.transitMainFragment(fragment);
-                        NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_PRODUCT, ((MovieMetaData.ShopItem) headElement).getProductReportId(), null);
-                    } else if (dataObj instanceof MovieMetaData.TriviaItem){
+                        NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_PRODUCT, ((ShopItem) headElement).getProductReportId(), null);
+                    } else if (dataObj instanceof TriviaItem){
                         ECTrviaViewFragment fragment = new ECTrviaViewFragment();
                         fragment.setShouldShowCloseBtn(true);
-                        fragment.setTriviaItem(activeObj.title, (MovieMetaData.TriviaItem)dataObj);
+                        fragment.setTriviaItem(activeObj.title, (TriviaItem)dataObj);
                         playerActivity.transitMainFragment(fragment);
                         mainMovieListener = null;
                         NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_TRIVIA, headElement.getId(), null);
 
-                    } else if (dataObj instanceof MovieMetaData.TextItem) {
+                    } else if (dataObj instanceof TextItem) {
 						ECTextViewFragment fragment = new ECTextViewFragment();
 						fragment.setShouldShowCloseBtn(true);
-						fragment.setTextItem(activeObj.title, (MovieMetaData.TextItem)dataObj);
+						fragment.setTextItem(activeObj.title, (TextItem)dataObj);
 						playerActivity.transitMainFragment(fragment);
                         mainMovieListener = null;
                         NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_TRIVIA, headElement.getId(), null);
@@ -257,18 +255,18 @@ public class IMEElementsGridFragment extends AbstractGridViewFragment implements
 
         int retId = R.layout.ime_grid_presentation_item;
 
-        if (activeObj.imeObject instanceof MovieMetaData.IMEElement) {
-            Object dataObj = ((MovieMetaData.IMEElement) activeObj.imeObject).imeObject;
-            if (dataObj instanceof MovieMetaData.PresentationDataItem) {
-                if (dataObj instanceof MovieMetaData.LocationItem ||
+        if (activeObj.imeObject instanceof IMEElement) {
+            Object dataObj = ((IMEElement) activeObj.imeObject).imeObject;
+            if (dataObj instanceof PresentationDataItem) {
+                if (dataObj instanceof LocationItem ||
                         (dataObj instanceof AVGalleryIMEEngine.IMECombineItem && ((AVGalleryIMEEngine.IMECombineItem)dataObj).isLocation() ) )
                     retId = R.layout.ime_grid_presentation_item;
-                else if (dataObj instanceof MovieMetaData.AudioVisualItem &&
-                        ((MovieMetaData.AudioVisualItem)dataObj).isShareClip()) {
+                else if (dataObj instanceof AudioVisualItem &&
+                        ((AudioVisualItem)dataObj).isShareClip()) {
                     retId = R.layout.ime_grid_share_item;
-                } else if (dataObj instanceof MovieMetaData.TextItem) {
+                } else if (dataObj instanceof TextItem) {
 					retId = R.layout.ime_grid_text_item;
-				} else if (dataObj instanceof MovieMetaData.ShopItem) {
+				} else if (dataObj instanceof ShopItem) {
                     retId = R.layout.ime_grid_presentation_item;
                 }
             }
@@ -294,16 +292,16 @@ public class IMEElementsGridFragment extends AbstractGridViewFragment implements
             posterWidth = poster.getWidth() / 2;
         }
 
-        if (activeObj.imeObject instanceof MovieMetaData.IMEElement) {
-            Object dataObj = ((MovieMetaData.IMEElement) activeObj.imeObject).imeObject;
-            if (dataObj instanceof MovieMetaData.PresentationDataItem) {
+        if (activeObj.imeObject instanceof IMEElement) {
+            Object dataObj = ((IMEElement) activeObj.imeObject).imeObject;
+            if (dataObj instanceof PresentationDataItem) {
                 Object tag = rowView.getTag(R.id.ime_title);
-                //boolean isSameItem = tag != null && tag.equals(((MovieMetaData.PresentationDataItem) dataObj).getId());
+                //boolean isSameItem = tag != null && tag.equals(((PresentationDataItem) dataObj).getId());
 
-                rowView.setTag(R.id.ime_title, ((MovieMetaData.PresentationDataItem) dataObj).getId());
-                if (dataObj instanceof MovieMetaData.LocationItem ){
+                rowView.setTag(R.id.ime_title, ((PresentationDataItem) dataObj).getId());
+                if (dataObj instanceof LocationItem ){
 
-                    MovieMetaData.LocationItem locationItem = (MovieMetaData.LocationItem) dataObj;
+                    LocationItem locationItem = (LocationItem) dataObj;
                     if (locationItem != null ){
                         poster.setImageDrawable(null);
                         String imageUrl = "";
@@ -318,7 +316,7 @@ public class IMEElementsGridFragment extends AbstractGridViewFragment implements
                     }
 
                 } else if (poster != null) {
-                    String imageUrl = ((MovieMetaData.PresentationDataItem) dataObj).getPosterImgUrl();
+                    String imageUrl = ((PresentationDataItem) dataObj).getPosterImgUrl();
 
                     if (!StringHelper.isEmpty(imageUrl)) {
                         NextGenGlide.load(getActivity(), imageUrl).centerCrop()
@@ -332,11 +330,11 @@ public class IMEElementsGridFragment extends AbstractGridViewFragment implements
 
                 ImageView playbutton = (ImageView)rowView.findViewById(R.id.ime_item_play_logo);
                 if (playbutton != null){
-                    playbutton.setVisibility((dataObj instanceof MovieMetaData.AudioVisualItem) ? View.VISIBLE : View.INVISIBLE);
+                    playbutton.setVisibility((dataObj instanceof AudioVisualItem) ? View.VISIBLE : View.INVISIBLE);
                 }
 
-                if (subText1 != null && !subText1.getText().equals(((MovieMetaData.PresentationDataItem) dataObj).getGridItemDisplayName())) {
-                    subText1.setText(((MovieMetaData.PresentationDataItem) dataObj).getGridItemDisplayName());
+                if (subText1 != null && !subText1.getText().equals(((PresentationDataItem) dataObj).getGridItemDisplayName())) {
+                    subText1.setText(((PresentationDataItem) dataObj).getGridItemDisplayName());
                     subText1.setTag(R.id.ime_title, "");
                 }
             }
@@ -356,9 +354,9 @@ public class IMEElementsGridFragment extends AbstractGridViewFragment implements
                     subText1.setTag(R.id.ime_title, frameTime);
                 }
 
-                TheTakeApiDAO.getFrameProducts(frameTime, new ResultListener<List<MovieMetaData.ShopItemInterface>>() {
+                TheTakeApiDAO.getFrameProducts(frameTime, new ResultListener<List<ShopItemInterface>>() {
                     @Override
-                    public void onResult(final List<MovieMetaData.ShopItemInterface> result) {
+                    public void onResult(final List<ShopItemInterface> result) {
                         if (subText1.getTag(R.id.ime_title).equals(frameTime)) {
                             if (result != null && result.size() > 0 && getActivity() != null) {
                                 getActivity().runOnUiThread(new Runnable() {

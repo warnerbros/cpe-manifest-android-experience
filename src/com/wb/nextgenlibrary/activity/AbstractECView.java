@@ -8,9 +8,9 @@ import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.wb.cpedata.data.manifest.ExperienceData;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.fragment.ECViewLeftListFragment;
 import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.utils.F;
@@ -20,18 +20,18 @@ import com.wb.nextgenlibrary.util.utils.F;
  */
 public abstract class AbstractECView extends AbstractNGEActivity {
 
-    protected MovieMetaData.ExperienceData ecGroupData ;
-    protected MovieMetaData.ExperienceData selectedEC = null;
+    protected ExperienceData ecGroupData ;
+    protected ExperienceData selectedEC = null;
     protected ECViewLeftListFragment listFragment;
     protected FrameLayout leftListFrame;
     protected boolean isContentFullScreen = false;
     private String titleText = null;
 
-    public abstract void onLeftListItemSelected(MovieMetaData.ExperienceData ecContentData);
+    public abstract void onLeftListItemSelected(ExperienceData ecContentData);
 
     public abstract int getContentViewId();
 
-    public MovieMetaData.ExperienceData getECGroupData(){
+    public ExperienceData getECGroupData(){
         return ecGroupData;
     }
 

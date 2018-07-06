@@ -25,12 +25,15 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.wb.cpedata.data.manifest.AudioVisualItem;
+import com.wb.cpedata.data.manifest.ECGalleryItem;
+import com.wb.cpedata.data.manifest.LocationItem;
+import com.wb.cpedata.data.manifest.PresentationDataItem;
+import com.wb.cpedata.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
-import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.util.HttpImageHelper;
 import com.wb.nextgenlibrary.util.TabletUtils;
-import com.wb.nextgenlibrary.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
@@ -54,7 +57,7 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
 
     private FrameLayout videoFrame, galleryFrame;
 
-    MovieMetaData.LocationItem selectedLocationItem = null;
+    LocationItem selectedLocationItem = null;
     String title = null;
 
     Bundle savedInstanceState;
@@ -165,7 +168,7 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
         return R.id.ime_map_close_button;
     }
 
-    public void setLocationItem(String textTitle, final MovieMetaData.LocationItem locationItem){
+    public void setLocationItem(String textTitle, final LocationItem locationItem){
         if (locationItem != null) {
             title = textTitle;
             selectedLocationItem = locationItem;
@@ -179,7 +182,7 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
             if (mapView != null) {
                 final LatLng location = new LatLng(selectedLocationItem.latitude, selectedLocationItem.longitude);
 
-                List<MovieMetaData.LocationItem> locList = new ArrayList<MovieMetaData.LocationItem>();
+                List<LocationItem> locList = new ArrayList<LocationItem>();
                 locList.add(locationItem);
                 HttpImageHelper.getAllMapPins(locList, new ResultListener<Boolean>() {
                     @Override
@@ -204,7 +207,7 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
     }
 
     class IMEOnMapReadyCallback implements OnMapReadyCallback{
-        MovieMetaData.LocationItem locationItem;
+        LocationItem locationItem;
         GoogleMap.OnMapClickListener onMapClickListener = new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
@@ -212,7 +215,7 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
             }
         };
 
-        public IMEOnMapReadyCallback(MovieMetaData.LocationItem locationItem){
+        public IMEOnMapReadyCallback(LocationItem locationItem){
             this.locationItem = locationItem;
 
         }
@@ -295,8 +298,8 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
 
         public void setItem(Object item) {
             currentItem = item;
-            if (item instanceof MovieMetaData.LocationItem) {
-                final MovieMetaData.LocationItem locationItem = ((MovieMetaData.LocationItem) item);
+            if (item instanceof LocationItem) {
+                final LocationItem locationItem = ((LocationItem) item);
                 locationPlayIcon.setVisibility(View.INVISIBLE);
                 if (locationItem != null) { // TODO: CHECK
 
@@ -321,31 +324,31 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
                 }
 
 
-            } else if (item instanceof MovieMetaData.PresentationDataItem) {
-                if (item instanceof MovieMetaData.AudioVisualItem)
+            } else if (item instanceof PresentationDataItem) {
+                if (item instanceof AudioVisualItem)
                     locationPlayIcon.setVisibility(View.VISIBLE);
                 else
                     locationPlayIcon.setVisibility(View.INVISIBLE);
                 if (TabletUtils.isTablet()){
-                    NextGenGlide.load(getActivity(), ((MovieMetaData.PresentationDataItem) item).getPosterImgUrl()).fitCenter().into(locationPhoto);
+                    NextGenGlide.load(getActivity(), ((PresentationDataItem) item).getPosterImgUrl()).fitCenter().into(locationPhoto);
 
                 }else
-                    NextGenGlide.load(getActivity(), ((MovieMetaData.PresentationDataItem) item).getPosterImgUrl()).fitCenter().into(locationPhoto);
+                    NextGenGlide.load(getActivity(), ((PresentationDataItem) item).getPosterImgUrl()).fitCenter().into(locationPhoto);
             }
         }
 
         @Override
         public void onClick(View v) {
             if (currentItem != null) {
-                if (currentItem instanceof MovieMetaData.LocationItem) {
+                if (currentItem instanceof LocationItem) {
                     if (videoViewFragment != null){
                         videoViewFragment.stopPlayback();
                     }
                     mapView.setVisibility(View.VISIBLE);
                     videoFrame.setVisibility(View.GONE);
                     galleryFrame.setVisibility(View.GONE);
-                    NGEAnalyticData.reportEvent(getActivity(), IMEECMapViewFragment.this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_LOCATION_THUMBNAIL, ((MovieMetaData.LocationItem) currentItem).getId(), null);
-                } else if (currentItem instanceof MovieMetaData.AudioVisualItem) {
+                    NGEAnalyticData.reportEvent(getActivity(), IMEECMapViewFragment.this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_LOCATION_THUMBNAIL, ((LocationItem) currentItem).getId(), null);
+                } else if (currentItem instanceof AudioVisualItem) {
                     mapView.setVisibility(View.GONE);
                     videoFrame.setVisibility(View.VISIBLE);
                     galleryFrame.setVisibility(View.GONE);
@@ -355,11 +358,11 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
                         videoViewFragment.setShouldHideMetaData(true);
                         videoViewFragment.setShouldShowCloseBtn(false);
                         videoViewFragment.setAspectRatioFramePriority(FixedAspectRatioFrameLayout.Priority.HEIGHT_PRIORITY);
-                        videoViewFragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) currentItem);
-                        NGEAnalyticData.reportEvent(getActivity(), IMEECMapViewFragment.this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_VIDEO, ((MovieMetaData.AudioVisualItem) currentItem).videoId, null);
+                        videoViewFragment.setAudioVisualItem((AudioVisualItem) currentItem);
+                        NGEAnalyticData.reportEvent(getActivity(), IMEECMapViewFragment.this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_VIDEO, ((AudioVisualItem) currentItem).videoId, null);
                     }
 
-                } else if (currentItem instanceof MovieMetaData.ECGalleryItem) {
+                } else if (currentItem instanceof ECGalleryItem) {
                     mapView.setVisibility(View.GONE);
                     videoFrame.setVisibility(View.GONE);
                     galleryFrame.setVisibility(View.VISIBLE);
@@ -374,8 +377,8 @@ public class IMEECMapViewFragment extends AbstractNextGenFragment implements Vie
                         galleryViewFragment.setShouldShowShareBtn(false);
                         galleryViewFragment.setAspectRatioFramePriority(FixedAspectRatioFrameLayout.Priority.HEIGHT_PRIORITY);
 
-                        galleryViewFragment.setCurrentGallery((MovieMetaData.ECGalleryItem) currentItem);
-                        NGEAnalyticData.reportEvent(getActivity(), IMEECMapViewFragment.this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_VIDEO, ((MovieMetaData.ECGalleryItem) currentItem).galleryId, null);
+                        galleryViewFragment.setCurrentGallery((ECGalleryItem) currentItem);
+                        NGEAnalyticData.reportEvent(getActivity(), IMEECMapViewFragment.this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_VIDEO, ((ECGalleryItem) currentItem).galleryId, null);
                     }
                 }
             }

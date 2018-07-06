@@ -5,10 +5,10 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.wb.cpedata.data.manifest.ECGalleryItem;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.activity.AbstractECView;
 import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
-import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.util.TabletUtils;
 
 /**
@@ -16,7 +16,7 @@ import com.wb.nextgenlibrary.util.TabletUtils;
  */
 abstract public class AbstractECGalleryViewFragment extends ECViewFragment  {
     private TextView galleryNameTextView;
-    protected MovieMetaData.ECGalleryItem currentGallery;
+    protected ECGalleryItem currentGallery;
     private ImageButton fullscreenToggleBtn;
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -55,7 +55,7 @@ abstract public class AbstractECGalleryViewFragment extends ECViewFragment  {
             return null;
     }
 
-    public void setCurrentGallery(MovieMetaData.ECGalleryItem gallery){
+    public void setCurrentGallery(ECGalleryItem gallery){
         currentGallery = gallery;
         if (galleryNameTextView != null){
             galleryNameTextView.setText(gallery.getTitle());

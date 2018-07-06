@@ -5,9 +5,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.wb.cpedata.data.manifest.TextItem;
+import com.wb.cpedata.model.AVGalleryIMEEngine.IMECombineItem;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.data.MovieMetaData;
-import com.wb.nextgenlibrary.model.AVGalleryIMEEngine.IMECombineItem;
 import com.wb.nextgenlibrary.util.PicassoTrustAll;
 import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
 import com.wb.nextgenlibrary.widget.FontFitTextView;
@@ -20,7 +20,7 @@ public class ECTextViewFragment extends AbstractNextGenFragment {
 	protected FixedAspectRatioFrameLayout imageContainer;
 
 	IMECombineItem selectedCombineItem = null;
-	MovieMetaData.TextItem selectedTextItem = null;
+	TextItem selectedTextItem = null;
 	String title = null;
 
 	public int getContentViewId(){
@@ -46,7 +46,7 @@ public class ECTextViewFragment extends AbstractNextGenFragment {
 		return title;
 	}
 
-	public void setTextItem(String textTitle, MovieMetaData.TextItem textItem){
+	public void setTextItem(String textTitle, TextItem textItem){
 		if (textItem != null) {
 			title = textTitle;
 			selectedTextItem = textItem;

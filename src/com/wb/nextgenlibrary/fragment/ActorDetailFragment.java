@@ -22,19 +22,21 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.google.gson.Gson;
+import com.wb.cpedata.data.manifest.BaselineCastData;
+import com.wb.cpedata.data.manifest.CastData;
+import com.wb.cpedata.data.manifest.CastHeadShot;
+import com.wb.cpedata.data.manifest.Filmography;
+import com.wb.cpedata.data.manifest.MovieMetaData;
+import com.wb.cpedata.network.BaselineApiDAO;
+import com.wb.cpedata.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 
 import com.wb.nextgenlibrary.activity.ActorGalleryActivity;
 import com.wb.nextgenlibrary.adapter.ActorDetailGalleryRecyclerAdapter;
 import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
-import com.wb.nextgenlibrary.data.MovieMetaData;
-import com.wb.nextgenlibrary.data.MovieMetaData.Filmography;
-import com.wb.nextgenlibrary.data.MovieMetaData.CastData;
-import com.wb.nextgenlibrary.network.BaselineApiDAO;
 import com.wb.nextgenlibrary.util.DialogUtils;
 import com.wb.nextgenlibrary.util.TabletUtils;
-import com.wb.nextgenlibrary.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 import com.wb.nextgenlibrary.widget.FixedAspectRatioFrameLayout;
@@ -238,9 +240,9 @@ public class ActorDetailFragment extends AbstractNextGenFragment implements View
             if (actorOjbect.getBaselineCastData().filmogrphies == null){
                 if (loadingView != null)
                     loadingView.setVisibility(View.VISIBLE);
-                BaselineApiDAO.getFilmographyAndBioOfPerson(actorOjbect.getBaselineActorId(), new ResultListener<MovieMetaData.BaselineCastData>() {
+                BaselineApiDAO.getFilmographyAndBioOfPerson(actorOjbect.getBaselineActorId(), new ResultListener<BaselineCastData>() {
                     @Override
-                    public void onResult(MovieMetaData.BaselineCastData result) {
+                    public void onResult(BaselineCastData result) {
                         actorOjbect.getBaselineCastData().filmogrphies = result.filmogrphies;
                         if (!StringHelper.isEmpty(result.biography))
                             actorOjbect.getBaselineCastData().biography = result.biography;
@@ -295,7 +297,7 @@ public class ActorDetailFragment extends AbstractNextGenFragment implements View
                         actorGalleryRecyclerView.smoothScrollToPosition(0);
                     } else
                         actorGalleryFrame.setVisibility(View.GONE);
-                    List<MovieMetaData.CastHeadShot> headShots = actorOjbect.getBaselineCastData().getGallery();
+                    List<CastHeadShot> headShots = actorOjbect.getBaselineCastData().getGallery();
                     if (headShots != null && headShots.size() > 1)
                         actorGalleryAdaptor.setCastHeadShots(headShots.subList(1, headShots.size()));
                     else {
@@ -310,19 +312,19 @@ public class ActorDetailFragment extends AbstractNextGenFragment implements View
     }
 
     private void resetSocialMediaIcons(){
-        String facebookUrl = actorOjbect.getBaselineCastData().getSocialMediaUrl(MovieMetaData.BaselineCastData.SOCIAL_MEDIA_KEY.FACEBOOK_KEY);
+        String facebookUrl = actorOjbect.getBaselineCastData().getSocialMediaUrl(BaselineCastData.SOCIAL_MEDIA_KEY.FACEBOOK_KEY);
         if (!StringHelper.isEmpty(facebookUrl)){
             facebookBtn.setVisibility(View.VISIBLE);
         }else
             facebookBtn.setVisibility(View.GONE);
 
-        String instagramUrl = actorOjbect.getBaselineCastData().getSocialMediaUrl(MovieMetaData.BaselineCastData.SOCIAL_MEDIA_KEY.INSTAGRAM_KEY);
+        String instagramUrl = actorOjbect.getBaselineCastData().getSocialMediaUrl(BaselineCastData.SOCIAL_MEDIA_KEY.INSTAGRAM_KEY);
         if (!StringHelper.isEmpty(instagramUrl)){
             instagramBtn.setVisibility(View.VISIBLE);
         }else
             instagramBtn.setVisibility(View.GONE);
 
-        String twitterUrl = actorOjbect.getBaselineCastData().getSocialMediaUrl(MovieMetaData.BaselineCastData.SOCIAL_MEDIA_KEY.TWITTER_KEY);
+        String twitterUrl = actorOjbect.getBaselineCastData().getSocialMediaUrl(BaselineCastData.SOCIAL_MEDIA_KEY.TWITTER_KEY);
         if (!StringHelper.isEmpty(twitterUrl)){
             twitterBtn.setVisibility(View.VISIBLE);
         }else
@@ -456,7 +458,7 @@ public class ActorDetailFragment extends AbstractNextGenFragment implements View
     public void onClick(View v){
         String socialUrl = null;
         if (v.equals(facebookBtn)){
-            socialUrl = actorOjbect.getBaselineCastData().getSocialMediaUrl(MovieMetaData.BaselineCastData.SOCIAL_MEDIA_KEY.FACEBOOK_KEY);
+            socialUrl = actorOjbect.getBaselineCastData().getSocialMediaUrl(BaselineCastData.SOCIAL_MEDIA_KEY.FACEBOOK_KEY);
 
             try {
                 getActivity().getPackageManager().getPackageInfo("com.facebook.katana", 0);
@@ -468,10 +470,10 @@ public class ActorDetailFragment extends AbstractNextGenFragment implements View
             }
 
         }else if (v.equals(twitterBtn)){
-            socialUrl = actorOjbect.getBaselineCastData().getSocialMediaUrl(MovieMetaData.BaselineCastData.SOCIAL_MEDIA_KEY.TWITTER_KEY);
+            socialUrl = actorOjbect.getBaselineCastData().getSocialMediaUrl(BaselineCastData.SOCIAL_MEDIA_KEY.TWITTER_KEY);
             NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_ACTOR_SOCIAL, actorOjbect.getId(), "Twitter");
         }else if (v.equals(instagramBtn)){
-            socialUrl = actorOjbect.getBaselineCastData().getSocialMediaUrl(MovieMetaData.BaselineCastData.SOCIAL_MEDIA_KEY.INSTAGRAM_KEY);
+            socialUrl = actorOjbect.getBaselineCastData().getSocialMediaUrl(BaselineCastData.SOCIAL_MEDIA_KEY.INSTAGRAM_KEY);
             NGEAnalyticData.reportEvent(getActivity(), this, NGEAnalyticData.AnalyticAction.ACTION_SELECT_ACTOR_SOCIAL, actorOjbect.getId(), "Instagram");
         }
 

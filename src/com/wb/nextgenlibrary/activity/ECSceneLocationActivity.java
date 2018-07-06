@@ -13,11 +13,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.wb.cpedata.data.manifest.AudioVisualItem;
+import com.wb.cpedata.data.manifest.ECGalleryItem;
+import com.wb.cpedata.data.manifest.ExperienceData;
+import com.wb.cpedata.data.manifest.LocationItem;
+import com.wb.cpedata.data.manifest.PresentationDataItem;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
-import com.wb.nextgenlibrary.data.MovieMetaData;
-import com.wb.nextgenlibrary.data.MovieMetaData.ExperienceData;
-import com.wb.nextgenlibrary.data.MovieMetaData.PresentationDataItem;
 import com.wb.nextgenlibrary.fragment.ECGalleryViewFragment;
 import com.wb.nextgenlibrary.fragment.ECSceneLocationMapFragment;
 import com.wb.nextgenlibrary.fragment.ECVideoViewFragment;
@@ -53,7 +55,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
     private NGEFragmentTransactionEngine fragmentTransactionEngine;
     private View sliderFrame;
 
-    private List<MovieMetaData.LocationItem> rootSceneLocations;
+    private List<LocationItem> rootSceneLocations;
 
     private Fragment currentFragment;
 
@@ -147,7 +149,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
         }
     }
 
-    public void onSceneLocationSelected(MovieMetaData.LocationItem location) {
+    public void onSceneLocationSelected(LocationItem location) {
         if (locationECsAdapter != null) {
             locationECsAdapter.setSceneLocation(location);
             locationECsAdapter.notifyDataSetChanged();
@@ -203,7 +205,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
         TextView locationTxt;
         TextView arrowTxt;
         String currentText;
-        MovieMetaData.LocationItem sceneLocation;
+        LocationItem sceneLocation;
         int itemIndex;
 
         SliderTextViewHolder(View itemView, String text, int index) {
@@ -224,7 +226,7 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
             arrowTxt.setVisibility(View.GONE);
         }
 
-        public void setSceneLocation(MovieMetaData.LocationItem sceneLocation, int position, boolean isLast) {
+        public void setSceneLocation(LocationItem sceneLocation, int position, boolean isLast) {
             this.sceneLocation = sceneLocation;
             itemIndex = position;
             arrowTxt.setVisibility(View.VISIBLE);
@@ -257,13 +259,13 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
         int lastloadingIndex = -1;
         static final int PAGEITEMCOUNT = 6;
 
-        MovieMetaData.LocationItem sceneLocation;
-        List<MovieMetaData.LocationItem> sceneLocations = new ArrayList<MovieMetaData.LocationItem>();
+        LocationItem sceneLocation;
+        List<LocationItem> sceneLocations = new ArrayList<LocationItem>();
 
-        public void setSceneLocation(MovieMetaData.LocationItem sceneLocation) {
+        public void setSceneLocation(LocationItem sceneLocation) {
             this.sceneLocation = sceneLocation;
-            sceneLocations = new ArrayList<MovieMetaData.LocationItem>();
-            MovieMetaData.LocationItem thisSL = sceneLocation;
+            sceneLocations = new ArrayList<LocationItem>();
+            LocationItem thisSL = sceneLocation;
             if (thisSL != null) {
                 sceneLocations.add(0, thisSL);
             }
@@ -323,22 +325,22 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
         public void setItem(Object item, int position) {
             currentItem = item;
             itemIndex = position;
-            if (item instanceof MovieMetaData.LocationItem) {
-                MovieMetaData.LocationItem locationItem = ((MovieMetaData.LocationItem) item);
+            if (item instanceof LocationItem) {
+                LocationItem locationItem = ((LocationItem) item);
                 locationPlayIcon.setVisibility(View.INVISIBLE);
                 if (locationItem == null) { // TODO: CHECK
-                    locationItem = ((MovieMetaData.LocationItem) item);
+                    locationItem = ((LocationItem) item);
 
                 }
                 if (locationItem != null && !StringHelper.isEmpty(locationItem.getPosterImgUrl())) {
                     NextGenGlide.load(ECSceneLocationActivity.this, locationItem.getPosterImgUrl()).into(locationPhoto);
-                    locationName.setText(((MovieMetaData.LocationItem) item).getTitle());
-                    int locationCount = 0;//((MovieMetaData.LocationItem)item).childrenSceneLocations.size();
+                    locationName.setText(((LocationItem) item).getTitle());
+                    int locationCount = 0;//((LocationItem)item).childrenSceneLocations.size();
 
                     NextGenLogger.d(F.TAG, "Position: " + itemIndex + " loaded: " + locationItem.getPosterImgUrl());
                 }
             } else if (item instanceof PresentationDataItem) {
-                if (item instanceof MovieMetaData.AudioVisualItem)
+                if (item instanceof AudioVisualItem)
                     locationPlayIcon.setVisibility(View.VISIBLE);
                 else
                     locationPlayIcon.setVisibility(View.INVISIBLE);
@@ -350,13 +352,13 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
         @Override
         public void onClick(View v) {
             if (currentItem != null) {
-                if (currentItem instanceof MovieMetaData.LocationItem) {
-                    mapViewFragment.setSelectionFromSlider((MovieMetaData.LocationItem) currentItem);
-                    locationECsAdapter.setSceneLocation((MovieMetaData.LocationItem) currentItem);
+                if (currentItem instanceof LocationItem) {
+                    mapViewFragment.setSelectionFromSlider((LocationItem) currentItem);
+                    locationECsAdapter.setSceneLocation((LocationItem) currentItem);
                     locationECsAdapter.notifyDataSetChanged();
                     locationECRecyclerView.smoothScrollToPosition(0);
-                    NGEAnalyticData.reportEvent(ECSceneLocationActivity.this, null, NGEAnalyticData.AnalyticAction.ACTION_SELECT_LOCATION_THUMBNAIL, ((MovieMetaData.LocationItem) currentItem).getId(), null);
-                } else if (currentItem instanceof MovieMetaData.AudioVisualItem) {
+                    NGEAnalyticData.reportEvent(ECSceneLocationActivity.this, null, NGEAnalyticData.AnalyticAction.ACTION_SELECT_LOCATION_THUMBNAIL, ((LocationItem) currentItem).getId(), null);
+                } else if (currentItem instanceof AudioVisualItem) {
                     ECVideoViewFragment videoViewFragment;
                     if (currentFragment instanceof ECVideoViewFragment) {
                         videoViewFragment = (ECVideoViewFragment) currentFragment;
@@ -370,12 +372,12 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
 
                     }
 
-                    videoViewFragment.setAudioVisualItem((MovieMetaData.AudioVisualItem) currentItem);
+                    videoViewFragment.setAudioVisualItem((AudioVisualItem) currentItem);
 
                     transitToFragment(videoViewFragment);
-                    NGEAnalyticData.reportEvent(ECSceneLocationActivity.this, null, NGEAnalyticData.AnalyticAction.ACTION_SELECT_VIDEO, ((MovieMetaData.AudioVisualItem) currentItem).videoId, null);
+                    NGEAnalyticData.reportEvent(ECSceneLocationActivity.this, null, NGEAnalyticData.AnalyticAction.ACTION_SELECT_VIDEO, ((AudioVisualItem) currentItem).videoId, null);
 
-                } else if (currentItem instanceof MovieMetaData.ECGalleryItem) {
+                } else if (currentItem instanceof ECGalleryItem) {
                     ECGalleryViewFragment galleryViewFragment;
                     if (currentFragment instanceof ECGalleryViewFragment) {
                         galleryViewFragment = (ECGalleryViewFragment) currentFragment;
@@ -386,9 +388,9 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
                         galleryViewFragment.setBGColor(ECSceneLocationActivity.this.getResources().getColor(android.R.color.black));
                         galleryViewFragment.setAspectRatioFramePriority(FixedAspectRatioFrameLayout.Priority.HEIGHT_PRIORITY);
                     }
-                    galleryViewFragment.setCurrentGallery((MovieMetaData.ECGalleryItem) currentItem);
+                    galleryViewFragment.setCurrentGallery((ECGalleryItem) currentItem);
                     transitToFragment(galleryViewFragment);
-                    NGEAnalyticData.reportEvent(ECSceneLocationActivity.this, null, NGEAnalyticData.AnalyticAction.ACTION_SELECT_VIDEO, ((MovieMetaData.ECGalleryItem) currentItem).galleryId, null);
+                    NGEAnalyticData.reportEvent(ECSceneLocationActivity.this, null, NGEAnalyticData.AnalyticAction.ACTION_SELECT_VIDEO, ((ECGalleryItem) currentItem).galleryId, null);
                 }
 
             }
@@ -401,9 +403,9 @@ public class ECSceneLocationActivity extends AbstractECView implements ECSceneLo
         int lastloadingIndex = -1;
         static final int PAGEITEMCOUNT = 6;
 
-        MovieMetaData.LocationItem sceneLocation;
+        LocationItem sceneLocation;
 
-        public void setSceneLocation(MovieMetaData.LocationItem sceneLocation) {
+        public void setSceneLocation(LocationItem sceneLocation) {
             this.sceneLocation = sceneLocation;
 
             if (sliderTextAdapter != null) {

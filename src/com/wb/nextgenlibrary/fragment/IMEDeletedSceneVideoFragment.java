@@ -4,8 +4,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.wb.cpedata.data.manifest.AudioVisualItem;
+import com.wb.cpedata.data.manifest.ExperienceData;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.data.MovieMetaData;
 
 /**
  * Created by gzcheng on 5/23/17.
@@ -14,7 +15,7 @@ import com.wb.nextgenlibrary.data.MovieMetaData;
 public class IMEDeletedSceneVideoFragment extends ECVideoViewFragment {
 	TextView titleTextView, descriptionTextView;
 
-	MovieMetaData.ExperienceData deletedSceneExperience = null;
+	ExperienceData deletedSceneExperience = null;
 
 	@Override
 	public int getContentViewId(){
@@ -34,16 +35,16 @@ public class IMEDeletedSceneVideoFragment extends ECVideoViewFragment {
 
 	}
 
-	public void setExperience(MovieMetaData.ExperienceData deletedSceneExperience){
+	public void setExperience(ExperienceData deletedSceneExperience){
 		this.deletedSceneExperience = deletedSceneExperience;
 		if (titleTextView != null)
 			titleTextView.setText(this.deletedSceneExperience.title);
-		//MovieMetaData.AudioVisualItem presentationDataItem = shareClipExperience.getChildrenContents().get(itemIndex).audioVisualItems.get(0);
+		//AudioVisualItem presentationDataItem = shareClipExperience.getChildrenContents().get(itemIndex).audioVisualItems.get(0);
 
 		//setAudioVisualItem(presentationDataItem);
 	}
 
-	public void setAudioVisualItem(MovieMetaData.AudioVisualItem avItem){
+	public void setAudioVisualItem(AudioVisualItem avItem){
 		super.setAudioVisualItem(avItem);
 		if (descriptionTextView != null)
 			descriptionTextView.setText(avItem.getTitle());

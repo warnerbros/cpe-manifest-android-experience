@@ -13,9 +13,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.wb.cpedata.data.manifest.ExperienceData;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.util.TabletUtils;
 import com.wb.nextgenlibrary.util.utils.F;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;
@@ -65,7 +65,7 @@ public class ECInteractiveActivity extends AbstractECView implements AdapterView
 	}
 
 
-	public void onLeftListItemSelected(MovieMetaData.ExperienceData ecContentData){
+	public void onLeftListItemSelected(ExperienceData ecContentData){
 
 	}
 
@@ -107,7 +107,7 @@ public class ECInteractiveActivity extends AbstractECView implements AdapterView
 			ImageView thumbnailImg = (ImageView) convertView.findViewById(R.id.next_gen_extra_thumbnail);
 			TextView titleTxt = (TextView) convertView.findViewById(R.id.next_gen_extra_title);
 
-			MovieMetaData.ExperienceData thisExtra = getItem(position);
+			ExperienceData thisExtra = getItem(position);
 			if(!thisExtra.title.equals(titleTxt.getText())){
 				titleTxt.setText(thisExtra.title.toUpperCase());
 				NextGenGlide.load(ECInteractiveActivity.this, thisExtra.getPosterImgUrl()).fitCenter().into(thumbnailImg);
@@ -122,7 +122,7 @@ public class ECInteractiveActivity extends AbstractECView implements AdapterView
 			return ecGroupData.getChildrenContents().size();
 		}
 
-		public MovieMetaData.ExperienceData getItem(int position) {
+		public ExperienceData getItem(int position) {
 			return  ecGroupData.getChildrenContents().get(position);
 		}
 

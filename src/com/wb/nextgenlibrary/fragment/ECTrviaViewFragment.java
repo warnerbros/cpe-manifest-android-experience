@@ -5,10 +5,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.wb.cpedata.data.manifest.TriviaItem;
+import com.wb.cpedata.model.AVGalleryIMEEngine;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.data.MovieMetaData;
-import com.wb.nextgenlibrary.model.AVGalleryIMEEngine.IMECombineItem;
-import com.wb.nextgenlibrary.util.PicassoTrustAll;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.widget.FontFitTextView;
 
@@ -23,8 +22,8 @@ public class ECTrviaViewFragment extends AbstractNextGenFragment {
     protected FontFitTextView triviaContent;
 
 
-    IMECombineItem selectedCombineItem = null;
-    MovieMetaData.TriviaItem selectedTriviaItem = null;
+    AVGalleryIMEEngine.IMECombineItem selectedCombineItem = null;
+    TriviaItem selectedTriviaItem = null;
     String title = null;
 
     public int getContentViewId(){
@@ -48,7 +47,7 @@ public class ECTrviaViewFragment extends AbstractNextGenFragment {
         return title;
     }
 
-    public void setTriviaItem(String textTitle, MovieMetaData.TriviaItem triviaItem){
+    public void setTriviaItem(String textTitle, TriviaItem triviaItem){
         if (triviaItem != null) {
             title = textTitle;
             selectedTriviaItem = triviaItem;
@@ -66,7 +65,7 @@ public class ECTrviaViewFragment extends AbstractNextGenFragment {
         }
     }
 
-    public void setTextItem(String textTitle, IMECombineItem triviaItem){
+    public void setTextItem(String textTitle, AVGalleryIMEEngine.IMECombineItem triviaItem){
         if (triviaItem != null) {
             title = textTitle;
             selectedCombineItem = triviaItem;

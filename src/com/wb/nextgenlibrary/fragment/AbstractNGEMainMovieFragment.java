@@ -4,9 +4,9 @@ import android.media.MediaPlayer;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
+import com.wb.cpedata.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.interfaces.NGEPlaybackStatusListener;
 import com.wb.nextgenlibrary.interfaces.NGEPlayerInterface;
-import com.wb.nextgenlibrary.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.videoview.IVideoViewActionListener;
 import com.wb.nextgenlibrary.widget.CustomMediaController;
 

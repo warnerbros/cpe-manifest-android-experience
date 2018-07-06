@@ -18,17 +18,15 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.security.ProviderInstaller;
+import com.wb.cpedata.CPEDataParser;
+import com.wb.cpedata.ManifestItem;
+import com.wb.cpedata.data.manifest.MovieMetaData;
 import com.wb.nextgenlibrary.activity.LauncherActivity;
-import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.fragment.AbstractCastMainMovieFragment;
 import com.wb.nextgenlibrary.fragment.AbstractNGEMainMovieFragment;
 import com.wb.nextgenlibrary.interfaces.NGEEventHandler;
-import com.wb.nextgenlibrary.network.BaselineApiDAO;
 import com.wb.nextgenlibrary.network.NGECacheManager;
-import com.wb.nextgenlibrary.network.TheTakeApiDAO;
-import com.wb.nextgenlibrary.parser.ManifestXMLParser;
-import com.wb.nextgenlibrary.util.Size;
-import com.wb.nextgenlibrary.util.concurrent.ResultListener;
+import com.wb.cpedata.util.Size;
 import com.wb.nextgenlibrary.util.utils.F;
 import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
@@ -40,37 +38,6 @@ import java.util.Locale;
  * Created by gzcheng on 8/10/16.
  */
 public class NextGenExperience {
-
-
-	public static class ManifestItem{
-        public final String imageUrl;
-        public final String movieName;
-        private final String manifestFileUrl;
-        private final String ngeStyleFileUrl;
-        private final String appDataFileUrl;
-        public final String contentId;
-
-        public ManifestItem(String movieName, String cid, String imageUrl, String manifestFileUrl, String appDataFileUrl, String ngeStyleFileUrl){
-            this.imageUrl = imageUrl;
-            contentId = cid;
-            this.manifestFileUrl = manifestFileUrl;
-            this.movieName = movieName;
-            this.appDataFileUrl = appDataFileUrl;
-            this.ngeStyleFileUrl = ngeStyleFileUrl;
-        }
-
-        public String getManifestFileUrl(){
-            return manifestFileUrl;
-        }
-
-        public String getAppDataFileUrl(){
-            return appDataFileUrl;
-        }
-
-        public String getNgeStyleFileUrl(){
-            return ngeStyleFileUrl;
-        }
-    }
 
     static public List<ManifestItem> manifestItems;
     private static Context applicationContext;
@@ -174,34 +141,8 @@ public class NextGenExperience {
 			NextGenLogger.e(F.TAG, "GooglePlayServicesNotAvailableException: " + ex.getMessage());
 		}
 
-		try{
-			NextGenLogger.d("TIME_THIS", "---------------Next Test--------------");
-
-			long systime = SystemClock.uptimeMillis();
-			ManifestXMLParser.NextGenManifestData manifest = new ManifestXMLParser().startParsing(manifestItem.getManifestFileUrl(),
-					manifestItem.getAppDataFileUrl(), manifestItem.getNgeStyleFileUrl(), locale);
-			long currentTime = SystemClock.uptimeMillis() - systime;
-			NextGenLogger.d("TIME_THIS", "Time to finish parsing: " + currentTime);
-
-			// TODO error handling if manifest is null
-			movieMetaData = MovieMetaData.process(manifest);
-
-
-			currentTime = SystemClock.uptimeMillis() - currentTime - systime;
-			NextGenLogger.d("TIME_THIS", "Time to finish processing: " + currentTime);
-
-			BaselineApiDAO.init();
-            BaselineApiDAO.getCastActorsImages(movieMetaData.getAllCastsList(), null);
-
-			TheTakeApiDAO.init();
-			return true;
-		}catch (Exception ex){
-			NextGenLogger.e(F.TAG, ex.getLocalizedMessage());
-			NextGenLogger.e(F.TAG, ex.getStackTrace().toString());
-			return false;
-		}
-
-
+		movieMetaData = CPEDataParser.parseCPEManifests(applicationContext, manifestItem, locale);
+		return movieMetaData != null;
     }
 
     public static ManifestItem getManifestItem(){

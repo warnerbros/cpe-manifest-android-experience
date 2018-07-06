@@ -17,19 +17,14 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaMetadata;
 import com.google.android.gms.cast.MediaStatus;
-import com.google.android.gms.cast.framework.CastButtonFactory;
 import com.google.android.gms.cast.framework.CastContext;
 import com.google.android.gms.cast.framework.CastSession;
-import com.google.android.gms.cast.framework.CastStateListener;
-import com.google.android.gms.cast.framework.Session;
 import com.google.android.gms.cast.framework.SessionManager;
-import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.images.WebImage;
-import com.squareup.picasso.Picasso;
+import com.wb.cpedata.data.manifest.AudioVisualItem;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.interfaces.ECVideoPlayerInterface;
 import com.wb.nextgenlibrary.util.utils.StringHelper;
 
@@ -54,7 +49,7 @@ public class ECCastPlayerFragment extends Fragment implements ECVideoPlayerInter
 	private SeekBar sbSeek;
 	private ProgressBar pbPlayPause;
 
-	private MovieMetaData.AudioVisualItem selectedAVItem = null;
+	private AudioVisualItem selectedAVItem = null;
 	boolean shouldAutoPlay = false;
 	ECVideoViewFragment.ECVideoListAdaptor ecsAdaptor = null;
 
@@ -521,7 +516,7 @@ public class ECCastPlayerFragment extends Fragment implements ECVideoPlayerInter
 	}
 	/******************************************************************/
 
-	public void setAudioVisualItem(MovieMetaData.AudioVisualItem avItem){
+	public void setAudioVisualItem(AudioVisualItem avItem){
 		if (avItem != null) {
 			selectedAVItem = avItem;
 			if (countDownCountainer != null)

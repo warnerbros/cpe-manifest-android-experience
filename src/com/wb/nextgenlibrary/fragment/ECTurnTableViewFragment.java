@@ -13,9 +13,10 @@ import android.widget.ProgressBar;
 import android.widget.SeekBar;
 
 import com.bumptech.glide.Glide;
+import com.wb.cpedata.data.manifest.ECGalleryItem;
+import com.wb.cpedata.data.manifest.PictureItem;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
-import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.util.utils.F;
 import com.wb.nextgenlibrary.util.utils.NextGenLogger;
 
@@ -109,7 +110,7 @@ public class ECTurnTableViewFragment extends AbstractECGalleryViewFragment{
     }
 
 
-    public void setCurrentGallery(MovieMetaData.ECGalleryItem gallery){
+    public void setCurrentGallery(ECGalleryItem gallery){
         boolean bNeedReloadBitmaps = gallery == null || currentGallery == null || !gallery.equals(currentGallery) || turntableBitmaps == null || turntableBitmaps.size() == 0;
 
         super.setCurrentGallery(gallery);
@@ -139,10 +140,10 @@ public class ECTurnTableViewFragment extends AbstractECGalleryViewFragment{
         }
     }
 
-    private class DownloadImagesFilesTask extends AsyncTask<List<MovieMetaData.PictureItem>, Integer, List<Bitmap>> {
-        protected List<Bitmap> doInBackground(List<MovieMetaData.PictureItem>... pictureItemsArray) {
+    private class DownloadImagesFilesTask extends AsyncTask<List<PictureItem>, Integer, List<Bitmap>> {
+        protected List<Bitmap> doInBackground(List<PictureItem>... pictureItemsArray) {
 
-            List<MovieMetaData.PictureItem> pictureItems = pictureItemsArray[0];
+            List<PictureItem> pictureItems = pictureItemsArray[0];
             int count = pictureItems.size();
 
             if (getActivity() == null)
@@ -180,7 +181,7 @@ public class ECTurnTableViewFragment extends AbstractECGalleryViewFragment{
             List<Bitmap> result = new ArrayList<Bitmap>();
 
             for (int i = 0 ; i * fractionNumber < pictureItems.size(); i++ ) {
-                MovieMetaData.PictureItem item = pictureItems.get((int)(i * fractionNumber));
+                PictureItem item = pictureItems.get((int)(i * fractionNumber));
                 try {
                     Bitmap theBitmap = Glide.
                             with(NextGenExperience.getApplicationContext()).

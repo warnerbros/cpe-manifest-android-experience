@@ -47,13 +47,13 @@ import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+import com.wb.cpedata.data.manifest.AudioVisualItem;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.analytic.NGEAnalyticData;
-import com.wb.nextgenlibrary.data.MovieMetaData;
 import com.wb.nextgenlibrary.interfaces.ECVideoPlayerInterface;
 import com.wb.nextgenlibrary.interfaces.IMEVideoStatusListener;
 import com.wb.nextgenlibrary.interfaces.NGEPlayerInterface;
-import com.wb.nextgenlibrary.util.Size;
+import com.wb.cpedata.util.Size;
 import com.wb.nextgenlibrary.util.utils.F;
 import com.wb.nextgenlibrary.util.utils.NextGenGlide;
 import com.wb.nextgenlibrary.util.utils.NextGenLogger;
@@ -81,7 +81,7 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
     ImageButton previewPlayBtn = null;
     FixedAspectRatioFrameLayout aspectRatioFrame = null;
 
-    MovieMetaData.AudioVisualItem selectedAVItem = null;
+    AudioVisualItem selectedAVItem = null;
     boolean bSetOnResume= false;
     ImageView bgImageView;
 
@@ -544,7 +544,7 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
         }
     };
 
-    public void setAudioVisualItem(MovieMetaData.AudioVisualItem avItem){
+    public void setAudioVisualItem(AudioVisualItem avItem){
         if (ecVideoViewListener != null)
             ecVideoViewListener.stopRepeatingTask();
         if (avItem != null) {

@@ -11,7 +11,7 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.widget.TextView;
 
-import com.wb.nextgenlibrary.util.Size;
+import com.wb.cpedata.util.Size;
 
 public class FontFitTextView extends TextView {
 
