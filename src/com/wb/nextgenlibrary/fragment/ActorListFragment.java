@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.wb.cpedata.data.manifest.CastData;
 import com.wb.cpedata.data.manifest.CastGroup;
-import com.wb.cpedata.data.manifest.MovieMetaData;
+import com.wb.cpedata.data.manifest.CPEData;
 import com.wb.cpedata.network.BaselineApiDAO;
 import com.wb.cpedata.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.NextGenExperience;
@@ -76,13 +76,13 @@ public class ActorListFragment extends ExtraLeftListFragment<CastData> implement
         castGroupSegmentedControl = (SegmentedGroup) view.findViewById(R.id.cast_group_segmented_control);
 
         if (castGroupSegmentedControl != null){
-            if (StringHelper.isEmpty(listMode) && NextGenExperience.getMovieMetaData().getCastGroups().size() > 0){
-                listMode = NextGenExperience.getMovieMetaData().getCastGroups().get(0).getGroupTitle();
+            if (StringHelper.isEmpty(listMode) && NextGenExperience.getCPEData().getCastGroups().size() > 0){
+                listMode = NextGenExperience.getCPEData().getCastGroups().get(0).getGroupTitle();
             }
-            if (NextGenExperience.getMovieMetaData().hasMultipleCastMode() && !bFixedMode) {
+            if (NextGenExperience.getCPEData().hasMultipleCastMode() && !bFixedMode) {
                 castGroupSegmentedControl.setVisibility(View.VISIBLE);
                 int defaultId = -1;
-                for (CastGroup group : NextGenExperience.getMovieMetaData().getCastGroups()){
+                for (CastGroup group : NextGenExperience.getCPEData().getCastGroups()){
                     RadioButton radioButton = (RadioButton) getActivity().getLayoutInflater().inflate(R.layout.actor_group_radio_btn, null);
                     radioButton.setText(group.getGroupTitle());
                     castGroupSegmentedControl.addView(radioButton);
@@ -129,7 +129,7 @@ public class ActorListFragment extends ExtraLeftListFragment<CastData> implement
 
 
 
-        BaselineApiDAO.getCastActorsImages(NextGenExperience.getMovieMetaData().getAllCastsList(), new ResultListener<Boolean>() {
+        BaselineApiDAO.getCastActorsImages(NextGenExperience.getCPEData().getAllCastsList(), new ResultListener<Boolean>() {
             @Override
             public void onResult(Boolean result) {
 
@@ -161,7 +161,7 @@ public class ActorListFragment extends ExtraLeftListFragment<CastData> implement
 
 
     public List<CastData> getActorInfos(){
-        CastGroup group =  NextGenExperience.getMovieMetaData().getCastGroupByTitle(listMode);
+        CastGroup group =  NextGenExperience.getCPEData().getCastGroupByTitle(listMode);
         if (group != null)
             return group.getCastsList();
         else
@@ -226,7 +226,7 @@ public class ActorListFragment extends ExtraLeftListFragment<CastData> implement
     }
 
     protected String getHeaderText(){
-        CastGroup group =  NextGenExperience.getMovieMetaData().getCastGroupByTitle(listMode);
+        CastGroup group =  NextGenExperience.getCPEData().getCastGroupByTitle(listMode);
         if (group != null)
             return group.getGroupTitle();
         else

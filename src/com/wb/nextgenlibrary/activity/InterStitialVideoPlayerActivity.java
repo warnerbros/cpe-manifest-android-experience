@@ -35,7 +35,7 @@ public class InterStitialVideoPlayerActivity extends Activity{
                     public void run() {
                         Intent intent = new Intent(InterStitialVideoPlayerActivity.this, InMovieExperience.class);
                         //intent.setAction(android.content.Intent.ACTION_VIEW);
-                        intent.setDataAndType(Uri.parse(NextGenExperience.getMovieMetaData().getMainMovieUrl()), "video/*");
+                        intent.setDataAndType(Uri.parse(NextGenExperience.getCPEData().getMainMovieUrl()), "video/*");
                         //intent.setDataAndType(Uri.parse("http://cdn.theplatform.services/u/ContentServer/WarnerBros/Static/mos/NextGEN/feature/ManOfSteel_Clean.mp4"), "video/*");
                         startActivity(intent);
                        finish();

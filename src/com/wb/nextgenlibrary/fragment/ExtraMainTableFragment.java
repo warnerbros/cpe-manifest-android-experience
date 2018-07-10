@@ -6,8 +6,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wb.cpedata.data.manifest.ExperienceData;
-import com.wb.cpedata.data.manifest.MovieMetaData;
-import com.wb.cpedata.data.manifest.MovieMetaData.ECGroupType;
+import com.wb.cpedata.data.manifest.CPEData;
+import com.wb.cpedata.data.manifest.CPEData.ECGroupType;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.R;
 import com.wb.nextgenlibrary.activity.ECGalleryActivity;
@@ -32,7 +32,7 @@ public class ExtraMainTableFragment extends AbstractGridViewFragment {
     protected List<ExperienceData> ecGroups = getSourceData();
 
     protected List<ExperienceData> getSourceData(){
-        return NextGenExperience.getMovieMetaData().getExtraECGroups();
+        return NextGenExperience.getCPEData().getExtraECGroups();
     }
 
     protected void onListItemClick(View v, int position, long id){
@@ -52,7 +52,7 @@ public class ExtraMainTableFragment extends AbstractGridViewFragment {
             intent = new Intent(getActivity(), ECSceneLocationActivity.class);
         }else if (selectedGroup.getECGroupType() == ECGroupType.EXTERNAL_APP){
             if (selectedGroup.getExternalApp() != null){
-                if (selectedGroup.getExternalApp().externalApiName.equals(MovieMetaData.THE_TAKE_MANIFEST_IDENTIFIER)){
+                if (selectedGroup.getExternalApp().externalApiName.equals(CPEData.THE_TAKE_MANIFEST_IDENTIFIER)){
                     intent = new Intent(getActivity(), ShopCategoryActivity.class);
 
                 }

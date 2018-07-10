@@ -79,7 +79,7 @@ public class IMEActorFragment extends ActorListFragment implements NGEPlaybackSt
     protected void onModeChanged(){
 
         modeCorrectedActiveActorList.removeAll(modeCorrectedActiveActorList);
-        String job = NextGenExperience.getMovieMetaData().findJobByCastGroupName(listMode);
+        String job = NextGenExperience.getCPEData().findJobByCastGroupName(listMode);
         for (CastData castData: currentActiveActorList){
             if (castData.job.equals(job)){
                 modeCorrectedActiveActorList.add(castData);
@@ -137,7 +137,7 @@ public class IMEActorFragment extends ActorListFragment implements NGEPlaybackSt
         TextView actorsTitle = (TextView)view.findViewById(R.id.actor_list_title);
 
         if (actorsTitle != null ) {
-            if (!NextGenExperience.getMovieMetaData().hasMultipleCastMode()) {
+            if (!NextGenExperience.getCPEData().hasMultipleCastMode()) {
                 actorsTitle.setText(getHeaderText());
                 actorsTitle.setVisibility(View.VISIBLE);
             } else {
@@ -145,7 +145,7 @@ public class IMEActorFragment extends ActorListFragment implements NGEPlaybackSt
             }
         }
 
-        setCastIMEElementLists(NextGenExperience.getMovieMetaData().getCastIMEElements());
+        setCastIMEElementLists(NextGenExperience.getCPEData().getCastIMEElements());
 
     }
 

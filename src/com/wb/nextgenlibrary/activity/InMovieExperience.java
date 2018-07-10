@@ -142,10 +142,10 @@ public class InMovieExperience extends AbstractNGEActivity implements NGEFragmen
         super.onCreate(savedInstanceState);
 
         detectScreenShotService();
-        if (NextGenExperience.getMovieMetaData() == null)
+        if (NextGenExperience.getCPEData() == null)
             finish();
 
-        INTERSTITIAL_VIDEO_URI = Uri.parse(NextGenExperience.getMovieMetaData().getInterstitialVideoURL());
+        INTERSTITIAL_VIDEO_URI = Uri.parse(NextGenExperience.getCPEData().getInterstitialVideoURL());
 
         fragmentTransactionEngine = new NGEFragmentTransactionEngine(this);
         setContentView(R.layout.next_gen_videoview);
@@ -159,8 +159,8 @@ public class InMovieExperience extends AbstractNGEActivity implements NGEFragmen
 
         backgroundImageView = (ImageView)findViewById(R.id.ime_background_image_view);
         if (backgroundImageView != null){
-            if (NextGenExperience.getMovieMetaData().getExtraExperience().style != null) {
-                String bgImgUrl = NextGenExperience.getMovieMetaData().getExtraExperience().style.getBackground().getImage().url;
+            if (NextGenExperience.getCPEData().getExtraExperience().style != null) {
+                String bgImgUrl = NextGenExperience.getCPEData().getExtraExperience().style.getBackground().getImage().url;
                 NextGenGlide.load(this, bgImgUrl).into(backgroundImageView);
             }
         }
@@ -485,7 +485,7 @@ public class InMovieExperience extends AbstractNGEActivity implements NGEFragmen
 
     @Override
     String getTitleImageUrl(){
-        return NextGenExperience.getMovieMetaData().getTitletreatmentImageUrl();
+        return NextGenExperience.getCPEData().getTitletreatmentImageUrl();
     }
 
     @Override
@@ -897,7 +897,7 @@ public class InMovieExperience extends AbstractNGEActivity implements NGEFragmen
     }
 
     private boolean isCommentaryAvailable(){
-        return !StringHelper.isEmpty(NextGenExperience.getMovieMetaData().getCommentaryTrackURL());
+        return !StringHelper.isEmpty(NextGenExperience.getCPEData().getCommentaryTrackURL());
     }
 
     private boolean isCommentaryOn = false;
@@ -908,12 +908,12 @@ public class InMovieExperience extends AbstractNGEActivity implements NGEFragmen
         if (isCommentaryAvailable()) {
             if (mainMovieFragment.canHandleCommentaryAudioTrackSwitching()){
                 List<String> commentaries = new ArrayList<>();
-                commentaries.add(NextGenExperience.getMovieMetaData().getCommentaryTrackURL());
+                commentaries.add(NextGenExperience.getCPEData().getCommentaryTrackURL());
                 mainMovieFragment.setCommentaryTrackUrls(commentaries);
             }else {
 
                 try {
-                    commentaryAudioPlayer = MediaPlayer.create(this, Uri.parse(NextGenExperience.getMovieMetaData().getCommentaryTrackURL()));
+                    commentaryAudioPlayer = MediaPlayer.create(this, Uri.parse(NextGenExperience.getCPEData().getCommentaryTrackURL()));
                     commentaryAudioPlayer.setLooping(false);
                     commentaryPlayersStatusListener = new NGECommentaryPlayersStatusListener();
                     commentaryAudioPlayer.setOnPreparedListener(commentaryPlayersStatusListener);

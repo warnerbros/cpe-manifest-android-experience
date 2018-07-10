@@ -13,7 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.wb.cpedata.data.manifest.ExperienceData;
-import com.wb.cpedata.data.manifest.MovieMetaData;
+import com.wb.cpedata.data.manifest.CPEData;
 import com.wb.cpedata.data.manifest.ShopItem;
 import com.wb.cpedata.data.manifest.ShopItemInterface;
 import com.wb.cpedata.data.theTake.ShopCategory;
@@ -61,7 +61,7 @@ public class ShopCategoryActivity extends AbstractNGEActivity implements NGEFrag
 
         String groupId = getIntent().getStringExtra(F.ID);
         if (!StringHelper.isEmpty(F.ID)){
-            ecGroupData = NextGenExperience.getMovieMetaData().findExperienceDataById(groupId);
+            ecGroupData = NextGenExperience.getCPEData().findExperienceDataById(groupId);
         }
 
         gridFrament = new ShopCategoryGridFragment();
@@ -105,7 +105,7 @@ public class ShopCategoryActivity extends AbstractNGEActivity implements NGEFrag
     }
 
     private void requestCategoryList(){
-        if (ecGroupData != null && ecGroupData.getECGroupType() == MovieMetaData.ECGroupType.SHOP){
+        if (ecGroupData != null && ecGroupData.getECGroupType() == CPEData.ECGroupType.SHOP){
             HashMap<String, ShopCategory> shopCategoryHashMap = new HashMap<>();
             if (categories.size() == 0){
                 for (ExperienceData child : ecGroupData.getChildrenContents()){
@@ -173,7 +173,7 @@ public class ShopCategoryActivity extends AbstractNGEActivity implements NGEFrag
                         if (category == null){
                             category = new ShopCategory();
                             category.categoryId = categories.size();
-                            category.categoryName = MovieMetaData.getMatchingLocalizableObject(shopItem.categoryType.getBasicMetadata().getLocalizedInfo(), NextGenExperience.getClientLocale()).getTitleDisplayUnlimited();
+                            category.categoryName = CPEData.getMatchingLocalizableObject(shopItem.categoryType.getBasicMetadata().getLocalizedInfo(), NextGenExperience.getClientLocale()).getTitleDisplayUnlimited();
                             categories.add(category);
                             category.products = new ArrayList<>();
                             shopCategoryHashMap.put(id, category);
@@ -350,7 +350,7 @@ public class ShopCategoryActivity extends AbstractNGEActivity implements NGEFrag
 
     @Override
     public String getBackgroundImgUri(){
-        return NextGenExperience.getMovieMetaData().getExtraExperience().style.getBackground().getImage().url;
+        return NextGenExperience.getCPEData().getExtraExperience().style.getBackground().getImage().url;
     }
 
     @Override

@@ -57,12 +57,12 @@ public class IMEElementsGridFragment extends AbstractGridViewFragment implements
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        imeGroups = NextGenExperience.getMovieMetaData().getImeElementGroups();
+        imeGroups = NextGenExperience.getCPEData().getImeElementGroups();
         this.savedInstanceState = savedInstanceState;
         for (IMEElementsGroup group : imeGroups){
 
             if (group.getExternalApiData() != null){
-                if(MovieMetaData.THE_TAKE_MANIFEST_IDENTIFIER.equals(group.getExternalApiData().externalApiName)){
+                if(CPEData.THE_TAKE_MANIFEST_IDENTIFIER.equals(group.getExternalApiData().externalApiName)){
                     imeEngines.add(new TheTakeIMEEngine());
                 }else
                     imeEngines.add(new AVGalleryIMEEngine(group.getIMEElementesList()));
@@ -137,8 +137,8 @@ public class IMEElementsGridFragment extends AbstractGridViewFragment implements
                         ECGalleryViewFragment fragment = new ECGalleryViewFragment();
                         fragment.setContentViewId(R.layout.ime_gallery_frame_view);
                         fragment.setShouldShowCloseBtn(true);
-                        /*if (NextGenExperience.getMovieMetaData().getInMovieExperience().style != null)
-                            fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getInMovieExperience().style.getBackground().getImage().url);*/
+                        /*if (NextGenExperience.getCPEData().getInMovieExperience().style != null)
+                            fragment.setBGImageUrl(NextGenExperience.getCPEData().getInMovieExperience().style.getBackground().getImage().url);*/
                         fragment.setCurrentGallery((ECGalleryItem) headElement);
                         mainMovieListener = null;
                         playerActivity.transitMainFragment(fragment);
@@ -153,8 +153,8 @@ public class IMEElementsGridFragment extends AbstractGridViewFragment implements
                             fragment.setShouldAutoPlay(playerActivity.isPlaying() ? false : true);
                             fragment.setShouldShowCloseBtn(true);
                             fragment.setExperienceAndIndex(activeObj.imeExperience, ((IMEElement) activeObj.imeObject).itemIndex);
-                            /*if (NextGenExperience.getMovieMetaData().getInMovieExperience().style != null)
-                                fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getInMovieExperience().style.getBackground().getImage().url);*/
+                            /*if (NextGenExperience.getCPEData().getInMovieExperience().style != null)
+                                fragment.setBGImageUrl(NextGenExperience.getCPEData().getInMovieExperience().style.getBackground().getImage().url);*/
                             fragment.setVideoStatusListener(this);
                             mainMovieListener = fragment;
                             playerActivity.transitMainFragment(fragment);
@@ -165,8 +165,8 @@ public class IMEElementsGridFragment extends AbstractGridViewFragment implements
 							fragment.setShouldAutoPlay(playerActivity.isPlaying() ? false : true);
                             fragment.setShouldShowCloseBtn(true);
 							fragment.setExperience(activeObj.imeExperience);
-                            /*if (NextGenExperience.getMovieMetaData().getInMovieExperience().style != null)
-                                fragment.setBGImageUrl(NextGenExperience.getMovieMetaData().getInMovieExperience().style.getBackground().getImage().url);*/
+                            /*if (NextGenExperience.getCPEData().getInMovieExperience().style != null)
+                                fragment.setBGImageUrl(NextGenExperience.getCPEData().getInMovieExperience().style.getBackground().getImage().url);*/
                             fragment.setAudioVisualItem((AudioVisualItem) headElement);
                             fragment.setVideoStatusListener(this);
                             mainMovieListener = fragment;

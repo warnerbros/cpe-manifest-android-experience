@@ -40,7 +40,7 @@ public abstract class AbstractECView extends AbstractNGEActivity {
 
         Intent intent = getIntent();
         String groupId = intent.getStringExtra(F.ID);
-        ecGroupData = NextGenExperience.getMovieMetaData().findExperienceDataById(groupId);
+        ecGroupData = NextGenExperience.getCPEData().findExperienceDataById(groupId);
 
         setContentView(getContentViewId());
 
@@ -80,10 +80,10 @@ public abstract class AbstractECView extends AbstractNGEActivity {
 
     @Override
     public String getBackgroundImgUri(){
-        if (NextGenExperience.getMovieMetaData().getExtraExperience().style != null &&
-                NextGenExperience.getMovieMetaData().getExtraExperience().style.getBackground() != null &&
-                NextGenExperience.getMovieMetaData().getExtraExperience().style.getBackground().getImage() != null)
-            return NextGenExperience.getMovieMetaData().getExtraExperience().style.getBackground().getImage().url;
+        if (NextGenExperience.getCPEData().getExtraExperience().style != null &&
+                NextGenExperience.getCPEData().getExtraExperience().style.getBackground() != null &&
+                NextGenExperience.getCPEData().getExtraExperience().style.getBackground().getImage() != null)
+            return NextGenExperience.getCPEData().getExtraExperience().style.getBackground().getImage().url;
         else
             return null;
     }

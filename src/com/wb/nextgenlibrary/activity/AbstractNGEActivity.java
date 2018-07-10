@@ -274,8 +274,8 @@ public abstract class AbstractNGEActivity extends NGEHideStatusBarActivity imple
     }
 
     String getTitleImageUrl(){
-        return NextGenExperience.getMovieMetaData().getTitletreatmentImageUrl();
-        //return NextGenExperience.getMovieMetaData().getStyle().getTitleImageURL(NextGenStyle.NextGenAppearanceType.InMovie);
+        return NextGenExperience.getCPEData().getTitletreatmentImageUrl();
+        //return NextGenExperience.getCPEData().getStyle().getTitleImageURL(NextGenStyle.NextGenAppearanceType.InMovie);
     }
 
     public boolean isCasting(){

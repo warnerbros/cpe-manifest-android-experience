@@ -20,7 +20,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.security.ProviderInstaller;
 import com.wb.cpedata.CPEDataParser;
 import com.wb.cpedata.ManifestItem;
-import com.wb.cpedata.data.manifest.MovieMetaData;
+import com.wb.cpedata.data.manifest.CPEData;
 import com.wb.nextgenlibrary.activity.LauncherActivity;
 import com.wb.nextgenlibrary.fragment.AbstractCastMainMovieFragment;
 import com.wb.nextgenlibrary.fragment.AbstractNGEMainMovieFragment;
@@ -41,7 +41,7 @@ public class NextGenExperience {
 
     static public List<ManifestItem> manifestItems;
     private static Context applicationContext;
-    private static MovieMetaData movieMetaData;
+    private static CPEData movieMetaData;
     private static float deviceScreenDensity = 0.0f;
     private static int deviceScreenWidth = -1;
     private static int deviceScreenHeight = -1;
@@ -153,7 +153,7 @@ public class NextGenExperience {
         return applicationContext;
     }
 
-    public static MovieMetaData getMovieMetaData(){
+    public static CPEData getCPEData(){
         return movieMetaData;
     }
 

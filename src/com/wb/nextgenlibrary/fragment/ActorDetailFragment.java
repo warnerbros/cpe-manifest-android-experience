@@ -26,7 +26,7 @@ import com.wb.cpedata.data.manifest.BaselineCastData;
 import com.wb.cpedata.data.manifest.CastData;
 import com.wb.cpedata.data.manifest.CastHeadShot;
 import com.wb.cpedata.data.manifest.Filmography;
-import com.wb.cpedata.data.manifest.MovieMetaData;
+import com.wb.cpedata.data.manifest.CPEData;
 import com.wb.cpedata.network.BaselineApiDAO;
 import com.wb.cpedata.util.concurrent.ResultListener;
 import com.wb.nextgenlibrary.NextGenExperience;

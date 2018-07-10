@@ -37,7 +37,7 @@ public class ECShopItemDetailActivity extends AbstractNGEActivity implements Con
 		String shopItemId = getIntent().getStringExtra(SHOP_ITEM_ID);
 		ShopItemInterface shopItem = null;
 		if (!StringHelper.isEmpty(shopItemId)){
-			shopItem = NextGenExperience.getMovieMetaData().getShopItemByAppId(shopItemId);
+			shopItem = NextGenExperience.getCPEData().getShopItemByAppId(shopItemId);
 			bShopItemHasVideo = shopItem instanceof ShopItem && ((ShopItem)shopItem).getAVItem() != null;
 		}
 
@@ -46,7 +46,7 @@ public class ECShopItemDetailActivity extends AbstractNGEActivity implements Con
 	}
 
 	public String getBackgroundImgUri(){
-		return NextGenExperience.getMovieMetaData().getExtraExperience().style.getBackground().getImage().url;
+		return NextGenExperience.getCPEData().getExtraExperience().style.getBackground().getImage().url;
 	}
 	public String getLeftButtonText(){
 		return getResources().getString(R.string.back_button_text);

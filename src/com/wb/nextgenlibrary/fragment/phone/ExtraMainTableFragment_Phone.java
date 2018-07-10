@@ -7,7 +7,7 @@ import android.view.View;
 
 import com.wb.cpedata.data.manifest.CastGroup;
 import com.wb.cpedata.data.manifest.ExperienceData;
-import com.wb.cpedata.data.manifest.MovieMetaData;
+import com.wb.cpedata.data.manifest.CPEData;
 import com.wb.nextgenlibrary.NextGenExperience;
 import com.wb.nextgenlibrary.activity.NGEHideStatusBarActivity;
 import com.wb.nextgenlibrary.activity.phone.NGEActorsActivity_Phone;
@@ -28,7 +28,7 @@ public class ExtraMainTableFragment_Phone extends ExtraMainTableFragment {
             super(castGroup.getGroupTitle(), castGroup.groupJob,
                     null);
             this.castGroup = castGroup;
-            type = MovieMetaData.ECGroupType.ACTORS;
+            type = CPEData.ECGroupType.ACTORS;
         }
 
         public String getPosterImgUrl(){
@@ -62,13 +62,13 @@ public class ExtraMainTableFragment_Phone extends ExtraMainTableFragment {
     protected List<ExperienceData> getSourceData(){
         List<ExperienceData> ecList = new ArrayList<ExperienceData>();
 
-        if (NextGenExperience.getMovieMetaData().getCastGroups().size() > 0) {
-            for (CastGroup group : NextGenExperience.getMovieMetaData().getCastGroups()){
+        if (NextGenExperience.getCPEData().getCastGroups().size() > 0) {
+            for (CastGroup group : NextGenExperience.getCPEData().getCastGroups()){
                 ecList.add(new ActorExperience(group));
             }
         }
 
-        ecList.addAll(NextGenExperience.getMovieMetaData().getExtraECGroups());
+        ecList.addAll(NextGenExperience.getCPEData().getExtraECGroups());
         return ecList;
     }
 

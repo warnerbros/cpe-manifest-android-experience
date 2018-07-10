@@ -44,8 +44,8 @@ public class NGEActorsActivity_Phone extends AbstractNGEActivity implements NGEF
 
     @Override
     public String getBackgroundImgUri(){
-        if (NextGenExperience.getMovieMetaData().getExtraExperience().style != null)
-            return NextGenExperience.getMovieMetaData().getExtraExperience().style.getBackground().getImage().url;
+        if (NextGenExperience.getCPEData().getExtraExperience().style != null)
+            return NextGenExperience.getCPEData().getExtraExperience().style.getBackground().getImage().url;
         else
             return null;
     }

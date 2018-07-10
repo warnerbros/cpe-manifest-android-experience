@@ -112,13 +112,13 @@ public class StartupActivity extends NGEHideStatusBarActivity implements View.On
 
     //private SimpleExoPlayerView exoStartupVideoView;
 
-    ExperienceStyle mainStyle = NextGenExperience.getMovieMetaData() != null ? NextGenExperience.getMovieMetaData().getRootExperienceStyle() : null;
+    ExperienceStyle mainStyle = NextGenExperience.getCPEData() != null ? NextGenExperience.getCPEData().getRootExperienceStyle() : null;
     @Override
     public void onCreate(Bundle savedState) {
         super.onCreate(savedState);
 
         setContentView(R.layout.next_gen_startup_view);
-        if (NextGenExperience.getMovieMetaData() == null)
+        if (NextGenExperience.getCPEData() == null)
             finish();
 
         videoParentFrame = (FixedAspectRatioFrameLayout)findViewById(R.id.video_parent_aspect_ratio_frame);
@@ -194,7 +194,7 @@ public class StartupActivity extends NGEHideStatusBarActivity implements View.On
                 NextGenGlide.load(this, bgImageUrl).asBitmap().fitCenter().into(startupImageView);
             }
         }else{      // load default image
-            String imageurl = NextGenExperience.getMovieMetaData().getExtraExperience().getPosterImgUrl();
+            String imageurl = NextGenExperience.getCPEData().getExtraExperience().getPosterImgUrl();
             videoParentFrame.setVisibility(View.GONE);
             NextGenGlide.load(this, imageurl).listener(new RequestListener<GlideUrl, GlideDrawable>() {
                 @Override
@@ -695,7 +695,7 @@ public class StartupActivity extends NGEHideStatusBarActivity implements View.On
 
 
 
-                if (titleImageView != null && titleLayoutArea != null && !StringHelper.isEmpty(NextGenExperience.getMovieMetaData().getTitletreatmentImageUrl())){
+                if (titleImageView != null && titleLayoutArea != null && !StringHelper.isEmpty(NextGenExperience.getCPEData().getTitletreatmentImageUrl())){
 
                     double titleShrinkRatio = shrinkRatio;
                     int titleWidth = (int) (((double) titleLayoutArea.getWidthPixels().intValue()) * shrinkRatio);
@@ -722,7 +722,7 @@ public class StartupActivity extends NGEHideStatusBarActivity implements View.On
                     } else if (titleParams instanceof FrameLayout.LayoutParams) {
                         ((FrameLayout.LayoutParams) titleParams).setMargins(titleX, titleY, 0, 0);
                     }
-                    NextGenGlide.load(this, NextGenExperience.getMovieMetaData().getTitletreatmentImageUrl()).into(titleImageView);
+                    NextGenGlide.load(this, NextGenExperience.getCPEData().getTitletreatmentImageUrl()).into(titleImageView);
                 }
 
                 if (StringHelper.isEmpty(mainStyle.getBackgroundVideoUrl())) {
@@ -744,7 +744,7 @@ public class StartupActivity extends NGEHideStatusBarActivity implements View.On
         if (v.getId() == R.id.next_gen_startup_play_button || v.getId() == R.id.next_gen_startup_play_text_button) {
 
             Intent intent = new Intent(this, InMovieExperience.class);
-            intent.setDataAndType(Uri.parse(NextGenExperience.getMovieMetaData().getMainMovieUrl()), "video/*");
+            intent.setDataAndType(Uri.parse(NextGenExperience.getCPEData().getMainMovieUrl()), "video/*");
             startActivity(intent);
             NGEAnalyticData.reportEvent(this, null, NGEAnalyticData.AnalyticAction.ACTION_PLAY_MOVIE, null, null);
 

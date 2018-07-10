@@ -273,8 +273,8 @@ public abstract class AbstractCastMainMovieFragment extends AbstractNGEMainMovie
 
 		int timeCode = getCurrentPosition();
 		String posterUrl = getPosterUrl();
-		if (NextGenExperience.getMovieMetaData().hasShareClipExp() && getActivity() instanceof InMovieExperience){
-			posterUrl = NextGenExperience.getMovieMetaData().getClosestShareClipImage(timeCode);
+		if (NextGenExperience.getCPEData().hasShareClipExp() && getActivity() instanceof InMovieExperience){
+			posterUrl = NextGenExperience.getCPEData().getClosestShareClipImage(timeCode);
 		}
 		if (!StringHelper.isEmpty(posterUrl) && ivPoster != null){
 			Glide.with(getActivity()).load(posterUrl).fitCenter().into(ivPoster);

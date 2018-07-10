@@ -154,7 +154,7 @@ public class ECGalleryViewFragment extends AbstractECGalleryViewFragment impleme
 
 					String shareString = imageUrl;
 					if (NextGenExperience.getManifestItem() != null){
-						shareString = getResources().getString(R.string.share_image_text,NextGenExperience.getManifestItem().movieName) + imageUrl;
+						shareString = getResources().getString(R.string.share_image_text, NextGenExperience.getCPEData().getMovieTitle()) + imageUrl;
 					}
 
 					NextGenExperience.launchSocialSharingWithUrl(getActivity(), shareString);

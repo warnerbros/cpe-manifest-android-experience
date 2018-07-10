@@ -29,14 +29,14 @@ public class OutOfMovieActivity extends AbstractNGEActivity implements NGEFragme
     public void onCreate(Bundle savedState) {
         super.onCreate(savedState);
 
-        if (NextGenExperience.getMovieMetaData() == null)
+        if (NextGenExperience.getCPEData() == null)
             finish();
 
         setContentView(R.layout.next_gen_extra);
         float density = NextGenExperience.getScreenDensity(this);
         int spacing = (int)(10 *density);
 
-        extraStyle = NextGenExperience.getMovieMetaData().getExtraExperience().style;
+        extraStyle = NextGenExperience.getCPEData().getExtraExperience().style;
 
         fragmentTransactionEngine = new NGEFragmentTransactionEngine(this);
         initFragments();
@@ -128,7 +128,7 @@ public class OutOfMovieActivity extends AbstractNGEActivity implements NGEFragme
             return extraStyle.getBackground().getImage().url;
         else
             return "";
-        //return NextGenExperience.getMovieMetaData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.OutOfMovie);
+        //return NextGenExperience.getCPEData().getStyle().getBackgroundImageURL(NextGenStyle.NextGenAppearanceType.OutOfMovie);
     }
 
     @Override
@@ -140,7 +140,7 @@ public class OutOfMovieActivity extends AbstractNGEActivity implements NGEFragme
     public String getRightTitleImageUri(){
         /*if (extraStyle != null) {
             StyleData.NodeStyleData nodeStyleData = extraStyle.getNodeStyleData(NGEHideStatusBarActivity.getCurrentScreenOrientation());
-            MovieMetaData.PictureImageData titleImageData = nodeStyleData.theme.getImageData();
+            CPEData.PictureImageData titleImageData = nodeStyleData.theme.getImageData();
             return ;
         }else
             return "";*/

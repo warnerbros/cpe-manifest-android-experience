@@ -10,7 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
 
-import com.wb.cpedata.data.manifest.MovieMetaData;
+import com.wb.cpedata.data.manifest.CPEData;
 import com.wb.cpedata.data.manifest.ShopItem;
 import com.wb.cpedata.data.manifest.ShopItemInterface;
 import com.wb.cpedata.data.theTake.ShopCategory;
