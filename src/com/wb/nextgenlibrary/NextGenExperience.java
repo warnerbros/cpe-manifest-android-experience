@@ -39,7 +39,6 @@ import java.util.Locale;
  */
 public class NextGenExperience {
 
-    static public List<ManifestItem> manifestItems;
     private static Context applicationContext;
     private static CPEData movieMetaData;
     private static float deviceScreenDensity = 0.0f;
@@ -62,7 +61,6 @@ public class NextGenExperience {
     private static String sUserAgent;
 
     public static void exitExperience(){
-        manifestItems = null;
         movieMetaData = null;
         nextgenPlaybackObject = null;
         applicationContext = null;
@@ -261,15 +259,6 @@ public class NextGenExperience {
     public static void enableDiagnosticMode() {
         isDiagnosticMode = true;
         //applicationContext.setSharedPrefs(PREFS_DIAGNOSTIC_MODE + sDay, true);
-    }
-
-
-    public static ManifestItem findManifestItemByCID(String cid){
-        for (ManifestItem item : manifestItems){
-            if (cid.equals(item.contentId))
-                return item;
-        }
-        return null;
     }
 
     public static String getGoogleMapAPIKey(){
