@@ -53,14 +53,24 @@ public class ECInteractiveActivity extends AbstractECView implements AdapterView
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id){
-		Intent intent = new Intent(this, WebViewActivity.class);
-		String[] orientations = ecGroupData.getChildrenContents().get(position).interactiveItems.get(0).getOrientations();
-		intent.putExtra(F.URL, ecGroupData.getChildrenContents().get(position).interactiveItems.get(0).assetLocation);
-		intent.setAction(Intent.ACTION_VIEW);
-		intent.putExtra(F.ID, ecGroupData.getChildrenContents().get(position).experienceId);
-		if (orientations.length > 0)
-			intent.putExtra(WebViewActivity.ORIENTATION, orientations);
-		//intent.putExtra(F.TITLE, selectedGroup.title);
+		Intent intent = null;
+		//get first item to check the type
+
+		if (ecGroupData.getChildrenContents().get(position).interactiveItems.get(0).runtimeEnvironment.contains("ATH")) {
+			// ATH content
+			intent = new Intent(this, FullscreenPlayerActivity.class);
+			intent.putExtra(FullscreenPlayerActivity.ARG_CONTENT_ADDRESS, ecGroupData.getChildrenContents().get(position).interactiveItems.get(0).assetLocation);
+		} else {
+
+			intent = new Intent(this, WebViewActivity.class);
+			String[] orientations = ecGroupData.getChildrenContents().get(position).interactiveItems.get(0).getOrientations();
+			intent.putExtra(F.URL, ecGroupData.getChildrenContents().get(position).interactiveItems.get(0).assetLocation);
+			intent.setAction(Intent.ACTION_VIEW);
+			intent.putExtra(F.ID, ecGroupData.getChildrenContents().get(position).experienceId);
+			if (orientations.length > 0)
+				intent.putExtra(WebViewActivity.ORIENTATION, orientations);
+			//intent.putExtra(F.TITLE, selectedGroup.title);
+		}
 		startActivity(intent);
 	}
 
@@ -108,8 +118,11 @@ public class ECInteractiveActivity extends AbstractECView implements AdapterView
 			TextView titleTxt = (TextView) convertView.findViewById(R.id.next_gen_extra_title);
 
 			MovieMetaData.ExperienceData thisExtra = getItem(position);
-			if(!thisExtra.title.equals(titleTxt.getText())){
-				titleTxt.setText(thisExtra.title.toUpperCase());
+
+			String itemTitle = thisExtra.title != null ? thisExtra.title : "";
+			// fallback to set the title to Empty one
+			if(!itemTitle.equals(titleTxt.getText())){
+				titleTxt.setText(itemTitle.toUpperCase());
 				NextGenGlide.load(ECInteractiveActivity.this, thisExtra.getPosterImgUrl()).fitCenter().into(thumbnailImg);
 				//PicassoTrustAll.loadImageIntoView(getActivity(), thisExtra.getPosterImgUrl(), thumbnailImg);
 			}

@@ -19,9 +19,11 @@ import android.widget.TextView;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
@@ -33,7 +35,7 @@ import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource;
 import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
-import com.google.android.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
@@ -142,9 +144,9 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
         videoView = (SimpleExoPlayerView) view.findViewById(R.id.ec_video_view);
         mediaDataSourceFactory = buildDataSourceFactory(true);
         if (videoView != null){
-            @SimpleExoPlayer.ExtensionRendererMode int extensionRendererMode = SimpleExoPlayer.EXTENSION_RENDERER_MODE_ON;//SimpleExoPlayer.EXTENSION_RENDERER_MODE_OFF;
+            @DefaultRenderersFactory.ExtensionRendererMode int extensionRendererMode = DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON;//SimpleExoPlayer.EXTENSION_RENDERER_MODE_OFF;
             TrackSelection.Factory videoTrackSelectionFactory =
-                            new AdaptiveVideoTrackSelection.Factory(BANDWIDTH_METER);
+                            new AdaptiveTrackSelection.Factory(BANDWIDTH_METER);
             TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
             //trackSelectionHelper = new TrackSelectionHelper(trackSelector, videoTrackSelectionFactory);
             player = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector, new DefaultLoadControl(),
@@ -218,8 +220,34 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
             boolean isFreshloaded = true;
             private Handler mHandler = new Handler();
             int counter = COUNT_DOWN_SECONDS;
+
             @Override
-            public void onTimelineChanged(Timeline timeline, Object manifest) {
+            public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
+
+            }
+
+            @Override
+            public void onRepeatModeChanged(int repeatMode) {
+
+            }
+
+            @Override
+            public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+
+            }
+
+            @Override
+            public void onPositionDiscontinuity(int reason) {
+
+            }
+
+            @Override
+            public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+
+            }
+
+            @Override
+            public void onSeekProcessed() {
 
             }
 
@@ -304,10 +332,7 @@ public class ECVideoViewFragment extends ECViewFragment implements ECVideoPlayer
 
             }
 
-            @Override
-            public void onPositionDiscontinuity() {
 
-            }
             Runnable mStatusChecker = new Runnable() {
                 @Override
                 public void run() {
