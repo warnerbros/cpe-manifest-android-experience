@@ -56,31 +56,22 @@ public class ECInteractiveActivity extends AbstractECView implements AdapterView
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id){
 		Intent intent = null;
 		//get first item to check the type
-		try {
-			if (ecGroupData.getChildrenContents().get(position).interactiveItems.get(0).runtimeEnvironment.contains("ATH")) {
-				// ATH content
-
-
-					Class.forName("co.aetherinc.aetherplayer.PlayerFragment");
-					intent = new Intent(this, FullscreenPlayerActivity.class);
-					intent.putExtra(FullscreenPlayerActivity.ARG_CONTENT_ADDRESS, ecGroupData.getChildrenContents().get(position).interactiveItems.get(0).assetLocation);
-
-
-			} else {
-
-				intent = new Intent(this, WebViewActivity.class);
-				String[] orientations = ecGroupData.getChildrenContents().get(position).interactiveItems.get(0).getOrientations();
-				intent.putExtra(F.URL, ecGroupData.getChildrenContents().get(position).interactiveItems.get(0).assetLocation);
-				intent.setAction(Intent.ACTION_VIEW);
-				intent.putExtra(F.ID, ecGroupData.getChildrenContents().get(position).experienceId);
-				if (orientations.length > 0)
-					intent.putExtra(WebViewActivity.ORIENTATION, orientations);
-				//intent.putExtra(F.TITLE, selectedGroup.title);
-			}
-			startActivity(intent);
-		} catch (ClassNotFoundException e) {
-			Log.w("NextGen","ATH Player missing in classpath");
+		if (ecGroupData.getChildrenContents().get(position).interactiveItems.get(0).runtimeEnvironment.toUpperCase().contains("ATH")) {
+			// ATH content
+			intent = new Intent(this, FullscreenPlayerActivity.class);
+			intent.putExtra(FullscreenPlayerActivity.ARG_CONTENT_ADDRESS, ecGroupData.getChildrenContents().get(position).interactiveItems.get(0).assetLocation);
+		} else {
+			intent = new Intent(this, WebViewActivity.class);
+			String[] orientations = ecGroupData.getChildrenContents().get(position).interactiveItems.get(0).getOrientations();
+			intent.putExtra(F.URL, ecGroupData.getChildrenContents().get(position).interactiveItems.get(0).assetLocation);
+			intent.setAction(Intent.ACTION_VIEW);
+			intent.putExtra(F.ID, ecGroupData.getChildrenContents().get(position).experienceId);
+			if (orientations.length > 0)
+				intent.putExtra(WebViewActivity.ORIENTATION, orientations);
+			//intent.putExtra(F.TITLE, selectedGroup.title);
 		}
+		startActivity(intent);
+
 	}
 
 

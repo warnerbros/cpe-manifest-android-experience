@@ -2235,7 +2235,20 @@ public class MovieMetaData {
             }
 
             if (interactiveItems != null && interactiveItems.size() > 0){
-                this.interactiveItems.addAll(interactiveItems);
+                try {
+                    Class.forName("co.aetherinc.aetherplayer.PlayerFragment");
+                    this.interactiveItems.addAll(interactiveItems);
+                } catch (ClassNotFoundException cnfe) {
+                    // Aether is not available do not add ATH Interactive elements to the list
+                    for (InteractiveItem item:interactiveItems) {
+                        if (!item.runtimeEnvironment.toUpperCase().contains("ATH")) {
+                            this.interactiveItems.add(item);
+                        }
+                    }
+                }
+
+
+
             }
         }
 
