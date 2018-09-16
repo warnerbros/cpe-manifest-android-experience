@@ -52,6 +52,13 @@
 		</activity>
 
 		<activity
+			android:name="com.wb.nextgenlibrary.activity.FullscreenPlayerActivity"
+			android:theme="@style/Theme.AppCompat.NoActionBar"
+			android:configChanges="orientation|keyboardHidden|screenSize">
+
+		</activity>
+
+		<activity
 			android:name="com.wb.nextgenlibrary.activity.InterStitialVideoPlayerActivity"
 			android:screenOrientation="sensorLandscape"
 			android:configChanges="orientation|screenSize"

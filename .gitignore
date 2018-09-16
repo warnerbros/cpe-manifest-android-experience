@@ -8,6 +8,7 @@ build/
 target/
 
 # Android Studio / Gradle
+build
 *.iml
 *.idea/
 *.classpath
@@ -18,3 +19,4 @@ target/
 # data files
 assets/*.xml
 res/raw/*.mp4
+local.properties
